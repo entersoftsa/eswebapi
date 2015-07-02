@@ -1,0 +1,11 @@
+<div class="es-prm">
+    <label class="es-prm-label">{{esParamDef.caption}}</label>
+    <div class="es-prm-val">
+        <input kendo-numeric-text-box 
+        	align="right" 
+        	k-ng-model="esParamVal[esParamDef.id].paramValue" 
+        	k-spinners="false" 
+        	k-decimals="esParamDef.precision" 
+        	k-format="'n'+'{{esParamDef.precision}}'" />
+    </div>
+</div>

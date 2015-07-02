@@ -1,0 +1,9 @@
+<div>
+	<h4>Parameters</h4>
+<div>
+<div ng-repeat="param in esParamsDef | filter:{visible: true} | orderBy:'aa'">
+    <div>
+        <es-param es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
+        <hr>
+    </div>
+</div>

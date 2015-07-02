@@ -1,0 +1,15 @@
+<div class="boxc-col">
+	<div>
+		<es-params-panel 
+			ng-cloak 
+			es-params-values="esParamsValues" 
+			es-group-id="esGroupId" 
+			es-filter-id="esFilterId" 
+			es-params-def="esParamsDef">
+		</es-params-panel>
+	</div>
+
+    <div ng-cloak>
+        <es-grid es-group-id="esGroupId" es-filter-id="esFilterId" es-grid-options="esGridOptions"  es-execute-params="esParamsValues" />
+    </div>
+</div>

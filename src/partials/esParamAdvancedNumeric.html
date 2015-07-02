@@ -1,0 +1,31 @@
+<div class="es-prm">
+    <label class="es-prm-label">{{esParamDef.caption}}</label>
+    <div class="es-prm-val">
+        <select class="es-prm-val" 
+                kendo-drop-down-list
+                ng-cloak
+                k-ng-delay="esParamDef"
+                k-data-text-field="'caption'" 
+                k-data-value-field="'value'" 
+                k-auto-bind="true"
+                k-data-source="esWebUIHelper.getesComplexParamFunctionOptions()"
+                k-value-primitive="true"
+                k-ng-model="esParamVal[esParamDef.id].paramValue.oper">
+        </select> 
+        <input kendo-numeric-text-box 
+        	align="right" 
+        	k-ng-model="esParamVal[esParamDef.id].paramValue.value" 
+        	k-spinners="false" 
+        	k-decimals="esParamDef.precision" 
+        	k-format="'n'+'{{esParamDef.precision}}'" />
+
+        <span ng-hide="esParamVal[esParamDef.id].paramValue.oper != 'RANGE'">
+            <input kendo-numeric-text-box 
+                align="right"
+                k-ng-model="esParamVal[esParamDef.id].paramValue.valueTo" 
+                k-spinners="false" 
+                k-decimals="esParamDef.precision" 
+                k-format="'n'+'{{esParamDef.precision}}'" />
+        </span>
+    </div>
+</div>

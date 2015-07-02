@@ -1,0 +1,14 @@
+<div class="boxc-col es-prm">
+        <label class="es-prm-label">{{esParamDef.caption}} xaxa </label>
+        <select class="es-prm-val" 
+                kendo-multi-select 
+                k-placeholder="esParamDef.caption"
+                k-template="'<span><b>#: Code #</b> -- #: Description #</span>'"
+                k-data-text-field="esParamDef.invSelectedMasterField"
+                k-data-value-field="esParamDef.invSelectedMasterField"
+                k-filter="'contains'"
+                k-auto-bind="false"
+                ng-model="esParamVal[esParamDef.id].paramValue"
+                k-data-source="esParamLookupDS">
+        </select>
+    </div>

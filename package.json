@@ -1,0 +1,28 @@
+{
+    "name": "eswebapi",
+    "description": "Entersoft Application Server WEB API",
+    "version": "0.0.1",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/entersoftsa/eswebapi.git"
+    },
+    "jspm": {
+        "format": "global",
+        "directories": {
+            "lib": "dist"
+        },
+        "dependencies": {
+            "angular-sanitize": "github:angular/bower-angular-sanitize@1.3.15",
+            "stacktrace-js": "bower:stacktrace-js@0.6.4"
+        }
+    },
+    "devDependencies": {
+        "grunt": "~0.4.5",
+        "grunt-contrib-concat": "~0.4.0",
+        "grunt-contrib-jshint": "~0.10.0",
+        "grunt-contrib-nodeunit": "^0.4.1",
+        "grunt-contrib-uglify": "~0.5.0",
+        "grunt-contrib-watch": "~0.6.1"
+    }
+}
