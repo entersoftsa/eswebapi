@@ -306,7 +306,7 @@
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
-                    return "../../src/partials/esGrid.html";
+                    return "src/partials/esGrid.html";
                 },
                 link: function(scope, iElement, iAttrs) {
                     if (!scope.esGroupId || !scope.esFilterId) {
@@ -334,7 +334,7 @@
                     esParamVal: "=",
                     esType: "="
                 },
-                template: '<div ng-include src="\'../../src/partials/\'+esType+\'.html\'"></div>',
+                template: '<div ng-include src="\'src/partials/\'+esType+\'.html\'"></div>',
                 link: function(scope, iElement, iAttrs) {
 
                     if (!scope.esParamDef) {
@@ -359,7 +359,7 @@
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
-                    return "../../src/partials/esWebPQ.html";
+                    return "src/partials/esWebPQ.html";
                 },
                 link: function(scope, iElement, iAttrs) {
                     if (!scope.esGroupId || !scope.esFilterId) {
@@ -388,7 +388,7 @@
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
-                    return "../../src/partials/esParams.html";
+                    return "src/partials/esParams.html";
                 },
                 link: function(scope, iElement, iAttrs) {
                     if (!iAttrs.esParamsDef && !iAttrs.esPqInfo && (!scope.esGroupId || !scope.esFilterId)) {

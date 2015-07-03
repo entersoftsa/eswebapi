@@ -1,38 +1,38 @@
 {
-  "name": "eswebapi",
-  "version": "0.0.1",
-  "homepage": "http://entersoftsa.github.io/eswebapi",
-  "authors": [
-    "Stavros Menegos <sme@entersoft.gr>"
-  ],
-  "description": "AngularJS library for Entersoft WEB API Application Server",
-  "main": "dist/eswebapi.min.js",
-  "keywords": [
-    "entersoft",
-    "es",
-    "angular",
-    "eswebapi"
-  ],
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "angularjs": "~1.4.1",
-    "angular-route": "~1.4.1",
-    "ngstorage": "~0.3.4",
-    "angular-sanitize": "~1.4.1",
-    "noty": "~2.3.5",
-    "bootstrap": "~3.3.4",
-    "jquery": "~2.1.4",
-    "stacktrace-js": "~0.6.4",
-    "log4javascript": "~1.4.9",
-    "underscore": "~1.8.3",
-    "jscache": "*"
-  },
-  "private": false
+    "name": "eswebapi",
+    "version": "0.0.1",
+    "homepage": "http://entersoftsa.github.io/eswebapi",
+    "authors": [
+        "Stavros Menegos <sme@entersoft.gr>"
+    ],
+    "description": "AngularJS library for Entersoft WEB API Application Server",
+    "main": "dist/eswebapi.min.js",
+    "keywords": [
+        "entersoft",
+        "es",
+        "angular",
+        "eswebapi"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "angularjs": "~1.4.1",
+        "angular-route": "~1.4.1",
+        "ngstorage": "~0.3.4",
+        "angular-sanitize": "~1.4.1",
+        "noty": "~2.3.5",
+        "bootstrap": "~3.3.4",
+        "jquery": "~2.1.4",
+        "stacktrace-js": "~0.6.4",
+        "log4javascript": "~1.4.9",
+        "underscore": "~1.8.3",
+        "jscache": "*"
+    },
+    "private": false
 }
