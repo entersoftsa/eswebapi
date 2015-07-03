@@ -1,809 +1,634 @@
 /*! Entersoft Application Server WEB API - v0.0.1 - 2015-07-03
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
+/***********************************
+ * Entersoft SA
+ * http://www.entersoft.eu
+ * v0.0.72
+ *
+ ***********************************/
+
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', []);
 
-    var esComplexParamFunctionOptions = [{
-        caption: "=",
-        value: "EQ"
-    }, {
-        caption: "<>",
-        value: "NE"
-    }, {
-        caption: "<",
-        value: "LT"
-    }, {
-        caption: "<=",
-        value: "LE"
-    }, {
-        caption: ">",
-        value: "GT"
-    }, {
-        caption: ">=",
-        value: "GE"
-    }, {
-        caption: "...<=...<=...",
-        value: "RANGE"
-    }, {
-        caption: "Empty",
-        value: "NULL"
-    }, {
-        caption: "Not Empty",
-        value: "NOTNULL"
-    }];
+    /* Services */
 
-    function ESParamVal(paramId, paramVal) {
-        this.paramCode = paramId;
-        this.paramValue = paramVal;
+    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngSanitize' /*, 'es.Services.Analytics' */ ]);
+
+    esWebServices.
+    constant('ESWEBAPI_URL', {
+        __LOGIN__: "api/Login",
+        __PUBLICQUERY__: "api/rpc/PublicQuery/",
+        __PUBLICQUERY_INFO__: "api/rpc/PublicQueryInfo/",
+        __USERSITES__: "api/Login/Usersites",
+        __STANDARD_ZOOM__: "api/rpc/FetchStdZoom/",
+        __SCROLLERROOTTABLE__: "api/rpc/SimpleScrollerRootTable/",
+        __SCROLLER__: "api/rpc/SimpleScroller/",
+        __ENTITYACTION__: "api/Entity/",
+        __ENTITYBYGIDACTION__: "api/EntityByGID/",
+        __ELASTICSEARCH__: "api/esearch/",
+        __SERVER_CAPABILITIES__: "api/Login/ServerCapabilities/",
+        __REGISTER_EXCEPTION__: "api/rpc/registerException/",
+        __FETCH_COMPANY_PARAM__: "api/rpc/FetchCompanyParam/",
+        __FETCH_COMPANY_PARAMS__: "api/rpc/FetchCompanyParams/",
+        __SCROLLER_COMMAND__: "api/rpc/ScrollerCommand/",
+        __FORM_COMMAND__: "api/rpc/FormCommand/",
+        __FETCH_SESSION_INFO__: "api/rpc/FetchSessionInfo/",
+        __FETCH_ODS_TABLE_INFO__: "api/rpc/FetchOdsTableInfo/",
+        __FETCH_ODS_COLUMN_INFO__: "api/rpc/FetchOdsColumnInfo/",
+        __FETCH_ODS_RELATION_INFO__: "api/rpc/FetchOdsRelationInfo/",
+        __FETCH_ODS_DETAIL_RELATIONS_INFO__: "api/rpc/FetchOdsDetailRelationsInfo/",
+        __FETCH_ODS_MASTER_RELATIONS_INFO__: "api/rpc/FetchOdsMasterRelationsInfo/",
+    });
+
+    esWebServices.value("__WEBAPI_RT__", {
+        url: ""
+    });
+
+
+    function endsWith(str, suffix) {
+        return str.indexOf(suffix, str.length - suffix.length) !== -1;
     }
 
-    ESParamVal.prototype.getExecuteVal = function() {
-        return this.paramValue;
-    };
-
-
-    function ESNumericParamVal(paramId, paramVal) {
-        //call super constructor
-        ESParamVal.call(this, paramId, paramVal);
+    function startsWith(str, prefix) {
+        return str.toLowerCase().indexOf(prefix.toLowerCase()) === 0;
     }
 
-    //inherit from ESParamval SuperClass
-    ESNumericParamVal.prototype = Object.create(ESParamVal.prototype);
+    esWebServices.provider("es.Services.WebApi",
+        function() {
 
+            var urlWEBAPI = "";
+            var unSecureWEBAPI = "";
+            var secureWEBAPI = "";
 
-    ESNumericParamVal.prototype.getExecuteVal = function() {
-        switch (this.paramValue.oper) {
-            case "RANGE":
-                return "ESNumeric(" + this.paramValue.oper + ", '" + this.paramValue.value + "', '" + this.paramValue.valueTo + "')";
-            case "NULL":
-            case "NOTNULL":
-                return "ESNumeric(" + this.paramValue.oper + ", '0')";
-            default:
-                return "ESNumeric(" + this.paramValue.oper + ", '" + this.paramValue.value + "')";
-        }
-    }
+            var esConfigSettings = {
+                host: "",
+                allowUnsecureConnection: false,
+                subscriptionId: "",
+                subscriptionPassword: ""
+            };
 
-    function ESStringParamVal(paramId, paramVal) {
-        //call super constructor
-        ESParamVal.call(this, paramId, paramVal);
-    }
-
-    //inherit from ESParamval SuperClass
-    ESStringParamVal.prototype = Object.create(ESParamVal.prototype);
-
-
-    ESStringParamVal.prototype.getExecuteVal = function() {
-        switch (this.paramValue.oper) {
-            case "EQ":
-                return this.paramValue.value;
-            case "RANGE":
-                return "ESString(" + this.paramValue.oper + ", '" + this.paramValue.value + "', '" + this.paramValue.valueTo + "')";
-            case "NULL":
-            case "NOTNULL":
-                return "ESString(" + this.paramValue.oper + ", '')";
-            default:
-                return "ESString(" + this.paramValue.oper + ", '" + this.paramValue.value + "')";
-        }
-    }
-
-
-    function ESParamValues(vals) {
-        this.setParamValues(vals);
-    }
-
-    ESParamValues.prototype.setParamValues = function(vals) {
-        var x = this;
-
-        //delete any previsously assigned properties
-        for (var prop in x) {
-            if (x.hasOwnProperty(prop)) {
-                delete x[prop];
-            }
-        };
-
-        //asign new properties
-        if (!vals || !_.isArray(vals) || vals.length == 0) {
-            return;
-        }
-
-        vals.forEach(function(element, index, array) {
-            x[element.paramCode] = element;
-        });
-    }
-
-    ESParamValues.prototype.getExecuteVals = function() {
-        var x = this;
-        var ret = {};
-        for (var prop in x) {
-            if (x.hasOwnProperty(prop)) {
-                var p = x[prop];
-
-                if (p.paramValue) {
-                    ret[p.paramCode] = p.getExecuteVal();
-                }
-            }
-        }
-        return ret;
-    }
-
-    function prepareStdZoom($log, zoomID, esWebApiService) {
-        var xParam = {
-            transport: {
-                read: function(options) {
-
-                    $log.info("FETCHing ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
-
-                    var pqOptions = {};
-                    esWebApiService.fetchStdZoom(zoomID, pqOptions)
-                        .success(function(pq) {
-                            // SME CHANGE THIS ONCE WE HAVE CORRECT PQ
-                            if (pq.Count == -1) {
-                                pq.Count = pq.Rows ? pq.Rows.length : 0;
-                            }
-                            // END tackling
-
-                            options.success(pq);
-                            $log.info("FETCHed ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
-                        })
-                        .error(function(err) {
-                            options.error(err);
-                        });
-                }
-
-            },
-            schema: {
-                data: "Rows",
-                total: "Count"
-            }
-        }
-        return new kendo.data.DataSource(xParam);
-    }
-
-
-    function prepareWebScroller(dsType, esWebApiService, $log, espqParams, esOptions) {
-        var xParam = {
-            transport: {
-                read: function(options) {
-
-                    var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
-                    $log.info("FETCHing PQ with PQParams ", JSON.stringify(qParams), " and gridoptions ", JSON.stringify(options));
-                    var pqOptions = {};
-
-                    if (options.data && options.data.page && options.data.pageSize) {
-                        pqOptions.WithCount = true;
-                        pqOptions.Page = options.data.page;
-                        pqOptions.PageSize = options.data.pageSize
-                    }
-
-                    var executeParams = qParams.Params;
-                    if (executeParams instanceof ESParamValues) {
-                        executeParams = executeParams.getExecuteVals();
-                    }
-
-
-                    esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
-                        .success(function(pq) {
-
-                            if (!angular.isDefined(pq.Rows)) {
-                                pq.Rows = [];
-                                pq.Count = 0;
-                            }
-
-                            if (!angular.isDefined(pq.Count)) {
-                                pq.Count = -1;
-                            }
-
-                            options.success(pq);
-                            $log.info("FETCHed PQ with PQParams ", JSON.stringify(executeParams), " and gridoptions ", JSON.stringify(options));
-                        })
-                        .error(function(err) {
-                            $log.error("Error in DataSource ", err);
-                            options.error(err);
-                        });
+            return {
+                getSettings: function() {
+                    return esConfigSettings;
                 },
 
-            },
-            requestStart: function(e) {
-                $log.info("request started ", e);
-            },
+                getServerUrl: function() {
+                    return urlWEBAPI;
+                },
 
-            schema: {
-                data: "Rows",
-                total: "Count"
-            }
-        }
+                setSettings: function(setting) {
+                    var __SECURE_HTTP_PREFIX__ = "https://";
+                    var __UNSECURE_HTTP_PREFIX__ = "http://";
 
-        if (esOptions) {
-            angular.extend(xParam, esOptions);
-        }
+                    esConfigSettings = setting;
 
-        if (dsType && dsType === "pivot") {
-            return new kendo.data.PivotDataSource(xParam);
-        } else {
-            return new kendo.data.DataSource(xParam);
-        }
-    }
+                    if (esConfigSettings.host) {
+                        esConfigSettings.host = esConfigSettings.host.trim();
 
-    esWEBUI.filter('esTrustHtml', ['$sce',
-        function($sce) {
-            return function(text) {
-                return $sce.trustAsHtml(text);
-            };
-        }
-    ]);
-
-    esWEBUI
-        .filter('esParamTypeMapper', function() {
-            var f = function(pParam) {
-                if (!pParam) {
-                    return "";
-                }
-
-                var pt = pParam.parameterType.toLowerCase()
-
-                //ESNumeric
-                if (pt.indexOf("entersoft.framework.platform.esnumeric") == 0) {
-                    return "esParamAdvancedNumeric";
-                }
-
-                //ESString
-                if (pt.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
-                    return "esParamAdvancedString";
-                }
-
-                // Numeric (Integer or Decimal)
-                if (pt.indexOf("system.string, mscorlib") == 0) {
-                    switch (pParam.controlType) {
-                        case 1:
-                            {
-                                return "esParamNumeric";
-                            }
-                            break;
-                        case 2:
-                            {
-                                return "esParamNumeric";
-                            }
-                            break;
-                    }
-                }
-
-
-                //case Enum 
-                if (pParam.enumList && (pParam.enumList.length > 1)) {
-                    if (pParam.enumOptionAll) {
-                        return "esParamMultiEnum";
-                    } else {
-                        return "esParamEnum";
-                    }
-                }
-
-                if (pParam.invSelectedMasterTable) {
-                    if (pParam.invSelectedMasterTable[4] == "Z") {
-                        if (pParam.multiValued) {
-                            return "esParamMultiZoom";
-                        } else {
-                            return "esParamZoom";
+                        if (startsWith(esConfigSettings.host, __SECURE_HTTP_PREFIX__)) {
+                            esConfigSettings.host = esConfigSettings.host.slice(__SECURE_HTTP_PREFIX__.length).trim();
+                        } else if (startsWith(esConfigSettings.host, __UNSECURE_HTTP_PREFIX__)) {
+                            esConfigSettings.host = esConfigSettings.host.slice(__UNSECURE_HTTP_PREFIX__.length).trim();
                         }
+
+                        if (esConfigSettings.host == "") {
+                            throw "host for Entersoft WEB API Server is not specified";
+                        }
+
+                        if (!endsWith(esConfigSettings.host, "/")) {
+                            esConfigSettings.host += "/";
+                        }
+
+                        unSecureWEBAPI = __UNSECURE_HTTP_PREFIX__ + esConfigSettings.host;;
+                        secureWEBAPI = __SECURE_HTTP_PREFIX__ + esConfigSettings.host;
+
+                        if (esConfigSettings.allowUnsecureConnection) {
+                            urlWEBAPI = unSecureWEBAPI;
+                        } else {
+                            urlWEBAPI = secureWEBAPI;
+                        }
+
                     } else {
-                        return "esParamText";
+                        throw "host for Entersoft WEB API Server is not specified";
                     }
-                }
-
-                return "esParamText";
-
-            };
-
-
-            return f;
-        })
-        .directive('esGrid', ['es.Services.WebApi', 'es.UI.Web.UIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esGroupId: "=",
-                    esFilterId: "=",
-                    esExecuteParams: "=",
-                    esGridOptions: "=",
+                    return this;
                 },
-                templateUrl: function(element, attrs) {
-                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
-                    return "src/partials/esGrid.html";
-                },
-                link: function(scope, iElement, iAttrs) {
-                    if (!scope.esGroupId || !scope.esFilterId) {
-                        throw "You must set GroupID and FilterID for esgrid to work";
-                    }
 
+                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'es.Services.Globals',
+                    function($http, $log, $q, $rootScope, ESWEBAPI_URL, esGlobals) {
 
-                    if (!scope.esGridOptions && !iAttrs.esGridOptions) {
-                        // Now esGridOption explicitly assigned so ask the server 
-                        esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
-                            .success(function(ret) {
-                                var p1 = ret;
-                                var p2 = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, p1);
-                                scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, scope.esGroupId, scope.esFilterId, scope.esExecuteParams, p2);
-                            });
-                    }
-                }
-            };
-        }])
-        .directive('esParam', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esParamDef: "=",
-                    esParamVal: "=",
-                    esType: "="
-                },
-                template: '<div ng-include src="\'src/partials/\'+esType+\'.html\'"></div>',
-                link: function(scope, iElement, iAttrs) {
+                        function fregisterException(inMessageObj, storeToRegister) {
+                            if (!inMessageObj) {
+                                return;
+                            }
 
-                    if (!scope.esParamDef) {
-                        throw "You must set a param";
-                    }
+                            var messageObj = angular.copy(inMessageObj);
 
-                    scope.esWebUIHelper = esWebUIHelper;
-                    scope.esWebApiService = esWebApiService;
-
-                    if (scope.esParamDef.invSelectedMasterTable) {
-                        scope.esParamLookupDS = prepareStdZoom($log, scope.esParamDef.invSelectedMasterTable, esWebApiService);
-                    }
-                }
-            };
-        }])
-        .directive('esWebPq', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esGroupId: "=",
-                    esFilterId: "=",
-                },
-                templateUrl: function(element, attrs) {
-                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
-                    return "src/partials/esWebPQ.html";
-                },
-                link: function(scope, iElement, iAttrs) {
-                    if (!scope.esGroupId || !scope.esFilterId) {
-                        throw "You must set the pair es-group-id and es-filter-id attrs";
-                    }
-
-                    esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
-                        .success(function(ret) {
-                            var v = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, ret);
-                            scope.esParamsValues = v.defaultValues;
-                            scope.esParamsDef = v.params;
-                            scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, scope.esGroupId, scope.esFilterId, scope.esParamsValues, v);
-                        });
-                }
-            };
-        }])
-        .directive('esParamsPanel', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esParamsDef: '=',
-                    esPqInfo: '=',
-                    esParamsValues: '=',
-                    esGroupId: "=",
-                    esFilterId: "=",
-                },
-                templateUrl: function(element, attrs) {
-                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
-                    return "src/partials/esParams.html";
-                },
-                link: function(scope, iElement, iAttrs) {
-                    if (!iAttrs.esParamsDef && !iAttrs.esPqInfo && (!scope.esGroupId || !scope.esFilterId)) {
-                        throw "You must set either the es-params-def or ea-pq-info or the pair es-group-id and es-filter-id attrs";
-                    }
-
-                    if (!iAttrs.esParamsDef) {
-                        if (!iAttrs.esPqInfo) {
-                            // we are given groupid and filterid =>
-                            // we must retrieve pqinfo on owr own
-                            esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
-                                .success(function(ret) {
-                                    var v = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, ret);
-                                    scope.esParamsValues = v.defaultValues;
-                                    scope.esParamsDef = v.params;
+                            try {
+                                messageObj.__SubscriptionID = esConfigSettings.subscriptionId;
+                                messageObj.__ServerUrl = urlWEBAPI;
+                                messageObj.__EDate = new Date();
+                                $.ajax({
+                                    type: "POST",
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__REGISTER_EXCEPTION__),
+                                    contentType: "application/json",
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    data: JSON.stringify({
+                                        exceptionData: messageObj,
+                                        exceptionStore: storeToRegister
+                                    }, null, '\t')
                                 });
-                        } else {
-                            scope.esParamDef = esPqInfo.params;
+
+                                // if google analytics are enabled register the exception as well
+                                var esGA = esGlobals.getGA();
+                                if (esGA) {
+                                    esGA.registerException(messageObj);
+                                }
+
+                            } catch (loggingError) {
+
+                                // For Developers - log the log-failure.
+                                $log.warn("Error logging failed");
+                                $log.error(loggingError);
+                            }
+                        }
+
+                        function execScrollerCommand(scrollerCommandParams) {
+                            if (!scrollerCommandParams || !scrollerCommandParams.ScrollerID || !scrollerCommandParams.CommandID) {
+                                throw "ScrollerID and CommandID properties must be defined";
+                            }
+                            var surl = ESWEBAPI_URL.__SCROLLER_COMMAND__;
+
+                            var tt = esGlobals.trackTimer("SCR", "COMMAND", scrollerCommandParams.ScrollerID.concat("/", scrollerCommandParams.CommandID));
+                            tt.startTime();
+
+                            var ht = $http({
+                                method: 'post',
+                                headers: {
+                                    "Authorization": esGlobals.getWebApiToken()
+                                },
+                                url: surl,
+                                data: scrollerCommandParams
+                            });
+
+                            ht.then(function() {
+                                tt.endTime().send();
+                            });
+                            return ht;
+                        }
+
+                        function getOdsInfo(odsType, odsID) {
+                            var defered = $q.defer();
+                            $http.get(unSecureWEBAPI + ESWEBAPI_URL[odsType] + odsID)
+                                .success(function(data) {
+                                    defered.resolve(data);
+                                })
+                            return defered.promise;
+                        }
+
+                        function execFormCommand(formCommandParams) {
+                            if (!formCommandParams || !formCommandParams.EntityID || !formCommandParams.CommandID) {
+                                throw "EntityID and CommandID properties must be defined";
+                            }
+                            var surl = ESWEBAPI_URL.__FORM_COMMAND__;
+
+                            var tt = esGlobals.trackTimer("FORM", "COMMAND", formCommandParams.EntityID.concat("/", formCommandParams.CommandID));
+                            tt.startTime();
+
+                            var ht = $http({
+                                method: 'post',
+                                headers: {
+                                    "Authorization": esGlobals.getWebApiToken()
+                                },
+                                url: surl,
+                                data: formCommandParams
+                            });
+
+                            ht.then(function() {
+                                tt.endTime().send();
+                            });
+                            return ht;
+                        }
+
+                        function execScroller(apiUrl, groupID, filterID, params) {
+                            var surl = urlWEBAPI.concat(apiUrl, groupID, "/", filterID);
+                            var tt = esGlobals.trackTimer("SCR", "FETCH", groupID.concat("/", filterID));
+                            tt.startTime();
+
+                            var ht = $http({
+                                method: 'GET',
+                                headers: {
+                                    "Authorization": esGlobals.getWebApiToken()
+                                },
+                                url: surl,
+                                params: params
+                            });
+
+                            ht.then(function() {
+                                tt.endTime().send();
+                            });
+                            return ht;
+                        }
+
+                        return {
+
+                            getServerUrl: function() {
+                                return urlWEBAPI;
+                            },
+
+                            openSession: function(credentials) {
+                                var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
+                                tt.startTime();
+
+                                return $http({
+                                    method: 'post',
+                                    url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
+                                    data: {
+                                        SubscriptionID: esConfigSettings.subscriptionId,
+                                        SubscriptionPassword: esConfigSettings.subscriptionPassword,
+                                        Model: credentials
+                                    }
+                                }).
+                                success(function(data) {
+                                    esGlobals.sessionOpened(data, credentials);
+                                    tt.endTime().send();
+                                }).
+                                error(function(data, status, headers, config) {
+                                    esGlobals.sessionClosed();
+                                    if (data) {
+                                        $log.error(data);
+                                    } else {
+                                        console.log("Generic Http error");
+                                    }
+                                });
+                            },
+
+                            logout: function() {
+                                esGlobals.sessionClosed();
+                                $log.info("LOGOUT User");
+                            },
+
+                            fetchCompanyParam: function(esparam) {
+                                if (!esparam) {
+                                    return undefined;
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_COMPANY_PARAM__, esparam);
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl
+                                });
+                                return ht;
+                            },
+
+                            fetchCompanyParams: function(esparam) {
+                                var surl;
+                                if (!esparam) {
+                                    // get all parameters
+                                    surl = urlWEBAPI + ESWEBAPI_URL.__FETCH_COMPANY_PARAMS__;
+                                } else {
+                                    if (angular.isArray(esparam)) {
+                                        surl = urlWEBAPI + ESWEBAPI_URL.__FETCH_COMPANY_PARAMS__ + esparam.join("/");
+                                    } else {
+                                        surl = urlWEBAPI + ESWEBAPI_URL.__FETCH_COMPANY_PARAMS__ + esparam;
+                                    }
+                                }
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl
+                                });
+                                return ht;
+                            },
+
+                            registerException: fregisterException,
+
+                            fetchOdsTableInfo: function(tableID) {
+                                return getOdsInfo("__FETCH_ODS_TABLE_INFO__", tableID);
+                            },
+
+                            fetchOdsColumnInfo: function(tableID, columnID) {
+                                var odsItem = columnID ? tableID + "/" + columnID : tableID;
+                                return getOdsInfo("__FETCH_ODS_COLUMN_INFO__", odsItem);
+                            },
+
+                            fetchOdsRelationInfo: function(relationID) {
+                                return getOdsInfo("__FETCH_ODS_RELATION_INFO__", relationID);
+                            },
+
+                            fetchOdsMasterRelationsInfo: function(tableID, columnID) {
+                                return getOdsInfo("__FETCH_ODS_MASTER_RELATIONS_INFO__", tableID + "/" +columnID);  
+                            },
+
+                            fetchOdsdDetailRelationsInfo: function(tableID, columnID) {
+                                return getOdsInfo("__FETCH_ODS_DETAIL_RELATIONS_INFO__", tableID + "/" +columnID);  
+                            },
+
+                            fetchServerCapabilities: function() {
+
+                                var defered = $q.defer();
+
+                                $http.get(unSecureWEBAPI + ESWEBAPI_URL.__SERVER_CAPABILITIES__)
+                                    .success(function(data) {
+                                        defered.resolve(data);
+                                    })
+                                    .error(function() {
+                                        $http.get(secureWEBAPI + ESWEBAPI_URL.__SERVER_CAPABILITIES__)
+                                            .success(function(data) {
+                                                defered.resolve(data);
+                                            })
+                                            .error(function(dat, stat, header, config) {
+                                                defered.reject([dat, stat, header, config]);
+                                            });
+                                    });
+
+                                return defered.promise;
+                            },
+
+                            fetchScroller: function(groupID, filterID, params) {
+                                return execScroller(ESWEBAPI_URL.__SCROLLER__, groupID, filterID, params);
+                            },
+
+                            fetchSimpleScrollerRootTable: function(groupID, filterID, params) {
+                                return execScroller(ESWEBAPI_URL.__SCROLLERROOTTABLE__, groupID, filterID, params);
+                            },
+
+                            fetchUserSites: function(ebsuser) {
+                                return $http({
+                                    method: 'post',
+                                    url: urlWEBAPI + ESWEBAPI_URL.__USERSITES__,
+                                    data: {
+                                        SubscriptionID: esConfigSettings.subscriptionId,
+                                        SubscriptionPassword: esConfigSettings.subscriptionPassword,
+                                        Model: ebsuser
+                                    }
+                                });
+                            },
+
+                            fetchSessionInfo: function() {
+                                return $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: urlWEBAPI + ESWEBAPI_URL.__FETCH_SESSION_INFO__
+                                });
+                            },
+
+                            executeNewEntityAction: function(entityType, actionID, commandParams) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ENTITYACTION__, entityType, "/", actionID);
+                                var tt = esGlobals.trackTimer("ACTION", "NEW_ENTITY", entityType.concat("/", actionID));
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'post',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    data: commandParams
+                                });
+                                ht.then(function() {
+                                    tt.endTime().send();
+                                });
+                                return ht;
+                            },
+
+                            executeEntityActionByCode: function(entityType, entityCode, actionID, commandParams) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ENTITYACTION__, entityType, "/", entityCode, "/", actionID);
+                                var tt = esGlobals.trackTimer("ACTION", "ENTITY_CODE", entityType.concat("/", actionID));
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'post',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    data: commandParams
+                                });
+
+                                ht.then(function() {
+                                    tt.endTime().send();
+                                });
+                                return ht;
+                            },
+
+                            executeEntityActionByGID: function(entityType, entityGID, actionID, commandParams) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ENTITYBYGIDACTION__, entityType, "/", entityGID, "/", actionID);
+                                var tt = esGlobals.trackTimer("ACTION", "ENTITY_GID", entityType.concat("/", actionID));
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'post',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    data: commandParams
+                                });
+
+                                ht.then(function() {
+                                    tt.endTime().send();
+                                });
+                                return ht;
+
+                            },
+
+                            executeFormCommand: function(formCommandParams) {
+                                return execFormCommand(formCommandParams);
+                            },
+
+                            executeFormCommandDS: function(entityID, commandID, commandParams, ds) {
+                                var params = {
+                                    EntityID: entityID,
+                                    CommandID: commandID,
+                                    CommandParams: commandParams
+                                };
+                                if (ds) {
+                                    params.EntityDataset = ds;
+                                }
+
+                                return execFormCommand(params);
+                            },
+
+                            executeScrollerCommandSRV: function(groupID, filterID, commandID, scrollerParams, commandParams) {
+
+                                var scrollerCommandParams = {
+                                    ScrollerID: groupID + "/" + filterID,
+                                    CommandID: commandID,
+                                    ScrollerParams: scrollerParams,
+                                    CommandParams: commandParams
+                                };
+                                return execScrollerCommand(scrollerCommandParams);
+                            },
+
+                            executeScrollerCommandDS: function(groupID, filterID, commandID, dataSet, commandParams) {
+                                var scrollerCommandParams = {
+                                    ScrollerID: groupID + "/" + filterID,
+                                    CommandID: commandID,
+                                    ScrollerDataset: dataSet,
+                                    CommandParams: commandParams
+                                };
+                                return execScrollerCommand(scrollerCommandParams);
+                            },
+
+                            fetchPublicQueryInfo: function(GroupID, FilterID) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, GroupID, "/", FilterID);
+                                var tt = esGlobals.trackTimer("PQ", "INFO", GroupID.concat("/", FilterID));
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl
+                                });
+
+
+                                ht.then(function() {
+                                    tt.endTime().send();
+                                });
+
+                                //finally return the $http promise
+                                return ht;
+                            },
+
+                            fetchStdZoom: function(zoomID, options) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__STANDARD_ZOOM__, zoomID);
+                                var tt = esGlobals.trackTimer("ZOOM", "FETCH", zoomID);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken(),
+                                        "X-ESPQOptions": JSON.stringify(options)
+                                    },
+                                    url: surl
+                                });
+
+
+                                ht.then(function() {
+                                    tt.endTime().send();
+                                });
+
+                                //finally return the $http promise
+                                return ht;
+                            },
+
+                            /**
+                             * fetch PQ schema
+                             * @param  {string} GroupID
+                             * @param  {string} FilterID
+                             * @param  {object} Params - parameters specific to GroupID / FilterID
+                             * [@param  {string} httpVerb] - optional parameter to specify HTTP verb. Default is GET
+                             * @return {AngularHttpPromise}
+                             */
+                            fetchPublicQuery: function(GroupID, FilterID, options, Params, httpVerb) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY__, GroupID, "/", FilterID);
+                                var tt = esGlobals.trackTimer("PQ", "FETCH", GroupID.concat("/", FilterID));
+                                tt.startTime();
+
+                                /**
+                                 * $http object configuration
+                                 * @type {Object}
+                                 */
+                                var httpConfig = {
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    params: Params
+                                };
+
+                                if (options) {
+                                    httpConfig.headers["X-ESPQOptions"] = JSON.stringify(options);
+                                }
+
+                                //if called with 3 arguments then default to a GET request
+                                httpConfig.method = httpVerb || 'GET';
+
+                                //if not a GET request, switch to data instead of params
+                                if (httpConfig.method !== 'GET') {
+                                    delete httpConfig.params;
+                                    httpConfig.data = Params;
+                                }
+
+                                var ht = $http(httpConfig);
+                                ht.then(function() {
+                                    tt.endTime().send();
+                                });
+
+                                //finally return the $http promise
+                                return ht;
+                            },
+
+
+
+                            eSearch: function(eUrl, eMethod, eBody) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ELASTICSEARCH__, eUrl);
+
+                                return $http({
+                                    method: eMethod,
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    data: eBody
+                                }).success(function(data) {
+                                    // if google analytics are enabled register the exception as well
+                                    var esGA = esGlobals.getGA();
+                                    if (esGA) {
+                                        esGA.registerEventTrack({
+                                            category: "ELASTIC_SEARCH",
+                                            action: "SEARCH",
+                                            label: eUrl
+                                        });
+                                    }
+                                }).error(function(err) {
+                                    try {
+                                        fregisterException(err);
+                                    } catch (exc) {
+
+                                    }
+                                });
+                            }
                         }
                     }
-                }
-            };
-        }]);
-
-    esWEBUI.factory("es.UI.Web.UIHelper", ['es.Services.WebApi', '$log',
-        function(esWebApiService, $log) {
-
-            function esColToKCol(esGridInfo, esCol) {
-                var tCol = {
-                    field: esCol.field,
-                    title: esCol.title,
-                    width: esCol.width,
-                    attributes: esCol.attributes,
-                    values: esCol.enumValues,
-
-                }
-
-                if (esCol.formatString && esCol.formatString != "") {
-                    tCol.format = "{0:" + esCol.formatString + "}";
-                }
-                return tCol;
+                ]
             }
+        }
+    );
 
-            function esGridInfoToKInfo(esWebApiService, esGroupId, esFilterId, executeParams, esGridInfo) {
-                var grdopt = {
-                    pageable: {
-                        refresh: true
-                    },
-                    sortable: true,
-                    filterable: true,
-                    resizable: true,
-                    toolbar: ["excel"],
-                    excel: {
-                        allPages: true,
-                        fileName: esGroupId + "-" + esFilterId + ".xlsx",
-                        filterable: true
-                    }
-                };
-
-                var kdsoptions = {
-                    serverFiltering: true,
-                    serverPaging: true,
-                    pageSize: 20
-                };
-
-                grdopt.columns = esGridInfo.columns;
-
-                grdopt.dataSource = prepareWebScroller(null, esWebApiService, $log, function() {
-                    return {
-                        GroupID: esGroupId,
-                        FilterID: esFilterId,
-                        Params: executeParams
-                    }
-                }, kdsoptions);
-
-                return grdopt;
-            }
-
-            function winColToESCol(inGroupID, inFilterID, gridexInfo, jCol) {
-                var esCol = {
-                    AA: undefined,
-                    field: undefined,
-                    title: undefined,
-                    width: undefined,
-                    visible: undefined,
-                    attributes: undefined,
-                    enumValues: undefined,
-                    formatString: undefined,
-                };
-
-                esCol.AA = parseInt(jCol.AA);
-                esCol.field = jCol.ColName;
-                esCol.title = jCol.Caption;
-                esCol.formatString = jCol.FormatString;
-                esCol.visible = (jCol.Visible == "true");
-
-                if (jCol.TextAlignment == "3") {
-                    esCol.attributes = {
-                        style: "text-align: right;"
-                    };
-                }
-
-                //Enum Column
-                if (jCol.EditType == "5") {
-                    var l1 = _.sortBy(_.filter(gridexInfo.ValueList, function(x) {
-                        var v = x.ColName == jCol.ColName;
-                        v = v && (typeof x.Value != 'undefined');
-                        v = v && x.fFilterID == inFilterID;
-                        return v;
-                    }), function(x) {
-                        return !isNaN(x.Value) ? parseInt(x.Value) : null;
-                    });
-                    var l2 = _.map(l1, function(x) {
-                        return {
-                            text: x.Caption,
-                            value: !isNaN(x.Value) ? parseInt(x.Value) : null
-                        };
-                    });
-
-                    if (l2 && l2.length) {
-                        esCol.enumValues = l2;
-                    }
-                }
-                return esCol;
-            }
-
-            //here 
-
-            function esEval(pInfo, expr) {
-                var EQ = {
-                    oper: "EQ",
-                    paramID: pInfo.id
-                };
-                var GE = {
-                    oper: "GE",
-                    paramID: pInfo.id
-                };
-                var GT = {
-                    oper: "GT",
-                    paramID: pInfo.id
-                };
-                var LE = {
-                    oper: "LE",
-                    paramID: pInfo.id
-                };
-                var LT = {
-                    oper: "LT",
-                    paramID: pInfo.id
-                };
-                var NE = {
-                    oper: "NE",
-                    paramID: pInfo.id
-                };
-                var RANGE = {
-                    oper: "RANGE",
-                    paramID: pInfo.id
-                };
-                var NULL = {
-                    oper: "NULL",
-                    paramID: pInfo.id
-                };
-                var NOTNULL = {
-                    oper: "NOTNULL",
-                    paramID: pInfo.id
-                };
-                return eval(expr);
-            }
-
-            function ESNumeric(inArg, val, val2) {
-                var k = {
-                    value: !isNaN(val) ? parseInt(val) : null,
-                    valueTo: !isNaN(val2) ? parseInt(val2) : null,
-                    oper: inArg.oper || "EQ"
-                };
-                return new ESNumericParamVal(inArg.paramID, k);
-            }
-
-            function ESString(inArg, val, val2) {
-                var k = {
-                    value: val,
-                    valueTo: val2,
-                    oper: inArg.oper || "EQ"
-                };
-                return new ESStringParamVal(inArg.paramID, k);
-            }
-
-            function getEsParamVal(esParamInfo, dx) {
-                var ps = esParamInfo.parameterType.toLowerCase();
-
-                //ESNumeric
-                if (ps.indexOf("entersoft.framework.platform.esnumeric") == 0) {
-                    if (!dx || dx.length == 0) {
-                        return ESNumeric(esParamInfo.id, {
-                            oper: "EQ"
-                        });
-                    }
-                    return esEval(esParamInfo, dx[0].Value);
-                }
-
-                //ESString
-                if (ps.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
-                    if (!dx || dx.length == 0) {
-                        return new ESStringParamVal(esParamInfo.id, {
-                            oper: "EQ",
-                            value: null
-                        });
-                    }
-
-                    return esEval(esParamInfo, dx[0].Value);
-                }
-
-                //Not set
-                if (!dx || dx.length == 0) {
-                    return new ESParamVal(esParamInfo.id, null);
-                }
-
-                var processedVals = _.map(dx, function(k) {
-                    return processStrToken(esParamInfo, k.Value);
-                });
-
-                if (processedVals.length == 1) {
-                    processedVals = processedVals[0];
-                }
-                return new ESParamVal(esParamInfo.id, processedVals);
-            }
-
-            function processStrToken(esParamInfo, val) {
-                if (!esParamInfo) {
-                    return val;
-                }
-
-                var ps = esParamInfo.parameterType.toLowerCase();
-                if (ps.indexOf("system.byte") != -1 || ps.indexOf("system.int") != -1) {
-                    return parseInt(val);
-                }
-
-                if (esParamInfo.enumList && esParamInfo.enumList.length > 1) {
-                    return parseInt(val);
-                }
-
-                return val;
-            }
-
-            function winParamInfoToesParamInfo(winParamInfo, gridexInfo) {
-                if (!winParamInfo) {
-                    return null;
-                }
-
-                var esParamInfo = {
-                    id: undefined,
-                    aa: undefined,
-                    caption: undefined,
-                    toolTip: undefined,
-                    controlType: undefined,
-                    parameterType: undefined,
-                    precision: undefined,
-                    multiValued: undefined,
-                    visible: undefined,
-                    required: undefined,
-                    oDSTag: undefined,
-                    formatStrng: undefined,
-                    tags: undefined,
-                    visibility: undefined,
-                    invSelectedMasterTable: undefined,
-                    invSelectedMasterField: undefined,
-                    invTableMappings: undefined,
-                    defaultValues: undefined,
-                    enumOptionAll: undefined,
-                    enumList: undefined
-                };
-
-                esParamInfo.id = winParamInfo.ID;
-                esParamInfo.aa = parseInt(winParamInfo.AA);
-                esParamInfo.caption = winParamInfo.Caption;
-                esParamInfo.toolTip = winParamInfo.Tooltip;
-                esParamInfo.controlType = parseInt(winParamInfo.ControlType);
-                esParamInfo.parameterType = winParamInfo.ParameterType;
-                esParamInfo.precision = parseInt(winParamInfo.Precision);
-                esParamInfo.multiValued = winParamInfo.MultiValued == "true";
-                esParamInfo.visible = winParamInfo.Visible == "true";
-                esParamInfo.required = winParamInfo.Required == "true";
-                esParamInfo.oDSTag = winParamInfo.ODSTag;
-                esParamInfo.tags = winParamInfo.Tags;
-                esParamInfo.visibility = parseInt(winParamInfo.Visibility);
-                esParamInfo.invSelectedMasterTable = winParamInfo.InvSelectedMasterTable;
-                esParamInfo.invSelectedMasterField = winParamInfo.InvSelectedMasterField;
-                esParamInfo.invTableMappings = winParamInfo.InvTableMappings;
-
-                esParamInfo.enumOptionAll = winParamInfo.EnumOptionAll;
-                var enmList = _.sortBy(_.map(_.filter(gridexInfo.EnumItem, function(x) {
-                    return x.fParamID == esParamInfo.id && (typeof x.ID != 'undefined');
-                }), function(e) {
-                    return {
-                        text: esParamInfo.oDSTag ? e.Caption.substring(e.Caption.indexOf(".") + 1) : e.Caption,
-                        value: !isNaN(e.ID) ? parseInt(e.ID) : null
-                    };
-                }), "value");
-
-                esParamInfo.enumList = (enmList.length) ? enmList : undefined;
-
-
-                var gxDef = gridexInfo.DefaultValue;
-                if (gxDef && angular.isArray(gxDef)) {
-                    var dx = _.where(gxDef, {
-                        fParamID: esParamInfo.id
-                    });
-
-                    esParamInfo.defaultValues = getEsParamVal(esParamInfo, dx);
-                }
-
-                return esParamInfo;
-            }
-
-            function winGridInfoToESGridInfo(inGroupID, inFilterID, gridexInfo) {
-                if (!gridexInfo || !gridexInfo.LayoutColumn) {
-                    return null;
-                }
-
-                var filterInfo = _.where(gridexInfo.Filter, {
-                    ID: inFilterID
-                });
-
-                if (!filterInfo || filterInfo.length != 1) {
-                    return null;
-                }
-
-                var esGridInfo = {
-                    id: undefined,
-                    caption: undefined,
-                    rootTable: undefined,
-                    selectedMasterTable: undefined,
-                    selectedMasterField: undefined,
-                    totalRow: undefined,
-                    columnHeaders: undefined,
-                    columnSetHeaders: undefined,
-                    columnSetRowCount: undefined,
-                    columnSetHeaderLines: undefined,
-                    headerLines: undefined,
-                    groupByBoxVisible: undefined,
-                    filterLineVisible: false,
-                    previewRow: undefined,
-                    previewRowMember: undefined,
-                    previewRowLines: undefined,
-                    columns: undefined,
-                    params: undefined,
-                    defaultValues: undefined,
-                };
-
-                var z2 = _.map(_.where(gridexInfo.LayoutColumn, {
-                    fFilterID: inFilterID
-                }), function(x) {
-                    return winColToESCol(inGroupID, inFilterID, gridexInfo, x);
-                });
-
-                var z1 = _.sortBy(_.where(z2, {
-                    visible: true
-                }), function(x) {
-                    return parseInt(x.AA);
-                });
-
-                var z3 = _.map(z1, function(x) {
-                    return esColToKCol(esGridInfo, x);
-                });
-
-                filterInfo = filterInfo[0];
-                esGridInfo.id = filterInfo.ID;
-                esGridInfo.caption = filterInfo.Caption;
-                esGridInfo.rootTable = filterInfo.RootTable;
-                esGridInfo.selectedMasterTable = filterInfo.SelectedMasterTable;
-                esGridInfo.selectedMasterField = filterInfo.SelectedMasterField;
-                esGridInfo.totalRow = filterInfo.TotalRow;
-                esGridInfo.columnHeaders = filterInfo.ColumnHeaders;
-                esGridInfo.columnSetHeaders = filterInfo.ColumnSetHeaders;
-                esGridInfo.columnSetRowCount = filterInfo.ColumnSetRowCount;
-                esGridInfo.columnSetHeaderLines = filterInfo.ColumnSetHeaderLines;
-                esGridInfo.headerLines = filterInfo.HeaderLines;
-                esGridInfo.groupByBoxVisible = filterInfo.GroupByBoxVisible;
-                esGridInfo.filterLineVisible = filterInfo.FilterLineVisible;
-                esGridInfo.previewRow = filterInfo.PreviewRow;
-                esGridInfo.previewRowMember = filterInfo.PreviewRowMember;
-                esGridInfo.previewRowLines = filterInfo.PreviewRowLines;
-
-                esGridInfo.columns = z3;
-
-                esGridInfo.params = _.map(gridexInfo.Param, function(p) {
-                    return winParamInfoToesParamInfo(p, gridexInfo);
-                });
-
-
-                var dfValues = _.map(esGridInfo.params, function(p) {
-                    return p.defaultValues;
-                });
-
-                esGridInfo.defaultValues = new ESParamValues(dfValues);
-                return esGridInfo;
-            }
-
-            return ({
-                winGridInfoToESGridInfo: winGridInfoToESGridInfo,
-                winColToESCol: winColToESCol,
-                esColToKCol: esColToKCol,
-                esGridInfoToKInfo: esGridInfoToKInfo,
-                getZoomDataSource: prepareStdZoom,
-                getPQDataSource: prepareWebScroller,
-                getesComplexParamFunctionOptions: function() {
-                    return esComplexParamFunctionOptions;
+    esWebServices.factory('es.Services.ElasticSearch', ['es.Services.WebApi',
+        function(esWebApi) {
+            return {
+                searchIndex: function(index, body) {
+                    var eUrl = index + "/_search";
+                    return esWebApi.eSearch(eUrl, "post", body);
                 },
 
-            });
+                searchIndexAndDocument: function(index, docType, body) {
+                    var eUrl = index + "/" + docType + "/_search";
+                    return esWebApi.eSearch(eUrl, "post", body);
+                },
+
+                searchFree: esWebApi.eSearch
+            };
         }
     ]);
 
-})();
+}());
 
     (function() {
         'use strict';
@@ -2423,632 +2248,807 @@
 
 
 
-/***********************************
- * Entersoft SA
- * http://www.entersoft.eu
- * v0.0.72
- *
- ***********************************/
-
 (function() {
     'use strict';
+    var esWEBUI = angular.module('es.Web.UI', []);
 
-    /* Services */
+    var esComplexParamFunctionOptions = [{
+        caption: "=",
+        value: "EQ"
+    }, {
+        caption: "<>",
+        value: "NE"
+    }, {
+        caption: "<",
+        value: "LT"
+    }, {
+        caption: "<=",
+        value: "LE"
+    }, {
+        caption: ">",
+        value: "GT"
+    }, {
+        caption: ">=",
+        value: "GE"
+    }, {
+        caption: "...<=...<=...",
+        value: "RANGE"
+    }, {
+        caption: "Empty",
+        value: "NULL"
+    }, {
+        caption: "Not Empty",
+        value: "NOTNULL"
+    }];
 
-    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngSanitize' /*, 'es.Services.Analytics' */ ]);
-
-    esWebServices.
-    constant('ESWEBAPI_URL', {
-        __LOGIN__: "api/Login",
-        __PUBLICQUERY__: "api/rpc/PublicQuery/",
-        __PUBLICQUERY_INFO__: "api/rpc/PublicQueryInfo/",
-        __USERSITES__: "api/Login/Usersites",
-        __STANDARD_ZOOM__: "api/rpc/FetchStdZoom/",
-        __SCROLLERROOTTABLE__: "api/rpc/SimpleScrollerRootTable/",
-        __SCROLLER__: "api/rpc/SimpleScroller/",
-        __ENTITYACTION__: "api/Entity/",
-        __ENTITYBYGIDACTION__: "api/EntityByGID/",
-        __ELASTICSEARCH__: "api/esearch/",
-        __SERVER_CAPABILITIES__: "api/Login/ServerCapabilities/",
-        __REGISTER_EXCEPTION__: "api/rpc/registerException/",
-        __FETCH_COMPANY_PARAM__: "api/rpc/FetchCompanyParam/",
-        __FETCH_COMPANY_PARAMS__: "api/rpc/FetchCompanyParams/",
-        __SCROLLER_COMMAND__: "api/rpc/ScrollerCommand/",
-        __FORM_COMMAND__: "api/rpc/FormCommand/",
-        __FETCH_SESSION_INFO__: "api/rpc/FetchSessionInfo/",
-        __FETCH_ODS_TABLE_INFO__: "api/rpc/FetchOdsTableInfo/",
-        __FETCH_ODS_COLUMN_INFO__: "api/rpc/FetchOdsColumnInfo/",
-        __FETCH_ODS_RELATION_INFO__: "api/rpc/FetchOdsRelationInfo/",
-        __FETCH_ODS_DETAIL_RELATIONS_INFO__: "api/rpc/FetchOdsDetailRelationsInfo/",
-        __FETCH_ODS_MASTER_RELATIONS_INFO__: "api/rpc/FetchOdsMasterRelationsInfo/",
-    });
-
-    esWebServices.value("__WEBAPI_RT__", {
-        url: ""
-    });
-
-
-    function endsWith(str, suffix) {
-        return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    function ESParamVal(paramId, paramVal) {
+        this.paramCode = paramId;
+        this.paramValue = paramVal;
     }
 
-    function startsWith(str, prefix) {
-        return str.toLowerCase().indexOf(prefix.toLowerCase()) === 0;
+    ESParamVal.prototype.getExecuteVal = function() {
+        return this.paramValue;
+    };
+
+
+    function ESNumericParamVal(paramId, paramVal) {
+        //call super constructor
+        ESParamVal.call(this, paramId, paramVal);
     }
 
-    esWebServices.provider("es.Services.WebApi",
-        function() {
-
-            var urlWEBAPI = "";
-            var unSecureWEBAPI = "";
-            var secureWEBAPI = "";
-
-            var esConfigSettings = {
-                host: "",
-                allowUnsecureConnection: false,
-                subscriptionId: "",
-                subscriptionPassword: ""
-            };
-
-            return {
-                getSettings: function() {
-                    return esConfigSettings;
-                },
-
-                getServerUrl: function() {
-                    return urlWEBAPI;
-                },
-
-                setSettings: function(setting) {
-                    var __SECURE_HTTP_PREFIX__ = "https://";
-                    var __UNSECURE_HTTP_PREFIX__ = "http://";
-
-                    esConfigSettings = setting;
-
-                    if (esConfigSettings.host) {
-                        esConfigSettings.host = esConfigSettings.host.trim();
-
-                        if (startsWith(esConfigSettings.host, __SECURE_HTTP_PREFIX__)) {
-                            esConfigSettings.host = esConfigSettings.host.slice(__SECURE_HTTP_PREFIX__.length).trim();
-                        } else if (startsWith(esConfigSettings.host, __UNSECURE_HTTP_PREFIX__)) {
-                            esConfigSettings.host = esConfigSettings.host.slice(__UNSECURE_HTTP_PREFIX__.length).trim();
-                        }
-
-                        if (esConfigSettings.host == "") {
-                            throw "host for Entersoft WEB API Server is not specified";
-                        }
-
-                        if (!endsWith(esConfigSettings.host, "/")) {
-                            esConfigSettings.host += "/";
-                        }
-
-                        unSecureWEBAPI = __UNSECURE_HTTP_PREFIX__ + esConfigSettings.host;;
-                        secureWEBAPI = __SECURE_HTTP_PREFIX__ + esConfigSettings.host;
-
-                        if (esConfigSettings.allowUnsecureConnection) {
-                            urlWEBAPI = unSecureWEBAPI;
-                        } else {
-                            urlWEBAPI = secureWEBAPI;
-                        }
-
-                    } else {
-                        throw "host for Entersoft WEB API Server is not specified";
-                    }
-                    return this;
-                },
-
-                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'es.Services.Globals',
-                    function($http, $log, $q, $rootScope, ESWEBAPI_URL, esGlobals) {
-
-                        function fregisterException(inMessageObj, storeToRegister) {
-                            if (!inMessageObj) {
-                                return;
-                            }
-
-                            var messageObj = angular.copy(inMessageObj);
-
-                            try {
-                                messageObj.__SubscriptionID = esConfigSettings.subscriptionId;
-                                messageObj.__ServerUrl = urlWEBAPI;
-                                messageObj.__EDate = new Date();
-                                $.ajax({
-                                    type: "POST",
-                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__REGISTER_EXCEPTION__),
-                                    contentType: "application/json",
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
-                                    data: JSON.stringify({
-                                        exceptionData: messageObj,
-                                        exceptionStore: storeToRegister
-                                    }, null, '\t')
-                                });
-
-                                // if google analytics are enabled register the exception as well
-                                var esGA = esGlobals.getGA();
-                                if (esGA) {
-                                    esGA.registerException(messageObj);
-                                }
-
-                            } catch (loggingError) {
-
-                                // For Developers - log the log-failure.
-                                $log.warn("Error logging failed");
-                                $log.error(loggingError);
-                            }
-                        }
-
-                        function execScrollerCommand(scrollerCommandParams) {
-                            if (!scrollerCommandParams || !scrollerCommandParams.ScrollerID || !scrollerCommandParams.CommandID) {
-                                throw "ScrollerID and CommandID properties must be defined";
-                            }
-                            var surl = ESWEBAPI_URL.__SCROLLER_COMMAND__;
-
-                            var tt = esGlobals.trackTimer("SCR", "COMMAND", scrollerCommandParams.ScrollerID.concat("/", scrollerCommandParams.CommandID));
-                            tt.startTime();
-
-                            var ht = $http({
-                                method: 'post',
-                                headers: {
-                                    "Authorization": esGlobals.getWebApiToken()
-                                },
-                                url: surl,
-                                data: scrollerCommandParams
-                            });
-
-                            ht.then(function() {
-                                tt.endTime().send();
-                            });
-                            return ht;
-                        }
-
-                        function getOdsInfo(odsType, odsID) {
-                            var defered = $q.defer();
-                            $http.get(unSecureWEBAPI + ESWEBAPI_URL[odsType] + odsID)
-                                .success(function(data) {
-                                    defered.resolve(data);
-                                })
-                            return defered.promise;
-                        }
-
-                        function execFormCommand(formCommandParams) {
-                            if (!formCommandParams || !formCommandParams.EntityID || !formCommandParams.CommandID) {
-                                throw "EntityID and CommandID properties must be defined";
-                            }
-                            var surl = ESWEBAPI_URL.__FORM_COMMAND__;
-
-                            var tt = esGlobals.trackTimer("FORM", "COMMAND", formCommandParams.EntityID.concat("/", formCommandParams.CommandID));
-                            tt.startTime();
-
-                            var ht = $http({
-                                method: 'post',
-                                headers: {
-                                    "Authorization": esGlobals.getWebApiToken()
-                                },
-                                url: surl,
-                                data: formCommandParams
-                            });
-
-                            ht.then(function() {
-                                tt.endTime().send();
-                            });
-                            return ht;
-                        }
-
-                        function execScroller(apiUrl, groupID, filterID, params) {
-                            var surl = urlWEBAPI.concat(apiUrl, groupID, "/", filterID);
-                            var tt = esGlobals.trackTimer("SCR", "FETCH", groupID.concat("/", filterID));
-                            tt.startTime();
-
-                            var ht = $http({
-                                method: 'GET',
-                                headers: {
-                                    "Authorization": esGlobals.getWebApiToken()
-                                },
-                                url: surl,
-                                params: params
-                            });
-
-                            ht.then(function() {
-                                tt.endTime().send();
-                            });
-                            return ht;
-                        }
-
-                        return {
-
-                            getServerUrl: function() {
-                                return urlWEBAPI;
-                            },
-
-                            openSession: function(credentials) {
-                                var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
-                                tt.startTime();
-
-                                return $http({
-                                    method: 'post',
-                                    url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
-                                    data: {
-                                        SubscriptionID: esConfigSettings.subscriptionId,
-                                        SubscriptionPassword: esConfigSettings.subscriptionPassword,
-                                        Model: credentials
-                                    }
-                                }).
-                                success(function(data) {
-                                    esGlobals.sessionOpened(data, credentials);
-                                    tt.endTime().send();
-                                }).
-                                error(function(data, status, headers, config) {
-                                    esGlobals.sessionClosed();
-                                    if (data) {
-                                        $log.error(data);
-                                    } else {
-                                        console.log("Generic Http error");
-                                    }
-                                });
-                            },
-
-                            logout: function() {
-                                esGlobals.sessionClosed();
-                                $log.info("LOGOUT User");
-                            },
-
-                            fetchCompanyParam: function(esparam) {
-                                if (!esparam) {
-                                    return undefined;
-                                }
-
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_COMPANY_PARAM__, esparam);
-                                var ht = $http({
-                                    method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
-                                    url: surl
-                                });
-                                return ht;
-                            },
-
-                            fetchCompanyParams: function(esparam) {
-                                var surl;
-                                if (!esparam) {
-                                    // get all parameters
-                                    surl = urlWEBAPI + ESWEBAPI_URL.__FETCH_COMPANY_PARAMS__;
-                                } else {
-                                    if (angular.isArray(esparam)) {
-                                        surl = urlWEBAPI + ESWEBAPI_URL.__FETCH_COMPANY_PARAMS__ + esparam.join("/");
-                                    } else {
-                                        surl = urlWEBAPI + ESWEBAPI_URL.__FETCH_COMPANY_PARAMS__ + esparam;
-                                    }
-                                }
-
-                                var ht = $http({
-                                    method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
-                                    url: surl
-                                });
-                                return ht;
-                            },
-
-                            registerException: fregisterException,
-
-                            fetchOdsTableInfo: function(tableID) {
-                                return getOdsInfo("__FETCH_ODS_TABLE_INFO__", tableID);
-                            },
-
-                            fetchOdsColumnInfo: function(tableID, columnID) {
-                                var odsItem = columnID ? tableID + "/" + columnID : tableID;
-                                return getOdsInfo("__FETCH_ODS_COLUMN_INFO__", odsItem);
-                            },
-
-                            fetchOdsRelationInfo: function(relationID) {
-                                return getOdsInfo("__FETCH_ODS_RELATION_INFO__", relationID);
-                            },
-
-                            fetchOdsMasterRelationsInfo: function(tableID, columnID) {
-                                return getOdsInfo("__FETCH_ODS_MASTER_RELATIONS_INFO__", tableID + "/" +columnID);  
-                            },
-
-                            fetchOdsdDetailRelationsInfo: function(tableID, columnID) {
-                                return getOdsInfo("__FETCH_ODS_DETAIL_RELATIONS_INFO__", tableID + "/" +columnID);  
-                            },
-
-                            fetchServerCapabilities: function() {
-
-                                var defered = $q.defer();
-
-                                $http.get(unSecureWEBAPI + ESWEBAPI_URL.__SERVER_CAPABILITIES__)
-                                    .success(function(data) {
-                                        defered.resolve(data);
-                                    })
-                                    .error(function() {
-                                        $http.get(secureWEBAPI + ESWEBAPI_URL.__SERVER_CAPABILITIES__)
-                                            .success(function(data) {
-                                                defered.resolve(data);
-                                            })
-                                            .error(function(dat, stat, header, config) {
-                                                defered.reject([dat, stat, header, config]);
-                                            });
-                                    });
-
-                                return defered.promise;
-                            },
-
-                            fetchScroller: function(groupID, filterID, params) {
-                                return execScroller(ESWEBAPI_URL.__SCROLLER__, groupID, filterID, params);
-                            },
-
-                            fetchSimpleScrollerRootTable: function(groupID, filterID, params) {
-                                return execScroller(ESWEBAPI_URL.__SCROLLERROOTTABLE__, groupID, filterID, params);
-                            },
-
-                            fetchUserSites: function(ebsuser) {
-                                return $http({
-                                    method: 'post',
-                                    url: urlWEBAPI + ESWEBAPI_URL.__USERSITES__,
-                                    data: {
-                                        SubscriptionID: esConfigSettings.subscriptionId,
-                                        SubscriptionPassword: esConfigSettings.subscriptionPassword,
-                                        Model: ebsuser
-                                    }
-                                });
-                            },
-
-                            fetchSessionInfo: function() {
-                                return $http({
-                                    method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
-                                    url: urlWEBAPI + ESWEBAPI_URL.__FETCH_SESSION_INFO__
-                                });
-                            },
-
-                            executeNewEntityAction: function(entityType, actionID, commandParams) {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ENTITYACTION__, entityType, "/", actionID);
-                                var tt = esGlobals.trackTimer("ACTION", "NEW_ENTITY", entityType.concat("/", actionID));
-                                tt.startTime();
-
-                                var ht = $http({
-                                    method: 'post',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
-                                    url: surl,
-                                    data: commandParams
-                                });
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-                                return ht;
-                            },
-
-                            executeEntityActionByCode: function(entityType, entityCode, actionID, commandParams) {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ENTITYACTION__, entityType, "/", entityCode, "/", actionID);
-                                var tt = esGlobals.trackTimer("ACTION", "ENTITY_CODE", entityType.concat("/", actionID));
-                                tt.startTime();
-
-                                var ht = $http({
-                                    method: 'post',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
-                                    url: surl,
-                                    data: commandParams
-                                });
-
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-                                return ht;
-                            },
-
-                            executeEntityActionByGID: function(entityType, entityGID, actionID, commandParams) {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ENTITYBYGIDACTION__, entityType, "/", entityGID, "/", actionID);
-                                var tt = esGlobals.trackTimer("ACTION", "ENTITY_GID", entityType.concat("/", actionID));
-                                tt.startTime();
-
-                                var ht = $http({
-                                    method: 'post',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
-                                    url: surl,
-                                    data: commandParams
-                                });
-
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-                                return ht;
-
-                            },
-
-                            executeFormCommand: function(formCommandParams) {
-                                return execFormCommand(formCommandParams);
-                            },
-
-                            executeFormCommandDS: function(entityID, commandID, commandParams, ds) {
-                                var params = {
-                                    EntityID: entityID,
-                                    CommandID: commandID,
-                                    CommandParams: commandParams
-                                };
-                                if (ds) {
-                                    params.EntityDataset = ds;
-                                }
-
-                                return execFormCommand(params);
-                            },
-
-                            executeScrollerCommandSRV: function(groupID, filterID, commandID, scrollerParams, commandParams) {
-
-                                var scrollerCommandParams = {
-                                    ScrollerID: groupID + "/" + filterID,
-                                    CommandID: commandID,
-                                    ScrollerParams: scrollerParams,
-                                    CommandParams: commandParams
-                                };
-                                return execScrollerCommand(scrollerCommandParams);
-                            },
-
-                            executeScrollerCommandDS: function(groupID, filterID, commandID, dataSet, commandParams) {
-                                var scrollerCommandParams = {
-                                    ScrollerID: groupID + "/" + filterID,
-                                    CommandID: commandID,
-                                    ScrollerDataset: dataSet,
-                                    CommandParams: commandParams
-                                };
-                                return execScrollerCommand(scrollerCommandParams);
-                            },
-
-                            fetchPublicQueryInfo: function(GroupID, FilterID) {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, GroupID, "/", FilterID);
-                                var tt = esGlobals.trackTimer("PQ", "INFO", GroupID.concat("/", FilterID));
-                                tt.startTime();
-
-                                var ht = $http({
-                                    method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
-                                    url: surl
-                                });
-
-
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-
-                                //finally return the $http promise
-                                return ht;
-                            },
-
-                            fetchStdZoom: function(zoomID, options) {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__STANDARD_ZOOM__, zoomID);
-                                var tt = esGlobals.trackTimer("ZOOM", "FETCH", zoomID);
-                                tt.startTime();
-
-                                var ht = $http({
-                                    method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken(),
-                                        "X-ESPQOptions": JSON.stringify(options)
-                                    },
-                                    url: surl
-                                });
-
-
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-
-                                //finally return the $http promise
-                                return ht;
-                            },
-
-                            /**
-                             * fetch PQ schema
-                             * @param  {string} GroupID
-                             * @param  {string} FilterID
-                             * @param  {object} Params - parameters specific to GroupID / FilterID
-                             * [@param  {string} httpVerb] - optional parameter to specify HTTP verb. Default is GET
-                             * @return {AngularHttpPromise}
-                             */
-                            fetchPublicQuery: function(GroupID, FilterID, options, Params, httpVerb) {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY__, GroupID, "/", FilterID);
-                                var tt = esGlobals.trackTimer("PQ", "FETCH", GroupID.concat("/", FilterID));
-                                tt.startTime();
-
-                                /**
-                                 * $http object configuration
-                                 * @type {Object}
-                                 */
-                                var httpConfig = {
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
-                                    url: surl,
-                                    params: Params
-                                };
-
-                                if (options) {
-                                    httpConfig.headers["X-ESPQOptions"] = JSON.stringify(options);
-                                }
-
-                                //if called with 3 arguments then default to a GET request
-                                httpConfig.method = httpVerb || 'GET';
-
-                                //if not a GET request, switch to data instead of params
-                                if (httpConfig.method !== 'GET') {
-                                    delete httpConfig.params;
-                                    httpConfig.data = Params;
-                                }
-
-                                var ht = $http(httpConfig);
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-
-                                //finally return the $http promise
-                                return ht;
-                            },
-
-
-
-                            eSearch: function(eUrl, eMethod, eBody) {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ELASTICSEARCH__, eUrl);
-
-                                return $http({
-                                    method: eMethod,
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
-                                    url: surl,
-                                    data: eBody
-                                }).success(function(data) {
-                                    // if google analytics are enabled register the exception as well
-                                    var esGA = esGlobals.getGA();
-                                    if (esGA) {
-                                        esGA.registerEventTrack({
-                                            category: "ELASTIC_SEARCH",
-                                            action: "SEARCH",
-                                            label: eUrl
-                                        });
-                                    }
-                                }).error(function(err) {
-                                    try {
-                                        fregisterException(err);
-                                    } catch (exc) {
-
-                                    }
-                                });
-                            }
-                        }
-                    }
-                ]
+    //inherit from ESParamval SuperClass
+    ESNumericParamVal.prototype = Object.create(ESParamVal.prototype);
+
+
+    ESNumericParamVal.prototype.getExecuteVal = function() {
+        switch (this.paramValue.oper) {
+            case "RANGE":
+                return "ESNumeric(" + this.paramValue.oper + ", '" + this.paramValue.value + "', '" + this.paramValue.valueTo + "')";
+            case "NULL":
+            case "NOTNULL":
+                return "ESNumeric(" + this.paramValue.oper + ", '0')";
+            default:
+                return "ESNumeric(" + this.paramValue.oper + ", '" + this.paramValue.value + "')";
+        }
+    }
+
+    function ESStringParamVal(paramId, paramVal) {
+        //call super constructor
+        ESParamVal.call(this, paramId, paramVal);
+    }
+
+    //inherit from ESParamval SuperClass
+    ESStringParamVal.prototype = Object.create(ESParamVal.prototype);
+
+
+    ESStringParamVal.prototype.getExecuteVal = function() {
+        switch (this.paramValue.oper) {
+            case "EQ":
+                return this.paramValue.value;
+            case "RANGE":
+                return "ESString(" + this.paramValue.oper + ", '" + this.paramValue.value + "', '" + this.paramValue.valueTo + "')";
+            case "NULL":
+            case "NOTNULL":
+                return "ESString(" + this.paramValue.oper + ", '')";
+            default:
+                return "ESString(" + this.paramValue.oper + ", '" + this.paramValue.value + "')";
+        }
+    }
+
+
+    function ESParamValues(vals) {
+        this.setParamValues(vals);
+    }
+
+    ESParamValues.prototype.setParamValues = function(vals) {
+        var x = this;
+
+        //delete any previsously assigned properties
+        for (var prop in x) {
+            if (x.hasOwnProperty(prop)) {
+                delete x[prop];
+            }
+        };
+
+        //asign new properties
+        if (!vals || !_.isArray(vals) || vals.length == 0) {
+            return;
+        }
+
+        vals.forEach(function(element, index, array) {
+            x[element.paramCode] = element;
+        });
+    }
+
+    ESParamValues.prototype.getExecuteVals = function() {
+        var x = this;
+        var ret = {};
+        for (var prop in x) {
+            if (x.hasOwnProperty(prop)) {
+                var p = x[prop];
+
+                if (p.paramValue) {
+                    ret[p.paramCode] = p.getExecuteVal();
+                }
             }
         }
-    );
+        return ret;
+    }
 
-    esWebServices.factory('es.Services.ElasticSearch', ['es.Services.WebApi',
-        function(esWebApi) {
-            return {
-                searchIndex: function(index, body) {
-                    var eUrl = index + "/_search";
-                    return esWebApi.eSearch(eUrl, "post", body);
+    function prepareStdZoom($log, zoomID, esWebApiService) {
+        var xParam = {
+            transport: {
+                read: function(options) {
+
+                    $log.info("FETCHing ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
+
+                    var pqOptions = {};
+                    esWebApiService.fetchStdZoom(zoomID, pqOptions)
+                        .success(function(pq) {
+                            // SME CHANGE THIS ONCE WE HAVE CORRECT PQ
+                            if (pq.Count == -1) {
+                                pq.Count = pq.Rows ? pq.Rows.length : 0;
+                            }
+                            // END tackling
+
+                            options.success(pq);
+                            $log.info("FETCHed ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
+                        })
+                        .error(function(err) {
+                            options.error(err);
+                        });
+                }
+
+            },
+            schema: {
+                data: "Rows",
+                total: "Count"
+            }
+        }
+        return new kendo.data.DataSource(xParam);
+    }
+
+
+    function prepareWebScroller(dsType, esWebApiService, $log, espqParams, esOptions) {
+        var xParam = {
+            transport: {
+                read: function(options) {
+
+                    var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
+                    $log.info("FETCHing PQ with PQParams ", JSON.stringify(qParams), " and gridoptions ", JSON.stringify(options));
+                    var pqOptions = {};
+
+                    if (options.data && options.data.page && options.data.pageSize) {
+                        pqOptions.WithCount = true;
+                        pqOptions.Page = options.data.page;
+                        pqOptions.PageSize = options.data.pageSize
+                    }
+
+                    var executeParams = qParams.Params;
+                    if (executeParams instanceof ESParamValues) {
+                        executeParams = executeParams.getExecuteVals();
+                    }
+
+
+                    esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
+                        .success(function(pq) {
+
+                            if (!angular.isDefined(pq.Rows)) {
+                                pq.Rows = [];
+                                pq.Count = 0;
+                            }
+
+                            if (!angular.isDefined(pq.Count)) {
+                                pq.Count = -1;
+                            }
+
+                            options.success(pq);
+                            $log.info("FETCHed PQ with PQParams ", JSON.stringify(executeParams), " and gridoptions ", JSON.stringify(options));
+                        })
+                        .error(function(err) {
+                            $log.error("Error in DataSource ", err);
+                            options.error(err);
+                        });
                 },
 
-                searchIndexAndDocument: function(index, docType, body) {
-                    var eUrl = index + "/" + docType + "/_search";
-                    return esWebApi.eSearch(eUrl, "post", body);
-                },
+            },
+            requestStart: function(e) {
+                $log.info("request started ", e);
+            },
 
-                searchFree: esWebApi.eSearch
+            schema: {
+                data: "Rows",
+                total: "Count"
+            }
+        }
+
+        if (esOptions) {
+            angular.extend(xParam, esOptions);
+        }
+
+        if (dsType && dsType === "pivot") {
+            return new kendo.data.PivotDataSource(xParam);
+        } else {
+            return new kendo.data.DataSource(xParam);
+        }
+    }
+
+    esWEBUI.filter('esTrustHtml', ['$sce',
+        function($sce) {
+            return function(text) {
+                return $sce.trustAsHtml(text);
             };
         }
     ]);
 
-}());
+    esWEBUI
+        .filter('esParamTypeMapper', function() {
+            var f = function(pParam) {
+                if (!pParam) {
+                    return "";
+                }
+
+                var pt = pParam.parameterType.toLowerCase()
+
+                //ESNumeric
+                if (pt.indexOf("entersoft.framework.platform.esnumeric") == 0) {
+                    return "esParamAdvancedNumeric";
+                }
+
+                //ESString
+                if (pt.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
+                    return "esParamAdvancedString";
+                }
+
+                // Numeric (Integer or Decimal)
+                if (pt.indexOf("system.string, mscorlib") == 0) {
+                    switch (pParam.controlType) {
+                        case 1:
+                            {
+                                return "esParamNumeric";
+                            }
+                            break;
+                        case 2:
+                            {
+                                return "esParamNumeric";
+                            }
+                            break;
+                    }
+                }
+
+
+                //case Enum 
+                if (pParam.enumList && (pParam.enumList.length > 1)) {
+                    if (pParam.enumOptionAll) {
+                        return "esParamMultiEnum";
+                    } else {
+                        return "esParamEnum";
+                    }
+                }
+
+                if (pParam.invSelectedMasterTable) {
+                    if (pParam.invSelectedMasterTable[4] == "Z") {
+                        if (pParam.multiValued) {
+                            return "esParamMultiZoom";
+                        } else {
+                            return "esParamZoom";
+                        }
+                    } else {
+                        return "esParamText";
+                    }
+                }
+
+                return "esParamText";
+
+            };
+
+
+            return f;
+        })
+        .directive('esGrid', ['es.Services.WebApi', 'es.UI.Web.UIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esGroupId: "=",
+                    esFilterId: "=",
+                    esExecuteParams: "=",
+                    esGridOptions: "=",
+                },
+                templateUrl: function(element, attrs) {
+                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
+                    return "src/partials/esGrid.html";
+                },
+                link: function(scope, iElement, iAttrs) {
+                    if (!scope.esGroupId || !scope.esFilterId) {
+                        throw "You must set GroupID and FilterID for esgrid to work";
+                    }
+
+
+                    if (!scope.esGridOptions && !iAttrs.esGridOptions) {
+                        // Now esGridOption explicitly assigned so ask the server 
+                        esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
+                            .success(function(ret) {
+                                var p1 = ret;
+                                var p2 = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, p1);
+                                scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, scope.esGroupId, scope.esFilterId, scope.esExecuteParams, p2);
+                            });
+                    }
+                }
+            };
+        }])
+        .directive('esParam', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esParamDef: "=",
+                    esParamVal: "=",
+                    esType: "="
+                },
+                template: '<div ng-include src="\'src/partials/\'+esType+\'.html\'"></div>',
+                link: function(scope, iElement, iAttrs) {
+
+                    if (!scope.esParamDef) {
+                        throw "You must set a param";
+                    }
+
+                    scope.esWebUIHelper = esWebUIHelper;
+                    scope.esWebApiService = esWebApiService;
+
+                    if (scope.esParamDef.invSelectedMasterTable) {
+                        scope.esParamLookupDS = prepareStdZoom($log, scope.esParamDef.invSelectedMasterTable, esWebApiService);
+                    }
+                }
+            };
+        }])
+        .directive('esWebPq', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esGroupId: "=",
+                    esFilterId: "=",
+                },
+                templateUrl: function(element, attrs) {
+                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
+                    return "src/partials/esWebPQ.html";
+                },
+                link: function(scope, iElement, iAttrs) {
+                    if (!scope.esGroupId || !scope.esFilterId) {
+                        throw "You must set the pair es-group-id and es-filter-id attrs";
+                    }
+
+                    esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
+                        .success(function(ret) {
+                            var v = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, ret);
+                            scope.esParamsValues = v.defaultValues;
+                            scope.esParamsDef = v.params;
+                            scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, scope.esGroupId, scope.esFilterId, scope.esParamsValues, v);
+                        });
+                }
+            };
+        }])
+        .directive('esParamsPanel', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esParamsDef: '=',
+                    esPqInfo: '=',
+                    esParamsValues: '=',
+                    esGroupId: "=",
+                    esFilterId: "=",
+                },
+                templateUrl: function(element, attrs) {
+                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
+                    return "src/partials/esParams.html";
+                },
+                link: function(scope, iElement, iAttrs) {
+                    if (!iAttrs.esParamsDef && !iAttrs.esPqInfo && (!scope.esGroupId || !scope.esFilterId)) {
+                        throw "You must set either the es-params-def or ea-pq-info or the pair es-group-id and es-filter-id attrs";
+                    }
+
+                    if (!iAttrs.esParamsDef) {
+                        if (!iAttrs.esPqInfo) {
+                            // we are given groupid and filterid =>
+                            // we must retrieve pqinfo on owr own
+                            esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
+                                .success(function(ret) {
+                                    var v = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, ret);
+                                    scope.esParamsValues = v.defaultValues;
+                                    scope.esParamsDef = v.params;
+                                });
+                        } else {
+                            scope.esParamDef = esPqInfo.params;
+                        }
+                    }
+                }
+            };
+        }]);
+
+    esWEBUI.factory("es.UI.Web.UIHelper", ['es.Services.WebApi', '$log',
+        function(esWebApiService, $log) {
+
+            function esColToKCol(esGridInfo, esCol) {
+                var tCol = {
+                    field: esCol.field,
+                    title: esCol.title,
+                    width: esCol.width,
+                    attributes: esCol.attributes,
+                    values: esCol.enumValues,
+
+                }
+
+                if (esCol.formatString && esCol.formatString != "") {
+                    tCol.format = "{0:" + esCol.formatString + "}";
+                }
+                return tCol;
+            }
+
+            function esGridInfoToKInfo(esWebApiService, esGroupId, esFilterId, executeParams, esGridInfo) {
+                var grdopt = {
+                    pageable: {
+                        refresh: true
+                    },
+                    sortable: true,
+                    filterable: true,
+                    resizable: true,
+                    toolbar: ["excel"],
+                    excel: {
+                        allPages: true,
+                        fileName: esGroupId + "-" + esFilterId + ".xlsx",
+                        filterable: true
+                    }
+                };
+
+                var kdsoptions = {
+                    serverFiltering: true,
+                    serverPaging: true,
+                    pageSize: 20
+                };
+
+                grdopt.columns = esGridInfo.columns;
+
+                grdopt.dataSource = prepareWebScroller(null, esWebApiService, $log, function() {
+                    return {
+                        GroupID: esGroupId,
+                        FilterID: esFilterId,
+                        Params: executeParams
+                    }
+                }, kdsoptions);
+
+                return grdopt;
+            }
+
+            function winColToESCol(inGroupID, inFilterID, gridexInfo, jCol) {
+                var esCol = {
+                    AA: undefined,
+                    field: undefined,
+                    title: undefined,
+                    width: undefined,
+                    visible: undefined,
+                    attributes: undefined,
+                    enumValues: undefined,
+                    formatString: undefined,
+                };
+
+                esCol.AA = parseInt(jCol.AA);
+                esCol.field = jCol.ColName;
+                esCol.title = jCol.Caption;
+                esCol.formatString = jCol.FormatString;
+                esCol.visible = (jCol.Visible == "true");
+
+                if (jCol.TextAlignment == "3") {
+                    esCol.attributes = {
+                        style: "text-align: right;"
+                    };
+                }
+
+                //Enum Column
+                if (jCol.EditType == "5") {
+                    var l1 = _.sortBy(_.filter(gridexInfo.ValueList, function(x) {
+                        var v = x.ColName == jCol.ColName;
+                        v = v && (typeof x.Value != 'undefined');
+                        v = v && x.fFilterID == inFilterID;
+                        return v;
+                    }), function(x) {
+                        return !isNaN(x.Value) ? parseInt(x.Value) : null;
+                    });
+                    var l2 = _.map(l1, function(x) {
+                        return {
+                            text: x.Caption,
+                            value: !isNaN(x.Value) ? parseInt(x.Value) : null
+                        };
+                    });
+
+                    if (l2 && l2.length) {
+                        esCol.enumValues = l2;
+                    }
+                }
+                return esCol;
+            }
+
+            //here 
+
+            function esEval(pInfo, expr) {
+                var EQ = {
+                    oper: "EQ",
+                    paramID: pInfo.id
+                };
+                var GE = {
+                    oper: "GE",
+                    paramID: pInfo.id
+                };
+                var GT = {
+                    oper: "GT",
+                    paramID: pInfo.id
+                };
+                var LE = {
+                    oper: "LE",
+                    paramID: pInfo.id
+                };
+                var LT = {
+                    oper: "LT",
+                    paramID: pInfo.id
+                };
+                var NE = {
+                    oper: "NE",
+                    paramID: pInfo.id
+                };
+                var RANGE = {
+                    oper: "RANGE",
+                    paramID: pInfo.id
+                };
+                var NULL = {
+                    oper: "NULL",
+                    paramID: pInfo.id
+                };
+                var NOTNULL = {
+                    oper: "NOTNULL",
+                    paramID: pInfo.id
+                };
+                return eval(expr);
+            }
+
+            function ESNumeric(inArg, val, val2) {
+                var k = {
+                    value: !isNaN(val) ? parseInt(val) : null,
+                    valueTo: !isNaN(val2) ? parseInt(val2) : null,
+                    oper: inArg.oper || "EQ"
+                };
+                return new ESNumericParamVal(inArg.paramID, k);
+            }
+
+            function ESString(inArg, val, val2) {
+                var k = {
+                    value: val,
+                    valueTo: val2,
+                    oper: inArg.oper || "EQ"
+                };
+                return new ESStringParamVal(inArg.paramID, k);
+            }
+
+            function getEsParamVal(esParamInfo, dx) {
+                var ps = esParamInfo.parameterType.toLowerCase();
+
+                //ESNumeric
+                if (ps.indexOf("entersoft.framework.platform.esnumeric") == 0) {
+                    if (!dx || dx.length == 0) {
+                        return ESNumeric(esParamInfo.id, {
+                            oper: "EQ"
+                        });
+                    }
+                    return esEval(esParamInfo, dx[0].Value);
+                }
+
+                //ESString
+                if (ps.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
+                    if (!dx || dx.length == 0) {
+                        return new ESStringParamVal(esParamInfo.id, {
+                            oper: "EQ",
+                            value: null
+                        });
+                    }
+
+                    return esEval(esParamInfo, dx[0].Value);
+                }
+
+                //Not set
+                if (!dx || dx.length == 0) {
+                    return new ESParamVal(esParamInfo.id, null);
+                }
+
+                var processedVals = _.map(dx, function(k) {
+                    return processStrToken(esParamInfo, k.Value);
+                });
+
+                if (processedVals.length == 1) {
+                    processedVals = processedVals[0];
+                }
+                return new ESParamVal(esParamInfo.id, processedVals);
+            }
+
+            function processStrToken(esParamInfo, val) {
+                if (!esParamInfo) {
+                    return val;
+                }
+
+                var ps = esParamInfo.parameterType.toLowerCase();
+                if (ps.indexOf("system.byte") != -1 || ps.indexOf("system.int") != -1) {
+                    return parseInt(val);
+                }
+
+                if (esParamInfo.enumList && esParamInfo.enumList.length > 1) {
+                    return parseInt(val);
+                }
+
+                return val;
+            }
+
+            function winParamInfoToesParamInfo(winParamInfo, gridexInfo) {
+                if (!winParamInfo) {
+                    return null;
+                }
+
+                var esParamInfo = {
+                    id: undefined,
+                    aa: undefined,
+                    caption: undefined,
+                    toolTip: undefined,
+                    controlType: undefined,
+                    parameterType: undefined,
+                    precision: undefined,
+                    multiValued: undefined,
+                    visible: undefined,
+                    required: undefined,
+                    oDSTag: undefined,
+                    formatStrng: undefined,
+                    tags: undefined,
+                    visibility: undefined,
+                    invSelectedMasterTable: undefined,
+                    invSelectedMasterField: undefined,
+                    invTableMappings: undefined,
+                    defaultValues: undefined,
+                    enumOptionAll: undefined,
+                    enumList: undefined
+                };
+
+                esParamInfo.id = winParamInfo.ID;
+                esParamInfo.aa = parseInt(winParamInfo.AA);
+                esParamInfo.caption = winParamInfo.Caption;
+                esParamInfo.toolTip = winParamInfo.Tooltip;
+                esParamInfo.controlType = parseInt(winParamInfo.ControlType);
+                esParamInfo.parameterType = winParamInfo.ParameterType;
+                esParamInfo.precision = parseInt(winParamInfo.Precision);
+                esParamInfo.multiValued = winParamInfo.MultiValued == "true";
+                esParamInfo.visible = winParamInfo.Visible == "true";
+                esParamInfo.required = winParamInfo.Required == "true";
+                esParamInfo.oDSTag = winParamInfo.ODSTag;
+                esParamInfo.tags = winParamInfo.Tags;
+                esParamInfo.visibility = parseInt(winParamInfo.Visibility);
+                esParamInfo.invSelectedMasterTable = winParamInfo.InvSelectedMasterTable;
+                esParamInfo.invSelectedMasterField = winParamInfo.InvSelectedMasterField;
+                esParamInfo.invTableMappings = winParamInfo.InvTableMappings;
+
+                esParamInfo.enumOptionAll = winParamInfo.EnumOptionAll;
+                var enmList = _.sortBy(_.map(_.filter(gridexInfo.EnumItem, function(x) {
+                    return x.fParamID == esParamInfo.id && (typeof x.ID != 'undefined');
+                }), function(e) {
+                    return {
+                        text: esParamInfo.oDSTag ? e.Caption.substring(e.Caption.indexOf(".") + 1) : e.Caption,
+                        value: !isNaN(e.ID) ? parseInt(e.ID) : null
+                    };
+                }), "value");
+
+                esParamInfo.enumList = (enmList.length) ? enmList : undefined;
+
+
+                var gxDef = gridexInfo.DefaultValue;
+                if (gxDef && angular.isArray(gxDef)) {
+                    var dx = _.where(gxDef, {
+                        fParamID: esParamInfo.id
+                    });
+
+                    esParamInfo.defaultValues = getEsParamVal(esParamInfo, dx);
+                }
+
+                return esParamInfo;
+            }
+
+            function winGridInfoToESGridInfo(inGroupID, inFilterID, gridexInfo) {
+                if (!gridexInfo || !gridexInfo.LayoutColumn) {
+                    return null;
+                }
+
+                var filterInfo = _.where(gridexInfo.Filter, {
+                    ID: inFilterID
+                });
+
+                if (!filterInfo || filterInfo.length != 1) {
+                    return null;
+                }
+
+                var esGridInfo = {
+                    id: undefined,
+                    caption: undefined,
+                    rootTable: undefined,
+                    selectedMasterTable: undefined,
+                    selectedMasterField: undefined,
+                    totalRow: undefined,
+                    columnHeaders: undefined,
+                    columnSetHeaders: undefined,
+                    columnSetRowCount: undefined,
+                    columnSetHeaderLines: undefined,
+                    headerLines: undefined,
+                    groupByBoxVisible: undefined,
+                    filterLineVisible: false,
+                    previewRow: undefined,
+                    previewRowMember: undefined,
+                    previewRowLines: undefined,
+                    columns: undefined,
+                    params: undefined,
+                    defaultValues: undefined,
+                };
+
+                var z2 = _.map(_.where(gridexInfo.LayoutColumn, {
+                    fFilterID: inFilterID
+                }), function(x) {
+                    return winColToESCol(inGroupID, inFilterID, gridexInfo, x);
+                });
+
+                var z1 = _.sortBy(_.where(z2, {
+                    visible: true
+                }), function(x) {
+                    return parseInt(x.AA);
+                });
+
+                var z3 = _.map(z1, function(x) {
+                    return esColToKCol(esGridInfo, x);
+                });
+
+                filterInfo = filterInfo[0];
+                esGridInfo.id = filterInfo.ID;
+                esGridInfo.caption = filterInfo.Caption;
+                esGridInfo.rootTable = filterInfo.RootTable;
+                esGridInfo.selectedMasterTable = filterInfo.SelectedMasterTable;
+                esGridInfo.selectedMasterField = filterInfo.SelectedMasterField;
+                esGridInfo.totalRow = filterInfo.TotalRow;
+                esGridInfo.columnHeaders = filterInfo.ColumnHeaders;
+                esGridInfo.columnSetHeaders = filterInfo.ColumnSetHeaders;
+                esGridInfo.columnSetRowCount = filterInfo.ColumnSetRowCount;
+                esGridInfo.columnSetHeaderLines = filterInfo.ColumnSetHeaderLines;
+                esGridInfo.headerLines = filterInfo.HeaderLines;
+                esGridInfo.groupByBoxVisible = filterInfo.GroupByBoxVisible;
+                esGridInfo.filterLineVisible = filterInfo.FilterLineVisible;
+                esGridInfo.previewRow = filterInfo.PreviewRow;
+                esGridInfo.previewRowMember = filterInfo.PreviewRowMember;
+                esGridInfo.previewRowLines = filterInfo.PreviewRowLines;
+
+                esGridInfo.columns = z3;
+
+                esGridInfo.params = _.map(gridexInfo.Param, function(p) {
+                    return winParamInfoToesParamInfo(p, gridexInfo);
+                });
+
+
+                var dfValues = _.map(esGridInfo.params, function(p) {
+                    return p.defaultValues;
+                });
+
+                esGridInfo.defaultValues = new ESParamValues(dfValues);
+                return esGridInfo;
+            }
+
+            return ({
+                winGridInfoToESGridInfo: winGridInfoToESGridInfo,
+                winColToESCol: winColToESCol,
+                esColToKCol: esColToKCol,
+                esGridInfoToKInfo: esGridInfoToKInfo,
+                getZoomDataSource: prepareStdZoom,
+                getPQDataSource: prepareWebScroller,
+                getesComplexParamFunctionOptions: function() {
+                    return esComplexParamFunctionOptions;
+                },
+
+            });
+        }
+    ]);
+
+})();
