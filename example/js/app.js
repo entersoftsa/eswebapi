@@ -11,10 +11,29 @@
     ]);
 
     eskbApp.config(['$logProvider',
+        '$routeProvider',
         '$httpProvider',
         'es.Services.WebApiProvider',
         '$exceptionHandlerProvider',
-        function($logProvider, $httpProvider, esWebApiServiceProvider, $exceptionHandlerProvider) {
+        function($logProvider, $routeProvider, $httpProvider, esWebApiServiceProvider, $exceptionHandlerProvider) {
+
+            $routeProvider
+            .when('/', {
+                templateUrl: 'login.html',
+                controller: 'loginCtrl'
+            })
+            .when('/login', {
+                templateUrl: 'login.html',
+                controller: 'loginCtrl'
+            })
+            .when('/properties', {
+                templateUrl: 'properties.html',
+                controller: 'propertiesCtrl'
+            })
+            .when('/pq', {
+                templateUrl: 'pq.html',
+                controller: 'pqCtrl'
+            });
 
             var interceptor = ['$q', '$sessionStorage', '$timeout', '$location', function($q, $sessionStorage, $timeout, $location) {
                 var httpHandlers = {
@@ -52,11 +71,12 @@
 
             var subscriptionId = "";
             esWebApiServiceProvider.setSettings({
-                host: "eswebapialp.azurewebsites.net",
+                //host: "eswebapialp.azurewebsites.net",
                 //host: "eswebapi.entersoft.gr",
+                host: "localhost/eswebapi",
                 subscriptionId: subscriptionId,
                 subscriptionPassword: "passx",
-                allowUnsecureConnection: false
+                allowUnsecureConnection: true
             });
 
             // $logProvider.addESWebApiAppender(esWebApiServiceProvider.getServerUrl(), subscriptionId);

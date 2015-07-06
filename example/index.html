@@ -10,49 +10,24 @@
     <link rel="stylesheet" href="lib/telerik/styles/kendo.dataviz.material.min.css" />
 </head>
 
-<body ng-cloak ng-controller="esPQCtrl">
+<body ng-cloak>
     <div>
-        <h1>
-        {{currentUser.Name}} - PQ {{pqInfo.caption}}
-        </h1>
-        <h3>
-         ESAngular Version is {{version.esAngularVersion}}
-        </h3>
-        <h3>
-         ESWebApi Version is {{version.esWebAPIVersion}}
-        </h3>
-        <div>
-            <ul kendo-panel-bar>
-                <li ng-repeat="x in cMenu.panels">
-                    {{x.title}}
-                </li>
-            </ul>
-        </div>
-        <div>
-            <kendo-grid xk-ng-delay="version.esEBSVersion" k-data-source="version.esEBSVersion.ESProperty" height="400" k-scrollable="true" />
-        </div>
-
-        <hr>
-        <button es-analytics-on es-analytics-category="hello stavros" type="submit" ng-click="execute()">Execute</button>
-    </div>
-    <div ng-cloak>
-        <input type="text" ng-model="GroupID" class="form-control" placeholder="Entersoft Public Query Group ID" required autofocus>
-        <input type="text" ng-model="FilterID" class="form-control" placeholder="Entersoft Public Query Filter ID" required>
-        <!-- <textarea>{{pVals}}</textarea> -->
-        <hr>
-        <!-- <es-params-panel ng-cloak es-params-values="pVals" es-group-id="GroupID" es-filter-id="FilterID" es-params-def="pqInfo.params"></es-params-panel> -->
-
-        <!-- <es-params-panel ng-cloak es-params-values="pVals" es-group-id="GroupID" es-filter-id="FilterID" ></es-params-panel> -->
-
-        <es-web-pq es-group-id="GroupID" es-filter-id="FilterID"></es-web-pq>
-        <hr>
+        <ul kendo-menu>
+            <li>
+                Settings
+                <ul>
+                    <li>
+                        <a href="#/login">Login</a>
+                    </li>
+                    <li>
+                        <a href="#/properties">Properties</a>
+                    </li>
+                </ul>
+            </li>
     </div>
 
-    <!-- <div ng-cloak>
-        <es-grid es-group-id="GroupID" es-filter-id="FilterID" es-grid-options="gridOptions"  es-execute-params="pVals" />
-    </div> -->
-
-
+    <div ng-view></div>
+   
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -63,7 +38,7 @@
     <script src="bower_components/log4javascript/js/log4javascript.js"></script>
     <script src="bower_components/underscore/underscore-min.js"></script>
     <script src="bower_components/jscache/cache.js"></script>
-    <script src="lib/eswebapi/eswebapi.min.js"></script>
+    <script src="lib/eswebapi/eswebapi.js"></script>
     <script src="lib/eswebapi/eswebapi.templates.js"></script>
     <script src="lib/telerik/js/jszip.min.js"></script>
     <script src="lib/telerik/js/cultures/kendo.culture.el-GR.min.js"></script>

@@ -1,0 +1,14 @@
+<div>
+    <h3>
+         ESAngular Version is {{version.esAngularVersion}}
+    </h3>
+    <h3>
+         ESWebApi Version is {{version.esWebAPIVersion}}
+    </h3>
+    <button ng-click="getVersionInfo()">Requery</button>
+    <hr>
+    <div>
+        <kendo-grid xk-ng-delay="version.esEBSVersion" k-data-source="version.esEBSVersion.ESProperty" height="400" k-scrollable="true" />
+    </div>
+    <hr>
+</div>
