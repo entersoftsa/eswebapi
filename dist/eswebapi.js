@@ -114,8 +114,8 @@
                     return this;
                 },
 
-                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'es.Services.Globals',
-                    function($http, $log, $q, $rootScope, ESWEBAPI_URL, esGlobals) {
+                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'es.Services.Globals', 'es.Services.Messaging',
+                    function($http, $log, $q, $rootScope, ESWEBAPI_URL, esGlobals, esMessaging) {
 
                         function fregisterException(inMessageObj, storeToRegister) {
                             if (!inMessageObj) {
@@ -176,23 +176,28 @@
                             ht.then(function() {
                                 tt.endTime().send();
                             });
+
                             return ht;
                         }
 
                         function getOdsInfo(odsType, odsID) {
-                            var defered = $q.defer();
-                            $http.get(unSecureWEBAPI + ESWEBAPI_URL[odsType] + odsID)
-                                .success(function(data) {
-                                    defered.resolve(data);
-                                })
-                            return defered.promise;
+                            var surl = urlWEBAPI + ESWEBAPI_URL[odsType] + odsID;
+                            var ht = $http({
+                                method: 'get',
+                                headers: {
+                                    "Authorization": esGlobals.getWebApiToken()
+                                },
+                                url: surl
+                            });
+                            processWEBAPIPromise(ht);
+                            return ht;
                         }
 
                         function execFormCommand(formCommandParams) {
                             if (!formCommandParams || !formCommandParams.EntityID || !formCommandParams.CommandID) {
                                 throw "EntityID and CommandID properties must be defined";
                             }
-                            var surl = ESWEBAPI_URL.__FORM_COMMAND__;
+                            var surl = urlWEBAPI + ESWEBAPI_URL.__FORM_COMMAND__;
 
                             var tt = esGlobals.trackTimer("FORM", "COMMAND", formCommandParams.EntityID.concat("/", formCommandParams.CommandID));
                             tt.startTime();
@@ -206,10 +211,7 @@
                                 data: formCommandParams
                             });
 
-                            ht.then(function() {
-                                tt.endTime().send();
-                            });
-                            return ht;
+                            return processWEBAPIPromise(ht, tt);
                         }
 
                         function execScroller(apiUrl, groupID, filterID, params) {
@@ -226,10 +228,20 @@
                                 params: params
                             });
 
-                            ht.then(function() {
-                                tt.endTime().send();
+                            return processWEBAPIPromise(ht, tt);
+                        }
+
+                        function processWEBAPIPromise(promise, tt) {
+                            if (tt) {
+                                promise.then(function() {
+                                    tt.endTime().send();
+                                });
+                            }
+
+                            promise.error(function(a, b) {
+                                esMessaging.publish("ES_HTTP_CORE_ERR", a, b);
                             });
-                            return ht;
+                            return promise;
                         }
 
                         return {
@@ -242,7 +254,7 @@
                                 var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
                                 tt.startTime();
 
-                                return $http({
+                                var promise = $http({
                                     method: 'post',
                                     url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
                                     data: {
@@ -263,6 +275,8 @@
                                         console.log("Generic Http error");
                                     }
                                 });
+
+                                return processWEBAPIPromise(promise);
                             },
 
                             logout: function() {
@@ -283,7 +297,7 @@
                                     },
                                     url: surl
                                 });
-                                return ht;
+                                return processWEBAPIPromise(ht);
                             },
 
                             fetchCompanyParams: function(esparam) {
@@ -306,7 +320,7 @@
                                     },
                                     url: surl
                                 });
-                                return ht;
+                                return processWEBAPIPromise(ht);
                             },
 
                             registerException: fregisterException,
@@ -325,11 +339,11 @@
                             },
 
                             fetchOdsMasterRelationsInfo: function(tableID, columnID) {
-                                return getOdsInfo("__FETCH_ODS_MASTER_RELATIONS_INFO__", tableID + "/" +columnID);  
+                                return getOdsInfo("__FETCH_ODS_MASTER_RELATIONS_INFO__", tableID + "/" + columnID);
                             },
 
                             fetchOdsdDetailRelationsInfo: function(tableID, columnID) {
-                                return getOdsInfo("__FETCH_ODS_DETAIL_RELATIONS_INFO__", tableID + "/" +columnID);  
+                                return getOdsInfo("__FETCH_ODS_DETAIL_RELATIONS_INFO__", tableID + "/" + columnID);
                             },
 
                             fetchServerCapabilities: function() {
@@ -362,7 +376,7 @@
                             },
 
                             fetchUserSites: function(ebsuser) {
-                                return $http({
+                                var ht = $http({
                                     method: 'post',
                                     url: urlWEBAPI + ESWEBAPI_URL.__USERSITES__,
                                     data: {
@@ -371,16 +385,19 @@
                                         Model: ebsuser
                                     }
                                 });
+                                return processWEBAPIPromise(ht);
                             },
 
                             fetchSessionInfo: function() {
-                                return $http({
+                                var promise = $http({
                                     method: 'get',
                                     headers: {
                                         "Authorization": esGlobals.getWebApiToken()
                                     },
                                     url: urlWEBAPI + ESWEBAPI_URL.__FETCH_SESSION_INFO__
                                 });
+
+                                return processWEBAPIPromise(promise);
                             },
 
                             executeNewEntityAction: function(entityType, actionID, commandParams) {
@@ -396,10 +413,7 @@
                                     url: surl,
                                     data: commandParams
                                 });
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-                                return ht;
+                                return processWEBAPIPromise(ht, tt);
                             },
 
                             executeEntityActionByCode: function(entityType, entityCode, actionID, commandParams) {
@@ -416,10 +430,7 @@
                                     data: commandParams
                                 });
 
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-                                return ht;
+                                return processWEBAPIPromise(ht, tt);
                             },
 
                             executeEntityActionByGID: function(entityType, entityGID, actionID, commandParams) {
@@ -436,10 +447,7 @@
                                     data: commandParams
                                 });
 
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-                                return ht;
+                                return processWEBAPIPromise(ht, tt);
 
                             },
 
@@ -493,14 +501,7 @@
                                     },
                                     url: surl
                                 });
-
-
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-
-                                //finally return the $http promise
-                                return ht;
+                                return processWEBAPIPromise(ht, tt);
                             },
 
                             fetchStdZoom: function(zoomID, options) {
@@ -516,14 +517,7 @@
                                     },
                                     url: surl
                                 });
-
-
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-
-                                //finally return the $http promise
-                                return ht;
+                                return processWEBAPIPromise(ht, tt);
                             },
 
                             /**
@@ -565,12 +559,7 @@
                                 }
 
                                 var ht = $http(httpConfig);
-                                ht.then(function() {
-                                    tt.endTime().send();
-                                });
-
-                                //finally return the $http promise
-                                return ht;
+                                return processWEBAPIPromise(ht, tt);
                             },
 
 
@@ -578,7 +567,7 @@
                             eSearch: function(eUrl, eMethod, eBody) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ELASTICSEARCH__, eUrl);
 
-                                return $http({
+                                var ht = $http({
                                     method: eMethod,
                                     headers: {
                                         "Authorization": esGlobals.getWebApiToken()
@@ -602,6 +591,8 @@
 
                                     }
                                 });
+
+                                return processWEBAPIPromise(ht);
                             }
                         }
                     }
