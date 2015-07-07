@@ -24,6 +24,5 @@
     "log4javascript": "~1.4.9",
     "underscore": "~1.8.3",
     "jscache": "*",
-    "noty": "~2.3.5"
   }
 }

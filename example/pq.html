@@ -1,7 +1,8 @@
 <div ng-cloak>
     <h4>{{GroupID}} - {{FilterID}}</h4>
-    <h4>this is {{esGridOptions}} and {{esGroupId}}
+    <h4>this is {{GroupID}}</h4>
+    <button ng-click="doRun()">Execute</button>
     <hr>
-    <es-web-pq es-group-id="GroupID" es-filter-id="FilterID"></es-web-pq>
+    <es-web-pq es-group-id="GroupID" es-grid-options="gridOptions" es-filter-id="FilterID"></es-web-pq>
     <hr>
 </div>

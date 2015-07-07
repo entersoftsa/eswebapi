@@ -33,7 +33,7 @@ module.exports = function(grunt) {
                 dest: 'dist/<%= pkg.name %>.min.js'
             }
         },
-        clean: ["dist"],
+        clean: ["dist", "example/lib/eswebapi/dist"],
 
         jshint: {
             options: {
@@ -105,6 +105,19 @@ module.exports = function(grunt) {
             }
         },
 
+        copy: {
+            main: {
+                files: [
+                    // includes files within path and its sub-directories
+                    {
+                        expand: true,
+                        src: ['dist/**'],
+                        dest: 'example/lib/eswebapi/'
+                    },
+                ],
+            },
+        },
+
         watch: {
             gruntfile: {
                 files: '<%= jshint.gruntfile.src %>',
@@ -118,6 +131,7 @@ module.exports = function(grunt) {
     });
 
     // These plugins provide necessary tasks.
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-filerev');
@@ -128,7 +142,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     //Step 1 task
-    grunt.registerTask('step1', ['clean', 'concat', 'uglify', 'filerev:scripts', 'ngtemplates']);
+    grunt.registerTask('step1', ['clean', 'concat', 'uglify', 'filerev:scripts', 'ngtemplates', 'copy']);
 
     // Default task.
     grunt.registerTask('default', ['jshint', 'nodeunit', 'concat', 'uglify']);

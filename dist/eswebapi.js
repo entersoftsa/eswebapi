@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v0.0.1 - 2015-07-03
+/*! Entersoft Application Server WEB API - v0.0.1 - 2015-07-07
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -2606,6 +2606,7 @@
                 scope: {
                     esGroupId: "=",
                     esFilterId: "=",
+                    esGridOptions: "=",
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);

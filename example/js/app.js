@@ -1,4 +1,4 @@
-(function(angular, noty) {
+(function(angular) {
     var eskbApp = angular.module('smeApp', [
 
         /* angular modules */
@@ -18,29 +18,35 @@
         function($logProvider, $routeProvider, $httpProvider, esWebApiServiceProvider, $exceptionHandlerProvider) {
 
             $routeProvider
-            .when('/', {
-                templateUrl: 'login.html',
-                controller: 'loginCtrl'
-            })
-            .when('/login', {
-                templateUrl: 'login.html',
-                controller: 'loginCtrl'
-            })
-            .when('/properties', {
-                templateUrl: 'properties.html',
-                controller: 'propertiesCtrl'
-            })
-            .when('/pq', {
-                templateUrl: 'pq.html',
-                controller: 'pqCtrl'
-            });
+                .when('/', {
+                    templateUrl: 'login.html',
+                    controller: 'loginCtrl'
+                })
+                .when('/login', {
+                    templateUrl: 'login.html',
+                    controller: 'loginCtrl'
+                })
+                .when('/properties', {
+                    templateUrl: 'properties.html',
+                    controller: 'propertiesCtrl'
+                })
+                .when('/pq', {
+                    templateUrl: 'pq.html',
+                    controller: 'pqCtrl'
+                });
+
 
             var interceptor = ['$q', '$sessionStorage', '$timeout', '$location', function($q, $sessionStorage, $timeout, $location) {
+                function handleRelogin(rejection) {
+                    alert("Your session has expired or is invalid. Please relogin");
+
+                    delete $sessionStorage.__esrequest_sesssion;
+                    $location.path("/");
+
+                }
                 var httpHandlers = {
-                    401: function() {
-                        delete $sessionStorage.__esrequest_sesssion;
-                        $location.path("/");
-                    }
+                    401: handleRelogin,
+                    403: handleRelogin
                 };
 
                 return {
@@ -84,4 +90,4 @@
         }
     ]);
 
-})(window.angular, noty);
+})(window.angular);

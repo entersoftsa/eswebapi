@@ -356,6 +356,7 @@
                 scope: {
                     esGroupId: "=",
                     esFilterId: "=",
+                    esGridOptions: "=",
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);

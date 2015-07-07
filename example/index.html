@@ -12,34 +12,35 @@
 
 <body ng-cloak>
     <div>
-        <ul kendo-menu>
-            <li>
-                Settings
-                <ul>
-                    <li>
-                        <a href="#/login">Login</a>
-                    </li>
-                    <li>
-                        <a href="#/properties">Properties</a>
-                    </li>
-                </ul>
-            </li>
+        <span kendo-notification="esnotify" auto-hide-after="3000" ></span>
+        <button ng-click="press()">Press</button>
+        <div>
+            <ul kendo-menu>
+                <li>
+                    Settings
+                    <ul>
+                        <li>
+                            <a href="#/login">Login</a>
+                        </li>
+                        <li>
+                            <a href="#/properties">Properties</a>
+                        </li>
+                    </ul>
+                </li>
+        </div>
+        <div ng-view></div>
     </div>
-
-    <div ng-view></div>
-   
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/ngStorage/ngstorage.min.js"></script>
     <script src="bower_components/stacktrace-js/dist/stacktrace.js"></script>
     <script src="bower_components/log4javascript/js/log4javascript.js"></script>
     <script src="bower_components/underscore/underscore-min.js"></script>
     <script src="bower_components/jscache/cache.js"></script>
-    <script src="lib/eswebapi/eswebapi.js"></script>
-    <script src="lib/eswebapi/eswebapi.templates.js"></script>
+    <script src="lib/eswebapi/dist/eswebapi.js"></script>
+    <script src="lib/eswebapi/dist/eswebapi.templates.js"></script>
     <script src="lib/telerik/js/jszip.min.js"></script>
     <script src="lib/telerik/js/cultures/kendo.culture.el-GR.min.js"></script>
     <script src="lib/telerik/js/kendo.all.min.js"></script>
