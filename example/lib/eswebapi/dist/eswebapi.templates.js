@@ -37,7 +37,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamText.html',
-    "<div class=es-prm><label class=es-prm-label>{{esParamDef.caption}}</label><div class=es-prm-val><input kendo-masked-text-box k-clear-prompt-char=true k-mask=esParamDef.formatString ng-model=\"esParamVal[esParamDef.id].paramValue\"></div></div>"
+    "<div class=es-prm><label class=es-prm-label>{{esParamDef.caption}}</label><div class=es-prm-val><input kendo-masked-text-box k-mask=esParamDef.formatString ng-model=\"esParamVal[esParamDef.id].paramValue\"></div></div>"
   );
 
 
