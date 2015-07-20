@@ -69,10 +69,12 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'es.Services
         $scope.GroupID = "ESFICustomer";
         $scope.FilterID = "ESFITradeAccountCustomer_def";
         $scope.gridOptions = null;
+        $scope.pVals = null;
 
         $scope.doRun = function() {
-            alert("Run");
+            alert("Running with " + JSON.stringify($scope.pVals.getExecuteVals()));
             $scope.gridOptions.dataSource.read();
+
         }
     }
 ]);

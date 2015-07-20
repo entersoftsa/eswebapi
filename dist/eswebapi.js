@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v0.0.1 - 2015-07-07
+/*! Entersoft Application Server WEB API - v0.0.1 - 2015-07-20
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -2358,7 +2358,7 @@
             if (x.hasOwnProperty(prop)) {
                 var p = x[prop];
 
-                if (p.paramValue) {
+                if (p.paramValue || (angular.isNumber(p.paramValue) && p.paramValue == 0)) {
                     ret[p.paramCode] = p.getExecuteVal();
                 }
             }
@@ -2598,6 +2598,7 @@
                     esGroupId: "=",
                     esFilterId: "=",
                     esGridOptions: "=",
+                    esParamsValues: "=",
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
