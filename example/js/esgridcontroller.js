@@ -9,7 +9,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'es.Servic
 
         $scope.odscinfo = null;
         $scope.press = function() {
-            esWebApiService.fetchOdsTableInfo("ESFICustomer").success(function(x) { $scope.odscinfo = x;});
+            esWebApiService.fetchOdsTableInfo("ESFICustomer").success(function(x) {
+                $scope.odscinfo = x;
+            });
         };
 
         esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, b, c) {
@@ -27,17 +29,20 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             LangID: 'el-GR'
         };
 
+        $scope.version = {};
+
         $scope.doLogin = function() {
 
+
             esWebApiService.openSession($scope.credentials)
-                .success(function($user, status, headers, config) {
+                .then(function(rep) {
                     $location.path("/pq");
-                })
-                .error(function(rejection, b, c) {
-                    var msg = rejection ? rejection.UserMessage : "Generic Server Error";
+                }, function(rejection) {
+                    var msg = rejection.data ? rejection.data.UserMessage : "Generic Server Error";
                     $scope.esnotify.error(msg);
                 });
         }
+
     }
 ]);
 
@@ -72,6 +77,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'es.Services
         $scope.pVals = null;
 
         $scope.doRun = function() {
+
             alert("Running with " + JSON.stringify($scope.pVals.getExecuteVals()));
             $scope.gridOptions.dataSource.read();
 
