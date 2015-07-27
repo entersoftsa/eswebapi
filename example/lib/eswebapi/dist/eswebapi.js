@@ -1845,6 +1845,46 @@
                 esMessaging.publish("AUTH_CHANGED", esClientSession, getAuthToken(model));
             }
 
+            function getUserMessage(err, status) {
+                if (!err) {
+                    switch (status) {
+                        case 401:
+                            return "Please Login first";
+                        case 403:
+                            return "You are not authorized. Please Login and try again";
+
+                        case 500:
+                        default:
+                            return "General Error. Please check your network and internet access";
+                    }
+                }
+
+                var sMsg = "";
+                if (err.UserMessage) {
+                    sMsg = err.UserMessage;
+                    if (err.MessageID) {
+                        sMsg = sMsg + " (" + err.MessageID + ")";
+                    }
+                    return sMsg;
+                }
+
+                if (err.Messages) {
+                    if (angular.isArray(err.Messages)) {
+                        var i = 0;
+                        sMsg = _.reduce(err.Messages, function(ret, x) {
+                            return ret + "\r\n" + "[" + i + "]" + x;
+                        }, "");
+
+                    } else {
+                        sMsg = err.Messages;
+                    }
+
+                    return sMsg ? sMsg : "General Error. Please check your network and internet access";
+                } else {
+                    return "General Error. Please check your network and internet access";
+                }
+            }
+
             function getAuthToken(model) {
                 if (model) {
                     return 'Bearer ' + model.WebApiToken;
@@ -1864,7 +1904,7 @@
 
                 setModel: fsetModel,
 
-                getModel: fgetModel
+                getModel: fgetModel,
             };
 
             function TrackTiming(category, variable, opt_label) {
@@ -1921,6 +1961,8 @@
                 getClientSession: function() {
                     return esClientSession;
                 },
+
+                getUserMessage: getUserMessage,
 
                 sessionClosed: function() {
                     esClientSession.setModel(null);

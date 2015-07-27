@@ -4,8 +4,8 @@
 
 var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI']);
 
-smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'es.Services.Messaging', 'es.Services.WebApi',
-    function($location, $scope, $log, esMessaging, esWebApiService) {
+smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'es.Services.Messaging', 'es.Services.WebApi', 'es.Services.Globals',
+    function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 
         $scope.odscinfo = null;
         $scope.press = function() {
@@ -14,8 +14,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'es.Servic
             });
         };
 
-        esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, b, c) {
-            $scope.esnotify.error("WOOOOOOOOPS");
+        esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
+            var s = esGlobals.getUserMessage(rejection, status);
+            $scope.esnotify.error(s);
         });
     }
 ]);
@@ -32,14 +33,9 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
         $scope.version = {};
 
         $scope.doLogin = function() {
-
-
             esWebApiService.openSession($scope.credentials)
                 .then(function(rep) {
                     $location.path("/pq");
-                }, function(rejection) {
-                    var msg = rejection.data ? rejection.data.UserMessage : "Generic Server Error";
-                    $scope.esnotify.error(msg);
                 });
         }
 
@@ -83,10 +79,8 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'es.Services
             pVals: null
         }];
 
-    
+
         $scope.doRun = function(pq) {
-            debugger;
-            alert("Running with " + JSON.stringify(pq.pVals.getExecuteVals()));
             pq.gridOptions.dataSource.read();
 
         }
