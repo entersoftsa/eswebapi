@@ -71,15 +71,23 @@ smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'es.
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', '_', 'es.Services.Cache', 'es.Services.Messaging', 'es.Services.Globals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
-        $scope.GroupID = "ESFICustomer";
-        $scope.FilterID = "ESFITradeAccountCustomer_def";
-        $scope.gridOptions = null;
-        $scope.pVals = null;
+        $scope.pqs = [{
+            groupId: "ESFICustomer",
+            filterId: "ESFITradeAccountCustomer_def",
+            gridOptions: null,
+            pVals: null
+        }, {
+            groupId: "ESMMStockItem",
+            filterId: "ESMMStockItem_def",
+            gridOptions: null,
+            pVals: null
+        }];
 
-        $scope.doRun = function() {
-
-            alert("Running with " + JSON.stringify($scope.pVals.getExecuteVals()));
-            $scope.gridOptions.dataSource.read();
+    
+        $scope.doRun = function(pq) {
+            debugger;
+            alert("Running with " + JSON.stringify(pq.pVals.getExecuteVals()));
+            pq.gridOptions.dataSource.read();
 
         }
     }

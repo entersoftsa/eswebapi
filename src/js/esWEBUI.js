@@ -709,8 +709,9 @@
                     return null;
                 }
 
-                var filterInfo = _.where(gridexInfo.Filter, {
-                    ID: inFilterID
+                var fId = inFilterID.toLowerCase();
+                var filterInfo = _.filter(gridexInfo.Filter, function(x) {
+                    return x.ID.toLowerCase() == fId;
                 });
 
                 if (!filterInfo || filterInfo.length != 1) {

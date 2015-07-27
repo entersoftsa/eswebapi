@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v0.0.1 - 2015-07-21
+/*! Entersoft Application Server WEB API - v0.0.1 - 2015-07-27
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -2950,8 +2950,9 @@
                     return null;
                 }
 
-                var filterInfo = _.where(gridexInfo.Filter, {
-                    ID: inFilterID
+                var fId = inFilterID.toLowerCase();
+                var filterInfo = _.filter(gridexInfo.Filter, function(x) {
+                    return x.ID.toLowerCase() == fId;
                 });
 
                 if (!filterInfo || filterInfo.length != 1) {
