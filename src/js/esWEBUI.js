@@ -85,6 +85,25 @@
         }
     }
 
+    function ESDateParamVal(paramVal) {
+        //call super constructor
+        //param id will be given at a later assignment
+        if (!paramVal) {
+            paramVal = {
+                fromDType: null,
+                fromD: null,
+                toDType: null,
+                toD: null
+            };
+        }
+        ESParamVal.call(this, "", paramVal);
+    }
+
+    ESDateParamVal.prototype = Object.create(ESParamVal.prototype);
+
+    ESDateParamVal.prototype.getExecuteVal = function() {
+        return "ESDateRange(" + this.paramValue.fromDType + "," + this.paramValue.fromD + "," + this.paramValue.toDType + "," + this.paramValue.toD + ")";
+    }
 
     function ESParamValues(vals) {
         this.setParamValues(vals);
@@ -240,6 +259,11 @@
 
                 var pt = pParam.parameterType.toLowerCase()
 
+                //ESDateRange
+                // if (pt.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
+                //     return "esParamDateRange";
+                // }
+                
                 //ESNumeric
                 if (pt.indexOf("entersoft.framework.platform.esnumeric") == 0) {
                     return "esParamAdvancedNumeric";
@@ -518,6 +542,14 @@
             }
 
             //here 
+            function dateEval(pInfo, expr) {
+                var SpecificDate = "SpecificDate";
+                var Month = "Month";
+                expr = expr.replace(/#/g, '"');
+                var dVal = eval(expr);
+                dVal.paramCode = pInfo.id;
+                return dVal;
+            }
 
             function esEval(pInfo, expr) {
                 var EQ = {
@@ -577,6 +609,16 @@
                 return new ESStringParamVal(inArg.paramID, k);
             }
 
+            function ESDateRange(fromDType, fromD, toDType, toD) {
+                var k = {
+                    fromDType: fromDType,
+                    fromD: fromD,
+                    toDType: toDType,
+                    toD: toD
+                };
+                return new ESDateParamVal(k);
+            }
+
             function getEsParamVal(esParamInfo, dx) {
                 var ps = esParamInfo.parameterType.toLowerCase();
 
@@ -588,6 +630,16 @@
                         });
                     }
                     return esEval(esParamInfo, dx[0].Value);
+                }
+
+                //ESDateRange
+                if (ps.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
+                    if (!dx || dx.length == 0) {
+                        return ESNumeric(esParamInfo.id, {
+                            oper: "EQ"
+                        });
+                    }
+                    return dateEval(esParamInfo, dx[0].Value);
                 }
 
                 //ESString
@@ -790,6 +842,11 @@
             }
 
             return ({
+                ESParamVal: ESParamVal,
+                ESNumericParamVal: ESNumericParamVal,
+                ESStringParamVal: ESStringParamVal,
+                ESDateParamVal: ESDateParamVal,
+
                 winGridInfoToESGridInfo: winGridInfoToESGridInfo,
                 winColToESCol: winColToESCol,
                 esColToKCol: esColToKCol,

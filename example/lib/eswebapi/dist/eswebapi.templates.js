@@ -16,6 +16,11 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('src/partials/esParamDateRange.html',
+    "<div class=es-prm><label class=es-prm-label>{{esParamDef.caption}}</label><div class=es-prm-val><input kendo-masked-text-box k-mask=esParamDef.formatString ng-model=\"esParamVal[esParamDef.id].getExecuteVal()\"></div></div>"
+  );
+
+
   $templateCache.put('src/partials/esParamEnum.html',
     "<div class=boxc-col><h4>{{esParamDef.caption}} and the field to bind to {{esParamDef.id}} and value is {{esParamVal[esParamDef.id]}}</h4><select class=es-prm-val kendo-drop-down-list ng-cloak k-ng-delay=esParamDef k-data-text-field=\"'text'\" k-data-value-field=\"'value'\" k-auto-bind=true k-option-label=\"{ text: 'All', value: null}\" k-data-source=esParamDef.enumList k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue></select></div>"
   );

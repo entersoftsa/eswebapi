@@ -1,4 +1,26 @@
 <div>
+    
+    <!-- <div>
+        <label>NGMODEL {{ngmodel}}</label>
+        <label>KMODEL {{kmodel}}</label>
+        <label>dVal {{myDateVal}}</label>
+        <div>
+            <select kendo-drop-down-list
+            k-change="onChange(kendoEvent)"
+            k-data-text-field="'title'" 
+            k-auto-bind="true" 
+            k-data-value-field="'value'" 
+            k-data-source="dateRange" 
+            ng-model="ngmodel"
+            k-ng-model="kmodel"
+            style="width: 50%;" >
+            </select>
+            <input ng-hide="kmodel.dType > 1" kendo-date-picker k-ng-model="myDateVal.fromD" k-format="'dd/MM/yyyy'" />
+            <input ng-hide="kmodel.dType > 1" kendo-date-picker k-ng-model="myDateVal.toD" k-format="'dd/MM/yyyy'" />
+        </div>
+    </div> -->
+
+
     <section class="do-login clearfix row">
         <div class="col-xs-12 col-sm-offset-3 col-sm-6 col-md-4 col-md-offset-4">
             <form name="loginForm">
