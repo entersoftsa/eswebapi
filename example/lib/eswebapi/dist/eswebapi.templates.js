@@ -17,12 +17,12 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamDateRange.html',
-    "<div class=es-prm><label class=es-prm-label>{{esParamDef.caption}}</label><div class=es-prm-val><input kendo-masked-text-box k-mask=esParamDef.formatString ng-model=\"esParamVal[esParamDef.id].getExecuteVal()\"></div></div>"
+    "<div class=es-prm><label class=es-prm-label>{{esParamDef.caption}}</label><div class=es-prm-val><select kendo-drop-down-list k-data-text-field=\"'title'\" k-auto-bind=true k-data-value-field=\"'dValue'\" k-data-source=esWebUIHelper.getesDateRangeOptions() k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.dRange style=\"width: 50%\"></select><span ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange > '1'\"><input kendo-date-picker k-ng-model=esParamVal[esParamDef.id].paramValue.fromD k-format=\"'dd/MM/yyyy'\"></span> <span ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange != '0'\"><input kendo-date-picker k-ng-model=esParamVal[esParamDef.id].paramValue.toD k-format=\"'dd/MM/yyyy'\"></span></div></div>"
   );
 
 
   $templateCache.put('src/partials/esParamEnum.html',
-    "<div class=boxc-col><h4>{{esParamDef.caption}} and the field to bind to {{esParamDef.id}} and value is {{esParamVal[esParamDef.id]}}</h4><select class=es-prm-val kendo-drop-down-list ng-cloak k-ng-delay=esParamDef k-data-text-field=\"'text'\" k-data-value-field=\"'value'\" k-auto-bind=true k-option-label=\"{ text: 'All', value: null}\" k-data-source=esParamDef.enumList k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue></select></div>"
+    "<div class=boxc-col><h4>{{esParamDef.caption}}</h4><select class=es-prm-val kendo-drop-down-list ng-cloak k-ng-delay=esParamDef k-data-text-field=\"'text'\" k-data-value-field=\"'value'\" k-auto-bind=true k-option-label=\"{ text: 'All', value: null}\" k-data-source=esParamDef.enumList k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue></select></div>"
   );
 
 
@@ -32,7 +32,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamMultiZoom.html',
-    "<div class=\"boxc-col es-prm\"><label class=es-prm-label>{{esParamDef.caption}} xaxa</label><select class=es-prm-val kendo-multi-select k-placeholder=esParamDef.caption k-template=\"'<span><b>#: Code #</b> -- #: Description #</span>'\" k-data-text-field=esParamDef.invSelectedMasterField k-data-value-field=esParamDef.invSelectedMasterField k-filter=\"'contains'\" k-auto-bind=false ng-model=esParamVal[esParamDef.id].paramValue k-data-source=esParamLookupDS></select></div>"
+    "<div class=\"boxc-col es-prm\"><label class=es-prm-label>{{esParamDef.caption}}</label><select class=es-prm-val kendo-multi-select k-placeholder=esParamDef.caption k-template=\"'<span><b>#: Code #</b> -- #: Description #</span>'\" k-data-text-field=esParamDef.invSelectedMasterField k-data-value-field=esParamDef.invSelectedMasterField k-filter=\"'contains'\" k-auto-bind=false ng-model=esParamVal[esParamDef.id].paramValue k-data-source=esParamLookupDS></select></div>"
   );
 
 

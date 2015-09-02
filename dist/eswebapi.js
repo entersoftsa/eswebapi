@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v0.0.1 - 2015-07-30
+/*! Entersoft Application Server WEB API - v0.0.1 - 2015-09-02
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -2314,6 +2314,108 @@
         value: "NOTNULL"
     }];
 
+    var esDateRangeOptions = [{
+            dValue: "0",
+            dType: 0,
+            title: "Specific Date Range"
+        }, {
+            dValue: "1",
+            dType: 1,
+            title: "Specific Date"
+        }, {
+            dValue: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
+            dType: 2,
+            title: "Anything"
+        }, {
+            dValue: "ESDateRange(Day)",
+            dType: 3,
+            title: "Today"
+        }, {
+            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)',
+            dType: 4,
+            title: "Up Today"
+        }, {
+            dValue: 'ESDateRange(Day, 0, SpecificDate, #9999/01/01#)',
+            dType: 5,
+            title: "Starting from Today"
+        }, {
+            dValue: "ESDateRange(Day, -1)",
+            dType: 6,
+            title: "Yesterday"
+        }, {
+            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, -1)',
+            dType: 7,
+            title: "Up To Yesterday"
+        }, {
+            dValue: "ESDateRange(Day, 1)",
+            dType: 8,
+            title: "Tomorrow"
+        }, {
+            dValue: 'ESDateRange(Day, 1, SpecificDate, #9999/01/01#)',
+            dType: 9,
+            title: "Starting from Tomorrow"
+        }, {
+            dValue: "ESDateRange(Week)",
+            dType: 10,
+            title: "This week"
+        }, {
+            dValue: "ESDateRange(Week, -1)",
+            dType: 11,
+            title: "Previous week"
+        }, {
+            dValue: "ESDateRange(Week, 1)",
+            dType: 12,
+            title: "Next week"
+        }, {
+            dValue: "ESDateRange(Month)",
+            dType: 13,
+            title: "This month"
+        }, {
+            dValue: 'ESDateRange(Month, 0, SpecificDate, #9999/01/01#)',
+            dType: 14,
+            title: "Since 1st of month"
+        }, {
+            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, 0)',
+            dType: 15,
+            title: "Up to end of month"
+        }, {
+            dValue: "ESDateRange(Month, -1)",
+            dType: 16,
+            title: "Last month"
+        }, {
+            dValue: 'ESDateRange(Month, -1, SpecificDate, #9999/01/01#)',
+            dType: 17,
+            title: "Since 1st of last month"
+        }, {
+            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, -1)',
+            dType: 18,
+            title: "Up to end of last month"
+        }, {
+            dValue: "ESDateRange(Quarter)",
+            dType: 19,
+            title: "This quarter"
+        }, {
+            dValue: "ESDateRange(Quarter, -1)",
+            dType: 20,
+            title: "Last quarter"
+        }, {
+            dValue: "ESDateRange(SixMonth)",
+            dType: 21,
+            title: "This HY"
+        }, {
+            dValue: "ESDateRange(SixMonth, -1)",
+            dType: 22,
+            title: "Last HY"
+        }, {
+            dValue: "ESDateRange(Year)",
+            dType: 23,
+            title: "This Year"
+        }, {
+            dValue: "ESDateRange(Year, -1)",
+            dType: 24,
+            title: "Last Year"
+        }, ];
+
     function ESParamVal(paramId, paramVal) {
         this.paramCode = paramId;
         this.paramValue = paramVal;
@@ -2368,24 +2470,24 @@
         }
     }
 
-    function ESDateParamVal(paramVal) {
+    function ESDateParamVal(paramId, paramVal) {
         //call super constructor
         //param id will be given at a later assignment
         if (!paramVal) {
             paramVal = {
-                fromDType: null,
+                // empty date range is treated as ANYTHING
+                dRange: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
                 fromD: null,
-                toDType: null,
                 toD: null
             };
         }
-        ESParamVal.call(this, "", paramVal);
+        ESParamVal.call(this, paramId, paramVal);
     }
 
     ESDateParamVal.prototype = Object.create(ESParamVal.prototype);
 
     ESDateParamVal.prototype.getExecuteVal = function() {
-        return "ESDateRange(" + this.paramValue.fromDType + "," + this.paramValue.fromD + "," + this.paramValue.toDType + "," + this.paramValue.toD + ")";
+        return this.paramValue.dRange;
     }
 
     function ESParamValues(vals) {
@@ -2543,10 +2645,11 @@
                 var pt = pParam.parameterType.toLowerCase()
 
                 //ESDateRange
-                // if (pt.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
-                //     return "esParamDateRange";
-                // }
-                
+
+                if (pt.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
+                    return "esParamDateRange";
+                }
+
                 //ESNumeric
                 if (pt.indexOf("entersoft.framework.platform.esnumeric") == 0) {
                     return "esParamAdvancedNumeric";
@@ -2828,10 +2931,40 @@
             function dateEval(pInfo, expr) {
                 var SpecificDate = "SpecificDate";
                 var Month = "Month";
-                expr = expr.replace(/#/g, '"');
-                var dVal = eval(expr);
-                dVal.paramCode = pInfo.id;
-                return dVal;
+                var SixMonth = "SixMonth";
+                var Week = "Week";
+                var Year = "Year";
+                var Quarter = "Quarter";
+                var Day = "Day";
+
+                function isActualDate(v)
+                {
+                    return v && v != "1753/01/01" && v != "9999/01/01";
+                }
+
+                var dVal = eval(expr.replace(/#/g, '"'));
+                var esdate = new ESDateParamVal(pInfo.id);
+
+                //From Specific Date To Specific Date
+                if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD) && dVal.toType == SpecificDate && isActualDate(dVal.toD))
+                {
+                    esdate.paramValue.dRange = "0";
+                    esdate.paramValue.fromD = new Date(dVal.fromD);
+                    esdate.paramValue.toD = new Date(dVal.toD);
+                    return esdate;
+                }
+
+                //From Specific Date To Specific Date
+                if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD))
+                {
+                    esdate.paramValue.dRange = "1";
+                    esdate.paramValue.fromD = new Date(dVal.fromD);
+                    return esdate;
+                }
+
+                // all toher cases of esdaterange
+                esdate.paramValue.dRange = expr;
+                return esdate;
             }
 
             function esEval(pInfo, expr) {
@@ -2892,14 +3025,25 @@
                 return new ESStringParamVal(inArg.paramID, k);
             }
 
-            function ESDateRange(fromDType, fromD, toDType, toD) {
+            function ESDateRange(fromType, fromD, toType, toD) {
+
+                debugger;
+
+                /*
                 var k = {
-                    fromDType: fromDType,
+                    dRange: dRange,
                     fromD: fromD,
-                    toDType: toDType,
                     toD: toD
                 };
                 return new ESDateParamVal(k);
+                */
+
+                return {
+                    "fromType": fromType,
+                    "fromD": fromD,
+                    "toType": toType,
+                    "toD": toD
+                }
             }
 
             function getEsParamVal(esParamInfo, dx) {
@@ -3136,6 +3280,11 @@
                 esGridInfoToKInfo: esGridInfoToKInfo,
                 getZoomDataSource: prepareStdZoom,
                 getPQDataSource: prepareWebScroller,
+
+                getesDateRangeOptions: function() {
+                    return esDateRangeOptions;
+                },
+                
                 getesComplexParamFunctionOptions: function() {
                     return esComplexParamFunctionOptions;
                 },

@@ -46,10 +46,15 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             if (!kendoEvent) {
                 return;
             }
-            kendoEvent.sender.text(mapper(kendoEvent.sender.dataItem(), $scope.myDateVal));
+            //kendoEvent.sender.text(mapper(kendoEvent.sender.dataItem(), $scope.myDateVal));
         }
 
-        $scope.myDateVal = new esWebUIHelper.ESDateParamVal();
+        $scope.myDateVal = new esWebUIHelper.ESDateParamVal("myP", {
+                //dRange: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)', ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)
+                dRange: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
+                fromD: null,
+                toD: null
+        });
 
         var mapper = function(val, dateVal) {
             var d = new Date();
@@ -244,7 +249,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
         }
 
         $scope.dateRange = [{
-            value: "0",
+            dValue: "0",
             dType: 0,
             title: "Specific Date Range"
         }, {
@@ -252,7 +257,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             dType: 1,
             title: "Specific Date"
         }, {
-            dValue: 'ESDateRange(SpecificDate, "9999/01/01", SpecificDate, "1753/01/01")',
+            dValue: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
             dType: 2,
             title: "Anything"
         }, {
@@ -260,11 +265,11 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             dType: 3,
             title: "Today"
         }, {
-            dValue: 'ESDateRange(SpecificDate, "1753/01/01", Day, 0)',
+            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)',
             dType: 4,
             title: "Up Today"
         }, {
-            dValue: 'ESDateRange(Day, 0, SpecificDate, "9999/01/01")',
+            dValue: 'ESDateRange(Day, 0, SpecificDate, #9999/01/01#)',
             dType: 5,
             title: "Starting from Today"
         }, {
@@ -272,7 +277,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             dType: 6,
             title: "Yesterday"
         }, {
-            dValue: 'ESDateRange(SpecificDate, "1753/01/01", Day, -1)',
+            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, -1)',
             dType: 7,
             title: "Up To Yesterday"
         }, {
@@ -280,7 +285,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             dType: 8,
             title: "Tomorrow"
         }, {
-            dValue: 'ESDateRange(Day, 1, SpecificDate, "9999/01/01")',
+            dValue: 'ESDateRange(Day, 1, SpecificDate, #9999/01/01#)',
             dType: 9,
             title: "Starting from Tomorrow"
         }, {
@@ -300,11 +305,11 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             dType: 13,
             title: "This month"
         }, {
-            dValue: 'ESDateRange(Month, 0, SpecificDate, "9999/01/01")',
+            dValue: 'ESDateRange(Month, 0, SpecificDate, #9999/01/01#)',
             dType: 14,
             title: "Since 1st of month"
         }, {
-            dValue: 'ESDateRange(SpecificDate, "1753/01/01", Month, 0)',
+            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, 0)',
             dType: 15,
             title: "Up to end of month"
         }, {
@@ -312,11 +317,11 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             dType: 16,
             title: "Last month"
         }, {
-            dValue: 'ESDateRange(Month, -1, SpecificDate, "9999/01/01")',
+            dValue: 'ESDateRange(Month, -1, SpecificDate, #9999/01/01#)',
             dType: 17,
             title: "Since 1st of last month"
         }, {
-            dValue: 'ESDateRange(SpecificDate, "1753/01/01", Month, -1)',
+            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, -1)',
             dType: 18,
             title: "Up to end of last month"
         }, {

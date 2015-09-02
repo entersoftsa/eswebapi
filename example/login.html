@@ -1,24 +1,28 @@
 <div>
-    
-    <!-- <div>
-        <label>NGMODEL {{ngmodel}}</label>
-        <label>KMODEL {{kmodel}}</label>
+    <div>
+        <p>
+        <label>NGMODEL === {{myDateVal.paramValue.dRange}}</label>
+        </p>
+        <p>
+        <label>KMODEL is  {{kmodel}}</label>
+        </p>
+        <p>
         <label>dVal {{myDateVal}}</label>
+        </p>
         <div>
             <select kendo-drop-down-list
-            k-change="onChange(kendoEvent)"
             k-data-text-field="'title'" 
-            k-auto-bind="true" 
-            k-data-value-field="'value'" 
+            k-auto-bind="true"
+            k-data-value-field="'dValue'" 
             k-data-source="dateRange" 
-            ng-model="ngmodel"
-            k-ng-model="kmodel"
+            k-ng-model="myDateVal.paramValue.dRange"
+            k-value-primitive="true"
             style="width: 50%;" >
             </select>
-            <input ng-hide="kmodel.dType > 1" kendo-date-picker k-ng-model="myDateVal.fromD" k-format="'dd/MM/yyyy'" />
-            <input ng-hide="kmodel.dType > 1" kendo-date-picker k-ng-model="myDateVal.toD" k-format="'dd/MM/yyyy'" />
+            <input ng-hide="myDateVal.paramValue.dRange > '1'" kendo-date-picker k-ng-model="myDateVal.paramValue.fromD" k-format="'dd/MM/yyyy'" />
+            <input ng-hide="myDateVal.paramValue.dRange != '0'" kendo-date-picker k-ng-model="myDateVal.paramValue.toD" k-format="'dd/MM/yyyy'" />
         </div>
-    </div> -->
+    </div>
 
 
     <section class="do-login clearfix row">
@@ -28,40 +32,40 @@
                     <div class="input-group">
                         <span class="input-group-addon">
                                 <span class="fa fa-user"></span>
-                        </span>
-                        <input type="text" ng-model="credentials.UserID" class="form-control" placeholder="user id">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">
+        </span>
+        <input type="text" ng-model="credentials.UserID" class="form-control" placeholder="user id">
+    </div>
+</div>
+<div class="form-group">
+    <div class="input-group">
+        <span class="input-group-addon">
                                 <span class="fa fa-lock"></span>
-                        </span>
-                        <input type="password" ng-model="credentials.Password" class="form-control" placeholder="password">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">
+        </span>
+        <input type="password" ng-model="credentials.Password" class="form-control" placeholder="password">
+    </div>
+</div>
+<div class="form-group">
+    <div class="input-group">
+        <span class="input-group-addon">
                                 <span class="fa fa-lock"></span>
-                        </span>
-                        <input type="text" ng-model="credentials.BranchID" class="form-control" placeholder="branch">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">
+        </span>
+        <input type="text" ng-model="credentials.BranchID" class="form-control" placeholder="branch">
+    </div>
+</div>
+<div class="form-group">
+    <div class="input-group">
+        <span class="input-group-addon">
                                 <span class="fa fa-lock"></span>
-                        </span>
-                        <input type="text" ng-model="credentials.LangID" class="form-control" placeholder="Language ID">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <button es-analytics-on class="btn btn-lg btn-warning btn-login" ng-click="doLogin()">Login</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
+        </span>
+        <input type="text" ng-model="credentials.LangID" class="form-control" placeholder="Language ID">
+    </div>
+</div>
+<div class="form-group">
+    <div>
+        <button es-analytics-on class="btn btn-lg btn-warning btn-login" ng-click="doLogin()">Login</button>
+    </div>
+</div>
+</form>
+</div>
+</section>
 </div>
