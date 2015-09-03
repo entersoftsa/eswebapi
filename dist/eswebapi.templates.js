@@ -17,7 +17,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamDateRange.html',
-    "<div class=es-prm><label class=es-prm-label>{{esParamDef.caption}}</label><div class=es-prm-val><select kendo-drop-down-list k-data-text-field=\"'title'\" k-auto-bind=true k-data-value-field=\"'dValue'\" k-data-source=esWebUIHelper.getesDateRangeOptions() k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.dRange style=\"width: 50%\"></select><span ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange > '1'\"><input kendo-date-picker k-ng-model=esParamVal[esParamDef.id].paramValue.fromD k-format=\"'dd/MM/yyyy'\"></span> <span ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange != '0'\"><input kendo-date-picker k-ng-model=esParamVal[esParamDef.id].paramValue.toD k-format=\"'dd/MM/yyyy'\"></span></div></div>"
+    "<div class=es-prm><label class=es-prm-label>{{esParamDef.caption}}</label><div class=es-prm-val><select kendo-drop-down-list k-data-text-field=\"'title'\" k-auto-bind=true k-data-value-field=\"'dValue'\" k-data-source=dateRangeOptions k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.dRange style=\"width: 50%\"></select><span ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange > '1'\"><input kendo-date-picker k-ng-model=esParamVal[esParamDef.id].paramValue.fromD k-format=\"'dd/MM/yyyy'\"></span> <span ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange != '0'\"><input kendo-date-picker k-ng-model=esParamVal[esParamDef.id].paramValue.toD k-format=\"'dd/MM/yyyy'\"></span></div></div>"
   );
 
 

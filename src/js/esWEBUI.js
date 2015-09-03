@@ -31,107 +31,136 @@
         value: "NOTNULL"
     }];
 
+    var dDateRangeClass = {
+        6: [0, 1, 2, 3, 6, 8, 10, 11, 12, 13, 16, 19, 20, 21, 22, 23, 24],
+        20: [0, 1, 25, 26, 27, 28, 29, 30],
+    };
+
     var esDateRangeOptions = [{
-            dValue: "0",
-            dType: 0,
-            title: "Specific Date Range"
-        }, {
-            dValue: "1",
-            dType: 1,
-            title: "Specific Date"
-        }, {
-            dValue: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
-            dType: 2,
-            title: "Anything"
-        }, {
-            dValue: "ESDateRange(Day)",
-            dType: 3,
-            title: "Today"
-        }, {
-            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)',
-            dType: 4,
-            title: "Up Today"
-        }, {
-            dValue: 'ESDateRange(Day, 0, SpecificDate, #9999/01/01#)',
-            dType: 5,
-            title: "Starting from Today"
-        }, {
-            dValue: "ESDateRange(Day, -1)",
-            dType: 6,
-            title: "Yesterday"
-        }, {
-            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, -1)',
-            dType: 7,
-            title: "Up To Yesterday"
-        }, {
-            dValue: "ESDateRange(Day, 1)",
-            dType: 8,
-            title: "Tomorrow"
-        }, {
-            dValue: 'ESDateRange(Day, 1, SpecificDate, #9999/01/01#)',
-            dType: 9,
-            title: "Starting from Tomorrow"
-        }, {
-            dValue: "ESDateRange(Week)",
-            dType: 10,
-            title: "This week"
-        }, {
-            dValue: "ESDateRange(Week, -1)",
-            dType: 11,
-            title: "Previous week"
-        }, {
-            dValue: "ESDateRange(Week, 1)",
-            dType: 12,
-            title: "Next week"
-        }, {
-            dValue: "ESDateRange(Month)",
-            dType: 13,
-            title: "This month"
-        }, {
-            dValue: 'ESDateRange(Month, 0, SpecificDate, #9999/01/01#)',
-            dType: 14,
-            title: "Since 1st of month"
-        }, {
-            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, 0)',
-            dType: 15,
-            title: "Up to end of month"
-        }, {
-            dValue: "ESDateRange(Month, -1)",
-            dType: 16,
-            title: "Last month"
-        }, {
-            dValue: 'ESDateRange(Month, -1, SpecificDate, #9999/01/01#)',
-            dType: 17,
-            title: "Since 1st of last month"
-        }, {
-            dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, -1)',
-            dType: 18,
-            title: "Up to end of last month"
-        }, {
-            dValue: "ESDateRange(Quarter)",
-            dType: 19,
-            title: "This quarter"
-        }, {
-            dValue: "ESDateRange(Quarter, -1)",
-            dType: 20,
-            title: "Last quarter"
-        }, {
-            dValue: "ESDateRange(SixMonth)",
-            dType: 21,
-            title: "This HY"
-        }, {
-            dValue: "ESDateRange(SixMonth, -1)",
-            dType: 22,
-            title: "Last HY"
-        }, {
-            dValue: "ESDateRange(Year)",
-            dType: 23,
-            title: "This Year"
-        }, {
-            dValue: "ESDateRange(Year, -1)",
-            dType: 24,
-            title: "Last Year"
-        }, ];
+        dValue: "0",
+        dType: 0,
+        title: "Specific Date Range"
+    }, {
+        dValue: "1",
+        dType: 1,
+        title: "Specific Date"
+    }, {
+        dValue: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
+        dType: 2,
+        title: "Anything"
+    }, {
+        dValue: "ESDateRange(Day)",
+        dType: 3,
+        title: "Today"
+    }, {
+        dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)',
+        dType: 4,
+        title: "Up Today"
+    }, {
+        dValue: 'ESDateRange(Day, 0, SpecificDate, #9999/01/01#)',
+        dType: 5,
+        title: "Starting from Today"
+    }, {
+        dValue: "ESDateRange(Day, -1)",
+        dType: 6,
+        title: "Yesterday"
+    }, {
+        dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, -1)',
+        dType: 7,
+        title: "Up To Yesterday"
+    }, {
+        dValue: "ESDateRange(Day, 1)",
+        dType: 8,
+        title: "Tomorrow"
+    }, {
+        dValue: 'ESDateRange(Day, 1, SpecificDate, #9999/01/01#)',
+        dType: 9,
+        title: "Starting from Tomorrow"
+    }, {
+        dValue: "ESDateRange(Week)",
+        dType: 10,
+        title: "Current week"
+    }, {
+        dValue: "ESDateRange(Week, -1)",
+        dType: 11,
+        title: "Previous week"
+    }, {
+        dValue: "ESDateRange(Week, 1)",
+        dType: 12,
+        title: "Next week"
+    }, {
+        dValue: "ESDateRange(Month)",
+        dType: 13,
+        title: "Current month"
+    }, {
+        dValue: 'ESDateRange(Month, 0, SpecificDate, #9999/01/01#)',
+        dType: 14,
+        title: "Since 1st of month"
+    }, {
+        dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, 0)',
+        dType: 15,
+        title: "Up to end of month"
+    }, {
+        dValue: "ESDateRange(Month, -1)",
+        dType: 16,
+        title: "Last month"
+    }, {
+        dValue: 'ESDateRange(Month, -1, SpecificDate, #9999/01/01#)',
+        dType: 17,
+        title: "Since 1st of last month"
+    }, {
+        dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, -1)',
+        dType: 18,
+        title: "Up to end of last month"
+    }, {
+        dValue: "ESDateRange(Quarter)",
+        dType: 19,
+        title: "Current quarter"
+    }, {
+        dValue: "ESDateRange(Quarter, -1)",
+        dType: 20,
+        title: "Last quarter"
+    }, {
+        dValue: "ESDateRange(SixMonth)",
+        dType: 21,
+        title: "This HY"
+    }, {
+        dValue: "ESDateRange(SixMonth, -1)",
+        dType: 22,
+        title: "Last HY"
+    }, {
+        dValue: "ESDateRange(Year)",
+        dType: 23,
+        title: "Current Year"
+    }, {
+        dValue: "ESDateRange(Year, -1)",
+        dType: 24,
+        title: "Last Year"
+    }, {
+        dValue: "ESDateRange(FiscalPeriod, 0)",
+        dType: 25,
+        title: "Current Fiscal Period"
+    }, {
+        dValue: "ESDateRange(FiscalYear, 0, Day, 0)",
+        dType: 26,
+        title: "Since start of FY up today"
+    }, {
+        dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, 0)",
+        dType: 27,
+        title: "Since start of FY up to end of Fiscal Period"
+    }, {
+        dValue: "ESDateRange(FiscalPeriod, -1)",
+        dType: 28,
+        title: "Last Fiscal Period"
+    }, {
+        dValue: "ESDateRange(FiscalPeriod, -1, Day, 0)",
+        dType: 29,
+        title: "Since start of last Fiscal Period up today"
+    }, {
+        dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, -1)",
+        dType: 30,
+        title: "Since start of FY up to last Fiscal Period"
+    }, ];
 
     function ESParamVal(paramId, paramVal) {
         this.paramCode = paramId;
@@ -204,6 +233,32 @@
     ESDateParamVal.prototype = Object.create(ESParamVal.prototype);
 
     ESDateParamVal.prototype.getExecuteVal = function() {
+        var s = this.paramValue.dRange;
+        if (s == "0" || s == "1") {
+            var sFromD = "#1753/01/01#";
+            var sToD = "#9999/01/01#";
+            var isEmpty = true;
+
+            // Fix the fromD
+            var mFromD = moment(this.paramValue.fromD);
+            if (mFromD.isValid()) {
+                isEmpty = false;
+                sFromD = mFromD.format('YYYY/MM/DD');
+            }
+
+            var mToD = moment(this.paramValue.toD);
+            if (mToD.isValid()) {
+                isEmpty = false;
+                sToD = mToD.format('YYYY/MM/DD');
+            }
+
+            if (s == "0" || isEmpty) {
+                return "ESDateRange(SpecificDate, " + "#" + sFromD + "#" + ", SpecificDate, " + "#" + sToD + "#" + ")";
+            }
+
+            return "ESDateRange(SpecificDate, " + "#" + sFromD + "#" + ")";
+        }
+
         return this.paramValue.dRange;
     }
 
@@ -474,6 +529,11 @@
                     if (scope.esParamDef.invSelectedMasterTable) {
                         scope.esParamLookupDS = prepareStdZoom($log, scope.esParamDef.invSelectedMasterTable, esWebApiService);
                     }
+
+                    // Case Date Range
+                    if (scope.esParamDef.controlType == 6 || scope.esParamDef.controlType == 20) {
+                        scope.dateRangeOptions = esWebUIHelper.getesDateRangeOptions(scope.esParamDef.controlType);
+                    }
                 }
             };
         }])
@@ -654,8 +714,7 @@
                 var Quarter = "Quarter";
                 var Day = "Day";
 
-                function isActualDate(v)
-                {
+                function isActualDate(v) {
                     return v && v != "1753/01/01" && v != "9999/01/01";
                 }
 
@@ -663,8 +722,7 @@
                 var esdate = new ESDateParamVal(pInfo.id);
 
                 //From Specific Date To Specific Date
-                if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD) && dVal.toType == SpecificDate && isActualDate(dVal.toD))
-                {
+                if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD) && dVal.toType == SpecificDate && isActualDate(dVal.toD)) {
                     esdate.paramValue.dRange = "0";
                     esdate.paramValue.fromD = new Date(dVal.fromD);
                     esdate.paramValue.toD = new Date(dVal.toD);
@@ -672,8 +730,7 @@
                 }
 
                 //From Specific Date To Specific Date
-                if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD))
-                {
+                if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD)) {
                     esdate.paramValue.dRange = "1";
                     esdate.paramValue.fromD = new Date(dVal.fromD);
                     return esdate;
@@ -757,8 +814,9 @@
                 //ESNumeric
                 if (ps.indexOf("entersoft.framework.platform.esnumeric") == 0) {
                     if (!dx || dx.length == 0) {
-                        return ESNumeric(esParamInfo.id, {
-                            oper: "EQ"
+                        return new ESNumericParamVal(esParamInfo.id, {
+                            oper: "EQ",
+                            value: 0
                         });
                     }
                     return esEval(esParamInfo, dx[0].Value);
@@ -767,8 +825,10 @@
                 //ESDateRange
                 if (ps.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
                     if (!dx || dx.length == 0) {
-                        return ESNumeric(esParamInfo.id, {
-                            oper: "EQ"
+                        return new ESDateParamVal(esParamInfo.id, esParamInfo.controlType == 6 ? null : {
+                            dRange: "ESDateRange(FiscalPeriod, 0)",
+                            fromD: null,
+                            toD: null
                         });
                     }
                     return dateEval(esParamInfo, dx[0].Value);
@@ -986,10 +1046,24 @@
                 getZoomDataSource: prepareStdZoom,
                 getPQDataSource: prepareWebScroller,
 
-                getesDateRangeOptions: function() {
-                    return esDateRangeOptions;
+                getesDateRangeOptions: function(dateRangeClass) {
+                    if (!dateRangeClass || !dDateRangeClass[dateRangeClass]) {
+                        return esDateRangeOptions;
+                    }
+
+                    var arr = dDateRangeClass[dateRangeClass];
+                    if (!_.isArray(arr) || arr.length == 0) {
+                        return esDateRangeOptions;
+                    }
+
+                    var x = [];
+                    var i;
+                    for (i = 0; i < arr.length; i++) {
+                        x[i] = esDateRangeOptions[arr[i]];
+                    }
+                    return x;
                 },
-                
+
                 getesComplexParamFunctionOptions: function() {
                     return esComplexParamFunctionOptions;
                 },
