@@ -118,6 +118,24 @@ module.exports = function(grunt) {
             },
         },
 
+        connect: {
+            options: {
+                keepalive: true
+            },
+            server: {}
+        },
+
+        ngdocs: {
+            all: ['src/js/*.js']
+        },
+
+        open: {
+            doc: {
+                path: 'http://localhost/eswebapidocs'
+            }
+        },
+
+
         watch: {
             gruntfile: {
                 files: '<%= jshint.gruntfile.src %>',
@@ -140,9 +158,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-ngdocs');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-open');
 
     //Step 1 task
     grunt.registerTask('step1', ['clean', 'concat', 'uglify', 'filerev:scripts', 'ngtemplates', 'copy']);
+
+    // doc
+    grunt.registerTask('doc', ['ngdocs', 'open:doc']);
 
     // Default task.
     grunt.registerTask('default', ['jshint', 'nodeunit', 'concat', 'uglify']);
