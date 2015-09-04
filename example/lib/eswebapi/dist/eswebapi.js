@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v0.0.1 - 2015-09-03
+/*! Entersoft Application Server WEB API - v0.0.1 - 2015-09-04
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -2285,6 +2285,201 @@
     'use strict';
     var esWEBUI = angular.module('es.Web.UI', []);
 
+/*
+    var dateRangeResolve = function(val, dateVal) {
+        var d = new Date();
+
+        switch (val.dType) {
+            case 0:
+                {
+                    if (!dateVal || !(angular.isDate(dateVal.fromD) && angular.isDate(dateVal.toD))) {
+                        return val.title;
+                    }
+
+                    var s = "";
+                    if (angular.isDate(dateVal.fromD)) {
+                        s = dateVal.fromD.toLocaleDateString("el-GR");
+                    }
+                    s = s + " - ";
+
+                    var toS = "";
+                    if (angular.isDate(dateVal.toD)) {
+                        toS = dateVal.toD.toLocaleDateString("el-GR");
+                    }
+                    s = s + toS;
+                    return s;
+                }
+            case 1:
+                {
+                    if (!dateVal || !angular.isDate(dateVal.fromD)) {
+                        return val.title;
+                    }
+                    return dateVal.fromD.toLocaleDateString("el-GR");
+                }
+            case 2:
+                return val.title;
+            case 3:
+                return d.toLocaleDateString();
+            case 4:
+                return "-> " + d.toLocaleDateString();
+            case 5:
+                return d.toLocaleDateString() + " ->";
+            case 6:
+                {
+                    d.setDate(d.getDate() - 1);
+                    return d.toLocaleDateString();
+                }
+            case 7:
+                {
+                    d.setDate(d.getDate() - 1);
+                    return d.toLocaleDateString() + " ->";
+                }
+            case 8:
+                {
+                    d.setDate(d.getDate() + 1);
+                    return d.toLocaleDateString();
+                }
+            case 9:
+                {
+                    d.setDate(d.getDate() + 1);
+                    return d.toLocaleDateString() + " ->";
+                }
+            case 10:
+                {
+                    var cDay = d.getDay();
+                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+
+                    var f = new Date(d);
+                    var t = new Date(d);
+                    f.setDate(d.getDate() - sDiff);
+                    t.setDate(f.getDate() + 6);
+
+                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                }
+            case 11:
+                {
+                    d.setDate(d.getDate() - 7);
+
+                    var cDay = d.getDay();
+                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+
+                    var f = new Date(d);
+                    var t = new Date(d);
+                    f.setDate(d.getDate() - sDiff);
+                    t.setDate(f.getDate() + 6);
+
+                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                }
+            case 12:
+                {
+                    d.setDate(d.getDate() + 7);
+
+                    var cDay = d.getDay();
+                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+
+                    var f = new Date(d);
+                    var t = new Date(d);
+                    f.setDate(d.getDate() - sDiff);
+                    t.setDate(f.getDate() + 6);
+
+                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                }
+            case 13:
+                {
+                    d.setDate(1);
+
+                    var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                    return d.toLocaleDateString() + " - " + f.toLocaleDateString();
+                }
+            case 14:
+                {
+                    d.setDate(1);
+                    return d.toLocaleDateString() + " ->";
+                }
+            case 15:
+                {
+                    var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                    return "-> " + f.toLocaleDateString();
+                }
+            case 16:
+                {
+                    var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                    var t = new Date(d.getFullYear(), d.getMonth(), 0);
+                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                }
+            case 17:
+                {
+                    var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                    return f.toLocaleDateString() + " ->";
+                }
+            case 18:
+                {
+                    var f = new Date(d.getFullYear(), d.getMonth(), 0);
+                    return "-> " + f.toLocaleDateString();
+                }
+            case 19:
+                {
+                    var m = d.getMonth();
+                    var r = m % 3;
+
+                    var f = new Date(d.getFullYear(), m - r, 1);
+                    var t = new Date(d.getFullYear(), m + (3 - r), 0);
+                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                }
+            case 20:
+                {
+                    var m = d.getMonth();
+                    var r = m % 3;
+
+                    var t = new Date(d.getFullYear(), m - r, 0);
+                    var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
+                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                }
+            case 21:
+                {
+                    var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
+                    var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
+                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                }
+            case 22:
+                {
+                    var f;
+                    var t;
+                    var y = d.getFullYear();
+                    if (m >= 6) {
+                        f = new Date(y, 0, 1);
+                        t = new Date(y, 5, 30);
+                    } else {
+                        f = new Date(y - 1, 6, 1);
+                        t = new Date(y - 1, 11, 31);
+                    }
+
+                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                }
+
+            case 23:
+                {
+                    var y = d.getFullYear();
+                    var f = new Date(y, 0, 1);
+                    var t = new Date(y, 11, 31);
+                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                }
+
+            case 24:
+                {
+                    var y = d.getFullYear() - 1;
+                    var f = new Date(y, 0, 1);
+                    var t = new Date(y, 11, 31);
+                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                }
+
+            default:
+                return "ooops";
+        }
+    }
+
+    */
+
     var esComplexParamFunctionOptions = [{
         caption: "=",
         value: "EQ"
@@ -2816,6 +3011,9 @@
                     // Case Date Range
                     if (scope.esParamDef.controlType == 6 || scope.esParamDef.controlType == 20) {
                         scope.dateRangeOptions = esWebUIHelper.getesDateRangeOptions(scope.esParamDef.controlType);
+                        scope.dateRangeResolution = function() {
+                            return "Hello World, I am parameter " + scope.esParamDef.caption;
+                        }
                     }
                 }
             };
@@ -3003,6 +3201,14 @@
 
                 var dVal = eval(expr.replace(/#/g, '"'));
                 var esdate = new ESDateParamVal(pInfo.id);
+
+                // Specific Date
+                var mD = moment(dVal, "YYYY/MM/DD");
+                if (!dVal.fromType && !dVal.toType && !dVal.fromD && !dVal.toD && mD.isValid()) {
+                    esdate.paramValue.dRange = "1";
+                    esdate.paramValue.fromD = mD.toDate();
+                    return esdate;
+                }
 
                 //From Specific Date To Specific Date
                 if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD) && dVal.toType == SpecificDate && isActualDate(dVal.toD)) {

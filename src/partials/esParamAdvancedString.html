@@ -14,14 +14,10 @@
 	    </select> 
         <input
         		kendo-masked-text-box
-        		k-clear-prompt-char="true"
-				k-mask="esParamDef.formatString"
-        		k- ng-model="esParamVal[esParamDef.id].paramValue.value"
+        		ng-model="esParamVal[esParamDef.id].paramValue.value"
         		 />
         <input
         	kendo-masked-text-box
-        	k-clear-prompt-char="true"
-			k-mask="esParamDef.formatString"
             ng-model="esParamVal[esParamDef.id].paramValue.valueTo" 
             ng-hide="esParamVal[esParamDef.id].paramValue.oper != 'RANGE'" />
     </div>
