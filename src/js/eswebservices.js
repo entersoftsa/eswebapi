@@ -5,6 +5,17 @@
  *
  ***********************************/
 
+/**
+ * @ngdoc overview
+ * @name es.Services.Web
+ * @module es.Services.Web
+ * @requires ngStorage
+ * @requires ngSanitize
+ * @kind module
+ * @description
+ * This module encapsulates the services, providers, factories and constants for the Entersoft AngularJS WEB API
+ */
+
 (function() {
     'use strict';
 
@@ -51,7 +62,16 @@
         return str.toLowerCase().indexOf(prefix.toLowerCase()) === 0;
     }
 
-    esWebServices.provider("es.Services.WebApi",
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esWebApi
+     * @module es.Services.Web
+     * @kind provider
+     * @description
+     * # esWebApi
+     * Web API.
+     */
+    esWebServices.provider("esWebApi",
         function() {
 
             var urlWEBAPI = "";
@@ -112,7 +132,7 @@
                     return this;
                 },
 
-                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'es.Services.Globals', 'es.Services.Messaging',
+                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'esGlobals', 'esMessaging',
                     function($http, $log, $q, $rootScope, ESWEBAPI_URL, esGlobals, esMessaging) {
 
                         function fregisterException(inMessageObj, storeToRegister) {
@@ -487,6 +507,44 @@
                                 return execScrollerCommand(scrollerCommandParams);
                             },
 
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchPublicQueryInfo
+                             * @methodOf es.Services.Web.esWebApi
+                             * @description this is a descr
+                             * @module es.Services.Web
+                             * @kind function
+                             * @param {string} GroupID Entersoft Public Query GroupID
+                             * @param {string} FilterID Entersoft Public Query FilterID
+                             * @return {httpPromise} Returns a promise. If success i.e. success(function(ret) {...}) the response ret is a JSON object representing the Entersoft 
+                             * Business Suite Janus based GridEx Layout. See the example on how to use the returned value in order to create an esGrid options object
+                             *
+                             * if error i.e. error(function(err, status) { ... }) the err contains the server error object and if available the status code i.e. 400
+                             * @example
+<pre>
+function($scope, esWebApi, esWebUIHelper) {
+    $scope.pGroup = "ESMMStockItem";
+    $scope.pFilter = "ESMMStockItem_def";
+    $scope.fetchPQInfo = function() {
+        esWebApi.fetchPublicQueryInfo($scope.pGroup, $scope.pFilter)
+            .success(function(ret) {
+                // This is the gridlayout as defined in the EBS Public Query based on .NET Janus GridEx Layout
+                $scope.esJanusGridLayout = ret;
+
+                // This is the neutral-abstract representation of the Janus GridEx Layout according to the ES WEB UI simplification
+                $scope.esWebGridInfo = esWebUIHelper.winGridInfoToESGridInfo($scope.pGroup, $scope.pFilter, $scope.esJanusGridLayout);
+
+                // This is the kendo-grid based layout ready to be assigned to kendo-grid options attribute for rendering the results
+                // and for executing the corresponding Public Query
+                $scope.esWebGridLayout = esWebUIHelper.esGridInfoToKInfo(esWebApi, $scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
+            })
+            .error(function(err, status) {
+                alert(a.UserMessage || a.MessageID || "Generic Error");
+            });
+    }
+}
+</pre>
+                             */
                             fetchPublicQueryInfo: function(GroupID, FilterID) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, GroupID, "/", FilterID);
                                 var tt = esGlobals.trackTimer("PQ", "INFO", GroupID.concat("/", FilterID));
@@ -519,12 +577,17 @@
                             },
 
                             /**
-                             * fetch PQ schema
-                             * @param  {string} GroupID
-                             * @param  {string} FilterID
-                             * @param  {object} Params - parameters specific to GroupID / FilterID
-                             * [@param  {string} httpVerb] - optional parameter to specify HTTP verb. Default is GET
-                             * @return {AngularHttpPromise}
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchPublicQuery
+                             * @methodOf es.Services.Web.esWebApi
+                             * @module es.Services.Web
+                             * @kind function
+                             * @param {string} GroupID Entersoft Public Query GroupID
+                             * @param {string} FilterID Entersoft Public Query FilterID
+                             * @param {object} Execution options 
+                             * @param {object} Params Parameters specific to GroupID / FilterID
+                             * @param {string=} httpVerb Parameter to specify HTTP verb. Default is GET
+                             * @return {httpPromise} Returns a promise 
                              */
                             fetchPublicQuery: function(GroupID, FilterID, options, Params, httpVerb) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY__, GroupID, "/", FilterID);
@@ -599,7 +662,7 @@
         }
     );
 
-    esWebServices.factory('es.Services.ElasticSearch', ['es.Services.WebApi',
+    esWebServices.factory('esElasticSearch', ['esWebApi',
         function(esWebApi) {
             return {
                 searchIndex: function(index, body) {

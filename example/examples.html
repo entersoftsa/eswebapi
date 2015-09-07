@@ -1,0 +1,17 @@
+<div>
+    <h3>
+         fetchPublicQueryInfo
+    </h3>
+    <span>
+        <input type="text" ng-model="pGroup" class="form-control" placeholder="PQ GroupID">
+        <input type="text" ng-model="pFilter" class="form-control" placeholder="PQ FilterID">
+        <button ng-click="fetchPQInfo()">fetchPublicQueryInfo</button>
+    </span>
+
+    <div>
+        <span>
+            <textarea>{{esJanusGridLayout}}</textarea> 
+            <textarea>{{esWebGridInfo}}</textarea>
+        </span>
+    </div>
+</div>

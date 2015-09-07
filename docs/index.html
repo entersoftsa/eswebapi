@@ -11,7 +11,7 @@
                  Declarative templates with data-binding, MVC, dependency injection and great
                  testability story all implemented with pure client-side JavaScript!">
   <meta name="fragment" content="!">
-  <title ng-bind-template="Entersoft Application Server WEB API: {{partialTitle}}">Docs</title>
+  <title ng-bind-template="Entersoft AngularJS Web API Documentation: {{partialTitle}}">Docs</title>
   <script type="text/javascript">
     // dynamically add base tag as well as css and javascript files.
     // we can't add css/js the usual way, because some browsers (FF) eagerly prefetch resources
@@ -75,6 +75,15 @@
       }
     })();
 
+    // GA asynchronous tracker
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-555555-0', 'auto');
+    ga('send', 'pageview');
+
   </script>
 </head>
 
@@ -84,8 +93,16 @@
       <div class="navbar-inner">
         <div class="container">
           
+            
+              <a href="http://www.entersoft.eu">
+            
+              <img class="pull-left" src="grunt-styles/src/assets/logo.png">
+            
+              </a>
+            
           
-            <a  class="brand">Entersoft Application Server WEB API</a>
+          
+            <a  class="brand">Entersoft AngularJS Web API Documentation</a>
           
           <ul class="nav">
             <li ng-repeat="(url, name) in sections" ng-class="{active: isActivePath(url)}">

@@ -1,201 +1,210 @@
+/**
+ * @ngdoc overview
+ * @name es.Web.UI
+ * @module es.Web.UI
+ * @kind module
+ * @description
+ * This module encapsulates a set of directives, filters, services and methods for UI
+ */
+
 (function() {
     'use strict';
     var esWEBUI = angular.module('es.Web.UI', []);
 
-/*
-    var dateRangeResolve = function(val, dateVal) {
-        var d = new Date();
+    /*
+        var dateRangeResolve = function(val, dateVal) {
+            var d = new Date();
 
-        switch (val.dType) {
-            case 0:
-                {
-                    if (!dateVal || !(angular.isDate(dateVal.fromD) && angular.isDate(dateVal.toD))) {
-                        return val.title;
-                    }
+            switch (val.dType) {
+                case 0:
+                    {
+                        if (!dateVal || !(angular.isDate(dateVal.fromD) && angular.isDate(dateVal.toD))) {
+                            return val.title;
+                        }
 
-                    var s = "";
-                    if (angular.isDate(dateVal.fromD)) {
-                        s = dateVal.fromD.toLocaleDateString("el-GR");
-                    }
-                    s = s + " - ";
+                        var s = "";
+                        if (angular.isDate(dateVal.fromD)) {
+                            s = dateVal.fromD.toLocaleDateString("el-GR");
+                        }
+                        s = s + " - ";
 
-                    var toS = "";
-                    if (angular.isDate(dateVal.toD)) {
-                        toS = dateVal.toD.toLocaleDateString("el-GR");
+                        var toS = "";
+                        if (angular.isDate(dateVal.toD)) {
+                            toS = dateVal.toD.toLocaleDateString("el-GR");
+                        }
+                        s = s + toS;
+                        return s;
                     }
-                    s = s + toS;
-                    return s;
-                }
-            case 1:
-                {
-                    if (!dateVal || !angular.isDate(dateVal.fromD)) {
-                        return val.title;
+                case 1:
+                    {
+                        if (!dateVal || !angular.isDate(dateVal.fromD)) {
+                            return val.title;
+                        }
+                        return dateVal.fromD.toLocaleDateString("el-GR");
                     }
-                    return dateVal.fromD.toLocaleDateString("el-GR");
-                }
-            case 2:
-                return val.title;
-            case 3:
-                return d.toLocaleDateString();
-            case 4:
-                return "-> " + d.toLocaleDateString();
-            case 5:
-                return d.toLocaleDateString() + " ->";
-            case 6:
-                {
-                    d.setDate(d.getDate() - 1);
+                case 2:
+                    return val.title;
+                case 3:
                     return d.toLocaleDateString();
-                }
-            case 7:
-                {
-                    d.setDate(d.getDate() - 1);
+                case 4:
+                    return "-> " + d.toLocaleDateString();
+                case 5:
                     return d.toLocaleDateString() + " ->";
-                }
-            case 8:
-                {
-                    d.setDate(d.getDate() + 1);
-                    return d.toLocaleDateString();
-                }
-            case 9:
-                {
-                    d.setDate(d.getDate() + 1);
-                    return d.toLocaleDateString() + " ->";
-                }
-            case 10:
-                {
-                    var cDay = d.getDay();
-                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+                case 6:
+                    {
+                        d.setDate(d.getDate() - 1);
+                        return d.toLocaleDateString();
+                    }
+                case 7:
+                    {
+                        d.setDate(d.getDate() - 1);
+                        return d.toLocaleDateString() + " ->";
+                    }
+                case 8:
+                    {
+                        d.setDate(d.getDate() + 1);
+                        return d.toLocaleDateString();
+                    }
+                case 9:
+                    {
+                        d.setDate(d.getDate() + 1);
+                        return d.toLocaleDateString() + " ->";
+                    }
+                case 10:
+                    {
+                        var cDay = d.getDay();
+                        var sDiff = (cDay == 0) ? 6 : (cDay - 1);
 
-                    var f = new Date(d);
-                    var t = new Date(d);
-                    f.setDate(d.getDate() - sDiff);
-                    t.setDate(f.getDate() + 6);
+                        var f = new Date(d);
+                        var t = new Date(d);
+                        f.setDate(d.getDate() - sDiff);
+                        t.setDate(f.getDate() + 6);
 
-                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                }
-            case 11:
-                {
-                    d.setDate(d.getDate() - 7);
+                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                    }
+                case 11:
+                    {
+                        d.setDate(d.getDate() - 7);
 
-                    var cDay = d.getDay();
-                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+                        var cDay = d.getDay();
+                        var sDiff = (cDay == 0) ? 6 : (cDay - 1);
 
-                    var f = new Date(d);
-                    var t = new Date(d);
-                    f.setDate(d.getDate() - sDiff);
-                    t.setDate(f.getDate() + 6);
+                        var f = new Date(d);
+                        var t = new Date(d);
+                        f.setDate(d.getDate() - sDiff);
+                        t.setDate(f.getDate() + 6);
 
-                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                }
-            case 12:
-                {
-                    d.setDate(d.getDate() + 7);
+                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                    }
+                case 12:
+                    {
+                        d.setDate(d.getDate() + 7);
 
-                    var cDay = d.getDay();
-                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+                        var cDay = d.getDay();
+                        var sDiff = (cDay == 0) ? 6 : (cDay - 1);
 
-                    var f = new Date(d);
-                    var t = new Date(d);
-                    f.setDate(d.getDate() - sDiff);
-                    t.setDate(f.getDate() + 6);
+                        var f = new Date(d);
+                        var t = new Date(d);
+                        f.setDate(d.getDate() - sDiff);
+                        t.setDate(f.getDate() + 6);
 
-                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                }
-            case 13:
-                {
-                    d.setDate(1);
+                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                    }
+                case 13:
+                    {
+                        d.setDate(1);
 
-                    var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-                    return d.toLocaleDateString() + " - " + f.toLocaleDateString();
-                }
-            case 14:
-                {
-                    d.setDate(1);
-                    return d.toLocaleDateString() + " ->";
-                }
-            case 15:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-                    return "-> " + f.toLocaleDateString();
-                }
-            case 16:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-                    var t = new Date(d.getFullYear(), d.getMonth(), 0);
-                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                }
-            case 17:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-                    return f.toLocaleDateString() + " ->";
-                }
-            case 18:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth(), 0);
-                    return "-> " + f.toLocaleDateString();
-                }
-            case 19:
-                {
-                    var m = d.getMonth();
-                    var r = m % 3;
+                        var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                        return d.toLocaleDateString() + " - " + f.toLocaleDateString();
+                    }
+                case 14:
+                    {
+                        d.setDate(1);
+                        return d.toLocaleDateString() + " ->";
+                    }
+                case 15:
+                    {
+                        var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                        return "-> " + f.toLocaleDateString();
+                    }
+                case 16:
+                    {
+                        var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                        var t = new Date(d.getFullYear(), d.getMonth(), 0);
+                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                    }
+                case 17:
+                    {
+                        var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                        return f.toLocaleDateString() + " ->";
+                    }
+                case 18:
+                    {
+                        var f = new Date(d.getFullYear(), d.getMonth(), 0);
+                        return "-> " + f.toLocaleDateString();
+                    }
+                case 19:
+                    {
+                        var m = d.getMonth();
+                        var r = m % 3;
 
-                    var f = new Date(d.getFullYear(), m - r, 1);
-                    var t = new Date(d.getFullYear(), m + (3 - r), 0);
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
-            case 20:
-                {
-                    var m = d.getMonth();
-                    var r = m % 3;
+                        var f = new Date(d.getFullYear(), m - r, 1);
+                        var t = new Date(d.getFullYear(), m + (3 - r), 0);
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                    }
+                case 20:
+                    {
+                        var m = d.getMonth();
+                        var r = m % 3;
 
-                    var t = new Date(d.getFullYear(), m - r, 0);
-                    var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
-            case 21:
-                {
-                    var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
-                    var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
-            case 22:
-                {
-                    var f;
-                    var t;
-                    var y = d.getFullYear();
-                    if (m >= 6) {
-                        f = new Date(y, 0, 1);
-                        t = new Date(y, 5, 30);
-                    } else {
-                        f = new Date(y - 1, 6, 1);
-                        t = new Date(y - 1, 11, 31);
+                        var t = new Date(d.getFullYear(), m - r, 0);
+                        var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                    }
+                case 21:
+                    {
+                        var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
+                        var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                    }
+                case 22:
+                    {
+                        var f;
+                        var t;
+                        var y = d.getFullYear();
+                        if (m >= 6) {
+                            f = new Date(y, 0, 1);
+                            t = new Date(y, 5, 30);
+                        } else {
+                            f = new Date(y - 1, 6, 1);
+                            t = new Date(y - 1, 11, 31);
+                        }
+
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
                     }
 
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
+                case 23:
+                    {
+                        var y = d.getFullYear();
+                        var f = new Date(y, 0, 1);
+                        var t = new Date(y, 11, 31);
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                    }
 
-            case 23:
-                {
-                    var y = d.getFullYear();
-                    var f = new Date(y, 0, 1);
-                    var t = new Date(y, 11, 31);
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
+                case 24:
+                    {
+                        var y = d.getFullYear() - 1;
+                        var f = new Date(y, 0, 1);
+                        var t = new Date(y, 11, 31);
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                    }
 
-            case 24:
-                {
-                    var y = d.getFullYear() - 1;
-                    var f = new Date(y, 0, 1);
-                    var t = new Date(y, 11, 31);
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
-
-            default:
-                return "ooops";
+                default:
+                    return "ooops";
+            }
         }
-    }
 
-    */
+        */
 
     var esComplexParamFunctionOptions = [{
         caption: "=",
@@ -594,6 +603,15 @@
         }
     }
 
+    /**
+     * @ngdoc filter
+     * @name es.Web.UI.filter:esTrustHtml
+     *
+     * @description
+     * esGrid Directive
+     *
+     * 
+     */
     esWEBUI.filter('esTrustHtml', ['$sce',
         function($sce) {
             return function(text) {
@@ -672,7 +690,26 @@
 
             return f;
         })
-        .directive('esGrid', ['es.Services.WebApi', 'es.UI.Web.UIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:esGrid
+         * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
+         * @requires es.Web.UI.esUIHelper
+         * @requires $log
+         * @restrict AE
+         * @param {template} esGroupId The Entersoft Public Query Group ID
+         * @param {template} esFilterId The Entersoft Public Query Filter ID
+         * @param {esGridInfoOptions=} esGridOptions should grid options are already available you can explicitly assign
+         * @param {object=} esExecuteParams Params object that will be used when executing the public query
+         *
+         * @description
+         * This directive is responsible to render the html for the presentation of the results / data of an Entersoft Public Query.
+         * The esGrid generates a Telerik kendo-grid web ui element {@link http://docs.telerik.com/KENDO-UI/api/javascript/ui/grid kendo-grid}.
+         * 
+         * In order to instantiate an esGrid with an Angular application, you have to provide the parameters esGroupId and esFilterId are required.
+         * These two parameters along with esExecuteParams will be supplied to the {@link es.Services.Web.esWebApi}
+         */
+        .directive('esGrid', ['esWebApi', 'esUIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -703,7 +740,18 @@
                 }
             };
         }])
-        .directive('esParam', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:esParam
+         * @element div
+         * @function
+         *
+         * @description
+         * esGrid esParam
+         *
+         * 
+         */
+        .directive('esParam', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -735,7 +783,18 @@
                 }
             };
         }])
-        .directive('esWebPq', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:esWebPq
+         * @element div
+         * @function
+         *
+         * @description
+         * esGrid esWebPq
+         *
+         * 
+         */
+        .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -763,7 +822,18 @@
                 }
             };
         }])
-        .directive('esParamsPanel', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:esParamsPanel
+         * @element div
+         * @function
+         *
+         * @description
+         * Resize textarea automatically to the size of its text content.
+         *
+         * 
+         */
+        .directive('esParamsPanel', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -800,7 +870,14 @@
             };
         }]);
 
-    esWEBUI.factory("es.UI.Web.UIHelper", ['es.Services.WebApi', '$log',
+    /**
+     * @ngdoc service
+     * @name es.Web.UI.esUIHelper
+     * @description
+     * # esUIHelper
+     * esUIHelper addons.
+     */
+    esWEBUI.factory('esUIHelper', ['esWebApi', '$log',
         function(esWebApiService, $log) {
 
             function esColToKCol(esGridInfo, esCol) {
@@ -1190,8 +1267,8 @@
                     defaultValues: undefined,
                 };
 
-                var z2 = _.map(_.where(gridexInfo.LayoutColumn, {
-                    fFilterID: inFilterID
+                var z2 = _.map(_.filter(gridexInfo.LayoutColumn, function(y) {
+                    return y.fFilterID.toLowerCase() == fId;
                 }), function(x) {
                     return winColToESCol(inGroupID, inFilterID, gridexInfo, x);
                 });

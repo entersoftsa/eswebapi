@@ -1,0 +1,56 @@
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/2728041/src/js/eswebservices.js#L74" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
+<div><span class="hint">service in module <code ng:non-bindable="">es.Services.Web</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="es-services-web-eswebapi-page"><h3 id="description_eswebapi">esWebApi</h3>
+<p>Web API.</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/2728041/src/js/eswebservices.js#L592" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(GroupID, FilterID, Execution, Params, httpVerb)</h3>
+<div class="fetchpublicquery"><h5 id="methods_fetchpublicquery_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>GroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query GroupID</p>
+</div></td></tr><tr><td>FilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query FilterID</p>
+</div></td></tr><tr><td>Execution</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>options</p>
+</div></td></tr><tr><td>Params</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Parameters specific to GroupID / FilterID</p>
+</div></td></tr><tr><td>httpVerb <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Parameter to specify HTTP verb. Default is GET</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchpublicquery_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Returns a promise</p>
+</div></td></tr></table></div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/2728041/src/js/eswebservices.js#L548" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID)</h3>
+<div class="fetchpublicqueryinfo"><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>this is a descr</p>
+</div><h5 id="methods_fetchpublicqueryinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>GroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query GroupID</p>
+</div></td></tr><tr><td>FilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query FilterID</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchpublicqueryinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Returns a promise. If success i.e. success(function(ret) {...}) the response ret is a JSON object representing the Entersoft
+Business Suite Janus based GridEx Layout. See the example on how to use the returned value in order to create an esGrid options object</p>
+<p>if error i.e. error(function(err, status) { ... }) the err contains the server error object and if available the status code i.e. 400</p>
+</div></td></tr></table><h4 id="methods_fetchpublicqueryinfo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><pre class="prettyprint linenums">
+function($scope, esWebApi, esWebUIHelper) {
+    $scope.pGroup = "ESMMStockItem";
+    $scope.pFilter = "ESMMStockItem_def";
+    $scope.fetchPQInfo = function() {
+        esWebApi.fetchPublicQueryInfo($scope.pGroup, $scope.pFilter)
+            .success(function(ret) {
+                // This is the gridlayout as defined in the EBS Public Query based on .NET Janus GridEx Layout
+                $scope.esJanusGridLayout = ret;
+
+                // This is the neutral-abstract representation of the Janus GridEx Layout according to the ES WEB UI simplification
+                $scope.esWebGridInfo = esWebUIHelper.winGridInfoToESGridInfo($scope.pGroup, $scope.pFilter, $scope.esJanusGridLayout);
+
+                // This is the kendo-grid based layout ready to be assigned to kendo-grid options attribute for rendering the results
+                // and for executing the corresponding Public Query
+                $scope.esWebGridLayout = esWebUIHelper.esGridInfoToKInfo(esWebApi, $scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
+            })
+            .error(function(err, status) {
+                alert(a.UserMessage || a.MessageID || "Generic Error");
+            });
+    }
+}
+</pre>
+</div></div>
+</div>
+</li>
+</ul>
+</div>
+</div>

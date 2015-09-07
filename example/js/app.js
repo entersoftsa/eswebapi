@@ -12,7 +12,7 @@
 
     eskbApp.config(['$logProvider',
         '$routeProvider',
-        'es.Services.WebApiProvider',
+        'esWebApiProvider',
         '$exceptionHandlerProvider',
         function($logProvider, $routeProvider, esWebApiServiceProvider, $exceptionHandlerProvider) {
 
@@ -32,6 +32,10 @@
                 .when('/pq', {
                     templateUrl: 'pq.html',
                     controller: 'pqCtrl'
+                })
+                .when('/examples', {
+                    templateUrl: 'examples.html',
+                    controller: 'examplesCtrl'
                 });
 
             $logProvider.addDefaultAppenders();

@@ -10,7 +10,7 @@
     var esWebFramework = angular.module('es.Services.Web');
 
 
-    esWebFramework.provider('es.Services.Cache', function() {
+    esWebFramework.provider('esCache', function() {
         var cache = null;
         var settings = {};
         settings.maxSize = -1;
@@ -84,7 +84,7 @@
     // Define the factory on the module.
     // Inject the dependencies.
     // Point to the factory definition function.
-    esWebFramework.factory('es.Services.Messaging', function() {
+    esWebFramework.factory('esMessaging', function() {
         //#region Internal Properties
         var cache = {};
 
@@ -138,7 +138,7 @@
     });
 
 
-    esWebFramework.factory('es.Services.Globals', ['$sessionStorage', '$log', 'es.Services.Messaging', '$injector' /* 'es.Services.GA' */ ,
+    esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', '$injector' /* 'es.Services.GA' */ ,
         function($sessionStorage, $log, esMessaging, $injector) {
 
             function fgetGA() {
@@ -375,7 +375,7 @@
     ]);
 
 
-    esWebFramework.run(['es.Services.Globals', 'es.Services.WebApi', function(esGlobals, esWebApi) {
+    esWebFramework.run(['esGlobals', 'esWebApi', function(esGlobals, esWebApi) {
         var esSession = esGlobals.getClientSession();
         esSession.getModel();
         esSession.hostUrl = esWebApi.getServerUrl();

@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v0.0.1 - 2015-09-04
+/*! Entersoft Application Server WEB API - v0.0.1 - 2015-09-07
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6,6 +6,17 @@
  * v0.0.72
  *
  ***********************************/
+
+/**
+ * @ngdoc overview
+ * @name es.Services.Web
+ * @module es.Services.Web
+ * @requires ngStorage
+ * @requires ngSanitize
+ * @kind module
+ * @description
+ * This module encapsulates the services, providers, factories and constants for the Entersoft AngularJS WEB API
+ */
 
 (function() {
     'use strict';
@@ -53,7 +64,16 @@
         return str.toLowerCase().indexOf(prefix.toLowerCase()) === 0;
     }
 
-    esWebServices.provider("es.Services.WebApi",
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esWebApi
+     * @module es.Services.Web
+     * @kind provider
+     * @description
+     * # esWebApi
+     * Web API.
+     */
+    esWebServices.provider("esWebApi",
         function() {
 
             var urlWEBAPI = "";
@@ -114,7 +134,7 @@
                     return this;
                 },
 
-                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'es.Services.Globals', 'es.Services.Messaging',
+                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'esGlobals', 'esMessaging',
                     function($http, $log, $q, $rootScope, ESWEBAPI_URL, esGlobals, esMessaging) {
 
                         function fregisterException(inMessageObj, storeToRegister) {
@@ -489,6 +509,44 @@
                                 return execScrollerCommand(scrollerCommandParams);
                             },
 
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchPublicQueryInfo
+                             * @methodOf es.Services.Web.esWebApi
+                             * @description this is a descr
+                             * @module es.Services.Web
+                             * @kind function
+                             * @param {string} GroupID Entersoft Public Query GroupID
+                             * @param {string} FilterID Entersoft Public Query FilterID
+                             * @return {httpPromise} Returns a promise. If success i.e. success(function(ret) {...}) the response ret is a JSON object representing the Entersoft 
+                             * Business Suite Janus based GridEx Layout. See the example on how to use the returned value in order to create an esGrid options object
+                             *
+                             * if error i.e. error(function(err, status) { ... }) the err contains the server error object and if available the status code i.e. 400
+                             * @example
+<pre>
+function($scope, esWebApi, esWebUIHelper) {
+    $scope.pGroup = "ESMMStockItem";
+    $scope.pFilter = "ESMMStockItem_def";
+    $scope.fetchPQInfo = function() {
+        esWebApi.fetchPublicQueryInfo($scope.pGroup, $scope.pFilter)
+            .success(function(ret) {
+                // This is the gridlayout as defined in the EBS Public Query based on .NET Janus GridEx Layout
+                $scope.esJanusGridLayout = ret;
+
+                // This is the neutral-abstract representation of the Janus GridEx Layout according to the ES WEB UI simplification
+                $scope.esWebGridInfo = esWebUIHelper.winGridInfoToESGridInfo($scope.pGroup, $scope.pFilter, $scope.esJanusGridLayout);
+
+                // This is the kendo-grid based layout ready to be assigned to kendo-grid options attribute for rendering the results
+                // and for executing the corresponding Public Query
+                $scope.esWebGridLayout = esWebUIHelper.esGridInfoToKInfo(esWebApi, $scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
+            })
+            .error(function(err, status) {
+                alert(a.UserMessage || a.MessageID || "Generic Error");
+            });
+    }
+}
+</pre>
+                             */
                             fetchPublicQueryInfo: function(GroupID, FilterID) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, GroupID, "/", FilterID);
                                 var tt = esGlobals.trackTimer("PQ", "INFO", GroupID.concat("/", FilterID));
@@ -521,12 +579,17 @@
                             },
 
                             /**
-                             * fetch PQ schema
-                             * @param  {string} GroupID
-                             * @param  {string} FilterID
-                             * @param  {object} Params - parameters specific to GroupID / FilterID
-                             * [@param  {string} httpVerb] - optional parameter to specify HTTP verb. Default is GET
-                             * @return {AngularHttpPromise}
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchPublicQuery
+                             * @methodOf es.Services.Web.esWebApi
+                             * @module es.Services.Web
+                             * @kind function
+                             * @param {string} GroupID Entersoft Public Query GroupID
+                             * @param {string} FilterID Entersoft Public Query FilterID
+                             * @param {object} Execution options 
+                             * @param {object} Params Parameters specific to GroupID / FilterID
+                             * @param {string=} httpVerb Parameter to specify HTTP verb. Default is GET
+                             * @return {httpPromise} Returns a promise 
                              */
                             fetchPublicQuery: function(GroupID, FilterID, options, Params, httpVerb) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY__, GroupID, "/", FilterID);
@@ -601,7 +664,7 @@
         }
     );
 
-    esWebServices.factory('es.Services.ElasticSearch', ['es.Services.WebApi',
+    esWebServices.factory('esElasticSearch', ['esWebApi',
         function(esWebApi) {
             return {
                 searchIndex: function(index, body) {
@@ -1640,7 +1703,7 @@
     var esWebFramework = angular.module('es.Services.Web');
 
 
-    esWebFramework.provider('es.Services.Cache', function() {
+    esWebFramework.provider('esCache', function() {
         var cache = null;
         var settings = {};
         settings.maxSize = -1;
@@ -1714,7 +1777,7 @@
     // Define the factory on the module.
     // Inject the dependencies.
     // Point to the factory definition function.
-    esWebFramework.factory('es.Services.Messaging', function() {
+    esWebFramework.factory('esMessaging', function() {
         //#region Internal Properties
         var cache = {};
 
@@ -1768,7 +1831,7 @@
     });
 
 
-    esWebFramework.factory('es.Services.Globals', ['$sessionStorage', '$log', 'es.Services.Messaging', '$injector' /* 'es.Services.GA' */ ,
+    esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', '$injector' /* 'es.Services.GA' */ ,
         function($sessionStorage, $log, esMessaging, $injector) {
 
             function fgetGA() {
@@ -2005,7 +2068,7 @@
     ]);
 
 
-    esWebFramework.run(['es.Services.Globals', 'es.Services.WebApi', function(esGlobals, esWebApi) {
+    esWebFramework.run(['esGlobals', 'esWebApi', function(esGlobals, esWebApi) {
         var esSession = esGlobals.getClientSession();
         esSession.getModel();
         esSession.hostUrl = esWebApi.getServerUrl();
@@ -2013,472 +2076,489 @@
 })();
 
 
- // is now in the Global scope; but, we don't want to reference
- // global objects inside the AngularJS components - that's
- // not how AngularJS rolls; as such, we want to wrap the
- // stacktrace feature in a proper AngularJS service that
- // formally exposes the print method.
- // version 0.0.24
+(function() {
+    'use strict';
 
- (function() {
-     'use strict';
+    var esWebFramework = angular.module('es.Services.Web');
 
-     var esWebFramework = angular.module('es.Services.Web');
-     esWebFramework.factory(
-         "es.Services.StackTrace",
-         function() {
-             // "printStackTrace" is a global object.
-             return ({
-                 print: printStackTrace
-             });
-         }
-     );
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esStackTrace
+     * @description
+     * # esStackTrace
+     * Factory used to provide the stacktracejs javascript library for complete stack trace error reporting.
+     */
+    esWebFramework.factory(
+        "esStackTrace",
 
-     esWebFramework.provider("$log",
-         function() {
-             var logAppenders = [];
-             var ajaxAppender = null;
-             var logger = null;
-             var level = log4javascript.Level.ALL;
-             var lt = null;
+        /**
+         * @ngdoc
+         * @name es.Services.Web.esStackTrace#print
+         * @methodOf es.Services.Web.esStackTrace
+         *
+         * @description
+         * Method that returns the printStackTrace object from the corresponding javascript library.
+         * For more information on printStackTrace please see {@link https://github.com/stacktracejs/stacktrace.js/ stacktrace.js}
+         * @returns {function} printStackTrace
+         **/
+        function() {
+            return ({
+                print: printStackTrace
+            });
+        }
+    );
 
-             function getLogger() {
-                 return log4javascript.getLogger('esLogger');
-             }
+    esWebFramework.provider("$log",
+        function() {
+            var logAppenders = [];
+            var ajaxAppender = null;
+            var logger = null;
+            var level = log4javascript.Level.ALL;
+            var lt = null;
 
-             function createDefaultAppenders(addPopup) {
-                 doaddAppender(new log4javascript.BrowserConsoleAppender());
+            function getLogger() {
+                return log4javascript.getLogger('esLogger');
+            }
 
-                 var x = angular.isDefined(addPopup) && addPopup;
-                 if (x) {
-                     doaddAppender(new log4javascript.PopUpAppender());
-                 }
-             }
+            function createDefaultAppenders(addPopup) {
+                doaddAppender(new log4javascript.BrowserConsoleAppender());
 
-             function setAccessToken(session, token) {
-                 if (!ajaxAppender) {
-                     return;
-                 }
+                var x = angular.isDefined(addPopup) && addPopup;
+                if (x) {
+                    doaddAppender(new log4javascript.PopUpAppender());
+                }
+            }
 
-                 if (lt && session && session.connectionModel) {
-                     lt.setCustomField("userId", session.connectionModel.UserID);
-                     if (session.credentials) {
-                         lt.setCustomField("branchId", session.credentials.BranchID);
-                         lt.setCustomField("langId", session.credentials.LangID);
-                     }
-                 }
+            function setAccessToken(session, token) {
+                if (!ajaxAppender) {
+                    return;
+                }
 
-                 var hd = ajaxAppender.getHeaders();
-                 if (hd) {
-                     var i;
-                     var foundIndex = -1;
-                     for (i = 0; i < hd.length; i++) {
-                         if (hd[i].name == "Authorization") {
-                             foundIndex = i;
-                             break;
-                         }
-                     }
-                     if (foundIndex != -1) {
-                         hd.splice(foundIndex, 1);
-                     }
-                 }
+                if (lt && session && session.connectionModel) {
+                    lt.setCustomField("userId", session.connectionModel.UserID);
+                    if (session.credentials) {
+                        lt.setCustomField("branchId", session.credentials.BranchID);
+                        lt.setCustomField("langId", session.credentials.LangID);
+                    }
+                }
 
-                 if (token && token != "") {
-                     ajaxAppender.addHeader("Authorization", token);
-                 }
-             }
+                var hd = ajaxAppender.getHeaders();
+                if (hd) {
+                    var i;
+                    var foundIndex = -1;
+                    for (i = 0; i < hd.length; i++) {
+                        if (hd[i].name == "Authorization") {
+                            foundIndex = i;
+                            break;
+                        }
+                    }
+                    if (foundIndex != -1) {
+                        hd.splice(foundIndex, 1);
+                    }
+                }
 
-             function doaddAppender(appender) {
-                 if (logAppenders.indexOf(appender) == -1) {
-                     logAppenders.push(appender);
-                     return true;
-                 }
-                 return false;
-             }
+                if (token && token != "") {
+                    ajaxAppender.addHeader("Authorization", token);
+                }
+            }
 
-             return {
+            function doaddAppender(appender) {
+                if (logAppenders.indexOf(appender) == -1) {
+                    logAppenders.push(appender);
+                    return true;
+                }
+                return false;
+            }
 
-                 setLevel: function(lvl) {
-                     level = lvl;
-                     if (logger) {
-                         logger.setLevel(level);
-                     }
-                 },
+            return {
 
-                 getLevel: function() {
-                     return level;
-                 },
+                setLevel: function(lvl) {
+                    level = lvl;
+                    if (logger) {
+                        logger.setLevel(level);
+                    }
+                },
 
-                 getCurrentLevel: function() {
-                     if (logger) {
-                         return logger.getEffectiveLevel();
-                     } else {
-                         return log4javascript.Level.OFF;
-                     }
-                 },
+                getLevel: function() {
+                    return level;
+                },
 
-                 addAppender: doaddAppender,
+                getCurrentLevel: function() {
+                    if (logger) {
+                        return logger.getEffectiveLevel();
+                    } else {
+                        return log4javascript.Level.OFF;
+                    }
+                },
 
-                 addDefaultAppenders: createDefaultAppenders,
+                addAppender: doaddAppender,
 
-                 addESWebApiAppender: function(srvUrl, subscriptionId) {
-                     // var ajaxUrl = srvUrl + "api/rpc/log/";
-                     var ajaxUrl = srvUrl + "api/rpc/registerException/";
+                addDefaultAppenders: createDefaultAppenders,
 
-                     ajaxAppender = new log4javascript.AjaxAppender(ajaxUrl, false);
-                     ajaxAppender.setSendAllOnUnload(true);
+                addESWebApiAppender: function(srvUrl, subscriptionId) {
+                    // var ajaxUrl = srvUrl + "api/rpc/log/";
+                    var ajaxUrl = srvUrl + "api/rpc/registerException/";
 
-                     lt = new log4javascript.JsonLayout();
-                     lt.setCustomField("subscriptionId", subscriptionId);
+                    ajaxAppender = new log4javascript.AjaxAppender(ajaxUrl, false);
+                    ajaxAppender.setSendAllOnUnload(true);
 
-                     ajaxAppender.setLayout(lt);
-                     ajaxAppender.setWaitForResponse(true);
-                     ajaxAppender.setBatchSize(100);
-                     ajaxAppender.setTimed(true);
-                     ajaxAppender.setTimerInterval(60000);
-                     ajaxAppender.addHeader("Content-Type", "application/json");
+                    lt = new log4javascript.JsonLayout();
+                    lt.setCustomField("subscriptionId", subscriptionId);
 
-                     ajaxAppender.setRequestSuccessCallback(function(xmlHttp) {
-                         console.log("ES Logger, BATCH of logs upoloaded", xmlHttp.responseURL, xmlHttp.status);
-                     });
+                    ajaxAppender.setLayout(lt);
+                    ajaxAppender.setWaitForResponse(true);
+                    ajaxAppender.setBatchSize(100);
+                    ajaxAppender.setTimed(true);
+                    ajaxAppender.setTimerInterval(60000);
+                    ajaxAppender.addHeader("Content-Type", "application/json");
 
-                     ajaxAppender.setFailCallback(function(messg) {
-                         console.error("Failed to POST Logs to the server", messg);
-                     });
-                     return doaddAppender(ajaxAppender);
-                 },
+                    ajaxAppender.setRequestSuccessCallback(function(xmlHttp) {
+                        console.log("ES Logger, BATCH of logs upoloaded", xmlHttp.responseURL, xmlHttp.status);
+                    });
 
-                 $get: ['es.Services.Messaging',
-                     function(esMessaging) {
-                         try {
+                    ajaxAppender.setFailCallback(function(messg) {
+                        console.error("Failed to POST Logs to the server", messg);
+                    });
+                    return doaddAppender(ajaxAppender);
+                },
 
-                             logger = getLogger();
-                             logger.setLevel(level);
+                $get: ['esMessaging',
+                    function(esMessaging) {
+                        try {
 
-                             if (logAppenders.length == 0) {
-                                 createDefaultAppenders();
-                             }
+                            logger = getLogger();
+                            logger.setLevel(level);
 
-                             var i = 0;
-                             for (i = 0; i < logAppenders.length; i++) {
-                                 logger.addAppender(logAppenders[i]);
-                             }
+                            if (logAppenders.length == 0) {
+                                createDefaultAppenders();
+                            }
 
-                             esMessaging.subscribe("AUTH_CHANGED", function(session, tok) {
-                                 setAccessToken(session, tok)
-                             });
+                            var i = 0;
+                            for (i = 0; i < logAppenders.length; i++) {
+                                logger.addAppender(logAppenders[i]);
+                            }
 
-                             logger.sendAll = function() {
-                                 try {
-                                     if (ajaxAppender) {
-                                         ajaxAppender.sendAll();
-                                     }
-                                 } catch (exc) {
+                            esMessaging.subscribe("AUTH_CHANGED", function(session, tok) {
+                                setAccessToken(session, tok)
+                            });
 
-                                 }
-                             }
+                            logger.sendAll = function() {
+                                try {
+                                    if (ajaxAppender) {
+                                        ajaxAppender.sendAll();
+                                    }
+                                } catch (exc) {
 
-                             console.info("ES Logger started");
-                             return logger;
-                         } catch (exception) {
-                             console.log("Error in starting entersoft logger", exception);
-                             return $log;
-                         }
+                                }
+                            }
 
-                     }
-                 ]
-             }
-         }
+                            console.info("ES Logger started");
+                            return logger;
+                        } catch (exception) {
+                            console.log("Error in starting entersoft logger", exception);
+                            return $log;
+                        }
 
-     );
+                    }
+                ]
+            }
+        }
 
-
-     // -------------------------------------------------- //
-     // -------------------------------------------------- //
-
-
-     // By default, AngularJS will catch errors and log them to
-     // the Console. We want to keep that behavior; however, we
-     // want to intercept it so that we can also log the errors
-     // to the server for later analysis.
-     esWebFramework.provider("$exceptionHandler",
-         function() {
-             var logSettings = {
-                 pushToServer: false,
-                 logServer: ""
-             };
-             return {
-                 getSettings: function() {
-                     return logSettings;
-                 },
-
-                 setPushToServer: function(pushToServer) {
-                     logSettings.pushToServer = pushToServer;
-                 },
-
-                 setLogServer: function(logServer) {
-                     logSettings.logServer = logServer;
-                 },
-
-                 $get: ['$log', '$window', 'es.Services.StackTrace', '$injector',
-                     function($log, $window, stacktraceService, $injector) {
-
-                         // I log the given error to the remote server.
-                         function log(exception, cause) {
-                                 var errorMessage, stackTrace, itm;
-
-                                 try {
-                                     errorMessage = exception.toString();
-                                     stackTrace = stacktraceService.print({
-                                         e: exception
-                                     });
-
-                                     itm = {
-                                         errorUrl: $window.location.href,
-                                         errorMessage: errorMessage,
-                                         stackTrace: stackTrace,
-                                         cause: (cause || "")
-                                     };
-
-                                     $log.error(JSON.stringify(itm, null, '\t'));
-
-                                 } catch (loggingError) {
-                                     console.log(arguments);
-                                 }
-
-                                 if (logSettings.pushToServer) {
-                                     // Now, we need to try and log the error the server.
-                                     // --
-                                     // NOTE: In production, I have some debouncing
-                                     // logic here to prevent the same client from
-                                     // logging the same error over and over again! All
-                                     // that would do is add noise to the log.
-                                     try {
-                                         var ESWEBAPI = $injector.get('es.Services.WebApi');
-
-                                         ESWEBAPI.registerException(itm, logSettings.logServer);
-
-                                     } catch (loggingError) {
-
-                                         // For Developers - log the log-failure.
-                                         $log.warn("ES Error in registerException on store " + logSettings.logServer);
-                                         $log.error(loggingError);
-
-                                     }
-                                 }
-
-                             }
-                             // Return the logging function.
-                         return (log);
-                     }
-                 ]
-
-             }
-         }
-     );
- })();
+    );
 
 
+    // -------------------------------------------------- //
+    // -------------------------------------------------- //
 
+
+    // By default, AngularJS will catch errors and log them to
+    // the Console. We want to keep that behavior; however, we
+    // want to intercept it so that we can also log the errors
+    // to the server for later analysis.
+    esWebFramework.provider("$exceptionHandler",
+        function() {
+            var logSettings = {
+                pushToServer: false,
+                logServer: ""
+            };
+            return {
+                getSettings: function() {
+                    return logSettings;
+                },
+
+                setPushToServer: function(pushToServer) {
+                    logSettings.pushToServer = pushToServer;
+                },
+
+                setLogServer: function(logServer) {
+                    logSettings.logServer = logServer;
+                },
+
+                $get: ['$log', '$window', 'esStackTrace', '$injector',
+                    function($log, $window, stacktraceService, $injector) {
+
+                        // I log the given error to the remote server.
+                        function log(exception, cause) {
+                            var errorMessage, stackTrace, itm;
+
+                            try {
+                                errorMessage = exception.toString();
+                                stackTrace = stacktraceService.print({
+                                    e: exception
+                                });
+
+                                itm = {
+                                    errorUrl: $window.location.href,
+                                    errorMessage: errorMessage,
+                                    stackTrace: stackTrace,
+                                    cause: (cause || "")
+                                };
+
+                                $log.error(JSON.stringify(itm, null, '\t'));
+
+                            } catch (loggingError) {
+                                console.log(arguments);
+                            }
+
+                            if (logSettings.pushToServer) {
+                                // Now, we need to try and log the error the server.
+                                // --
+                                // NOTE: In production, I have some debouncing
+                                // logic here to prevent the same client from
+                                // logging the same error over and over again! All
+                                // that would do is add noise to the log.
+                                try {
+                                    var ESWEBAPI = $injector.get('esWebApi');
+
+                                    ESWEBAPI.registerException(itm, logSettings.logServer);
+
+                                } catch (loggingError) {
+
+                                    // For Developers - log the log-failure.
+                                    $log.warn("ES Error in registerException on store " + logSettings.logServer);
+                                    $log.error(loggingError);
+
+                                }
+                            }
+
+                        }
+                        // Return the logging function.
+                        return (log);
+                    }
+                ]
+
+            }
+        }
+    );
+})();
+
+/**
+ * @ngdoc overview
+ * @name es.Web.UI
+ * @module es.Web.UI
+ * @kind module
+ * @description
+ * This module encapsulates a set of directives, filters, services and methods for UI
+ */
 
 (function() {
     'use strict';
     var esWEBUI = angular.module('es.Web.UI', []);
 
-/*
-    var dateRangeResolve = function(val, dateVal) {
-        var d = new Date();
+    /*
+        var dateRangeResolve = function(val, dateVal) {
+            var d = new Date();
 
-        switch (val.dType) {
-            case 0:
-                {
-                    if (!dateVal || !(angular.isDate(dateVal.fromD) && angular.isDate(dateVal.toD))) {
-                        return val.title;
-                    }
+            switch (val.dType) {
+                case 0:
+                    {
+                        if (!dateVal || !(angular.isDate(dateVal.fromD) && angular.isDate(dateVal.toD))) {
+                            return val.title;
+                        }
 
-                    var s = "";
-                    if (angular.isDate(dateVal.fromD)) {
-                        s = dateVal.fromD.toLocaleDateString("el-GR");
-                    }
-                    s = s + " - ";
+                        var s = "";
+                        if (angular.isDate(dateVal.fromD)) {
+                            s = dateVal.fromD.toLocaleDateString("el-GR");
+                        }
+                        s = s + " - ";
 
-                    var toS = "";
-                    if (angular.isDate(dateVal.toD)) {
-                        toS = dateVal.toD.toLocaleDateString("el-GR");
+                        var toS = "";
+                        if (angular.isDate(dateVal.toD)) {
+                            toS = dateVal.toD.toLocaleDateString("el-GR");
+                        }
+                        s = s + toS;
+                        return s;
                     }
-                    s = s + toS;
-                    return s;
-                }
-            case 1:
-                {
-                    if (!dateVal || !angular.isDate(dateVal.fromD)) {
-                        return val.title;
+                case 1:
+                    {
+                        if (!dateVal || !angular.isDate(dateVal.fromD)) {
+                            return val.title;
+                        }
+                        return dateVal.fromD.toLocaleDateString("el-GR");
                     }
-                    return dateVal.fromD.toLocaleDateString("el-GR");
-                }
-            case 2:
-                return val.title;
-            case 3:
-                return d.toLocaleDateString();
-            case 4:
-                return "-> " + d.toLocaleDateString();
-            case 5:
-                return d.toLocaleDateString() + " ->";
-            case 6:
-                {
-                    d.setDate(d.getDate() - 1);
+                case 2:
+                    return val.title;
+                case 3:
                     return d.toLocaleDateString();
-                }
-            case 7:
-                {
-                    d.setDate(d.getDate() - 1);
+                case 4:
+                    return "-> " + d.toLocaleDateString();
+                case 5:
                     return d.toLocaleDateString() + " ->";
-                }
-            case 8:
-                {
-                    d.setDate(d.getDate() + 1);
-                    return d.toLocaleDateString();
-                }
-            case 9:
-                {
-                    d.setDate(d.getDate() + 1);
-                    return d.toLocaleDateString() + " ->";
-                }
-            case 10:
-                {
-                    var cDay = d.getDay();
-                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+                case 6:
+                    {
+                        d.setDate(d.getDate() - 1);
+                        return d.toLocaleDateString();
+                    }
+                case 7:
+                    {
+                        d.setDate(d.getDate() - 1);
+                        return d.toLocaleDateString() + " ->";
+                    }
+                case 8:
+                    {
+                        d.setDate(d.getDate() + 1);
+                        return d.toLocaleDateString();
+                    }
+                case 9:
+                    {
+                        d.setDate(d.getDate() + 1);
+                        return d.toLocaleDateString() + " ->";
+                    }
+                case 10:
+                    {
+                        var cDay = d.getDay();
+                        var sDiff = (cDay == 0) ? 6 : (cDay - 1);
 
-                    var f = new Date(d);
-                    var t = new Date(d);
-                    f.setDate(d.getDate() - sDiff);
-                    t.setDate(f.getDate() + 6);
+                        var f = new Date(d);
+                        var t = new Date(d);
+                        f.setDate(d.getDate() - sDiff);
+                        t.setDate(f.getDate() + 6);
 
-                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                }
-            case 11:
-                {
-                    d.setDate(d.getDate() - 7);
+                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                    }
+                case 11:
+                    {
+                        d.setDate(d.getDate() - 7);
 
-                    var cDay = d.getDay();
-                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+                        var cDay = d.getDay();
+                        var sDiff = (cDay == 0) ? 6 : (cDay - 1);
 
-                    var f = new Date(d);
-                    var t = new Date(d);
-                    f.setDate(d.getDate() - sDiff);
-                    t.setDate(f.getDate() + 6);
+                        var f = new Date(d);
+                        var t = new Date(d);
+                        f.setDate(d.getDate() - sDiff);
+                        t.setDate(f.getDate() + 6);
 
-                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                }
-            case 12:
-                {
-                    d.setDate(d.getDate() + 7);
+                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                    }
+                case 12:
+                    {
+                        d.setDate(d.getDate() + 7);
 
-                    var cDay = d.getDay();
-                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+                        var cDay = d.getDay();
+                        var sDiff = (cDay == 0) ? 6 : (cDay - 1);
 
-                    var f = new Date(d);
-                    var t = new Date(d);
-                    f.setDate(d.getDate() - sDiff);
-                    t.setDate(f.getDate() + 6);
+                        var f = new Date(d);
+                        var t = new Date(d);
+                        f.setDate(d.getDate() - sDiff);
+                        t.setDate(f.getDate() + 6);
 
-                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                }
-            case 13:
-                {
-                    d.setDate(1);
+                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                    }
+                case 13:
+                    {
+                        d.setDate(1);
 
-                    var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-                    return d.toLocaleDateString() + " - " + f.toLocaleDateString();
-                }
-            case 14:
-                {
-                    d.setDate(1);
-                    return d.toLocaleDateString() + " ->";
-                }
-            case 15:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-                    return "-> " + f.toLocaleDateString();
-                }
-            case 16:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-                    var t = new Date(d.getFullYear(), d.getMonth(), 0);
-                    return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                }
-            case 17:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-                    return f.toLocaleDateString() + " ->";
-                }
-            case 18:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth(), 0);
-                    return "-> " + f.toLocaleDateString();
-                }
-            case 19:
-                {
-                    var m = d.getMonth();
-                    var r = m % 3;
+                        var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                        return d.toLocaleDateString() + " - " + f.toLocaleDateString();
+                    }
+                case 14:
+                    {
+                        d.setDate(1);
+                        return d.toLocaleDateString() + " ->";
+                    }
+                case 15:
+                    {
+                        var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                        return "-> " + f.toLocaleDateString();
+                    }
+                case 16:
+                    {
+                        var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                        var t = new Date(d.getFullYear(), d.getMonth(), 0);
+                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
+                    }
+                case 17:
+                    {
+                        var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                        return f.toLocaleDateString() + " ->";
+                    }
+                case 18:
+                    {
+                        var f = new Date(d.getFullYear(), d.getMonth(), 0);
+                        return "-> " + f.toLocaleDateString();
+                    }
+                case 19:
+                    {
+                        var m = d.getMonth();
+                        var r = m % 3;
 
-                    var f = new Date(d.getFullYear(), m - r, 1);
-                    var t = new Date(d.getFullYear(), m + (3 - r), 0);
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
-            case 20:
-                {
-                    var m = d.getMonth();
-                    var r = m % 3;
+                        var f = new Date(d.getFullYear(), m - r, 1);
+                        var t = new Date(d.getFullYear(), m + (3 - r), 0);
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                    }
+                case 20:
+                    {
+                        var m = d.getMonth();
+                        var r = m % 3;
 
-                    var t = new Date(d.getFullYear(), m - r, 0);
-                    var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
-            case 21:
-                {
-                    var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
-                    var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
-            case 22:
-                {
-                    var f;
-                    var t;
-                    var y = d.getFullYear();
-                    if (m >= 6) {
-                        f = new Date(y, 0, 1);
-                        t = new Date(y, 5, 30);
-                    } else {
-                        f = new Date(y - 1, 6, 1);
-                        t = new Date(y - 1, 11, 31);
+                        var t = new Date(d.getFullYear(), m - r, 0);
+                        var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                    }
+                case 21:
+                    {
+                        var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
+                        var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                    }
+                case 22:
+                    {
+                        var f;
+                        var t;
+                        var y = d.getFullYear();
+                        if (m >= 6) {
+                            f = new Date(y, 0, 1);
+                            t = new Date(y, 5, 30);
+                        } else {
+                            f = new Date(y - 1, 6, 1);
+                            t = new Date(y - 1, 11, 31);
+                        }
+
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
                     }
 
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
+                case 23:
+                    {
+                        var y = d.getFullYear();
+                        var f = new Date(y, 0, 1);
+                        var t = new Date(y, 11, 31);
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                    }
 
-            case 23:
-                {
-                    var y = d.getFullYear();
-                    var f = new Date(y, 0, 1);
-                    var t = new Date(y, 11, 31);
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
+                case 24:
+                    {
+                        var y = d.getFullYear() - 1;
+                        var f = new Date(y, 0, 1);
+                        var t = new Date(y, 11, 31);
+                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
+                    }
 
-            case 24:
-                {
-                    var y = d.getFullYear() - 1;
-                    var f = new Date(y, 0, 1);
-                    var t = new Date(y, 11, 31);
-                    return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                }
-
-            default:
-                return "ooops";
+                default:
+                    return "ooops";
+            }
         }
-    }
 
-    */
+        */
 
     var esComplexParamFunctionOptions = [{
         caption: "=",
@@ -2877,6 +2957,15 @@
         }
     }
 
+    /**
+     * @ngdoc filter
+     * @name es.Web.UI.filter:esTrustHtml
+     *
+     * @description
+     * esGrid Directive
+     *
+     * 
+     */
     esWEBUI.filter('esTrustHtml', ['$sce',
         function($sce) {
             return function(text) {
@@ -2955,7 +3044,26 @@
 
             return f;
         })
-        .directive('esGrid', ['es.Services.WebApi', 'es.UI.Web.UIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:esGrid
+         * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
+         * @requires es.Web.UI.esUIHelper
+         * @requires $log
+         * @restrict AE
+         * @param {template} esGroupId The Entersoft Public Query Group ID
+         * @param {template} esFilterId The Entersoft Public Query Filter ID
+         * @param {esGridInfoOptions=} esGridOptions should grid options are already available you can explicitly assign
+         * @param {object=} esExecuteParams Params object that will be used when executing the public query
+         *
+         * @description
+         * This directive is responsible to render the html for the presentation of the results / data of an Entersoft Public Query.
+         * The esGrid generates a Telerik kendo-grid web ui element {@link http://docs.telerik.com/KENDO-UI/api/javascript/ui/grid kendo-grid}.
+         * 
+         * In order to instantiate an esGrid with an Angular application, you have to provide the parameters esGroupId and esFilterId are required.
+         * These two parameters along with esExecuteParams will be supplied to the {@link es.Services.Web.esWebApi}
+         */
+        .directive('esGrid', ['esWebApi', 'esUIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -2986,7 +3094,18 @@
                 }
             };
         }])
-        .directive('esParam', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:esParam
+         * @element div
+         * @function
+         *
+         * @description
+         * esGrid esParam
+         *
+         * 
+         */
+        .directive('esParam', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -3018,7 +3137,18 @@
                 }
             };
         }])
-        .directive('esWebPq', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:esWebPq
+         * @element div
+         * @function
+         *
+         * @description
+         * esGrid esWebPq
+         *
+         * 
+         */
+        .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -3046,7 +3176,18 @@
                 }
             };
         }])
-        .directive('esParamsPanel', ['$log', 'es.Services.WebApi', 'es.UI.Web.UIHelper', function($log, esWebApiService, esWebUIHelper) {
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:esParamsPanel
+         * @element div
+         * @function
+         *
+         * @description
+         * Resize textarea automatically to the size of its text content.
+         *
+         * 
+         */
+        .directive('esParamsPanel', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -3083,7 +3224,14 @@
             };
         }]);
 
-    esWEBUI.factory("es.UI.Web.UIHelper", ['es.Services.WebApi', '$log',
+    /**
+     * @ngdoc service
+     * @name es.Web.UI.esUIHelper
+     * @description
+     * # esUIHelper
+     * esUIHelper addons.
+     */
+    esWEBUI.factory('esUIHelper', ['esWebApi', '$log',
         function(esWebApiService, $log) {
 
             function esColToKCol(esGridInfo, esCol) {
@@ -3473,8 +3621,8 @@
                     defaultValues: undefined,
                 };
 
-                var z2 = _.map(_.where(gridexInfo.LayoutColumn, {
-                    fFilterID: inFilterID
+                var z2 = _.map(_.filter(gridexInfo.LayoutColumn, function(y) {
+                    return y.fFilterID.toLowerCase() == fId;
                 }), function(x) {
                     return winColToESCol(inGroupID, inFilterID, gridexInfo, x);
                 });

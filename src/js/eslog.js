@@ -1,22 +1,31 @@
+
 (function() {
     'use strict';
 
     var esWebFramework = angular.module('es.Services.Web');
 
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esStackTrace
+     * @description
+     * # esStackTrace
+     * Factory used to provide the stacktracejs javascript library for complete stack trace error reporting.
+     */
     esWebFramework.factory(
         "esStackTrace",
+
+        /**
+         * @ngdoc
+         * @name es.Services.Web.esStackTrace#print
+         * @methodOf es.Services.Web.esStackTrace
+         *
+         * @description
+         * Method that returns the printStackTrace object from the corresponding javascript library.
+         * For more information on printStackTrace please see {@link https://github.com/stacktracejs/stacktrace.js/ stacktrace.js}
+         * @returns {function} printStackTrace
+         **/
         function() {
-            /**
-             * @ngdoc service
-             * @name es.Services.Web.service.esStackTrace
-             * @description This is a factory for javascript stack trace error reporting built on top of printStackTrace
-             **/
             return ({
-                /**
-                 * @ngdoc method
-                 * @name print
-                 * @methodOf es.Services.Web.service.esStackTrace
-                 **/
                 print: printStackTrace
             });
         }
@@ -136,7 +145,7 @@
                     return doaddAppender(ajaxAppender);
                 },
 
-                $get: ['es.Services.Messaging',
+                $get: ['esMessaging',
                     function(esMessaging) {
                         try {
 
@@ -208,7 +217,7 @@
                     logSettings.logServer = logServer;
                 },
 
-                $get: ['$log', '$window', 'es.Services.StackTrace', '$injector',
+                $get: ['$log', '$window', 'esStackTrace', '$injector',
                     function($log, $window, stacktraceService, $injector) {
 
                         // I log the given error to the remote server.
@@ -242,7 +251,7 @@
                                 // logging the same error over and over again! All
                                 // that would do is add noise to the log.
                                 try {
-                                    var ESWEBAPI = $injector.get('es.Services.WebApi');
+                                    var ESWEBAPI = $injector.get('esWebApi');
 
                                     ESWEBAPI.registerException(itm, logSettings.logServer);
 

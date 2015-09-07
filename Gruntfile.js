@@ -33,7 +33,12 @@ module.exports = function(grunt) {
                 dest: 'dist/<%= pkg.name %>.min.js'
             }
         },
-        clean: ["dist", "example/lib/eswebapi/dist"],
+
+        clean: 
+        {
+            build: ["dist", "example/lib/eswebapi/dist"],
+            docs: ['docs']
+        },
 
         jshint: {
             options: {
@@ -126,6 +131,16 @@ module.exports = function(grunt) {
         },
 
         ngdocs: {
+            options: {
+                dest: 'docs',
+                html5Mode: false,
+                title: "Entersoft AngularJS Web API Documentation",
+                image: "src/assets/logo.png",
+                imageLink: "http://www.entersoft.eu",
+                analytics: {
+                    account: 'UA-555555-0'
+                }
+            },
             all: ['src/js/*.js']
         },
 
@@ -163,10 +178,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-open');
 
     //Step 1 task
-    grunt.registerTask('step1', ['clean', 'concat', 'uglify', 'filerev:scripts', 'ngtemplates', 'copy']);
+    grunt.registerTask('1step', ['clean:build', 'concat', 'uglify', 'filerev:scripts', 'ngtemplates', 'copy']);
 
     // doc
-    grunt.registerTask('doc', ['ngdocs', 'open:doc']);
+    grunt.registerTask('0doc', ['clean:docs', 'ngdocs']);
 
     // Default task.
     grunt.registerTask('default', ['jshint', 'nodeunit', 'concat', 'uglify']);
