@@ -608,9 +608,11 @@
      * @name es.Web.UI.filter:esTrustHtml
      *
      * @description
-     * esGrid Directive
+     * Creates `esGrid` Directive
+     * * If `source` is not an object or array (inc. `null` and `undefined`), `source` is returned.
+     * * If `source` is identical to 'destination' an exception will be thrown.
      *
-     * 
+     * @requires $sce
      */
     esWEBUI.filter('esTrustHtml', ['$sce',
         function($sce) {

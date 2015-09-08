@@ -34,8 +34,7 @@ module.exports = function(grunt) {
             }
         },
 
-        clean: 
-        {
+        clean: {
             build: ["dist", "example/lib/eswebapi/dist"],
             docs: ['docs']
         },
@@ -134,6 +133,10 @@ module.exports = function(grunt) {
             options: {
                 dest: 'docs',
                 html5Mode: false,
+                scripts: [
+                    'bower_components/angular/angular.min.js',
+                    'bower_components/angular-animate/angular-animate.min.js'
+                ],
                 title: "Entersoft AngularJS Web API Documentation",
                 image: "src/assets/logo.png",
                 imageLink: "http://www.entersoft.eu",
@@ -141,7 +144,10 @@ module.exports = function(grunt) {
                     account: 'UA-555555-0'
                 }
             },
-            all: ['src/js/*.js']
+            api: {
+                src: ['src/js/*.js'],
+                title: 'Entersoft WEB API documentation'
+            }
         },
 
         open: {

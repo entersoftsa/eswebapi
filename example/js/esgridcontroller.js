@@ -24,11 +24,22 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $rootScope, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.credentials = {
-            UserID: 'sme',
-            Password: 'smekonren',
-            BranchID: 'ΑΘ',
+            UserID: 'admin',
+            Password: 'entersoft',
+            BranchID: 'ΑΘΗ',
             LangID: 'el-GR'
         };
+
+        $scope.doLogin = function() {
+            esWebApiService.openSession($scope.credentials)
+                .then(function(rep) {
+                        $log.info(rep);
+                        $location.path("/pq");
+                    },
+                    function(err) {
+                        $log.error(err);
+                    });
+        }
 
         $scope.version = {};
 
@@ -58,12 +69,6 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
 
 
         /* End Section */
-        $scope.doLogin = function() {
-            esWebApiService.openSession($scope.credentials)
-                .then(function(rep) {
-                    $location.path("/pq");
-                });
-        }
 
     }
 ]);
@@ -90,10 +95,12 @@ smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'esW
     }
 ]);
 
-smeControllers.controller('examplesCtrl', ['$scope', 'esWebApi', 'esUIHelper',
-    function($scope, esWebApi, esWebUIHelper) {
+smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHelper',
+    function($log, $scope, esWebApi, esWebUIHelper) {
         $scope.pGroup = "ESMMStockItem";
         $scope.pFilter = "ESMMStockItem_def";
+
+        //fetchPublicQueryInfo sample
         $scope.fetchPQInfo = function() {
             esWebApi.fetchPublicQueryInfo($scope.pGroup, $scope.pFilter)
                 .success(function(ret) {
@@ -111,6 +118,70 @@ smeControllers.controller('examplesCtrl', ['$scope', 'esWebApi', 'esUIHelper',
                     alert(a.UserMessage || a.MessageID || "Generic Error");
                 });
         }
+
+        // fetchPublicQuery sample
+        $scope.dofetchPublicQuery = function()
+        {
+            var group = "ESGOPerson";
+            var filter = "PersonList";
+            $scope.pqResult = "";
+
+            var pqOptions = {
+                WithCount: false,
+                Page: 2,
+                PageSize: 5
+            };
+
+            var pqParams = {
+                Name: "ao*"
+            };
+
+            esWebApi.fetchPublicQuery(group, filter, pqOptions, pqParams)
+            .then(function(ret)
+            {
+                $scope.pqResult = ret.data;
+                $log.info(ret);
+            }, 
+            function(err) {
+                $scope.pqResult = ret;
+                $log.error(err);
+            });
+        }
+
+        //fetchSessionInfo 
+
+
+        //logout sample
+        $scope.doLogout = function() {
+            esWebApi.logout();
+            alert("LOGGED OUT. You must relogin to run the samples");
+        };
+
+        // fetchCompanyParam
+        $scope.fetchCompanyParam = function() {
+            esWebApi.fetchCompanyParam($scope.pCompanyParam)
+                .then(function(x) {
+                        $scope.pCompanyParamValue = x.data;
+                    },
+                    function(err) {
+                        $scope.pCompanyParamValue = JSON.stringify(err);
+                    });
+        }
+
+        //fetchCompanyParams
+        $scope.fetchCompanyParams = function() {
+            if (!$scope.pCompanyParams) {
+                $scope.pCompanyParams = null;
+            }
+            esWebApi.fetchCompanyParams($scope.pCompanyParams)
+            .then(function(x) {
+                    $scope.pCompanyParamsValue = x.data;
+                },
+
+                function(err) {
+                    $scope.pCompanyParamsValue = JSON.stringify(err);
+                });
+        };
     }
 ]);
 

@@ -1,6 +1,6 @@
 NG_DOCS={
   "sections": {
-    "api": "API Documentation"
+    "api": "Entersoft WEB API documentation"
   },
   "pages": [
     {
@@ -28,7 +28,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "es.Services.Web",
       "shortDescription": "esWebApi",
-      "keywords": "$scope alert api assigned attribute based business code corresponding create default defined descr ebs entersoft err error es esgrid esgridinfotokinfo esjanusgridlayout esmmstockitem esmmstockitem_def eswebapi eswebgridinfo eswebgridlayout eswebuihelper example executing execution fetchpqinfo fetchpublicquery fetchpublicqueryinfo filterid function generic gridex gridlayout groupid http httpverb janus json kendo-grid layout messageid net neutral-abstract object options order parameter parameters params pfilter pgroup promise provider public query ready rendering representation representing response ret returned returns server service services simplification specific status success suite ui usermessage verb web wingridinfotoesgridinfo"
+      "keywords": "$location $log $scope abcd accept acceptable access admin admindsdsds administrator alert angularjs api appear applicable application array assigned attribute autheticated authorization automatically based bearer boolean branch branchid browser browsers business cache call calling calls capable case cases category clean-up cleaned-up code codes comma company company-parameter-not-found companyparam complete config content-type contents corresponding count countof create credentials current data database default define defined definition depending descr description designer detailed developer development diagram dofetchpublicquery dologin dologout e-mail e-mails e1515a3c-8262-4581-8332-8663c2787964 ebs el-gr elements emprty empty entersoft equal err error es es_mail_bodyfooter esdaterange esgoperson esgrid esgridinfotokinfo esjanusgridlayout esmmstockitem esmmstockitem_def esparam esparams estype eswebapi eswebapiservice eswebgridinfo eswebgridlayout eswebuihelper example executed executing execution exist exists explicitly eyj0exaioijkv1qilcjhbgcioijiuzi1nij9 eyj1bmlxdwvfbmftzsi6imfkbwluiiwiec1lcy11c2vylxbhc3n3b3jkijoizw50zxjzb2z0iiwiec1lcy11c2vylwjyyw5jac1pzci6is6rzpjolyisingtzxmtdxnlci1syw5nlwlkijoizwwtr1iilcj4lwvzbg9naw5pbmzvlvn1ynnjcmlwdglvblbhc3n3b3jkijoicgfzc3gilcjpc3mioijfbnrlcnnvznqilcjhdwqioijodhrwoi8vbg9jywxob3n0iiwizxhwijoxndqxnzeznzg1lcjuymyioje0nde3mdc3odv9 false fcompanycode fcompanysitegid fetchcompanyparam fetchcompanyparams fetchpqinfo fetchpublicquery fetchpublicqueryinfo fieldname fieldvalue filter filterid footer form fpersoncodegid framework function fusergid general generic gid google greater gridex gridexlayout gridlayout group groupid handles headers hello help hold holds http httpverb inactive include info inputpage inputpagesize int internal janus json kendo-grid key kindsite kindwh langid layout length list local logged logged-in login login-invalid-user logout manually mapping mastertable mastertablename matter message messageid messages messaging method methods missing model myvalidparamkey nan natter net network neutral-abstract null num number object objects opensession operation operations options order pagesize paging param parameter parameters paramid params passwdkey password passx path pcompanyparam pcompanyparams pcompanyparamsvalue pcompanyparamvalue performed performs person personinterestcategoryvalue personlist pfilter pgroup place post powered pq pqfilterid pqgroupid pqoptions pqparams pqresult pre preference promise properties provider pseudo public query ready record records reflects regdate registered releated relogin rendering rep representation representing requested required requiring respect response result ret retrieve return returned returns rights rows sample samples scroller selection separated server service servicelevel services session set simplification site spa spas specific ssas status statustext storage stored string stringify strings structure subscriptionid subscriptionpassword success successful sucess suite supplied table template text time token total transformrequest transformresponse treated true type typical typically ui unauthorized undefined url user userid usermessage usersites valid values var verb web webapitoken webapitokenexpiresat wingridinfotoesgridinfo withcount world xxxx"
     },
     {
       "section": "api",
@@ -90,8 +90,8 @@ NG_DOCS={
       "shortName": "esTrustHtml",
       "type": "filter",
       "moduleName": "es.Web.UI",
-      "shortDescription": "esGrid Directive",
-      "keywords": "api directive es esgrid filter ui web"
+      "shortDescription": "Creates esGrid Directive",
+      "keywords": "$sce api array creates destination directive es esgrid exception filter identical null object returned source thrown ui undefined web"
     }
   ],
   "apis": {
@@ -101,6 +101,7 @@ NG_DOCS={
   "editExample": true,
   "startPage": "/api",
   "scripts": [
-    "angular.min.js"
+    "angular.min.js",
+    "angular-animate.min.js"
   ]
 };

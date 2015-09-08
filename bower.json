@@ -23,6 +23,7 @@
     ],
     "dependencies": {
         "angularjs": "~1.4.1",
+        "angular-animate": "~1.4.1",
         "angular-route": "~1.4.1",
         "ngstorage": "~0.3.4",
         "angular-sanitize": "~1.4.1",

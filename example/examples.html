@@ -1,17 +1,53 @@
 <div>
     <h3>
-         fetchPublicQueryInfo
+         1. fetchPublicQueryInfo
     </h3>
     <span>
-        <input type="text" ng-model="pGroup" class="form-control" placeholder="PQ GroupID">
-        <input type="text" ng-model="pFilter" class="form-control" placeholder="PQ FilterID">
+        <input type="text" ng-model="pGroup"  placeholder="PQ GroupID">
+        <input type="text" ng-model="pFilter" placeholder="PQ FilterID">
         <button ng-click="fetchPQInfo()">fetchPublicQueryInfo</button>
     </span>
-
     <div>
         <span>
             <textarea>{{esJanusGridLayout}}</textarea> 
             <textarea>{{esWebGridInfo}}</textarea>
+        </span>
+    </div>
+       <hr/>
+    <div>
+        <h3> 2. fetchPublicQuery</h3>
+        <button ng-click="dofetchPublicQuery()">fetchPublicQuery</button>
+        <<textarea>{{pqResult}}</textarea>
+    </div>
+     <hr/>
+    <div>
+        <h3>3. logout</h3>
+        <button ng-click="doLogout()">Logout</button>
+    </div>
+    <hr/>
+    <div>
+        <h3>4. fetchCompanyParam</h3>
+        <span>
+            <input ng-model="pCompanyParam" placeholder="CompanyParamID">
+            <text>{{pCompanyParamValue}}</text>
+            <button ng-click="fetchCompanyParam()">fetchCompanyParam</button>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>5. fetchCompanyParams</h3>
+        <span>
+            <input ng-model="pCompanyParams" placeholder="null or list of company params">
+            <text>{{pCompanyParamsValue}}</text>
+            <button ng-click="fetchCompanyParams()">fetchCompanyParams</button>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>6. fetchSessionInfo</h3>
+        <span>
+            <button ng-click="fetchSessionInfo()">fetchSessionInfo</button>
+            <<textarea>{{pSessionInfo}}</textarea>
         </span>
     </div>
 </div>
