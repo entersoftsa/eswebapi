@@ -182,7 +182,7 @@ var x = {
 ret.data.Count will always be greater or equal to 0 and it will always be equal to the ret.data.Rows.length i.e. the number of 
 records returned by the server. If the query returns no data, the ret.Count will be 0 and ret.data.Rows will always be an empty array []. 
 So, if NO PAGING is taking place, we always have ret.data.Count == ret.data.Rows.length.</p>
-<p>ATTENTION If no records are returned by the Server ret.data.Rows will NOT BE null or undefined or not defined. It will be an empty array. ret.data.PageSize will be -1, ret.data.Page will be -1, </p>
+<p><strong>ATTENTION</strong> If no records are returned by the Server ret.data.Rows will NOT BE null or undefined or not defined. It will be an empty array. ret.data.PageSize will be -1, ret.data.Page will be -1, </p>
 <p>If PAGING is taking place the following pseudo code diagram reflects the contents of ret.data response:
 <pre class="prettyprint linenums">
 IF WithCount == TRUE THEN
@@ -218,7 +218,7 @@ $scope.dofetchPublicQuery = function() {
     };
 
     var pqParams = {
-        Name: "ao*"
+        Name: "a*"
     };
 
     esWebApi.fetchPublicQuery(group, filter, pqOptions, pqParams)
