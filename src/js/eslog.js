@@ -8,7 +8,7 @@
      * @ngdoc service
      * @name es.Services.Web.esStackTrace
      * @description
-     * # esStackTrace
+     * # esStackTrace and other services
      * Factory used to provide the stacktracejs javascript library for complete stack trace error reporting.
      */
     esWebFramework.factory(

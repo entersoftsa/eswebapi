@@ -121,7 +121,7 @@ module.exports = function(grunt) {
         },
 
         copy: {
-            main: {
+            sourcefiles: {
                 files: [
                     // includes files within path and its sub-directories
                     {
@@ -163,7 +163,7 @@ module.exports = function(grunt) {
                 image: "src/assets/logo.png",
                 imageLink: "http://www.entersoft.eu",
                 analytics: {
-                    account: 'UA-555555-0'
+                    account: 'UA-50505865-6'
                 }
             },
             api: {
@@ -172,9 +172,45 @@ module.exports = function(grunt) {
             }
         },
 
+        prompt: {
+            github: {
+                options: {
+                    questions: [{
+                        config: 'github_userid',
+                        type: 'input',
+                        message: 'Github UserID',
+                        validate: function(value) {
+                            if (!value) {
+                                return 'Should not be blank';
+                            }
+                            return true;
+                        }
+                    }, {
+                        config: 'github_password',
+                        type: 'password',
+                        message: 'Github Password',
+                        validate: function(value) {
+                            if (!value) {
+                                return 'Should not be blank';
+                            }
+                            return true;
+                        }
+                    }]
+                }
+            }
+        },
+
         shell: {
-            dos: {
-                command: "git add .&&git commit -m 'auto'&&git push origin master"
+            sourcefiles: {
+                command: "git add .&&git commit -m 'auto'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git master"
+            },
+            pub_docs: {
+                command: "git add .&&git commit -m 'auto'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git gh-pages",
+                options: {
+                    execOptions: {
+                        cwd: '../../docs_eswebapi/eswebapi/'
+                    }
+                }
             }
         },
 
@@ -202,17 +238,36 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-ngdocs');
     grunt.loadNpmTasks('grunt-shell');
+    grunt.loadNpmTasks('grunt-prompt');
 
     //Step 1 task
-    grunt.registerTask('1step', ['clean:build', 'concat', 'uglify', 'filerev:scripts', 'ngtemplates', 'copy']);
+    grunt.registerTask('fulldeploy', [
+        /* compile and prepare source files */
+        'clean:build',
+        'concat',
+        'uglify',
+        'filerev:scripts',
+        'ngtemplates',
+        'copy:sourcefiles',
+
+        /* compile documentation */
+        'clean:docs',
+        'clean:pub_docs',
+        'ngdocs',
+        'copy:pub_docs',
+
+        /* prepare for github push*/
+        'prompt:github',
+
+        /* push to gihub both documentation and source files */
+        'shell:pub_docs',
+        'shell:sourcefiles'
+    ]);
 
     // doc
     grunt.registerTask('0doc', ['clean:docs', 'clean:pub_docs', 'ngdocs']);
 
     // publish doc
-    grunt.registerTask('publishdoc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:pub_docs']);
-
-    // Default task.
-    grunt.registerTask('default', ['jshint', 'nodeunit', 'concat', 'uglify']);
+    grunt.registerTask('publishdoc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:pub_docs', 'prompt:github', 'shell:pub_docs']);
 
 };

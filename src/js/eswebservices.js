@@ -13,7 +13,10 @@
  * @requires ngSanitize
  * @kind module
  * @description
- * This module encapsulates the services, providers, factories and constants for the Entersoft AngularJS WEB API
+ * This module encapsulates the services, providers, factories and constants for the **Entersoft AngularJS WEB API**
+ * The main functions provided are:
+ ** a()
+ ** b()
  */
 
 (function() {

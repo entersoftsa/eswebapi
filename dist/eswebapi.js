@@ -15,7 +15,10 @@
  * @requires ngSanitize
  * @kind module
  * @description
- * This module encapsulates the services, providers, factories and constants for the Entersoft AngularJS WEB API
+ * This module encapsulates the services, providers, factories and constants for the **Entersoft AngularJS WEB API**
+ * The main functions provided are:
+ ** a()
+ ** b()
  */
 
 (function() {
@@ -521,8 +524,10 @@ var f = {
         http: "//localhost/eswebapi/api/rpc/FetchCompanyParam/ssaS"
     },
     "statusText": "Not Found"
-}; < /pre> * @example
-    < pre >
+}; 
+</pre> 
+                            * @example
+<pre>
 // fetchCompanyParam
 $scope.fetchCompanyParam = function() {
     esWebApi.fetchCompanyParam($scope.pCompanyParam)
@@ -717,6 +722,63 @@ $scope.fetchCompanyParams = function() {
                                 return processWEBAPIPromise(ht);
                             },
 
+/**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchSessionInfo
+                             * @methodOf es.Services.Web.esWebApi
+                             * @description Function that returns Entersoft Application Server session information
+                             * @module es.Services.Web
+                             * @kind function
+                             * @return {httpPromise} * If sucess the **response.data.ESProperty** contains the array of the session properties objects.
+                             * Each session property object is fo the following form:
+<pre>
+var sessprop = {
+    ID: string, // property ID i.e. "101"
+    Description: string, // property Description in the session's language translation i.e. "Έκδοση Εγκατάστασης"
+    ValueS: string, // property Value in string format i.e. "4.0.36 - 2"
+    Type: int // property EBS Type i.e. 0
+};
+</pre>
+                             * *If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+                             * err.data.UserMessage
+                             *
+                             * Success promise return value i.e. response.data is of the following form:
+<pre>
+var x = {
+    "ESProperty": [{
+        "ID": "101",
+        "Description": "Έκδοση Εγκατάστασης",
+        "ValueS": "4.0.36 - 2",
+        "Type": 0
+    }, {
+        "ID": "102",
+        "Description": "Έκδοση Παραστατικών",
+        "ValueS": "167",
+        "Type": 0
+    }, 
+    // ... more properties
+    {
+        "ID": "16",
+        "Description": "Τρέχων Αριθμός Χρηστών",
+        "ValueS": "BackOffice = 1, Retail = 0, Mobile = 6, Web = 0",
+        "Type": 0
+    }]
+};
+
+</pre>
+                             * @example
+<pre>
+//fetchSessionInfo example
+$scope.fetchSessionInfo = function() {
+    esWebApi.fetchSessionInfo()
+        .then(function(ret) {
+            $scope.pSessionInfo = ret.data;
+        }, function(err) {
+            $scope.pSessionInfo = err;
+        });
+}
+</pre>
+*/
                             fetchSessionInfo: function() {
                                 var promise = $http({
                                     method: 'get',
@@ -935,7 +997,9 @@ var pqParams = {
                              * at the execution time will be treated by the Entersoft Application Server as having null value.
                              * @param {string=} httpVerb Parameter to specify HTTP verb. Default is GET
                              * @return {httpPromise} Returns a promise.
-                             ** If success i.e. then(function(ret) { ... }) ret.data holds the result of the Public Query Execution in the typical form as follows:
+                             ** If success i.e. then(function(ret) { ... }) ret.data holds the result of the Public Query Execution.
+                             * In any success response, ret.data.Table will hold as string the Public Query MasterTableName as defined through the Entersoft Scroller Designer.
+                             * The response has the typical form as follows:
 <pre>
 var x = {
     Table: string, // The name of the MasterTable as defined in the Public Query definition (through the Scroller Designer)
@@ -943,11 +1007,9 @@ var x = {
     Count: int, // If applicable and capable the total number of records found in the server at the execution time for the current execution of Public Query / pqParams 
     Page: int, // If applicable the requested Page Number (1 based), otherwise -1
     PageSize: int, // If applicable the Number of records in the Page (i.e. less or equal to the requested PageSize) otherwise -1
-
 }
 </pre>                        
-                             * In any success response, ret.data.Table will hold as string the Public Query MasterTableName as defined through the Entersoft Scroller Designer.
-                             * 
+                             *                              * 
                              * If **NO PAGING** is taking place (no matter how), which means that all data are returned from the server THEN
                              * ret.data.Count will always be greater or equal to 0 and it will always be equal to the ret.data.Rows.length i.e. the number of 
                              * records returned by the server. If the query returns no data, the ret.Count will be 0 and ret.data.Rows will always be an empty array []. 
@@ -2500,7 +2562,7 @@ $scope.dofetchPublicQuery = function() {
      * @ngdoc service
      * @name es.Services.Web.esStackTrace
      * @description
-     * # esStackTrace
+     * # esStackTrace and other services
      * Factory used to provide the stacktracejs javascript library for complete stack trace error reporting.
      */
     esWebFramework.factory(
