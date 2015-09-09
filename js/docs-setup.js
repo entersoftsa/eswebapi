@@ -10,7 +10,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "es.Services.Web",
       "shortDescription": "This module encapsulates the services, providers, factories and constants for the Entersoft AngularJS WEB API",
-      "keywords": "angularjs api constants encapsulates es factories module ngsanitize ngstorage overview providers services web"
+      "keywords": "angularjs api constants encapsulates es factories functions main module ngsanitize ngstorage overview provided providers services web"
     },
     {
       "section": "api",
