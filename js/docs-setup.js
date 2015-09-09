@@ -18,7 +18,7 @@ NG_DOCS={
       "shortName": "es.Services.Web.esStackTrace",
       "type": "service",
       "moduleName": "es.Services.Web",
-      "shortDescription": "esStackTrace",
+      "shortDescription": "esStackTrace and other services",
       "keywords": "api complete corresponding error es esstacktrace factory https javascript js library method object print printstacktrace provide reporting returns service services stack stacktrace stacktracejs trace web"
     },
     {
