@@ -519,8 +519,10 @@ var f = {
         http: "//localhost/eswebapi/api/rpc/FetchCompanyParam/ssaS"
     },
     "statusText": "Not Found"
-}; < /pre> * @example
-    < pre >
+}; 
+</pre> 
+                            * @example
+<pre>
 // fetchCompanyParam
 $scope.fetchCompanyParam = function() {
     esWebApi.fetchCompanyParam($scope.pCompanyParam)
@@ -558,13 +560,17 @@ $scope.fetchCompanyParam = function() {
                              * @description Function that returns the ES Params for the requested array of parameter id's
                              * @module es.Services.Web
                              * @kind function
-                             * @param {string[]=} esParams Either an array of strings, or a comma separated string of values or a string representing the list of es params the values of which we want to be returned.
-                             * if esParams is null or undefined or emprty string the complete set of ES Company Params will be returned.
-                             * @return {httpPromise} If sucess the response.data contains the Array of Parameter definition and parameter value objects.
-                             * If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+                             * @param {string[]=} esParams can be
+                             ** an array of strings
+                             ** a comma separated string of values
+                             ** a string of comma separated list of es params the values of which we want to be returned.
+                             * _If esParams is null or undefined or emprty string_ the complete set of ES Company Params will be returned.
+                             * @return {httpPromise} 
+                             ** If sucess the response.data contains the Array of Parameter definition and parameter value objects.
+                             ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
                              * err.data.UserMessage
                              *
-                             * Success promise return value i.e. response.data is of the following form:
+                             * Success promise return value i.e. *response.data* is of the following form:
 <pre>
 var x = [{
     "ID": "PERSONINTERESTCATEGORYVALUE",
@@ -711,6 +717,63 @@ $scope.fetchCompanyParams = function() {
                                 return processWEBAPIPromise(ht);
                             },
 
+/**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchSessionInfo
+                             * @methodOf es.Services.Web.esWebApi
+                             * @description Function that returns Entersoft Application Server session information
+                             * @module es.Services.Web
+                             * @kind function
+                             * @return {httpPromise} * If sucess the **response.data.ESProperty** contains the array of the session properties objects.
+                             * Each session property object is fo the following form:
+<pre>
+var sessprop = {
+    ID: string, // property ID i.e. "101"
+    Description: string, // property Description in the session's language translation i.e. "Έκδοση Εγκατάστασης"
+    ValueS: string, // property Value in string format i.e. "4.0.36 - 2"
+    Type: int // property EBS Type i.e. 0
+};
+</pre>
+                             * *If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+                             * err.data.UserMessage
+                             *
+                             * Success promise return value i.e. response.data is of the following form:
+<pre>
+var x = {
+    "ESProperty": [{
+        "ID": "101",
+        "Description": "Έκδοση Εγκατάστασης",
+        "ValueS": "4.0.36 - 2",
+        "Type": 0
+    }, {
+        "ID": "102",
+        "Description": "Έκδοση Παραστατικών",
+        "ValueS": "167",
+        "Type": 0
+    }, 
+    // ... more properties
+    {
+        "ID": "16",
+        "Description": "Τρέχων Αριθμός Χρηστών",
+        "ValueS": "BackOffice = 1, Retail = 0, Mobile = 6, Web = 0",
+        "Type": 0
+    }]
+};
+
+</pre>
+                             * @example
+<pre>
+//fetchSessionInfo example
+$scope.fetchSessionInfo = function() {
+    esWebApi.fetchSessionInfo()
+        .then(function(ret) {
+            $scope.pSessionInfo = ret.data;
+        }, function(err) {
+            $scope.pSessionInfo = err;
+        });
+}
+</pre>
+*/
                             fetchSessionInfo: function() {
                                 var promise = $http({
                                     method: 'get',
@@ -899,16 +962,16 @@ var pqOptions = {
 };
 </pre>
                              *
-                             * If pqOptions is null or undefined OR pqOptions.Page is null OR undefined OR NaN OR less than or equal to 0 THEN
+                             ** If pqOptions is null or undefined OR pqOptions.Page is null OR undefined OR NaN OR less than or equal to 0 THEN
                              * the Public Query will be executed at the Entersoft Application Server with no paging at all, which means that ALL the 
                              * rows will be returned.
                              *
-                             * If pqOptions is valid and pqOptions.PageSize is null OR undefined OR NaN OR less or equal to 0 THEN 
+                             ** If pqOptions is valid and pqOptions.PageSize is null OR undefined OR NaN OR less or equal to 0 THEN 
                              * the Public Query will be executed with PageSize equal to 20 which is the server's default
                              *
-                             * If pqOptions is valid and pqOptions.WithCount is true THEN the result will also include the total count of records 
+                             ** If pqOptions is valid and pqOptions.WithCount is true THEN the result will also include the total count of records 
                              * (no natter what the pagesize is) found in the server for the given Public Query and pqParams supplied for the PQ execution.
-                             * If pqOptions is valid and pqOptions.WithCount is false, the result still might contain information about the 
+                             ** If pqOptions is valid and pqOptions.WithCount is false, the result still might contain information about the 
                              * total records depending on the other parameters. See the return section for detailed information about the returned value.
                              * @param {object} pqParams Parameters that will be used for the execution of the Public Query at the Entersoft Application Server
                              * The typical structure of the pqParams object is:
@@ -922,14 +985,16 @@ var pqParams = {
                              * (through Entersoft Scroller Designer) and value is an Entersoft Application server acceptable value for the given parameter, depending on the
                              * parameter type and properties as defined in the Public Query (through Entersoft Scroller Designer)
                              *
-                             * If pqParams is null or undefined or empty object i.e. {} THEN the Public Query will be executed by the Entersoft Application Server
+                             ** If pqParams is null or undefined or empty object i.e. {} THEN the Public Query will be executed by the Entersoft Application Server
                              * with all parameters assigned the value null.
                              *
-                             * If pqParams is not null and some parameters are specified THEN all the parameters that are not explicitly assigned a value i.e. are missing or are null or undefined in the pqParams object 
+                             ** If pqParams is not null and some parameters are specified THEN all the parameters that are not explicitly assigned a value i.e. are missing or are null or undefined in the pqParams object 
                              * at the execution time will be treated by the Entersoft Application Server as having null value.
                              * @param {string=} httpVerb Parameter to specify HTTP verb. Default is GET
                              * @return {httpPromise} Returns a promise.
-                             * If success i.e. then(function(ret) { ... }) ret.data holds the result of the Public Query Execution in the typical form as follows:
+                             ** If success i.e. then(function(ret) { ... }) ret.data holds the result of the Public Query Execution.
+                             * In any success response, ret.data.Table will hold as string the Public Query MasterTableName as defined through the Entersoft Scroller Designer.
+                             * The response has the typical form as follows:
 <pre>
 var x = {
     Table: string, // The name of the MasterTable as defined in the Public Query definition (through the Scroller Designer)
@@ -937,19 +1002,17 @@ var x = {
     Count: int, // If applicable and capable the total number of records found in the server at the execution time for the current execution of Public Query / pqParams 
     Page: int, // If applicable the requested Page Number (1 based), otherwise -1
     PageSize: int, // If applicable the Number of records in the Page (i.e. less or equal to the requested PageSize) otherwise -1
-
 }
 </pre>                        
-                             * In any success response, ret.data.Table will hold as string the Public Query MasterTableName as defined through the Entersoft Scroller Designer.
-                             * 
-                             * If NO PAGING is taking place (no matter how), which means that all data are returned from the server THEN
+                             *                              * 
+                             * If **NO PAGING** is taking place (no matter how), which means that all data are returned from the server THEN
                              * ret.data.Count will always be greater or equal to 0 and it will always be equal to the ret.data.Rows.length i.e. the number of 
                              * records returned by the server. If the query returns no data, the ret.Count will be 0 and ret.data.Rows will always be an empty array []. 
                              * So, if NO PAGING is taking place, we always have ret.data.Count == ret.data.Rows.length.
                              * 
                              * **ATTENTION** If no records are returned by the Server ret.data.Rows will NOT BE null or undefined or not defined. It will be an empty array. ret.data.PageSize will be -1, ret.data.Page will be -1, 
                              * 
-                             * If PAGING is taking place the following pseudo code diagram reflects the contents of ret.data response:
+                             *If **PAGING** is taking place the following pseudo code diagram reflects the contents of ret.data response:
 <pre>
 IF WithCount == TRUE THEN
     {
@@ -970,7 +1033,7 @@ ELSE
 END IF
 </pre>
                              *
-                             * If error i.e. function(err) { ... } then err.data contains the Entersoft Application server error object.
+                             ** If error i.e. function(err) { ... } then err.data contains the Entersoft Application server error object.
                              * @example
 <pre>
 $scope.dofetchPublicQuery = function() {

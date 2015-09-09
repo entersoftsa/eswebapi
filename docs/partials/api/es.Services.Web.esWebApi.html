@@ -1,4 +1,4 @@
-<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/62e2952/src/js/eswebservices.js#L74" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/21e2acc/src/js/eswebservices.js#L74" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
 <div><span class="hint">service in module <code ng:non-bindable="">es.Services.Web</code>
 </span>
 </div>
@@ -8,7 +8,7 @@
 <p>Web API.</p>
 </div></div>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/62e2952/src/js/eswebservices.js#L538" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/21e2acc/src/js/eswebservices.js#L540" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
 <div class="fetchcompanyparam"><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>Function that returns the ES Param for a requested ParamID.</p>
 </div><h5 id="methods_fetchcompanyparam_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParam</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>The ID of the ES CompanyParam. The ID should not contain the @ i.e. fetchCompanyParam(&quot;MyValidParamKey&quot;)</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchcompanyparam_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>If sucess the response.data contains the Parameter definition and parameter value.
@@ -45,8 +45,10 @@ var f = {
         http: "//localhost/eswebapi/api/rpc/FetchCompanyParam/ssaS"
     },
     "statusText": "Not Found"
-}; &lt; /pre&gt; * @example
-    &lt; pre &gt;
+}; 
+</pre> </p>
+</div></td></tr></table><h4 id="methods_fetchcompanyparam_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchcompanyparam-page"><pre class="prettyprint linenums">
 // fetchCompanyParam
 $scope.fetchCompanyParam = function() {
     esWebApi.fetchCompanyParam($scope.pCompanyParam)
@@ -60,16 +62,24 @@ $scope.fetchCompanyParam = function() {
 }
 
 </pre>
-</div></td></tr></table></div>
+</div></div>
+</div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/62e2952/src/js/eswebservices.js#L626" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/21e2acc/src/js/eswebservices.js#L632" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
 <div class="fetchcompanyparams"><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>Function that returns the ES Params for the requested array of parameter id&#39;s</p>
-</div><h5 id="methods_fetchcompanyparams_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParams <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string[]</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>Either an array of strings, or a comma separated string of values or a string representing the list of es params the values of which we want to be returned.
-if esParams is null or undefined or emprty string the complete set of ES Company Params will be returned.</p>
-</div></td></tr></tbody></table><h5 id="methods_fetchcompanyparams_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>If sucess the response.data contains the Array of Parameter definition and parameter value objects.
-If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
-err.data.UserMessage</p>
-<p>Success promise return value i.e. response.data is of the following form:
+</div><h5 id="methods_fetchcompanyparams_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParams <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string[]</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>can be</p>
+<ul>
+<li>an array of strings</li>
+<li>a comma separated string of values</li>
+<li>a string of comma separated list of es params the values of which we want to be returned.
+<em>If esParams is null or undefined or emprty string</em> the complete set of ES Company Params will be returned.</li>
+</ul>
+</div></td></tr></tbody></table><h5 id="methods_fetchcompanyparams_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><ul>
+<li>If sucess the response.data contains the Array of Parameter definition and parameter value objects.</li>
+<li>If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+err.data.UserMessage</li>
+</ul>
+<p>Success promise return value i.e. <em>response.data</em> is of the following form:
 <pre class="prettyprint linenums">
 var x = [{
     "ID": "PERSONINTERESTCATEGORYVALUE",
@@ -129,7 +139,7 @@ $scope.fetchCompanyParams = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/62e2952/src/js/eswebservices.js#L1003" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/21e2acc/src/js/eswebservices.js#L1066" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
 <div class="fetchpublicquery"><h5 id="methods_fetchpublicquery_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>pqGroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>pqFilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query FilterID</p>
 </div></td></tr><tr><td>pqOptions</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
@@ -141,15 +151,20 @@ var pqOptions = {
     PageSize: int
 };
 </pre>
-<p>If pqOptions is null or undefined OR pqOptions.Page is null OR undefined OR NaN OR less than or equal to 0 THEN
+<ul>
+<li><p>If pqOptions is null or undefined OR pqOptions.Page is null OR undefined OR NaN OR less than or equal to 0 THEN
 the Public Query will be executed at the Entersoft Application Server with no paging at all, which means that ALL the 
 rows will be returned.</p>
-<p>If pqOptions is valid and pqOptions.PageSize is null OR undefined OR NaN OR less or equal to 0 THEN 
+</li>
+<li><p>If pqOptions is valid and pqOptions.PageSize is null OR undefined OR NaN OR less or equal to 0 THEN 
 the Public Query will be executed with PageSize equal to 20 which is the server&#39;s default</p>
-<p>If pqOptions is valid and pqOptions.WithCount is true THEN the result will also include the total count of records 
-(no natter what the pagesize is) found in the server for the given Public Query and pqParams supplied for the PQ execution.
-If pqOptions is valid and pqOptions.WithCount is false, the result still might contain information about the 
-total records depending on the other parameters. See the return section for detailed information about the returned value.</p>
+</li>
+<li><p>If pqOptions is valid and pqOptions.WithCount is true THEN the result will also include the total count of records 
+(no natter what the pagesize is) found in the server for the given Public Query and pqParams supplied for the PQ execution.</p>
+</li>
+<li>If pqOptions is valid and pqOptions.WithCount is false, the result still might contain information about the 
+total records depending on the other parameters. See the return section for detailed information about the returned value.</li>
+</ul>
 </div></td></tr><tr><td>pqParams</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Parameters that will be used for the execution of the Public Query at the Entersoft Application Server
 The typical structure of the pqParams object is:
 <pre class="prettyprint linenums">
@@ -161,13 +176,20 @@ var pqParams = {
 pqParams is a typical JSON object of key: value properties, where key is the parameter name as defined in the Public Query 
 (through Entersoft Scroller Designer) and value is an Entersoft Application server acceptable value for the given parameter, depending on the
 parameter type and properties as defined in the Public Query (through Entersoft Scroller Designer)</p>
-<p>If pqParams is null or undefined or empty object i.e. {} THEN the Public Query will be executed by the Entersoft Application Server
+<ul>
+<li><p>If pqParams is null or undefined or empty object i.e. {} THEN the Public Query will be executed by the Entersoft Application Server
 with all parameters assigned the value null.</p>
-<p>If pqParams is not null and some parameters are specified THEN all the parameters that are not explicitly assigned a value i.e. are missing or are null or undefined in the pqParams object 
+</li>
+<li><p>If pqParams is not null and some parameters are specified THEN all the parameters that are not explicitly assigned a value i.e. are missing or are null or undefined in the pqParams object 
 at the execution time will be treated by the Entersoft Application Server as having null value.</p>
+</li>
+</ul>
 </div></td></tr><tr><td>httpVerb <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Parameter to specify HTTP verb. Default is GET</p>
-</div></td></tr></tbody></table><h5 id="methods_fetchpublicquery_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Returns a promise.
-If success i.e. then(function(ret) { ... }) ret.data holds the result of the Public Query Execution in the typical form as follows:
+</div></td></tr></tbody></table><h5 id="methods_fetchpublicquery_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Returns a promise.</p>
+<ul>
+<li>If success i.e. then(function(ret) { ... }) ret.data holds the result of the Public Query Execution.
+In any success response, ret.data.Table will hold as string the Public Query MasterTableName as defined through the Entersoft Scroller Designer.
+The response has the typical form as follows:
 <pre class="prettyprint linenums">
 var x = {
     Table: string, // The name of the MasterTable as defined in the Public Query definition (through the Scroller Designer)
@@ -175,15 +197,15 @@ var x = {
     Count: int, // If applicable and capable the total number of records found in the server at the execution time for the current execution of Public Query / pqParams 
     Page: int, // If applicable the requested Page Number (1 based), otherwise -1
     PageSize: int, // If applicable the Number of records in the Page (i.e. less or equal to the requested PageSize) otherwise -1
-
 }
-</pre><br>In any success response, ret.data.Table will hold as string the Public Query MasterTableName as defined through the Entersoft Scroller Designer.</p>
-<p>If NO PAGING is taking place (no matter how), which means that all data are returned from the server THEN
+</pre>                        <pre><code>                       * 
+</code></pre>If <strong>NO PAGING</strong> is taking place (no matter how), which means that all data are returned from the server THEN
 ret.data.Count will always be greater or equal to 0 and it will always be equal to the ret.data.Rows.length i.e. the number of 
 records returned by the server. If the query returns no data, the ret.Count will be 0 and ret.data.Rows will always be an empty array []. 
-So, if NO PAGING is taking place, we always have ret.data.Count == ret.data.Rows.length.</p>
+So, if NO PAGING is taking place, we always have ret.data.Count == ret.data.Rows.length.</li>
+</ul>
 <p><strong>ATTENTION</strong> If no records are returned by the Server ret.data.Rows will NOT BE null or undefined or not defined. It will be an empty array. ret.data.PageSize will be -1, ret.data.Page will be -1, </p>
-<p>If PAGING is taking place the following pseudo code diagram reflects the contents of ret.data response:
+<p>If <strong>PAGING</strong> is taking place the following pseudo code diagram reflects the contents of ret.data response:
 <pre class="prettyprint linenums">
 IF WithCount == TRUE THEN
     {
@@ -203,7 +225,9 @@ ELSE
     }
 END IF
 </pre>
-<p>If error i.e. function(err) { ... } then err.data contains the Entersoft Application server error object.</p>
+<ul>
+<li>If error i.e. function(err) { ... } then err.data contains the Entersoft Application server error object.</li>
+</ul>
 </div></td></tr></table><h4 id="methods_fetchpublicquery_example">Example</h4>
 <div class="example"><div class="es-services-web-eswebapi-fetchpublicquery-page"><pre class="prettyprint linenums">
 $scope.dofetchPublicQuery = function() {
@@ -235,7 +259,7 @@ $scope.dofetchPublicQuery = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/62e2952/src/js/eswebservices.js#L853" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/21e2acc/src/js/eswebservices.js#L916" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID)</h3>
 <div class="fetchpublicqueryinfo"><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Function that returns the Entersoft Janus based GridExLayout as a JSON object.</p>
 </div><h5 id="methods_fetchpublicqueryinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>GroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>FilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query FilterID</p>
@@ -269,7 +293,62 @@ function($scope, esWebApi, esWebUIHelper) {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/62e2952/src/js/eswebservices.js#L473" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/21e2acc/src/js/eswebservices.js#L777" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
+<div class="fetchsessioninfo"><div class="es-services-web-eswebapi-fetchsessioninfo-page"><p>Function that returns Entersoft Application Server session information</p>
+</div><h5 id="methods_fetchsessioninfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchsessioninfo-page"><ul>
+<li>If sucess the <strong>response.data.ESProperty</strong> contains the array of the session properties objects.
+Each session property object is fo the following form:
+<pre class="prettyprint linenums">
+var sessprop = {
+    ID: string, // property ID i.e. "101"
+    Description: string, // property Description in the session's language translation i.e. "Έκδοση Εγκατάστασης"
+    ValueS: string, // property Value in string format i.e. "4.0.36 - 2"
+    Type: int // property EBS Type i.e. 0
+};
+</pre>
+*If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+err.data.UserMessage</li>
+</ul>
+<p>Success promise return value i.e. response.data is of the following form:
+<pre class="prettyprint linenums">
+var x = {
+    "ESProperty": [{
+        "ID": "101",
+        "Description": "Έκδοση Εγκατάστασης",
+        "ValueS": "4.0.36 - 2",
+        "Type": 0
+    }, {
+        "ID": "102",
+        "Description": "Έκδοση Παραστατικών",
+        "ValueS": "167",
+        "Type": 0
+    }, 
+    // ... more properties
+    {
+        "ID": "16",
+        "Description": "Τρέχων Αριθμός Χρηστών",
+        "ValueS": "BackOffice = 1, Retail = 0, Mobile = 6, Web = 0",
+        "Type": 0
+    }]
+};
+
+</pre>
+</div></td></tr></table><h4 id="methods_fetchsessioninfo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchsessioninfo-page"><pre class="prettyprint linenums">
+//fetchSessionInfo example
+$scope.fetchSessionInfo = function() {
+    esWebApi.fetchSessionInfo()
+        .then(function(ret) {
+            $scope.pSessionInfo = ret.data;
+        }, function(err) {
+            $scope.pSessionInfo = err;
+        });
+}
+</pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/21e2acc/src/js/eswebservices.js#L473" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
 <div class="logout"><div class="es-services-web-eswebapi-logout-page"><p>Function that performs a web session logout. As a result of calling this function, all internal state
 related to the current web session, if any, is cleaned-up and no valid web session is available. The application/user must login again through openSession
 in order to be able to call any Entersoft WEB API autheticated method or service.</p>
@@ -285,7 +364,7 @@ $scope.doLogout = function ()
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/62e2952/src/js/eswebservices.js#L425" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/21e2acc/src/js/eswebservices.js#L425" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
 <div class="opensession"><div class="es-services-web-eswebapi-opensession-page"><p>this is a descr</p>
 </div><h5 id="methods_opensession_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>credentials</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-opensession-page"><p>Entersoft Business Suite login credentials in the form of a JSON object with the following form:
 <pre class="prettyprint linenums">

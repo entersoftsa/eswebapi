@@ -35,8 +35,19 @@ module.exports = function(grunt) {
         },
 
         clean: {
+            options: {
+                force: true
+            },
             build: ["dist", "example/lib/eswebapi/dist"],
-            docs: ['docs']
+            docs: ['docs'],
+            pub_docs: ['../../docs_eswebapi/eswebapi/css/',
+                '../../docs_eswebapi/eswebapi/font/',
+                '../../docs_eswebapi/eswebapi/grunt-scripts/',
+                '../../docs_eswebapi/eswebapi/grunt-styles/',
+                '../../docs_eswebapi/eswebapi/js/',
+                '../../docs_eswebapi/eswebapi/partials/',
+                '../../docs_eswebapi/eswebapi/index.html'
+            ]
         },
 
         jshint: {
@@ -120,6 +131,17 @@ module.exports = function(grunt) {
                     },
                 ],
             },
+            pub_docs: {
+                files: [
+                    // includes files within path and its sub-directories
+                    {
+                        cwd: 'docs/',
+                        expand: true,
+                        src: ['**'],
+                        dest: '../../docs_eswebapi/eswebapi/'
+                    },
+                ],
+            }
         },
 
         connect: {
@@ -150,12 +172,11 @@ module.exports = function(grunt) {
             }
         },
 
-        open: {
-            doc: {
-                path: 'http://localhost/eswebapidocs'
+        shell: {
+            dos: {
+                command: "git add .&&git commit -m 'auto'&&git push origin master"
             }
         },
-
 
         watch: {
             gruntfile: {
@@ -180,14 +201,16 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-ngdocs');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-open');
+    grunt.loadNpmTasks('grunt-shell');
 
     //Step 1 task
     grunt.registerTask('1step', ['clean:build', 'concat', 'uglify', 'filerev:scripts', 'ngtemplates', 'copy']);
 
     // doc
-    grunt.registerTask('0doc', ['clean:docs', 'ngdocs']);
+    grunt.registerTask('0doc', ['clean:docs', 'clean:pub_docs', 'ngdocs']);
+
+    // publish doc
+    grunt.registerTask('publishdoc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:pub_docs']);
 
     // Default task.
     grunt.registerTask('default', ['jshint', 'nodeunit', 'concat', 'uglify']);
