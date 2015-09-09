@@ -140,6 +140,12 @@ module.exports = function(grunt) {
                         src: ['**'],
                         dest: '../../docs_eswebapi/eswebapi/'
                     },
+                    {
+                        cwd: 'src/assets',
+                        expand: true,
+                        src: ['*.ico'],
+                        dest: '../../docs_eswebapi/eswebapi/'  
+                    }
                 ],
             }
         },

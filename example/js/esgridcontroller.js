@@ -157,6 +157,16 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                 });
         }
 
+        //fetchODSTableInfo example
+        $scope.fetchOdsTableInfo = function() {
+            esWebApi.fetchOdsTableInfo($scope.odsID)
+                .then(function(ret) {
+                    $scope.pTableInfo = ret.data;
+                }, function(err) {
+                    $scope.pTableInfo = err;
+                });
+        }
+
 
         //logout sample
         $scope.doLogout = function() {

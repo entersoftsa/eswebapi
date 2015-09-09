@@ -657,6 +657,155 @@ $scope.fetchCompanyParams = function() {
 
                             registerException: fregisterException,
 
+/**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchOdsTableInfo
+                             * @methodOf es.Services.Web.esWebApi
+                             * @description Function that returns the ODSTable definition from the ** Entersoft Object Description System (ODS)** repository.
+                             * @module es.Services.Web
+                             * @kind function
+                             * @param {string} esParam The ODS Table ID or the ODS Table GID in string (guid) to retrieve
+                             * @return {httpPromise} If sucess the response.data contains the ODS Table Definition object in JSON representation
+                             * If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+                             * err.data.UserMessage
+                             *
+                             * Success promise return value i.e. response.data is of the following form:
+<pre>
+var odsTableforESGOCity = {
+    "Role": 1,
+    "ModuleID": "ESGO",
+    "ID": "ESGOZCity",
+    "GID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+    "DBTableName": "ESGOZCity",
+    "Flags": 1028,
+    "Columns": [{
+        "ID": "Code",
+        "GID": "aa00f03d-640b-4c0c-8bbe-4b3adabea477",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "Code",
+        "AllowEQUC": true,
+        "Size": 20,
+        "ODSType": "ESZOOMCODE",
+        "Precision": 0,
+        "Nullable": false,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 1
+    }, {
+        "ID": "Description",
+        "GID": "b92ab124-86c0-4c70-9093-53337f91577b",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "Description",
+        "AllowEQUC": true,
+        "Size": 100,
+        "ODSType": "ESFIELD",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 2
+    }, {
+        "ID": "AlternativeDescription",
+        "GID": "bcccdd8d-afe8-4fca-a448-cacde6593adc",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "AlternativeDescription",
+        "AllowEQUC": true,
+        "Size": 100,
+        "ODSType": "ESFIELD",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 3
+    }, {
+        "ID": "Inactive",
+        "GID": "df7e74e8-af69-4f9f-bd5a-8bec32361423",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "Inactive",
+        "AllowEQUC": false,
+        "Size": -1,
+        "ODSType": "ESBOOL",
+        "Precision": 0,
+        "Nullable": false,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 4
+    }, {
+        "ID": "PhonePrefix",
+        "GID": "806db65c-9f30-4859-b5b0-7f91a32d6aca",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "PhonePrefix",
+        "AllowEQUC": true,
+        "Size": 15,
+        "ODSType": "ESTELNO",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 5
+    }, {
+        "ID": "fMunicipalityCode",
+        "GID": "3ebdcae6-a3a4-4cfd-8371-8b8825a1d542",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "fMunicipalityCode",
+        "AllowEQUC": false,
+        "Size": 20,
+        "ODSType": "ESFZOOMCODE",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 6
+    }]
+};
+</pre>
+                             *
+                             * Error promise return value i.e. function(err) is of the following form:
+<pre>
+// fetchOdsTableInfo("escity"), which does not exist in the ODS
+var f = {
+        "data": {
+            "MessageID": "invalid-table-id",
+            "UserMessage": "invalid table id: escity",
+            "Messages": []
+        },
+        "status": 404,
+        "config": {
+            "method": "GET",
+            "transformRequest": [null],
+            "transformResponse": [null],
+            "headers": {
+                "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwieC1lcy11c2VyLXBhc3N3b3JkIjoiZW50ZXJzb2Z0IiwieC1lcy11c2VyLWJyYW5jaC1pZCI6Is6RzpjOlyIsIngtZXMtdXNlci1sYW5nLWlkIjoiZWwtR1IiLCJ4LWVzbG9naW5pbmZvLVN1YnNjcmlwdGlvblBhc3N3b3JkIjoicGFzc3giLCJpc3MiOiJFbnRlcnNvZnQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0IiwiZXhwIjoxNDQxODIxNzUwLCJuYmYiOjE0NDE4MTU3NTB9.4k2NfaqmbDa50XWtxR4O6mN6WANyDOkvmNtkTywbnLo",
+                "Accept": "application/json, text/plain},"
+                url ":"
+                http: //localhost/eswebapi/api/rpc/FetchOdsTableInfo/escity"},"statusText":"Not Found"};
+
+</pre> 
+                            * @example
+<pre>
+//fetchODSTableInfo example
+$scope.fetchOdsTableInfo = function() {
+    esWebApi.fetchOdsTableInfo($scope.odsID)
+        .then(function(ret) {
+            $scope.pTableInfo = ret.data;
+        }, function(err) {
+            $scope.pTableInfo = err;
+        });
+}
+</pre>
+*/
                             fetchOdsTableInfo: function(tableID) {
                                 return getOdsInfo("__FETCH_ODS_TABLE_INFO__", tableID);
                             },

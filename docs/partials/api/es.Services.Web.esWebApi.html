@@ -1,4 +1,4 @@
-<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/d8e062f/src/js/eswebservices.js#L77" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L77" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
 <div><span class="hint">service in module <code ng:non-bindable="">es.Services.Web</code>
 </span>
 </div>
@@ -8,7 +8,7 @@
 <p>Web API.</p>
 </div></div>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/d8e062f/src/js/eswebservices.js#L543" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L543" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
 <div class="fetchcompanyparam"><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>Function that returns the ES Param for a requested ParamID.</p>
 </div><h5 id="methods_fetchcompanyparam_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParam</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>The ID of the ES CompanyParam. The ID should not contain the @ i.e. fetchCompanyParam(&quot;MyValidParamKey&quot;)</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchcompanyparam_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>If sucess the response.data contains the Parameter definition and parameter value.
@@ -65,7 +65,7 @@ $scope.fetchCompanyParam = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/d8e062f/src/js/eswebservices.js#L635" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L635" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
 <div class="fetchcompanyparams"><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>Function that returns the ES Params for the requested array of parameter id&#39;s</p>
 </div><h5 id="methods_fetchcompanyparams_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParams <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string[]</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>can be</p>
 <ul>
@@ -139,7 +139,151 @@ $scope.fetchCompanyParams = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/d8e062f/src/js/eswebservices.js#L1069" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L809" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodstableinfo">fetchOdsTableInfo(esParam)</h3>
+<div class="fetchodstableinfo"><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>Function that returns the ODSTable definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
+</div><h5 id="methods_fetchodstableinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParam</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>The ODS Table ID or the ODS Table GID in string (guid) to retrieve</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchodstableinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>If sucess the response.data contains the ODS Table Definition object in JSON representation
+If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+err.data.UserMessage</p>
+<p>Success promise return value i.e. response.data is of the following form:
+<pre class="prettyprint linenums">
+var odsTableforESGOCity = {
+    "Role": 1,
+    "ModuleID": "ESGO",
+    "ID": "ESGOZCity",
+    "GID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+    "DBTableName": "ESGOZCity",
+    "Flags": 1028,
+    "Columns": [{
+        "ID": "Code",
+        "GID": "aa00f03d-640b-4c0c-8bbe-4b3adabea477",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "Code",
+        "AllowEQUC": true,
+        "Size": 20,
+        "ODSType": "ESZOOMCODE",
+        "Precision": 0,
+        "Nullable": false,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 1
+    }, {
+        "ID": "Description",
+        "GID": "b92ab124-86c0-4c70-9093-53337f91577b",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "Description",
+        "AllowEQUC": true,
+        "Size": 100,
+        "ODSType": "ESFIELD",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 2
+    }, {
+        "ID": "AlternativeDescription",
+        "GID": "bcccdd8d-afe8-4fca-a448-cacde6593adc",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "AlternativeDescription",
+        "AllowEQUC": true,
+        "Size": 100,
+        "ODSType": "ESFIELD",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 3
+    }, {
+        "ID": "Inactive",
+        "GID": "df7e74e8-af69-4f9f-bd5a-8bec32361423",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "Inactive",
+        "AllowEQUC": false,
+        "Size": -1,
+        "ODSType": "ESBOOL",
+        "Precision": 0,
+        "Nullable": false,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 4
+    }, {
+        "ID": "PhonePrefix",
+        "GID": "806db65c-9f30-4859-b5b0-7f91a32d6aca",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "PhonePrefix",
+        "AllowEQUC": true,
+        "Size": 15,
+        "ODSType": "ESTELNO",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 5
+    }, {
+        "ID": "fMunicipalityCode",
+        "GID": "3ebdcae6-a3a4-4cfd-8371-8b8825a1d542",
+        "TableID": "ESGOZCity",
+        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+        "DBColumnName": "fMunicipalityCode",
+        "AllowEQUC": false,
+        "Size": 20,
+        "ODSType": "ESFZOOMCODE",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 6
+    }]
+};
+</pre>
+<p>Error promise return value i.e. function(err) is of the following form:
+<pre class="prettyprint linenums">
+// fetchOdsTableInfo("escity"), which does not exist in the ODS
+var f = {
+        "data": {
+            "MessageID": "invalid-table-id",
+            "UserMessage": "invalid table id: escity",
+            "Messages": []
+        },
+        "status": 404,
+        "config": {
+            "method": "GET",
+            "transformRequest": [null],
+            "transformResponse": [null],
+            "headers": {
+                "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwieC1lcy11c2VyLXBhc3N3b3JkIjoiZW50ZXJzb2Z0IiwieC1lcy11c2VyLWJyYW5jaC1pZCI6Is6RzpjOlyIsIngtZXMtdXNlci1sYW5nLWlkIjoiZWwtR1IiLCJ4LWVzbG9naW5pbmZvLVN1YnNjcmlwdGlvblBhc3N3b3JkIjoicGFzc3giLCJpc3MiOiJFbnRlcnNvZnQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0IiwiZXhwIjoxNDQxODIxNzUwLCJuYmYiOjE0NDE4MTU3NTB9.4k2NfaqmbDa50XWtxR4O6mN6WANyDOkvmNtkTywbnLo",
+                "Accept": "application/json, text/plain},"
+                url ":"
+                http: //localhost/eswebapi/api/rpc/FetchOdsTableInfo/escity"},"statusText":"Not Found"};
+
+</pre> </p>
+</div></td></tr></table><h4 id="methods_fetchodstableinfo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchodstableinfo-page"><pre class="prettyprint linenums">
+//fetchODSTableInfo example
+$scope.fetchOdsTableInfo = function() {
+    esWebApi.fetchOdsTableInfo($scope.odsID)
+        .then(function(ret) {
+            $scope.pTableInfo = ret.data;
+        }, function(err) {
+            $scope.pTableInfo = err;
+        });
+}
+</pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L1218" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
 <div class="fetchpublicquery"><h5 id="methods_fetchpublicquery_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>pqGroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>pqFilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query FilterID</p>
 </div></td></tr><tr><td>pqOptions</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
@@ -259,7 +403,7 @@ $scope.dofetchPublicQuery = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/d8e062f/src/js/eswebservices.js#L919" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L1068" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID)</h3>
 <div class="fetchpublicqueryinfo"><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Function that returns the Entersoft Janus based GridExLayout as a JSON object.</p>
 </div><h5 id="methods_fetchpublicqueryinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>GroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>FilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query FilterID</p>
@@ -293,7 +437,7 @@ function($scope, esWebApi, esWebUIHelper) {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/d8e062f/src/js/eswebservices.js#L780" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L929" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
 <div class="fetchsessioninfo"><div class="es-services-web-eswebapi-fetchsessioninfo-page"><p>Function that returns Entersoft Application Server session information</p>
 </div><h5 id="methods_fetchsessioninfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchsessioninfo-page"><ul>
 <li>If sucess the <strong>response.data.ESProperty</strong> contains the array of the session properties objects.
@@ -348,7 +492,7 @@ $scope.fetchSessionInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/d8e062f/src/js/eswebservices.js#L476" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L476" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
 <div class="logout"><div class="es-services-web-eswebapi-logout-page"><p>Function that performs a web session logout. As a result of calling this function, all internal state
 related to the current web session, if any, is cleaned-up and no valid web session is available. The application/user must login again through openSession
 in order to be able to call any Entersoft WEB API autheticated method or service.</p>
@@ -364,7 +508,7 @@ $scope.doLogout = function ()
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/d8e062f/src/js/eswebservices.js#L428" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L428" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
 <div class="opensession"><div class="es-services-web-eswebapi-opensession-page"><p>this is a descr</p>
 </div><h5 id="methods_opensession_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>credentials</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-opensession-page"><p>Entersoft Business Suite login credentials in the form of a JSON object with the following form:
 <pre class="prettyprint linenums">
