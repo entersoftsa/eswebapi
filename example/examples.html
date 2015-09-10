@@ -52,11 +52,76 @@
     </div>
     <hr/>
     <div>
-        <h3>7. fetchODSTableInfo</h3>
+        <h3>7. fetchOdsTableInfo</h3>
         <span>
             <input ng-model="odsID" placeholder="ES ODS ID to fetch">
             <button ng-click="fetchOdsTableInfo()">fetchOdsTableInfo</button>
             <textarea>{{pTableInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>8. fetchOdsColumnInfo</h3>
+        <span>
+            <input ng-model="odsID" placeholder="ES ODS Table-Column ID to fetch">
+            <input ng-model="odsColumnID" placeholder="ES ODS Column ID to fetch">
+            <button ng-click="fetchOdsColumnInfo()">fetchOdsColumnInfo</button>
+            <textarea>{{pColumnInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>9. fetchOdsRelationInfo</h3>
+        <span>
+            <input ng-model="odsID" placeholder="ES ODS Relation ID to fetch">
+            <button ng-click="fetchOdsRelationInfo()">fetchOdsRelationInfo</button>
+            <textarea>{{pRelationInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>10. fetchOdsMasterRelationsInfo</h3>
+        <span>
+            <input ng-model="odsID" placeholder="ES ODS Table ID to fetch">
+            <input ng-model="odsColumnID" placeholder="ES ODS Foreign Column ID to fetch">
+            <button ng-click="fetchOdsMasterRelationsInfo()">fetchOdsMasterRelationsInfo</button>
+            <textarea>{{pRelationInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>11. fetchOdsDetailRelationsInfo</h3>
+        <span>
+            <input ng-model="odsID" placeholder="ES ODS Table ID to fetch">
+            <input ng-model="odsColumnID" placeholder="ES ODS Foreign Column ID to fetch">
+            <button ng-click="fetchOdsDetailRelationsInfo()">fetchOdsDetailRelationsInfo</button>
+            <textarea>{{pRelationInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>12. fetchServerCapabilities</h3>
+        <span>
+            <button ng-click="fetchServerCapabilities()">fetchServerCapabilities</button>
+            <textarea>{{pSrvCapabilities}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>13. fetchUserSites</h3>
+        <span>
+            <input ng-model="pUser" placeholder="EBS UserID">
+            <button ng-click="fetchUserSites()">fetchUserSites</button>
+            <textarea>{{pUserSites}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>14. fetchStdZoom</h3>
+        <span>
+            <input ng-model="pZoomID" placeholder="EBS Zoom ID">
+            <button ng-click="fetchStdZoom()">fetchStdZoom</button>
+            <textarea>{{pZoomResults}}</textarea>
         </span>
     </div>
 </div>

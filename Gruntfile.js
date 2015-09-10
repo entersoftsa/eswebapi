@@ -139,12 +139,11 @@ module.exports = function(grunt) {
                         expand: true,
                         src: ['**'],
                         dest: '../../docs_eswebapi/eswebapi/'
-                    },
-                    {
+                    }, {
                         cwd: 'src/assets',
                         expand: true,
                         src: ['*.ico'],
-                        dest: '../../docs_eswebapi/eswebapi/'  
+                        dest: '../../docs_eswebapi/eswebapi/'
                     }
                 ],
             }
@@ -169,7 +168,8 @@ module.exports = function(grunt) {
                 image: "src/assets/logo.png",
                 imageLink: "http://www.entersoft.eu",
                 analytics: {
-                    account: 'UA-50505865-6'
+                    account: 'UA-50505865-6',
+                    domainName: 'entersoft.eu'
                 }
             },
             api: {
@@ -207,10 +207,10 @@ module.exports = function(grunt) {
         },
 
         shell: {
-            sourcefiles: {
+            github_sourcefiles: {
                 command: "git add .&&git commit -m 'auto'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git master"
             },
-            pub_docs: {
+            github_pub_docs: {
                 command: "git add .&&git commit -m 'auto'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git gh-pages",
                 options: {
                     execOptions: {
@@ -246,7 +246,24 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-prompt');
 
-    //Step 1 task
+    // Build Sources Task
+    grunt.registerTask('1build', [
+        /* compile and prepare source files */
+        'clean:build',
+        'concat',
+        'uglify',
+        'filerev:scripts',
+        'ngtemplates',
+        'copy:sourcefiles',
+
+        /* compile documentation */
+        'clean:docs',
+        'clean:pub_docs',
+        'ngdocs',
+        'copy:pub_docs'
+    ]);
+
+    // Full deploy Task
     grunt.registerTask('fulldeploy', [
         /* compile and prepare source files */
         'clean:build',
@@ -266,8 +283,8 @@ module.exports = function(grunt) {
         'prompt:github',
 
         /* push to gihub both documentation and source files */
-        'shell:pub_docs',
-        'shell:sourcefiles'
+        'shell:github_pub_docs',
+        'shell:github_sourcefiles'
     ]);
 
     // doc

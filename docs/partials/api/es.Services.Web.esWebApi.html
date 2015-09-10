@@ -1,4 +1,4 @@
-<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L77" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L77" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
 <div><span class="hint">service in module <code ng:non-bindable="">es.Services.Web</code>
 </span>
 </div>
@@ -8,12 +8,15 @@
 <p>Web API.</p>
 </div></div>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L543" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L545" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
 <div class="fetchcompanyparam"><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>Function that returns the ES Param for a requested ParamID.</p>
 </div><h5 id="methods_fetchcompanyparam_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParam</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>The ID of the ES CompanyParam. The ID should not contain the @ i.e. fetchCompanyParam(&quot;MyValidParamKey&quot;)</p>
-</div></td></tr></tbody></table><h5 id="methods_fetchcompanyparam_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>If sucess the response.data contains the Parameter definition and parameter value.
-If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
-err.data.UserMessage</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchcompanyparam_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>Returns a promise.</p>
+<ul>
+<li>If sucess the response.data contains the Parameter definition and parameter value.</li>
+<li>If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+err.data.UserMessage</li>
+</ul>
 <p>Success promise return value i.e. response.data is of the following form:
 <pre class="prettyprint linenums">
 var x = {
@@ -38,7 +41,7 @@ var f = {
         "transformRequest": [null],
         "transformResponse": [null],
         "headers": {
-            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwieC1lcy11c2VyLXBhc3N3b3JkIjoiZW50ZXJzb2Z0IiwieC1lcy11c2VyLWJyYW5jaC1pZCI6Is6RzpjOlyIsIngtZXMtdXNlci1sYW5nLWlkIjoiZWwtR1IiLCJ4LWVzbG9naW5pbmZvLVN1YnNjcmlwdGlvblBhc3N3b3JkIjoicGFzc3giLCJpc3MiOiJFbnRlcnNvZnQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0IiwiZXhwIjoxNDQxNzEzNzg1LCJuYmYiOjE0NDE3MDc3ODV9.1lsLhzaXEW6Yt2B1wcIEal8WIVykSFP_Q5nk4UfWf5c",
+            "Authorization": "Bearer xyzquerty....",
             "Accept": "application/json, text/plain"
         },
         url ":",
@@ -65,7 +68,7 @@ $scope.fetchCompanyParam = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L635" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L637" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
 <div class="fetchcompanyparams"><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>Function that returns the ES Params for the requested array of parameter id&#39;s</p>
 </div><h5 id="methods_fetchcompanyparams_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParams <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string[]</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>can be</p>
 <ul>
@@ -74,7 +77,8 @@ $scope.fetchCompanyParam = function() {
 <li>a string of comma separated list of es params the values of which we want to be returned.
 <em>If esParams is null or undefined or emprty string</em> the complete set of ES Company Params will be returned.</li>
 </ul>
-</div></td></tr></tbody></table><h5 id="methods_fetchcompanyparams_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><ul>
+</div></td></tr></tbody></table><h5 id="methods_fetchcompanyparams_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>Returns a promise.</p>
+<ul>
 <li>If sucess the response.data contains the Array of Parameter definition and parameter value objects.</li>
 <li>If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
 err.data.UserMessage</li>
@@ -110,7 +114,7 @@ var f = {
         "transformRequest": [null],
         "transformResponse": [null],
         "headers": {
-            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwieC1lcy11c2VyLXBhc3N3b3JkIjoiZW50ZXJzb2Z0IiwieC1lcy11c2VyLWJyYW5jaC1pZCI6Is6RzpjOlyIsIngtZXMtdXNlci1sYW5nLWlkIjoiZWwtR1IiLCJ4LWVzbG9naW5pbmZvLVN1YnNjcmlwdGlvblBhc3N3b3JkIjoicGFzc3giLCJpc3MiOiJFbnRlcnNvZnQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0IiwiZXhwIjoxNDQxNzEzNzg1LCJuYmYiOjE0NDE3MDc3ODV9.1lsLhzaXEW6Yt2B1wcIEal8WIVykSFP_Q5nk4UfWf5c",
+            "Authorization": "Bearer xyzquerty....",
             "Accept": "application/json, text/plain"
         },
         url ":",
@@ -139,12 +143,383 @@ $scope.fetchCompanyParams = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L809" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodstableinfo">fetchOdsTableInfo(esParam)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L889" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodscolumninfo">fetchOdsColumnInfo(tableID, columnID)</h3>
+<div class="fetchodscolumninfo"><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><p>Function that returns the ODSTable definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
+</div><h5 id="methods_fetchodscolumninfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;. If columnID parameter is undefined, null or empty string <strong>then</strong>
+additional forms of tableid-column id definition are available:</p>
+<ul>
+<li>Fully qualified column name i.e. &quot;ESFIItem.Description&quot;</li>
+<li>ODS Column&#39;s GID in string i.e. &quot;74c82778-6b49-4928-9f06-81b4384bf677&quot;</li>
+</ul>
+</div></td></tr><tr><td>columnID <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><p>The ODS Column/Field ID  to retrieve i.e. &quot;Description&quot;. If columnID is undefined or null or empty string
+then tableID should be one of the forms described above.</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchodscolumninfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><p>Returns a promise.</p>
+<ul>
+<li>If sucess the response.data contains the ODS Column/Field Definition object in JSON representation</li>
+<li>If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+err.data.UserMessage</li>
+</ul>
+<p>Success promise return value i.e. response.data is of the following form:
+<pre class="prettyprint linenums">
+var odsColumnforESFIItem_Code = {
+    "ID": "Code",
+    "GID": "74c82778-6b49-4928-9f06-81b4384bf677",
+    "TableID": "ESFIItem",
+    "TableGID": "8445cfd5-9dda-47cc-8f3a-01b5586347d2",
+    "DBColumnName": "Code",
+    "AllowEQUC": true,
+    "Size": 50,
+    "ODSType": "ESCODE",
+    "Precision": 0,
+    "Nullable": false,
+    "ChoiceType": "",
+    "Flags": 2112,
+    "HelpTxt": "",
+    "SeqNum": 2
+};
+</pre>
+<p>Error promise return value i.e. function(err) is of the following form:
+<pre class="prettyprint linenums">
+// fetchOdsColumnInfo("esfiitem", "codeg"), which does not exist in the ODS
+var f = {
+        "data": {
+            "MessageID": "invalid-column-id",
+            "UserMessage": "invalid column id: esfiitem.codeg",
+            "Messages": []
+        },
+        "status": 404,
+        "config": {
+            "method": "GET",
+            "transformRequest": [null],
+            "transformResponse": [null],
+            "headers": {
+                "Authorization": "Bearer xyzquerty....",
+                "Accept": "application/json, text/plain},"
+                url ":"
+                http: //localhost/eswebapi/api/rpc/FetchOdsColumnInfo/esfiitem/codeg"},"statusText":"Not Found"};
+
+</pre> </p>
+</div></td></tr></table><h4 id="methods_fetchodscolumninfo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><pre class="prettyprint linenums">
+//fetchODSColumnInfo example
+$scope.fetchOdsColumnInfo = function() {
+   esWebApi.fetchOdsColumnInfo($scope.odsID, $scope.odsColumnID)
+       .then(function(ret) {
+           $scope.pColumnInfo = ret.data;
+       }, function(err) {
+           $scope.pColumnInfo = err;
+       });
+}
+</pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L1223" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsdetailrelationsinfo">fetchOdsDetailRelationsInfo(tableID, columnID)</h3>
+<div class="fetchodsdetailrelationsinfo"><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><p>Function that returns the Detail ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given ColumnID of the Master TableID
+from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
+</div><h5 id="methods_fetchodsdetailrelationsinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;.</p>
+</div></td></tr><tr><td>columnID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><p>The ODS Column/Field ID  to retrieve i.e. &quot;GID&quot;.</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchodsdetailrelationsinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><p>Returns a promise..</p>
+<ul>
+<li>If sucess the response.data contains an Array of the Detail ODS Relation Definition objects in JSON representation, that exist
+for the given <em>tableID</em> and foreign <em>columnID</em></li>
+<li>If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+err.data.UserMessage</li>
+</ul>
+<p>Success promise return value i.e. response.data is of the following form:
+<pre class="prettyprint linenums">
+var odsDetailRelations = [{
+    "ID": "FK_ESFIItemPriceHistory_ESFIPricelist",
+    "GID": "6ec8be7a-bfac-42c2-95c2-c15b68cca9d2",
+    "NameInDB": "FK_ESFIItemPriceHistory_ESFIPricelist",
+    "MTableID": "ESFIPricelist",
+    "DTableID": "ESFIItemPriceHistory",
+    "MTableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+    "MValue1GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+    "DTableGID": "08b1d27b-5425-4dbf-8dc5-8f340f289d84",
+    "DValue1GID": "71f4b69d-0db5-4fd3-9e62-772f50673b69",
+    "IsVirtual": false,
+    "IsDeleted": false,
+    "MasterColumns": [{
+        "ID": "GID",
+        "GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+        "TableID": "ESFIPricelist",
+        "TableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+        "DBColumnName": "GID",
+        "AllowEQUC": false,
+        "Size": -1,
+        "ODSType": "ESGID",
+        "Precision": 0,
+        "Nullable": false,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 1
+    }],
+    "DetailColumns": [{
+        "ID": "fPricelistGID",
+        "GID": "71f4b69d-0db5-4fd3-9e62-772f50673b69",
+        "TableID": "ESFIItemPriceHistory",
+        "TableGID": "08b1d27b-5425-4dbf-8dc5-8f340f289d84",
+        "DBColumnName": "fPricelistGID",
+        "AllowEQUC": false,
+        "Size": -1,
+        "ODSType": "ESFGID",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 7
+    }]
+},
+
+// ...
+// ...
+
+}];
+
+</pre>
+<p>Error promise return value i.e. function(err) is of the following form:
+<pre class="prettyprint linenums">
+// fetchOdsDetailRelationsInfo("ESFIPricelist", "gidc"), which does not exist in the ODS
+var f = {
+    "data": {
+        "MessageID": "invalid-column-id",
+        "UserMessage": "invalid column id: ESFIPricelist.gidc",
+        "Messages": []
+    },
+    "status": 404,
+    "config": {
+        "method": "GET",
+        "transformRequest": [null],
+        "transformResponse": [null],
+        "headers": {
+            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwieC1lcy11c2VyLXBhc3N3b3JkIjoiZW50ZXJzb2Z0IiwieC1lcy11c2VyLWJyYW5jaC1pZCI6Is6RzpjOlyIsIngtZXMtdXNlci1sYW5nLWlkIjoiZWwtR1IiLCJ4LWVzbG9naW5pbmZvLVN1YnNjcmlwdGlvblBhc3N3b3JkIjoicGFzc3giLCJpc3MiOiJFbnRlcnNvZnQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0IiwiZXhwIjoxNDQxODkyMDcwLCJuYmYiOjE0NDE4ODYwNzB9.tCuasMPd4kXT02kQo0Z9M8MuwnoGCTkexDs58OeRwcI",
+            "Accept": "application/json, text/plain"
+        },
+        "url": "http://localhost/eswebapi/api/rpc/FetchOdsDetailRelationsInfo/ESFIPricelist/gidc"
+    },
+    "statusText": "Not Found"
+};
+</pre>
+</div></td></tr></table><h4 id="methods_fetchodsdetailrelationsinfo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><pre class="prettyprint linenums">
+//fetchOdsDetailRelationsInfo example
+$scope.fetchOdsDetailRelationsInfo = function() {
+    esWebApi.fetchOdsDetailRelationsInfo($scope.odsID, $scope.odsColumnID)
+        .then(function(ret) {
+            $scope.pRelationInfo = ret.data;
+        }, function(err) {
+            $scope.pRelationInfo = err;
+        });
+}
+</pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L1110" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsmasterrelationsinfo">fetchOdsMasterRelationsInfo(tableID, columnID)</h3>
+<div class="fetchodsmasterrelationsinfo"><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><p>Function that returns the Master Relations ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given foreign ColumnID of the Master TableID
+from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
+</div><h5 id="methods_fetchodsmasterrelationsinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;.</p>
+</div></td></tr><tr><td>columnID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><p>The ODS Column/Field ID  to retrieve i.e. &quot;fDim1Code&quot;.</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchodsmasterrelationsinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><p>Returns a promise..</p>
+<ul>
+<li>If sucess the response.data contains an Array of Master relations of the ODS Relation Definition objects in JSON representation, that exist
+for the given <em>tableID</em> and foreign <em>columnID</em></li>
+<li>If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+err.data.UserMessage</li>
+</ul>
+<p>Success promise return value i.e. response.data is of the following form:
+<pre class="prettyprint linenums">
+var odsMasterRelations = [{
+    "ID": "FK_ESFIPricelistItem_ESFIPricelist",
+    "GID": "87fbc76d-7ac7-4102-a7cd-00374a6a4338",
+    "NameInDB": "FK_ESFIPricelistItem_ESFIPricelist",
+    "MTableID": "ESFIPricelist",
+    "DTableID": "ESFIPricelistItem",
+    "MTableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+    "MValue1GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+    "DTableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
+    "DValue1GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
+    "IsVirtual": false,
+    "IsDeleted": false,
+    "MasterColumns": [{
+        "ID": "GID",
+        "GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+        "TableID": "ESFIPricelist",
+        "TableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+        "DBColumnName": "GID",
+        "AllowEQUC": false,
+        "Size": -1,
+        "ODSType": "ESGID",
+        "Precision": 0,
+        "Nullable": false,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 1
+    }],
+    "DetailColumns": [{
+        "ID": "fPricelistGID",
+        "GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
+        "TableID": "ESFIPricelistItem",
+        "TableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
+        "DBColumnName": "fPricelistGID",
+        "AllowEQUC": false,
+        "Size": -1,
+        "ODSType": "ESFGID",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 2048,
+        "HelpTxt": "",
+        "SeqNum": 2
+    }]
+}];
+</pre>
+<p>Error promise return value i.e. function(err) is of the following form:
+<pre class="prettyprint linenums">
+// fetchOdsMasterRelationsInfo("esfiitem", "fnon"), which does not exist in the ODS
+var f = {
+    "data": {
+        "MessageID": "invalid-column-id",
+        "UserMessage": "invalid column id: esfiitem.fnon",
+        "Messages": []
+    },
+    "status": 404,
+    "config": {
+        "method": "GET",
+        "transformRequest": [null],
+        "transformResponse": [null],
+        "headers": {
+            "Authorization": "Bearer xyzquerty....",
+            "Accept": "application/json, text/plain"
+        },
+        "url": "http://localhost/eswebapi/api/rpc/FetchOdsMasterRelationsInfo/esfiitem/fnon"
+    },
+    "statusText": "Not Found"
+};
+</pre>
+</div></td></tr></table><h4 id="methods_fetchodsmasterrelationsinfo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><pre class="prettyprint linenums">
+//fetchOdsMasterRelationsInfo example
+$scope.fetchOdsMasterRelationsInfo = function() {
+    esWebApi.fetchOdsMasterRelationsInfo($scope.odsID, $scope.odsColumnID)
+        .then(function(ret) {
+            $scope.pRelationInfo = ret.data;
+        }, function(err) {
+            $scope.pRelationInfo = err;
+        });
+}
+</pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L1004" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsrelationinfo">fetchOdsRelationInfo(relationID)</h3>
+<div class="fetchodsrelationinfo"><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>Function that returns the ODS Releation definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
+</div><h5 id="methods_fetchodsrelationinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>relationID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>The ODS Relation ID or the ODS Relation GID in string (guid) to retrieve</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchodsrelationinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>Returns a promise.</p>
+<ul>
+<li>If sucess the response.data contains the ODS Relation Definition object in JSON representation</li>
+<li>If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+err.data.UserMessage</li>
+</ul>
+<p>Success promise return value i.e. response.data is of the following form:
+<pre class="prettyprint linenums">
+var odsRelation = {
+    "ID": "FK_ESFIPricelistItem_ESFIPricelist",
+    "GID": "87fbc76d-7ac7-4102-a7cd-00374a6a4338",
+    "NameInDB": "FK_ESFIPricelistItem_ESFIPricelist",
+    "MTableID": "ESFIPricelist",
+    "DTableID": "ESFIPricelistItem",
+    "MTableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+    "MValue1GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+    "DTableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
+    "DValue1GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
+    "IsVirtual": false,
+    "IsDeleted": false,
+    "MasterColumns": [{
+        "ID": "GID",
+        "GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+        "TableID": "ESFIPricelist",
+        "TableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+        "DBColumnName": "GID",
+        "AllowEQUC": false,
+        "Size": -1,
+        "ODSType": "ESGID",
+        "Precision": 0,
+        "Nullable": false,
+        "ChoiceType": "",
+        "Flags": 0,
+        "HelpTxt": "",
+        "SeqNum": 1
+    }],
+    "DetailColumns": [{
+        "ID": "fPricelistGID",
+        "GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
+        "TableID": "ESFIPricelistItem",
+        "TableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
+        "DBColumnName": "fPricelistGID",
+        "AllowEQUC": false,
+        "Size": -1,
+        "ODSType": "ESFGID",
+        "Precision": 0,
+        "Nullable": true,
+        "ChoiceType": "",
+        "Flags": 2048,
+        "HelpTxt": "",
+        "SeqNum": 2
+    }]
+};
+
+</pre>
+<p>Error promise return value i.e. function(err) is of the following form:
+<pre class="prettyprint linenums">
+// fetchRelationInfo("abcd"), which does not exist in the ODS
+var f = {
+        "data": {
+            "MessageID": "invalid-relation-id",
+            "UserMessage": "invalid relation id: abcd",
+            "Messages": []
+        },
+        "status": 404,
+        "config": {
+            "method": "GET",
+            "transformRequest": [null],
+            "transformResponse": [null],
+            "headers": {
+                "Authorization": "Bearer xyzquerty....",
+                "Accept": "application/json, text/plain},"
+                url ":"
+                http: //localhost/eswebapi/api/rpc/FetchOdsRelationInfo/abcd"},"statusText":"Not Found"};
+
+
+</pre> </p>
+</div></td></tr></table><h4 id="methods_fetchodsrelationinfo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><pre class="prettyprint linenums">
+//fetchOdsRelationInfo example
+$scope.fetchOdsRelationInfo = function() {
+    esWebApi.fetchOdsRelationInfo($scope.odsID)
+        .then(function(ret) {
+            $scope.pRelationInfo = ret.data;
+        }, function(err) {
+            $scope.pRelationInfo = err;
+        });
+}
+</pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L812" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodstableinfo">fetchOdsTableInfo(tableID)</h3>
 <div class="fetchodstableinfo"><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>Function that returns the ODSTable definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
-</div><h5 id="methods_fetchodstableinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParam</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>The ODS Table ID or the ODS Table GID in string (guid) to retrieve</p>
-</div></td></tr></tbody></table><h5 id="methods_fetchodstableinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>If sucess the response.data contains the ODS Table Definition object in JSON representation
-If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
-err.data.UserMessage</p>
+</div><h5 id="methods_fetchodstableinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>The ODS Table ID or the ODS Table GID in string (guid) to retrieve</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchodstableinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>Returns a promise.</p>
+<ul>
+<li>If sucess the response.data contains the ODS Table Definition object in JSON representation</li>
+<li>If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+err.data.UserMessage</li>
+</ul>
 <p>Success promise return value i.e. response.data is of the following form:
 <pre class="prettyprint linenums">
 var odsTableforESGOCity = {
@@ -262,7 +637,7 @@ var f = {
             "transformRequest": [null],
             "transformResponse": [null],
             "headers": {
-                "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwieC1lcy11c2VyLXBhc3N3b3JkIjoiZW50ZXJzb2Z0IiwieC1lcy11c2VyLWJyYW5jaC1pZCI6Is6RzpjOlyIsIngtZXMtdXNlci1sYW5nLWlkIjoiZWwtR1IiLCJ4LWVzbG9naW5pbmZvLVN1YnNjcmlwdGlvblBhc3N3b3JkIjoicGFzc3giLCJpc3MiOiJFbnRlcnNvZnQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0IiwiZXhwIjoxNDQxODIxNzUwLCJuYmYiOjE0NDE4MTU3NTB9.4k2NfaqmbDa50XWtxR4O6mN6WANyDOkvmNtkTywbnLo",
+                "Authorization": "Bearer xyzquerty....",
                 "Accept": "application/json, text/plain},"
                 url ":"
                 http: //localhost/eswebapi/api/rpc/FetchOdsTableInfo/escity"},"statusText":"Not Found"};
@@ -283,7 +658,7 @@ $scope.fetchOdsTableInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L1218" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L1751" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
 <div class="fetchpublicquery"><h5 id="methods_fetchpublicquery_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>pqGroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>pqFilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query FilterID</p>
 </div></td></tr><tr><td>pqOptions</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
@@ -403,13 +778,18 @@ $scope.dofetchPublicQuery = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L1068" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L1538" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID)</h3>
 <div class="fetchpublicqueryinfo"><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Function that returns the Entersoft Janus based GridExLayout as a JSON object.</p>
 </div><h5 id="methods_fetchpublicqueryinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>GroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>FilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query FilterID</p>
-</div></td></tr></tbody></table><h5 id="methods_fetchpublicqueryinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Returns a promise. If success i.e. success(function(ret) {...}) the response ret is a JSON object representing the Entersoft
+</div></td></tr></tbody></table><h5 id="methods_fetchpublicqueryinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Returns a promise.</p>
+<ul>
+<li><p>If success i.e. success(function(ret) {...}) the response ret is a JSON object representing the Entersoft 
 Business Suite Janus based GridEx Layout. See the example on how to use the returned value in order to create an esGrid options object</p>
-<p>if error i.e. error(function(err, status) { ... }) the err contains the server error object and if available the status code i.e. 400</p>
+</li>
+<li><p>If error i.e. error(function(err, status) { ... }) the err contains the server error object and if available the status code i.e. 400</p>
+</li>
+</ul>
 </div></td></tr></table><h4 id="methods_fetchpublicqueryinfo_example">Example</h4>
 <div class="example"><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><pre class="prettyprint linenums">
 function($scope, esWebApi, esWebUIHelper) {
@@ -437,9 +817,42 @@ function($scope, esWebApi, esWebUIHelper) {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L929" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L1264" class="view-source icon-eye-open"> </a><h3 id="methods_fetchservercapabilities">fetchServerCapabilities()</h3>
+<div class="fetchservercapabilities"><div class="es-services-web-eswebapi-fetchservercapabilities-page"><p>Function that returns the WEB API Server capabilities in terms of http(s). This service does not require
+authorization prior to call</p>
+</div><h5 id="methods_fetchservercapabilities_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchservercapabilities-page"><p>If success i.e. function(ret) { ... } <strong><em>ret</em></strong> is a JSON object of the current WEB API Server capabilities.
+The return object has the following structure:
+<pre class="prettyprint linenums">
+var srvCapabilities = {
+    AllowInsecureHttp: boolean, 
+    // If false, WEB API Server does not allow unsecure conncetions. ONLY httpS is supported
+    // If true, WEB API Server allows for unsecure connection. This scenario is most likely expected in VPN connections for LOB applications
+    WebApiVersion: {
+        Major: int, // i.e. 1
+        Minor: int, // i.e. 7
+        Patch: int  // i.e. 7
+    }
+};
+</pre>
+</div></td></tr></table><h4 id="methods_fetchservercapabilities_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchservercapabilities-page"><pre class="prettyprint linenums">
+$scope.fetchServerCapabilities = function()
+{
+    esWebApi.fetchServerCapabilities()
+        .then(function(ret) {
+            $scope.pSrvCapabilities = ret;
+        }, function(err) {
+            $scope.pSrvCapabilities = err;
+        });
+}
+</pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L1398" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
 <div class="fetchsessioninfo"><div class="es-services-web-eswebapi-fetchsessioninfo-page"><p>Function that returns Entersoft Application Server session information</p>
-</div><h5 id="methods_fetchsessioninfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchsessioninfo-page"><ul>
+</div><h5 id="methods_fetchsessioninfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchsessioninfo-page"><p>Returns a promise.</p>
+<ul>
 <li>If sucess the <strong>response.data.ESProperty</strong> contains the array of the session properties objects.
 Each session property object is fo the following form:
 <pre class="prettyprint linenums">
@@ -449,8 +862,8 @@ var sessprop = {
     ValueS: string, // property Value in string format i.e. "4.0.36 - 2"
     Type: int // property EBS Type i.e. 0
 };
-</pre>
-*If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+</pre></li>
+<li>If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
 err.data.UserMessage</li>
 </ul>
 <p>Success promise return value i.e. response.data is of the following form:
@@ -492,7 +905,102 @@ $scope.fetchSessionInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L476" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L1615" class="view-source icon-eye-open"> </a><h3 id="methods_fetchstdzoom">fetchStdZoom(zoomID, pqOptions)</h3>
+<div class="fetchstdzoom"><h5 id="methods_fetchstdzoom_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>zoomID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchstdzoom-page"><p>Entersoft Public Query GroupID</p>
+</div></td></tr><tr><td>pqOptions</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-fetchstdzoom-page"><p>Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
+pqOptions is a JSON object of the following type:
+ <pre class="prettyprint linenums">
+var pqOptions = {
+    WithCount: boolean,
+    Page: int,
+    PageSize: int
+};
+</pre>
+<ul>
+<li><p>If pqOptions is null or undefined OR pqOptions.Page is null OR undefined OR NaN OR less than or equal to 0 THEN
+the Public Query will be executed at the Entersoft Application Server with no paging at all, which means that ALL the 
+rows will be returned.</p>
+</li>
+<li><p>If pqOptions is valid and pqOptions.PageSize is null OR undefined OR NaN OR less or equal to 0 THEN 
+the Public Query will be executed with PageSize equal to 20 which is the server&#39;s default</p>
+</li>
+<li><p>If pqOptions is valid and pqOptions.WithCount is true THEN the result will also include the total count of records 
+(no natter what the pagesize is) found in the server for the given Public Query and pqParams supplied for the PQ execution.</p>
+</li>
+<li>If pqOptions is valid and pqOptions.WithCount is false, the result still might contain information about the 
+total records depending on the other parameters. See the return section for detailed information about the returned value.</li>
+</ul>
+</div></td></tr></tbody></table><h5 id="methods_fetchstdzoom_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchstdzoom-page"><p>Returns a promise.</p>
+<ul>
+<li><p>If success i.e. then(function(ret) { ... }) ret.data holds the result of the Zoom Records.
+In any success response, ret.data.Table will hold as string the Public Query MasterTableName as defined through the Entersoft Scroller Designer.
+The response has the typical form as follows:
+<pre class="prettyprint linenums">
+var x = {
+    Table: string, // The name of the standard i.e. in the form ESXXZxxxx provided in the **_zoomID_** parameter
+    Rows: [{Record 1}, {Record 2}, ....], // An array of JSON objects each one representing a record in the form of fieldName: fieldValue
+    Count: int, // In contrast to fetchPublicQuery, for fetchZoom, Count will always have value no matter of the options parameter and fields.
+    Page: int, // If applicable the requested Page Number (1 based), otherwise -1
+    PageSize: int, // If applicable the Number of records in the Page (i.e. less or equal to the requested PageSize) otherwise -1
+}
+</pre>                        </p>
+</li>
+<li><p>If error i.e. function(err) { ... } then err.data contains the Entersoft Application server error object.</p>
+</li>
+</ul>
+</div></td></tr></table><h4 id="methods_fetchstdzoom_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchstdzoom-page"><pre class="prettyprint linenums">
+$scope.fetchStdZoom = function()
+{
+    var zoomOptions = {
+        WithCount: false,
+        Page: 2,
+        PageSize: 5
+
+    };
+    esWebApi.fetchStdZoom($scope.pZoomID, zoomOptions)
+        .then(function(ret) {
+            $scope.pZoomResults = ret.data;
+        }, function(err) {
+            $scope.pZoomResults = err;
+        });
+}
+</pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L1327" class="view-source icon-eye-open"> </a><h3 id="methods_fetchusersites">fetchUserSites(ebsuser)</h3>
+<div class="fetchusersites"><div class="es-services-web-eswebapi-fetchusersites-page"><p>Function that returns ESGOSites of the current ESCompany that the given user has access to
+authorization prior to call</p>
+</div><h5 id="methods_fetchusersites_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>ebsuser</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchusersites-page"><p>The Entersoft Business Suite UserID for whom we want to fetch the ESGOSites of the current ESCompany
+the user has access to.</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchusersites_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchusersites-page"><p>If success i.e. function(ret) { ... } ret.data is an Array of JSON objects representing the ESGOSites user has access to whitin the context of the current ESCompany.
+The return object has the following structure:
+<pre class="prettyprint linenums">
+var UserSite = {
+    Key: string,  // The ESGOSite Code i.e. "ΑΘΗ",
+    Value: string // The ESGOSite Description i.e. "Κεντρικά Entersoft" 
+};
+</pre>
+</div></td></tr></table><h4 id="methods_fetchusersites_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchusersites-page"><pre class="prettyprint linenums">
+$scope.fetchUserSites = function()
+{
+    esWebApi.fetchUserSites($scope.pUser)
+        .then(function(ret) {
+            $scope.pUserSites = ret.data;
+        }, function(err) {
+            $scope.pUserSites = err;
+        });
+}
+
+// results based on EBS Demo fetchUserSites("esmaster") =&gt;
+// ret.data ===&gt; [{"Key":"ΑΘΗ","Value":"Κεντρικά Entersoft"},{"Key":"ΘΕΣ","Value":"Υποκατάστημα Θεσσαλονίκης ES"}]
+</pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L477" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
 <div class="logout"><div class="es-services-web-eswebapi-logout-page"><p>Function that performs a web session logout. As a result of calling this function, all internal state
 related to the current web session, if any, is cleaned-up and no valid web session is available. The application/user must login again through openSession
 in order to be able to call any Entersoft WEB API autheticated method or service.</p>
@@ -508,7 +1016,7 @@ $scope.doLogout = function ()
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a3104ad/src/js/eswebservices.js#L428" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/bc5c822/src/js/eswebservices.js#L429" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
 <div class="opensession"><div class="es-services-web-eswebapi-opensession-page"><p>this is a descr</p>
 </div><h5 id="methods_opensession_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>credentials</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-opensession-page"><p>Entersoft Business Suite login credentials in the form of a JSON object with the following form:
 <pre class="prettyprint linenums">
@@ -519,11 +1027,14 @@ var credentials  = {
    LangID: "el-GR"
 }
 </pre>
-</div></td></tr></tbody></table><h5 id="methods_opensession_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-opensession-page"><p>Returns a promise. If success i.e. success(function(ret) {...}) the response ret is a JSON object that holds the current web session
+</div></td></tr></tbody></table><h5 id="methods_opensession_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-opensession-page"><p>Returns a promise.</p>
+<ul>
+<li>If success i.e. success(function(ret) {...}) the response ret is a JSON object that holds the current web session
 properties. In an Entersoft AngularJS SPA typical template, upon successful login i.e. openSession, the response object is stored
 in the browser&#39;s local storage and in most of the cases the developer will not need to use or retrieve it manually. It is up to
 Entersoft AngularJS WEB API calls that need the access token in order to access the Web API services and methods to retrieve it from the 
-local storage.</p>
+local storage.</li>
+</ul>
 <p>A success response object has the following form:
 <pre class="prettyprint linenums">
 var rep = {

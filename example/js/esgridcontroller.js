@@ -167,6 +167,81 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                 });
         }
 
+        //fetchODSColumnInfo example
+        $scope.fetchOdsColumnInfo = function() {
+            esWebApi.fetchOdsColumnInfo($scope.odsID, $scope.odsColumnID)
+                .then(function(ret) {
+                    $scope.pColumnInfo = ret.data;
+                }, function(err) {
+                    $scope.pColumnInfo = err;
+                });
+        }
+
+        //fetchOdsRelationInfo example
+        $scope.fetchOdsRelationInfo = function() {
+            esWebApi.fetchOdsRelationInfo($scope.odsID)
+                .then(function(ret) {
+                    $scope.pRelationInfo = ret.data;
+                }, function(err) {
+                    $scope.pRelationInfo = err;
+                });
+        }
+
+        //fetchOdsMasterRelationsInfo example
+        $scope.fetchOdsMasterRelationsInfo = function() {
+            esWebApi.fetchOdsMasterRelationsInfo($scope.odsID, $scope.odsColumnID)
+                .then(function(ret) {
+                    $scope.pRelationInfo = ret.data;
+                }, function(err) {
+                    $scope.pRelationInfo = err;
+                });
+        }
+
+        //fetchOdsDetailRelationsInfo example
+        $scope.fetchOdsDetailRelationsInfo = function() {
+            esWebApi.fetchOdsDetailRelationsInfo($scope.odsID, $scope.odsColumnID)
+                .then(function(ret) {
+                    $scope.pRelationInfo = ret.data;
+                }, function(err) {
+                    $scope.pRelationInfo = err;
+                });
+        }
+
+        $scope.fetchServerCapabilities = function()
+        {
+            esWebApi.fetchServerCapabilities()
+                .then(function(ret) {
+                    $scope.pSrvCapabilities = ret;
+                }, function(err) {
+                    $scope.pSrvCapabilities = err;
+                });
+        }
+
+        $scope.fetchUserSites = function()
+        {
+            esWebApi.fetchUserSites($scope.pUser)
+                .then(function(ret) {
+                    $scope.pUserSites = ret.data;
+                }, function(err) {
+                    $scope.pUserSites = err;
+                });
+        }
+
+        $scope.fetchStdZoom = function()
+        {
+            var zoomOptions = {
+                WithCount: false,
+                Page: 300,
+                PageSize: 5
+
+            };
+            esWebApi.fetchStdZoom($scope.pZoomID, zoomOptions)
+                .then(function(ret) {
+                    $scope.pZoomResults = ret.data;
+                }, function(err) {
+                    $scope.pZoomResults = err;
+                });
+        }
 
         //logout sample
         $scope.doLogout = function() {
