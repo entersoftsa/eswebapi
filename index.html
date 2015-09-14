@@ -18,7 +18,7 @@
     // before the base attribute is added, causing 404 and terribly slow loading of the docs app.
     (function() {
       var indexFile = (location.pathname.match(/\/(index[^\.]*\.html)/) || ['', ''])[1],
-          origin, baseUrl, rUrl = /(\/?#!\/.*|\/(api)\/?(\?.*)*|\/index[^\.]*\.html.*)$/,
+          origin, baseUrl, rUrl = /(\/?#!\/.*|\/(api|installation)\/?(\?.*)*|\/index[^\.]*\.html.*)$/,
           headEl = document.getElementsByTagName('head')[0],
           sync = true;
 
@@ -98,13 +98,13 @@
             
               <a href="http://www.entersoft.eu">
             
-              <img class="pull-left" src="grunt-styles/src/assets/logo.png">
+              <img class="pull-left" src="grunt-styles/src/content/assets/logo.png">
             
               </a>
             
           
           
-            <a  class="brand">Entersoft AngularJS Web API Documentation</a>
+            <a  href="#/api"  class="brand">Entersoft AngularJS Web API Documentation</a>
           
           <ul class="nav">
             <li ng-repeat="(url, name) in sections" ng-class="{active: isActivePath(url)}">
@@ -145,8 +145,16 @@
       <div class="span3">
         <form class="form-search" ng-submit="submitForm()">
           
-          <input type="text" ng-model="search" placeholder="search the docs"
-                 tabindex="1" accesskey="s" class="search-query">
+          <div class="dropdown search"
+               ng-class="{open: focused && bestMatch.rank > 0 && bestMatch.page != currentPage}">
+            <input type="text" ng-model="search" placeholder="search the docs"
+                   tabindex="1" accesskey="s" class="search-query" focused="focused">
+            <ul class="dropdown-menu">
+              <li>
+                <a href="{{bestMatch.page.url}}">{{bestMatch.page.shortName}}</a>
+              </li>
+            </ul>
+          </div>
           
           <div class="spacer"></div>
 

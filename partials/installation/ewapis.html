@@ -1,0 +1,106 @@
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/content/installation/ewapis.ngdoc" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="entersoft-web-api-server-page"><p>The latest version of Entersoft WEB API Server (EWAPIS) can be found on GitHub at: <a href="https://github.com/entersoftsa/eswebapiserver">ES WEB API Server</a>.</p>
+<h3 id="installation-requirements">Installation Requirements</h3>
+<ol>
+<li>Microsoft Windows (Windows 7, Windows 8.1, Windows 10, Windows Servers Family)</li>
+<li>Microsoft Internet Information Server (MS IIS) 64-bit version 7.5 or higher. It is recommended to use IIS 8.0 or IIS 10.0</li>
+<li>Prior to start installation please make sure that you have added all the Application Development Features of IIS as shown in the screenshot below:
+<img src="images/installation/01windowsfeatures.png" alt="Turn On Windows Features"></li>
+</ol>
+<h3 id="installation-instructions">Installation Instructions</h3>
+<ol>
+<li>Download Entersoft WEB API Server from GitHub: <a href="https://github.com/entersoftsa/eswebapiserver">ES WEB API Server</a>.</li>
+<li>Open IIS Manager</li>
+<li>Go to the node “Default Web Site” and choose Deploy -&gt; Import Application<h3 id=""><img src="images/installation/02webapi.png" alt="Import Application"></h3>
+</li>
+<li>Select the zip file that you downloaded from Step 1.
+<img src="images/installation/03webapi.png" alt="Import Application">  </li>
+<li>Press Next 
+<img src="images/installation/04webapi.png" alt="Import Application"> </li>
+<li>Press Next (or if you are an expericened user, select Advanced Settings to configure the web site)</li>
+<li>Enter the name of the web site that will expose the Entersoft WEB API service
+<img src="images/installation/05webapi.png" alt="Import Application"> </li>
+<li>Press Next and the installation will begin</li>
+<li>After successful installation the IIS Manager will have the new application added under the Default Web Site as shown in the picture:<h3 id=""><img src="images/installation/06webapi.png" alt="Import Application"> </h3>
+<strong>Note:</strong></li>
+<li>If you are installing the Entersoft WEB API Server on top of an existing application, you will be prompted to specify whether you want a fresh install i.e. remove all existing files first and then install the application, or an update that will leave intact any unnecessary files i.e. not included in the zip being installed.</li>
+<li>If it is a fresh install or a fresh re-install, the directory App_Data might not exist and you will create at the next steps. This directory contains all instance related configuration files and settings and thus is never part of the product installation, otherwise your contents will be overwritten on your next update.</li>
+<li>Once installed, right-click on the eswebapi application and choose explore in order to go to the directory where the eswebapi is installed. If the directory App_Data does not exist, create it with the exact name. Copy the file “configSample.json” found in the application’s directory into the App_Data directory and rename it to config.json. So the directory structure would look like as in the picture below:
+<img src="images/installation/07webapi.png" alt="Import Application"></li>
+<li><p>Edit the file _App<em>Data\config.json</em> in order to register the Entersoft Application Server(s) that this WEB API Server will serve. For a single EAS the settings will be as following</p>
+<pre><code class="lang-js">{
+&quot;TokenLifetimeInMinutes&quot;: 100,
+&quot;AdminPassword&quot;: &quot;4T0WVxO/s4A=&quot;,
+&quot;AllowInsecureHttp&quot;:  true,
+
+&quot;Subscriptions&quot;: [
+ {
+     &quot;SubscriptionID&quot;: &quot;&quot;,
+     &quot;SubscriptionPassword&quot;: &quot;CgJHAQYVg+iChKZvXcEKHA==&quot;,
+     &quot;Bridges&quot;: [
+         {
+             &quot;BridgeID&quot;: &quot;&quot;,
+             &quot;DatabaseID&quot;: &quot;ES&quot;,
+             &quot;CompanyID&quot;: &quot;ES&quot;,
+             &quot;DefaultUserCredentials&quot;: {
+                 &quot;UserID&quot;: &quot;sme&quot;,
+                 &quot;Password&quot;: &quot;4T0WVxO/s4A=&quot;,
+                 &quot;BranchID&quot;: &quot;ΑΘΗ&quot;,
+                 &quot;LangID&quot;: &quot;el-GR&quot;
+             },
+             &quot;Services&quot;: [
+                 {
+                     &quot;ServiceID&quot;: &quot;&quot;
+                 }
+             ],
+             &quot;ERPServers&quot;: [
+                 {
+                     &quot;Host&quot;: &quot;127.0.0.1&quot;,
+                     &quot;Port&quot;: 8888
+                 }
+             ]
+         }
+     ]
+ }
+]
+}
+</code></pre>
+<h2 id="config-file">Config file</h2>
+</li>
+</ol>
+<p><strong>TokenLifetimeInMinutes</strong> is the number in minutes that the generated token will be valid. After that period of time the token will expire and any subsequent calls using this access token will be denied. It should be greater or equal to 1.</p>
+<p><strong>AdminPassword</strong></p>
+<p><strong>AllowInsecureHttp</strong> if set to true, this instance of the EWAPIS will respond to calls through plain HTTP, otherwise HTTPS (secure HTTP) will be required and no calls (except one that queries the EWAPIS for its capabilities) will be accepted unless they are under https. If in a production environment the use of HTTPS is strongly recommended because sensitive information could be travelling between the client and the server. In order to deploy an HTTPS solution you will need a valid certificate to be installed on the IIS Server, issued by one of the valid and trusted security authorities (VeriSign, GoDaddy, etc.). In case that for any reason you want to bypass the HTTPS requirement, it is strongly recommended to go for alternative solutions in order to secure the communication between the client and the EWAPIS such as VPN, IP security firewalls, etc., assuming that we are referring to intranet applications – clients that are well known to the system and the access can be controlled.</p>
+<p>An instance of EWAPIS can serve one or more EAS either of the same Tax Accounting Entity or of different entities (multi-tenant mode). Each EAS should be registered in the config.json file. For this registration we encounter the following concepts / nodes:</p>
+<ul>
+<li>A list of Subscriptions.</li>
+<li>Each Subscription has <strong>SubscriptionID</strong> which must be unique and a hashed value for a password stored in the <strong>SubscriptionPassword</strong> field.</li>
+<li>Each Subscription has a list of Bridges that represent a specific connections to an EAS under a unique combination of DatabaseID and CompanyID as specified in the EAS.</li>
+<li>Each Bridge has the following attributes that need to be specified:</li>
+<li><strong>BridgeID</strong> a unique identifier for the specific Bridge</li>
+<li><strong>DatabaseID</strong> the EBS database id as specified in the ESDBDEF.XML found in the $\CSConfig directory of the EAS. This is equivalent to the DatabaseID a user selects in the EBS ESMainApp.EXE full login dialog.</li>
+<li><strong>CompanyID</strong> the EBS Company that this bridge connects to within the companies registered in the DatabaseID. This is equivalent to the CompanyID a user selects in the EBS ESMainApp.EXE full login dialog.</li>
+<li><strong>DefaultUserCredentials</strong> Depending on the user login mode that will be selected at the WEB API client application (ERP Mode, Impersonation Mode, B2C mode) the EWAPIS needs to have registered a valid EBS User so that this user will be used by the EWAPIS either at the Impersonation Mode as well as for any operation that can be executed against the EAS without any prior user login (e.g. FetchUserSites). </li>
+</ul>
+<p><strong>Note:</strong>
+Typically, this user should be an administrator but for security and audit trail purposes it is strongly recommended this user not be the default admin users found in any EBS installation such as “esmaster”, “admin”. It is strongly recommended the Sys Admin of EBS installation to create a new user e.g. eswebapi with a strong password and give this user access to all companies and branches from within the EBS User Management screens (for more information please refer to the EBS Manual). In case that you need more elaborate audit trail from all the EWAPIS calls against a specific DatabaseID / CompanyID defined in a Bridge instance, it is recommended to create different EBS users for each specific BridgeID. DefaultUserCredentials include the following attributes need to be specified as in a typical EBS ESMainApp.EXE full login dialog:</p>
+<ul>
+<li><strong>UserID</strong></li>
+<li><strong>Password</strong> this the hashed value stored in the database under the ESGOUser Table in the corresponding record.</li>
+<li><strong>BranchID</strong></li>
+<li><strong>LangID</strong></li>
+<li><strong>Services</strong> Each Bridge can support any number of services i.e. Applications (RFA, Expenses, etc). Every WEB API client connects to the EWAPIS in the context of a specific Service. This version of EWAPIS does not fully support Services, so it is recommended to leave this section as in the template.</li>
+<li><strong>ERPServers</strong> Each Bridge should have at least one or more EAS servers that should be registered under the ERPServers section. Should more than one ERPServers are declared then these servers are required to fully support the DatabaseID, CompanyID and DefaultCredentials that specified under the Bridge definition and will be used in a Round-Robin form for Load Balancing and Fault Tolerant access to the services.</li>
+<li><strong>HostID</strong> the IP or DNS name of the EAS</li>
+<li><strong>Port</strong> the port to which the given EAS is listening to
+Once config.json is correctly configured you should restart the EWAPI application / site through the IIS Management console and then you can test the connectivity by browsing to the test page:</li>
+</ul>
+<p><img src="images/installation/08webapi.png" alt="Test Site"></p>
+<p>If installed in the localhost then the test page is accessible by any browser by navigating to <a href="http://localhost/eswebapi">http://localhost/eswebapi</a> (where eswebapi is the application name used when installing the EWAPIS)
+<img src="images/installation/09webapi.png" alt="Test Site"></p>
+<p>The General Password refers to the SubscriptionPassword which if left unchanged is <strong><em>passx</em></strong>
+<strong>AllowHTTP</strong> should be clicked in case that you deployed the EWAPIS in a non-secure server i.e. NOT using HTTPS. If everything is OK then you will see the Alert Message “OK” along with the name of the given user.</p>
+</div></div>
