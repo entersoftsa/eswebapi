@@ -9,30 +9,30 @@ The latest version of Entersoft WEB API Server (EWAPIS) can be found on GitHub a
 1. Microsoft Windows (Windows 7, Windows 8.1, Windows 10, Windows Servers Family)
 2. Microsoft Internet Information Server (MS IIS) 64-bit version 7.5 or higher. It is recommended to use IIS 8.0 or IIS 10.0
 3. Prior to start installation please make sure that you have added all the Application Development Features of IIS as shown in the screenshot below:
-![Turn On Windows Features](images/installation/01windowsfeatures.png)
+![Turn On Windows Features](images/installation/01.png)
  
 ## Installation Instructions
 1.	Download Entersoft WEB API Server from GitHub: {@link https://github.com/entersoftsa/eswebapiserver ES WEB API Server}.
 2.	Open IIS Manager
 3.	Go to the node “Default Web Site” and choose Deploy -> Import Application
-![Import Application](images/installation/02webapi.png)
+![Import Application](images/installation/02.png)
 --
 4.	Select the zip file that you downloaded from Step 1.
-![Import Application](images/installation/03webapi.png)  
+![Import Application](images/installation/03.png)  
 5.	Press Next 
-![Import Application](images/installation/04webapi.png) 
+![Import Application](images/installation/04.png) 
 6.	Press Next (or if you are an expericened user, select Advanced Settings to configure the web site)
 7.	Enter the name of the web site that will expose the Entersoft WEB API service
-![Import Application](images/installation/05webapi.png) 
+![Import Application](images/installation/05.png) 
 8.	Press Next and the installation will begin
 9.	After successful installation the IIS Manager will have the new application added under the Default Web Site as shown in the picture:
-![Import Application](images/installation/06webapi.png) 
+![Import Application](images/installation/06.png) 
 --
 **Note:**
 * If you are installing the Entersoft WEB API Server on top of an existing application, you will be prompted to specify whether you want a fresh install i.e. remove all existing files first and then install the application, or an update that will leave intact any unnecessary files i.e. not included in the zip being installed.
 * If it is a fresh install or a fresh re-install, the directory App_Data might not exist and you will create at the next steps. This directory contains all instance related configuration files and settings and thus is never part of the product installation, otherwise your contents will be overwritten on your next update.
 10.	Once installed, right-click on the eswebapi application and choose explore in order to go to the directory where the eswebapi is installed. If the directory App_Data does not exist, create it with the exact name. Copy the file “configSample.json” found in the application’s directory into the App_Data directory and rename it to config.json. So the directory structure would look like as in the picture below:
-![Import Application](images/installation/07webapi.png)
+![Import Application](images/installation/07.png)
 11.	Edit the file _App_Data\config.json_ in order to register the Entersoft Application Server(s) that this WEB API Server will serve. For a single EAS the settings will be as following
 ```js
 {
@@ -102,10 +102,10 @@ Typically, this user should be an administrator but for security and audit trail
 * **Port** the port to which the given EAS is listening to
 Once config.json is correctly configured you should restart the EWAPI application / site through the IIS Management console and then you can test the connectivity by browsing to the test page:
 
-![Test Site](images/installation/08webapi.png)
+![Test Site](images/installation/08.png)
  
 If installed in the localhost then the test page is accessible by any browser by navigating to http://localhost/eswebapi (where eswebapi is the application name used when installing the EWAPIS)
-![Test Site](images/installation/09webapi.png)
+![Test Site](images/installation/09.png)
 
 The General Password refers to the SubscriptionPassword which if left unchanged is **_passx_**
 **AllowHTTP** should be clicked in case that you deployed the EWAPIS in a non-secure server i.e. NOT using HTTPS. If everything is OK then you will see the Alert Message “OK” along with the name of the given user.

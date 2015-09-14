@@ -8,28 +8,28 @@
 <li>Microsoft Windows (Windows 7, Windows 8.1, Windows 10, Windows Servers Family)</li>
 <li>Microsoft Internet Information Server (MS IIS) 64-bit version 7.5 or higher. It is recommended to use IIS 8.0 or IIS 10.0</li>
 <li>Prior to start installation please make sure that you have added all the Application Development Features of IIS as shown in the screenshot below:
-<img src="images/installation/01windowsfeatures.png" alt="Turn On Windows Features"></li>
+<img src="images/installation/01.png" alt="Turn On Windows Features"></li>
 </ol>
 <h3 id="installation-instructions">Installation Instructions</h3>
 <ol>
 <li>Download Entersoft WEB API Server from GitHub: <a href="https://github.com/entersoftsa/eswebapiserver">ES WEB API Server</a>.</li>
 <li>Open IIS Manager</li>
-<li>Go to the node “Default Web Site” and choose Deploy -&gt; Import Application<h3 id=""><img src="images/installation/02webapi.png" alt="Import Application"></h3>
+<li>Go to the node “Default Web Site” and choose Deploy -&gt; Import Application<h3 id=""><img src="images/installation/02.png" alt="Import Application"></h3>
 </li>
 <li>Select the zip file that you downloaded from Step 1.
-<img src="images/installation/03webapi.png" alt="Import Application">  </li>
+<img src="images/installation/03.png" alt="Import Application">  </li>
 <li>Press Next 
-<img src="images/installation/04webapi.png" alt="Import Application"> </li>
+<img src="images/installation/04.png" alt="Import Application"> </li>
 <li>Press Next (or if you are an expericened user, select Advanced Settings to configure the web site)</li>
 <li>Enter the name of the web site that will expose the Entersoft WEB API service
-<img src="images/installation/05webapi.png" alt="Import Application"> </li>
+<img src="images/installation/05.png" alt="Import Application"> </li>
 <li>Press Next and the installation will begin</li>
-<li>After successful installation the IIS Manager will have the new application added under the Default Web Site as shown in the picture:<h3 id=""><img src="images/installation/06webapi.png" alt="Import Application"> </h3>
+<li>After successful installation the IIS Manager will have the new application added under the Default Web Site as shown in the picture:<h3 id=""><img src="images/installation/06.png" alt="Import Application"> </h3>
 <strong>Note:</strong></li>
 <li>If you are installing the Entersoft WEB API Server on top of an existing application, you will be prompted to specify whether you want a fresh install i.e. remove all existing files first and then install the application, or an update that will leave intact any unnecessary files i.e. not included in the zip being installed.</li>
 <li>If it is a fresh install or a fresh re-install, the directory App_Data might not exist and you will create at the next steps. This directory contains all instance related configuration files and settings and thus is never part of the product installation, otherwise your contents will be overwritten on your next update.</li>
 <li>Once installed, right-click on the eswebapi application and choose explore in order to go to the directory where the eswebapi is installed. If the directory App_Data does not exist, create it with the exact name. Copy the file “configSample.json” found in the application’s directory into the App_Data directory and rename it to config.json. So the directory structure would look like as in the picture below:
-<img src="images/installation/07webapi.png" alt="Import Application"></li>
+<img src="images/installation/07.png" alt="Import Application"></li>
 <li><p>Edit the file _App<em>Data\config.json</em> in order to register the Entersoft Application Server(s) that this WEB API Server will serve. For a single EAS the settings will be as following</p>
 <pre><code class="lang-js">{
 &quot;TokenLifetimeInMinutes&quot;: 100,
@@ -98,9 +98,9 @@ Typically, this user should be an administrator but for security and audit trail
 <li><strong>Port</strong> the port to which the given EAS is listening to
 Once config.json is correctly configured you should restart the EWAPI application / site through the IIS Management console and then you can test the connectivity by browsing to the test page:</li>
 </ul>
-<p><img src="images/installation/08webapi.png" alt="Test Site"></p>
+<p><img src="images/installation/08.png" alt="Test Site"></p>
 <p>If installed in the localhost then the test page is accessible by any browser by navigating to <a href="http://localhost/eswebapi">http://localhost/eswebapi</a> (where eswebapi is the application name used when installing the EWAPIS)
-<img src="images/installation/09webapi.png" alt="Test Site"></p>
+<img src="images/installation/09.png" alt="Test Site"></p>
 <p>The General Password refers to the SubscriptionPassword which if left unchanged is <strong><em>passx</em></strong>
 <strong>AllowHTTP</strong> should be clicked in case that you deployed the EWAPIS in a non-secure server i.e. NOT using HTTPS. If everything is OK then you will see the Alert Message “OK” along with the name of the given user.</p>
 </div></div>
