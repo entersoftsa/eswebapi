@@ -1,0 +1,12 @@
+@ngdoc overview
+@name Entersoft Application Server
+@sortOrder 100
+@description
+
+# Entersoft Application Server
+
+In case that you lack of access to a development environment of Entersoft Business Suite (EBS) you may download a demo version of EBS found in {@link http://www.entersoft.eu/Demos/Entersoft-showcase-download-demos Entersoft Business Suite Demo}. The demo installs all the necessary components and subsystems for EBS to work either in all in one PC / Server or in a distributed architecture. A demo database is also a part of the installation as well as a Startup DB. While in demo mode, EBS is fully functional with limitations on the number of records you may create. Should an SQL Server installation is not available you may download the Express Edition of SQL Server 2014 from Microsoft’s Site {@link http://www.microsoft.com/en-us/download/details.aspx?id=42299 SQL Express}.
+
+**ATTENTION**
+--
+In case you have access to a production environment of EBS, it is strongly recommended to create a development environment either on a side-by-side architecture to your production environment or by installing a local instance of EBS in your development PC.

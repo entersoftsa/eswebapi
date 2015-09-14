@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v0.0.1 - 2015-09-10
+/*! Entersoft Application Server WEB API - v0.0.1 - 2015-09-14
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -16,9 +16,6 @@
  * @kind module
  * @description
  * This module encapsulates the services, providers, factories and constants for the **Entersoft AngularJS WEB API**
- * The main functions provided are:
- ** a()
- ** b()
  */
 
 (function() {
@@ -238,6 +235,9 @@
                         }
 
                         function execScroller(apiUrl, groupID, filterID, params) {
+                            groupID = groupID ? groupID.replace(/ /g, "") : "";
+                            filterID = filterID ? filterID.replace(/ /g, "") : "";
+
                             var surl = urlWEBAPI.concat(apiUrl, groupID, "/", filterID);
                             var tt = esGlobals.trackTimer("SCR", "FETCH", groupID.concat("/", filterID));
                             tt.startTime();
@@ -268,7 +268,27 @@
                         }
 
                         return {
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#getServerUrl
+                             * @methodOf es.Services.Web.esWebApi
+                             * @module es.Services.Web
+                             * @kind function
+                             * @description Function that returns the full URL to the Entersoft WEB API Server as it has been resolved 
+                             * according to the configuration of the esWebApiProvider at the provider's configuration function of the AngularJS application.
+                             * For more information, please  
+                             * @return {string} The URL to the Entersoft WEB API Server
+                             * @example
+<pre>
+// getServerUrl
 
+var sUrl = esWebApi.getServerUrl();
+alert(sUrl);
+
+// i.e. http://localhost/eswebapi/ (if allowUnsecureConnection configuration setting of the esWebApiProvider is true)
+// i.e. https://localhost/eswebapi/ (if allowUnsecureConnection configuration setting of the esWebApiProvider is false)
+</pre>
+                             **/
                             getServerUrl: function() {
                                 return urlWEBAPI;
                             },
@@ -277,18 +297,20 @@
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#openSession
                              * @methodOf es.Services.Web.esWebApi
-                             * @description this is a descr
+                             * @description This is the function that enables for login and connect through the Entersoft WEB API Server to the Entersoft Application Server.
+                             * The vast majority of the esWebApi service methods **REQUIRE** for an authorization token in order to be executed. This Authorization token is obtained 
+                             * through a successfull call of the **__openSession__**  function and it is implicitly stored and managed by the esWebApi for its complete lifecycle.
                              * @module es.Services.Web
                              * @kind function
                              * @param {object} credentials Entersoft Business Suite login credentials in the form of a JSON object with the following form:
-                             <pre>
+                             ```js
                              var credentials  = {
                                 UserID: "xxxx", //Entersoft User id 
                                 Password: "this is my password", // Entersoft User's password
                                 BranchID: "Branch", // a valid Branch that the user has access rights and will be used as default for all operations requiring a BranchID
                                 LangID: "el-GR"
                              }
-                             </pre>
+                             ```
                              * @return {httpPromise} Returns a promise.
                              ** If success i.e. success(function(ret) {...}) the response ret is a JSON object that holds the current web session
                              * properties. In an Entersoft AngularJS SPA typical template, upon successful login i.e. openSession, the response object is stored
@@ -462,7 +484,7 @@ $scope.doLogin = function() {
                              * @name es.Services.Web.esWebApi#logout
                              * @methodOf es.Services.Web.esWebApi
                              * @description Function that performs a web session logout. As a result of calling this function, all internal state
-                             * related to the current web session, if any, is cleaned-up and no valid web session is available. The application/user must login again through openSession
+                             * related to the current web session, if any, is cleaned-up and no valid web session is available. The application/user must login again through {@link es.Services.Web.esWebApi#methods_opensession openSession}
                              * in order to be able to call any Entersoft WEB API autheticated method or service.
                              * @module es.Services.Web
                              * @kind function
@@ -1284,15 +1306,249 @@ $scope.fetchServerCapabilities = function()
                                 return defered.promise;
                             },
 
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchScroller
+                             * @methodOf es.Services.Web.esWebApi
+                             * @description Function that returns the results of the execution of an Entersoft Scroller (simple or hierarchical) in JSON format
+                             * @module es.Services.Web
+                             * @kind function
+                             * @param {string} groupID Entersoft Scroller GroupID
+                             * @param {string} filterID Entersoft Scroller FilterID
+                             * @param {object} params pqParams Parameters that will be used for the execution of the Scroller at the Entersoft Application Server
+                             * The typical structure of the params object is:
+<pre>
+var pqParams = {
+    Name: "a*",
+    RegDate: "ESDateRange(Day)"
+};
+</pre>
+                             * params is a typical JSON object of key: value properties, where key is the parameter name as defined in the Scroller 
+                             * (through Entersoft Scroller Designer) and value is an Entersoft Application server acceptable value for the given parameter, depending on the
+                             * parameter type and properties as defined in the Scroller (through Entersoft Scroller Designer)
+                             *
+                             ** If params is null or undefined or empty object i.e. {} THEN the Scroller will be executed by the Entersoft Application Server
+                             * with all parameters assigned the value null.
+                             *
+                             ** If params is not null and some parameters are specified THEN all the parameters that are not explicitly assigned a value i.e. are missing or are null or undefined in the params object 
+                             * at the execution time will be treated by the Entersoft Application Server as having null value.
+                             * @return {httpPromise} Returns a promise. 
+                             ** If success i.e. function(ret) { ...} ret.data contains the JSON object of the results of tables and records in the following form:
+<pre>
+var scrollerRet = {
+    DatasetTable1: [
+        {
+         Field_1: value1,
+         ...
+         Field_N: valueN
+        } // Row 1,
+        ...
+        {
+        Field_1: value1,
+         ...
+         Field_N: valueN
+        } // Row N
+    ],
+    ...
+    DatasetTableY: [
+        {
+         Field_1: value1,
+         ...
+         Field_N: valueN
+        } // Row 1,
+        ...
+        {
+        Field_1: value1,
+         ...
+         Field_Z: valueZ
+        } // Row K
+    ]
+};
+</pre>
+                            ** If error i.e. function(err) { ... } err contains the server error oject in JSON Format.
+                            *@example
+<pre>
+// fetchScroller sample
+$scope.fetchScroller = function() {
+     var scroller_params = {
+        Name: "a*"
+    };
+    esWebApi.fetchScroller($scope.pGroup, $scope.pFilter, scroller_params)
+        .then(function(ret) {
+                $scope.pScrollerResults = ret.data;
+                $log.info(ret);
+            },
+            function(err) {
+                $scope.pScrollerResults = ret;
+                $log.error(err);
+            });
+}
+</pre>
+                            * The result for fetchScroller("ESGOPerson", "PersonList", scroller_Params) has the following format:
+<pre>
+var scrollerResults = {
+    "ESGOPerson": [{
+        "GID": "d4b166f4-417d-46b8-8459-1d11d81f4aff",
+        "Code": "0000026",
+        "Name": "AGROSKY A.E.",
+        "Description1": "Εμπόριο Αγροτικών Προϊόντων",
+        "TaxRegistrationNumber": "094123469",
+        "Code5": "1",
+        "Address1": "ΑΝΔΡΕOY 212",
+        "fPostalCode": "30300",
+        "fCityCode": "ΝΑΥΠΑΚΤΟΣ",
+        "Area": "ΑΙΤΩΛΟΑΚΑΡΝΑΝΙΑΣ",
+        "Code7": "010",
+        "Description5": "ΔΥΤΙΚΗ ΣΤΕΡΕΑ / ΛΕΥΚΑΔΑ",
+        "Telephone1": "2310-804858",
+        "Code8": "ΣΥΝΕΡΓΑΤΗΣ",
+        "Description6": "ΣΥΝΕΡΓΑΤΗΣ",
+        "Code9": "ΥΠΗΡΕΣΙΕΣ",
+        "Description7": "ΥΠΗΡΕΣΙΕΣ",
+        "EMailAddress": "info@agrosky.gr"
+    }, 
+    // ...
+    {
+        "GID": "ee80474d-0f07-48df-b8e0-b47d58d9e9ba",
+        "Code": "0000003",
+        "Name": "AMY Α.Ε.",
+        "Description1": "Εμπόριο - Διανομή Ποτών & Αναψυκτικών",
+        "TaxRegistrationNumber": "094123478",
+        "Code5": "2",
+        "Address1": "ΧΟΛΑΡΓΟΥ 34",
+        "fPostalCode": "10437",
+        "fCityCode": "ΑΘΗΝΑ",
+        "Area": "ΟΜΟΝΟΙΑ",
+        "Code7": "001",
+        "Description5": "ΑΘΗΝΑ - ΠΡΟΑΣΤΙΑ",
+        "Telephone1": "23210-24680",
+        "Code8": "ΠΕΛΑΤΕΣ",
+        "Description6": "ΠΕΛΑΤΕΣ",
+        "Code9": "BIOMHXANIA",
+        "Description7": "BIOMHXANIA",
+        "EMailAddress": "info@elma.gr"
+    }]
+};
+</pre>
+                            **/
                             fetchScroller: function(groupID, filterID, params) {
                                 return execScroller(ESWEBAPI_URL.__SCROLLER__, groupID, filterID, params);
                             },
 
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchSimpleScrollerRootTable
+                             * @methodOf es.Services.Web.esWebApi
+                             * @description Function that returns the data of the defined MasterTable for an Entersoft Scroller (simple or hierarchical) in JSON format.
+                             * It is very similar to fetchScroller function with the **MAIN** difference that it only returns the data for the **MASTER Table** as
+                             * defined by the creator at the Scroller Definition
+                             * @module es.Services.Web
+                             * @kind function
+                             * @param {string} groupID Entersoft Scroller GroupID
+                             * @param {string} filterID Entersoft Scroller FilterID
+                             * @param {object} params pqParams Parameters that will be used for the execution of the Scroller at the Entersoft Application Server
+                             * The typical structure of the params object is:
+<pre>
+var pqParams = {
+    Name: "a*",
+    RegDate: "ESDateRange(Day)"
+};
+</pre>
+                             * params is a typical JSON object of key: value properties, where key is the parameter name as defined in the Scroller 
+                             * (through Entersoft Scroller Designer) and value is an Entersoft Application server acceptable value for the given parameter, depending on the
+                             * parameter type and properties as defined in the Scroller (through Entersoft Scroller Designer)
+                             *
+                             ** If params is null or undefined or empty object i.e. {} THEN the Scroller will be executed by the Entersoft Application Server
+                             * with all parameters assigned the value null.
+                             *
+                             ** If params is not null and some parameters are specified THEN all the parameters that are not explicitly assigned a value i.e. are missing or are null or undefined in the params object 
+                             * at the execution time will be treated by the Entersoft Application Server as having null value.
+                             * @return {httpPromise} Returns a promise. 
+                             ** If success i.e. function(ret) { ...} ret.data contains the **array** of the JSON objects that represent the records of the Master Table. Result has the following form:
+<pre>
+var simpleRootTablescrollerRet = [
+        {
+         Field_1: value1,
+         ...
+         Field_N: valueN
+        } // Row 1,
+        ...
+        {
+        Field_1: value1,
+         ...
+         Field_N: valueN
+        } // Row N
+    ];
+</pre>
+                            ** If error i.e. function(err) { ... } err contains the server error oject in JSON Format.
+                            *@example
+<pre>
+// fetchSimpleScrollerRootTable sample
+$scope.fetchSimpleScrollerRootTable = function() {
+     var scroller_params = {
+        Name: "a*"
+    };
+    esWebApi.fetchSimpleScrollerRootTable($scope.pGroup, $scope.pFilter, scroller_params)
+        .then(function(ret) {
+                $scope.pScrollerResults = ret.data;
+                $log.info(ret);
+            },
+            function(err) {
+                $scope.pScrollerResults = ret;
+                $log.error(err);
+            });
+}
+</pre>
+                            * The result for fetchSimpleScrollerRootTable("ESGOPerson", "PersonList", scroller_Params) has the following format:
+<pre>
+var simpleRootTable_scrollerResults = [{
+        "GID": "d4b166f4-417d-46b8-8459-1d11d81f4aff",
+        "Code": "0000026",
+        "Name": "AGROSKY A.E.",
+        "Description1": "Εμπόριο Αγροτικών Προϊόντων",
+        "TaxRegistrationNumber": "094123469",
+        "Code5": "1",
+        "Address1": "ΑΝΔΡΕOY 212",
+        "fPostalCode": "30300",
+        "fCityCode": "ΝΑΥΠΑΚΤΟΣ",
+        "Area": "ΑΙΤΩΛΟΑΚΑΡΝΑΝΙΑΣ",
+        "Code7": "010",
+        "Description5": "ΔΥΤΙΚΗ ΣΤΕΡΕΑ / ΛΕΥΚΑΔΑ",
+        "Telephone1": "2310-804858",
+        "Code8": "ΣΥΝΕΡΓΑΤΗΣ",
+        "Description6": "ΣΥΝΕΡΓΑΤΗΣ",
+        "Code9": "ΥΠΗΡΕΣΙΕΣ",
+        "Description7": "ΥΠΗΡΕΣΙΕΣ",
+        "EMailAddress": "info@agrosky.gr"
+    }, 
+    // ...
+    {
+        "GID": "ee80474d-0f07-48df-b8e0-b47d58d9e9ba",
+        "Code": "0000003",
+        "Name": "AMY Α.Ε.",
+        "Description1": "Εμπόριο - Διανομή Ποτών & Αναψυκτικών",
+        "TaxRegistrationNumber": "094123478",
+        "Code5": "2",
+        "Address1": "ΧΟΛΑΡΓΟΥ 34",
+        "fPostalCode": "10437",
+        "fCityCode": "ΑΘΗΝΑ",
+        "Area": "ΟΜΟΝΟΙΑ",
+        "Code7": "001",
+        "Description5": "ΑΘΗΝΑ - ΠΡΟΑΣΤΙΑ",
+        "Telephone1": "23210-24680",
+        "Code8": "ΠΕΛΑΤΕΣ",
+        "Description6": "ΠΕΛΑΤΕΣ",
+        "Code9": "BIOMHXANIA",
+        "Description7": "BIOMHXANIA",
+        "EMailAddress": "info@elma.gr"
+    }];
+</pre>
+                            **/
                             fetchSimpleScrollerRootTable: function(groupID, filterID, params) {
                                 return execScroller(ESWEBAPI_URL.__SCROLLERROOTTABLE__, groupID, filterID, params);
                             },
 
- /**
+                            /**
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#fetchUserSites
                              * @methodOf es.Services.Web.esWebApi
@@ -1637,6 +1893,72 @@ $scope.fetchStdZoom = function()
                              * @methodOf es.Services.Web.esWebApi
                              * @module es.Services.Web
                              * @kind function
+                             * @description fetchPublicQuery is one of the most important functions of the esWebApi Service as it is the most preferable and
+                             * strongly recommended way to get data from the Entersoft Application Server through the Entersoft WEB API Sever.
+                             *
+                             * **Public Queries** is a new Entersoft Data Retrieval component introduced since 4.0.28.0 version of EBS. Public Queries can be defined and managed 
+                             * through the Entersoft Scroller Designer much like the well-know and widely used across all Entersoft Applications ecosystem *Entersoft Scroller*.
+                             * Although, Entersoft Public Queries are very similar in principle and definition to Entersoft Scrollers, they have a completely new implementation and a set of prerequisites
+                             * in order to use and execute them against the Entersoft Application Server.
+                             *
+                             * Public Queries have been designed and developed in order to enable for modern programming, customization and integration with 3rd party systems with respect to: 
+                             * WEB Programming i.e. Ajax calls, JQuery, plain Javascript, AngularJS, node.js, Python, etc. as well as mobile programming in native platforms such as: Microsoft Univeral Applications, Microsoft .NET Framework applications, Xamarin Forms, Xamarin Monotouch, Xamarin Monodroid, Objective C, Java, etc.
+                             * and in general in any Mono (.NET open source platform for Linux and Mac OSx OSs), .NET or javascript based development frameworks.
+                             *
+                             * The main features of Entersoft Public Queries (PQ) compared to Entersoft Scrollers are:
+                             ** **async** PQs are executed asynchronously, by taking full advantage of the **async** capabilities of Microsoft .NET Framework 4.5.1, which is required to be installed and available at the Entersoft Application Server as well as at the Entersoft WEB API Server.
+                             * This feaure allows for greater scalability i.e. greater number of concurrent calls to the Entersoft Application Server, better thread management and better use of server's CPU
+                             * 
+                             ** **server side paging** PQ's fully support first class Microsoft SQL Server server side paging with FAST and cpu and memory OPTIMIZED Transact SQL transformations and Execution.
+                             * PQs require that the underlying Microsoft SQL Server should be SQL Server 2008 R2 or higher with SQL Server 2014 being strongly recommended.
+                             * PQ's Paging allows for variable Page number request of variable PageSize. 
+                             * 
+                             * For example, suppose that we have a large table of ESGOPerson with millions of records 
+                             * and we have defined a Public Query with Parameters such as @Name, @eMail, @City, etc. ORDERED BY the ESGOPerson.FullName. 
+                             * Suppose we want to execute this PQ with no parameter values meaning ALL elgibile records and we want just the data of 6th Page with PageSize of 250 Records.
+                             * Assuming that all prerequisites are met, the PQ will be executed by the Entersoft Application Server aynchronously, getting ONLY the 6th Page of 250 records pagesize. 
+                             * Also interesting, we want a second execution of this PQ for the 37th Page with a PageSize of 1000 Rows. No problem, since, Page and PageSize are variable
+                             * and can take any value in every subsequent call.
+                             * Should this scenario is executed with Entersoft Scroller instead of PQ, we would have a huge burden on the SQL Server to get all millions of records !!! as well as a HUGE XML Dataset in the Entersoft Application Server (possibly an out-of-memory exception) 
+                             * and a couple of memory operations to slice the data to get just the 6th page i.e. out of question !!!
+                             * 
+                             * **IMPORTANT** PQs also allow for ALL data to be returned, i.e. with No Paging at all, if this is what we want. Even in this bad scenario, PQ execution will be orders
+                             * of magnitude BETTER performin in all aspects compared to Scoller execution: FASTER SQL Execution, LESS Memory required, ASYNC App Server Execution, MORE Efficient memory processing (JSON instead of XML).
+                             * Of course, we have to be careful,
+                             * so that we will not overload systems resources (SQL, Entersoft App Server, nework, traffic, bandwidth, Browser's memory etc.). 
+                             * 
+                             ** **Count of Records** PQs no matter whether Paging in taking place or not, allow for the Number of Records that meet the current sql statement (defined by the PQ along with the run-time params) to be returned along with the data.
+                             * The number of records, if requested to be returned, it highly optimized executed by the SQL Server with just one round-trip to the server 
+                             * with no need to re-write or restructure the PQ's defintion. Any transformations are done at run-time atomatically by the Entersoft Query Processor along with 
+                             * the support of the new features of SQL Server, Transact SQL.
+                             * 
+                             ** **JSON format** The default format to which PQ data and results are transformed to and returned to the caller. 
+                             * JSON for this kind of data i.e. records which outperforms in almost any aspect the *DataSet - XML* representation. Most important, PQ's execution 
+                             * is taking advantage of the latest .NET Framework and ADO.NET execution options with ASYNC READERS, ASYNC Streams and StringBuilders in order to 
+                             * construct the JSON result in the most optimal way. **Newtonsoft JSON** .NET library, now 1st class citizen of the .NET Framework, is the core 
+                             * component used for serialization and deserialization of objects in the Entersoft .NET Framework code ecosystem. 
+                             * **ATTENTION** Special consideration and Newtonsoft serialization configuration has taken place in order to properly handle NULL values and DATES.
+                             *
+                             ** **Precompiled SQL** PQ Actual SQL Statement is precompiled and stored at design time, which speeds up the application server PQ execution time as
+                             * the sql statement to be sent to the SQL Server is instantly available. This is in contrast to the Scroller's execution model that requires the SQL Statement 
+                             * to be constructed in every execution.
+                             *
+                             * 
+                             * **Public Query Prerequisites**
+                             ** Entersoft Business Suite, Entersoft Expert, Entersoft CRM family products of version 4.0.28 or later 
+                             ** Microsoft .NET Framework 4.5.1 or later to be installed on the Entersoft Application Server(s) and Entersoft WEB API Server(s)
+                             ** Microsoft SQL Server 2008 R2 or later (Recommended: SQL Server 2014 or later)
+                             ** For Paging to work, the PQ Definition should explicitly contain at least one ORDER BY field
+                             *
+                             * 
+                             * **Public Query Restrictions**
+                             ** Hierarchical Public Queries are NOT SUPPORTED and will not be supported as the are fundamentally against the core concept of the PQ.
+                             * The developer should design its solution in such a way with multiple PQ's i.e. for a Master-Detail old style Hierarchical DataSet OR if its not
+                             * a major overhead to have a PQ for the details including the necessary fields form the Master (verbose). In case that a Hierarchical datase old style 
+                             * result is absolutely necessary, the only choice is to use Scroller instead of Public Query with all the drawbacks.
+                             ** BINARY* type fields are supported BUT not explicitly converted to any web or javascript recommended BASE64 representation. The use of fields of binary type
+                             * in the PQ schema should be extemely rare for many reasons (web performance, security, javascript's limitations & restrictions, etc.).
+                             * 
                              * @param {string} pqGroupID Entersoft Public Query GroupID
                              * @param {string} pqFilterID Entersoft Public Query FilterID
                              * @param {object} pqOptions Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.

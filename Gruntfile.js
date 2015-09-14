@@ -131,6 +131,19 @@ module.exports = function(grunt) {
                     },
                 ],
             },
+            docs_images: {
+                files: [{
+                    cwd: 'src/content/assets/images',
+                    expand: true,
+                    src: ['favicon.ico'],
+                    dest: 'docs/'
+                }, {
+                    cwd: 'src/content/assets/',
+                    expand: true,
+                    src: ['images/**', '!images/favicon.ico'],
+                    dest: 'docs/'
+                }, ],
+            },
             pub_docs: {
                 files: [
                     // includes files within path and its sub-directories
@@ -140,11 +153,11 @@ module.exports = function(grunt) {
                         src: ['**'],
                         dest: '../../docs_eswebapi/eswebapi/'
                     }, {
-                        cwd: 'src/assets',
+                        cwd: 'src/content/assets/',
                         expand: true,
-                        src: ['*.ico'],
+                        src: ['CNAME'],
                         dest: '../../docs_eswebapi/eswebapi/'
-                    }
+                    },
                 ],
             }
         },
@@ -164,17 +177,26 @@ module.exports = function(grunt) {
                     'bower_components/angular/angular.min.js',
                     'bower_components/angular-animate/angular-animate.min.js'
                 ],
+                bestMatch: true,
+                startPage: '/api',
                 title: "Entersoft AngularJS Web API Documentation",
-                image: "src/assets/logo.png",
+                titleLink: "#/api",
+                image: "src/content/assets/logo.png",
                 imageLink: "http://www.entersoft.eu",
                 analytics: {
                     account: 'UA-50505865-6',
-                    domainName: 'entersoft.eu'
+                    domainName: 'entersoft.gr'
                 }
             },
             api: {
-                src: ['src/js/*.js'],
-                title: 'Entersoft WEB API documentation'
+                src: ['src/js/*.js', 'src/content/api/*.ngdoc'],
+                title: 'API Reference'
+            },
+            installation: {
+                src: [
+                    'src/content/installation/*.ngdoc'
+                ],
+                title: 'Installation'
             }
         },
 
@@ -208,10 +230,10 @@ module.exports = function(grunt) {
 
         shell: {
             github_sourcefiles: {
-                command: "git add .&&git commit -m 'auto'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git master"
+                command: "git add --all&&git commit -m 'auto'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git master"
             },
             github_pub_docs: {
-                command: "git add .&&git commit -m 'auto'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git gh-pages",
+                command: "git add --all&&git commit -m 'auto'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git gh-pages",
                 options: {
                     execOptions: {
                         cwd: '../../docs_eswebapi/eswebapi/'
@@ -288,9 +310,9 @@ module.exports = function(grunt) {
     ]);
 
     // doc
-    grunt.registerTask('0doc', ['clean:docs', 'clean:pub_docs', 'ngdocs']);
+    grunt.registerTask('0doc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:docs_images']);
 
     // publish doc
-    grunt.registerTask('publishdoc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:pub_docs', 'prompt:github', 'shell:pub_docs']);
+    grunt.registerTask('publishdoc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:docs_images', 'copy:pub_docs', 'prompt:github', 'shell:pub_docs']);
 
 };

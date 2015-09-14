@@ -207,8 +207,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                 });
         }
 
-        $scope.fetchServerCapabilities = function()
-        {
+        $scope.fetchServerCapabilities = function() {
             esWebApi.fetchServerCapabilities()
                 .then(function(ret) {
                     $scope.pSrvCapabilities = ret;
@@ -217,8 +216,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                 });
         }
 
-        $scope.fetchUserSites = function()
-        {
+        $scope.fetchUserSites = function() {
             esWebApi.fetchUserSites($scope.pUser)
                 .then(function(ret) {
                     $scope.pUserSites = ret.data;
@@ -227,8 +225,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                 });
         }
 
-        $scope.fetchStdZoom = function()
-        {
+        $scope.fetchStdZoom = function() {
             var zoomOptions = {
                 WithCount: false,
                 Page: 300,
@@ -274,6 +271,62 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                         $scope.pCompanyParamsValue = JSON.stringify(err);
                     });
         };
+
+        //generic function for executing esWebApi functions that take no params
+        $scope.voidgeneric = function() {
+
+            var f = esWebApi[$scope.pMethod];
+            if (!f) {
+                $scope.pMethodResults = "Method [" + $scope.pMethod + "] not found";
+                return;
+            }
+
+            var retVal = f();
+            if (retVal.then) {
+                retVal.then(function(x) {
+                        $scope.pMethodResults = x;
+                    },
+
+                    function(err) {
+                        $scope.pMethodResults = JSON.stringify(err);
+                    });
+            } else {
+                $scope.pMethodResults = retVal;
+            }
+
+        };
+
+        // fetchScroller sample
+        $scope.fetchScroller = function() {
+             var scroller_params = {
+                Name: "a*"
+            };
+            esWebApi.fetchScroller($scope.pGroup, $scope.pFilter, scroller_params)
+                .then(function(ret) {
+                        $scope.pScrollerResults = ret.data;
+                        $log.info(ret);
+                    },
+                    function(err) {
+                        $scope.pScrollerResults = ret;
+                        $log.error(err);
+                    });
+        }
+
+        // fetchSimpleScrollerRootTable sample
+        $scope.fetchSimpleScrollerRootTable = function() {
+             var scroller_params = {
+                Name: "a*"
+            };
+            esWebApi.fetchSimpleScrollerRootTable($scope.pGroup, $scope.pFilter, scroller_params)
+                .then(function(ret) {
+                        $scope.pScrollerResults = ret.data;
+                        $log.info(ret);
+                    },
+                    function(err) {
+                        $scope.pScrollerResults = ret;
+                        $log.error(err);
+                    });
+        }
     }
 ]);
 

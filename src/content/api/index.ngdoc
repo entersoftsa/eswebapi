@@ -1,0 +1,7 @@
+@ngdoc overview
+@name API Reference
+@description
+
+# sme AngularJS API Docs
+sme 
+Welcome to the AngularJS API docs page. These pages contain the AngularJS reference materials for version <strong ng-bind="version"></strong>.

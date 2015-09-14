@@ -124,4 +124,37 @@
             <textarea>{{pZoomResults}}</textarea>
         </span>
     </div>
+    <hr/>
+    <div>
+        <h3>15. voidgeneric</h3>
+        <span>
+            <input ng-model="pMethod" placeholder="EBS Zoom ID">
+            <button ng-click="voidgeneric()">voidgeneric</button>
+            <textarea>{{pMethodResults}}</textarea>
+        </span>
+    </div>
+
+    <hr/>
+    <div>
+        <h3>16. fetchScroller</h3>
+        <span>
+            <input type="text" ng-model="pGroup"  placeholder="PQ GroupID">
+            <input type="text" ng-model="pFilter" placeholder="PQ FilterID">
+            <button ng-click="fetchScroller()">fetchScroller</button>
+            <textarea>{{pScrollerResults}}</textarea>
+        </span>
+    </div>
+
+    <hr/>
+    <div>
+        <h3>17. fetchSimpleScrollerRootTable</h3>
+        <span>
+            <input type="text" ng-model="pGroup"  placeholder="PQ GroupID">
+            <input type="text" ng-model="pFilter" placeholder="PQ FilterID">
+            <button ng-click="fetchSimpleScrollerRootTable()">fetchSimpleScrollerRootTable</button>
+            <textarea>{{pScrollerResults}}</textarea>
+        </span>
+    </div>
+
 </div>
+

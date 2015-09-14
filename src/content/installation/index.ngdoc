@@ -1,0 +1,54 @@
+@ngdoc overview
+@name API Installation
+@description
+# Getting Started
+
+This document assumes that you have a fair knowledge on Entersoft Business Suite (EBS), Entersoft Expert (EXP) or Entersoft CRM (CRM). In order to proceed is strongly recommended to have attend the EBS Foundation Seminar so that you have the knowledge required to setup and connect to EBS, design a Scroller, create and execute an automation, and have a decent knowledge on the EBS Object model.
+The Architecture behind the Entersoft WEB API is as following:
+1. Entersoft Application Server(s) - EAS
+2. SQL Server RDBMS - SQLDB
+3. Entersoft WEB API Server (ASP.NET MVC 5 Web Server) - EWAPIS
+4. Entersoft API Clients EAPIC
+
+## 1. ENTERSOFT APPLICATION SERVER(S)
+Entersoft WEB API Server can connect to multiple application servers simultaneously either of load-balancing purposes (in case that all registered application servers serve the same entity – database & company) or for multi-tenant purposes where databases and companies belong to different entities. In order for the EWAPIS to connect to a specific EAS, .NET Remoting over TCP/IP is required to be stablished between the EWAPIS and the EAS and that the designated  host server (IP or DNS name) and the TCP/IP port (specified in the **_$/CSConfig/ES00Server.config_**) should be accessible from the server hosting the EWAPIS:
+
+```xml
+<configuration>
+  <system.runtime.remoting>
+    <application>
+      <channels>
+        <channel ref="tcp" useIPAddress="true" BindTo="127.0.0.1" port="8888">
+          <clientProviders>
+            <formatter ref="binary"></formatter>
+          </clientProviders>
+          <serverProviders>
+            <formatter ref="binary" typeFilterLevel="Full"/>
+          </serverProviders>
+        </channel>
+      </channels>
+    </application>
+    <customErrors mode="off"/>
+  </system.runtime.remoting>
+</configuration>
+```
+EAS can be hosted either on-premises or on the cloud such as Windows Azure VM. In any case you should contact your system IT to configure the firewall or any other system management software that controls access to the internal network resources. The process of registering EAS to be accessed by a specific instance of a EWAPIS is described in the EWAPIS setup and configuration chapter. 
+
+# 2. MICROSOFT SQL SERVER – DATABASE
+Entersoft EBS supports all versions of SQL Server from SQL 2005 and later. However, in order to get access and use the Entersoft Public Queries (EPQ) - the new mechanism introduced since EBS version 4.28) for retrieving data from the EBS - you should use SQL Server 2008 R2 and later. SQL Server 2014 is recommended.
+Entersoft Public Queries (EPQ) is the evolution of the Scroller in terms of programmatic access to data from EBS through EBS object model. EPQs support for fast execution (minimal overhead compared to scroller execution), paging, Number of records in total and JSON format as return type. EPQs are described in more detail in {@link api/es.Services.Web.esWebApi#methods_fetchpublicquery fetchPublicQuery}.
+
+# 3. ENTERSOFT WEB API SERVER
+Entersoft WEB API Server is built on ASP.NET MVC 5 technology and is deployed as a Microsoft IIS Application – Web Site. 
+
+# 4. ENTERSOFT API CLIENTS
+Depending on the programming environment of the client software that needs access to the Entersoft Application Server there are different libraries that can be used. See the table below:
+
+ Environment | Entersoft API Client | Repository | Examples
+--- | --- | --- | --- |
+.NET Framework Native Apps on Windows Platforms | Entersoft Bridge Session | {@link https://www.nuget.org/packages/Entersoft.ERPBridge ERPBridge}| Any native .NET application – Windows Forms, WPF, WCF, WF, ASP.NET, etc. DLL or EXE 
+Portable Class Library enabled environments  | Entersoft PCL Client Session | {@link https://www.nuget.org/packages/Entersoft.Web.Client/ .NET PCL} | Xamarin iOS, Xamarin Android, Xamarin WP, Xamarin Forms, Mono Linux projects 
+JavaScript, NodeJS, WEB Front-end development | Entersoft WEB API Client | {@link https://github.com/entersoftsa/eswebapi ESWebApi} | JQuery, AngularJS, NodeJS, JavaScript frameworks, etc.
+
+This document focus on the JavaScript and the Entersoft WEB API Client framework (EWAPIC). However, most of the document is applicable to the PCL Library environments and the Entersoft PCL Client Session as it is symmetric to the WEB API and requires – assumes the same architecture.
+
