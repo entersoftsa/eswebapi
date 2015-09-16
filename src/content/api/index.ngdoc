@@ -23,6 +23,29 @@ Furthermore, in the area of Web platforms, Entersoft SA is proud to announce the
 
 There is no limit in things you can do integrate with the Entersoft Application Server, in environments other than Microsoft such as PHP, Ruby, Node.js, Angular, JQuery, Javascript frameworks, Java, etc. Furthermore, services and applications such as Microsoft PowerBI, Azure Machine Learning, etc. can be easily integrated with an Entersoft Application Server through a solid, coherent and state-of-the art API such as the Entersoft WEB API. The same applies for the Mobile ecosystem, where no matter what the programming ennironment is Objective-C, Java, Xamarin, C#, F#, Visual Studio 2015, Windows Universal Apps you can select the most applicable Entersoft API flavor and exploit services anf functions of the Entersoft Application Server back-end with a minor effort.
 
+# Case Studies
+There is no better evidence and test for an API than the use of the API for the development of new applications and services. It is worth mentioning that Entersoft API Client SDKs have been used and tested in the development of the following Entersoft Applications:
+* **Entersoft Request For Approval - Web**, an AngularJS based Web Application developed by Entersoft SA to address the need of a Request & Approve processes that we so often encounter in enterprises and companies of any size. The Web edition of this application is using the Entersoft AngularJS API library.
+![Entersoft Request For Approval - Web](images/api/es05api-intro.png)
+_Entersoft Request For Approval - Web -1_
+
+![Entersoft Request For Approval - Web](images/api/es06api-intro.png)
+_Entersoft Request For Approval - Web -2_
+
+* **Entersoft Request For Approval - iOS, Android, WP** True Native Mobile Applications for the specific platforms and devices with more features and services than the Web edition such as: Push Notifications, SMS, eMail, Reminders and Notes. The application has been developed on Xamarin.Forms along with Entersoft PCL API client SDK.
+![Entersoft Request For Approval - iOS](images/api/es07api-intro.png)
+![Entersoft Request For Approval - iOS](images/api/es08api-intro.png)
+
+* **Entersoft Knwoledge Base** that soon will be publicly available, that is based on Entersoft AngularJS API, AngularJS and ElasticSearch integration with Entersoft Business Suite.
+![Entersoft Knowledge Base](images/api/es03api-intro.png)
+_Entersoft Knowledge Base -1_
+
+![Entersoft Knowledge Base](images/api/es04api-intro.png)
+_Entersoft Knowledge Base -2_
+
+As the use of the Entersoft API's is increasing day-by-day, more applications, case studies and solutions will be relying on the Entersoft APIs and will be listed in a special Case Study Section, so that we can all extend our knowledge and push our potentials.
+
+# Remarks
 Depending on the programming environment of the client software that needs access to the Entersoft Application Server there are different libraries that can be used. See the table below:
 
  Environment | Entersoft API Client | Repository | Examples
