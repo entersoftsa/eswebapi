@@ -705,6 +705,8 @@
          * @param {object=} esExecuteParams Params object that will be used when executing the public query
          *
          * @description
+         *
+         * **TBD**
          * This directive is responsible to render the html for the presentation of the results / data of an Entersoft Public Query.
          * The esGrid generates a Telerik kendo-grid web ui element {@link http://docs.telerik.com/KENDO-UI/api/javascript/ui/grid kendo-grid}.
          * 
@@ -745,11 +747,10 @@
         /**
          * @ngdoc directive
          * @name es.Web.UI.directive:esParam
-         * @element div
          * @function
          *
          * @description
-         * esGrid esParam
+         * **TBD**
          *
          * 
          */
@@ -792,7 +793,7 @@
          * @function
          *
          * @description
-         * esGrid esWebPq
+         * **TBD**
          *
          * 
          */
@@ -827,11 +828,10 @@
         /**
          * @ngdoc directive
          * @name es.Web.UI.directive:esParamsPanel
-         * @element div
          * @function
          *
          * @description
-         * Resize textarea automatically to the size of its text content.
+         * **TBD**
          *
          * 
          */
@@ -876,8 +876,7 @@
      * @ngdoc service
      * @name es.Web.UI.esUIHelper
      * @description
-     * # esUIHelper
-     * esUIHelper addons.
+     * **TBD**
      */
     esWEBUI.factory('esUIHelper', ['esWebApi', '$log',
         function(esWebApiService, $log) {

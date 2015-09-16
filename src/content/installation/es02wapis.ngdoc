@@ -1,6 +1,6 @@
 @ngdoc overview
 @name Entersoft WEB API Server
-@sortOrder 290
+@sortOrder 200
 @description
 
 The latest version of Entersoft WEB API Server (EWAPIS) can be found on GitHub at: {@link https://github.com/entersoftsa/eswebapiserver ES WEB API Server}.
@@ -109,3 +109,44 @@ If installed in the localhost then the test page is accessible by any browser by
 
 The General Password refers to the SubscriptionPassword which if left unchanged is **_passx_**
 **AllowHTTP** should be clicked in case that you deployed the EWAPIS in a non-secure server i.e. NOT using HTTPS. If everything is OK then you will see the Alert Message “OK” along with the name of the given user.
+
+# Elastic Search
+In order to be able to use the {@link api/es.Services.Web.esElasticSearch esElasticSearch Service} of the {@link #/api Entersoft AnularJS API} you 
+have to register the Elastic Search engine to be used with the Entersoft WEB API Server. The registration is done within the context of a Subscription 
+i.e. every subscription can have a different Elastic Search Engine for its own purposes) as shown below:
+```js
+{
+    "TokenLifetimeInMinutes": 58,
+    "AllowInsecureHttp" :  true,
+
+    "Subscriptions": [
+        {
+            "SubscriptionID": "",
+            "SubscriptionPassword": "CgJHAQYVg+iChKZvXcEKHA==",
+            "Bridges": [
+                {
+                    "BridgeID": "",
+                    "DatabaseID": "Entersoft",
+                    "CompanyID": "ES",
+                    "ElasticSearch": {
+                                "Host": "127.0.0.1", // i.e. the IP or DNS Name that resolves to the desired ElasticSearch engine service
+                                "Port": 9200 // i.e. integer that represents the external Port that the ElasticSearch engine service has been configured to listen to. According to the ElasticSearch documentation this defaults to port 9200.
+                    },
+                    "DefaultUserCredentials": {
+                        "UserID": "esmaster",
+                        "Password": "BTJTgbOPCmh4sZSwkk2ieQ==",
+                        "BranchID": "ΑΘ",
+                        "LangID": "el-GR"
+                    },
+                    "Services": [{"ServiceID": ""}],
+                    "ERPServers": [{
+                            "Host": "eserp.entersoft.gr",
+                            "Port": 8500
+                    }]
+                }
+            ]
+        }    
+      ]
+}
+```
+For more information about Elastic Search and how to setup and deploy an Elastic Search Engine please visit {@link https://www.elastic.co/guide/en/elasticsearch/reference/current/setup.html ElasticSearch Setup}.

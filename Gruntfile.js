@@ -174,7 +174,7 @@ module.exports = function(grunt) {
                 ],
                 bestMatch: true,
                 startPage: '/api',
-                title: "Entersoft AngularJS Web API Documentation",
+                title: "Entersoft AngularJS API",
                 titleLink: "#/api",
                 image: "src/content/assets/logo.png",
                 imageLink: "http://www.entersoft.eu",

@@ -13,7 +13,9 @@
  * @requires ngSanitize
  * @kind module
  * @description
- * This module encapsulates the services, providers, factories and constants for the **Entersoft AngularJS WEB API**
+ * This module encapsulates the services, providers, factories and constants for the **Entersoft AngularJS WEB API** services that can be used
+ * within the context of any AngularJS Single Page Application (SPA).
+ * The core components of the ES WEB API is the Angular Provider {@link es.Services.Web.esWebApi esWebApiProvider}
  */
 
 (function() {
@@ -64,11 +66,24 @@
 
     /**
      * @ngdoc service
+     * @name es.Services.Web.esWebApiProvider
+     * @module es.Services.Web
+     * @kind provider
+     * @sortOrder 1000
+     * @description
+     * Provides the functions needed to configure the esWebAPI service through the esWebApiProvider that is taking place typically in the _app.js_ file of the AngularJS SPA
+     *  in the _app.config_ function.
+     * Web API.
+     */
+
+    /**
+     * @ngdoc service
      * @name es.Services.Web.esWebApi
      * @module es.Services.Web
      * @kind provider
+     * @sortOrder 1000
      * @description
-     * # esWebApi
+     * In order to use the esWebApi service you have to configure within your AngularJS application the service through the {@link es.Services.Web.esWebApiProvider esWebApiProvider}.
      * Web API.
      */
     esWebServices.provider("esWebApi",
@@ -86,19 +101,95 @@
             };
 
             return {
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esWebApiProvider#getSettings
+                 * @methodOf es.Services.Web.esWebApiProvider
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns the current settings that have been used for the configuration of the esWebApiProvider.
+                 * @return {object} A JSON object representing the esWebApiProvider configuration settings. A typical form 
+                 * of the _settings_ configuration object is as follows:
+```js
+var esWebApiSettings = {
+    host: string, // i.e. "localhost/eswebapi" the url (with out the http or https protocol) that points to the Entersoft WEB API Server
+                  // if you specify the complete url, then the https or https part will be automatically removed. The actual protocol that 
+                  // wil be used depends on the allowUnsecureConnection property.
+    subscriptionId: string, // i.e. in typical installations this should be an empty string ""
+    subscriptionPassword: string, // the passowrd for the selected subscriptionId. In typical instllations this would be "passx"
+    allowUnsecureConnection: boolean // whether the ES Web Api Server allows for unsecure connections i.e. http or not i.e. https will be used
+}
+```
+                 **/
                 getSettings: function() {
                     return esConfigSettings;
                 },
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esWebApiProvider#getServerUrl
+                 * @methodOf es.Services.Web.esWebApiProvider
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns the actual URL to the Entersoft WEB API Server as it has been resolved after configuration of
+                 * the esWebApiProvider.
+                 * @return {string} Returns the actual URL to the Entersoft WEB API Server 
+                 **/
                 getServerUrl: function() {
                     return urlWEBAPI;
                 },
 
-                setSettings: function(setting) {
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esWebApiProvider#setSettings
+                 * @methodOf es.Services.Web.esWebApiProvider
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns the full URL to the Entersoft WEB API Server as it has been resolved 
+                 * according to the configuration of the esWebApiProvider at the provider's configuration function of the AngularJS application.
+                 * For more information on how to setup the Entersoft Web Api Server please refer to {@link installation/es02wapis ES API Server}.
+                 * @param {object} settings A JSON object that contains the configuration properties for the esWebApi service to work. A typical form 
+                 * of the _settings_ configuration object is as follows:
+```js
+var esWebApiSettings = {
+            host: string, // i.e. "localhost/eswebapi" the url (with out the http or https protocol) that points to the Entersoft WEB API Server
+                          // if you specify the complete url, then the https or https part will be automatically removed. The actual protocol that 
+                          // wil be used depends on the allowUnsecureConnection property.
+            subscriptionId: string, // i.e. in typical installations this should be an empty string ""
+            subscriptionPassword: string, // the passowrd for the selected subscriptionId. In typical instllations this would be "passx"
+            allowUnsecureConnection: boolean // whether the ES Web Api Server allows for unsecure connections i.e. http or not i.e. https will be used
+        }
+```
+                 * @example
+                 * This sample assumes that the Entersoft WEB API Server has been installed in the local Microsoft IIS as a WEB Application under
+                 * the Default Web Site as shown below:
+                 * ![Local ES WEB API Server](images/api/es01webapisrv.png)
+```js
+eskbApp.config(['$logProvider',
+    '$routeProvider',
+    'esWebApiProvider',
+    '$exceptionHandlerProvider',
+    function($logProvider, $routeProvider, esWebApiServiceProvider, $exceptionHandlerProvider) {
+
+        // The configuration of the other providers used in this AngularJS Application is 
+        // omitted for clarity purposes
+
+        var subscriptionId = "";
+        esWebApiServiceProvider.setSettings({
+            host: "localhost/eswebapi",
+            subscriptionId: subscriptionId,
+            subscriptionPassword: "passx",
+            allowUnsecureConnection: true
+        });
+    }
+]);
+```
+                **/
+                setSettings: function(settings) {
                     var __SECURE_HTTP_PREFIX__ = "https://";
                     var __UNSECURE_HTTP_PREFIX__ = "http://";
 
-                    esConfigSettings = setting;
+                    esConfigSettings = settings;
 
                     if (esConfigSettings.host) {
                         esConfigSettings.host = esConfigSettings.host.trim();
@@ -277,7 +368,7 @@
                              * For more information, please  
                              * @return {string} The URL to the Entersoft WEB API Server
                              * @example
-<pre>
+```js
 // getServerUrl
 
 var sUrl = esWebApi.getServerUrl();
@@ -285,7 +376,7 @@ alert(sUrl);
 
 // i.e. http://localhost/eswebapi/ (if allowUnsecureConnection configuration setting of the esWebApiProvider is true)
 // i.e. https://localhost/eswebapi/ (if allowUnsecureConnection configuration setting of the esWebApiProvider is false)
-</pre>
+```
                              **/
                             getServerUrl: function() {
                                 return urlWEBAPI;
@@ -317,7 +408,7 @@ alert(sUrl);
                              * local storage.
                              * 
                              * A success response object has the following form:
-<pre>
+```js
 var rep = {
     "data": {
         "Model": {
@@ -387,7 +478,7 @@ var rep = {
     },
     "statusText": "OK"
 }
-</pre>
+```
                              * In case of an error i.e. function(err) {...} the err contains the Entersoft's Application Server error message and 
                              * the http error codes in case the error is network related. As in the case of success, should you use the typical Entersoft
                              * AngularJS development template for SPAs, the framework automatically handles the error response of openSession call and 
@@ -395,7 +486,7 @@ var rep = {
                              * logged-in or performed a logout operation
                              * 
                              * An Entersoft application server releated response error e.g. User does not exist has the following form:
-<pre>
+```js
 var x = {
     "data": {
         "MessageID": "login-invalid-user",
@@ -426,9 +517,9 @@ var x = {
     "statusText": "Unauthorized"
 };
 
-</pre>
+```
                              * @example
-<pre>
+```js
 $scope.credentials = {
     UserID: 'admin',
     Password: 'entersoft',
@@ -446,7 +537,7 @@ $scope.doLogin = function() {
                 $log.error(err);
             });
 }
-</pre>
+```
 */
                             openSession: function(credentials) {
                                 var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
@@ -487,14 +578,14 @@ $scope.doLogin = function() {
                              * @module es.Services.Web
                              * @kind function
                              * @example
-<pre>
+```js
 //logout sample
 $scope.doLogout = function ()
 {
     esWebApi.logout();
     alert("LOGGED OUT. You must relogin to run the samples");
 };
-</pre>
+```
                              */
                             logout: function() {
                                 esGlobals.sessionClosed();
@@ -515,7 +606,7 @@ $scope.doLogout = function ()
                              * err.data.UserMessage
                              *
                              * Success promise return value i.e. response.data is of the following form:
-<pre>
+```js
 var x = {
     "ID": "MyValidParamKey",
     "Value": "hello world",
@@ -523,10 +614,10 @@ var x = {
     "Help": "Password for use of Google mapping service",
     "ESType": 0
 };
-</pre>
+```
                              *
                              * Error promise return value i.e. function(err) is of the following form:
-<pre>
+```js
 var f = {
     "data": {
         "MessageID": "company-parameter-not-found",
@@ -547,9 +638,9 @@ var f = {
     },
     "statusText": "Not Found"
 }; 
-</pre> 
+``` 
                             * @example
-<pre>
+```js
 // fetchCompanyParam
 $scope.fetchCompanyParam = function() {
     esWebApi.fetchCompanyParam($scope.pCompanyParam)
@@ -562,7 +653,7 @@ $scope.fetchCompanyParam = function() {
             });
 }
 
-</pre>
+```
 */
                             fetchCompanyParam: function(esparam) {
                                 if (!esparam) {
@@ -598,7 +689,7 @@ $scope.fetchCompanyParam = function() {
                              * err.data.UserMessage
                              *
                              * Success promise return value i.e. *response.data* is of the following form:
-<pre>
+```js
 var x = [{
     "ID": "PERSONINTERESTCATEGORYVALUE",
     "Value": "ΠΡΟΤΙΜΗΣΕΙΣ ΦΥΣΙΚΟΥ ΠΡΟΣΩΠΟΥ",
@@ -613,10 +704,10 @@ var x = [{
     "ESType": 0
 }];
 
-</pre>
+```
                              *
                              * Error promise return value i.e. function(err) is of the following form:
-<pre>
+```js
 var f = {
     "data": {
         "MessageID": "company-parameter-not-found",
@@ -637,9 +728,9 @@ var f = {
     },
     "statusText": "Not Found"
 }; 
-</pre> 
+``` 
                             * @example
-<pre>
+```js
 //fetchCompanyParams
 $scope.fetchCompanyParams = function() {
     if (!$scope.pCompanyParams) {
@@ -654,7 +745,7 @@ $scope.fetchCompanyParams = function() {
                 $scope.pCompanyParamsValue = JSON.stringify(err);
             });
 };
-</pre>
+```
 */
                             fetchCompanyParams: function(esparams) {
                                 var surl;
@@ -681,237 +772,238 @@ $scope.fetchCompanyParams = function() {
 
                             registerException: fregisterException,
 
-/**
-                             * @ngdoc function
-                             * @name es.Services.Web.esWebApi#fetchOdsTableInfo
-                             * @methodOf es.Services.Web.esWebApi
-                             * @description Function that returns the ODSTable definition from the ** Entersoft Object Description System (ODS)** repository.
-                             * @module es.Services.Web
-                             * @kind function
-                             * @param {string} tableID The ODS Table ID or the ODS Table GID in string (guid) to retrieve
-                             * @return {httpPromise}  Returns a promise.
-                             ** If sucess the response.data contains the ODS Table Definition object in JSON representation
-                             ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
-                             * err.data.UserMessage
-                             *
-                             * Success promise return value i.e. response.data is of the following form:
-<pre>
-var odsTableforESGOCity = {
-    "Role": 1,
-    "ModuleID": "ESGO",
-    "ID": "ESGOZCity",
-    "GID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
-    "DBTableName": "ESGOZCity",
-    "Flags": 1028,
-    "Columns": [{
-        "ID": "Code",
-        "GID": "aa00f03d-640b-4c0c-8bbe-4b3adabea477",
-        "TableID": "ESGOZCity",
-        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
-        "DBColumnName": "Code",
-        "AllowEQUC": true,
-        "Size": 20,
-        "ODSType": "ESZOOMCODE",
-        "Precision": 0,
-        "Nullable": false,
-        "ChoiceType": "",
-        "Flags": 0,
-        "HelpTxt": "",
-        "SeqNum": 1
-    }, {
-        "ID": "Description",
-        "GID": "b92ab124-86c0-4c70-9093-53337f91577b",
-        "TableID": "ESGOZCity",
-        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
-        "DBColumnName": "Description",
-        "AllowEQUC": true,
-        "Size": 100,
-        "ODSType": "ESFIELD",
-        "Precision": 0,
-        "Nullable": true,
-        "ChoiceType": "",
-        "Flags": 0,
-        "HelpTxt": "",
-        "SeqNum": 2
-    }, {
-        "ID": "AlternativeDescription",
-        "GID": "bcccdd8d-afe8-4fca-a448-cacde6593adc",
-        "TableID": "ESGOZCity",
-        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
-        "DBColumnName": "AlternativeDescription",
-        "AllowEQUC": true,
-        "Size": 100,
-        "ODSType": "ESFIELD",
-        "Precision": 0,
-        "Nullable": true,
-        "ChoiceType": "",
-        "Flags": 0,
-        "HelpTxt": "",
-        "SeqNum": 3
-    }, {
-        "ID": "Inactive",
-        "GID": "df7e74e8-af69-4f9f-bd5a-8bec32361423",
-        "TableID": "ESGOZCity",
-        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
-        "DBColumnName": "Inactive",
-        "AllowEQUC": false,
-        "Size": -1,
-        "ODSType": "ESBOOL",
-        "Precision": 0,
-        "Nullable": false,
-        "ChoiceType": "",
-        "Flags": 0,
-        "HelpTxt": "",
-        "SeqNum": 4
-    }, {
-        "ID": "PhonePrefix",
-        "GID": "806db65c-9f30-4859-b5b0-7f91a32d6aca",
-        "TableID": "ESGOZCity",
-        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
-        "DBColumnName": "PhonePrefix",
-        "AllowEQUC": true,
-        "Size": 15,
-        "ODSType": "ESTELNO",
-        "Precision": 0,
-        "Nullable": true,
-        "ChoiceType": "",
-        "Flags": 0,
-        "HelpTxt": "",
-        "SeqNum": 5
-    }, {
-        "ID": "fMunicipalityCode",
-        "GID": "3ebdcae6-a3a4-4cfd-8371-8b8825a1d542",
-        "TableID": "ESGOZCity",
-        "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
-        "DBColumnName": "fMunicipalityCode",
-        "AllowEQUC": false,
-        "Size": 20,
-        "ODSType": "ESFZOOMCODE",
-        "Precision": 0,
-        "Nullable": true,
-        "ChoiceType": "",
-        "Flags": 0,
-        "HelpTxt": "",
-        "SeqNum": 6
-    }]
-};
-</pre>
-                             *
-                             * Error promise return value i.e. function(err) is of the following form:
-<pre>
-// fetchOdsTableInfo("escity"), which does not exist in the ODS
-var f = {
-        "data": {
-            "MessageID": "invalid-table-id",
-            "UserMessage": "invalid table id: escity",
-            "Messages": []
-        },
-        "status": 404,
-        "config": {
-            "method": "GET",
-            "transformRequest": [null],
-            "transformResponse": [null],
-            "headers": {
-                "Authorization": "Bearer xyzquerty....",
-                "Accept": "application/json, text/plain},"
-                url ":"
-                http: //localhost/eswebapi/api/rpc/FetchOdsTableInfo/escity"},"statusText":"Not Found"};
+                            /**
+                                                         * @ngdoc function
+                                                         * @name es.Services.Web.esWebApi#fetchOdsTableInfo
+                                                         * @methodOf es.Services.Web.esWebApi
+                                                         * @description Function that returns the ODSTable definition from the ** Entersoft Object Description System (ODS)** repository.
+                                                         * @module es.Services.Web
+                                                         * @kind function
+                                                         * @param {string} tableID The ODS Table ID or the ODS Table GID in string (guid) to retrieve
+                                                         * @return {httpPromise}  Returns a promise.
+                                                         ** If sucess the response.data contains the ODS Table Definition object in JSON representation
+                                                         ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+                                                         * err.data.UserMessage
+                                                         *
+                                                         * Success promise return value i.e. response.data is of the following form:
+                            ```js
+                            var odsTableforESGOCity = {
+                                "Role": 1,
+                                "ModuleID": "ESGO",
+                                "ID": "ESGOZCity",
+                                "GID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+                                "DBTableName": "ESGOZCity",
+                                "Flags": 1028,
+                                "Columns": [{
+                                    "ID": "Code",
+                                    "GID": "aa00f03d-640b-4c0c-8bbe-4b3adabea477",
+                                    "TableID": "ESGOZCity",
+                                    "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+                                    "DBColumnName": "Code",
+                                    "AllowEQUC": true,
+                                    "Size": 20,
+                                    "ODSType": "ESZOOMCODE",
+                                    "Precision": 0,
+                                    "Nullable": false,
+                                    "ChoiceType": "",
+                                    "Flags": 0,
+                                    "HelpTxt": "",
+                                    "SeqNum": 1
+                                }, {
+                                    "ID": "Description",
+                                    "GID": "b92ab124-86c0-4c70-9093-53337f91577b",
+                                    "TableID": "ESGOZCity",
+                                    "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+                                    "DBColumnName": "Description",
+                                    "AllowEQUC": true,
+                                    "Size": 100,
+                                    "ODSType": "ESFIELD",
+                                    "Precision": 0,
+                                    "Nullable": true,
+                                    "ChoiceType": "",
+                                    "Flags": 0,
+                                    "HelpTxt": "",
+                                    "SeqNum": 2
+                                }, {
+                                    "ID": "AlternativeDescription",
+                                    "GID": "bcccdd8d-afe8-4fca-a448-cacde6593adc",
+                                    "TableID": "ESGOZCity",
+                                    "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+                                    "DBColumnName": "AlternativeDescription",
+                                    "AllowEQUC": true,
+                                    "Size": 100,
+                                    "ODSType": "ESFIELD",
+                                    "Precision": 0,
+                                    "Nullable": true,
+                                    "ChoiceType": "",
+                                    "Flags": 0,
+                                    "HelpTxt": "",
+                                    "SeqNum": 3
+                                }, {
+                                    "ID": "Inactive",
+                                    "GID": "df7e74e8-af69-4f9f-bd5a-8bec32361423",
+                                    "TableID": "ESGOZCity",
+                                    "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+                                    "DBColumnName": "Inactive",
+                                    "AllowEQUC": false,
+                                    "Size": -1,
+                                    "ODSType": "ESBOOL",
+                                    "Precision": 0,
+                                    "Nullable": false,
+                                    "ChoiceType": "",
+                                    "Flags": 0,
+                                    "HelpTxt": "",
+                                    "SeqNum": 4
+                                }, {
+                                    "ID": "PhonePrefix",
+                                    "GID": "806db65c-9f30-4859-b5b0-7f91a32d6aca",
+                                    "TableID": "ESGOZCity",
+                                    "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+                                    "DBColumnName": "PhonePrefix",
+                                    "AllowEQUC": true,
+                                    "Size": 15,
+                                    "ODSType": "ESTELNO",
+                                    "Precision": 0,
+                                    "Nullable": true,
+                                    "ChoiceType": "",
+                                    "Flags": 0,
+                                    "HelpTxt": "",
+                                    "SeqNum": 5
+                                }, {
+                                    "ID": "fMunicipalityCode",
+                                    "GID": "3ebdcae6-a3a4-4cfd-8371-8b8825a1d542",
+                                    "TableID": "ESGOZCity",
+                                    "TableGID": "0a3f7d43-dfb9-4a11-8610-8e2931c09868",
+                                    "DBColumnName": "fMunicipalityCode",
+                                    "AllowEQUC": false,
+                                    "Size": 20,
+                                    "ODSType": "ESFZOOMCODE",
+                                    "Precision": 0,
+                                    "Nullable": true,
+                                    "ChoiceType": "",
+                                    "Flags": 0,
+                                    "HelpTxt": "",
+                                    "SeqNum": 6
+                                }]
+                            };
+                            ```
+                                                         *
+                                                         * Error promise return value i.e. function(err) is of the following form:
+                            ```js
+                            // fetchOdsTableInfo("escity"), which does not exist in the ODS
+                            var f = {
+                                    "data": {
+                                        "MessageID": "invalid-table-id",
+                                        "UserMessage": "invalid table id: escity",
+                                        "Messages": []
+                                    },
+                                    "status": 404,
+                                    "config": {
+                                        "method": "GET",
+                                        "transformRequest": [null],
+                                        "transformResponse": [null],
+                                        "headers": {
+                                            "Authorization": "Bearer xyzquerty....",
+                                            "Accept": "application/json, text/plain},"
+                                            url ":"
+                                            http: //localhost/eswebapi/api/rpc/FetchOdsTableInfo/escity"},"statusText":"Not Found"};
 
-</pre> 
-                            * @example
-<pre>
-//fetchODSTableInfo example
-$scope.fetchOdsTableInfo = function() {
-    esWebApi.fetchOdsTableInfo($scope.odsID)
-        .then(function(ret) {
-            $scope.pTableInfo = ret.data;
-        }, function(err) {
-            $scope.pTableInfo = err;
-        });
-}
-</pre>
-*/
+                            ``` 
+                                                        * @example
+                            ```js
+                            //fetchODSTableInfo example
+                            $scope.fetchOdsTableInfo = function() {
+                                esWebApi.fetchOdsTableInfo($scope.odsID)
+                                    .then(function(ret) {
+                                        $scope.pTableInfo = ret.data;
+                                    }, function(err) {
+                                        $scope.pTableInfo = err;
+                                    });
+                            }
+                            ```
+                            */
                             fetchOdsTableInfo: function(tableID) {
                                 tableID = tableID ? tableID.replace(/ /g, "") : "";
                                 return getOdsInfo("__FETCH_ODS_TABLE_INFO__", tableID);
                             },
 
-/**
-                             * @ngdoc function
-                             * @name es.Services.Web.esWebApi#fetchOdsColumnInfo
-                             * @methodOf es.Services.Web.esWebApi
-                             * @description Function that returns the ODSTable definition from the ** Entersoft Object Description System (ODS)** repository.
-                             * @module es.Services.Web
-                             * @kind function
-                             * @param {string} tableID The ODS Table ID i.e. "ESFFitem". If columnID parameter is undefined, null or empty string **then**
-                             * additional forms of tableid-column id definition are available:
-                             ** Fully qualified column name i.e. "ESFIItem.Description"
-                             ** ODS Column's GID in string i.e. "74c82778-6b49-4928-9f06-81b4384bf677"
-                             * @param {string=} columnID The ODS Column/Field ID  to retrieve i.e. "Description". If columnID is undefined or null or empty string
-                             * then tableID should be one of the forms described above.
-                             * @return {httpPromise}  Returns a promise.
-                             ** If sucess the response.data contains the ODS Column/Field Definition object in JSON representation
-                             ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
-                             * err.data.UserMessage
-                             *
-                             * Success promise return value i.e. response.data is of the following form:
-<pre>
-var odsColumnforESFIItem_Code = {
-    "ID": "Code",
-    "GID": "74c82778-6b49-4928-9f06-81b4384bf677",
-    "TableID": "ESFIItem",
-    "TableGID": "8445cfd5-9dda-47cc-8f3a-01b5586347d2",
-    "DBColumnName": "Code",
-    "AllowEQUC": true,
-    "Size": 50,
-    "ODSType": "ESCODE",
-    "Precision": 0,
-    "Nullable": false,
-    "ChoiceType": "",
-    "Flags": 2112,
-    "HelpTxt": "",
-    "SeqNum": 2
-};
-</pre>
-                             *
-                             * Error promise return value i.e. function(err) is of the following form:
-<pre>
-// fetchOdsColumnInfo("esfiitem", "codeg"), which does not exist in the ODS
-var f = {
-        "data": {
-            "MessageID": "invalid-column-id",
-            "UserMessage": "invalid column id: esfiitem.codeg",
-            "Messages": []
-        },
-        "status": 404,
-        "config": {
-            "method": "GET",
-            "transformRequest": [null],
-            "transformResponse": [null],
-            "headers": {
-                "Authorization": "Bearer xyzquerty....",
-                "Accept": "application/json, text/plain},"
-                url ":"
-                http: //localhost/eswebapi/api/rpc/FetchOdsColumnInfo/esfiitem/codeg"},"statusText":"Not Found"};
+                            /**
+                                                         * @ngdoc function
+                                                         * @name es.Services.Web.esWebApi#fetchOdsColumnInfo
+                                                         * @methodOf es.Services.Web.esWebApi
+                                                         * @description Function that returns the ODSTable definition from the ** Entersoft Object Description System (ODS)** repository.
+                                                         * @module es.Services.Web
+                                                         * @kind function
+                                                         * @param {string} tableID The ODS Table ID i.e. "ESFFitem". If columnID parameter is undefined, null or empty string **then**
+                                                         * additional forms of tableid-column id definition are available:
+                                                         ** Fully qualified column name i.e. "ESFIItem.Description"
+                                                         ** ODS Column's GID in string i.e. "74c82778-6b49-4928-9f06-81b4384bf677"
+                                                         * @param {string=} columnID The ODS Column/Field ID  to retrieve i.e. "Description". If columnID is undefined or null or empty string
+                                                         * then tableID should be one of the forms described above.
+                                                         * @return {httpPromise}  Returns a promise.
+                                                         ** If sucess the response.data contains the ODS Column/Field Definition object in JSON representation
+                                                         ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+                                                         * err.data.UserMessage
+                                                         *
+                                                         * Success promise return value i.e. response.data is of the following form:
+                            ```js
+                            var odsColumnforESFIItem_Code = {
+                                "ID": "Code",
+                                "GID": "74c82778-6b49-4928-9f06-81b4384bf677",
+                                "TableID": "ESFIItem",
+                                "TableGID": "8445cfd5-9dda-47cc-8f3a-01b5586347d2",
+                                "DBColumnName": "Code",
+                                "AllowEQUC": true,
+                                "Size": 50,
+                                "ODSType": "ESCODE",
+                                "Precision": 0,
+                                "Nullable": false,
+                                "ChoiceType": "",
+                                "Flags": 2112,
+                                "HelpTxt": "",
+                                "SeqNum": 2
+                            };
+                            ```
+                                                         *
+                                                         * Error promise return value i.e. function(err) is of the following form:
+                            ```js
+                            // fetchOdsColumnInfo("esfiitem", "codeg"), which does not exist in the ODS
+                            var f = {
+                                    "data": {
+                                        "MessageID": "invalid-column-id",
+                                        "UserMessage": "invalid column id: esfiitem.codeg",
+                                        "Messages": []
+                                    },
+                                    "status": 404,
+                                    "config": {
+                                        "method": "GET",
+                                        "transformRequest": [null],
+                                        "transformResponse": [null],
+                                        "headers": {
+                                            "Authorization": "Bearer xyzquerty....",
+                                            "Accept": "application/json, text/plain},"
+                                            url ":"
+                                            http: //localhost/eswebapi/api/rpc/FetchOdsColumnInfo/esfiitem/codeg"},"statusText":"Not Found"};
 
-</pre> 
-                            * @example
-<pre>
- //fetchODSColumnInfo example
-$scope.fetchOdsColumnInfo = function() {
-    esWebApi.fetchOdsColumnInfo($scope.odsID, $scope.odsColumnID)
-        .then(function(ret) {
-            $scope.pColumnInfo = ret.data;
-        }, function(err) {
-            $scope.pColumnInfo = err;
-        });
-}
-</pre>
-*/
+                            ``` 
+                                                        * @example
+                            ```js
+                             //fetchODSColumnInfo example
+                            $scope.fetchOdsColumnInfo = function() {
+                                esWebApi.fetchOdsColumnInfo($scope.odsID, $scope.odsColumnID)
+                                    .then(function(ret) {
+                                        $scope.pColumnInfo = ret.data;
+                                    }, function(err) {
+                                        $scope.pColumnInfo = err;
+                                    });
+                            }
+                            ```
+                            */
                             fetchOdsColumnInfo: function(tableID, columnID) {
                                 tableID = tableID ? tableID.replace(/ /g, "") : "";
                                 columnID = columnID ? columnID.replace(/ /g, "") : "";
-                                var odsItem = "";columnID ? tableID + "/" + columnID : tableID;
+                                var odsItem = "";
+                                columnID ? tableID + "/" + columnID : tableID;
                                 if (columnID) {
                                     odsItem = tableID + "/" + columnID;
                                 } else {
@@ -925,330 +1017,330 @@ $scope.fetchOdsColumnInfo = function() {
                                 return getOdsInfo("__FETCH_ODS_COLUMN_INFO__", odsItem);
                             },
 
-/**
-                             * @ngdoc function
-                             * @name es.Services.Web.esWebApi#fetchOdsRelationInfo
-                             * @methodOf es.Services.Web.esWebApi
-                             * @description Function that returns the ODS Releation definition from the ** Entersoft Object Description System (ODS)** repository.
-                             * @module es.Services.Web
-                             * @kind function
-                             * @param {string} relationID The ODS Relation ID or the ODS Relation GID in string (guid) to retrieve
-                             * @return {httpPromise}  Returns a promise.
-                             ** If sucess the response.data contains the ODS Relation Definition object in JSON representation
-                             ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
-                             * err.data.UserMessage
-                             *
-                             * Success promise return value i.e. response.data is of the following form:
-<pre>
-var odsRelation = {
-    "ID": "FK_ESFIPricelistItem_ESFIPricelist",
-    "GID": "87fbc76d-7ac7-4102-a7cd-00374a6a4338",
-    "NameInDB": "FK_ESFIPricelistItem_ESFIPricelist",
-    "MTableID": "ESFIPricelist",
-    "DTableID": "ESFIPricelistItem",
-    "MTableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
-    "MValue1GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
-    "DTableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
-    "DValue1GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
-    "IsVirtual": false,
-    "IsDeleted": false,
-    "MasterColumns": [{
-        "ID": "GID",
-        "GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
-        "TableID": "ESFIPricelist",
-        "TableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
-        "DBColumnName": "GID",
-        "AllowEQUC": false,
-        "Size": -1,
-        "ODSType": "ESGID",
-        "Precision": 0,
-        "Nullable": false,
-        "ChoiceType": "",
-        "Flags": 0,
-        "HelpTxt": "",
-        "SeqNum": 1
-    }],
-    "DetailColumns": [{
-        "ID": "fPricelistGID",
-        "GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
-        "TableID": "ESFIPricelistItem",
-        "TableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
-        "DBColumnName": "fPricelistGID",
-        "AllowEQUC": false,
-        "Size": -1,
-        "ODSType": "ESFGID",
-        "Precision": 0,
-        "Nullable": true,
-        "ChoiceType": "",
-        "Flags": 2048,
-        "HelpTxt": "",
-        "SeqNum": 2
-    }]
-};
+                            /**
+                                                         * @ngdoc function
+                                                         * @name es.Services.Web.esWebApi#fetchOdsRelationInfo
+                                                         * @methodOf es.Services.Web.esWebApi
+                                                         * @description Function that returns the ODS Releation definition from the ** Entersoft Object Description System (ODS)** repository.
+                                                         * @module es.Services.Web
+                                                         * @kind function
+                                                         * @param {string} relationID The ODS Relation ID or the ODS Relation GID in string (guid) to retrieve
+                                                         * @return {httpPromise}  Returns a promise.
+                                                         ** If sucess the response.data contains the ODS Relation Definition object in JSON representation
+                                                         ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+                                                         * err.data.UserMessage
+                                                         *
+                                                         * Success promise return value i.e. response.data is of the following form:
+                            ```js
+                            var odsRelation = {
+                                "ID": "FK_ESFIPricelistItem_ESFIPricelist",
+                                "GID": "87fbc76d-7ac7-4102-a7cd-00374a6a4338",
+                                "NameInDB": "FK_ESFIPricelistItem_ESFIPricelist",
+                                "MTableID": "ESFIPricelist",
+                                "DTableID": "ESFIPricelistItem",
+                                "MTableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+                                "MValue1GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+                                "DTableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
+                                "DValue1GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
+                                "IsVirtual": false,
+                                "IsDeleted": false,
+                                "MasterColumns": [{
+                                    "ID": "GID",
+                                    "GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+                                    "TableID": "ESFIPricelist",
+                                    "TableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+                                    "DBColumnName": "GID",
+                                    "AllowEQUC": false,
+                                    "Size": -1,
+                                    "ODSType": "ESGID",
+                                    "Precision": 0,
+                                    "Nullable": false,
+                                    "ChoiceType": "",
+                                    "Flags": 0,
+                                    "HelpTxt": "",
+                                    "SeqNum": 1
+                                }],
+                                "DetailColumns": [{
+                                    "ID": "fPricelistGID",
+                                    "GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
+                                    "TableID": "ESFIPricelistItem",
+                                    "TableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
+                                    "DBColumnName": "fPricelistGID",
+                                    "AllowEQUC": false,
+                                    "Size": -1,
+                                    "ODSType": "ESFGID",
+                                    "Precision": 0,
+                                    "Nullable": true,
+                                    "ChoiceType": "",
+                                    "Flags": 2048,
+                                    "HelpTxt": "",
+                                    "SeqNum": 2
+                                }]
+                            };
 
-</pre>
-                             *
-                             * Error promise return value i.e. function(err) is of the following form:
-<pre>
-// fetchRelationInfo("abcd"), which does not exist in the ODS
-var f = {
-        "data": {
-            "MessageID": "invalid-relation-id",
-            "UserMessage": "invalid relation id: abcd",
-            "Messages": []
-        },
-        "status": 404,
-        "config": {
-            "method": "GET",
-            "transformRequest": [null],
-            "transformResponse": [null],
-            "headers": {
-                "Authorization": "Bearer xyzquerty....",
-                "Accept": "application/json, text/plain},"
-                url ":"
-                http: //localhost/eswebapi/api/rpc/FetchOdsRelationInfo/abcd"},"statusText":"Not Found"};
+                            ```
+                                                         *
+                                                         * Error promise return value i.e. function(err) is of the following form:
+                            ```js
+                            // fetchRelationInfo("abcd"), which does not exist in the ODS
+                            var f = {
+                                    "data": {
+                                        "MessageID": "invalid-relation-id",
+                                        "UserMessage": "invalid relation id: abcd",
+                                        "Messages": []
+                                    },
+                                    "status": 404,
+                                    "config": {
+                                        "method": "GET",
+                                        "transformRequest": [null],
+                                        "transformResponse": [null],
+                                        "headers": {
+                                            "Authorization": "Bearer xyzquerty....",
+                                            "Accept": "application/json, text/plain},"
+                                            url ":"
+                                            http: //localhost/eswebapi/api/rpc/FetchOdsRelationInfo/abcd"},"statusText":"Not Found"};
 
 
-</pre> 
-                            * @example
-<pre>
-//fetchOdsRelationInfo example
-$scope.fetchOdsRelationInfo = function() {
-    esWebApi.fetchOdsRelationInfo($scope.odsID)
-        .then(function(ret) {
-            $scope.pRelationInfo = ret.data;
-        }, function(err) {
-            $scope.pRelationInfo = err;
-        });
-}
-</pre>
-*/
+                            ``` 
+                                                        * @example
+                            ```js
+                            //fetchOdsRelationInfo example
+                            $scope.fetchOdsRelationInfo = function() {
+                                esWebApi.fetchOdsRelationInfo($scope.odsID)
+                                    .then(function(ret) {
+                                        $scope.pRelationInfo = ret.data;
+                                    }, function(err) {
+                                        $scope.pRelationInfo = err;
+                                    });
+                            }
+                            ```
+                            */
                             fetchOdsRelationInfo: function(relationID) {
                                 relationID = relationID ? relationID.replace(/ /g, "") : "";
                                 return getOdsInfo("__FETCH_ODS_RELATION_INFO__", relationID);
                             },
 
-/**
-                             * @ngdoc function
-                             * @name es.Services.Web.esWebApi#fetchOdsMasterRelationsInfo
-                             * @methodOf es.Services.Web.esWebApi
-                             * @description Function that returns the Master Relations ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given foreign ColumnID of the Master TableID
-                             * from the ** Entersoft Object Description System (ODS)** repository.
-                             * @module es.Services.Web
-                             * @kind function
-                             * @param {string} tableID The ODS Table ID i.e. "ESFFitem". 
-                             * @param {string} columnID The ODS Column/Field ID  to retrieve i.e. "fDim1Code".
-                             * @return {httpPromise}  Returns a promise..
-                             ** If sucess the response.data contains an Array of Master relations of the ODS Relation Definition objects in JSON representation, that exist
-                             * for the given *tableID* and foreign *columnID*
-                             ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
-                             * err.data.UserMessage
-                             *
-                             * Success promise return value i.e. response.data is of the following form:
-<pre>
-var odsMasterRelations = [{
-    "ID": "FK_ESFIPricelistItem_ESFIPricelist",
-    "GID": "87fbc76d-7ac7-4102-a7cd-00374a6a4338",
-    "NameInDB": "FK_ESFIPricelistItem_ESFIPricelist",
-    "MTableID": "ESFIPricelist",
-    "DTableID": "ESFIPricelistItem",
-    "MTableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
-    "MValue1GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
-    "DTableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
-    "DValue1GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
-    "IsVirtual": false,
-    "IsDeleted": false,
-    "MasterColumns": [{
-        "ID": "GID",
-        "GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
-        "TableID": "ESFIPricelist",
-        "TableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
-        "DBColumnName": "GID",
-        "AllowEQUC": false,
-        "Size": -1,
-        "ODSType": "ESGID",
-        "Precision": 0,
-        "Nullable": false,
-        "ChoiceType": "",
-        "Flags": 0,
-        "HelpTxt": "",
-        "SeqNum": 1
-    }],
-    "DetailColumns": [{
-        "ID": "fPricelistGID",
-        "GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
-        "TableID": "ESFIPricelistItem",
-        "TableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
-        "DBColumnName": "fPricelistGID",
-        "AllowEQUC": false,
-        "Size": -1,
-        "ODSType": "ESFGID",
-        "Precision": 0,
-        "Nullable": true,
-        "ChoiceType": "",
-        "Flags": 2048,
-        "HelpTxt": "",
-        "SeqNum": 2
-    }]
-}];
-</pre>
-                             *
-                             * Error promise return value i.e. function(err) is of the following form:
-<pre>
-// fetchOdsMasterRelationsInfo("esfiitem", "fnon"), which does not exist in the ODS
-var f = {
-    "data": {
-        "MessageID": "invalid-column-id",
-        "UserMessage": "invalid column id: esfiitem.fnon",
-        "Messages": []
-    },
-    "status": 404,
-    "config": {
-        "method": "GET",
-        "transformRequest": [null],
-        "transformResponse": [null],
-        "headers": {
-            "Authorization": "Bearer xyzquerty....",
-            "Accept": "application/json, text/plain"
-        },
-        "url": "http://localhost/eswebapi/api/rpc/FetchOdsMasterRelationsInfo/esfiitem/fnon"
-    },
-    "statusText": "Not Found"
-};
-</pre>
-                            * @example
-<pre>
-//fetchOdsMasterRelationsInfo example
-$scope.fetchOdsMasterRelationsInfo = function() {
-    esWebApi.fetchOdsMasterRelationsInfo($scope.odsID, $scope.odsColumnID)
-        .then(function(ret) {
-            $scope.pRelationInfo = ret.data;
-        }, function(err) {
-            $scope.pRelationInfo = err;
-        });
-}
-</pre>
-*/
+                            /**
+                                                         * @ngdoc function
+                                                         * @name es.Services.Web.esWebApi#fetchOdsMasterRelationsInfo
+                                                         * @methodOf es.Services.Web.esWebApi
+                                                         * @description Function that returns the Master Relations ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given foreign ColumnID of the Master TableID
+                                                         * from the ** Entersoft Object Description System (ODS)** repository.
+                                                         * @module es.Services.Web
+                                                         * @kind function
+                                                         * @param {string} tableID The ODS Table ID i.e. "ESFFitem". 
+                                                         * @param {string} columnID The ODS Column/Field ID  to retrieve i.e. "fDim1Code".
+                                                         * @return {httpPromise}  Returns a promise..
+                                                         ** If sucess the response.data contains an Array of Master relations of the ODS Relation Definition objects in JSON representation, that exist
+                                                         * for the given *tableID* and foreign *columnID*
+                                                         ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+                                                         * err.data.UserMessage
+                                                         *
+                                                         * Success promise return value i.e. response.data is of the following form:
+                            ```js
+                            var odsMasterRelations = [{
+                                "ID": "FK_ESFIPricelistItem_ESFIPricelist",
+                                "GID": "87fbc76d-7ac7-4102-a7cd-00374a6a4338",
+                                "NameInDB": "FK_ESFIPricelistItem_ESFIPricelist",
+                                "MTableID": "ESFIPricelist",
+                                "DTableID": "ESFIPricelistItem",
+                                "MTableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+                                "MValue1GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+                                "DTableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
+                                "DValue1GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
+                                "IsVirtual": false,
+                                "IsDeleted": false,
+                                "MasterColumns": [{
+                                    "ID": "GID",
+                                    "GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+                                    "TableID": "ESFIPricelist",
+                                    "TableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+                                    "DBColumnName": "GID",
+                                    "AllowEQUC": false,
+                                    "Size": -1,
+                                    "ODSType": "ESGID",
+                                    "Precision": 0,
+                                    "Nullable": false,
+                                    "ChoiceType": "",
+                                    "Flags": 0,
+                                    "HelpTxt": "",
+                                    "SeqNum": 1
+                                }],
+                                "DetailColumns": [{
+                                    "ID": "fPricelistGID",
+                                    "GID": "3a9f7b4b-c4fd-4900-8337-cddb9e4cf1f5",
+                                    "TableID": "ESFIPricelistItem",
+                                    "TableGID": "1aae96fc-f1bc-448a-9940-1d122a935e37",
+                                    "DBColumnName": "fPricelistGID",
+                                    "AllowEQUC": false,
+                                    "Size": -1,
+                                    "ODSType": "ESFGID",
+                                    "Precision": 0,
+                                    "Nullable": true,
+                                    "ChoiceType": "",
+                                    "Flags": 2048,
+                                    "HelpTxt": "",
+                                    "SeqNum": 2
+                                }]
+                            }];
+                            ```
+                                                         *
+                                                         * Error promise return value i.e. function(err) is of the following form:
+                            ```js
+                            // fetchOdsMasterRelationsInfo("esfiitem", "fnon"), which does not exist in the ODS
+                            var f = {
+                                "data": {
+                                    "MessageID": "invalid-column-id",
+                                    "UserMessage": "invalid column id: esfiitem.fnon",
+                                    "Messages": []
+                                },
+                                "status": 404,
+                                "config": {
+                                    "method": "GET",
+                                    "transformRequest": [null],
+                                    "transformResponse": [null],
+                                    "headers": {
+                                        "Authorization": "Bearer xyzquerty....",
+                                        "Accept": "application/json, text/plain"
+                                    },
+                                    "url": "http://localhost/eswebapi/api/rpc/FetchOdsMasterRelationsInfo/esfiitem/fnon"
+                                },
+                                "statusText": "Not Found"
+                            };
+                            ```
+                                                        * @example
+                            ```js
+                            //fetchOdsMasterRelationsInfo example
+                            $scope.fetchOdsMasterRelationsInfo = function() {
+                                esWebApi.fetchOdsMasterRelationsInfo($scope.odsID, $scope.odsColumnID)
+                                    .then(function(ret) {
+                                        $scope.pRelationInfo = ret.data;
+                                    }, function(err) {
+                                        $scope.pRelationInfo = err;
+                                    });
+                            }
+                            ```
+                            */
                             fetchOdsMasterRelationsInfo: function(tableID, columnID) {
                                 tableID = tableID ? tableID.replace(/ /g, "") : "";
                                 columnID = columnID ? columnID.replace(/ /g, "") : "";
                                 return getOdsInfo("__FETCH_ODS_MASTER_RELATIONS_INFO__", tableID + "/" + columnID);
                             },
 
-/**
-                             * @ngdoc function
-                             * @name es.Services.Web.esWebApi#fetchOdsDetailRelationsInfo
-                             * @methodOf es.Services.Web.esWebApi
-                             * @description Function that returns the Detail ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given ColumnID of the Master TableID
-                             * from the ** Entersoft Object Description System (ODS)** repository.
-                             * @module es.Services.Web
-                             * @kind function
-                             * @param {string} tableID The ODS Table ID i.e. "ESFFitem". 
-                             * @param {string} columnID The ODS Column/Field ID  to retrieve i.e. "GID".
-                             * @return {httpPromise}  Returns a promise..
-                             ** If sucess the response.data contains an Array of the Detail ODS Relation Definition objects in JSON representation, that exist
-                             * for the given *tableID* and foreign *columnID*
-                             ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
-                             * err.data.UserMessage
-                             *
-                             * Success promise return value i.e. response.data is of the following form:
-<pre>
-var odsDetailRelations = [{
-    "ID": "FK_ESFIItemPriceHistory_ESFIPricelist",
-    "GID": "6ec8be7a-bfac-42c2-95c2-c15b68cca9d2",
-    "NameInDB": "FK_ESFIItemPriceHistory_ESFIPricelist",
-    "MTableID": "ESFIPricelist",
-    "DTableID": "ESFIItemPriceHistory",
-    "MTableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
-    "MValue1GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
-    "DTableGID": "08b1d27b-5425-4dbf-8dc5-8f340f289d84",
-    "DValue1GID": "71f4b69d-0db5-4fd3-9e62-772f50673b69",
-    "IsVirtual": false,
-    "IsDeleted": false,
-    "MasterColumns": [{
-        "ID": "GID",
-        "GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
-        "TableID": "ESFIPricelist",
-        "TableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
-        "DBColumnName": "GID",
-        "AllowEQUC": false,
-        "Size": -1,
-        "ODSType": "ESGID",
-        "Precision": 0,
-        "Nullable": false,
-        "ChoiceType": "",
-        "Flags": 0,
-        "HelpTxt": "",
-        "SeqNum": 1
-    }],
-    "DetailColumns": [{
-        "ID": "fPricelistGID",
-        "GID": "71f4b69d-0db5-4fd3-9e62-772f50673b69",
-        "TableID": "ESFIItemPriceHistory",
-        "TableGID": "08b1d27b-5425-4dbf-8dc5-8f340f289d84",
-        "DBColumnName": "fPricelistGID",
-        "AllowEQUC": false,
-        "Size": -1,
-        "ODSType": "ESFGID",
-        "Precision": 0,
-        "Nullable": true,
-        "ChoiceType": "",
-        "Flags": 0,
-        "HelpTxt": "",
-        "SeqNum": 7
-    }]
-},
+                            /**
+                                                         * @ngdoc function
+                                                         * @name es.Services.Web.esWebApi#fetchOdsDetailRelationsInfo
+                                                         * @methodOf es.Services.Web.esWebApi
+                                                         * @description Function that returns the Detail ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given ColumnID of the Master TableID
+                                                         * from the ** Entersoft Object Description System (ODS)** repository.
+                                                         * @module es.Services.Web
+                                                         * @kind function
+                                                         * @param {string} tableID The ODS Table ID i.e. "ESFFitem". 
+                                                         * @param {string} columnID The ODS Column/Field ID  to retrieve i.e. "GID".
+                                                         * @return {httpPromise}  Returns a promise..
+                                                         ** If sucess the response.data contains an Array of the Detail ODS Relation Definition objects in JSON representation, that exist
+                                                         * for the given *tableID* and foreign *columnID*
+                                                         ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+                                                         * err.data.UserMessage
+                                                         *
+                                                         * Success promise return value i.e. response.data is of the following form:
+                            ```js
+                            var odsDetailRelations = [{
+                                "ID": "FK_ESFIItemPriceHistory_ESFIPricelist",
+                                "GID": "6ec8be7a-bfac-42c2-95c2-c15b68cca9d2",
+                                "NameInDB": "FK_ESFIItemPriceHistory_ESFIPricelist",
+                                "MTableID": "ESFIPricelist",
+                                "DTableID": "ESFIItemPriceHistory",
+                                "MTableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+                                "MValue1GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+                                "DTableGID": "08b1d27b-5425-4dbf-8dc5-8f340f289d84",
+                                "DValue1GID": "71f4b69d-0db5-4fd3-9e62-772f50673b69",
+                                "IsVirtual": false,
+                                "IsDeleted": false,
+                                "MasterColumns": [{
+                                    "ID": "GID",
+                                    "GID": "2c8ea6ae-5438-46a3-bcb0-2d0208a84ad0",
+                                    "TableID": "ESFIPricelist",
+                                    "TableGID": "1f361b65-09e3-40c7-b675-ba70d24ec33d",
+                                    "DBColumnName": "GID",
+                                    "AllowEQUC": false,
+                                    "Size": -1,
+                                    "ODSType": "ESGID",
+                                    "Precision": 0,
+                                    "Nullable": false,
+                                    "ChoiceType": "",
+                                    "Flags": 0,
+                                    "HelpTxt": "",
+                                    "SeqNum": 1
+                                }],
+                                "DetailColumns": [{
+                                    "ID": "fPricelistGID",
+                                    "GID": "71f4b69d-0db5-4fd3-9e62-772f50673b69",
+                                    "TableID": "ESFIItemPriceHistory",
+                                    "TableGID": "08b1d27b-5425-4dbf-8dc5-8f340f289d84",
+                                    "DBColumnName": "fPricelistGID",
+                                    "AllowEQUC": false,
+                                    "Size": -1,
+                                    "ODSType": "ESFGID",
+                                    "Precision": 0,
+                                    "Nullable": true,
+                                    "ChoiceType": "",
+                                    "Flags": 0,
+                                    "HelpTxt": "",
+                                    "SeqNum": 7
+                                }]
+                            },
 
-// ...
-// ...
+                            // ...
+                            // ...
 
-}];
+                            }];
 
-</pre>
-                             *
-                             * Error promise return value i.e. function(err) is of the following form:
-<pre>
-// fetchOdsDetailRelationsInfo("ESFIPricelist", "gidc"), which does not exist in the ODS
-var f = {
-    "data": {
-        "MessageID": "invalid-column-id",
-        "UserMessage": "invalid column id: ESFIPricelist.gidc",
-        "Messages": []
-    },
-    "status": 404,
-    "config": {
-        "method": "GET",
-        "transformRequest": [null],
-        "transformResponse": [null],
-        "headers": {
-            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwieC1lcy11c2VyLXBhc3N3b3JkIjoiZW50ZXJzb2Z0IiwieC1lcy11c2VyLWJyYW5jaC1pZCI6Is6RzpjOlyIsIngtZXMtdXNlci1sYW5nLWlkIjoiZWwtR1IiLCJ4LWVzbG9naW5pbmZvLVN1YnNjcmlwdGlvblBhc3N3b3JkIjoicGFzc3giLCJpc3MiOiJFbnRlcnNvZnQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0IiwiZXhwIjoxNDQxODkyMDcwLCJuYmYiOjE0NDE4ODYwNzB9.tCuasMPd4kXT02kQo0Z9M8MuwnoGCTkexDs58OeRwcI",
-            "Accept": "application/json, text/plain"
-        },
-        "url": "http://localhost/eswebapi/api/rpc/FetchOdsDetailRelationsInfo/ESFIPricelist/gidc"
-    },
-    "statusText": "Not Found"
-};
-</pre>
-                            * @example
-<pre>
-//fetchOdsDetailRelationsInfo example
-$scope.fetchOdsDetailRelationsInfo = function() {
-    esWebApi.fetchOdsDetailRelationsInfo($scope.odsID, $scope.odsColumnID)
-        .then(function(ret) {
-            $scope.pRelationInfo = ret.data;
-        }, function(err) {
-            $scope.pRelationInfo = err;
-        });
-}
-</pre>
-*/
+                            ```
+                                                         *
+                                                         * Error promise return value i.e. function(err) is of the following form:
+                            ```js
+                            // fetchOdsDetailRelationsInfo("ESFIPricelist", "gidc"), which does not exist in the ODS
+                            var f = {
+                                "data": {
+                                    "MessageID": "invalid-column-id",
+                                    "UserMessage": "invalid column id: ESFIPricelist.gidc",
+                                    "Messages": []
+                                },
+                                "status": 404,
+                                "config": {
+                                    "method": "GET",
+                                    "transformRequest": [null],
+                                    "transformResponse": [null],
+                                    "headers": {
+                                        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwieC1lcy11c2VyLXBhc3N3b3JkIjoiZW50ZXJzb2Z0IiwieC1lcy11c2VyLWJyYW5jaC1pZCI6Is6RzpjOlyIsIngtZXMtdXNlci1sYW5nLWlkIjoiZWwtR1IiLCJ4LWVzbG9naW5pbmZvLVN1YnNjcmlwdGlvblBhc3N3b3JkIjoicGFzc3giLCJpc3MiOiJFbnRlcnNvZnQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0IiwiZXhwIjoxNDQxODkyMDcwLCJuYmYiOjE0NDE4ODYwNzB9.tCuasMPd4kXT02kQo0Z9M8MuwnoGCTkexDs58OeRwcI",
+                                        "Accept": "application/json, text/plain"
+                                    },
+                                    "url": "http://localhost/eswebapi/api/rpc/FetchOdsDetailRelationsInfo/ESFIPricelist/gidc"
+                                },
+                                "statusText": "Not Found"
+                            };
+                            ```
+                                                        * @example
+                            ```js
+                            //fetchOdsDetailRelationsInfo example
+                            $scope.fetchOdsDetailRelationsInfo = function() {
+                                esWebApi.fetchOdsDetailRelationsInfo($scope.odsID, $scope.odsColumnID)
+                                    .then(function(ret) {
+                                        $scope.pRelationInfo = ret.data;
+                                    }, function(err) {
+                                        $scope.pRelationInfo = err;
+                                    });
+                            }
+                            ```
+                            */
                             fetchOdsDetailRelationsInfo: function(tableID, columnID) {
                                 tableID = tableID ? tableID.replace(/ /g, "") : "";
                                 columnID = columnID ? columnID.replace(/ /g, "") : "";
                                 return getOdsInfo("__FETCH_ODS_DETAIL_RELATIONS_INFO__", tableID + "/" + columnID);
                             },
 
- /**
+                            /**
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#fetchServerCapabilities
                              * @methodOf es.Services.Web.esWebApi
@@ -1258,7 +1350,7 @@ $scope.fetchOdsDetailRelationsInfo = function() {
                              * @kind function
                              * @return {httpPromise} If success i.e. function(ret) { ... } **_ret_** is a JSON object of the current WEB API Server capabilities.
                              * The return object has the following structure:
-<pre>
+```js
 var srvCapabilities = {
     AllowInsecureHttp: boolean, 
     // If false, WEB API Server does not allow unsecure conncetions. ONLY httpS is supported
@@ -1269,9 +1361,9 @@ var srvCapabilities = {
         Patch: int  // i.e. 7
     }
 };
-</pre>
+```
                              * @example
-<pre>
+```js
 $scope.fetchServerCapabilities = function()
 {
     esWebApi.fetchServerCapabilities()
@@ -1281,7 +1373,7 @@ $scope.fetchServerCapabilities = function()
             $scope.pSrvCapabilities = err;
         });
 }
-</pre>
+```
 */
                             fetchServerCapabilities: function() {
 
@@ -1315,12 +1407,12 @@ $scope.fetchServerCapabilities = function()
                              * @param {string} filterID Entersoft Scroller FilterID
                              * @param {object} params pqParams Parameters that will be used for the execution of the Scroller at the Entersoft Application Server
                              * The typical structure of the params object is:
-<pre>
+```js
 var pqParams = {
     Name: "a*",
     RegDate: "ESDateRange(Day)"
 };
-</pre>
+```
                              * params is a typical JSON object of key: value properties, where key is the parameter name as defined in the Scroller 
                              * (through Entersoft Scroller Designer) and value is an Entersoft Application server acceptable value for the given parameter, depending on the
                              * parameter type and properties as defined in the Scroller (through Entersoft Scroller Designer)
@@ -1332,7 +1424,7 @@ var pqParams = {
                              * at the execution time will be treated by the Entersoft Application Server as having null value.
                              * @return {httpPromise} Returns a promise. 
                              ** If success i.e. function(ret) { ...} ret.data contains the JSON object of the results of tables and records in the following form:
-<pre>
+```js
 var scrollerRet = {
     DatasetTable1: [
         {
@@ -1362,10 +1454,10 @@ var scrollerRet = {
         } // Row K
     ]
 };
-</pre>
+```
                             ** If error i.e. function(err) { ... } err contains the server error oject in JSON Format.
                             *@example
-<pre>
+```js
 // fetchScroller sample
 $scope.fetchScroller = function() {
      var scroller_params = {
@@ -1381,9 +1473,9 @@ $scope.fetchScroller = function() {
                 $log.error(err);
             });
 }
-</pre>
+```
                             * The result for fetchScroller("ESGOPerson", "PersonList", scroller_Params) has the following format:
-<pre>
+```js
 var scrollerResults = {
     "ESGOPerson": [{
         "GID": "d4b166f4-417d-46b8-8459-1d11d81f4aff",
@@ -1427,7 +1519,7 @@ var scrollerResults = {
         "EMailAddress": "info@elma.gr"
     }]
 };
-</pre>
+```
                             **/
                             fetchScroller: function(groupID, filterID, params) {
                                 return execScroller(ESWEBAPI_URL.__SCROLLER__, groupID, filterID, params);
@@ -1446,12 +1538,12 @@ var scrollerResults = {
                              * @param {string} filterID Entersoft Scroller FilterID
                              * @param {object} params pqParams Parameters that will be used for the execution of the Scroller at the Entersoft Application Server
                              * The typical structure of the params object is:
-<pre>
+```js
 var pqParams = {
     Name: "a*",
     RegDate: "ESDateRange(Day)"
 };
-</pre>
+```
                              * params is a typical JSON object of key: value properties, where key is the parameter name as defined in the Scroller 
                              * (through Entersoft Scroller Designer) and value is an Entersoft Application server acceptable value for the given parameter, depending on the
                              * parameter type and properties as defined in the Scroller (through Entersoft Scroller Designer)
@@ -1463,7 +1555,7 @@ var pqParams = {
                              * at the execution time will be treated by the Entersoft Application Server as having null value.
                              * @return {httpPromise} Returns a promise. 
                              ** If success i.e. function(ret) { ...} ret.data contains the **array** of the JSON objects that represent the records of the Master Table. Result has the following form:
-<pre>
+```js
 var simpleRootTablescrollerRet = [
         {
          Field_1: value1,
@@ -1477,10 +1569,10 @@ var simpleRootTablescrollerRet = [
          Field_N: valueN
         } // Row N
     ];
-</pre>
+```
                             ** If error i.e. function(err) { ... } err contains the server error oject in JSON Format.
                             *@example
-<pre>
+```js
 // fetchSimpleScrollerRootTable sample
 $scope.fetchSimpleScrollerRootTable = function() {
      var scroller_params = {
@@ -1496,9 +1588,9 @@ $scope.fetchSimpleScrollerRootTable = function() {
                 $log.error(err);
             });
 }
-</pre>
+```
                             * The result for fetchSimpleScrollerRootTable("ESGOPerson", "PersonList", scroller_Params) has the following format:
-<pre>
+```js
 var simpleRootTable_scrollerResults = [{
         "GID": "d4b166f4-417d-46b8-8459-1d11d81f4aff",
         "Code": "0000026",
@@ -1540,7 +1632,7 @@ var simpleRootTable_scrollerResults = [{
         "Description7": "BIOMHXANIA",
         "EMailAddress": "info@elma.gr"
     }];
-</pre>
+```
                             **/
                             fetchSimpleScrollerRootTable: function(groupID, filterID, params) {
                                 return execScroller(ESWEBAPI_URL.__SCROLLERROOTTABLE__, groupID, filterID, params);
@@ -1558,14 +1650,14 @@ var simpleRootTable_scrollerResults = [{
                              * the user has access to.
                              * @return {httpPromise} If success i.e. function(ret) { ... } ret.data is an Array of JSON objects representing the ESGOSites user has access to whitin the context of the current ESCompany.
                              * The return object has the following structure:
-<pre>
+```js
 var UserSite = {
     Key: string,  // The ESGOSite Code i.e. "ΑΘΗ",
     Value: string // The ESGOSite Description i.e. "Κεντρικά Entersoft" 
 };
-</pre>
+```
                              * @example
-<pre>
+```js
 $scope.fetchUserSites = function()
 {
     esWebApi.fetchUserSites($scope.pUser)
@@ -1578,7 +1670,7 @@ $scope.fetchUserSites = function()
 
 // results based on EBS Demo fetchUserSites("esmaster") =>
 // ret.data ===> [{"Key":"ΑΘΗ","Value":"Κεντρικά Entersoft"},{"Key":"ΘΕΣ","Value":"Υποκατάστημα Θεσσαλονίκης ES"}]
-</pre>
+```
 */
                             fetchUserSites: function(ebsuser) {
                                 var ht = $http({
@@ -1593,64 +1685,64 @@ $scope.fetchUserSites = function()
                                 return processWEBAPIPromise(ht);
                             },
 
-/**
-                             * @ngdoc function
-                             * @name es.Services.Web.esWebApi#fetchSessionInfo
-                             * @methodOf es.Services.Web.esWebApi
-                             * @description Function that returns Entersoft Application Server session information
-                             * @module es.Services.Web
-                             * @kind function
-                             * @return {httpPromise} Returns a promise.
-                             ** If sucess the **response.data.ESProperty** contains the array of the session properties objects.
-                             * Each session property object is fo the following form:
-<pre>
-var sessprop = {
-    ID: string, // property ID i.e. "101"
-    Description: string, // property Description in the session's language translation i.e. "Έκδοση Εγκατάστασης"
-    ValueS: string, // property Value in string format i.e. "4.0.36 - 2"
-    Type: int // property EBS Type i.e. 0
-};
-</pre>
-                             ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
-                             * err.data.UserMessage
-                             *
-                             * Success promise return value i.e. response.data is of the following form:
-<pre>
-var x = {
-    "ESProperty": [{
-        "ID": "101",
-        "Description": "Έκδοση Εγκατάστασης",
-        "ValueS": "4.0.36 - 2",
-        "Type": 0
-    }, {
-        "ID": "102",
-        "Description": "Έκδοση Παραστατικών",
-        "ValueS": "167",
-        "Type": 0
-    }, 
-    // ... more properties
-    {
-        "ID": "16",
-        "Description": "Τρέχων Αριθμός Χρηστών",
-        "ValueS": "BackOffice = 1, Retail = 0, Mobile = 6, Web = 0",
-        "Type": 0
-    }]
-};
+                            /**
+                                                         * @ngdoc function
+                                                         * @name es.Services.Web.esWebApi#fetchSessionInfo
+                                                         * @methodOf es.Services.Web.esWebApi
+                                                         * @description Function that returns Entersoft Application Server session information
+                                                         * @module es.Services.Web
+                                                         * @kind function
+                                                         * @return {httpPromise} Returns a promise.
+                                                         ** If sucess the **response.data.ESProperty** contains the array of the session properties objects.
+                                                         * Each session property object is fo the following form:
+                            ```js
+                            var sessprop = {
+                                ID: string, // property ID i.e. "101"
+                                Description: string, // property Description in the session's language translation i.e. "Έκδοση Εγκατάστασης"
+                                ValueS: string, // property Value in string format i.e. "4.0.36 - 2"
+                                Type: int // property EBS Type i.e. 0
+                            };
+                            ```
+                                                         ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
+                                                         * err.data.UserMessage
+                                                         *
+                                                         * Success promise return value i.e. response.data is of the following form:
+                            ```js
+                            var x = {
+                                "ESProperty": [{
+                                    "ID": "101",
+                                    "Description": "Έκδοση Εγκατάστασης",
+                                    "ValueS": "4.0.36 - 2",
+                                    "Type": 0
+                                }, {
+                                    "ID": "102",
+                                    "Description": "Έκδοση Παραστατικών",
+                                    "ValueS": "167",
+                                    "Type": 0
+                                }, 
+                                // ... more properties
+                                {
+                                    "ID": "16",
+                                    "Description": "Τρέχων Αριθμός Χρηστών",
+                                    "ValueS": "BackOffice = 1, Retail = 0, Mobile = 6, Web = 0",
+                                    "Type": 0
+                                }]
+                            };
 
-</pre>
-                             * @example
-<pre>
-//fetchSessionInfo example
-$scope.fetchSessionInfo = function() {
-    esWebApi.fetchSessionInfo()
-        .then(function(ret) {
-            $scope.pSessionInfo = ret.data;
-        }, function(err) {
-            $scope.pSessionInfo = err;
-        });
-}
-</pre>
-*/
+                            ```
+                                                         * @example
+                            ```js
+                            //fetchSessionInfo example
+                            $scope.fetchSessionInfo = function() {
+                                esWebApi.fetchSessionInfo()
+                                    .then(function(ret) {
+                                        $scope.pSessionInfo = ret.data;
+                                    }, function(err) {
+                                        $scope.pSessionInfo = err;
+                                    });
+                            }
+                            ```
+                            */
                             fetchSessionInfo: function() {
                                 var promise = $http({
                                     method: 'get',
@@ -1767,7 +1859,7 @@ $scope.fetchSessionInfo = function() {
                              *
                              ** If error i.e. error(function(err, status) { ... }) the err contains the server error object and if available the status code i.e. 400
                              * @example
-<pre>
+```js
 function($scope, esWebApi, esWebUIHelper) {
     $scope.pGroup = "ESMMStockItem";
     $scope.pFilter = "ESMMStockItem_def";
@@ -1789,7 +1881,7 @@ function($scope, esWebApi, esWebUIHelper) {
             });
     }
 }
-</pre>
+```
                              */
                             fetchPublicQueryInfo: function(GroupID, FilterID) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, GroupID, "/", FilterID);
@@ -1815,13 +1907,13 @@ function($scope, esWebApi, esWebUIHelper) {
                              * @param {string} zoomID Entersoft Public Query GroupID
                              * @param {object} pqOptions Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
                              * pqOptions is a JSON object of the following type:
- <pre>
+ ```js
 var pqOptions = {
     WithCount: boolean,
     Page: int,
     PageSize: int
 };
-</pre>
+```
                              *
                              ** If pqOptions is null or undefined OR pqOptions.Page is null OR undefined OR NaN OR less than or equal to 0 THEN
                              * the Public Query will be executed at the Entersoft Application Server with no paging at all, which means that ALL the 
@@ -1838,7 +1930,7 @@ var pqOptions = {
                              ** If success i.e. then(function(ret) { ... }) ret.data holds the result of the Zoom Records.
                              * In any success response, ret.data.Table will hold as string the Public Query MasterTableName as defined through the Entersoft Scroller Designer.
                              * The response has the typical form as follows:
-<pre>
+```js
 var x = {
     Table: string, // The name of the standard i.e. in the form ESXXZxxxx provided in the **_zoomID_** parameter
     Rows: [{Record 1}, {Record 2}, ....], // An array of JSON objects each one representing a record in the form of fieldName: fieldValue
@@ -1846,11 +1938,11 @@ var x = {
     Page: int, // If applicable the requested Page Number (1 based), otherwise -1
     PageSize: int, // If applicable the Number of records in the Page (i.e. less or equal to the requested PageSize) otherwise -1
 }
-</pre>                        
+```                        
                              *
                              ** If error i.e. function(err) { ... } then err.data contains the Entersoft Application server error object.
                              * @example
-<pre>
+```js
 $scope.fetchStdZoom = function()
 {
     var zoomOptions = {
@@ -1866,7 +1958,7 @@ $scope.fetchStdZoom = function()
             $scope.pZoomResults = err;
         });
 }
-</pre>
+```
                              */
                             fetchStdZoom: function(zoomID, pqOptions) {
                                 zoomID = zoomID ? zoomID.replace(/ /g, "") : "";
@@ -1961,13 +2053,13 @@ $scope.fetchStdZoom = function()
                              * @param {string} pqFilterID Entersoft Public Query FilterID
                              * @param {object} pqOptions Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
                              * pqOptions is a JSON object of the following type:
- <pre>
+ ```js
 var pqOptions = {
     WithCount: boolean,
     Page: int,
     PageSize: int
 };
-</pre>
+```
                              *
                              ** If pqOptions is null or undefined OR pqOptions.Page is null OR undefined OR NaN OR less than or equal to 0 THEN
                              * the Public Query will be executed at the Entersoft Application Server with no paging at all, which means that ALL the 
@@ -1982,12 +2074,12 @@ var pqOptions = {
                              * total records depending on the other parameters. See the return section for detailed information about the returned value.
                              * @param {object} pqParams Parameters that will be used for the execution of the Public Query at the Entersoft Application Server
                              * The typical structure of the pqParams object is:
-<pre>
+```js
 var pqParams = {
     Name: "a*",
     RegDate: "ESDateRange(Day)"
 };
-</pre>
+```
                              * pqParams is a typical JSON object of key: value properties, where key is the parameter name as defined in the Public Query 
                              * (through Entersoft Scroller Designer) and value is an Entersoft Application server acceptable value for the given parameter, depending on the
                              * parameter type and properties as defined in the Public Query (through Entersoft Scroller Designer)
@@ -2002,7 +2094,7 @@ var pqParams = {
                              ** If success i.e. then(function(ret) { ... }) ret.data holds the result of the Public Query Execution.
                              * In any success response, ret.data.Table will hold as string the Public Query MasterTableName as defined through the Entersoft Scroller Designer.
                              * The response has the typical form as follows:
-<pre>
+```js
 var x = {
     Table: string, // The name of the MasterTable as defined in the Public Query definition (through the Scroller Designer)
     Rows: [{Record 1}, {Record 2}, ....], // An array of JSON objects each one representing a record in the form of fieldName: fieldValue
@@ -2010,7 +2102,7 @@ var x = {
     Page: int, // If applicable the requested Page Number (1 based), otherwise -1
     PageSize: int, // If applicable the Number of records in the Page (i.e. less or equal to the requested PageSize) otherwise -1
 }
-</pre>                        
+```                        
                              *                              * 
                              * If **NO PAGING** is taking place (no matter how), which means that all data are returned from the server THEN
                              * ret.data.Count will always be greater or equal to 0 and it will always be equal to the ret.data.Rows.length i.e. the number of 
@@ -2020,7 +2112,7 @@ var x = {
                              * **ATTENTION** If no records are returned by the Server ret.data.Rows will NOT BE null or undefined or not defined. It will be an empty array. ret.data.PageSize will be -1, ret.data.Page will be -1, 
                              * 
                              *If **PAGING** is taking place the following pseudo code diagram reflects the contents of ret.data response:
-<pre>
+```js
 IF WithCount == TRUE THEN
     {
         Count: 0, // (if no data at all exist or the number of records found in the database for the specific pq & params execution),
@@ -2038,11 +2130,11 @@ ELSE
         Table: “xxxx”
     }
 END IF
-</pre>
+```
                              *
                              ** If error i.e. function(err) { ... } then err.data contains the Entersoft Application server error object.
                              * @example
-<pre>
+```js
 $scope.dofetchPublicQuery = function() {
     var group = "ESGOPerson";
     var filter = "PersonList";
@@ -2068,7 +2160,7 @@ $scope.dofetchPublicQuery = function() {
                 $log.error(err);
             });
 }
-</pre>
+```
                              */
                             fetchPublicQuery: function(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb) {
                                 pqGroupID = pqGroupID ? pqGroupID.replace(/ /g, "") : "";
@@ -2108,7 +2200,24 @@ $scope.dofetchPublicQuery = function() {
                             },
 
 
-
+                            /** 
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#eSearch
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server.
+                             * This function allows for almost any kind of operation can be executed by the ElasticSearch engine as an http method (i.e. GET, PUT, DELETE, POST, etc.)
+                             * {@link es.Services.Web.esElasticSearch#methods_searchIndex searchIndex}.
+                             * @param {string} eUrl the last segment of the URL (i.e. without the domain name) that contains the REST api part 
+                             * e.g. twitter/_settings,_mappings (the full CURL type request URL would be http://localhost:9200/twitter/_settings,_mappings). 
+                             * This call is an example from ElasticSearch documentation {@link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-index.html GetIndex}
+                             * that retrieves the settings and the mappings for the twitter index.
+                             * @param {string} eMethod The http method verb (i.e. "GET", "PUT", "DELETE", "POST", etc.). In the example above the verb should be "GET"
+                             * the index or indices specified by the elasticSearchIndex parameter.
+                             * @param {string} eBody The http request payload as required by the ElasticSearch REST call we are executing. In the example above there is no payload so it would be emtpy or null.
+                             * @return {httpPromise} The response that we get from Elastic Search service should we perform an AJAX call against the service
+                             * 
+                             */
                             eSearch: function(eUrl, eMethod, eBody) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ELASTICSEARCH__, eUrl);
 
@@ -2146,19 +2255,546 @@ $scope.dofetchPublicQuery = function() {
         }
     );
 
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esElasticSearch
+     * @module es.Services.Web
+     * @kind factory
+     * @sortOrder 500
+     * @description esElasticSerach is a facade provided by the ES WEB API in order to facilitate and secure the access to an Elastic Search, registered 
+     * in the ES WEB API Server through the esWebApi service. All the calls are actually passed through to the registeredto the Entersoft WEB API Server
+     * ElasticSearch engine.
+     *
+     * For more information about ElasticSearch please visit {@link https://www.elastic.co/ ElasticSearch} 
+     * and for the complete reference guide visit {@link https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html Reference Guide}.
+     *
+     * #**ES WEB API Server and ElasticSearch**
+     * In order to be able to use the esElasticSearch service of the Entersoft AgnularJS API, you have first to **register** to the {@link installation/es02wapis#Elastic-Search ES WEB API Server} 
+     * the ElasticSearch engine that will be serve the queries of the service. 
+     */
     esWebServices.factory('esElasticSearch', ['esWebApi',
         function(esWebApi) {
             return {
-                searchIndex: function(index, body) {
-                    var eUrl = index + "/_search";
-                    return esWebApi.eSearch(eUrl, "post", body);
+                /** 
+                 * @ngdoc function
+                 * @name es.Services.Web.esElasticSearch#searchIndex
+                 * @methodOf es.Services.Web.esElasticSearch
+                 * @kind function
+                 * @description This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server for the
+                 * **Search** service based on the elastic search query language. This is the most common scenario of Elastic Search usage i.e. querying the Elastic Search database
+                 * within the scope of one or more indices. See also {@link es.Services.Web.esElasticSearch#methods_searchIndexAndDocument searchIndexAndDocument}.
+                 * @param {string} elasticSearchIndex The Elastic Search index name or comma separated index names or reg expression resolving to index - indices to which the _elasticSearchQuery_ statement will be executed against.
+                 * @param {string} elasticSearchQuery The Elastic Search valid statement - query to be executed. For more information about ElsticSearch Query Language
+                 * please visit {@link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html ES Query DSL}.
+                 * @return {httpPromise} The response that we get from Elastic Search service should we perform an AJAX call against the service
+                 * @example
+    ```js
+// This example is taken from the Entersoft Knowledge Base WEB Application that is powered by the Entersoft AngularJS WEB API and the ElasticSearch
+var esQuery = {
+    "size": 10,
+    "from": 0,
+    "fields": ["Code", "Title", "Description", "Caption", "FType", "EDate", "RegistrationDate", "ArticleType", "DocCategoryCode", "Rating", "GID", "Product", "SEO", "Tag"],
+    "query": {
+        "filtered": {
+            "query": {
+                "multi_match": {
+                    "query": "version mobile",
+                    "fields": ["file", "Notes", "Description", "Title"]
+                }
+            },
+            "filter": {
+                "bool": {
+                    "must": []
+                }
+            }
+        }
+    },
+    "track_scores": true,
+    "sort": [{
+        "_score": "desc"
+    }],
+    "highlight": {
+        "pre_tags": ["<em highlight=\"green\">", "<em highlight=\"orange\" >", "<em highlight=\"red\">"],
+        "post_tags": ["</em>", "</em>", "</em>"],
+        "fields": {
+            "file": {
+                "fragment_size": 250,
+                "number_of_fragments": 1,
+                "no_match_size": 100
+            },
+            "Notes": {
+                "fragment_size": 250,
+                "number_of_fragments": 1,
+                "no_match_size": 100
+            },
+            "Title": {
+                "fragment_size": 250,
+                "number_of_fragments": 1,
+                "no_match_size": 100
+            },
+            "Description": {
+                "fragment_size": 250,
+                "number_of_fragments": 1,
+                "no_match_size": 100
+            }
+        }
+    },
+    "aggs": {
+        "type": {
+            "terms": {
+                "field": "ArticleType.raw",
+                "size": 0
+            }
+        },
+        "product": {
+            "terms": {
+                "field": "Product",
+                "size": 0
+            }
+        },
+        "tags": {
+            "terms": {
+                "field": "Tags.raw",
+                "size": 15
+            }
+        },
+        "articleYear": {
+            "date_histogram": {
+                "min_doc_count": 0,
+                "field": "RegistrationDate",
+                "interval": "year",
+                "format": "yyyy",
+                "order": {
+                    "_key": "desc"
+                }
+            }
+        },
+        "ftype": {
+            "terms": {
+                "field": "FType",
+                "size": 0
+            }
+        }
+    }
+};
+
+esElasticSearch.searchIndex("esknow", esQuery)
+    .then(function(ret)
+    {
+        var esQueryResults = ret.data;
+        $log.information("This query took " + esQueryResults.took + " ms to run");
+        $log.information("Max scored Results " + esQueryResults.hits.max_score);
+        $log.information("Total Number of Results " + esQueryResults.hits.total);
+        $log.information("Results " + esQueryResults.hits.hits);
+
+    });
+```
+                 * A sample response for this query is:
+```js
+// i.e. ret.data
+var resp = {
+    "took": 78,
+    "timed_out": false,
+    "_shards": {
+        "total": 5,
+        "successful": 5,
+        "failed": 0
+    },
+    "hits": {
+        "total": 286,
+        "max_score": 0.7949327,
+        "hits": [{
+            "_index": "esknow",
+            "_type": "eskbarticle",
+            "_id": "a74fb1a7-3097-4fb2-92e9-8a0c25c7c925",
+            "_score": 0.7949327,
+            "fields": {
+                "GID": ["a74fb1a7-3097-4fb2-92e9-8a0c25c7c925"],
+                "Description": ["Online sales ordering via mobile"],
+                "RegistrationDate": ["2012-06-01T21:25:42.827Z"],
+                "Rating": [0],
+                "Tag": ["ΕΜΠΟΡΙΚΟ", "ΛΕΙΤΟΥΡΓΙΚΟ"],
+                "SEO": ["/online-sales-ordering-via-mobile/clip-00188"],
+                "Code": ["CLIP-00188"]
+            },
+            "highlight": {
+                "Description": ["Online sales ordering via <em highlight=\"orange\" >mobile</em>"],
+                "Notes": ["input of key data for bids and sales orders for the salesperson. Structured menus, clear choices, easy movements and help on <em highlight=\"orange\" >mobile</em> or tablet devices without the need for extra training."]
+            }
+        }, {
+            "_index": "esknow",
+            "_type": "eskbarticle",
+            "_id": "5bd500eb-705a-48f5-8297-283ef543af9b",
+            "_score": 0.751858,
+            "fields": {
+                "GID": ["5bd500eb-705a-48f5-8297-283ef543af9b"],
+                "Description": ["Mobile MIS 360° 2.0"],
+                "RegistrationDate": ["2012-01-09T17:36:47.000Z"],
+                "Rating": [0],
+                "Product": ["MIS 360"],
+                "SEO": ["/mis-360/new-features/mobile-mis-360-2-0/kb-01003"],
+                "Code": ["KB-01003"],
+                "ArticleType": ["NEW FEATURES"]
+            },
+            "highlight": {
+                "Description": ["<em highlight=\"orange\" >Mobile</em> MIS 360° 2.0"],
+                "Notes": ["Νέα Χαρακτηριστικά & Λειτουργικότητα\nΤα νέα χαρακτηριστικά και οι βελτιώσεις της έκδοσης περιγράφονται"]
+            }
+        }, {
+            "_index": "esknow",
+            "_type": "eskbarticle",
+            "_id": "441a73c5-46f8-4b22-bb55-743af2d95780",
+            "_score": 0.751858,
+            "fields": {
+                "GID": ["441a73c5-46f8-4b22-bb55-743af2d95780"],
+                "Description": ["Mobile Suite 2.62"],
+                "RegistrationDate": ["2014-12-19T13:39:44.323Z"],
+                "Rating": [0],
+                "Product": ["MOBILE"],
+                "SEO": ["/mobile/new-features/mobile-suite-2-62/kb-01182"],
+                "Code": ["KB-01182"],
+                "ArticleType": ["NEW FEATURES"]
+            },
+            "highlight": {
+                "Description": ["<em highlight=\"orange\" >Mobile</em> Suite 2.62"],
+                "Notes": ["Summary description of the contents of this <em highlight=\"green\">version</em> \r\nRead a summary description of the contents of this <em highlight=\"green\">version</em>. A more extensive guide follows with customization guidelines follows.\r\n<em highlight=\"green\">Version</em> 2.62 of Entersoft <em highlight=\"orange\" >Mobile</em> Suite can be installed to iOS devices that"]
+            }
+        }, {
+            "_index": "esknow",
+            "_type": "eskbarticle",
+            "_id": "600a5020-e3bd-4c98-9eab-9668ab7f227c",
+            "_score": 0.67971146,
+            "fields": {
+                "GID": ["600a5020-e3bd-4c98-9eab-9668ab7f227c"],
+                "Description": ["Mobile Suite 2.62"],
+                "RegistrationDate": ["2014-12-19T13:36:10.900Z"],
+                "Rating": [0],
+                "Product": ["MOBILE"],
+                "SEO": ["/mobile/new-features/mobile-suite-2-62/kb-01181"],
+                "Code": ["KB-01181"],
+                "ArticleType": ["NEW FEATURES"]
+            },
+            "highlight": {
+                "Description": ["<em highlight=\"orange\" >Mobile</em> Suite 2.62"],
+                "Notes": ["κατάλογος των νέων λειτουργιών & βελτιώσεων με οδηγίες χρήσης & παραδείγματα όπου χρειάζεται.\r\nΗ έκδοση 2.62 του Entersoft <em highlight=\"orange\" >Mobile</em> Suite μπορεί να εγκατασταθεί μόνο σε κινητές συσκευές που επικοινωνούν με το Entersoft Business Suite έκδοσης 4.0.26.2 ή μεταγενέστερης"]
+            }
+        }, {
+            "_index": "esknow",
+            "_type": "eskbarticle",
+            "_id": "0507bdb7-3f3e-4818-801e-9af8fa897fda",
+            "_score": 0.67971146,
+            "fields": {
+                "GID": ["0507bdb7-3f3e-4818-801e-9af8fa897fda"],
+                "Description": ["Mobile Suite 2.12"],
+                "RegistrationDate": ["2012-02-02T16:12:30.000Z"],
+                "Rating": [0],
+                "Product": ["MOBILE"],
+                "Tag": ["MOBILE", "ΓΕΝΙΚΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ"],
+                "SEO": ["/mobile/new-features/mobile-suite-2-12/kb-00961"],
+                "Code": ["KB-00961"],
+                "ArticleType": ["NEW FEATURES"]
+            },
+            "highlight": {
+                "Description": ["<em highlight=\"orange\" >Mobile</em> Suite 2.12"],
+                "Notes": ["Νέα χαρακτηριστικά & Επεκτάσεις\nΣυνοπτική περιγραφή των σημαντικότερων προσθηκών της έκδοσης.\nΠαραστατικά"]
+            }
+        }, {
+            "_index": "esknow",
+            "_type": "eskbarticle",
+            "_id": "3dbca594-b277-4be0-bb33-f58adc37c8c4",
+            "_score": 0.67971146,
+            "fields": {
+                "GID": ["3dbca594-b277-4be0-bb33-f58adc37c8c4"],
+                "Description": ["Mobile Suite 2.12"],
+                "RegistrationDate": ["2012-02-02T17:16:11.000Z"],
+                "Rating": [0],
+                "Product": ["MOBILE"],
+                "Tag": ["MOBILE", "ΓΕΝΙΚΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ"],
+                "SEO": ["/mobile/new-features/mobile-suite-2-12/kb-00964"],
+                "Code": ["KB-00964"],
+                "ArticleType": ["NEW FEATURES"]
+            },
+            "highlight": {
+                "Description": ["<em highlight=\"orange\" >Mobile</em> Suite 2.12"],
+                "Notes": ["notes, age analysis and status.\nThere is a new button in customer list, which presents the financial info of the customer from <em highlight=\"orange\" >mobile</em> device database: name, phone, tax registration number, tax office, balance, turnover, pending invoices/order etc.\nGeneral"]
+            }
+        }, {
+            "_index": "esknow",
+            "_type": "eskbarticle",
+            "_id": "a1990c36-63c7-4914-86d4-2d1d4c358c34",
+            "_score": 0.65732294,
+            "fields": {
+                "GID": ["a1990c36-63c7-4914-86d4-2d1d4c358c34"],
+                "Description": ["Mobile Suite 2.16"],
+                "RegistrationDate": ["2012-04-03T15:47:25.000Z"],
+                "Rating": [0],
+                "Product": ["MOBILE"],
+                "SEO": ["/mobile/new-features/mobile-suite-2-16/kb-01000"],
+                "Code": ["KB-01000"],
+                "ArticleType": ["NEW FEATURES"]
+            },
+            "highlight": {
+                "Description": ["<em highlight=\"orange\" >Mobile</em> Suite 2.16"],
+                "Notes": ["Νέα χαρακτηριστικά & Επεκτάσεις\nΣυνοπτική περιγραφή των σημαντικότερων προσθηκών της έκδοσης.\nΓενικές"]
+            }
+        }, {
+            "_index": "esknow",
+            "_type": "eskbarticle",
+            "_id": "f17d84d7-e8e6-45c8-a889-44fb14564468",
+            "_score": 0.65732294,
+            "fields": {
+                "GID": ["f17d84d7-e8e6-45c8-a889-44fb14564468"],
+                "Description": ["Mobile Suite 2.14"],
+                "RegistrationDate": ["2012-02-22T10:20:58.000Z"],
+                "Rating": [0],
+                "Product": ["MOBILE"],
+                "Tag": ["MOBILE", "ΓΕΝΙΚΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ"],
+                "SEO": ["/mobile/new-features/mobile-suite-2-14/kb-00970"],
+                "Code": ["KB-00970"],
+                "ArticleType": ["NEW FEATURES"]
+            },
+            "highlight": {
+                "Description": ["<em highlight=\"orange\" >Mobile</em> Suite 2.14"],
+                "Notes": ["Νέα χαρακτηριστικά & Επεκτάσεις\nΣυνοπτική περιγραφή των σημαντικότερων προσθηκών της έκδοσης.\nΠαραστατικά"]
+            }
+        }, {
+            "_index": "esknow",
+            "_type": "eskbarticle",
+            "_id": "d3aa8714-9125-41b2-9a97-d49c0d4eca70",
+            "_score": 0.65732294,
+            "fields": {
+                "GID": ["d3aa8714-9125-41b2-9a97-d49c0d4eca70"],
+                "Description": ["Mobile Suite 2.10"],
+                "RegistrationDate": ["2012-01-25T16:17:59.000Z"],
+                "Rating": [0],
+                "Product": ["MOBILE"],
+                "Tag": ["MOBILE", "ΓΕΝΙΚΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ"],
+                "SEO": ["/mobile/new-features/mobile-suite-2-10/kb-00962"],
+                "Code": ["KB-00962"],
+                "ArticleType": ["NEW FEATURES"]
+            },
+            "highlight": {
+                "Description": ["<em highlight=\"orange\" >Mobile</em> Suite 2.10"],
+                "Notes": ["Νέα χαρακτηριστικά & Επεκτάσεις\nΣυνοπτική περιγραφή των σημαντικότερων προσθηκών της έκδοσης.\nΠαραστατικά"]
+            }
+        }, {
+            "_index": "esknow",
+            "_type": "eskbarticle",
+            "_id": "68bc6975-01ee-43f8-8b84-e84e381f46f1",
+            "_score": 0.65732294,
+            "fields": {
+                "GID": ["68bc6975-01ee-43f8-8b84-e84e381f46f1"],
+                "Description": ["Entersoft Seminars | ES Mobile (Tech)"],
+                "RegistrationDate": ["2015-01-30T16:50:04.853Z"],
+                "Rating": [0],
+                "Product": ["MOBILE"],
+                "SEO": ["/mobile/education/entersoft-seminars--es-mobile-tech/kb-01222"],
+                "Code": ["KB-01222"],
+                "ArticleType": ["EDUDEF"]
+            },
+            "highlight": {
+                "Description": ["Entersoft Seminars | ES <em highlight=\"orange\" >Mobile</em> (Tech)"],
+                "Notes": ["ES <em highlight=\"orange\" >Mobile</em> (Tech)\r\n\r\n"]
+            }
+        }]
+    },
+    "aggregations": {
+        "product": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [{
+                "key": "EBS",
+                "doc_count": 60
+            }, {
+                "key": "EXPERT",
+                "doc_count": 51
+            }, {
+                "key": "MOBILE",
+                "doc_count": 11
+            }, {
+                "key": "ALL",
+                "doc_count": 9
+            }, {
+                "key": "MIS 360",
+                "doc_count": 3
+            }]
+        },
+        "ftype": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [{
+                "key": ".pdf",
+                "doc_count": 102
+            }, {
+                "key": ".doc",
+                "doc_count": 45
+            }, {
+                "key": ".docx",
+                "doc_count": 4
+            }]
+        },
+        "articleYear": {
+            "buckets": [{
+                "key_as_string": "2015",
+                "key": 1420070400000,
+                "doc_count": 2
+            }, {
+                "key_as_string": "2014",
+                "key": 1388534400000,
+                "doc_count": 3
+            }, {
+                "key_as_string": "2013",
+                "key": 1356998400000,
+                "doc_count": 22
+            }, {
+                "key_as_string": "2012",
+                "key": 1325376000000,
+                "doc_count": 38
+            }, {
+                "key_as_string": "2011",
+                "key": 1293840000000,
+                "doc_count": 17
+            }, {
+                "key_as_string": "2010",
+                "key": 1262304000000,
+                "doc_count": 28
+            }, {
+                "key_as_string": "2009",
+                "key": 1230768000000,
+                "doc_count": 25
+            }]
+        },
+        "type": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [{
+                "key": "BUG FIXING",
+                "doc_count": 82
+            }, {
+                "key": "NEW FEATURES",
+                "doc_count": 41
+            }, {
+                "key": "QUESTION",
+                "doc_count": 3
+            }, {
+                "key": "SYSTEM",
+                "doc_count": 3
+            }, {
+                "key": "ERROR",
+                "doc_count": 2
+            }, {
+                "key": "CASE",
+                "doc_count": 1
+            }, {
+                "key": "EDUDEF",
+                "doc_count": 1
+            }, {
+                "key": "MANUAL",
+                "doc_count": 1
+            }]
+        },
+        "tags": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 3,
+            "buckets": [{
+                "key": "FIX",
+                "doc_count": 64
+            }, {
+                "key": "ΓΕΝΙΚΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ",
+                "doc_count": 25
+            }, {
+                "key": "MOBILE",
+                "doc_count": 6
+            }, {
+                "key": "SETUP",
+                "doc_count": 3
+            }, {
+                "key": "SYSTEM",
+                "doc_count": 3
+            }, {
+                "key": "ΦΟΡΟΛΟΓΙΚΟΣ ΜΗΧΑΝΙΣΜΟΣ",
+                "doc_count": 3
+            }, {
+                "key": "ΕΚΤΥΠΩΤΗΣ",
+                "doc_count": 2
+            }, {
+                "key": "BACK UP",
+                "doc_count": 1
+            }, {
+                "key": "BARCODE",
+                "doc_count": 1
+            }, {
+                "key": "EXPORT",
+                "doc_count": 1
+            }, {
+                "key": "PRINT",
+                "doc_count": 1
+            }, {
+                "key": "PROGRAMMING - CUSTOMIZATION",
+                "doc_count": 1
+            }, {
+                "key": "ΕΚΤΥΠΩΣΗ ΠΑΡΑΣΤΑΤΙΚΩΝ",
+                "doc_count": 1
+            }, {
+                "key": "ΕΜΠΟΡΙΚΟ",
+                "doc_count": 1
+            }, {
+                "key": "ΛΕΙΤΟΥΡΓΙΚΟ",
+                "doc_count": 1
+            }]
+        }
+    }
+    };
+```
+                 * 
+                 */
+                searchIndex: function(elasticSearchIndex, elasticSearchQuery) {
+                    var eUrl = elasticSearchIndex + "/_search";
+                    return esWebApi.eSearch(eUrl, "post", elasticSearchQuery);
                 },
 
-                searchIndexAndDocument: function(index, docType, body) {
-                    var eUrl = index + "/" + docType + "/_search";
-                    return esWebApi.eSearch(eUrl, "post", body);
+                /** 
+                 * @ngdoc function
+                 * @name es.Services.Web.esElasticSearch#searchIndexAndDocument
+                 * @methodOf es.Services.Web.esElasticSearch
+                 * @kind function
+                 * @description This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server for the
+                 * **Search** service based on the elastic search query language. This is the most common scenario of Elastic Search usage i.e. querying the Elastic Search database
+                 * within the scope of one or more indices for a limited set of documents of the given Document Types. It is similar to 
+                 * {@link es.Services.Web.esElasticSearch#methods_searchIndex searchIndex}.
+                 * @param {string} elasticSearchIndex The Elastic Search index name or comma separated index names or reg expression resolving to index - indices to which the _elasticSearchQuery_ statement will be executed against.
+                 * @param {string} elasticSearchDocumentType The Elastic Search Document Type or Types (in comma separated list) for which the elastic search query will be executed against within
+                 * the index or indices specified by the elasticSearchIndex parameter.
+                 * @param {string} elasticSearchQuery The Elastic Search valid statement - query to be executed. For more information about ElsticSearch Query Language
+                 * please visit {@link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html ES Query DSL}.
+                 * @return {httpPromise} The response that we get from Elastic Search service should we perform an AJAX call against the service
+                 * 
+                 */
+                searchIndexAndDocument: function(elasticSearchIndex, elasticSearchDocumentType, elasticSearchQuery) {
+                    var eUrl = elasticSearchIndex + "/" + elasticSearchDocumentType + "/_search";
+                    return esWebApi.eSearch(eUrl, "post", elasticSearchQuery);
                 },
 
+               /** 
+                 * @ngdoc function
+                 * @name es.Services.Web.esElasticSearch#searchFree
+                 * @methodOf es.Services.Web.esElasticSearch
+                 * @kind function
+                 * @description This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server.
+                 * This function allows for almost any kind of operation can be executed by the ElasticSearch engine as an http method (i.e. GET, PUT, DELETE, POST, etc.)
+                 * {@link es.Services.Web.esElasticSearch#methods_searchIndex searchIndex}.
+                 *
+                 * See also {@link es.Services.Web.esWebApi#methods_eSearch eSearch}
+                 * @param {string} eUrl the last segment of the URL (i.e. without the domain name) that contains the REST api part 
+                 * e.g. twitter/_settings,_mappings (the full CURL type request URL would be http://localhost:9200/twitter/_settings,_mappings). 
+                 * This call is an example from ElasticSearch documentation {@link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-index.html GetIndex}
+                 * that retrieves the settings and the mappings for the twitter index.
+                 * @param {string} eMethod The http method verb (i.e. "GET", "PUT", "DELETE", "POST", etc.). In the example above the verb should be "GET"
+                 * the index or indices specified by the elasticSearchIndex parameter.
+                 * @param {string} eBody The http request payload as required by the ElasticSearch REST call we are executing. In the example above there is no payload so it would be emtpy or null.
+                 * @return {httpPromise} The response that we get from Elastic Search service should we perform an AJAX call against the service
+                 * 
+                 */
                 searchFree: esWebApi.eSearch
             };
         }

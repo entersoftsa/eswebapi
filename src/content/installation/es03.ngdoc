@@ -1,0 +1,82 @@
+@ngdoc overview
+@name Entersoft Public Queries
+@sortOrder 300
+@description
+
+# What is an Entersoft Public Query
+ **Public Queries** is a new Entersoft Data Retrieval component introduced since 4.0.28.0 version of EBS. Public Queries can be defined and managed 
+ through the Entersoft Scroller Designer much like the well-know and widely used across all Entersoft Applications ecosystem *Entersoft Scroller*.
+ Although, Entersoft Public Queries are very similar in principle and definition to Entersoft Scrollers, they have a completely new implementation and a set of prerequisites
+ in order to use and execute them against the Entersoft Application Server.
+
+ Public Queries have been designed and developed in order to enable for modern programming, customization and integration with 3rd party systems with respect to: 
+ WEB Programming i.e. Ajax calls, JQuery, plain Javascript, AngularJS, node.js, Python, etc. as well as mobile programming in native platforms such as: Microsoft Univeral Applications, Microsoft .NET Framework applications, Xamarin Forms, Xamarin Monotouch, Xamarin Monodroid, Objective C, Java, etc.
+ and in general in any Mono (.NET open source platform for Linux and Mac OSx OSs), .NET or javascript based development frameworks.
+
+ The main features of Entersoft Public Queries (PQ) compared to Entersoft Scrollers are:
+* **async** PQs are executed asynchronously, by taking full advantage of the **async** capabilities of Microsoft .NET Framework 4.5.1, which is required to be installed and available at the Entersoft Application Server as well as at the Entersoft WEB API Server.
+ This feaure allows for greater scalability i.e. greater number of concurrent calls to the Entersoft Application Server, better thread management and better use of server's CPU
+ 
+* **server side paging** PQ's fully support first class Microsoft SQL Server server side paging with FAST and cpu and memory OPTIMIZED Transact SQL transformations and Execution.
+ PQs require that the underlying Microsoft SQL Server should be SQL Server 2008 R2 or higher with SQL Server 2014 being strongly recommended.
+ PQ's Paging allows for variable Page number request of variable PageSize. 
+ 
+ For example, suppose that we have a large table of ESGOPerson with millions of records 
+ and we have defined a Public Query with Parameters such as @Name, @eMail, @City, etc. ORDERED BY the ESGOPerson.FullName. 
+ Suppose we want to execute this PQ with no parameter values meaning ALL elgibile records and we want just the data of 6th Page with PageSize of 250 Records.
+ Assuming that all prerequisites are met, the PQ will be executed by the Entersoft Application Server aynchronously, getting ONLY the 6th Page of 250 records pagesize. 
+ Also interesting, we want a second execution of this PQ for the 37th Page with a PageSize of 1000 Rows. No problem, since, Page and PageSize are variable
+ and can take any value in every subsequent call.
+ Should this scenario is executed with Entersoft Scroller instead of PQ, we would have a huge burden on the SQL Server to get all millions of records !!! as well as a HUGE XML Dataset in the Entersoft Application Server (possibly an out-of-memory exception) 
+ and a couple of memory operations to slice the data to get just the 6th page i.e. out of question !!!
+ 
+ **IMPORTANT** PQs also allow for ALL data to be returned, i.e. with No Paging at all, if this is what we want. Even in this bad scenario, PQ execution will be orders
+ of magnitude BETTER performin in all aspects compared to Scoller execution: FASTER SQL Execution, LESS Memory required, ASYNC App Server Execution, MORE Efficient memory processing (JSON instead of XML).
+ Of course, we have to be careful,
+ so that we will not overload systems resources (SQL, Entersoft App Server, nework, traffic, bandwidth, Browser's memory etc.). 
+ 
+* **Count of Records** PQs no matter whether Paging in taking place or not, allow for the Number of Records that meet the current sql statement (defined by the PQ along with the run-time params) to be returned along with the data.
+ The number of records, if requested to be returned, it highly optimized executed by the SQL Server with just one round-trip to the server 
+ with no need to re-write or restructure the PQ's defintion. Any transformations are done at run-time atomatically by the Entersoft Query Processor along with 
+ the support of the new features of SQL Server, Transact SQL.
+ 
+* **JSON format** The default format to which PQ data and results are transformed to and returned to the caller. 
+ JSON for this kind of data i.e. records which outperforms in almost any aspect the *DataSet - XML* representation. Most important, PQ's execution 
+ is taking advantage of the latest .NET Framework and ADO.NET execution options with ASYNC READERS, ASYNC Streams and StringBuilders in order to 
+ construct the JSON result in the most optimal way. **Newtonsoft JSON** .NET library, now 1st class citizen of the .NET Framework, is the core 
+ component used for serialization and deserialization of objects in the Entersoft .NET Framework code ecosystem. 
+ **ATTENTION** Special consideration and Newtonsoft serialization configuration has taken place in order to properly handle NULL values and DATES.
+
+* **Precompiled SQL** PQ Actual SQL Statement is precompiled and stored at design time, which speeds up the application server PQ execution time as
+ the sql statement to be sent to the SQL Server is instantly available. This is in contrast to the Scroller's execution model that requires the SQL Statement 
+ to be constructed in every execution.
+
+ 
+ **Public Query Prerequisites**
+* Entersoft Business Suite, Entersoft Expert, Entersoft CRM family products of version 4.0.28 or later 
+* Microsoft .NET Framework 4.5.1 or later to be installed on the Entersoft Application Server(s) and Entersoft WEB API Server(s)
+* Microsoft SQL Server 2008 R2 or later (Recommended: SQL Server 2014 or later)
+* For Paging to work, the PQ Definition should explicitly contain at least one ORDER BY field
+
+ 
+ **Public Query Restrictions**
+* Hierarchical Public Queries are NOT SUPPORTED and will not be supported as the are fundamentally against the core concept of the PQ.
+ The developer should design its solution in such a way with multiple PQ's i.e. for a Master-Detail old style Hierarchical DataSet OR if its not
+ a major overhead to have a PQ for the details including the necessary fields form the Master (verbose). In case that a Hierarchical datase old style 
+ result is absolutely necessary, the only choice is to use Scroller instead of Public Query with all the drawbacks.
+* BINARY* type fields are supported BUT not explicitly converted to any web or javascript recommended BASE64 representation. The use of fields of binary type
+ in the PQ schema should be extemely rare for many reasons (web performance, security, javascript's limitations & restrictions, etc.).
+ 
+
+# How to create an Entersoft Public Query
+Suppose that you have an existing scroller (either Product or Custom i.e. *XXX) that you want to ALSO expose as a Public Query. PQs like Entersoft Scrollers are created, modified and designed by the Entersoft Scroller Designer. First you have to have the scroller and then you can transform it to a Public Query as following: 
+
+1. Login into the EBS as an adminsitrator or as a user with access rights to the designers.
+2. Locate the scroller (or in case of new, create one) and press the Scroller Designer Button:
+![Scroller Designer](images/installation/espq01.png)
+3. Press the button _Web Publish_ as shown in the image below (in case you don't see this option, please resize the active dialog window until the button becomes visible):
+![Web Publish](images/installation/espq02.png)
+4. If you run the Entersoft Client EXE i.e. **ESMainApp.exe** from the machine and the directory where the Entersoft Application Server that you are connected to is installed, then you are done. If the you run the **ESMainApp.exe** from a different machine or directory then you have to _publish the scroller and public query_ to the Entersoft Application Server as shown:
+![Publish to EAS](images/installation/espq04.png)
+5. After that, you can visit the Application Server installation directory and either in the folder **_CSPublicQueries_** (if the scroller that we transformed to a PQ was a custom one i.e. *XXX) or in the folder **_ESPublicQueries_** (if the scroller that we transformed to a PQ was a Product one) you will see the artefacts of the Public Query that we just created or modified in the corresponding sub-directory:
+![PQ Directory Structure](images/installation/espq03.png)

@@ -1,0 +1,515 @@
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/71d20ec/src/js/eswebservices.js#L2275" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esElasticSearch</code>
+<div><span class="hint">service in module <code ng:non-bindable="">es.Services.Web</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="es-services-web-eselasticsearch-page"><p>esElasticSerach is a facade provided by the ES WEB API in order to facilitate and secure the access to an Elastic Search, registered
+in the ES WEB API Server through the esWebApi service. All the calls are actually passed through to the registeredto the Entersoft WEB API Server
+ElasticSearch engine.</p>
+<p>For more information about ElasticSearch please visit <a href="https://www.elastic.co/">ElasticSearch</a> 
+and for the complete reference guide visit <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">Reference Guide</a>.</p>
+<p>#<strong>ES WEB API Server and ElasticSearch</strong>
+In order to be able to use the esElasticSearch service of the Entersoft AgnularJS API, you have first to <strong>register</strong> to the <a href="#/installation/es02wapis#elastic-search">ES WEB API Server</a> 
+the ElasticSearch engine that will be serve the queries of the service. </p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/71d20ec/src/js/eswebservices.js#L2798" class="view-source icon-eye-open"> </a><h3 id="methods_searchfree">searchFree(eUrl, eMethod, eBody)</h3>
+<div class="searchfree"><div class="es-services-web-eselasticsearch-searchfree-page"><p>This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server.
+This function allows for almost any kind of operation can be executed by the ElasticSearch engine as an http method (i.e. GET, PUT, DELETE, POST, etc.)
+<a href="#/api/es.Services.Web.esElasticSearch#methods_searchindex">searchIndex</a>.</p>
+<p>See also <a href="#/api/es.Services.Web.esWebApi#methods_esearch">eSearch</a></p>
+</div><h5 id="methods_searchfree_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>eUrl</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eselasticsearch-searchfree-page"><p>the last segment of the URL (i.e. without the domain name) that contains the REST api part
+e.g. twitter/_settings,_mappings (the full CURL type request URL would be <a href="http://localhost:9200/twitter/_settings,_mappings">http://localhost:9200/twitter/_settings,_mappings</a>). 
+This call is an example from ElasticSearch documentation <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-index.html">GetIndex</a>
+that retrieves the settings and the mappings for the twitter index.</p>
+</div></td></tr><tr><td>eMethod</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eselasticsearch-searchfree-page"><p>The http method verb (i.e. &quot;GET&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;POST&quot;, etc.). In the example above the verb should be &quot;GET&quot;
+the index or indices specified by the elasticSearchIndex parameter.</p>
+</div></td></tr><tr><td>eBody</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eselasticsearch-searchfree-page"><p>The http request payload as required by the ElasticSearch REST call we are executing. In the example above there is no payload so it would be emtpy or null.</p>
+</div></td></tr></tbody></table><h5 id="methods_searchfree_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eselasticsearch-searchfree-page"><p>The response that we get from Elastic Search service should we perform an AJAX call against the service</p>
+</div></td></tr></table></div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/71d20ec/src/js/eswebservices.js#L2751" class="view-source icon-eye-open"> </a><h3 id="methods_searchindex">searchIndex(elasticSearchIndex, elasticSearchQuery)</h3>
+<div class="searchindex"><div class="es-services-web-eselasticsearch-searchindex-page"><p>This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server for the
+<strong>Search</strong> service based on the elastic search query language. This is the most common scenario of Elastic Search usage i.e. querying the Elastic Search database
+within the scope of one or more indices. See also <a href="#/api/es.Services.Web.esElasticSearch#methods_searchindexanddocument">searchIndexAndDocument</a>.</p>
+</div><h5 id="methods_searchindex_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>elasticSearchIndex</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eselasticsearch-searchindex-page"><p>The Elastic Search index name or comma separated index names or reg expression resolving to index - indices to which the <em>elasticSearchQuery</em> statement will be executed against.</p>
+</div></td></tr><tr><td>elasticSearchQuery</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eselasticsearch-searchindex-page"><p>The Elastic Search valid statement - query to be executed. For more information about ElsticSearch Query Language
+please visit <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">ES Query DSL</a>.</p>
+</div></td></tr></tbody></table><h5 id="methods_searchindex_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eselasticsearch-searchindex-page"><p>The response that we get from Elastic Search service should we perform an AJAX call against the service</p>
+</div></td></tr></table><h4 id="methods_searchindex_example">Example</h4>
+<div class="example"><div class="es-services-web-eselasticsearch-searchindex-page"><pre><code class="lang-js">// This example is taken from the Entersoft Knowledge Base WEB Application that is powered by the Entersoft AngularJS WEB API and the ElasticSearch
+var esQuery = {
+&quot;size&quot;: 10,
+&quot;from&quot;: 0,
+&quot;fields&quot;: [&quot;Code&quot;, &quot;Title&quot;, &quot;Description&quot;, &quot;Caption&quot;, &quot;FType&quot;, &quot;EDate&quot;, &quot;RegistrationDate&quot;, &quot;ArticleType&quot;, &quot;DocCategoryCode&quot;, &quot;Rating&quot;, &quot;GID&quot;, &quot;Product&quot;, &quot;SEO&quot;, &quot;Tag&quot;],
+&quot;query&quot;: {
+    &quot;filtered&quot;: {
+        &quot;query&quot;: {
+            &quot;multi_match&quot;: {
+                &quot;query&quot;: &quot;version mobile&quot;,
+                &quot;fields&quot;: [&quot;file&quot;, &quot;Notes&quot;, &quot;Description&quot;, &quot;Title&quot;]
+            }
+        },
+        &quot;filter&quot;: {
+            &quot;bool&quot;: {
+                &quot;must&quot;: []
+            }
+        }
+    }
+},
+&quot;track_scores&quot;: true,
+&quot;sort&quot;: [{
+    &quot;_score&quot;: &quot;desc&quot;
+}],
+&quot;highlight&quot;: {
+    &quot;pre_tags&quot;: [&quot;&lt;em highlight=\&quot;green\&quot;&gt;&quot;, &quot;&lt;em highlight=\&quot;orange\&quot; &gt;&quot;, &quot;&lt;em highlight=\&quot;red\&quot;&gt;&quot;],
+    &quot;post_tags&quot;: [&quot;&lt;/em&gt;&quot;, &quot;&lt;/em&gt;&quot;, &quot;&lt;/em&gt;&quot;],
+    &quot;fields&quot;: {
+        &quot;file&quot;: {
+            &quot;fragment_size&quot;: 250,
+            &quot;number_of_fragments&quot;: 1,
+            &quot;no_match_size&quot;: 100
+        },
+        &quot;Notes&quot;: {
+            &quot;fragment_size&quot;: 250,
+            &quot;number_of_fragments&quot;: 1,
+            &quot;no_match_size&quot;: 100
+        },
+        &quot;Title&quot;: {
+            &quot;fragment_size&quot;: 250,
+            &quot;number_of_fragments&quot;: 1,
+            &quot;no_match_size&quot;: 100
+        },
+        &quot;Description&quot;: {
+            &quot;fragment_size&quot;: 250,
+            &quot;number_of_fragments&quot;: 1,
+            &quot;no_match_size&quot;: 100
+        }
+    }
+},
+&quot;aggs&quot;: {
+    &quot;type&quot;: {
+        &quot;terms&quot;: {
+            &quot;field&quot;: &quot;ArticleType.raw&quot;,
+            &quot;size&quot;: 0
+        }
+    },
+    &quot;product&quot;: {
+        &quot;terms&quot;: {
+            &quot;field&quot;: &quot;Product&quot;,
+            &quot;size&quot;: 0
+        }
+    },
+    &quot;tags&quot;: {
+        &quot;terms&quot;: {
+            &quot;field&quot;: &quot;Tags.raw&quot;,
+            &quot;size&quot;: 15
+        }
+    },
+    &quot;articleYear&quot;: {
+        &quot;date_histogram&quot;: {
+            &quot;min_doc_count&quot;: 0,
+            &quot;field&quot;: &quot;RegistrationDate&quot;,
+            &quot;interval&quot;: &quot;year&quot;,
+            &quot;format&quot;: &quot;yyyy&quot;,
+            &quot;order&quot;: {
+                &quot;_key&quot;: &quot;desc&quot;
+            }
+        }
+    },
+    &quot;ftype&quot;: {
+        &quot;terms&quot;: {
+            &quot;field&quot;: &quot;FType&quot;,
+            &quot;size&quot;: 0
+        }
+    }
+}
+};
+
+esElasticSearch.searchIndex(&quot;esknow&quot;, esQuery)
+.then(function(ret)
+{
+    var esQueryResults = ret.data;
+    $log.information(&quot;This query took &quot; + esQueryResults.took + &quot; ms to run&quot;);
+    $log.information(&quot;Max scored Results &quot; + esQueryResults.hits.max_score);
+    $log.information(&quot;Total Number of Results &quot; + esQueryResults.hits.total);
+    $log.information(&quot;Results &quot; + esQueryResults.hits.hits);
+
+});
+</code></pre>
+<p>A sample response for this query is:</p>
+<pre><code class="lang-js">// i.e. ret.data
+var resp = {
+&quot;took&quot;: 78,
+&quot;timed_out&quot;: false,
+&quot;_shards&quot;: {
+    &quot;total&quot;: 5,
+    &quot;successful&quot;: 5,
+    &quot;failed&quot;: 0
+},
+&quot;hits&quot;: {
+    &quot;total&quot;: 286,
+    &quot;max_score&quot;: 0.7949327,
+    &quot;hits&quot;: [{
+        &quot;_index&quot;: &quot;esknow&quot;,
+        &quot;_type&quot;: &quot;eskbarticle&quot;,
+        &quot;_id&quot;: &quot;a74fb1a7-3097-4fb2-92e9-8a0c25c7c925&quot;,
+        &quot;_score&quot;: 0.7949327,
+        &quot;fields&quot;: {
+            &quot;GID&quot;: [&quot;a74fb1a7-3097-4fb2-92e9-8a0c25c7c925&quot;],
+            &quot;Description&quot;: [&quot;Online sales ordering via mobile&quot;],
+            &quot;RegistrationDate&quot;: [&quot;2012-06-01T21:25:42.827Z&quot;],
+            &quot;Rating&quot;: [0],
+            &quot;Tag&quot;: [&quot;ΕΜΠΟΡΙΚΟ&quot;, &quot;ΛΕΙΤΟΥΡΓΙΚΟ&quot;],
+            &quot;SEO&quot;: [&quot;/online-sales-ordering-via-mobile/clip-00188&quot;],
+            &quot;Code&quot;: [&quot;CLIP-00188&quot;]
+        },
+        &quot;highlight&quot;: {
+            &quot;Description&quot;: [&quot;Online sales ordering via &lt;em highlight=\&quot;orange\&quot; &gt;mobile&lt;/em&gt;&quot;],
+            &quot;Notes&quot;: [&quot;input of key data for bids and sales orders for the salesperson. Structured menus, clear choices, easy movements and help on &lt;em highlight=\&quot;orange\&quot; &gt;mobile&lt;/em&gt; or tablet devices without the need for extra training.&quot;]
+        }
+    }, {
+        &quot;_index&quot;: &quot;esknow&quot;,
+        &quot;_type&quot;: &quot;eskbarticle&quot;,
+        &quot;_id&quot;: &quot;5bd500eb-705a-48f5-8297-283ef543af9b&quot;,
+        &quot;_score&quot;: 0.751858,
+        &quot;fields&quot;: {
+            &quot;GID&quot;: [&quot;5bd500eb-705a-48f5-8297-283ef543af9b&quot;],
+            &quot;Description&quot;: [&quot;Mobile MIS 360° 2.0&quot;],
+            &quot;RegistrationDate&quot;: [&quot;2012-01-09T17:36:47.000Z&quot;],
+            &quot;Rating&quot;: [0],
+            &quot;Product&quot;: [&quot;MIS 360&quot;],
+            &quot;SEO&quot;: [&quot;/mis-360/new-features/mobile-mis-360-2-0/kb-01003&quot;],
+            &quot;Code&quot;: [&quot;KB-01003&quot;],
+            &quot;ArticleType&quot;: [&quot;NEW FEATURES&quot;]
+        },
+        &quot;highlight&quot;: {
+            &quot;Description&quot;: [&quot;&lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; MIS 360° 2.0&quot;],
+            &quot;Notes&quot;: [&quot;Νέα Χαρακτηριστικά &amp; Λειτουργικότητα\nΤα νέα χαρακτηριστικά και οι βελτιώσεις της έκδοσης περιγράφονται&quot;]
+        }
+    }, {
+        &quot;_index&quot;: &quot;esknow&quot;,
+        &quot;_type&quot;: &quot;eskbarticle&quot;,
+        &quot;_id&quot;: &quot;441a73c5-46f8-4b22-bb55-743af2d95780&quot;,
+        &quot;_score&quot;: 0.751858,
+        &quot;fields&quot;: {
+            &quot;GID&quot;: [&quot;441a73c5-46f8-4b22-bb55-743af2d95780&quot;],
+            &quot;Description&quot;: [&quot;Mobile Suite 2.62&quot;],
+            &quot;RegistrationDate&quot;: [&quot;2014-12-19T13:39:44.323Z&quot;],
+            &quot;Rating&quot;: [0],
+            &quot;Product&quot;: [&quot;MOBILE&quot;],
+            &quot;SEO&quot;: [&quot;/mobile/new-features/mobile-suite-2-62/kb-01182&quot;],
+            &quot;Code&quot;: [&quot;KB-01182&quot;],
+            &quot;ArticleType&quot;: [&quot;NEW FEATURES&quot;]
+        },
+        &quot;highlight&quot;: {
+            &quot;Description&quot;: [&quot;&lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; Suite 2.62&quot;],
+            &quot;Notes&quot;: [&quot;Summary description of the contents of this &lt;em highlight=\&quot;green\&quot;&gt;version&lt;/em&gt; \r\nRead a summary description of the contents of this &lt;em highlight=\&quot;green\&quot;&gt;version&lt;/em&gt;. A more extensive guide follows with customization guidelines follows.\r\n&lt;em highlight=\&quot;green\&quot;&gt;Version&lt;/em&gt; 2.62 of Entersoft &lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; Suite can be installed to iOS devices that&quot;]
+        }
+    }, {
+        &quot;_index&quot;: &quot;esknow&quot;,
+        &quot;_type&quot;: &quot;eskbarticle&quot;,
+        &quot;_id&quot;: &quot;600a5020-e3bd-4c98-9eab-9668ab7f227c&quot;,
+        &quot;_score&quot;: 0.67971146,
+        &quot;fields&quot;: {
+            &quot;GID&quot;: [&quot;600a5020-e3bd-4c98-9eab-9668ab7f227c&quot;],
+            &quot;Description&quot;: [&quot;Mobile Suite 2.62&quot;],
+            &quot;RegistrationDate&quot;: [&quot;2014-12-19T13:36:10.900Z&quot;],
+            &quot;Rating&quot;: [0],
+            &quot;Product&quot;: [&quot;MOBILE&quot;],
+            &quot;SEO&quot;: [&quot;/mobile/new-features/mobile-suite-2-62/kb-01181&quot;],
+            &quot;Code&quot;: [&quot;KB-01181&quot;],
+            &quot;ArticleType&quot;: [&quot;NEW FEATURES&quot;]
+        },
+        &quot;highlight&quot;: {
+            &quot;Description&quot;: [&quot;&lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; Suite 2.62&quot;],
+            &quot;Notes&quot;: [&quot;κατάλογος των νέων λειτουργιών &amp; βελτιώσεων με οδηγίες χρήσης &amp; παραδείγματα όπου χρειάζεται.\r\nΗ έκδοση 2.62 του Entersoft &lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; Suite μπορεί να εγκατασταθεί μόνο σε κινητές συσκευές που επικοινωνούν με το Entersoft Business Suite έκδοσης 4.0.26.2 ή μεταγενέστερης&quot;]
+        }
+    }, {
+        &quot;_index&quot;: &quot;esknow&quot;,
+        &quot;_type&quot;: &quot;eskbarticle&quot;,
+        &quot;_id&quot;: &quot;0507bdb7-3f3e-4818-801e-9af8fa897fda&quot;,
+        &quot;_score&quot;: 0.67971146,
+        &quot;fields&quot;: {
+            &quot;GID&quot;: [&quot;0507bdb7-3f3e-4818-801e-9af8fa897fda&quot;],
+            &quot;Description&quot;: [&quot;Mobile Suite 2.12&quot;],
+            &quot;RegistrationDate&quot;: [&quot;2012-02-02T16:12:30.000Z&quot;],
+            &quot;Rating&quot;: [0],
+            &quot;Product&quot;: [&quot;MOBILE&quot;],
+            &quot;Tag&quot;: [&quot;MOBILE&quot;, &quot;ΓΕΝΙΚΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ&quot;],
+            &quot;SEO&quot;: [&quot;/mobile/new-features/mobile-suite-2-12/kb-00961&quot;],
+            &quot;Code&quot;: [&quot;KB-00961&quot;],
+            &quot;ArticleType&quot;: [&quot;NEW FEATURES&quot;]
+        },
+        &quot;highlight&quot;: {
+            &quot;Description&quot;: [&quot;&lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; Suite 2.12&quot;],
+            &quot;Notes&quot;: [&quot;Νέα χαρακτηριστικά &amp; Επεκτάσεις\nΣυνοπτική περιγραφή των σημαντικότερων προσθηκών της έκδοσης.\nΠαραστατικά&quot;]
+        }
+    }, {
+        &quot;_index&quot;: &quot;esknow&quot;,
+        &quot;_type&quot;: &quot;eskbarticle&quot;,
+        &quot;_id&quot;: &quot;3dbca594-b277-4be0-bb33-f58adc37c8c4&quot;,
+        &quot;_score&quot;: 0.67971146,
+        &quot;fields&quot;: {
+            &quot;GID&quot;: [&quot;3dbca594-b277-4be0-bb33-f58adc37c8c4&quot;],
+            &quot;Description&quot;: [&quot;Mobile Suite 2.12&quot;],
+            &quot;RegistrationDate&quot;: [&quot;2012-02-02T17:16:11.000Z&quot;],
+            &quot;Rating&quot;: [0],
+            &quot;Product&quot;: [&quot;MOBILE&quot;],
+            &quot;Tag&quot;: [&quot;MOBILE&quot;, &quot;ΓΕΝΙΚΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ&quot;],
+            &quot;SEO&quot;: [&quot;/mobile/new-features/mobile-suite-2-12/kb-00964&quot;],
+            &quot;Code&quot;: [&quot;KB-00964&quot;],
+            &quot;ArticleType&quot;: [&quot;NEW FEATURES&quot;]
+        },
+        &quot;highlight&quot;: {
+            &quot;Description&quot;: [&quot;&lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; Suite 2.12&quot;],
+            &quot;Notes&quot;: [&quot;notes, age analysis and status.\nThere is a new button in customer list, which presents the financial info of the customer from &lt;em highlight=\&quot;orange\&quot; &gt;mobile&lt;/em&gt; device database: name, phone, tax registration number, tax office, balance, turnover, pending invoices/order etc.\nGeneral&quot;]
+        }
+    }, {
+        &quot;_index&quot;: &quot;esknow&quot;,
+        &quot;_type&quot;: &quot;eskbarticle&quot;,
+        &quot;_id&quot;: &quot;a1990c36-63c7-4914-86d4-2d1d4c358c34&quot;,
+        &quot;_score&quot;: 0.65732294,
+        &quot;fields&quot;: {
+            &quot;GID&quot;: [&quot;a1990c36-63c7-4914-86d4-2d1d4c358c34&quot;],
+            &quot;Description&quot;: [&quot;Mobile Suite 2.16&quot;],
+            &quot;RegistrationDate&quot;: [&quot;2012-04-03T15:47:25.000Z&quot;],
+            &quot;Rating&quot;: [0],
+            &quot;Product&quot;: [&quot;MOBILE&quot;],
+            &quot;SEO&quot;: [&quot;/mobile/new-features/mobile-suite-2-16/kb-01000&quot;],
+            &quot;Code&quot;: [&quot;KB-01000&quot;],
+            &quot;ArticleType&quot;: [&quot;NEW FEATURES&quot;]
+        },
+        &quot;highlight&quot;: {
+            &quot;Description&quot;: [&quot;&lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; Suite 2.16&quot;],
+            &quot;Notes&quot;: [&quot;Νέα χαρακτηριστικά &amp; Επεκτάσεις\nΣυνοπτική περιγραφή των σημαντικότερων προσθηκών της έκδοσης.\nΓενικές&quot;]
+        }
+    }, {
+        &quot;_index&quot;: &quot;esknow&quot;,
+        &quot;_type&quot;: &quot;eskbarticle&quot;,
+        &quot;_id&quot;: &quot;f17d84d7-e8e6-45c8-a889-44fb14564468&quot;,
+        &quot;_score&quot;: 0.65732294,
+        &quot;fields&quot;: {
+            &quot;GID&quot;: [&quot;f17d84d7-e8e6-45c8-a889-44fb14564468&quot;],
+            &quot;Description&quot;: [&quot;Mobile Suite 2.14&quot;],
+            &quot;RegistrationDate&quot;: [&quot;2012-02-22T10:20:58.000Z&quot;],
+            &quot;Rating&quot;: [0],
+            &quot;Product&quot;: [&quot;MOBILE&quot;],
+            &quot;Tag&quot;: [&quot;MOBILE&quot;, &quot;ΓΕΝΙΚΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ&quot;],
+            &quot;SEO&quot;: [&quot;/mobile/new-features/mobile-suite-2-14/kb-00970&quot;],
+            &quot;Code&quot;: [&quot;KB-00970&quot;],
+            &quot;ArticleType&quot;: [&quot;NEW FEATURES&quot;]
+        },
+        &quot;highlight&quot;: {
+            &quot;Description&quot;: [&quot;&lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; Suite 2.14&quot;],
+            &quot;Notes&quot;: [&quot;Νέα χαρακτηριστικά &amp; Επεκτάσεις\nΣυνοπτική περιγραφή των σημαντικότερων προσθηκών της έκδοσης.\nΠαραστατικά&quot;]
+        }
+    }, {
+        &quot;_index&quot;: &quot;esknow&quot;,
+        &quot;_type&quot;: &quot;eskbarticle&quot;,
+        &quot;_id&quot;: &quot;d3aa8714-9125-41b2-9a97-d49c0d4eca70&quot;,
+        &quot;_score&quot;: 0.65732294,
+        &quot;fields&quot;: {
+            &quot;GID&quot;: [&quot;d3aa8714-9125-41b2-9a97-d49c0d4eca70&quot;],
+            &quot;Description&quot;: [&quot;Mobile Suite 2.10&quot;],
+            &quot;RegistrationDate&quot;: [&quot;2012-01-25T16:17:59.000Z&quot;],
+            &quot;Rating&quot;: [0],
+            &quot;Product&quot;: [&quot;MOBILE&quot;],
+            &quot;Tag&quot;: [&quot;MOBILE&quot;, &quot;ΓΕΝΙΚΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ&quot;],
+            &quot;SEO&quot;: [&quot;/mobile/new-features/mobile-suite-2-10/kb-00962&quot;],
+            &quot;Code&quot;: [&quot;KB-00962&quot;],
+            &quot;ArticleType&quot;: [&quot;NEW FEATURES&quot;]
+        },
+        &quot;highlight&quot;: {
+            &quot;Description&quot;: [&quot;&lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; Suite 2.10&quot;],
+            &quot;Notes&quot;: [&quot;Νέα χαρακτηριστικά &amp; Επεκτάσεις\nΣυνοπτική περιγραφή των σημαντικότερων προσθηκών της έκδοσης.\nΠαραστατικά&quot;]
+        }
+    }, {
+        &quot;_index&quot;: &quot;esknow&quot;,
+        &quot;_type&quot;: &quot;eskbarticle&quot;,
+        &quot;_id&quot;: &quot;68bc6975-01ee-43f8-8b84-e84e381f46f1&quot;,
+        &quot;_score&quot;: 0.65732294,
+        &quot;fields&quot;: {
+            &quot;GID&quot;: [&quot;68bc6975-01ee-43f8-8b84-e84e381f46f1&quot;],
+            &quot;Description&quot;: [&quot;Entersoft Seminars | ES Mobile (Tech)&quot;],
+            &quot;RegistrationDate&quot;: [&quot;2015-01-30T16:50:04.853Z&quot;],
+            &quot;Rating&quot;: [0],
+            &quot;Product&quot;: [&quot;MOBILE&quot;],
+            &quot;SEO&quot;: [&quot;/mobile/education/entersoft-seminars--es-mobile-tech/kb-01222&quot;],
+            &quot;Code&quot;: [&quot;KB-01222&quot;],
+            &quot;ArticleType&quot;: [&quot;EDUDEF&quot;]
+        },
+        &quot;highlight&quot;: {
+            &quot;Description&quot;: [&quot;Entersoft Seminars | ES &lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; (Tech)&quot;],
+            &quot;Notes&quot;: [&quot;ES &lt;em highlight=\&quot;orange\&quot; &gt;Mobile&lt;/em&gt; (Tech)\r\n\r\n&quot;]
+        }
+    }]
+},
+&quot;aggregations&quot;: {
+    &quot;product&quot;: {
+        &quot;doc_count_error_upper_bound&quot;: 0,
+        &quot;sum_other_doc_count&quot;: 0,
+        &quot;buckets&quot;: [{
+            &quot;key&quot;: &quot;EBS&quot;,
+            &quot;doc_count&quot;: 60
+        }, {
+            &quot;key&quot;: &quot;EXPERT&quot;,
+            &quot;doc_count&quot;: 51
+        }, {
+            &quot;key&quot;: &quot;MOBILE&quot;,
+            &quot;doc_count&quot;: 11
+        }, {
+            &quot;key&quot;: &quot;ALL&quot;,
+            &quot;doc_count&quot;: 9
+        }, {
+            &quot;key&quot;: &quot;MIS 360&quot;,
+            &quot;doc_count&quot;: 3
+        }]
+    },
+    &quot;ftype&quot;: {
+        &quot;doc_count_error_upper_bound&quot;: 0,
+        &quot;sum_other_doc_count&quot;: 0,
+        &quot;buckets&quot;: [{
+            &quot;key&quot;: &quot;.pdf&quot;,
+            &quot;doc_count&quot;: 102
+        }, {
+            &quot;key&quot;: &quot;.doc&quot;,
+            &quot;doc_count&quot;: 45
+        }, {
+            &quot;key&quot;: &quot;.docx&quot;,
+            &quot;doc_count&quot;: 4
+        }]
+    },
+    &quot;articleYear&quot;: {
+        &quot;buckets&quot;: [{
+            &quot;key_as_string&quot;: &quot;2015&quot;,
+            &quot;key&quot;: 1420070400000,
+            &quot;doc_count&quot;: 2
+        }, {
+            &quot;key_as_string&quot;: &quot;2014&quot;,
+            &quot;key&quot;: 1388534400000,
+            &quot;doc_count&quot;: 3
+        }, {
+            &quot;key_as_string&quot;: &quot;2013&quot;,
+            &quot;key&quot;: 1356998400000,
+            &quot;doc_count&quot;: 22
+        }, {
+            &quot;key_as_string&quot;: &quot;2012&quot;,
+            &quot;key&quot;: 1325376000000,
+            &quot;doc_count&quot;: 38
+        }, {
+            &quot;key_as_string&quot;: &quot;2011&quot;,
+            &quot;key&quot;: 1293840000000,
+            &quot;doc_count&quot;: 17
+        }, {
+            &quot;key_as_string&quot;: &quot;2010&quot;,
+            &quot;key&quot;: 1262304000000,
+            &quot;doc_count&quot;: 28
+        }, {
+            &quot;key_as_string&quot;: &quot;2009&quot;,
+            &quot;key&quot;: 1230768000000,
+            &quot;doc_count&quot;: 25
+        }]
+    },
+    &quot;type&quot;: {
+        &quot;doc_count_error_upper_bound&quot;: 0,
+        &quot;sum_other_doc_count&quot;: 0,
+        &quot;buckets&quot;: [{
+            &quot;key&quot;: &quot;BUG FIXING&quot;,
+            &quot;doc_count&quot;: 82
+        }, {
+            &quot;key&quot;: &quot;NEW FEATURES&quot;,
+            &quot;doc_count&quot;: 41
+        }, {
+            &quot;key&quot;: &quot;QUESTION&quot;,
+            &quot;doc_count&quot;: 3
+        }, {
+            &quot;key&quot;: &quot;SYSTEM&quot;,
+            &quot;doc_count&quot;: 3
+        }, {
+            &quot;key&quot;: &quot;ERROR&quot;,
+            &quot;doc_count&quot;: 2
+        }, {
+            &quot;key&quot;: &quot;CASE&quot;,
+            &quot;doc_count&quot;: 1
+        }, {
+            &quot;key&quot;: &quot;EDUDEF&quot;,
+            &quot;doc_count&quot;: 1
+        }, {
+            &quot;key&quot;: &quot;MANUAL&quot;,
+            &quot;doc_count&quot;: 1
+        }]
+    },
+    &quot;tags&quot;: {
+        &quot;doc_count_error_upper_bound&quot;: 0,
+        &quot;sum_other_doc_count&quot;: 3,
+        &quot;buckets&quot;: [{
+            &quot;key&quot;: &quot;FIX&quot;,
+            &quot;doc_count&quot;: 64
+        }, {
+            &quot;key&quot;: &quot;ΓΕΝΙΚΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ&quot;,
+            &quot;doc_count&quot;: 25
+        }, {
+            &quot;key&quot;: &quot;MOBILE&quot;,
+            &quot;doc_count&quot;: 6
+        }, {
+            &quot;key&quot;: &quot;SETUP&quot;,
+            &quot;doc_count&quot;: 3
+        }, {
+            &quot;key&quot;: &quot;SYSTEM&quot;,
+            &quot;doc_count&quot;: 3
+        }, {
+            &quot;key&quot;: &quot;ΦΟΡΟΛΟΓΙΚΟΣ ΜΗΧΑΝΙΣΜΟΣ&quot;,
+            &quot;doc_count&quot;: 3
+        }, {
+            &quot;key&quot;: &quot;ΕΚΤΥΠΩΤΗΣ&quot;,
+            &quot;doc_count&quot;: 2
+        }, {
+            &quot;key&quot;: &quot;BACK UP&quot;,
+            &quot;doc_count&quot;: 1
+        }, {
+            &quot;key&quot;: &quot;BARCODE&quot;,
+            &quot;doc_count&quot;: 1
+        }, {
+            &quot;key&quot;: &quot;EXPORT&quot;,
+            &quot;doc_count&quot;: 1
+        }, {
+            &quot;key&quot;: &quot;PRINT&quot;,
+            &quot;doc_count&quot;: 1
+        }, {
+            &quot;key&quot;: &quot;PROGRAMMING - CUSTOMIZATION&quot;,
+            &quot;doc_count&quot;: 1
+        }, {
+            &quot;key&quot;: &quot;ΕΚΤΥΠΩΣΗ ΠΑΡΑΣΤΑΤΙΚΩΝ&quot;,
+            &quot;doc_count&quot;: 1
+        }, {
+            &quot;key&quot;: &quot;ΕΜΠΟΡΙΚΟ&quot;,
+            &quot;doc_count&quot;: 1
+        }, {
+            &quot;key&quot;: &quot;ΛΕΙΤΟΥΡΓΙΚΟ&quot;,
+            &quot;doc_count&quot;: 1
+        }]
+    }
+}
+};
+</code></pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/71d20ec/src/js/eswebservices.js#L2773" class="view-source icon-eye-open"> </a><h3 id="methods_searchindexanddocument">searchIndexAndDocument(elasticSearchIndex, elasticSearchDocumentType, elasticSearchQuery)</h3>
+<div class="searchindexanddocument"><div class="es-services-web-eselasticsearch-searchindexanddocument-page"><p>This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server for the
+<strong>Search</strong> service based on the elastic search query language. This is the most common scenario of Elastic Search usage i.e. querying the Elastic Search database
+within the scope of one or more indices for a limited set of documents of the given Document Types. It is similar to 
+<a href="#/api/es.Services.Web.esElasticSearch#methods_searchindex">searchIndex</a>.</p>
+</div><h5 id="methods_searchindexanddocument_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>elasticSearchIndex</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eselasticsearch-searchindexanddocument-page"><p>The Elastic Search index name or comma separated index names or reg expression resolving to index - indices to which the <em>elasticSearchQuery</em> statement will be executed against.</p>
+</div></td></tr><tr><td>elasticSearchDocumentType</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eselasticsearch-searchindexanddocument-page"><p>The Elastic Search Document Type or Types (in comma separated list) for which the elastic search query will be executed against within
+the index or indices specified by the elasticSearchIndex parameter.</p>
+</div></td></tr><tr><td>elasticSearchQuery</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eselasticsearch-searchindexanddocument-page"><p>The Elastic Search valid statement - query to be executed. For more information about ElsticSearch Query Language
+please visit <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">ES Query DSL</a>.</p>
+</div></td></tr></tbody></table><h5 id="methods_searchindexanddocument_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eselasticsearch-searchindexanddocument-page"><p>The response that we get from Elastic Search service should we perform an AJAX call against the service</p>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
+</div>

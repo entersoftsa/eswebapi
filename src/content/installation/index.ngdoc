@@ -36,7 +36,7 @@ EAS can be hosted either on-premises or on the cloud such as Windows Azure VM. I
 
 # 2. MICROSOFT SQL SERVER – DATABASE
 Entersoft EBS supports all versions of SQL Server from SQL 2005 and later. However, in order to get access and use the Entersoft Public Queries (EPQ) - the new mechanism introduced since EBS version 4.28) for retrieving data from the EBS - you should use SQL Server 2008 R2 and later. SQL Server 2014 is recommended.
-Entersoft Public Queries (EPQ) is the evolution of the Scroller in terms of programmatic access to data from EBS through EBS object model. EPQs support for fast execution (minimal overhead compared to scroller execution), paging, Number of records in total and JSON format as return type. EPQs are described in more detail in {@link api/es.Services.Web.esWebApi#methods_fetchpublicquery fetchPublicQuery}.
+Entersoft Public Queries (EPQ) is the evolution of the Scroller in terms of programmatic access to data from EBS through EBS object model. EPQs support for fast execution (minimal overhead compared to scroller execution), paging, Number of records in total and JSON format as return type. EPQs are described in more detail in {@link installation/es03 Entersoft Public Queries} and in {@link api/es.Services.Web.esWebApi#methods_fetchpublicquery fetchPublicQuery}.
 
 # 3. ENTERSOFT WEB API SERVER
 Entersoft WEB API Server is built on ASP.NET MVC 5 technology and is deployed as a Microsoft IIS Application – Web Site. 
