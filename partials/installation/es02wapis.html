@@ -1,4 +1,4 @@
-<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/content/installation/ewapis.ngdoc" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><h1><code ng:non-bindable=""></code>
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/content/installation/es02wapis.ngdoc" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><h1><code ng:non-bindable=""></code>
 <div><span class="hint"></span>
 </div>
 </h1>
@@ -103,4 +103,43 @@ Once config.json is correctly configured you should restart the EWAPI applicatio
 <img src="images/installation/09.png" alt="Test Site"></p>
 <p>The General Password refers to the SubscriptionPassword which if left unchanged is <strong><em>passx</em></strong>
 <strong>AllowHTTP</strong> should be clicked in case that you deployed the EWAPIS in a non-secure server i.e. NOT using HTTPS. If everything is OK then you will see the Alert Message “OK” along with the name of the given user.</p>
+<h2 id="elastic-search">Elastic Search</h2>
+<p>In order to be able to use the <a href="#/api/es.Services.Web.esElasticSearch">esElasticSearch Service</a> of the <a href="#/api">Entersoft AnularJS API</a> you 
+have to register the Elastic Search engine to be used with the Entersoft WEB API Server. The registration is done within the context of a Subscription 
+i.e. every subscription can have a different Elastic Search Engine for its own purposes) as shown below:</p>
+<pre><code class="lang-js">{
+    &quot;TokenLifetimeInMinutes&quot;: 58,
+    &quot;AllowInsecureHttp&quot; :  true,
+
+    &quot;Subscriptions&quot;: [
+        {
+            &quot;SubscriptionID&quot;: &quot;&quot;,
+            &quot;SubscriptionPassword&quot;: &quot;CgJHAQYVg+iChKZvXcEKHA==&quot;,
+            &quot;Bridges&quot;: [
+                {
+                    &quot;BridgeID&quot;: &quot;&quot;,
+                    &quot;DatabaseID&quot;: &quot;Entersoft&quot;,
+                    &quot;CompanyID&quot;: &quot;ES&quot;,
+                    &quot;ElasticSearch&quot;: {
+                                &quot;Host&quot;: &quot;127.0.0.1&quot;, // i.e. the IP or DNS Name that resolves to the desired ElasticSearch engine service
+                                &quot;Port&quot;: 9200 // i.e. integer that represents the external Port that the ElasticSearch engine service has been configured to listen to. According to the ElasticSearch documentation this defaults to port 9200.
+                    },
+                    &quot;DefaultUserCredentials&quot;: {
+                        &quot;UserID&quot;: &quot;esmaster&quot;,
+                        &quot;Password&quot;: &quot;BTJTgbOPCmh4sZSwkk2ieQ==&quot;,
+                        &quot;BranchID&quot;: &quot;ΑΘ&quot;,
+                        &quot;LangID&quot;: &quot;el-GR&quot;
+                    },
+                    &quot;Services&quot;: [{&quot;ServiceID&quot;: &quot;&quot;}],
+                    &quot;ERPServers&quot;: [{
+                            &quot;Host&quot;: &quot;eserp.entersoft.gr&quot;,
+                            &quot;Port&quot;: 8500
+                    }]
+                }
+            ]
+        }    
+      ]
+}
+</code></pre>
+<p>For more information about Elastic Search and how to setup and deploy an Elastic Search Engine please visit <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/setup.html">ElasticSearch Setup</a>.</p>
 </div></div>

@@ -1,8 +1,49 @@
-<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/content/api/index.ngdoc" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/7bc7cc3/src/content/api/index.ngdoc#L2" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable=""></code>
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/content/api/index.ngdoc" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/71d20ec/src/content/api/index.ngdoc#L2" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable=""></code>
 <div><span class="hint"></span>
 </div>
 </h1>
-<div><div class="api-reference-page"><h2 id="sme-angularjs-api-docs">sme AngularJS API Docs</h2>
-<p>sme 
-Welcome to the AngularJS API docs page. These pages contain the AngularJS reference materials for version <strong ng-bind="version"></strong>.</p>
+<div><div class="api-reference-page"><h2 id="roadmap">Roadmap</h2>
+<p>Entersoft SA <strong>has been always committed to provide all the means</strong> for 3rd party integrations, customizations, extensions and add-ins to the Entersoft Application Server and Entersoft Rich Client systems in the Microsoft .NET ecosystem. Since the very first release of Entersoft Business Suite 1.0, Entersoft SA has made publicly available all the Entersoft .NET Libraries (assemblies) so that any developer can use and reference in order to connect to 
+the Entersoft Application Server and get access to almost all the services and methods Entersoft&#39;s core developers have access to.</p>
+<p>As technology has been moving towards the Web and the Mobile, Entersoft SA has been investing in applications and solutions that not only take advantage of the state-of-the-art technology advancements but also leverage our customer&#39;s investment on Entersoft Technologies and provide them with applications to address their current and future needs. Entersoft e-Commerce v1 (based on Microsoft ASP.NET) and the forthcoming Entersoft e-Commerce v2 (based on Microsoft MVC 5 and ASP.NET vNext) are Entersoft&#39;s flagship offerings in the area of Web and e-Commerce. </p>
+<p>Entersoft Merchandising for iOS, Entersoft SFA for iOS, Entersoft Field Service for iOS, Entersoft Request For Approval for iOS, Android and Windows Phone, Entersoft MIS 360 for iOs, Windows 10, Android and Windows Phone 8 form Entersoft&#39;s product portfolio of <strong><em>true Native Apps</em></strong> for the mobile workers of any enterprise.</p>
+<p>As Entersoft&#39;s Reserach and Development moves towards new products, solutions, platforms, development tools and technologies, so does the need for more API&#39;s so that 3rd party integration, customization, extension and interoperability can take place in theese platforms and applications. For a long period of time, Microsoft .NET Framework and Microsoft Windows were the center around which Entersoft ecosystem has been orbiting. For this ecosystem, Entersoft .NET API Managed Assemblies have been developed and made publicly available long time ago.</p>
+<p>In the annual Entersoft Developer Conference in 2015 we announced Entersoft&#39;s R&amp;D strategy and roadmap that we have been working on in order to address the <strong>new</strong> and the <strong>diversity</strong> of the technology environment that we all live, work and collaborate with in the context of <strong>APIs</strong>.
+<img src="images/api/es01api-intro.png" alt="EDC 2015"></p>
+<p>Now, .NET Framework running in other Operating Systems apart from Windows, such as Linux, Mac OSx, Android and most important <strong>iOS</strong> and other development platforms avaialbe apart from Visual Studio such as Xamarin and Mono.For these ecosystems a new approach is necessary based on <em>Portable Class Libraries (PCL)</em>. <strong>Entersoft Portable Class Library SDK</strong> is a totally new library built from the scratch and enables the same degree of capabilities for intergation, customization, extensibility and interoperability as the core managed .NET Entersoft API, and can be used within any programming environment, operating system and device that supports PCL.</p>
+<p><img src="images/api/es02api-intro.png" alt="ES Rodmap"></p>
+<p>Furthermore, in the area of Web platforms, Entersoft SA is proud to announce the release of the <strong>Entersoft WEB API Server</strong>, and the <strong>Entersoft WEB API libraries</strong>. Entersoft WEB API is the means through which any javascript or http enabled platform, service or solution can have real-time, on-line access to the Entersoft Application Server services and methods. Through this API, Entersoft back-end services and operations are extended and made available to almost any ecosystem of programming environments, platforms, operating systems, SAAS Services, Cloud Applications and Services, etc. with the only prerequisite to be able to call typical HTTP(S) requests.</p>
+<p>There is no limit in things you can do integrate with the Entersoft Application Server, in environments other than Microsoft such as PHP, Ruby, Node.js, Angular, JQuery, Javascript frameworks, Java, etc. Furthermore, services and applications such as Microsoft PowerBI, Azure Machine Learning, etc. can be easily integrated with an Entersoft Application Server through a solid, coherent and state-of-the art API such as the Entersoft WEB API. The same applies for the Mobile ecosystem, where no matter what the programming ennironment is Objective-C, Java, Xamarin, C#, F#, Visual Studio 2015, Windows Universal Apps you can select the most applicable Entersoft API flavor and exploit services anf functions of the Entersoft Application Server back-end with a minor effort.</p>
+<p>Depending on the programming environment of the client software that needs access to the Entersoft Application Server there are different libraries that can be used. See the table below:</p>
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Entersoft API Client</th>
+<th>Repository</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.NET Framework Native Apps on Windows Platforms</td>
+<td>Entersoft Bridge Session</td>
+<td><a href="https://www.nuget.org/packages/Entersoft.ERPBridge">ERPBridge</a></td>
+<td>Any native .NET application – Windows Forms, WPF, WCF, WF, ASP.NET, etc. DLL or EXE </td>
+</tr>
+<tr>
+<td>Portable Class Library enabled environments</td>
+<td>Entersoft PCL Client Session</td>
+<td><a href="https://www.nuget.org/packages/Entersoft.Web.Client/">.NET PCL</a></td>
+<td>Xamarin iOS, Xamarin Android, Xamarin WP, Xamarin Forms, Mono Linux projects </td>
+</tr>
+<tr>
+<td>JavaScript, NodeJS, WEB Front-end development</td>
+<td>Entersoft WEB API Client</td>
+<td><a href="https://github.com/entersoftsa/eswebapi">ESWebApi</a></td>
+<td>JQuery, AngularJS, NodeJS, JavaScript frameworks, etc.</td>
+</tr>
+</tbody>
+</table>
+<p>This document focus on the JavaScript and the Entersoft WEB API Client framework (EWAPIC). However, most of the document is applicable to the PCL Library environments and the Entersoft PCL Client Session as it is symmetric to the WEB API and requires – assumes the same architecture.</p>
 </div></div>
