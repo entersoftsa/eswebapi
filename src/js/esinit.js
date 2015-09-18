@@ -6,6 +6,17 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
+    var version = "1.1.0";
+    var vParts = _.map(version.split("."), function(x) {
+        return parseInt(x);
+    });
+
+    var esAngularAPIVer = {
+        Major: vParts[0],
+        Minor: vParts[1],
+        Patch: vParts[2]
+    };
+
 
     var esWebFramework = angular.module('es.Services.Web');
 
@@ -81,9 +92,14 @@
 
     });
 
-    // Define the factory on the module.
-    // Inject the dependencies.
-    // Point to the factory definition function.
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esMessaging
+     * @kind factory
+     * @description
+     * esMessaging is a factory service that provides all the primitive functions for a publisher-subscribers messaging event system that its is not based 
+     * on the AngularJS events or watch pattern but in pure callaback function pattern.
+     */
     esWebFramework.factory('esMessaging', function() {
         //#region Internal Properties
         var cache = {};
@@ -129,8 +145,73 @@
 
         // Define the functions and properties to reveal.
         var service = {
+
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esMessaging#publish
+             * @methodOf es.Services.Web.esMessaging
+             * @module es.Services.Web
+             * @kind function
+             * @description This function is used to raise - publish that an event-topic has occurred. As a consequence, all the subscribed to 
+             * this topic-event subsciption callback functions will be triggered and executed sequentially.
+             * @param {arguments} args or more arguments, with the first being the string for the topic-event that occurred. The rest of the arguments
+             * if any will be supplied to the callback functions that will be fired. These extra arguments are considered to be specific to the nature 
+             * of the topic-event.
+             * @example
+             * esMessaging is also used by the Entersoft AngularJS API in order to implement the login, logout, session expired, etc. logical events
+             * that need to be handled and properly managed in any application based on the API. 
+             *
+             * This call is used by the API to publish an event that occured. The topic-event is the "AUTH_CHANGED" and it is this event-topic that any interested in 
+             * party should subscribe to in order to be notified whenever this event occurs. The rest arguments, i.e. esClientSession and getAuthToken(model) are the
+             * parameters that will be supplied to the callback functions that have been registered to this topic-event.
+```js
+esMessaging.publish("AUTH_CHANGED", esClientSession, getAuthToken(model));
+```
+             **/            
             publish: publish,
+
+
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esMessaging#subscribe
+             * @methodOf es.Services.Web.esMessaging
+             * @module es.Services.Web
+             * @kind function
+             * @description This function is used to subscribe to a specific event-topic and register a callback function to be called (i.e. fired)
+             * once the event-topic is being raised - published.
+             * @param {string} topic the event name to which this function will subscribe to the callback
+             * @param {function} callback the callback function that will be fired once this event-topic is being **raised - published**
+             * @return {object} An object representic the handle to this specific subscription instance. 
+             * If you need to unsubscribe from this event-topic then you need to store the returned handle value, otherwise you do not need to keep the result
+             * @example
+             * In a controller, typically the root controller of an ng-app, we need to register for the "AUTH_CHANGED" topic event in order to properly configure and
+             * handle the logic of our application depending on the current login / authentication state with the Entersoft Application Server. For this, we need to
+             * use the subscribe function as in the example below:
+```js
+smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
+    function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
+
+        // ... other things
+
+        esMessaging.subscribe("AUTH_CHANGED", function(sess, apitoken) {
+            $scope.esnotify.error(s);
+        });
+    }
+]);
+```
+            *  
+            **/
             subscribe: subscribe,
+
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esMessaging#unsubscribe
+             * @methodOf es.Services.Web.esMessaging
+             * @module es.Services.Web
+             * @kind function
+             * @description This function is used to unsubscribe from an event-topic to which there was a subscription with the subscribe function
+             * @param {object} handle The handle that the subscribe function returned as a result when we first did the subscription.
+            **/
             unsubscribe: unsubscribe
         };
 
@@ -138,6 +219,18 @@
     });
 
 
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esGlobals
+     * @requires $sessionStorage
+     * @requires $log
+     * @requires $injector
+     * @requires es.Services.Web.esMessaging
+     * @kind factory
+     * @description
+     * esGlobals is a factory service that provides functions, constructs and messaging events for common _global_ nature in the context of a typical
+     * AngularJS SPA based on Entersoft AngularJS API.
+     */
     esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', '$injector' /* 'es.Services.GA' */ ,
         function($sessionStorage, $log, esMessaging, $injector) {
 
@@ -314,12 +407,24 @@
 
             return {
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#getVersion
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns the current version of the Entersoft AngularJS API.
+                 * @return {object} A JSON object representing the current version of the Entersoft AngularJS API in sem-ver semantics
+```js
+var esAPIversion = {
+    Major: int, // i.e. 1
+    Minor: int, // i.e. 0
+    Patch: int // i.e. 1
+}
+```
+                **/
                 getVersion: function() {
-                    return {
-                        Major: 0,
-                        Minor: 0,
-                        Patch: 140
-                    };
+                    return esAngularAPIVer;
                 },
 
                 getGA: fgetGA,
@@ -332,6 +437,31 @@
                     return esClientSession;
                 },
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#getUserMessage
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description This function is used to process the error obejct as well as the status code of any type of error in order to get the best match
+                 * for a user **Error Message** string to be presented to the user.
+                 * @param {object} err The error object we got from i.e. http or promise failure. 
+                 * @param {int=} status The status int code we got from an http or promise failure
+                 * @return {string} The string for the best match for user message
+                 * @example
+```js
+smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
+    function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
+
+        // other things to do
+
+        esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
+            var s = esGlobals.getUserMessage(rejection, status);
+            $scope.esnotify.error(s);
+        });
+    }
+]);
+```             **/
                 getUserMessage: getUserMessage,
 
                 sessionClosed: function() {

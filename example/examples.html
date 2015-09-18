@@ -156,5 +156,36 @@
         </span>
     </div>
 
+    <hr/>
+    <div>
+        <h3>18. IMAGE fetchEASWebAsset</h3>
+        <span>
+            <input type="text" ng-model="pAsset"  placeholder="EAS Asset to fetch">
+            <button ng-click="fetchEASWebAsset({base64: true})">fetchEASWebAsset</button>
+            <textarea>{{pAssetResults}}</textarea>
+            <img data-ng-src="{{'data:image/png;base64,' + pAssetResults}}"/>
+        </span>
+    </div>
+
+    <hr/>
+    <div>
+        <h3>19. TEXT fetchEASWebAsset</h3>
+        <span>
+            <input type="text" ng-model="pAsset"  placeholder="EAS Asset to fetch">
+            <button ng-click="fetchEASWebAsset({base64: false})">fetchEASWebAsset</button>
+            <textarea>{{pAssetResults}}</textarea>
+        </span>
+    </div>
+
+    <hr/>
+    <div>
+        <h3>20. PDF-WORD-ETC BIN FILES fetchEASWebAsset</h3>
+        <span>
+            <input type="text" ng-model="pAsset"  placeholder="EAS Asset to fetch">
+            <button ng-click="fetchEASWebAsset()">fetchEASWebAsset</button>
+            <textarea>{{pAssetResults}}</textarea>
+        </span>
+    </div>
+
 </div>
 

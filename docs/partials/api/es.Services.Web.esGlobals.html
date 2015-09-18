@@ -1,0 +1,55 @@
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/esinit.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/b9f2838/src/js/esinit.js#L234" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esGlobals</code>
+<div><span class="hint">service in module <code ng:non-bindable="">es.Services.Web</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="es-services-web-esglobals-page"><p>esGlobals is a factory service that provides functions, constructs and messaging events for common <em>global</em> nature in the context of a typical
+AngularJS SPA based on Entersoft AngularJS API.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ng.$sessionStorage">$sessionStorage</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$log">$log</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$injector">$injector</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/es.Services.Web.esMessaging">esMessaging</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/b9f2838/src/js/esinit.js#L465" class="view-source icon-eye-open"> </a><h3 id="methods_getusermessage">getUserMessage(err, status)</h3>
+<div class="getusermessage"><div class="es-services-web-esglobals-getusermessage-page"><p>This function is used to process the error obejct as well as the status code of any type of error in order to get the best match
+for a user <strong>Error Message</strong> string to be presented to the user.</p>
+</div><h5 id="methods_getusermessage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>err</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-esglobals-getusermessage-page"><p>The error object we got from i.e. http or promise failure.</p>
+</div></td></tr><tr><td>status <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-int">int</a></td><td><div class="es-services-web-esglobals-getusermessage-page"><p>The status int code we got from an http or promise failure</p>
+</div></td></tr></tbody></table><h5 id="methods_getusermessage_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-esglobals-getusermessage-page"><p>The string for the best match for user message</p>
+</div></td></tr></table><h4 id="methods_getusermessage_example">Example</h4>
+<div class="example"><div class="es-services-web-esglobals-getusermessage-page"><p>```js
+smeControllers.controller(&#39;mainCtrl&#39;, [&#39;$location&#39;, &#39;$scope&#39;, &#39;$log&#39;, &#39;esMessaging&#39;, &#39;esWebApi&#39;, &#39;esGlobals&#39;,
+    function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {</p>
+<pre><code>    // other things to do
+
+    esMessaging.subscribe(&quot;ES_HTTP_CORE_ERR&quot;, function(rejection, status) {
+        var s = esGlobals.getUserMessage(rejection, status);
+        $scope.esnotify.error(s);
+    });
+}
+</code></pre><p>]);</p>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/b9f2838/src/js/esinit.js#L426" class="view-source icon-eye-open"> </a><h3 id="methods_getversion">getVersion()</h3>
+<div class="getversion"><div class="es-services-web-esglobals-getversion-page"><p>Function that returns the current version of the Entersoft AngularJS API.</p>
+</div><h5 id="methods_getversion_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-esglobals-getversion-page"><p>A JSON object representing the current version of the Entersoft AngularJS API in sem-ver semantics</p>
+<pre><code class="lang-js">var esAPIversion = {
+    Major: int, // i.e. 1
+    Minor: int, // i.e. 0
+    Patch: int // i.e. 1
+}
+</code></pre>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
+</div>

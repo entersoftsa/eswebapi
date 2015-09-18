@@ -79,7 +79,7 @@ smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'esW
         $scope.getVersionInfo = function() {
             $scope.version = {};
 
-            $scope.esAngularVersion = esGlobals.getVersion();
+            $scope.version.esAngularVersion = esGlobals.getVersion();
 
             esWebApiService.fetchServerCapabilities().then(function(data) {
                 $scope.version.esWebAPIVersion = data.WebApiVersion;
@@ -298,7 +298,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
 
         // fetchScroller sample
         $scope.fetchScroller = function() {
-             var scroller_params = {
+            var scroller_params = {
                 Name: "a*"
             };
             esWebApi.fetchScroller($scope.pGroup, $scope.pFilter, scroller_params)
@@ -307,14 +307,14 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                         $log.info(ret);
                     },
                     function(err) {
-                        $scope.pScrollerResults = ret;
+                        $scope.pScrollerResults = err;
                         $log.error(err);
                     });
         }
 
         // fetchSimpleScrollerRootTable sample
         $scope.fetchSimpleScrollerRootTable = function() {
-             var scroller_params = {
+            var scroller_params = {
                 Name: "a*"
             };
             esWebApi.fetchSimpleScrollerRootTable($scope.pGroup, $scope.pFilter, scroller_params)
@@ -323,8 +323,29 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                         $log.info(ret);
                     },
                     function(err) {
-                        $scope.pScrollerResults = ret;
+                        $scope.pScrollerResults = err;
                         $log.error(err);
+                    });
+        }
+
+        $scope.fetchEASWebAsset = function(options) {
+            esWebApi.fetchEASWebAsset($scope.pAsset, options)
+                .then(function(ret) {
+                        $scope.pAssetResults = ret.data;
+
+                        if (!options) {
+                            var mime = require('mime-types');
+                            var sType = mime.lookup($scope.pAsset);
+                            var file = new Blob([ret.data], {
+                                type: sType
+                            });
+                            //saveAs(file, "test.pdf");
+                            var fU = URL.createObjectURL(file);
+                            window.open(fU);
+                        }
+                    },
+                    function(err) {
+                        $scope.pAssetResults = err;
                     });
         }
     }

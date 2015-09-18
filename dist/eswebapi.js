@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v0.0.1 - 2015-09-17
+/*! Entersoft Application Server WEB API - v1.1.0 - 2015-09-18
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -51,6 +51,7 @@
         __FETCH_ODS_RELATION_INFO__: "api/rpc/FetchOdsRelationInfo/",
         __FETCH_ODS_DETAIL_RELATIONS_INFO__: "api/rpc/FetchOdsDetailRelationsInfo/",
         __FETCH_ODS_MASTER_RELATIONS_INFO__: "api/rpc/FetchOdsMasterRelationsInfo/",
+        __FETCH_WEB_EAS_ASSET__: "api/asset/",
     });
 
     esWebServices.value("__WEBAPI_RT__", {
@@ -71,7 +72,6 @@
      * @name es.Services.Web.esWebApiProvider
      * @module es.Services.Web
      * @kind provider
-     * @sortOrder 1000
      * @description
      * Provides the functions needed to configure the esWebAPI service through the esWebApiProvider that is taking place typically in the _app.js_ file of the AngularJS SPA
      *  in the _app.config_ function.
@@ -82,8 +82,13 @@
      * @ngdoc service
      * @name es.Services.Web.esWebApi
      * @module es.Services.Web
+     * @requires $http 
+     * @requires $log 
+     * @requires $q 
+     * @requires $rootScope 
+     * @requires es.Services.Web.esGlobals 
+     * @requires es.Services.Web.esMessaging
      * @kind provider
-     * @sortOrder 1000
      * @description
      * In order to use the esWebApi service you have to configure within your AngularJS application the service through the {@link es.Services.Web.esWebApiProvider esWebApiProvider}.
      * Web API.
@@ -2201,7 +2206,100 @@ $scope.dofetchPublicQuery = function() {
                                 return processWEBAPIPromise(ht, tt);
                             },
 
+                            /** 
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchEASWebAsset
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This functions returns the contents of a file asset stored in the Entersoft Application Server (EAS) **ESWebAssets** 
+                             * or **CSWebAssets** sub-directories of the EAS. 
+                             * @param {string} [assetUrlPath] the sub-path that points to the file the contents of which we need to retrieve. So,
+                             * if at the EAS the file is stored in the _$/CSWebAssets/esrfa/config/menuConfig.json_ you have to provide as *assetUrlPath* 
+                             * the value "esrfa/config/menuConfig.json". 
+                             * @param {object=} options JSON object representing the options that will be used to get the contents of the file.
+                             * These options depend on what the caller wants to do with the results and on the document type e.g. image, MS Office document, PDF, etc.
+                             * If left null or unspecified, then contents of the file will be returned as _arraybuffer_ (requires AngularJS v1.2 or hogher)
+                             *
+                             * To get an image i.e. myphoto.png to be displayed by an <image> html element, you need to call with options.
+                             *
+                             * **ATTENTION**
+                             *
+                             * For the image to be shown correctly by an HTML image element you should pre-pappend to the begining of the returned string
+                             * the following string: "data:image/png;base64," i.e. img_data = "data:image/png;base64," + ret.data
+```js
+var options = {
+    base64: true,
+    responseType: ''
+}
+```
+                             * To get a unicode text document contents as a string you need to call
+```js
+var options = {
+    responseType: ''
+}
+```
+                             * As described above, if options is null or undefined, then the default options that will be used to execute the operation:
+```js
+{
+    base64: false,
+    responseType: 'arraybuffer'
+}
+```
+                             * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains the string or the array buffer with the contents of the file requested
+                             * @example
+                             * ![EAS directory structure example for fetchEASWebAsset](images/api/es09api-fetchasset.png)
+```js
+ $scope.fetchEASWebAsset = function() {
+    esWebApi.fetchEASWebAsset($scope.pAsset, false)
+    .then(function(ret) {
+        $scope.pAssetResults = ret.data;
+    },
+    function(err) {
+        $scope.pAssetResults = err;
+    });
+}
 
+// call this function
+// esWebApi.fetchEASWebAsset("xx/yy/abcd.txt", {responseType: null})
+// will return the contents of the file.
+```
+                             */
+                            fetchEASWebAsset: function(assetUrlPath, options)
+                            {
+                                var cOptions = {
+                                    base64: false,
+                                };
+
+                                if (options) {
+                                    cOptions.base64 = !!options.base64;
+                                    if (options.responseType) {
+                                        cOptions.responseType = options.responseType;
+                                    }
+                                } else {
+                                    cOptions.responseType = 'arraybuffer';
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_WEB_EAS_ASSET__, assetUrlPath);
+                                var tt = esGlobals.trackTimer("EAS_ASSET", "FETCH", assetUrlPath);
+                                tt.startTime();
+
+                                var httpConfig = {
+                                    method: 'GET',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    params: { base64: cOptions.base64},
+                                };
+
+                                if (cOptions.responseType) {
+                                    httpConfig.responseType = cOptions.responseType;
+                                }
+
+                                var ht = $http(httpConfig);
+                                return processWEBAPIPromise(ht, tt);
+                            },
+                            
                             /** 
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#eSearch
@@ -3251,566 +3349,6 @@ var resp = {
         }]);
 
 })(window.angular);
-(function(window, angular, undefined) {
-    'use strict';
-
-    // Module global settings.
-    var settings = {};
-
-    // Module global flags.
-    var flags = {
-        sdk: false,
-        ready: false
-    };
-
-    // Deferred Object which will be resolved when the Facebook SDK is ready
-    // and the `fbAsyncInit` function is called.
-    var loadDeferred;
-
-    /**
-     * @name facebook
-     * @kind function
-     * @description
-     * An Angularjs module to take approach of Facebook javascript sdk.
-     *
-     * @author Luis Carlos Osorio Jayk <luiscarlosjayk@gmail.com>
-     */
-    angular.module('es.Services.Social', []).
-
-    // Declare module settings value
-    value('settings', settings).
-
-    // Declare module flags value
-    value('flags', flags).
-
-    /**
-     * Facebook provider
-     */
-    provider('esFacebook', [
-        function() {
-
-            /**
-             * Facebook appId
-             * @type {Number}
-             */
-            settings.appId = null;
-
-            this.setAppId = function(appId) {
-                settings.appId = appId;
-            };
-
-            this.getAppId = function() {
-                return settings.appId;
-            };
-
-            /**
-             * Locale language, english by default
-             * @type {String}
-             */
-            settings.locale = 'en_US';
-
-            this.setLocale = function(locale) {
-                settings.locale = locale;
-            };
-
-            this.getLocale = function() {
-                return settings.locale;
-            };
-
-            /**
-             * Set if you want to check the authentication status
-             * at the start up of the app
-             * @type {Boolean}
-             */
-            settings.status = true;
-
-            this.setStatus = function(status) {
-                settings.status = status;
-            };
-
-            this.getStatus = function() {
-                return settings.status;
-            };
-
-            /**
-             * Adding a Channel File improves the performance of the javascript SDK,
-             * by addressing issues with cross-domain communication in certain browsers.
-             * @type {String}
-             */
-            settings.channelUrl = null;
-
-            this.setChannel = function(channel) {
-                settings.channelUrl = channel;
-            };
-
-            this.getChannel = function() {
-                return settings.channelUrl;
-            };
-
-            /**
-             * Enable cookies to allow the server to access the session
-             * @type {Boolean}
-             */
-            settings.cookie = true;
-
-            this.setCookie = function(cookie) {
-                settings.cookie = cookie;
-            };
-
-            this.getCookie = function() {
-                return settings.cookie;
-            };
-
-            /**
-             * Parse XFBML
-             * @type {Boolean}
-             */
-            settings.xfbml = true;
-
-            this.setXfbml = function(enable) {
-                settings.xfbml = enable;
-            };
-
-            this.getXfbml = function() {
-                return settings.xfbml;
-            };
-
-            /**
-             * Auth Response
-             * @type {Object}
-             */
-
-            this.setAuthResponse = function(obj) {
-                settings.authResponse = obj || true;
-            };
-
-            this.getAuthResponse = function() {
-                return settings.authResponse;
-            };
-
-            /**
-             * Frictionless Requests
-             * @type {Boolean}
-             */
-            settings.frictionlessRequests = false;
-
-            this.setFrictionlessRequests = function(enable) {
-                settings.frictionlessRequests = enable;
-            };
-
-            this.getFrictionlessRequests = function() {
-                return settings.frictionlessRequests;
-            };
-
-            /**
-             * HideFlashCallback
-             * @type {Object}
-             */
-            settings.hideFlashCallback = null;
-
-            this.setHideFlashCallback = function(obj) {
-                settings.hideFlashCallback = obj || null;
-            };
-
-            this.getHideFlashCallback = function() {
-                return settings.hideFlashCallback;
-            };
-
-            /**
-             * Custom option setting
-             * key @type {String}
-             * value @type {*}
-             * @return {*}
-             */
-            this.setInitCustomOption = function(key, value) {
-                if (!angular.isString(key)) {
-                    return false;
-                }
-
-                settings[key] = value;
-                return settings[key];
-            };
-
-            /**
-             * get init option
-             * @param  {String} key
-             * @return {*}
-             */
-            this.getInitOption = function(key) {
-                // If key is not String or If non existing key return null
-                if (!angular.isString(key) || !settings.hasOwnProperty(key)) {
-                    return false;
-                }
-
-                return settings[key];
-            };
-
-            /**
-             * load SDK
-             */
-            settings.loadSDK = true;
-
-            this.setLoadSDK = function(a) {
-                settings.loadSDK = !!a;
-            };
-
-            this.getLoadSDK = function() {
-                return settings.loadSDK;
-            };
-
-            /**
-             * SDK version
-             */
-            settings.version = 'v2.2';
-
-            this.setSdkVersion = function(version) {
-                settings.version = version;
-            };
-
-            this.getSdkVersion = function() {
-                return settings.version;
-            };
-
-            /**
-             * Init Facebook API required stuff
-             * This will prepare the app earlier (on settingsuration)
-             * @arg {Object/String} initSettings
-             * @arg {Boolean} _loadSDK (optional, true by default)
-             */
-            this.init = function(initSettings, _loadSDK) {
-                // If string is passed, set it as appId
-                if (angular.isString(initSettings)) {
-                    settings.appId = initSettings;
-                }
-
-                if (angular.isNumber(initSettings)) {
-                    settings.appId = initSettings.toString();
-                }
-
-                // If object is passed, merge it with app settings
-                if (angular.isObject(initSettings)) {
-                    angular.extend(settings, initSettings);
-                }
-
-                // Set if Facebook SDK should be loaded automatically or not.
-                if (angular.isDefined(_loadSDK)) {
-                    settings.loadSDK = !!_loadSDK;
-                }
-            };
-
-            /**
-             * This defined the Facebook service
-             */
-            this.$get = [
-                '$q',
-                '$rootScope',
-                '$timeout',
-                '$window',
-                function($q, $rootScope, $timeout, $window) {
-                    /**
-                     * This is the NgFacebook class to be retrieved on Facebook Service request.
-                     */
-                    function NgFacebook() {
-                        this.appId = settings.appId;
-                    }
-
-                    /**
-                     * Ready state method
-                     * @return {Boolean}
-                     */
-                    NgFacebook.prototype.isReady = function() {
-                        return flags.ready;
-                    };
-
-                    NgFacebook.prototype.login = function() {
-
-                        var d = $q.defer(),
-                            args = Array.prototype.slice.call(arguments),
-                            userFn,
-                            userFnIndex; // Converts arguments passed into an array
-
-                        // Get user function and it's index in the arguments array,
-                        // to replace it with custom function, allowing the usage of promises
-                        angular.forEach(args, function(arg, index) {
-                            if (angular.isFunction(arg)) {
-                                userFn = arg;
-                                userFnIndex = index;
-                            }
-                        });
-
-                        // Replace user function intended to be passed to the Facebook API with a custom one
-                        // for being able to use promises.
-                        if (angular.isFunction(userFn) && angular.isNumber(userFnIndex)) {
-                            args.splice(userFnIndex, 1, function(response) {
-                                $timeout(function() {
-
-                                    if (response && angular.isUndefined(response.error)) {
-                                        d.resolve(response);
-                                    } else {
-                                        d.reject(response);
-                                    }
-
-                                    if (angular.isFunction(userFn)) {
-                                        userFn(response);
-                                    }
-                                });
-                            });
-                        }
-
-                        // review(mrzmyr): generalize behaviour of isReady check
-                        if (this.isReady()) {
-                            $window.FB.login.apply($window.FB, args);
-                        } else {
-                            $timeout(function() {
-                                d.reject("Facebook.login() called before Facebook SDK has loaded.");
-                            });
-                        }
-
-                        return d.promise;
-                    };
-
-                    /**
-                     * Map some asynchronous Facebook SDK methods to NgFacebook
-                     */
-                    angular.forEach([
-                        'logout',
-                        'api',
-                        'ui',
-                        'getLoginStatus'
-                    ], function(name) {
-                        NgFacebook.prototype[name] = function() {
-
-                            var d = $q.defer(),
-                                args = Array.prototype.slice.call(arguments), // Converts arguments passed into an array
-                                userFn,
-                                userFnIndex;
-
-                            // Get user function and it's index in the arguments array,
-                            // to replace it with custom function, allowing the usage of promises
-                            angular.forEach(args, function(arg, index) {
-                                if (angular.isFunction(arg)) {
-                                    userFn = arg;
-                                    userFnIndex = index;
-                                }
-                            });
-
-                            // Replace user function intended to be passed to the Facebook API with a custom one
-                            // for being able to use promises.
-                            if (angular.isFunction(userFn) && angular.isNumber(userFnIndex)) {
-                                args.splice(userFnIndex, 1, function(response) {
-                                    $timeout(function() {
-
-                                        if (response && angular.isUndefined(response.error)) {
-                                            d.resolve(response);
-                                        } else {
-                                            d.reject(response);
-                                        }
-
-                                        if (angular.isFunction(userFn)) {
-                                            userFn(response);
-                                        }
-                                    });
-                                });
-                            }
-
-                            $timeout(function() {
-                                // Call when loadDeferred be resolved, meaning Service is ready to be used.
-                                loadDeferred.promise.then(function() {
-                                    $window.FB[name].apply(FB, args);
-                                });
-                            });
-
-                            return d.promise;
-                        };
-                    });
-
-                    /**
-                     * Map Facebook sdk XFBML.parse() to NgFacebook.
-                     */
-                    NgFacebook.prototype.parseXFBML = function() {
-
-                        var d = $q.defer();
-
-                        $timeout(function() {
-                            // Call when loadDeferred be resolved, meaning Service is ready to be used
-                            loadDeferred.promise.then(function() {
-                                $window.FB.XFBML.parse();
-                                d.resolve();
-                            });
-                        });
-
-                        return d.promise;
-                    };
-
-                    /**
-                     * Map Facebook SDK subscribe/unsubscribe method to NgFacebook.
-                     * Use it as Facebook.subscribe / Facebook.unsubscribe in the service.
-                     */
-
-                    angular.forEach([
-                        'subscribe',
-                        'unsubscribe',
-                    ], function(name) {
-
-                        NgFacebook.prototype[name] = function() {
-
-                            var d = $q.defer(),
-                                args = Array.prototype.slice.call(arguments), // Get arguments passed into an array
-                                userFn,
-                                userFnIndex;
-
-                            // Get user function and it's index in the arguments array,
-                            // to replace it with custom function, allowing the usage of promises
-                            angular.forEach(args, function(arg, index) {
-                                if (angular.isFunction(arg)) {
-                                    userFn = arg;
-                                    userFnIndex = index;
-                                }
-                            });
-
-                            // Replace user function intended to be passed to the Facebook API with a custom one
-                            // for being able to use promises.
-                            if (angular.isFunction(userFn) && angular.isNumber(userFnIndex)) {
-                                args.splice(userFnIndex, 1, function(response) {
-
-                                    $timeout(function() {
-
-                                        if (response && angular.isUndefined(response.error)) {
-                                            d.resolve(response);
-                                        } else {
-                                            d.reject(response);
-                                        }
-
-                                        if (angular.isFunction(userFn)) {
-                                            userFn(response);
-                                        }
-                                    });
-                                });
-                            }
-
-                            $timeout(function() {
-                                // Call when loadDeferred be resolved, meaning Service is ready to be used
-                                loadDeferred.promise.then(function() {
-                                    $window.FB.Event[name].apply(FB, args);
-                                });
-                            });
-
-                            return d.promise;
-                        };
-                    });
-
-                    return new NgFacebook(); // Singleton
-                }
-            ];
-
-        }
-    ]).
-
-    /**
-     * Module initialization
-     */
-    run([
-        '$rootScope',
-        '$q',
-        '$window',
-        '$timeout',
-        function($rootScope, $q, $window, $timeout) {
-            // Define global loadDeffered to notify when Service callbacks are safe to use
-            loadDeferred = $q.defer();
-
-            var loadSDK = settings.loadSDK;
-            delete(settings['loadSDK']); // Remove loadSDK from settings since this isn't part from Facebook API.
-
-            /**
-             * Define fbAsyncInit required by Facebook API
-             */
-            $window.fbAsyncInit = function() {
-                // Initialize our Facebook app
-                $timeout(function() {
-                    if (!settings.appId) {
-                        throw 'Missing appId setting.';
-                    }
-
-                    FB.init(settings);
-
-                    flags.ready = true;
-
-                    /**
-                     * Subscribe to Facebook API events and broadcast through app.
-                     */
-                    angular.forEach({
-                        'auth.login': 'login',
-                        'auth.logout': 'logout',
-                        'auth.prompt': 'prompt',
-                        'auth.sessionChange': 'sessionChange',
-                        'auth.statusChange': 'statusChange',
-                        'auth.authResponseChange': 'authResponseChange',
-                        'xfbml.render': 'xfbmlRender',
-                        'edge.create': 'like',
-                        'edge.remove': 'unlike',
-                        'comment.create': 'comment',
-                        'comment.remove': 'uncomment'
-                    }, function(mapped, name) {
-                        FB.Event.subscribe(name, function(response) {
-                            $timeout(function() {
-                                $rootScope.$broadcast('Facebook:' + mapped, response);
-                            });
-                        });
-                    });
-
-                    // Broadcast Facebook:load event
-                    $rootScope.$broadcast('Facebook:load');
-
-                    loadDeferred.resolve(FB);
-                });
-            };
-
-            /**
-             * Inject Facebook root element in DOM
-             */
-            (function addFBRoot() {
-                var fbroot = document.getElementById('fb-root');
-
-                if (!fbroot) {
-                    fbroot = document.createElement('div');
-                    fbroot.id = 'fb-root';
-                    document.body.insertBefore(fbroot, document.body.childNodes[0]);
-                }
-
-                return fbroot;
-            })();
-
-            /**
-             * SDK script injecting
-             */
-            if (loadSDK) {
-                (function injectScript() {
-                    var src = '//connect.facebook.net/' + settings.locale + '/sdk.js',
-                        script = document.createElement('script');
-                    script.id = 'facebook-jssdk';
-                    script.async = true;
-
-                    // Prefix protocol
-                    // for sure we don't want to ignore things, but this tests exists,
-                    // but it isn't recognized by istanbul, so we give it a 'ignore if'
-                    /* istanbul ignore if */
-                    if ($window.location.protocol.indexOf('file:') !== -1) {
-                        src = 'https:' + src;
-                    }
-
-                    script.src = src;
-                    script.onload = function() {
-                        flags.sdk = true;
-                    };
-
-                    // Fix for IE < 9, and yet supported by latest browsers
-                    document.getElementsByTagName('head')[0].appendChild(script);
-                })();
-            }
-        }
-    ]);
-
-})(window, angular);
 (function() {
     'use strict';
 
@@ -3818,6 +3356,17 @@ var resp = {
     underscore.factory('_', function() {
         return window._; //Underscore must already be loaded on the page 
     });
+
+    var version = "1.1.0";
+    var vParts = _.map(version.split("."), function(x) {
+        return parseInt(x);
+    });
+
+    var esAngularAPIVer = {
+        Major: vParts[0],
+        Minor: vParts[1],
+        Patch: vParts[2]
+    };
 
 
     var esWebFramework = angular.module('es.Services.Web');
@@ -3894,9 +3443,14 @@ var resp = {
 
     });
 
-    // Define the factory on the module.
-    // Inject the dependencies.
-    // Point to the factory definition function.
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esMessaging
+     * @kind factory
+     * @description
+     * esMessaging is a factory service that provides all the primitive functions for a publisher-subscribers messaging event system that its is not based 
+     * on the AngularJS events or watch pattern but in pure callaback function pattern.
+     */
     esWebFramework.factory('esMessaging', function() {
         //#region Internal Properties
         var cache = {};
@@ -3942,8 +3496,73 @@ var resp = {
 
         // Define the functions and properties to reveal.
         var service = {
+
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esMessaging#publish
+             * @methodOf es.Services.Web.esMessaging
+             * @module es.Services.Web
+             * @kind function
+             * @description This function is used to raise - publish that an event-topic has occurred. As a consequence, all the subscribed to 
+             * this topic-event subsciption callback functions will be triggered and executed sequentially.
+             * @param {arguments} args or more arguments, with the first being the string for the topic-event that occurred. The rest of the arguments
+             * if any will be supplied to the callback functions that will be fired. These extra arguments are considered to be specific to the nature 
+             * of the topic-event.
+             * @example
+             * esMessaging is also used by the Entersoft AngularJS API in order to implement the login, logout, session expired, etc. logical events
+             * that need to be handled and properly managed in any application based on the API. 
+             *
+             * This call is used by the API to publish an event that occured. The topic-event is the "AUTH_CHANGED" and it is this event-topic that any interested in 
+             * party should subscribe to in order to be notified whenever this event occurs. The rest arguments, i.e. esClientSession and getAuthToken(model) are the
+             * parameters that will be supplied to the callback functions that have been registered to this topic-event.
+```js
+esMessaging.publish("AUTH_CHANGED", esClientSession, getAuthToken(model));
+```
+             **/            
             publish: publish,
+
+
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esMessaging#subscribe
+             * @methodOf es.Services.Web.esMessaging
+             * @module es.Services.Web
+             * @kind function
+             * @description This function is used to subscribe to a specific event-topic and register a callback function to be called (i.e. fired)
+             * once the event-topic is being raised - published.
+             * @param {string} topic the event name to which this function will subscribe to the callback
+             * @param {function} callback the callback function that will be fired once this event-topic is being **raised - published**
+             * @return {object} An object representic the handle to this specific subscription instance. 
+             * If you need to unsubscribe from this event-topic then you need to store the returned handle value, otherwise you do not need to keep the result
+             * @example
+             * In a controller, typically the root controller of an ng-app, we need to register for the "AUTH_CHANGED" topic event in order to properly configure and
+             * handle the logic of our application depending on the current login / authentication state with the Entersoft Application Server. For this, we need to
+             * use the subscribe function as in the example below:
+```js
+smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
+    function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
+
+        // ... other things
+
+        esMessaging.subscribe("AUTH_CHANGED", function(sess, apitoken) {
+            $scope.esnotify.error(s);
+        });
+    }
+]);
+```
+            *  
+            **/
             subscribe: subscribe,
+
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esMessaging#unsubscribe
+             * @methodOf es.Services.Web.esMessaging
+             * @module es.Services.Web
+             * @kind function
+             * @description This function is used to unsubscribe from an event-topic to which there was a subscription with the subscribe function
+             * @param {object} handle The handle that the subscribe function returned as a result when we first did the subscription.
+            **/
             unsubscribe: unsubscribe
         };
 
@@ -3951,6 +3570,18 @@ var resp = {
     });
 
 
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esGlobals
+     * @requires $sessionStorage
+     * @requires $log
+     * @requires $injector
+     * @requires es.Services.Web.esMessaging
+     * @kind factory
+     * @description
+     * esGlobals is a factory service that provides functions, constructs and messaging events for common _global_ nature in the context of a typical
+     * AngularJS SPA based on Entersoft AngularJS API.
+     */
     esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', '$injector' /* 'es.Services.GA' */ ,
         function($sessionStorage, $log, esMessaging, $injector) {
 
@@ -4127,12 +3758,24 @@ var resp = {
 
             return {
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#getVersion
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns the current version of the Entersoft AngularJS API.
+                 * @return {object} A JSON object representing the current version of the Entersoft AngularJS API in sem-ver semantics
+```js
+var esAPIversion = {
+    Major: int, // i.e. 1
+    Minor: int, // i.e. 0
+    Patch: int // i.e. 1
+}
+```
+                **/
                 getVersion: function() {
-                    return {
-                        Major: 0,
-                        Minor: 0,
-                        Patch: 140
-                    };
+                    return esAngularAPIVer;
                 },
 
                 getGA: fgetGA,
@@ -4145,6 +3788,31 @@ var resp = {
                     return esClientSession;
                 },
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#getUserMessage
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description This function is used to process the error obejct as well as the status code of any type of error in order to get the best match
+                 * for a user **Error Message** string to be presented to the user.
+                 * @param {object} err The error object we got from i.e. http or promise failure. 
+                 * @param {int=} status The status int code we got from an http or promise failure
+                 * @return {string} The string for the best match for user message
+                 * @example
+```js
+smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
+    function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
+
+        // other things to do
+
+        esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
+            var s = esGlobals.getUserMessage(rejection, status);
+            $scope.esnotify.error(s);
+        });
+    }
+]);
+```             **/
                 getUserMessage: getUserMessage,
 
                 sessionClosed: function() {

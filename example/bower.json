@@ -17,13 +17,14 @@
   "dependencies": {
     "angular": "~1.4.1",
     "angular-route": "~1.4.1",
-    "ngstorage": "~0.3.7",
     "angular-sanitize": "~1.4.1",
     "jquery": "~2.1.4",
-    "stacktrace-js": "~0.6.4",
-    "log4javascript": "~1.4.9",
-    "underscore": "~1.8.3",
     "jscache": "*",
-    "moment": "~2.10.6"
+    "log4javascript": "~1.4.9",
+    "moment": "~2.10.6",
+    "ngstorage": "~0.3.7",
+    "require": "*",
+    "stacktrace-js": "~0.6.4",
+    "underscore": "~1.8.3"
   }
 }

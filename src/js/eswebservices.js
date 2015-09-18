@@ -49,6 +49,7 @@
         __FETCH_ODS_RELATION_INFO__: "api/rpc/FetchOdsRelationInfo/",
         __FETCH_ODS_DETAIL_RELATIONS_INFO__: "api/rpc/FetchOdsDetailRelationsInfo/",
         __FETCH_ODS_MASTER_RELATIONS_INFO__: "api/rpc/FetchOdsMasterRelationsInfo/",
+        __FETCH_WEB_EAS_ASSET__: "api/asset/",
     });
 
     esWebServices.value("__WEBAPI_RT__", {
@@ -69,7 +70,6 @@
      * @name es.Services.Web.esWebApiProvider
      * @module es.Services.Web
      * @kind provider
-     * @sortOrder 1000
      * @description
      * Provides the functions needed to configure the esWebAPI service through the esWebApiProvider that is taking place typically in the _app.js_ file of the AngularJS SPA
      *  in the _app.config_ function.
@@ -80,8 +80,13 @@
      * @ngdoc service
      * @name es.Services.Web.esWebApi
      * @module es.Services.Web
+     * @requires $http 
+     * @requires $log 
+     * @requires $q 
+     * @requires $rootScope 
+     * @requires es.Services.Web.esGlobals 
+     * @requires es.Services.Web.esMessaging
      * @kind provider
-     * @sortOrder 1000
      * @description
      * In order to use the esWebApi service you have to configure within your AngularJS application the service through the {@link es.Services.Web.esWebApiProvider esWebApiProvider}.
      * Web API.
@@ -2199,7 +2204,100 @@ $scope.dofetchPublicQuery = function() {
                                 return processWEBAPIPromise(ht, tt);
                             },
 
+                            /** 
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchEASWebAsset
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This functions returns the contents of a file asset stored in the Entersoft Application Server (EAS) **ESWebAssets** 
+                             * or **CSWebAssets** sub-directories of the EAS. 
+                             * @param {string} [assetUrlPath] the sub-path that points to the file the contents of which we need to retrieve. So,
+                             * if at the EAS the file is stored in the _$/CSWebAssets/esrfa/config/menuConfig.json_ you have to provide as *assetUrlPath* 
+                             * the value "esrfa/config/menuConfig.json". 
+                             * @param {object=} options JSON object representing the options that will be used to get the contents of the file.
+                             * These options depend on what the caller wants to do with the results and on the document type e.g. image, MS Office document, PDF, etc.
+                             * If left null or unspecified, then contents of the file will be returned as _arraybuffer_ (requires AngularJS v1.2 or hogher)
+                             *
+                             * To get an image i.e. myphoto.png to be displayed by an <image> html element, you need to call with options.
+                             *
+                             * **ATTENTION**
+                             *
+                             * For the image to be shown correctly by an HTML image element you should pre-pappend to the begining of the returned string
+                             * the following string: "data:image/png;base64," i.e. img_data = "data:image/png;base64," + ret.data
+```js
+var options = {
+    base64: true,
+    responseType: ''
+}
+```
+                             * To get a unicode text document contents as a string you need to call
+```js
+var options = {
+    responseType: ''
+}
+```
+                             * As described above, if options is null or undefined, then the default options that will be used to execute the operation:
+```js
+{
+    base64: false,
+    responseType: 'arraybuffer'
+}
+```
+                             * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains the string or the array buffer with the contents of the file requested
+                             * @example
+                             * ![EAS directory structure example for fetchEASWebAsset](images/api/es09api-fetchasset.png)
+```js
+ $scope.fetchEASWebAsset = function() {
+    esWebApi.fetchEASWebAsset($scope.pAsset, false)
+    .then(function(ret) {
+        $scope.pAssetResults = ret.data;
+    },
+    function(err) {
+        $scope.pAssetResults = err;
+    });
+}
 
+// call this function
+// esWebApi.fetchEASWebAsset("xx/yy/abcd.txt", {responseType: null})
+// will return the contents of the file.
+```
+                             */
+                            fetchEASWebAsset: function(assetUrlPath, options)
+                            {
+                                var cOptions = {
+                                    base64: false,
+                                };
+
+                                if (options) {
+                                    cOptions.base64 = !!options.base64;
+                                    if (options.responseType) {
+                                        cOptions.responseType = options.responseType;
+                                    }
+                                } else {
+                                    cOptions.responseType = 'arraybuffer';
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_WEB_EAS_ASSET__, assetUrlPath);
+                                var tt = esGlobals.trackTimer("EAS_ASSET", "FETCH", assetUrlPath);
+                                tt.startTime();
+
+                                var httpConfig = {
+                                    method: 'GET',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    params: { base64: cOptions.base64},
+                                };
+
+                                if (cOptions.responseType) {
+                                    httpConfig.responseType = cOptions.responseType;
+                                }
+
+                                var ht = $http(httpConfig);
+                                return processWEBAPIPromise(ht, tt);
+                            },
+                            
                             /** 
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#eSearch

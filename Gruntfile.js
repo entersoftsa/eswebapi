@@ -20,7 +20,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 // the files to concatenate
-                src: ['src/js/eswebservices.js', 'src/js/esanalytics.js', 'src/js/esenvironment.js', 'src/js/esfacebook.js', 'src/js/esinit.js', 'src/js/eslog.js', 'src/js/esWEBUI.js'],
+                src: ['src/js/eswebservices.js', 'src/js/esanalytics.js', 'src/js/esenvironment.js', 'src/js/esinit.js', 'src/js/eslog.js', 'src/js/esWEBUI.js'],
                 dest: 'dist/<%= pkg.name %>.js'
             }
         },
@@ -152,7 +152,7 @@ module.exports = function(grunt) {
                         expand: true,
                         src: ['**'],
                         dest: '../../docs_eswebapi/eswebapi/'
-                    }, 
+                    },
                 ],
             }
         },
@@ -237,6 +237,13 @@ module.exports = function(grunt) {
             }
         },
 
+        version: {
+            // options: {}, 
+            defaults: {
+                src: ['package.json', 'src/js/*.js']
+            }
+        },
+
         watch: {
             gruntfile: {
                 files: '<%= jshint.gruntfile.src %>',
@@ -262,6 +269,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ngdocs');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-prompt');
+    grunt.loadNpmTasks('grunt-version');
 
     // Build Sources Task
     grunt.registerTask('1build', [
