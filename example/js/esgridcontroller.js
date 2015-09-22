@@ -369,6 +369,36 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                         $scope.pAssetResults = err;
                     });
         }
+
+        $scope.fetchES00DocumentByGID = function() {
+            esWebApi.fetchES00DocumentByGID($scope.pES00Doc)
+                .then(function(ret) {
+                        $scope.pES00DocResults = ret.data;
+                    },
+                    function(err) {
+                        $scope.pES00DocResults = err;
+                    });    
+        }
+
+        $scope.fetchES00DocumentByCode = function() {
+            esWebApi.fetchES00DocumentByCode($scope.pES00Doc)
+                .then(function(ret) {
+                        $scope.pES00DocResults = ret.data;
+                    },
+                    function(err) {
+                        $scope.pES00DocResults = err;
+                    });    
+        }
+
+        $scope.fetchES00DocumentsByEntityGID = function() {
+            esWebApi.fetchES00DocumentsByEntityGID($scope.pES00Doc)
+                .then(function(ret) {
+                        $scope.pES00DocResults = ret.data;
+                    },
+                    function(err) {
+                        $scope.pES00DocResults = err;
+                    });    
+        }
     }
 ]);
 
