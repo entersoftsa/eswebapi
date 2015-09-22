@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.1.0 - 2015-09-18
+/*! Entersoft Application Server WEB API - v1.1.0 - 2015-09-21
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -25,7 +25,7 @@
 
     /* Services */
 
-    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngSanitize' /*, 'es.Services.Analytics' */ ]);
+    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngSanitize', 'ngFileUpload' /*, 'es.Services.Analytics' */ ]);
 
     esWebServices.
     constant('ESWEBAPI_URL', {
@@ -230,8 +230,8 @@ eskbApp.config(['$logProvider',
                     return this;
                 },
 
-                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'esGlobals', 'esMessaging',
-                    function($http, $log, $q, $rootScope, ESWEBAPI_URL, esGlobals, esMessaging) {
+                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'esGlobals', 'esMessaging', 'Upload',
+                    function($http, $log, $q, $rootScope, ESWEBAPI_URL, esGlobals, esMessaging, Upload) {
 
                         function fregisterException(inMessageObj, storeToRegister) {
                             if (!inMessageObj) {
@@ -2264,8 +2264,7 @@ var options = {
 // will return the contents of the file.
 ```
                              */
-                            fetchEASWebAsset: function(assetUrlPath, options)
-                            {
+                            fetchEASWebAsset: function(assetUrlPath, options) {
                                 var cOptions = {
                                     base64: false,
                                 };
@@ -2289,7 +2288,9 @@ var options = {
                                         "Authorization": esGlobals.getWebApiToken()
                                     },
                                     url: surl,
-                                    params: { base64: cOptions.base64},
+                                    params: {
+                                        base64: cOptions.base64
+                                    },
                                 };
 
                                 if (cOptions.responseType) {
@@ -2299,7 +2300,32 @@ var options = {
                                 var ht = $http(httpConfig);
                                 return processWEBAPIPromise(ht, tt);
                             },
-                            
+
+                            addES00Document: function(entity, entityId, description, file, okfunc, errfunc, progressfunc) {
+
+                                file.upload = Upload.upload({
+                                    url: 'http://esrdfiles.azurewebsites.net/api/photo',
+                                    method: 'POST',
+                                    headers: {
+                                        'my-header': 'my-header-value'
+                                    },
+                                    fields: {
+                                        description: description
+                                    },
+                                    file: file,
+                                });
+
+                                file.upload.then(function(response) {
+                                    $timeout(function() {
+                                        file.result = response.data;
+                                        okfunc(file);
+                                    });
+                                }, errfunc);
+
+                                file.upload.progress(progressfunc);
+
+                            },
+
                             /** 
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#eSearch
@@ -2875,7 +2901,7 @@ var resp = {
                     return esWebApi.eSearch(eUrl, "post", elasticSearchQuery);
                 },
 
-               /** 
+                /** 
                  * @ngdoc function
                  * @name es.Services.Web.esElasticSearch#searchFree
                  * @methodOf es.Services.Web.esElasticSearch
@@ -2901,7 +2927,6 @@ var resp = {
     ]);
 
 }());
-
     (function() {
         'use strict';
 

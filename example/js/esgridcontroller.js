@@ -101,6 +101,27 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
         $scope.pFilter = "ESMMStockItem_def";
         $scope.esWebAPI = esWebApi;
 
+        $scope.uploadPic = function(myFile) {
+            var okf = function(retFile) {
+                $log.information("file uploaded ....");
+            };
+
+            var errf = function(response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+                else {
+                    $scope.errorMsg = "Ooops something wnet wrong";
+                }
+                $log.error($scope.errorMsg);
+            };
+
+            var progressf = function(evt) {
+                myFile.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            };
+
+            esWebApi.addES00Document("abcd", "fff", $scope.username, myFile, okf, errf, progressf);
+        }
+
         //fetchPublicQueryInfo sample
         $scope.fetchPQInfo = function() {
             esWebApi.fetchPublicQueryInfo($scope.pGroup, $scope.pFilter)

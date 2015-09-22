@@ -22,6 +22,7 @@
     "jscache": "*",
     "log4javascript": "~1.4.9",
     "moment": "~2.10.6",
+    "ng-file-upload": "~7.3.6",
     "ngstorage": "~0.3.7",
     "require": "*",
     "stacktrace-js": "~0.6.4",
