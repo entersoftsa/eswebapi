@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.2 - 2015-09-25
+/*! Entersoft Application Server WEB API - v1.2.3 - 2015-09-25
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -3628,7 +3628,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.2.2";
+    var version = "1.2.3";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
