@@ -53,6 +53,7 @@
         __FETCH_ES00DOCUMENT_BY_GID__: "api/ES00Documents/InfoByGID/",
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
         __FETCH_ES00DOCUMENT_BY_ENTITYGID__: "api/ES00Documents/InfoByEntityGid/",
+        __FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__: "api/ES00Documents/BlobDataByGID/",
     });
 
     esWebServices.value("__WEBAPI_RT__", {
@@ -332,8 +333,8 @@ eskbApp.config(['$logProvider',
                         }
 
                         function execScroller(apiUrl, groupID, filterID, params) {
-                            groupID = groupID ? groupID.replace(/ /g, "") : "";
-                            filterID = filterID ? filterID.replace(/ /g, "") : "";
+                            groupID = groupID ? groupID.trim() : "";
+                            filterID = filterID ? filterID.trim() : "";
 
                             var surl = urlWEBAPI.concat(apiUrl, groupID, "/", filterID);
                             var tt = esGlobals.trackTimer("SCR", "FETCH", groupID.concat("/", filterID));
@@ -931,7 +932,7 @@ $scope.fetchCompanyParams = function() {
                             ```
                             */
                             fetchOdsTableInfo: function(tableID) {
-                                tableID = tableID ? tableID.replace(/ /g, "") : "";
+                                tableID = tableID ? tableID.trim() : "";
                                 return getOdsInfo("__FETCH_ODS_TABLE_INFO__", tableID);
                             },
 
@@ -1008,8 +1009,8 @@ $scope.fetchCompanyParams = function() {
                             ```
                             */
                             fetchOdsColumnInfo: function(tableID, columnID) {
-                                tableID = tableID ? tableID.replace(/ /g, "") : "";
-                                columnID = columnID ? columnID.replace(/ /g, "") : "";
+                                tableID = tableID ? tableID.trim() : "";
+                                columnID = columnID ? columnID.trim() : "";
                                 var odsItem = "";
                                 columnID ? tableID + "/" + columnID : tableID;
                                 if (columnID) {
@@ -1124,7 +1125,7 @@ $scope.fetchCompanyParams = function() {
                             ```
                             */
                             fetchOdsRelationInfo: function(relationID) {
-                                relationID = relationID ? relationID.replace(/ /g, "") : "";
+                                relationID = relationID ? relationID.trim() : "";
                                 return getOdsInfo("__FETCH_ODS_RELATION_INFO__", relationID);
                             },
 
@@ -1230,8 +1231,8 @@ $scope.fetchCompanyParams = function() {
                             ```
                             */
                             fetchOdsMasterRelationsInfo: function(tableID, columnID) {
-                                tableID = tableID ? tableID.replace(/ /g, "") : "";
-                                columnID = columnID ? columnID.replace(/ /g, "") : "";
+                                tableID = tableID ? tableID.trim() : "";
+                                columnID = columnID ? columnID.trim() : "";
                                 return getOdsInfo("__FETCH_ODS_MASTER_RELATIONS_INFO__", tableID + "/" + columnID);
                             },
 
@@ -1343,8 +1344,8 @@ $scope.fetchCompanyParams = function() {
                             ```
                             */
                             fetchOdsDetailRelationsInfo: function(tableID, columnID) {
-                                tableID = tableID ? tableID.replace(/ /g, "") : "";
-                                columnID = columnID ? columnID.replace(/ /g, "") : "";
+                                tableID = tableID ? tableID.trim() : "";
+                                columnID = columnID ? columnID.trim() : "";
                                 return getOdsInfo("__FETCH_ODS_DETAIL_RELATIONS_INFO__", tableID + "/" + columnID);
                             },
 
@@ -1969,7 +1970,7 @@ $scope.fetchStdZoom = function()
 ```
                              */
                             fetchStdZoom: function(zoomID, pqOptions) {
-                                zoomID = zoomID ? zoomID.replace(/ /g, "") : "";
+                                zoomID = zoomID ? zoomID.trim() : "";
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__STANDARD_ZOOM__, zoomID);
                                 var tt = esGlobals.trackTimer("ZOOM", "FETCH", zoomID);
                                 tt.startTime();
@@ -2171,8 +2172,8 @@ $scope.dofetchPublicQuery = function() {
 ```
                              */
                             fetchPublicQuery: function(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb) {
-                                pqGroupID = pqGroupID ? pqGroupID.replace(/ /g, "") : "";
-                                pqFilterID = pqFilterID ? pqFilterID.replace(/ /g, "") : "";
+                                pqGroupID = pqGroupID ? pqGroupID.trim() : "";
+                                pqFilterID = pqFilterID ? pqFilterID.trim() : "";
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY__, pqGroupID, "/", pqFilterID);
                                 var tt = esGlobals.trackTimer("PQ", "FETCH", pqGroupID.concat("/", pqFilterID));
@@ -2212,8 +2213,11 @@ $scope.dofetchPublicQuery = function() {
                              * @name es.Services.Web.esWebApi#fetchEASWebAsset
                              * @methodOf es.Services.Web.esWebApi
                              * @kind function
-                             * @description This functions returns the contents of a file asset stored in the Entersoft Application Server (EAS) **ESWebAssets** 
+                             * @description This function returns the contents of a file asset stored in the Entersoft Application Server (EAS) **ESWebAssets** 
                              * or **CSWebAssets** sub-directories of the EAS. 
+                             * 
+                             * **REQUIRES ESWebAPIServer >= 1.7.9**
+                             * 
                              * @param {string} assetUrlPath the sub-path that points to the file the contents of which we need to retrieve. So,
                              * if at the EAS the file is stored in the _$/CSWebAssets/esrfa/config/menuConfig.json_ you have to provide as *assetUrlPath* 
                              * the value "esrfa/config/menuConfig.json". 
@@ -2229,15 +2233,12 @@ $scope.dofetchPublicQuery = function() {
                              * the following string: "data:image/png;base64," i.e. img_data = "data:image/png;base64," + ret.data
 ```js
 var options = {
-    base64: true,
-    responseType: ''
+    base64: true
 }
 ```
-                             * To get a unicode text document contents as a string you need to call
+                             * To get a unicode or utf-8 text document contents as a string you need to call
 ```js
-var options = {
-    responseType: ''
-}
+var options = {Accept: 'text/plain'}
 ```
                              * As described above, if options is null or undefined, then the default options that will be used to execute the operation:
 ```js
@@ -2261,7 +2262,7 @@ var options = {
 }
 
 // call this function
-// esWebApi.fetchEASWebAsset("xx/yy/abcd.txt", {responseType: null})
+// esWebApi.fetchEASWebAsset("xx/yy/abcd.txt", {Accept: 'text/plain'})
 // will return the contents of the file.
 ```
                              */
@@ -2272,9 +2273,8 @@ var options = {
 
                                 if (options) {
                                     cOptions.base64 = !!options.base64;
-                                    if (options.responseType) {
-                                        cOptions.responseType = options.responseType;
-                                    }
+                                    cOptions.responseType = options.responseType;
+                                    cOptions.Accept = options.Accept;
                                 } else {
                                     cOptions.responseType = 'arraybuffer';
                                 }
@@ -2294,10 +2294,48 @@ var options = {
                                     },
                                 };
 
+                                httpConfig.headers.Accept = cOptions.Accept;
+
                                 if (cOptions.responseType) {
                                     httpConfig.responseType = cOptions.responseType;
-                                }
+                                } 
 
+                                var ht = $http(httpConfig);
+                                return processWEBAPIPromise(ht, tt);
+                            },
+
+                            /** 
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchES00DocumentBlobDataByGID
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function returns the arraybuffer for the document stored in **ES00Document** as **BLOBDATA** for a given by GID ES00Document record.
+                             * 
+                             * **REQUIRES ESWebAPIServer >= 1.7.9**
+                             * 
+                             * @param {string} es00DocumentGID The GID of the ES00Document record the blobdata of which we are looking for.
+                             * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains the **arraybuffer** of the contents of the file stored in **blobdata** in the ES00Document record specified by its GID key.
+                             * @example
+```js
+```
+                             **/
+                            fetchES00DocumentBlobDataByGID: function(es00documentGID) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__, es00documentGID);
+                                var tt = esGlobals.trackTimer("ES00DOCUMENT_BLOBDATA", "FETCH", es00documentGID);
+                                tt.startTime();
+
+                                var httpConfig = {
+                                    method: 'GET',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken(),
+                                        "Accept": undefined
+                                    },
+                                    url: surl,
+                                    params: {
+                                        base64: false
+                                    },
+                                    responseType: 'arraybuffer',
+                                };
                                 var ht = $http(httpConfig);
                                 return processWEBAPIPromise(ht, tt);
                             },
@@ -2307,7 +2345,10 @@ var options = {
                              * @name es.Services.Web.esWebApi#fetchES00DocumentByGID
                              * @methodOf es.Services.Web.esWebApi
                              * @kind function
-                             * @description This functions returns the JSON object for the record of the ES00Document object that matches the es00DocumentGID parameter. 
+                             * @description This function returns the JSON object for the record of the ES00Document object that matches the es00DocumentGID parameter. 
+                             * 
+                             * **REQUIRES ESWebAPIServer >= 1.7.9**
+                             * 
                              * @param {string} es00DocumentGID The GID of the ES00Document record that we are looking for
                              * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains the JSON representation of the ES00Document record for the specific GID.
                              * The JSON object is of the form:
@@ -2351,7 +2392,7 @@ $scope.fetchES00DocumentByGID = function() {
 
                              */
                             fetchES00DocumentByGID: function(es00DocumentGID) {
-                                es00DocumentGID = es00DocumentGID ? es00DocumentGID.replace(/ /g, "") : "";
+                                es00DocumentGID = es00DocumentGID ? es00DocumentGID.trim() : "";
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BY_GID__, es00DocumentGID);
                                 var tt = esGlobals.trackTimer("ES00DOCUMENT", "FETCH", es00DocumentGID);
                                 tt.startTime();
@@ -2372,7 +2413,10 @@ $scope.fetchES00DocumentByGID = function() {
                              * @name es.Services.Web.esWebApi#fetchES00DocumentByCode
                              * @methodOf es.Services.Web.esWebApi
                              * @kind function
-                             * @description This functions returns the JSON object for the record of the ES00Document object that matches the es00DocumentCode parameter. 
+                             * @description This function returns the JSON object for the record of the ES00Document object that matches the es00DocumentCode parameter. 
+                             * 
+                             * **REQUIRES ESWebAPIServer >= 1.7.9**
+                             * 
                              * @param {string} es00DocumentCode The Code of the ES00Document record that we are looking for
                              * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains the JSON representation of the ES00Document record for the specific doc Code.
                              * The JSON object is of the form:
@@ -2415,7 +2459,7 @@ $scope.fetchES00DocumentByCode = function() {
 ```
                              */
                             fetchES00DocumentByCode: function(es00DocumentCode) {
-                                es00DocumentCode = es00DocumentCode ? es00DocumentCode.replace(/ /g, "") : "";
+                                es00DocumentCode = es00DocumentCode ? es00DocumentCode.trim() : "";
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BY_CODE__, es00DocumentCode);
                                 var tt = esGlobals.trackTimer("ES00DOCUMENT", "FETCH", es00DocumentCode);
                                 tt.startTime();
@@ -2436,7 +2480,10 @@ $scope.fetchES00DocumentByCode = function() {
                              * @name es.Services.Web.esWebApi#fetchES00DocumentsByEntityGID
                              * @methodOf es.Services.Web.esWebApi
                              * @kind function
-                             * @description This functions returns an array of JSON objects for the records of type ES00Document that belong to entity with GID equal to entityGID. 
+                             * @description This function returns an array of JSON objects for the records of type ES00Document that belong to entity with GID equal to entityGID. 
+                             * 
+                             * **REQUIRES ESWebAPIServer >= 1.7.9**
+                             * 
                              * @param {string} entityGID The GID of the entity for which we want to get all the registered ES00Documents
                              * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains the array of the JSON representation of the ES00Document records for the specific entity.
                              * The JSON object is of the form:
@@ -2482,7 +2529,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 ```
                              */
                             fetchES00DocumentsByEntityGID: function(entityGID) {
-                                entityGID = entityGID ? entityGID.replace(/ /g, "") : "";
+                                entityGID = entityGID ? entityGID.trim() : "";
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BY_ENTITYGID__, entityGID);
                                 var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "FETCH", entityGID);
                                 tt.startTime();

@@ -7,6 +7,8 @@ var smeControllers = angular.module('smeControllers', ['kendo.directives', 'unde
 smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
     function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 
+        $scope.theGlobalUser = "";
+
         $scope.odscinfo = null;
         $scope.press = function() {
             esWebApiService.fetchOdsTableInfo("ESFICustomer").success(function(x) {
@@ -17,6 +19,18 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
             var s = esGlobals.getUserMessage(rejection, status);
             $scope.esnotify.error(s);
+        });
+
+        esMessaging.subscribe("AUTH_CHANGED", function(esSession, b) {
+            if (!b) {
+                $scope.theGlobalUser = "Nobody";
+                alert("You are nobody");
+                return;
+            }
+
+            $scope.theGlobalUser = esSession.connectionModel.Name;
+
+            alert("Welcome " + JSON.stringify(a));
         });
     }
 ]);
@@ -95,8 +109,9 @@ smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'esW
     }
 ]);
 
-smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHelper',
-    function($log, $scope, esWebApi, esWebUIHelper) {
+smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals',
+    function($log, $scope, esWebApi, esWebUIHelper, esGlobals) {
+
         $scope.pGroup = "ESMMStockItem";
         $scope.pFilter = "ESMMStockItem_def";
         $scope.esWebAPI = esWebApi;
@@ -264,7 +279,6 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
         //logout sample
         $scope.doLogout = function() {
             esWebApi.logout();
-            alert("LOGGED OUT. You must relogin to run the samples");
         };
 
         // fetchCompanyParam
@@ -349,21 +363,39 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                     });
         }
 
+        $scope.ImagefetchEASWebAsset = function(options) {
+            esWebApi.fetchEASWebAsset($scope.pAsset, options)
+                .then(function(ret) {
+                        $scope.pImageResults = ret.data;
+                    },
+                    function(err) {
+                        alert(err);
+                    });
+        }
+
+        $scope.TextfetchEASWebAsset = function(options) {
+            esWebApi.fetchEASWebAsset($scope.pAsset, options)
+                .then(function(ret) {
+                        $scope.pTextResults = ret.data;
+                    },
+                    function(err) {
+                        alert(err);
+                    });
+        }
+
         $scope.fetchEASWebAsset = function(options) {
             esWebApi.fetchEASWebAsset($scope.pAsset, options)
                 .then(function(ret) {
                         $scope.pAssetResults = ret.data;
 
-                        if (!options) {
-                            var mime = require('mime-types');
-                            var sType = mime.lookup($scope.pAsset);
-                            var file = new Blob([ret.data], {
-                                type: sType
-                            });
-                            //saveAs(file, "test.pdf");
-                            var fU = URL.createObjectURL(file);
-                            window.open(fU);
-                        }
+                        var sType = esGlobals.getMimeTypeForExt($scope.pAsset);
+                        $log.info("File " + $scope.pAsset + " ===> " + sType);
+                        var file = new Blob([ret.data], {
+                            type: sType
+                        });
+                        //saveAs(file, "test.pdf");
+                        var fU = URL.createObjectURL(file);
+                        window.open(fU);
                     },
                     function(err) {
                         $scope.pAssetResults = err;
@@ -377,7 +409,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                     },
                     function(err) {
                         $scope.pES00DocResults = err;
-                    });    
+                    });
         }
 
         $scope.fetchES00DocumentByCode = function() {
@@ -387,7 +419,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                     },
                     function(err) {
                         $scope.pES00DocResults = err;
-                    });    
+                    });
         }
 
         $scope.fetchES00DocumentsByEntityGID = function() {
@@ -397,7 +429,33 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                     },
                     function(err) {
                         $scope.pES00DocResults = err;
-                    });    
+                    });
+        }
+
+        $scope.fetchES00DocumentBlobDataByGID = function() {
+            esWebApi.fetchES00DocumentByGID($scope.pES00Doc)
+                .then(function(ret) {
+                        var esDoc = ret.data;
+                        $scope.pAssetResults = esDoc;
+
+                        esWebApi.fetchES00DocumentBlobDataByGID($scope.pES00Doc)
+                            .then(function(ret) {
+                                    var sType = esGlobals.getMimeTypeForExt(esDoc.FType);
+                                    $log.info("File " + $scope.pAsset + " ===> " + sType);
+                                    var file = new Blob([ret.data], {
+                                        type: sType
+                                    });
+                                    //saveAs(file, "test.pdf");
+                                    var fU = URL.createObjectURL(file);
+                                    window.open(fU);
+                                },
+                                function(err) {
+                                    $log.error(err);
+                                });
+                    },
+                    function(err) {
+                        $scope.pES00DocResults = err;
+                    });
         }
     }
 ]);

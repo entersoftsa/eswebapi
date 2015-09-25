@@ -225,10 +225,10 @@ module.exports = function(grunt) {
 
         shell: {
             github_sourcefiles: {
-                command: "git add --all&&git commit -m 'auto'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git master"
+                command: "git add --all&&git commit -m '<%= pkg.version %>'&&git tag <%= pkg.version %>&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git master --tags"
             },
             github_pub_docs: {
-                command: "git add --all&&git commit -m 'auto'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git gh-pages",
+                command: "git add --all&&git commit -m '<%= pkg.version %>'&&git tag <%= pkg.version %>&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git gh-pages --tags",
                 options: {
                     execOptions: {
                         cwd: '../../docs_eswebapi/eswebapi/'
@@ -241,6 +241,31 @@ module.exports = function(grunt) {
             // options: {}, 
             defaults: {
                 src: ['package.json', 'src/js/*.js']
+            }
+        },
+
+        nodemailer: {
+            options: {
+                transport: {
+                    type: 'SMTP',
+                    options: {
+                        host: 'septimus',
+                        port: 25
+                    }
+                },
+                message: {
+                    from: "esWebApi <sme@entersoft.gr>",
+                    subject: 'Entersoft AngularJS Web API v<%= pkg.version %> is available',
+                    html: "<body><h1>Entersoft AngularJS Web API v<%= pkg.version %></h1><p>In order to get the latest version please visit <a href='https://github.com/entersoftsa/eswebapi'>Entersoft AngularJS Web API</a>.<br/>For the documentation please visit <a href='https://github.com/entersoftsa/eswebapi'>API Reference</a>.</p><br/><div><a href='http://www.entersoft.gr'><img title='Entersoft SA' src='http://www.entersoft.gr/User_Scenario/Images/Logo.png'/></a></div></body>",
+                },
+
+                recipients: [{
+                    email: 'development@entersoft.gr',
+                    name: 'Entersoft Development'
+                }]
+            },
+
+            internal: {
             }
         },
 
@@ -270,6 +295,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-prompt');
     grunt.loadNpmTasks('grunt-version');
+    grunt.loadNpmTasks('grunt-nodemailer');
 
     // Build Sources Task
     grunt.registerTask('1build', [
@@ -310,7 +336,10 @@ module.exports = function(grunt) {
 
         /* push to gihub both documentation and source files */
         'shell:github_pub_docs',
-        'shell:github_sourcefiles'
+        'shell:github_sourcefiles',
+
+        // send email to dev community
+        'nodemailer:internal'
     ]);
 
     // doc

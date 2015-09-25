@@ -1,4 +1,4 @@
-<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/esinit.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/273f5d9/src/js/esinit.js#L234" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esGlobals</code>
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/esinit.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/c7a18fa/src/js/esinit.js#L234" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esGlobals</code>
 <div><span class="hint">service in module <code ng:non-bindable="">es.Services.Web</code>
 </span>
 </div>
@@ -18,7 +18,33 @@ AngularJS SPA based on Entersoft AngularJS API.</p>
 </li>
 </ul>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/273f5d9/src/js/esinit.js#L465" class="view-source icon-eye-open"> </a><h3 id="methods_getusermessage">getUserMessage(err, status)</h3>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/c7a18fa/src/js/esinit.js#L2801" class="view-source icon-eye-open"> </a><h3 id="methods_getextensionsformimetype">getExtensionsForMimeType(mimeType)</h3>
+<div class="getextensionsformimetype"><div class="es-services-web-esglobals-getextensionsformimetype-page"><p>Function that returns an array of extensions that match the given mimeType</p>
+<p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
+</div><h5 id="methods_getextensionsformimetype_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>mimeType</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-esglobals-getextensionsformimetype-page"><p>The mimeType string for which we want the string array of extensions that are mapped to this mimeType</p>
+</div></td></tr></tbody></table><h5 id="methods_getextensionsformimetype_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">array</a></td><td><div class="es-services-web-esglobals-getextensionsformimetype-page"><p>The array of strings that are mapped to this mimeType. If no map is found, an empty array i.e. [] will be returned</p>
+</div></td></tr></table><h4 id="methods_getextensionsformimetype_example">Example</h4>
+<div class="example"><div class="es-services-web-esglobals-getextensionsformimetype-page"><pre><code class="lang-js">var exts = esGlobals.getExtensionsForMimeType(&quot;text/plain&quot;);
+//exts will be [&quot;txt&quot;, &quot;text&quot;, &quot;conf&quot;, &quot;def&quot;, &quot;list&quot;, &quot;log&quot;, &quot;in&quot;]
+</code></pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/c7a18fa/src/js/esinit.js#L2763" class="view-source icon-eye-open"> </a><h3 id="methods_getmimetypeforext">getMimeTypeForExt(filenamewithext)</h3>
+<div class="getmimetypeforext"><div class="es-services-web-esglobals-getmimetypeforext-page"><p>Function that returns the mime-type for the given input filename or extension.</p>
+<p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
+</div><h5 id="methods_getmimetypeforext_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>filenamewithext</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-esglobals-getmimetypeforext-page"><p>the fullpath or just the filename or just the extension for which we want to have the corresponding mime-type
+i.e. &quot;/abc/xyz/masterfile.pdf&quot; or &quot;docx&quot; or &quot;.xlsx&quot;, etc.</p>
+</div></td></tr></tbody></table><h5 id="methods_getmimetypeforext_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-esglobals-getmimetypeforext-page"><p>The mime-type string for the extension or filename provided in the <em>filenamewithext</em> param. If no mime-type is registered for
+this extension the function returns an empty string &#39;&#39;.</p>
+</div></td></tr></table><h4 id="methods_getmimetypeforext_example">Example</h4>
+<div class="example"><div class="es-services-web-esglobals-getmimetypeforext-page"><pre><code class="lang-js">var mimeType = esGlobals.getMimeTypeForExt(&quot;myfile.docx&quot;);
+// mimeType will be &quot;application/vnd.openxmlformats-officedocument.wordprocessingml.document&quot;
+</code></pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/c7a18fa/src/js/esinit.js#L2852" class="view-source icon-eye-open"> </a><h3 id="methods_getusermessage">getUserMessage(err, status)</h3>
 <div class="getusermessage"><div class="es-services-web-esglobals-getusermessage-page"><p>This function is used to process the error obejct as well as the status code of any type of error in order to get the best match
 for a user <strong>Error Message</strong> string to be presented to the user.</p>
 </div><h5 id="methods_getusermessage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>err</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-esglobals-getusermessage-page"><p>The error object we got from i.e. http or promise failure.</p>
@@ -39,7 +65,7 @@ smeControllers.controller(&#39;mainCtrl&#39;, [&#39;$location&#39;, &#39;$scope&
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/273f5d9/src/js/esinit.js#L426" class="view-source icon-eye-open"> </a><h3 id="methods_getversion">getVersion()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/c7a18fa/src/js/esinit.js#L2738" class="view-source icon-eye-open"> </a><h3 id="methods_getversion">getVersion()</h3>
 <div class="getversion"><div class="es-services-web-esglobals-getversion-page"><p>Function that returns the current version of the Entersoft AngularJS API.</p>
 </div><h5 id="methods_getversion_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-esglobals-getversion-page"><p>A JSON object representing the current version of the Entersoft AngularJS API in sem-ver semantics</p>
 <pre><code class="lang-js">var esAPIversion = {
