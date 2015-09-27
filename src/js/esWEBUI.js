@@ -735,8 +735,8 @@
                     if (!scope.esGridOptions && !iAttrs.esGridOptions) {
                         // Now esGridOption explicitly assigned so ask the server 
                         esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
-                            .success(function(ret) {
-                                var p1 = ret;
+                            .then(function(ret) {
+                                var p1 = ret.data;
                                 var p2 = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, p1);
                                 scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, scope.esGroupId, scope.esFilterId, scope.esExecuteParams, p2);
                             });
@@ -816,8 +816,8 @@
                     }
 
                     esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
-                        .success(function(ret) {
-                            var v = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, ret);
+                        .then(function(ret) {
+                            var v = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, ret.data);
                             scope.esParamsValues = v.defaultValues;
                             scope.esParamsDef = v.params;
                             scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, scope.esGroupId, scope.esFilterId, scope.esParamsValues, v);
@@ -859,8 +859,8 @@
                             // we are given groupid and filterid =>
                             // we must retrieve pqinfo on owr own
                             esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
-                                .success(function(ret) {
-                                    var v = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, ret);
+                                .function(function(ret) {
+                                    var v = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, ret.data);
                                     scope.esParamsValues = v.defaultValues;
                                     scope.esParamsDef = v.params;
                                 });

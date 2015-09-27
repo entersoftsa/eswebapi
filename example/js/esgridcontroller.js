@@ -109,12 +109,17 @@ smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'esW
     }
 ]);
 
-smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals',
-    function($log, $scope, esWebApi, esWebUIHelper, esGlobals) {
+smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 
+    function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache) {
 
         $scope.pGroup = "ESMMStockItem";
         $scope.pFilter = "ESMMStockItem_def";
         $scope.esWebAPI = esWebApi;
+
+        $scope.cacheInfo = function() {
+            $scope.cacheSize = esCache.size();
+            $scope.cacheStats = esCache.stats();
+        };
 
         $scope.uploadPic = function(myFile) {
             var okf = function(retFile) {
@@ -140,9 +145,9 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
         //fetchPublicQueryInfo sample
         $scope.fetchPQInfo = function() {
             esWebApi.fetchPublicQueryInfo($scope.pGroup, $scope.pFilter)
-                .success(function(ret) {
+                .then(function(ret) {
                     // This is the gridlayout as defined in the EBS Public Query based on .NET Janus GridEx Layout
-                    $scope.esJanusGridLayout = ret;
+                    $scope.esJanusGridLayout = ret.data;
 
                     // This is the neutral-abstract representation of the Janus GridEx Layout according to the ES WEB UI simplification
                     $scope.esWebGridInfo = esWebUIHelper.winGridInfoToESGridInfo($scope.pGroup, $scope.pFilter, $scope.esJanusGridLayout);
@@ -150,8 +155,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                     // This is the kendo-grid based layout ready to be assigned to kendo-grid options attribute for rendering the results
                     // and for executing the corresponding Public Query
                     $scope.esWebGridLayout = esWebUIHelper.esGridInfoToKInfo(esWebApi, $scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
-                })
-                .error(function(err, status) {
+                }, function(err, status) {
                     alert(a.UserMessage || a.MessageID || "Generic Error");
                 });
         }
@@ -268,11 +272,11 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
                 PageSize: 5
 
             };
-            esWebApi.fetchStdZoom($scope.pZoomID, zoomOptions)
+            esWebApi.fetchStdZoom($scope.pZoomID, null, true)
                 .then(function(ret) {
                     $scope.pZoomResults = ret.data;
                 }, function(err) {
-                    $scope.pZoomResults = err;
+                    $scope.pZoomResults = JSON.stringify(err);
                 });
         }
 
@@ -433,29 +437,46 @@ smeControllers.controller('examplesCtrl', ['$log', '$scope', 'esWebApi', 'esUIHe
         }
 
         $scope.fetchES00DocumentBlobDataByGID = function() {
+            /*
             esWebApi.fetchES00DocumentByGID($scope.pES00Doc)
                 .then(function(ret) {
-                        var esDoc = ret.data;
-                        $scope.pAssetResults = esDoc;
-
-                        esWebApi.fetchES00DocumentBlobDataByGID($scope.pES00Doc)
-                            .then(function(ret) {
-                                    var sType = esGlobals.getMimeTypeForExt(esDoc.FType);
-                                    $log.info("File " + $scope.pAsset + " ===> " + sType);
-                                    var file = new Blob([ret.data], {
-                                        type: sType
-                                    });
-                                    //saveAs(file, "test.pdf");
-                                    var fU = URL.createObjectURL(file);
-                                    window.open(fU);
-                                },
-                                function(err) {
-                                    $log.error(err);
-                                });
-                    },
-                    function(err) {
-                        $scope.pES00DocResults = err;
+                    return ret.data;
+                })
+                .then(function(esDoc) {
+                    docType = esGlobals.getMimeTypeForExt(esDoc.FType);
+                    return esWebApi.fetchES00DocumentBlobDataByGID(esDoc.GID);
+                })
+                .then(function(fData) {
+                    $log.info("File " + $scope.pAsset + " ===> " + docType);
+                    var file = new Blob([fData.data], {
+                        type: docType
                     });
+                    //saveAs(file, "test.pdf");
+                    var fU = URL.createObjectURL(file);
+                    window.open(fU);
+                })
+                .catch(function(err) {
+                    $log.error("2nd error = " + JSON.stringify(err));
+                });
+            */
+
+            $q.all([esWebApi.fetchES00DocumentByGID($scope.pES00Doc), esWebApi.fetchES00DocumentBlobDataByGID($scope.pES00Doc)])
+            .then(function(results) {
+                var esDoc = results[0].data;
+                var fileData = results[1].data;
+
+                var docType = esGlobals.getMimeTypeForExt(esDoc.FType);
+                $log.info("File " + $scope.pAsset + " ===> " + docType);
+                    var file = new Blob([fileData], {
+                        type: docType
+                    });
+                    //saveAs(file, "test.pdf");
+                    var fU = URL.createObjectURL(file);
+                    window.open(fU);
+            })
+            .catch(function(err) {
+                    $log.error("2nd error = " + JSON.stringify(err));
+                });
         }
     }
 ]);

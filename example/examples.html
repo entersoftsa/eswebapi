@@ -34,6 +34,14 @@
             <br/>
         </form>
     </div>
+    <hr/>
+    <div>
+        <button ng-click="cacheInfo()">cache Information</button>
+        <span>
+            <textarea>{{cacheSize}}</textarea> 
+            <textarea>{{cacheStats}}</textarea>
+        </span>
+    </div>
     <h3>
          1. fetchPublicQueryInfo
     </h3>

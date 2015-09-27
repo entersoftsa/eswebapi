@@ -83,7 +83,7 @@
                     },
 
                     stats: function() {
-                        return cache.stats();
+                        return cache.getStats();
                     }
                 }
             }
@@ -372,7 +372,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 connectionModel: null,
 
                 getWebApiToken: function() {
-                    return getAuthToken(fgetModel());
+                    //sme fake
+                    var s = getAuthToken(fgetModel());
+
+                    /*
+                    if (s) {
+                        s = s.replace("j", "f").replace("x", "h");
+                    }
+                    */
+
+                    return s;
                 },
 
                 setModel: fsetModel,

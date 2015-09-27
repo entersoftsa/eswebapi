@@ -232,8 +232,8 @@ eskbApp.config(['$logProvider',
                     return this;
                 },
 
-                $get: ['$http', '$log', '$q', '$rootScope', 'ESWEBAPI_URL', 'esGlobals', 'esMessaging', 'Upload',
-                    function($http, $log, $q, $rootScope, ESWEBAPI_URL, esGlobals, esMessaging, Upload) {
+                $get: ['$http', '$log', '$q', '$timeout', '$rootScope', 'ESWEBAPI_URL', 'esGlobals', 'esMessaging', 'Upload', 'esCache',
+                    function($http, $log, $q, $timeout, $rootScope, ESWEBAPI_URL, esGlobals, esMessaging, Upload, esCache) {
 
                         function fregisterException(inMessageObj, storeToRegister) {
                             if (!inMessageObj) {
@@ -300,6 +300,16 @@ eskbApp.config(['$logProvider',
 
                         function getOdsInfo(odsType, odsID) {
                             var surl = urlWEBAPI + ESWEBAPI_URL[odsType] + odsID;
+
+                            var deferred = $q.defer();
+                            var cItem = esCache.getItem(surl);
+                            if (cItem) {
+                                $timeout(function() {
+                                    deferred.resolve(cItem);
+                                });
+                                return deferred.promise;
+                            }
+
                             var ht = $http({
                                 method: 'get',
                                 headers: {
@@ -307,8 +317,17 @@ eskbApp.config(['$logProvider',
                                 },
                                 url: surl
                             });
-                            processWEBAPIPromise(ht);
-                            return ht;
+
+                            processWEBAPIPromise(ht)
+                                .then(function(ret) {
+                                    esCache.setItem(surl, ret);
+                                    deferred.resolve(ret);
+
+                                }, function() {
+                                    deferred.reject(arguments);
+                                });
+
+                            return deferred.promise;
                         }
 
                         function execFormCommand(formCommandParams) {
@@ -1892,8 +1911,20 @@ function($scope, esWebApi, esWebUIHelper) {
 }
 ```
                              */
-                            fetchPublicQueryInfo: function(GroupID, FilterID) {
+                            fetchPublicQueryInfo: function(GroupID, FilterID, useCache) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, GroupID, "/", FilterID);
+
+                                var deferred = $q.defer();
+                                if (useCache) {
+                                    var cItem = esCache.getItem(surl);
+                                    if (cItem) {
+                                        $timeout(function() {
+                                            deferred.resolve(cItem);
+                                        });
+                                        return deferred.promise;
+                                    }
+                                }
+
                                 var tt = esGlobals.trackTimer("PQ", "INFO", GroupID.concat("/", FilterID));
                                 tt.startTime();
 
@@ -1904,7 +1935,14 @@ function($scope, esWebApi, esWebUIHelper) {
                                     },
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                processWEBAPIPromise(ht, tt)
+                                    .then(function(ret) {
+                                        esCache.setItem(surl, ret);
+                                        deferred.resolve(ret);
+                                    }, function() {
+                                        deferred.reject(arguments);
+                                    });
+                                return deferred.promise;
                             },
 
                             /**
@@ -1969,8 +2007,22 @@ $scope.fetchStdZoom = function()
 }
 ```
                              */
-                            fetchStdZoom: function(zoomID, pqOptions) {
+                            fetchStdZoom: function(zoomID, pqOptions, useCache) {
                                 zoomID = zoomID ? zoomID.trim() : "";
+
+                                useCache = !pqOptions && useCache;
+
+                                var deferred = $q.defer();
+                                if (useCache) {
+                                    var it = esCache.getItem("ESZOOM_" + zoomID);
+                                    if (it) {
+                                        $307ut(function() {
+                                            deferred.resolve(it);
+                                        });
+                                        return deferred.promise;
+                                    }
+                                }
+
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__STANDARD_ZOOM__, zoomID);
                                 var tt = esGlobals.trackTimer("ZOOM", "FETCH", zoomID);
                                 tt.startTime();
@@ -1983,7 +2035,17 @@ $scope.fetchStdZoom = function()
                                     },
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                var sp = processWEBAPIPromise(ht, tt);
+
+                                sp.then(function(ret) {
+                                    if (useCache) {
+                                        esCache.setItem("ESZOOM_" + zoomID, ret);
+                                    }
+                                    deferred.resolve(ret);
+                                }, function() {
+                                    deferred.reject(arguments);
+                                });
+                                return deferred.promise;
                             },
 
                             /**
@@ -2298,7 +2360,7 @@ var options = {Accept: 'text/plain'}
 
                                 if (cOptions.responseType) {
                                     httpConfig.responseType = cOptions.responseType;
-                                } 
+                                }
 
                                 var ht = $http(httpConfig);
                                 return processWEBAPIPromise(ht, tt);
@@ -2404,7 +2466,7 @@ $scope.fetchES00DocumentByGID = function() {
                                     },
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);                                
+                                return processWEBAPIPromise(ht, tt);
 
                             },
 
@@ -2471,7 +2533,7 @@ $scope.fetchES00DocumentByCode = function() {
                                     },
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);                                
+                                return processWEBAPIPromise(ht, tt);
 
                             },
 
@@ -2541,7 +2603,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     },
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);                                
+                                return processWEBAPIPromise(ht, tt);
 
                             },
 
