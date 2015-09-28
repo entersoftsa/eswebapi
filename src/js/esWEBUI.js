@@ -505,7 +505,7 @@
         return ret;
     }
 
-    function prepareStdZoom($log, zoomID, esWebApiService) {
+    function prepareStdZoom($log, zoomID, esWebApiService, useCache) {
         var xParam = {
             transport: {
                 read: function(options) {
@@ -513,8 +513,10 @@
                     $log.info("FETCHing ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
 
                     var pqOptions = {};
-                    esWebApiService.fetchStdZoom(zoomID, pqOptions)
-                        .success(function(pq) {
+                    esWebApiService.fetchStdZoom(zoomID, pqOptions, useCache)
+                        .then(function(ret) {
+                            var pq = ret.data;
+
                             // SME CHANGE THIS ONCE WE HAVE CORRECT PQ
                             if (pq.Count == -1) {
                                 pq.Count = pq.Rows ? pq.Rows.length : 0;
@@ -523,8 +525,7 @@
 
                             options.success(pq);
                             $log.info("FETCHed ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
-                        })
-                        .error(function(err) {
+                        }, function(err) {
                             options.error(err);
                         });
                 }

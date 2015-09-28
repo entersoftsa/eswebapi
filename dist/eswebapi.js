@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.4 - 2015-09-27
+/*! Entersoft Application Server WEB API - v1.2.5 - 2015-09-28
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -810,7 +810,7 @@ $scope.fetchCompanyParams = function() {
                                                          * @module es.Services.Web
                                                          * @kind function
                                                          * @param {string} tableID The ODS Table ID or the ODS Table GID in string (guid) to retrieve
-                                                         * @return {httpPromise}  Returns a promise.
+                                                         * @return {promise} Returns a promise.
                                                          ** If sucess the response.data contains the ODS Table Definition object in JSON representation
                                                          ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
                                                          * err.data.UserMessage
@@ -970,7 +970,7 @@ $scope.fetchCompanyParams = function() {
                                                          ** ODS Column's GID in string i.e. "74c82778-6b49-4928-9f06-81b4384bf677"
                                                          * @param {string=} columnID The ODS Column/Field ID  to retrieve i.e. "Description". If columnID is undefined or null or empty string
                                                          * then tableID should be one of the forms described above.
-                                                         * @return {httpPromise}  Returns a promise.
+                                                         * @return {promise} Returns a promise.
                                                          ** If sucess the response.data contains the ODS Column/Field Definition object in JSON representation
                                                          ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
                                                          * err.data.UserMessage
@@ -1055,7 +1055,7 @@ $scope.fetchCompanyParams = function() {
                                                          * @module es.Services.Web
                                                          * @kind function
                                                          * @param {string} relationID The ODS Relation ID or the ODS Relation GID in string (guid) to retrieve
-                                                         * @return {httpPromise}  Returns a promise.
+                                                         * @return {promise} Returns a promise.
                                                          ** If sucess the response.data contains the ODS Relation Definition object in JSON representation
                                                          ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
                                                          * err.data.UserMessage
@@ -1160,7 +1160,7 @@ $scope.fetchCompanyParams = function() {
                                                          * @kind function
                                                          * @param {string} tableID The ODS Table ID i.e. "ESFFitem". 
                                                          * @param {string} columnID The ODS Column/Field ID  to retrieve i.e. "fDim1Code".
-                                                         * @return {httpPromise}  Returns a promise..
+                                                         * @return {promise} Returns a promise..
                                                          ** If sucess the response.data contains an Array of Master relations of the ODS Relation Definition objects in JSON representation, that exist
                                                          * for the given *tableID* and foreign *columnID*
                                                          ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
@@ -1267,7 +1267,7 @@ $scope.fetchCompanyParams = function() {
                                                          * @kind function
                                                          * @param {string} tableID The ODS Table ID i.e. "ESFFitem". 
                                                          * @param {string} columnID The ODS Column/Field ID  to retrieve i.e. "GID".
-                                                         * @return {httpPromise}  Returns a promise..
+                                                         * @return {promise} Returns a promise..
                                                          ** If sucess the response.data contains an Array of the Detail ODS Relation Definition objects in JSON representation, that exist
                                                          * for the given *tableID* and foreign *columnID*
                                                          ** If error the err.data object contains the Entersoft Application Server error definition. Typically the user error message is 
@@ -1975,7 +1975,10 @@ var pqOptions = {
                              * (no natter what the pagesize is) found in the server for the given Public Query and pqParams supplied for the PQ execution.
                              ** If pqOptions is valid and pqOptions.WithCount is false, the result still might contain information about the 
                              * total records depending on the other parameters. See the return section for detailed information about the returned value.
-                             * @return {httpPromise} Returns a promise.
+                             * @param {boolean} useCache if pqOptions is null or undefined meaning that we want all data for the zoom to be fetched from the server
+                             * if useCache is true then on success the zoom records will be cached by the framework so that next call for the same zoom will get the results
+                             * from the cache.
+                             * @return {promise} Returns a promise.
                              ** If success i.e. then(function(ret) { ... }) ret.data holds the result of the Zoom Records.
                              * In any success response, ret.data.Table will hold as string the Public Query MasterTableName as defined through the Entersoft Scroller Designer.
                              * The response has the typical form as follows:
@@ -3690,7 +3693,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.2.4";
+    var version = "1.2.5";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -7375,7 +7378,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         return ret;
     }
 
-    function prepareStdZoom($log, zoomID, esWebApiService) {
+    function prepareStdZoom($log, zoomID, esWebApiService, useCache) {
         var xParam = {
             transport: {
                 read: function(options) {
@@ -7383,8 +7386,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     $log.info("FETCHing ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
 
                     var pqOptions = {};
-                    esWebApiService.fetchStdZoom(zoomID, pqOptions)
-                        .success(function(pq) {
+                    esWebApiService.fetchStdZoom(zoomID, pqOptions, useCache)
+                        .then(function(ret) {
+                            var pq = ret.data;
+
                             // SME CHANGE THIS ONCE WE HAVE CORRECT PQ
                             if (pq.Count == -1) {
                                 pq.Count = pq.Rows ? pq.Rows.length : 0;
@@ -7393,8 +7398,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                             options.success(pq);
                             $log.info("FETCHed ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
-                        })
-                        .error(function(err) {
+                        }, function(err) {
                             options.error(err);
                         });
                 }
