@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.2.5";
+    var version = "1.2.6";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -326,7 +326,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     // In case that response is of type ArrayBuffer instead of an object
                     try {
                         err = JSON.parse(String.fromCharCode.apply(null, new Uint8Array(err)));
-                    } catch(x) {
+                    } catch (x) {
 
                     }
                 }
@@ -2876,16 +2876,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                         var esga = fgetGA();
                         if (angular.isDefined(esga)) {
-                            var i;
-                            for (i = 0; i < 12; i++) {
-                                if (angular.isDefined(esga)) {
-                                    esga.registerEventTrack({
-                                        category: 'AUTH',
-                                        action: 'LOGIN',
-                                        label: data.Model.GID
-                                    });
-                                }
-                            }
+                            esga.registerEventTrack({
+                                category: 'AUTH',
+                                action: 'LOGIN',
+                                label: data.Model.GID
+                            });
                         }
 
                         $log.info("LOGIN User ", data.Model.Name);

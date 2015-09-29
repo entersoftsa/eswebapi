@@ -1,5 +1,8 @@
 # Entersoft AngularJS Web API
 
+**Version 1.2.6**
+- fetchPublicQueryInfo supports use of cache
+
 **Version 1.2.5**
 - Better support for premises
 - fetchStdZoom can cache the results for subsequent calls
