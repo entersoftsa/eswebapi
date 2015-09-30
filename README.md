@@ -1,5 +1,9 @@
 # Entersoft AngularJS Web API
 
+**Version 1.2.7**
+- More documentation on fetchPublicQueryInfo
+- More documentation on esCache provider
+
 **Version 1.2.6**
 - fetchPublicQueryInfo supports use of cache
 

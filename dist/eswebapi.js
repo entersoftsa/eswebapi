@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.6 - 2015-09-29
+/*! Entersoft Application Server WEB API - v1.2.7 - 2015-09-30
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -1883,9 +1883,555 @@ $scope.fetchUserSites = function()
                              * @kind function
                              * @param {string} GroupID Entersoft Public Query GroupID
                              * @param {string} FilterID Entersoft Public Query FilterID
+                             * @param {boolean} useCache If true, then the results of the fetchPublicQueryInfo will be cached by the framework for any
+                             * subsequent calls.
                              * @return {httpPromise} Returns a promise. 
                              ** If success i.e. success(function(ret) {...}) the response ret is a JSON object representing the Entersoft 
-                             * Business Suite Janus based GridEx Layout. See the example on how to use the returned value in order to create an esGrid options object
+                             * Business Suite Janus based GridEx Layout. The result of the fetchPublicQueryInfo is of the following type:
+```js
+var ret = {
+// Identification and ID properties of the PQ
+    "Filter": [{
+        "ID": "ESMMStockItem_Def",
+        "Caption": "Είδη Αποθήκης",
+        "QueryID": "ESMMStockItem\\ESMMStockItem_Def\\ESMMStockItem_Def_Q1.esq",
+        "RootTable": "ESFIItem",
+        "SelectedMasterTable": "ESFIItem",
+        "SelectedMasterField": "ISUDGID",
+        "TotalRow": "0",
+        "ColumnHeaders": "0",
+        "ColumnSetHeaders": "0",
+        "ColumnSetRowCount": "2",
+        "ColumnSetHeaderLines": "1",
+        "HeaderLines": "1",
+        "GroupByBoxVisible": "false",
+        "FilterLineVisible": "false",
+        "PreviewRow": "false",
+        "PreviewRowMember": "",
+        "PreviewRowLines": "3"
+    }],
+
+// Definition of the Parameters, if any, for the PQ
+    "Param": [{
+        "ID": "ESDCreated",
+        "AA": "1",
+        "Caption": "Ημ/νία δημιουργίας",
+        "Tooltip": "Ημ/νία δημιουργίας",
+        "ControlType": "6",
+        "ParameterType": "Entersoft.Framework.Platform.ESDateRange, QueryProcess",
+        "Precision": "0",
+        "MultiValued": "false",
+        "Visible": "true",
+        "Required": "false",
+        "ODSTag": "AA049FD6-4EFF-499F-8F6B-0573BD14D183",
+        "Tags": "",
+        "Visibility": "0"
+    }, {
+        "ID": "ESUCreated",
+        "AA": "2",
+        "Caption": "Χρήστης δημιουργίας",
+        "Tooltip": "Χρήστης δημιουργίας",
+        "ControlType": "9",
+        "ParameterType": "Entersoft.Framework.Platform.ESString, QueryProcess",
+        "Precision": "0",
+        "MultiValued": "false",
+        "Visible": "true",
+        "Required": "false",
+        "ODSTag": "0ABDC77C-119B-4729-A99F-C226EBCE0C1B",
+        "Tags": "",
+        "Visibility": "0"
+    }, {
+        "ID": "ESDModified",
+        "AA": "3",
+        "Caption": "Ημ/νία τελ.μεταβολής",
+        "Tooltip": "Ημ/νία τελ.μεταβολής",
+        "ControlType": "20",
+        "ParameterType": "Entersoft.Framework.Platform.ESDateRange, QueryProcess",
+        "Precision": "0",
+        "MultiValued": "false",
+        "Visible": "true",
+        "Required": "false",
+        "ODSTag": "4E4E17A4-ECA5-4CB0-9F11-02C943F6E6C8",
+        "Tags": "",
+        "Visibility": "0"
+    }],
+
+    // Default Values for the parameters specified in the previous section
+    "DefaultValue": [{
+        "fParamID": "ESDCreated",
+        "Value": "#2006/04/15#"
+    }, {
+        "fParamID": "ESUCreated",
+        "Value": "ESString(RANGE, 'wλμ', 'χχω')"
+    }, {
+        "fParamID": "ESDModified",
+        "Value": "#2011/03/14#"
+    }],
+
+    // Grid column Definition
+
+    "LayoutColumn": [{
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Code",
+        "AA": "0",
+        "Caption": "Κωδικός",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "74C82778-6B49-4928-9F06-81B4384BF677",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Description",
+        "AA": "4",
+        "Caption": "Περιγραφή",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "2B666760-3FA7-478A-8112-CCC77FBC754E",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "AlternativeDescription",
+        "AA": "5",
+        "Caption": "Εναλλακτική περιγραφή",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "A8E42370-78F3-4F38-BB65-F861B6DD1F84",
+        "Visible": "false",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Price",
+        "AA": "6",
+        "Caption": "Τιμή χονδρικής",
+        "FormatString": "#,0.00",
+        "Width": "100",
+        "ODSTag": "FC8D207E-FE62-4791-98C0-C5787C8940AD",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "3",
+        "EditType": "1",
+        "DataTypeName": "Decimal"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "RetailPrice",
+        "AA": "7",
+        "Caption": "Τιμή λιανικής",
+        "FormatString": "#,0.00",
+        "Width": "100",
+        "ODSTag": "F1FE2820-573E-41A5-B0A8-5DE247EEC20A",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "3",
+        "EditType": "1",
+        "DataTypeName": "Decimal"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "AssemblyType",
+        "AA": "8",
+        "Caption": "Τύπος σύνθεσης",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "AEAA32D3-E015-4891-AEB9-8A60ABBCA9AF",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "5",
+        "DataTypeName": "Byte"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemClass",
+        "AA": "9",
+        "Caption": "Κλάση",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "82538EA3-8EF0-4E8F-A395-9EF1466DCFB6",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "5",
+        "DataTypeName": "Byte"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "AA": "10",
+        "Caption": "Τύπος",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "0107AD25-0F2D-41F6-9D59-4C6B1CC0FE30",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "5",
+        "DataTypeName": "Byte"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Name",
+        "AA": "11",
+        "Caption": "Επωνυμία/Ονοματεπώνυμο",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "7699C12E-3B5F-47E8-B509-7AF97F4560B1",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Description1",
+        "AA": "12",
+        "Caption": "Περιγραφή1",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "2BF1AC3B-BDB3-4239-A9D1-696793981822",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "fItemFamilyCode",
+        "AA": "13",
+        "Caption": "Οικογένεια",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "7D4D3335-3D6D-45B5-A1D3-FF237A33867C",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "fItemGroupCode",
+        "AA": "14",
+        "Caption": "Ομάδα",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "CE625D36-7744-4DF9-9AFA-2F0851F9B025",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "fItemCategoryCode",
+        "AA": "15",
+        "Caption": "Κατηγορία",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "19AB9EB4-7791-4090-8AF6-F9434B031EF0",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "fItemSubcategoryCode",
+        "AA": "16",
+        "Caption": "Υποκατηγορία",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "22E443E1-9A08-4FAD-835A-6B7C15A844C2",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ESDCreated",
+        "AA": "1",
+        "Caption": "Ημ/νία δημιουργίας",
+        "FormatString": "d",
+        "Width": "100",
+        "ODSTag": "AA049FD6-4EFF-499F-8F6B-0573BD14D183",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "0",
+        "DataTypeName": "DateTime"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ESDModified",
+        "AA": "2",
+        "Caption": "Ημ/νία τελ.μεταβολής",
+        "FormatString": "d",
+        "Width": "100",
+        "ODSTag": "4E4E17A4-ECA5-4CB0-9F11-02C943F6E6C8",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "0",
+        "DataTypeName": "DateTime"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ESUCreated",
+        "AA": "3",
+        "Caption": "Χρήστης δημιουργίας",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "0ABDC77C-119B-4729-A99F-C226EBCE0C1B",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "0",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ESUModified",
+        "AA": "17",
+        "Caption": "Χρήστης τελ.μεταβολής",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "FC41CA99-AC07-45B5-825F-3982037E148C",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "0",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Comment",
+        "AA": "18",
+        "Caption": "Σχόλιο",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "BD9B18D3-BA45-4FA7-911A-C66ACA556AB9",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }],
+
+    // List of values (enums, custom enums, etc.)
+    "ValueList": [{
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "AssemblyType",
+        "Value": "0",
+        "Caption": "Απλό"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "AssemblyType",
+        "Value": "1",
+        "Caption": "Σετ"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "AssemblyType",
+        "Value": "2",
+        "Caption": "Παραγόμενο"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemClass",
+        "Value": "0",
+        "Caption": "Γενικό είδος-Υπηρεσία"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemClass",
+        "Value": "1",
+        "Caption": "Είδος Αποθήκης"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemClass",
+        "Value": "2",
+        "Caption": "Πάγιο"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "0",
+        "Caption": "Εμπόρευμα"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "1",
+        "Caption": "Προϊόν"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "8",
+        "Caption": "Ημιέτοιμο"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "2",
+        "Caption": "Ά ύλη"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "9",
+        "Caption": "Β’ύλη"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "12",
+        "Caption": "Υλικό συσκευασίας"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "3",
+        "Caption": "Ανταλλακτικό"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "4",
+        "Caption": "Αναλώσιμο"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "5",
+        "Caption": "Είδος συσκευασίας"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "6",
+        "Caption": "Eίδος εγγυοδοσίας"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "10",
+        "Caption": "Προϋπ/να έσοδα"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "11",
+        "Caption": "Προϋπ/να έξοδα"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "7",
+        "Caption": "Άλλο"
+    }],
+
+    //Gridex format styles and conditions
+    "FormatingCondition": [{
+        "fFilterID": "ESMMStockItem_Def",
+        "Key": "PriceMarkNegativeValues",
+        "AllowMerge": "true",
+        "ColumnKey": "Price",
+        "ConditionOperator": "3",
+        "Value1": "0",
+        "TargetColumnKey": "Price",
+        "fFormatStyleKey": "1ecd5e8f-b3d0-4a02-b9ac-d70a36ee4d41"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "Key": "RetailPriceMarkNegativeValues",
+        "AllowMerge": "true",
+        "ColumnKey": "RetailPrice",
+        "ConditionOperator": "3",
+        "Value1": "0",
+        "TargetColumnKey": "RetailPrice",
+        "fFormatStyleKey": "3a9999f7-322b-437d-abbf-43ded2a4bec6"
+    }],
+    "FormatStyle": [{
+        "Key": "1ecd5e8f-b3d0-4a02-b9ac-d70a36ee4d41",
+        "BackColor": "0",
+        "ForeColor": "-65536",
+        "FontBold": "0",
+        "FontItalic": "0",
+        "FontStrikeout": "0"
+    }, {
+        "Key": "3a9999f7-322b-437d-abbf-43ded2a4bec6",
+        "BackColor": "0",
+        "ForeColor": "-65536",
+        "FontBold": "0",
+        "FontItalic": "0",
+        "FontStrikeout": "0"
+    }]
+};
+```
+                             * 
+                             * See the example on how to use the returned value in order to create an esGrid options object
                              *
                              ** If error i.e. error(function(err, status) { ... }) the err contains the server error object and if available the status code i.e. 400
                              * @example
@@ -3693,7 +4239,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.2.6";
+    var version = "1.2.7";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -3708,6 +4254,27 @@ var resp = {
     var esWebFramework = angular.module('es.Services.Web');
 
 
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esCacheProvider
+     * @kind provider
+     * @description
+     * esCacheProvider exposes a set of functions that can be used to configure the esCache servive prior to its use. Configuration usually takes place
+     * at the _app.js_ file of the AngularJS SPA in the _app.config_ function.
+     */
+
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esCache
+     * @module es.Services.Web
+     * @kind provider
+     * @description
+     * esCache is a service that provides chachinf functionality to the Entersoft AngularJS API library that can be also used from the application developer
+     * for the needs of his/her Single Page Application. Although, the functions offered by the service are not specific to any of the publicly 
+     * available javascript libraries, the current version of the service relies on jscache, but this can change any time in the future with 100%
+     * compatibility to the functions offered by the service i.e. the exposed functions and their signature is an **interface** to the client developer, but not the
+     * implementation.
+     */
     esWebFramework.provider('esCache', function() {
         var cache = null;
         var settings = {};
@@ -3715,23 +4282,62 @@ var resp = {
         settings.storage = null;
 
         return {
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esCacheProvider#setMaxSize
+             * @methodOf es.Services.Web.esCacheProvider
+             * @module es.Services.Web
+             * @kind function
+             * @description This function is used to set the maximum number of items that the cache can hold.
+             * @param {number} size the maximum number of items that the cache can hold. If parameter does not resolve to a number it is set to -1 i.e. 
+             * **no limitation** in the number of cache items.
+             **/
             setMaxSize: function(size) {
                 if (angular.isNumber(size)) {
                     settings.maxSize = size;
+                } else {
+                    settings.maxSize = -1;
                 }
             },
 
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esCacheProvider#getMaxSize
+             * @methodOf es.Services.Web.esCacheProvider
+             * @module es.Services.Web
+             * @kind function
+             * @description This function returns the current maxsize for the cache.
+             * @return {number} the maxSize that cache engine has been set to.
+             **/
             getMaxSize: function() {
                 return settings.maxSize;
             },
 
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esCacheProvider#getStorageSettings
+             * @methodOf es.Services.Web.esCacheProvider
+             * @module es.Services.Web
+             * @kind function
+             * @description This function returns the storage object that cache engine has been configured to use, if any.
+             * @return {Object} The storage object that cache engine has been configured to use, if any.
+             **/
             getStorageSettings: function() {
                 return settings.storage;
             },
 
-            setStorageSettings: function(setings) {
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esCacheProvider#setStorageSettings
+             * @methodOf es.Services.Web.esCacheProvider
+             * @module es.Services.Web
+             * @kind function
+             * @description This function sets the storage object to be used as a 2nd level cache by the cache engine.
+             * @param {Object} storage The storage object to be used by the cache engine for 2nd level cache.
+             **/
+            setStorageSettings: function(storage) {
                 if (settings) {
-                    settings.storage = settings;
+                    settings.storage = storage;
                 }
             },
 
@@ -3743,32 +4349,106 @@ var resp = {
                 cache = new Cache(settings.maxSize, false, settings.storage);
 
                 return {
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#getItem
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function is used to get a value that might exist in the cache under the unique id **key**.
+                     * @param {Object|string} key Typically _key_ is of type string but it can be an object.
+                     * @return {Object} If the key exists in the cache, the value of that key is returned, otherwise _undefined_
+                     **/
                     getItem: function(key) {
                         return cache.getItem(key);
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#setItem
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function is used to set a key, value pair in the cache. If the key is already in the cache, its value will 
+                     * be replaced by the new value i.e. val
+                     * @param {Object|string} key Typically _key_ is of type string but it can be an object.
+                     * @param {Object} val The value to be stored under the key
+                     * @param {Object=} options Caching options. For more information please visit [monsur jscache](https://github.com/monsur/jscache).
+                     **/
                     setItem: function(key, val, options) {
                         cache.setItem(key, val, options);
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#removeItem
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function is used to remove an entry from the cache identified by **key**
+                     * @param {Object|string} key Typically _key_ is of type string but it can be an object.
+                     **/
                     removeItem: function(key) {
                         cache.removeItem(key);
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#removeWhere
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function is used to remove entries from the cache according to the resolution of the f supplied function
+                     * @param {function(key, val)} f a function which takes two arguments (key, val) and it should return a boolean value. This function 
+                     * will called against all cache entries and those that this function qualifies to true will be deleted from the cache.
+                     **/
                     removeWhere: function(f) {
                         cache.removeWhere(function(k, v) {
                             return f(k, v);
                         });
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#size
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function returns the current number of entries that the cache holds.
+                     * @return {number} The current number of entries that the cache holds.
+                     **/
                     size: function() {
                         return cache.size();
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#clear
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function clears the cache, by removing **ALL** its entries.
+                     **/
                     clear: function() {
                         cache.clear();
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#stats
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function returns cache statistics
+                     * @return {object} It returns an object holding all cache statistics i.e.
+```js
+{
+    "hits": 5,
+    "misses": 1
+}
+
+```
+                     **/
                     stats: function() {
                         return cache.getStats();
                     }
@@ -3841,7 +4521,7 @@ var resp = {
              * @kind function
              * @description This function is used to raise - publish that an event-topic has occurred. As a consequence, all the subscribed to 
              * this topic-event subsciption callback functions will be triggered and executed sequentially.
-             * @param {arguments} args or more arguments, with the first being the string for the topic-event that occurred. The rest of the arguments
+             * @param {... number} args or more arguments, with the first being the string for the topic-event that occurred. The rest of the arguments
              * if any will be supplied to the callback functions that will be fired. These extra arguments are considered to be specific to the nature 
              * of the topic-event.
              * @example
@@ -7580,7 +8260,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
          * The esGrid generates a Telerik kendo-grid web ui element {@link http://docs.telerik.com/KENDO-UI/api/javascript/ui/grid kendo-grid}.
          * 
          * In order to instantiate an esGrid with an Angular application, you have to provide the parameters esGroupId and esFilterId are required.
-         * These two parameters along with esExecuteParams will be supplied to the {@link es.Services.Web.esWebApi}
+         * These two parameters along with esExecuteParams will be supplied to the {@link es.Web.UI.esUIHelper#methods_esGridInfoToKInfo esToKendoTransform function}
          */
         .directive('esGrid', ['esWebApi', 'esUIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
             return {
@@ -7744,8 +8424,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
     /**
      * @ngdoc service
      * @name es.Web.UI.esUIHelper
-     * @description
-     * **TBD**
+     * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
+     * @requires $log
+     * @description This service provides a set of javascript objects and functions to support UI oriented operations such as preparation
+     * of schema model for a web grid to show the results of a PQ, Entersoft PQ Parameters meta-data manipulation , etc.
+     * yh
      */
     esWEBUI.factory('esUIHelper', ['esWebApi', '$log',
         function(esWebApiService, $log) {
@@ -8192,10 +8875,795 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 ESStringParamVal: ESStringParamVal,
                 ESDateParamVal: ESDateParamVal,
 
+                /**
+                 * @ngdoc function
+                 * @name es.Web.UI.esUIHelper#winGridInfoToESGridInfo
+                 * @methodOf es.Web.UI.esUIHelper
+                 * @module es.Web.UI
+                 * @kind function
+                 * @description  This function processes and transforms an Entersoft Windows - Janus specific definition of the UI layout of an
+                 * Entersoft Public Query or Entersoft Scroller to an abstract web-oriented defintion of the layout to be used by WEB UI components
+                 * such as telerik kendo-ui, jQuery grids, etc.
+                 * @param {string} inGroupID The Entersoft PQ (or Scroller) GroupID the the gridexInfo object describes
+                 * @param {string} inFilterID The Entersoft PQ (or Scroller) FilterID the the gridexInfo object describes
+                 * @param {object} gridexInfo The definition object for an Entersoft Public Query (or Scroller) as provided by the result
+                 * of the function {@link es.Services.Web.esWebApi#methods_fetchPublicQueryInfo fetchPublicQueryInfo}.
+                 * @return {object} Returns an object that is the abstract (not Janus specific) representation of the gridexInfo.
+                 * @example
+```js
+var inGroupID = "ESMMStockItem";
+var inFilterID = "ESMMStockItem_Def";
+var gridexInfo = {
+    "Filter": [{
+        "ID": "ESMMStockItem_Def",
+        "Caption": "Είδη Αποθήκης",
+        "QueryID": "ESMMStockItem\\ESMMStockItem_Def\\ESMMStockItem_Def_Q1.esq",
+        "RootTable": "ESFIItem",
+        "SelectedMasterTable": "ESFIItem",
+        "SelectedMasterField": "ISUDGID",
+        "TotalRow": "0",
+        "ColumnHeaders": "0",
+        "ColumnSetHeaders": "0",
+        "ColumnSetRowCount": "2",
+        "ColumnSetHeaderLines": "1",
+        "HeaderLines": "1",
+        "GroupByBoxVisible": "false",
+        "FilterLineVisible": "false",
+        "PreviewRow": "false",
+        "PreviewRowMember": "",
+        "PreviewRowLines": "3"
+    }],
+    "Param": [{
+        "ID": "ESDCreated",
+        "AA": "1",
+        "Caption": "Ημ/νία δημιουργίας",
+        "Tooltip": "Ημ/νία δημιουργίας",
+        "ControlType": "6",
+        "ParameterType": "Entersoft.Framework.Platform.ESDateRange, QueryProcess",
+        "Precision": "0",
+        "MultiValued": "false",
+        "Visible": "true",
+        "Required": "false",
+        "ODSTag": "AA049FD6-4EFF-499F-8F6B-0573BD14D183",
+        "Tags": "",
+        "Visibility": "0"
+    }, {
+        "ID": "ESUCreated",
+        "AA": "2",
+        "Caption": "Χρήστης δημιουργίας",
+        "Tooltip": "Χρήστης δημιουργίας",
+        "ControlType": "9",
+        "ParameterType": "Entersoft.Framework.Platform.ESString, QueryProcess",
+        "Precision": "0",
+        "MultiValued": "false",
+        "Visible": "true",
+        "Required": "false",
+        "ODSTag": "0ABDC77C-119B-4729-A99F-C226EBCE0C1B",
+        "Tags": "",
+        "Visibility": "0"
+    }, {
+        "ID": "ESDModified",
+        "AA": "3",
+        "Caption": "Ημ/νία τελ.μεταβολής",
+        "Tooltip": "Ημ/νία τελ.μεταβολής",
+        "ControlType": "20",
+        "ParameterType": "Entersoft.Framework.Platform.ESDateRange, QueryProcess",
+        "Precision": "0",
+        "MultiValued": "false",
+        "Visible": "true",
+        "Required": "false",
+        "ODSTag": "4E4E17A4-ECA5-4CB0-9F11-02C943F6E6C8",
+        "Tags": "",
+        "Visibility": "0"
+    }],
+    "DefaultValue": [{
+        "fParamID": "ESDCreated",
+        "Value": "#2006/04/15#"
+    }, {
+        "fParamID": "ESUCreated",
+        "Value": "ESString(RANGE, 'wλμ', 'χχω')"
+    }, {
+        "fParamID": "ESDModified",
+        "Value": "#2011/03/14#"
+    }],
+    "LayoutColumn": [{
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Code",
+        "AA": "0",
+        "Caption": "Κωδικός",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "74C82778-6B49-4928-9F06-81B4384BF677",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Description",
+        "AA": "4",
+        "Caption": "Περιγραφή",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "2B666760-3FA7-478A-8112-CCC77FBC754E",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "AlternativeDescription",
+        "AA": "5",
+        "Caption": "Εναλλακτική περιγραφή",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "A8E42370-78F3-4F38-BB65-F861B6DD1F84",
+        "Visible": "false",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Price",
+        "AA": "6",
+        "Caption": "Τιμή χονδρικής",
+        "FormatString": "#,0.00",
+        "Width": "100",
+        "ODSTag": "FC8D207E-FE62-4791-98C0-C5787C8940AD",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "3",
+        "EditType": "1",
+        "DataTypeName": "Decimal"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "RetailPrice",
+        "AA": "7",
+        "Caption": "Τιμή λιανικής",
+        "FormatString": "#,0.00",
+        "Width": "100",
+        "ODSTag": "F1FE2820-573E-41A5-B0A8-5DE247EEC20A",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "3",
+        "EditType": "1",
+        "DataTypeName": "Decimal"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "AssemblyType",
+        "AA": "8",
+        "Caption": "Τύπος σύνθεσης",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "AEAA32D3-E015-4891-AEB9-8A60ABBCA9AF",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "5",
+        "DataTypeName": "Byte"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemClass",
+        "AA": "9",
+        "Caption": "Κλάση",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "82538EA3-8EF0-4E8F-A395-9EF1466DCFB6",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "5",
+        "DataTypeName": "Byte"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "AA": "10",
+        "Caption": "Τύπος",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "0107AD25-0F2D-41F6-9D59-4C6B1CC0FE30",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "5",
+        "DataTypeName": "Byte"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Name",
+        "AA": "11",
+        "Caption": "Επωνυμία/Ονοματεπώνυμο",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "7699C12E-3B5F-47E8-B509-7AF97F4560B1",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Description1",
+        "AA": "12",
+        "Caption": "Περιγραφή1",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "2BF1AC3B-BDB3-4239-A9D1-696793981822",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "fItemFamilyCode",
+        "AA": "13",
+        "Caption": "Οικογένεια",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "7D4D3335-3D6D-45B5-A1D3-FF237A33867C",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "fItemGroupCode",
+        "AA": "14",
+        "Caption": "Ομάδα",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "CE625D36-7744-4DF9-9AFA-2F0851F9B025",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "fItemCategoryCode",
+        "AA": "15",
+        "Caption": "Κατηγορία",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "19AB9EB4-7791-4090-8AF6-F9434B031EF0",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "fItemSubcategoryCode",
+        "AA": "16",
+        "Caption": "Υποκατηγορία",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "22E443E1-9A08-4FAD-835A-6B7C15A844C2",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ESDCreated",
+        "AA": "1",
+        "Caption": "Ημ/νία δημιουργίας",
+        "FormatString": "d",
+        "Width": "100",
+        "ODSTag": "AA049FD6-4EFF-499F-8F6B-0573BD14D183",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "0",
+        "DataTypeName": "DateTime"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ESDModified",
+        "AA": "2",
+        "Caption": "Ημ/νία τελ.μεταβολής",
+        "FormatString": "d",
+        "Width": "100",
+        "ODSTag": "4E4E17A4-ECA5-4CB0-9F11-02C943F6E6C8",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "0",
+        "DataTypeName": "DateTime"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ESUCreated",
+        "AA": "3",
+        "Caption": "Χρήστης δημιουργίας",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "0ABDC77C-119B-4729-A99F-C226EBCE0C1B",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "0",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ESUModified",
+        "AA": "17",
+        "Caption": "Χρήστης τελ.μεταβολής",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "FC41CA99-AC07-45B5-825F-3982037E148C",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "0",
+        "DataTypeName": "String"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "Comment",
+        "AA": "18",
+        "Caption": "Σχόλιο",
+        "FormatString": "",
+        "Width": "100",
+        "ODSTag": "BD9B18D3-BA45-4FA7-911A-C66ACA556AB9",
+        "Visible": "true",
+        "ColumnSetRow": "-1",
+        "ColumnSetColumn": "-1",
+        "RowSpan": "-1",
+        "ColSpan": "-1",
+        "AggregateFunction": "0",
+        "TextAlignment": "1",
+        "EditType": "1",
+        "DataTypeName": "String"
+    }],
+    "ValueList": [{
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "AssemblyType",
+        "Value": "0",
+        "Caption": "Απλό"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "AssemblyType",
+        "Value": "1",
+        "Caption": "Σετ"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "AssemblyType",
+        "Value": "2",
+        "Caption": "Παραγόμενο"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemClass",
+        "Value": "0",
+        "Caption": "Γενικό είδος-Υπηρεσία"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemClass",
+        "Value": "1",
+        "Caption": "Είδος Αποθήκης"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemClass",
+        "Value": "2",
+        "Caption": "Πάγιο"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "0",
+        "Caption": "Εμπόρευμα"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "1",
+        "Caption": "Προϊόν"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "8",
+        "Caption": "Ημιέτοιμο"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "2",
+        "Caption": "Ά ύλη"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "9",
+        "Caption": "Β’ύλη"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "12",
+        "Caption": "Υλικό συσκευασίας"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "3",
+        "Caption": "Ανταλλακτικό"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "4",
+        "Caption": "Αναλώσιμο"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "5",
+        "Caption": "Είδος συσκευασίας"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "6",
+        "Caption": "Eίδος εγγυοδοσίας"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "10",
+        "Caption": "Προϋπ/να έσοδα"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "11",
+        "Caption": "Προϋπ/να έξοδα"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "ColName": "ItemType",
+        "Value": "7",
+        "Caption": "Άλλο"
+    }],
+    "FormatingCondition": [{
+        "fFilterID": "ESMMStockItem_Def",
+        "Key": "PriceMarkNegativeValues",
+        "AllowMerge": "true",
+        "ColumnKey": "Price",
+        "ConditionOperator": "3",
+        "Value1": "0",
+        "TargetColumnKey": "Price",
+        "fFormatStyleKey": "1ecd5e8f-b3d0-4a02-b9ac-d70a36ee4d41"
+    }, {
+        "fFilterID": "ESMMStockItem_Def",
+        "Key": "RetailPriceMarkNegativeValues",
+        "AllowMerge": "true",
+        "ColumnKey": "RetailPrice",
+        "ConditionOperator": "3",
+        "Value1": "0",
+        "TargetColumnKey": "RetailPrice",
+        "fFormatStyleKey": "3a9999f7-322b-437d-abbf-43ded2a4bec6"
+    }],
+    "FormatStyle": [{
+        "Key": "1ecd5e8f-b3d0-4a02-b9ac-d70a36ee4d41",
+        "BackColor": "0",
+        "ForeColor": "-65536",
+        "FontBold": "0",
+        "FontItalic": "0",
+        "FontStrikeout": "0"
+    }, {
+        "Key": "3a9999f7-322b-437d-abbf-43ded2a4bec6",
+        "BackColor": "0",
+        "ForeColor": "-65536",
+        "FontBold": "0",
+        "FontItalic": "0",
+        "FontStrikeout": "0"
+    }]
+};
+
+var esgridInfo = esUIHelper.winGridInfoToESGridInfo(inGroupID, inFilterID, gridexInfo);
+```
+* __The result will be:__
+```js
+{
+    "id": "ESMMStockItem_Def",
+    "caption": "Είδη Αποθήκης",
+    "rootTable": "ESFIItem",
+    "selectedMasterTable": "ESFIItem",
+    "selectedMasterField": "ISUDGID",
+    "totalRow": "0",
+    "columnHeaders": "0",
+    "columnSetHeaders": "0",
+    "columnSetRowCount": "2",
+    "columnSetHeaderLines": "1",
+    "headerLines": "1",
+    "groupByBoxVisible": "false",
+    "filterLineVisible": "false",
+    "previewRow": "false",
+    "previewRowMember": "",
+    "previewRowLines": "3",
+    "columns": [{
+        "field": "Code",
+        "title": "Κωδικός"
+    }, {
+        "field": "ESDCreated",
+        "title": "Ημ/νία δημιουργίας",
+        "format": "{0:d}"
+    }, {
+        "field": "ESDModified",
+        "title": "Ημ/νία τελ.μεταβολής",
+        "format": "{0:d}"
+    }, {
+        "field": "ESUCreated",
+        "title": "Χρήστης δημιουργίας"
+    }, {
+        "field": "Description",
+        "title": "Περιγραφή"
+    }, {
+        "field": "Price",
+        "title": "Τιμή χονδρικής",
+        "attributes": {
+            "style": "text-align: right;"
+        },
+        "format": "{0:#,0.00}"
+    }, {
+        "field": "RetailPrice",
+        "title": "Τιμή λιανικής",
+        "attributes": {
+            "style": "text-align: right;"
+        },
+        "format": "{0:#,0.00}"
+    }, {
+        "field": "AssemblyType",
+        "title": "Τύπος σύνθεσης"
+    }, {
+        "field": "ItemClass",
+        "title": "Κλάση"
+    }, {
+        "field": "ItemType",
+        "title": "Τύπος"
+    }, {
+        "field": "Name",
+        "title": "Επωνυμία/Ονοματεπώνυμο"
+    }, {
+        "field": "Description1",
+        "title": "Περιγραφή1"
+    }, {
+        "field": "fItemFamilyCode",
+        "title": "Οικογένεια"
+    }, {
+        "field": "fItemGroupCode",
+        "title": "Ομάδα"
+    }, {
+        "field": "fItemCategoryCode",
+        "title": "Κατηγορία"
+    }, {
+        "field": "fItemSubcategoryCode",
+        "title": "Υποκατηγορία"
+    }, {
+        "field": "ESUModified",
+        "title": "Χρήστης τελ.μεταβολής"
+    }, {
+        "field": "Comment",
+        "title": "Σχόλιο"
+    }],
+    "params": [{
+        "id": "ESDCreated",
+        "aa": 1,
+        "caption": "Ημ/νία δημιουργίας",
+        "toolTip": "Ημ/νία δημιουργίας",
+        "controlType": 6,
+        "parameterType": "Entersoft.Framework.Platform.ESDateRange, QueryProcess",
+        "precision": 0,
+        "multiValued": false,
+        "visible": true,
+        "required": false,
+        "oDSTag": "AA049FD6-4EFF-499F-8F6B-0573BD14D183",
+        "tags": "",
+        "visibility": 0,
+        "defaultValues": {
+            "paramCode": "ESDCreated",
+            "paramValue": {
+                "dRange": "1",
+                "fromD": "2006-04-14T21:00:00.000Z",
+                "toD": null
+            }
+        }
+    }, {
+        "id": "ESUCreated",
+        "aa": 2,
+        "caption": "Χρήστης δημιουργίας",
+        "toolTip": "Χρήστης δημιουργίας",
+        "controlType": 9,
+        "parameterType": "Entersoft.Framework.Platform.ESString, QueryProcess",
+        "precision": 0,
+        "multiValued": false,
+        "visible": true,
+        "required": false,
+        "oDSTag": "0ABDC77C-119B-4729-A99F-C226EBCE0C1B",
+        "tags": "",
+        "visibility": 0,
+        "defaultValues": {
+            "paramCode": "ESUCreated",
+            "paramValue": {
+                "value": "wλμ",
+                "valueTo": "χχω",
+                "oper": "RANGE"
+            }
+        }
+    }, {
+        "id": "ESDModified",
+        "aa": 3,
+        "caption": "Ημ/νία τελ.μεταβολής",
+        "toolTip": "Ημ/νία τελ.μεταβολής",
+        "controlType": 20,
+        "parameterType": "Entersoft.Framework.Platform.ESDateRange, QueryProcess",
+        "precision": 0,
+        "multiValued": false,
+        "visible": true,
+        "required": false,
+        "oDSTag": "4E4E17A4-ECA5-4CB0-9F11-02C943F6E6C8",
+        "tags": "",
+        "visibility": 0,
+        "defaultValues": {
+            "paramCode": "ESDModified",
+            "paramValue": {
+                "dRange": "1",
+                "fromD": "2011-03-13T22:00:00.000Z",
+                "toD": null
+            }
+        }
+    }],
+    "defaultValues": {
+        "ESDCreated": {
+            "paramCode": "ESDCreated",
+            "paramValue": {
+                "dRange": "1",
+                "fromD": "2006-04-14T21:00:00.000Z",
+                "toD": null
+            }
+        },
+        "ESUCreated": {
+            "paramCode": "ESUCreated",
+            "paramValue": {
+                "value": "wλμ",
+                "valueTo": "χχω",
+                "oper": "RANGE"
+            }
+        },
+        "ESDModified": {
+            "paramCode": "ESDModified",
+            "paramValue": {
+                "dRange": "1",
+                "fromD": "2011-03-13T22:00:00.000Z",
+                "toD": null
+            }
+        }
+    }
+}
+```
+                 **/
                 winGridInfoToESGridInfo: winGridInfoToESGridInfo,
+
                 winColToESCol: winColToESCol,
                 esColToKCol: esColToKCol,
+
+                /**
+                 * @ngdoc function
+                 * @name es.Web.UI.esUIHelper#esGridInfoToKInfo
+                 * @methodOf es.Web.UI.esUIHelper
+                 * @module es.Web.UI
+                 * @kind function
+                 * @description  This function processes and transforms an {@link es.Web.UI.esUIHelper#methods_winGridInfoToESGridInfo esgridInfo} object (abstract definition of gridexInfo)
+                 * to a Telerik kendo-grid layout definition object.
+                 * @param {service} esWebApiService The {@link es.Services.Web.esWebApi esWebApi Service}.
+                 * @param {string} inGroupID The Entersoft PQ (or Scroller) GroupID the the gridexInfo object describes
+                 * @param {string} inFilterID The Entersoft PQ (or Scroller) FilterID the the gridexInfo object describes
+                 * @param {object} executeParams The object that will hold or alread holds the values of the Entersoft Public Query Paramters i.e. the object
+                 * that holds the values of the params panel (EBS terminology). If the object is not an empty one i.e. {} BUT is has values for some of the named parameters
+                 * these values will be used as default values for those parameters, overiding any default values coming from the grid layout definition object.
+                 * @param {object} esGridInfo The Entersoft abstract definition object that is the result of {@link es.Web.UI.esUIHelper#methods_winGridInfoToESGridInfo winGridInfoToESGridInfo}.
+                 * of the function {@link es.Services.Web.esWebApi#methods_fetchPublicQueryInfo fetchPublicQueryInfo}.
+                 * @return {object} Returns an object that is the __Telerik kendo-grid specific__ schema definition object that can be used to initialize the
+                 * UI of a kendo-grid or kendo-grid like widget.
+                 *
+                 * The returned object can be directly assigned to the _k-options_ attribute of a __kendo-grid__ Telerik widget
+                 * @example
+                 * This is a screenshot from Pulic Query Info results (geridexInfo, esgridInfo and Telerik kendo-grid options)
+                 * ![Sample run for am ESMMStockItem PQInfo](images/api/es010fetchpqinfo.png)
+                 * 
+```js
+//fetchPublicQueryInfo sample
+$scope.fetchPQInfo = function() {
+    esWebApi.fetchPublicQueryInfo($scope.pGroup, $scope.pFilter)
+        .then(function(ret) {
+            // This is the gridlayout as defined in the EBS Public Query based on .NET Janus GridEx Layout
+            $scope.esJanusGridLayout = ret.data;
+
+            // This is the neutral-abstract representation of the Janus GridEx Layout according to the ES WEB UI simplification
+            $scope.esWebGridInfo = esWebUIHelper.winGridInfoToESGridInfo($scope.pGroup, $scope.pFilter, $scope.esJanusGridLayout);
+
+            // This is the kendo-grid based layout ready to be assigned to kendo-grid options attribute for rendering the results
+            // and for executing the corresponding Public Query
+            $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApi, $scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
+        }, function(err, status) {
+            alert(a.UserMessage || a.MessageID || "Generic Error");
+        });
+}
+```
+                 * __HTML__
+```html
+ <span>
+        <input type="text" ng-model="pGroup"  placeholder="PQ GroupID">
+        <input type="text" ng-model="pFilter" placeholder="PQ FilterID">
+        <button ng-click="fetchPQInfo()">fetchPublicQueryInfo</button>
+        <div kendo-grid k-ng-delay="esGridOptions" k-auto-bind="false" k-options="esGridOptions" />
+    </span>
+```
+                 **/
                 esGridInfoToKInfo: esGridInfoToKInfo,
+
                 getZoomDataSource: prepareStdZoom,
                 getPQDataSource: prepareWebScroller,
 

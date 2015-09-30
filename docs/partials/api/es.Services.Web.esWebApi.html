@@ -1,4 +1,4 @@
-<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L98" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L98" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
 <div><span class="hint">service in module <code ng:non-bindable="">es.Services.Web</code>
 </span>
 </div>
@@ -22,7 +22,7 @@ Web API.</p>
 </li>
 </ul>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L2656" class="view-source icon-eye-open"> </a><h3 id="methods_esearch">eSearch(eUrl, eMethod, eBody)</h3>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L3202" class="view-source icon-eye-open"> </a><h3 id="methods_esearch">eSearch(eUrl, eMethod, eBody)</h3>
 <div class="esearch"><div class="es-services-web-eswebapi-esearch-page"><p>This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server.
 This function allows for almost any kind of operation can be executed by the ElasticSearch engine as an http method (i.e. GET, PUT, DELETE, POST, etc.)
 <a href="#/api/es.Services.Web.esElasticSearch#methods_searchindex">searchIndex</a>.</p>
@@ -36,7 +36,7 @@ the index or indices specified by the elasticSearchIndex parameter.</p>
 </div></td></tr></tbody></table><h5 id="methods_esearch_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-esearch-page"><p>The response that we get from Elastic Search service should we perform an AJAX call against the service</p>
 </div></td></tr></table></div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L686" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L686" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
 <div class="fetchcompanyparam"><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>Function that returns the ES Param for a requested ParamID.</p>
 </div><h5 id="methods_fetchcompanyparam_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParam</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>The ID of the ES CompanyParam. The ID should not contain the @ i.e. fetchCompanyParam(&quot;MyValidParamKey&quot;)</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchcompanyparam_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>Returns a promise.</p>
@@ -92,7 +92,7 @@ $scope.fetchCompanyParam = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L778" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L778" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
 <div class="fetchcompanyparams"><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>Function that returns the ES Params for the requested array of parameter id&#39;s</p>
 </div><h5 id="methods_fetchcompanyparams_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParams <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string[]</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>can be</p>
 <ul>
@@ -163,7 +163,7 @@ $scope.fetchCompanyParams = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L2334" class="view-source icon-eye-open"> </a><h3 id="methods_fetcheaswebasset">fetchEASWebAsset(assetUrlPath, options)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L2880" class="view-source icon-eye-open"> </a><h3 id="methods_fetcheaswebasset">fetchEASWebAsset(assetUrlPath, options)</h3>
 <div class="fetcheaswebasset"><div class="es-services-web-eswebapi-fetcheaswebasset-page"><p>This function returns the contents of a file asset stored in the Entersoft Application Server (EAS) <strong>ESWebAssets</strong>
 or <strong>CSWebAssets</strong> sub-directories of the EAS. </p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
@@ -210,7 +210,7 @@ the following string: &quot;data:image/png;base64,&quot; i.e. img_data = &quot;d
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L2387" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentblobdatabygid">fetchES00DocumentBlobDataByGID(es00DocumentGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L2933" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentblobdatabygid">fetchES00DocumentBlobDataByGID(es00DocumentGID)</h3>
 <div class="fetches00documentblobdatabygid"><div class="es-services-web-eswebapi-fetches00documentblobdatabygid-page"><p>This function returns the arraybuffer for the document stored in <strong>ES00Document</strong> as <strong>BLOBDATA</strong> for a given by GID ES00Document record.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentblobdatabygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentblobdatabygid-page"><p>The GID of the ES00Document record the blobdata of which we are looking for.</p>
@@ -221,7 +221,7 @@ the following string: &quot;data:image/png;base64,&quot; i.e. img_data = &quot;d
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L2526" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbycode">fetchES00DocumentByCode(es00DocumentCode)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L3072" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbycode">fetchES00DocumentByCode(es00DocumentCode)</h3>
 <div class="fetches00documentbycode"><div class="es-services-web-eswebapi-fetches00documentbycode-page"><p>This function returns the JSON object for the record of the ES00Document object that matches the es00DocumentCode parameter.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentbycode_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentCode</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentbycode-page"><p>The Code of the ES00Document record that we are looking for</p>
@@ -265,7 +265,7 @@ var sampleDoc = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L2459" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbygid">fetchES00DocumentByGID(es00DocumentGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L3005" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbygid">fetchES00DocumentByGID(es00DocumentGID)</h3>
 <div class="fetches00documentbygid"><div class="es-services-web-eswebapi-fetches00documentbygid-page"><p>This function returns the JSON object for the record of the ES00Document object that matches the es00DocumentGID parameter.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentbygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentbygid-page"><p>The GID of the ES00Document record that we are looking for</p>
@@ -309,7 +309,7 @@ var sampleDoc = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L2596" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentsbyentitygid">fetchES00DocumentsByEntityGID(entityGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L3142" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentsbyentitygid">fetchES00DocumentsByEntityGID(entityGID)</h3>
 <div class="fetches00documentsbyentitygid"><div class="es-services-web-eswebapi-fetches00documentsbyentitygid-page"><p>This function returns an array of JSON objects for the records of type ES00Document that belong to entity with GID equal to entityGID.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentsbyentitygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>entityGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentsbyentitygid-page"><p>The GID of the entity for which we want to get all the registered ES00Documents</p>
@@ -356,7 +356,7 @@ var listOfDocs = [{
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L1030" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodscolumninfo">fetchOdsColumnInfo(tableID, columnID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L1030" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodscolumninfo">fetchOdsColumnInfo(tableID, columnID)</h3>
 <div class="fetchodscolumninfo"><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><p>Function that returns the ODSTable definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodscolumninfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;. If columnID parameter is undefined, null or empty string <strong>then</strong>
 additional forms of tableid-column id definition are available:</p>
@@ -426,7 +426,7 @@ $scope.fetchOdsColumnInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L1365" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsdetailrelationsinfo">fetchOdsDetailRelationsInfo(tableID, columnID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L1365" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsdetailrelationsinfo">fetchOdsDetailRelationsInfo(tableID, columnID)</h3>
 <div class="fetchodsdetailrelationsinfo"><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><p>Function that returns the Detail ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given ColumnID of the Master TableID
 from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodsdetailrelationsinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;.</p>
@@ -529,7 +529,7 @@ $scope.fetchOdsDetailRelationsInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L1252" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsmasterrelationsinfo">fetchOdsMasterRelationsInfo(tableID, columnID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L1252" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsmasterrelationsinfo">fetchOdsMasterRelationsInfo(tableID, columnID)</h3>
 <div class="fetchodsmasterrelationsinfo"><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><p>Function that returns the Master Relations ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given foreign ColumnID of the Master TableID
 from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodsmasterrelationsinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;.</p>
@@ -626,7 +626,7 @@ $scope.fetchOdsMasterRelationsInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L1146" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsrelationinfo">fetchOdsRelationInfo(relationID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L1146" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsrelationinfo">fetchOdsRelationInfo(relationID)</h3>
 <div class="fetchodsrelationinfo"><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>Function that returns the ODS Releation definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodsrelationinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>relationID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>The ODS Relation ID or the ODS Relation GID in string (guid) to retrieve</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchodsrelationinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">promise</a></td><td><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>Returns a promise.</p>
@@ -720,7 +720,7 @@ $scope.fetchOdsRelationInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L953" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodstableinfo">fetchOdsTableInfo(tableID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L953" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodstableinfo">fetchOdsTableInfo(tableID)</h3>
 <div class="fetchodstableinfo"><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>Function that returns the ODSTable definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodstableinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>The ODS Table ID or the ODS Table GID in string (guid) to retrieve</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchodstableinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">promise</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>Returns a promise.</p>
@@ -866,7 +866,7 @@ $scope.fetchOdsTableInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L2239" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L2785" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
 <div class="fetchpublicquery"><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>fetchPublicQuery is one of the most important functions of the esWebApi Service as it is the most preferable and
 strongly recommended way to get data from the Entersoft Application Server through the Entersoft WEB API Sever.</p>
 <p><strong>Public Queries</strong> is a new Entersoft Data Retrieval component introduced since 4.0.28.0 version of EBS. Public Queries can be defined and managed 
@@ -1046,17 +1046,559 @@ END IF
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L1914" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L2460" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID, useCache)</h3>
 <div class="fetchpublicqueryinfo"><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Function that returns the Entersoft Janus based GridExLayout as a JSON object.</p>
 </div><h5 id="methods_fetchpublicqueryinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>GroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>FilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query FilterID</p>
+</div></td></tr><tr><td>useCache</td><td><a href="" class="label type-hint type-hint-boolean">boolean</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>If true, then the results of the fetchPublicQueryInfo will be cached by the framework for any
+subsequent calls.</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchpublicqueryinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Returns a promise.</p>
 <ul>
-<li><p>If success i.e. success(function(ret) {...}) the response ret is a JSON object representing the Entersoft 
-Business Suite Janus based GridEx Layout. See the example on how to use the returned value in order to create an esGrid options object</p>
-</li>
-<li><p>If error i.e. error(function(err, status) { ... }) the err contains the server error object and if available the status code i.e. 400</p>
-</li>
+<li>If success i.e. success(function(ret) {...}) the response ret is a JSON object representing the Entersoft 
+Business Suite Janus based GridEx Layout. The result of the fetchPublicQueryInfo is of the following type:
+```js
+var ret = {
+// Identification and ID properties of the PQ
+  &quot;Filter&quot;: [{<pre><code>  &quot;ID&quot;: &quot;ESMMStockItem_Def&quot;,
+  &quot;Caption&quot;: &quot;Είδη Αποθήκης&quot;,
+  &quot;QueryID&quot;: &quot;ESMMStockItem\\ESMMStockItem_Def\\ESMMStockItem_Def_Q1.esq&quot;,
+  &quot;RootTable&quot;: &quot;ESFIItem&quot;,
+  &quot;SelectedMasterTable&quot;: &quot;ESFIItem&quot;,
+  &quot;SelectedMasterField&quot;: &quot;ISUDGID&quot;,
+  &quot;TotalRow&quot;: &quot;0&quot;,
+  &quot;ColumnHeaders&quot;: &quot;0&quot;,
+  &quot;ColumnSetHeaders&quot;: &quot;0&quot;,
+  &quot;ColumnSetRowCount&quot;: &quot;2&quot;,
+  &quot;ColumnSetHeaderLines&quot;: &quot;1&quot;,
+  &quot;HeaderLines&quot;: &quot;1&quot;,
+  &quot;GroupByBoxVisible&quot;: &quot;false&quot;,
+  &quot;FilterLineVisible&quot;: &quot;false&quot;,
+  &quot;PreviewRow&quot;: &quot;false&quot;,
+  &quot;PreviewRowMember&quot;: &quot;&quot;,
+  &quot;PreviewRowLines&quot;: &quot;3&quot;
+</code></pre>  }],</li>
+</ul>
+<p>// Definition of the Parameters, if any, for the PQ
+    &quot;Param&quot;: [{
+        &quot;ID&quot;: &quot;ESDCreated&quot;,
+        &quot;AA&quot;: &quot;1&quot;,
+        &quot;Caption&quot;: &quot;Ημ/νία δημιουργίας&quot;,
+        &quot;Tooltip&quot;: &quot;Ημ/νία δημιουργίας&quot;,
+        &quot;ControlType&quot;: &quot;6&quot;,
+        &quot;ParameterType&quot;: &quot;Entersoft.Framework.Platform.ESDateRange, QueryProcess&quot;,
+        &quot;Precision&quot;: &quot;0&quot;,
+        &quot;MultiValued&quot;: &quot;false&quot;,
+        &quot;Visible&quot;: &quot;true&quot;,
+        &quot;Required&quot;: &quot;false&quot;,
+        &quot;ODSTag&quot;: &quot;AA049FD6-4EFF-499F-8F6B-0573BD14D183&quot;,
+        &quot;Tags&quot;: &quot;&quot;,
+        &quot;Visibility&quot;: &quot;0&quot;
+    }, {
+        &quot;ID&quot;: &quot;ESUCreated&quot;,
+        &quot;AA&quot;: &quot;2&quot;,
+        &quot;Caption&quot;: &quot;Χρήστης δημιουργίας&quot;,
+        &quot;Tooltip&quot;: &quot;Χρήστης δημιουργίας&quot;,
+        &quot;ControlType&quot;: &quot;9&quot;,
+        &quot;ParameterType&quot;: &quot;Entersoft.Framework.Platform.ESString, QueryProcess&quot;,
+        &quot;Precision&quot;: &quot;0&quot;,
+        &quot;MultiValued&quot;: &quot;false&quot;,
+        &quot;Visible&quot;: &quot;true&quot;,
+        &quot;Required&quot;: &quot;false&quot;,
+        &quot;ODSTag&quot;: &quot;0ABDC77C-119B-4729-A99F-C226EBCE0C1B&quot;,
+        &quot;Tags&quot;: &quot;&quot;,
+        &quot;Visibility&quot;: &quot;0&quot;
+    }, {
+        &quot;ID&quot;: &quot;ESDModified&quot;,
+        &quot;AA&quot;: &quot;3&quot;,
+        &quot;Caption&quot;: &quot;Ημ/νία τελ.μεταβολής&quot;,
+        &quot;Tooltip&quot;: &quot;Ημ/νία τελ.μεταβολής&quot;,
+        &quot;ControlType&quot;: &quot;20&quot;,
+        &quot;ParameterType&quot;: &quot;Entersoft.Framework.Platform.ESDateRange, QueryProcess&quot;,
+        &quot;Precision&quot;: &quot;0&quot;,
+        &quot;MultiValued&quot;: &quot;false&quot;,
+        &quot;Visible&quot;: &quot;true&quot;,
+        &quot;Required&quot;: &quot;false&quot;,
+        &quot;ODSTag&quot;: &quot;4E4E17A4-ECA5-4CB0-9F11-02C943F6E6C8&quot;,
+        &quot;Tags&quot;: &quot;&quot;,
+        &quot;Visibility&quot;: &quot;0&quot;
+    }],</p>
+<pre><code>// Default Values for the parameters specified in the previous section
+&quot;DefaultValue&quot;: [{
+    &quot;fParamID&quot;: &quot;ESDCreated&quot;,
+    &quot;Value&quot;: &quot;#2006/04/15#&quot;
+}, {
+    &quot;fParamID&quot;: &quot;ESUCreated&quot;,
+    &quot;Value&quot;: &quot;ESString(RANGE, &#39;wλμ&#39;, &#39;χχω&#39;)&quot;
+}, {
+    &quot;fParamID&quot;: &quot;ESDModified&quot;,
+    &quot;Value&quot;: &quot;#2011/03/14#&quot;
+}],
+
+// Grid column Definition
+
+&quot;LayoutColumn&quot;: [{
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;Code&quot;,
+    &quot;AA&quot;: &quot;0&quot;,
+    &quot;Caption&quot;: &quot;Κωδικός&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;74C82778-6B49-4928-9F06-81B4384BF677&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;Description&quot;,
+    &quot;AA&quot;: &quot;4&quot;,
+    &quot;Caption&quot;: &quot;Περιγραφή&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;2B666760-3FA7-478A-8112-CCC77FBC754E&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;AlternativeDescription&quot;,
+    &quot;AA&quot;: &quot;5&quot;,
+    &quot;Caption&quot;: &quot;Εναλλακτική περιγραφή&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;A8E42370-78F3-4F38-BB65-F861B6DD1F84&quot;,
+    &quot;Visible&quot;: &quot;false&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;Price&quot;,
+    &quot;AA&quot;: &quot;6&quot;,
+    &quot;Caption&quot;: &quot;Τιμή χονδρικής&quot;,
+    &quot;FormatString&quot;: &quot;#,0.00&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;FC8D207E-FE62-4791-98C0-C5787C8940AD&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;3&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;Decimal&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;RetailPrice&quot;,
+    &quot;AA&quot;: &quot;7&quot;,
+    &quot;Caption&quot;: &quot;Τιμή λιανικής&quot;,
+    &quot;FormatString&quot;: &quot;#,0.00&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;F1FE2820-573E-41A5-B0A8-5DE247EEC20A&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;3&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;Decimal&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;AssemblyType&quot;,
+    &quot;AA&quot;: &quot;8&quot;,
+    &quot;Caption&quot;: &quot;Τύπος σύνθεσης&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;AEAA32D3-E015-4891-AEB9-8A60ABBCA9AF&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;5&quot;,
+    &quot;DataTypeName&quot;: &quot;Byte&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemClass&quot;,
+    &quot;AA&quot;: &quot;9&quot;,
+    &quot;Caption&quot;: &quot;Κλάση&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;82538EA3-8EF0-4E8F-A395-9EF1466DCFB6&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;5&quot;,
+    &quot;DataTypeName&quot;: &quot;Byte&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;AA&quot;: &quot;10&quot;,
+    &quot;Caption&quot;: &quot;Τύπος&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;0107AD25-0F2D-41F6-9D59-4C6B1CC0FE30&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;5&quot;,
+    &quot;DataTypeName&quot;: &quot;Byte&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;Name&quot;,
+    &quot;AA&quot;: &quot;11&quot;,
+    &quot;Caption&quot;: &quot;Επωνυμία/Ονοματεπώνυμο&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;7699C12E-3B5F-47E8-B509-7AF97F4560B1&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;Description1&quot;,
+    &quot;AA&quot;: &quot;12&quot;,
+    &quot;Caption&quot;: &quot;Περιγραφή1&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;2BF1AC3B-BDB3-4239-A9D1-696793981822&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;fItemFamilyCode&quot;,
+    &quot;AA&quot;: &quot;13&quot;,
+    &quot;Caption&quot;: &quot;Οικογένεια&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;7D4D3335-3D6D-45B5-A1D3-FF237A33867C&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;fItemGroupCode&quot;,
+    &quot;AA&quot;: &quot;14&quot;,
+    &quot;Caption&quot;: &quot;Ομάδα&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;CE625D36-7744-4DF9-9AFA-2F0851F9B025&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;fItemCategoryCode&quot;,
+    &quot;AA&quot;: &quot;15&quot;,
+    &quot;Caption&quot;: &quot;Κατηγορία&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;19AB9EB4-7791-4090-8AF6-F9434B031EF0&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;fItemSubcategoryCode&quot;,
+    &quot;AA&quot;: &quot;16&quot;,
+    &quot;Caption&quot;: &quot;Υποκατηγορία&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;22E443E1-9A08-4FAD-835A-6B7C15A844C2&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ESDCreated&quot;,
+    &quot;AA&quot;: &quot;1&quot;,
+    &quot;Caption&quot;: &quot;Ημ/νία δημιουργίας&quot;,
+    &quot;FormatString&quot;: &quot;d&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;AA049FD6-4EFF-499F-8F6B-0573BD14D183&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;0&quot;,
+    &quot;DataTypeName&quot;: &quot;DateTime&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ESDModified&quot;,
+    &quot;AA&quot;: &quot;2&quot;,
+    &quot;Caption&quot;: &quot;Ημ/νία τελ.μεταβολής&quot;,
+    &quot;FormatString&quot;: &quot;d&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;4E4E17A4-ECA5-4CB0-9F11-02C943F6E6C8&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;0&quot;,
+    &quot;DataTypeName&quot;: &quot;DateTime&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ESUCreated&quot;,
+    &quot;AA&quot;: &quot;3&quot;,
+    &quot;Caption&quot;: &quot;Χρήστης δημιουργίας&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;0ABDC77C-119B-4729-A99F-C226EBCE0C1B&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;0&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ESUModified&quot;,
+    &quot;AA&quot;: &quot;17&quot;,
+    &quot;Caption&quot;: &quot;Χρήστης τελ.μεταβολής&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;FC41CA99-AC07-45B5-825F-3982037E148C&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;0&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;Comment&quot;,
+    &quot;AA&quot;: &quot;18&quot;,
+    &quot;Caption&quot;: &quot;Σχόλιο&quot;,
+    &quot;FormatString&quot;: &quot;&quot;,
+    &quot;Width&quot;: &quot;100&quot;,
+    &quot;ODSTag&quot;: &quot;BD9B18D3-BA45-4FA7-911A-C66ACA556AB9&quot;,
+    &quot;Visible&quot;: &quot;true&quot;,
+    &quot;ColumnSetRow&quot;: &quot;-1&quot;,
+    &quot;ColumnSetColumn&quot;: &quot;-1&quot;,
+    &quot;RowSpan&quot;: &quot;-1&quot;,
+    &quot;ColSpan&quot;: &quot;-1&quot;,
+    &quot;AggregateFunction&quot;: &quot;0&quot;,
+    &quot;TextAlignment&quot;: &quot;1&quot;,
+    &quot;EditType&quot;: &quot;1&quot;,
+    &quot;DataTypeName&quot;: &quot;String&quot;
+}],
+
+// List of values (enums, custom enums, etc.)
+&quot;ValueList&quot;: [{
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;AssemblyType&quot;,
+    &quot;Value&quot;: &quot;0&quot;,
+    &quot;Caption&quot;: &quot;Απλό&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;AssemblyType&quot;,
+    &quot;Value&quot;: &quot;1&quot;,
+    &quot;Caption&quot;: &quot;Σετ&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;AssemblyType&quot;,
+    &quot;Value&quot;: &quot;2&quot;,
+    &quot;Caption&quot;: &quot;Παραγόμενο&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemClass&quot;,
+    &quot;Value&quot;: &quot;0&quot;,
+    &quot;Caption&quot;: &quot;Γενικό είδος-Υπηρεσία&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemClass&quot;,
+    &quot;Value&quot;: &quot;1&quot;,
+    &quot;Caption&quot;: &quot;Είδος Αποθήκης&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemClass&quot;,
+    &quot;Value&quot;: &quot;2&quot;,
+    &quot;Caption&quot;: &quot;Πάγιο&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;0&quot;,
+    &quot;Caption&quot;: &quot;Εμπόρευμα&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;1&quot;,
+    &quot;Caption&quot;: &quot;Προϊόν&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;8&quot;,
+    &quot;Caption&quot;: &quot;Ημιέτοιμο&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;2&quot;,
+    &quot;Caption&quot;: &quot;Ά ύλη&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;9&quot;,
+    &quot;Caption&quot;: &quot;Β’ύλη&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;12&quot;,
+    &quot;Caption&quot;: &quot;Υλικό συσκευασίας&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;3&quot;,
+    &quot;Caption&quot;: &quot;Ανταλλακτικό&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;4&quot;,
+    &quot;Caption&quot;: &quot;Αναλώσιμο&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;5&quot;,
+    &quot;Caption&quot;: &quot;Είδος συσκευασίας&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;6&quot;,
+    &quot;Caption&quot;: &quot;Eίδος εγγυοδοσίας&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;10&quot;,
+    &quot;Caption&quot;: &quot;Προϋπ/να έσοδα&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;11&quot;,
+    &quot;Caption&quot;: &quot;Προϋπ/να έξοδα&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;ColName&quot;: &quot;ItemType&quot;,
+    &quot;Value&quot;: &quot;7&quot;,
+    &quot;Caption&quot;: &quot;Άλλο&quot;
+}],
+
+//Gridex format styles and conditions
+&quot;FormatingCondition&quot;: [{
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;Key&quot;: &quot;PriceMarkNegativeValues&quot;,
+    &quot;AllowMerge&quot;: &quot;true&quot;,
+    &quot;ColumnKey&quot;: &quot;Price&quot;,
+    &quot;ConditionOperator&quot;: &quot;3&quot;,
+    &quot;Value1&quot;: &quot;0&quot;,
+    &quot;TargetColumnKey&quot;: &quot;Price&quot;,
+    &quot;fFormatStyleKey&quot;: &quot;1ecd5e8f-b3d0-4a02-b9ac-d70a36ee4d41&quot;
+}, {
+    &quot;fFilterID&quot;: &quot;ESMMStockItem_Def&quot;,
+    &quot;Key&quot;: &quot;RetailPriceMarkNegativeValues&quot;,
+    &quot;AllowMerge&quot;: &quot;true&quot;,
+    &quot;ColumnKey&quot;: &quot;RetailPrice&quot;,
+    &quot;ConditionOperator&quot;: &quot;3&quot;,
+    &quot;Value1&quot;: &quot;0&quot;,
+    &quot;TargetColumnKey&quot;: &quot;RetailPrice&quot;,
+    &quot;fFormatStyleKey&quot;: &quot;3a9999f7-322b-437d-abbf-43ded2a4bec6&quot;
+}],
+&quot;FormatStyle&quot;: [{
+    &quot;Key&quot;: &quot;1ecd5e8f-b3d0-4a02-b9ac-d70a36ee4d41&quot;,
+    &quot;BackColor&quot;: &quot;0&quot;,
+    &quot;ForeColor&quot;: &quot;-65536&quot;,
+    &quot;FontBold&quot;: &quot;0&quot;,
+    &quot;FontItalic&quot;: &quot;0&quot;,
+    &quot;FontStrikeout&quot;: &quot;0&quot;
+}, {
+    &quot;Key&quot;: &quot;3a9999f7-322b-437d-abbf-43ded2a4bec6&quot;,
+    &quot;BackColor&quot;: &quot;0&quot;,
+    &quot;ForeColor&quot;: &quot;-65536&quot;,
+    &quot;FontBold&quot;: &quot;0&quot;,
+    &quot;FontItalic&quot;: &quot;0&quot;,
+    &quot;FontStrikeout&quot;: &quot;0&quot;
+}]
+</code></pre><p>};
+```</p>
+<p>See the example on how to use the returned value in order to create an esGrid options object</p>
+<ul>
+<li>If error i.e. error(function(err, status) { ... }) the err contains the server error object and if available the status code i.e. 400</li>
 </ul>
 </div></td></tr></table><h4 id="methods_fetchpublicqueryinfo_example">Example</h4>
 <div class="example"><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><pre><code class="lang-js">function($scope, esWebApi, esWebUIHelper) {
@@ -1084,7 +1626,7 @@ Business Suite Janus based GridEx Layout. See the example on how to use the retu
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L1552" class="view-source icon-eye-open"> </a><h3 id="methods_fetchscroller">fetchScroller(groupID, filterID, params)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L1552" class="view-source icon-eye-open"> </a><h3 id="methods_fetchscroller">fetchScroller(groupID, filterID, params)</h3>
 <div class="fetchscroller"><div class="es-services-web-eswebapi-fetchscroller-page"><p>Function that returns the results of the execution of an Entersoft Scroller (simple or hierarchical) in JSON format</p>
 </div><h5 id="methods_fetchscroller_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>groupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchscroller-page"><p>Entersoft Scroller GroupID</p>
 </div></td></tr><tr><td>filterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchscroller-page"><p>Entersoft Scroller FilterID</p>
@@ -1206,7 +1748,7 @@ $scope.fetchScroller = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L1406" class="view-source icon-eye-open"> </a><h3 id="methods_fetchservercapabilities">fetchServerCapabilities()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L1406" class="view-source icon-eye-open"> </a><h3 id="methods_fetchservercapabilities">fetchServerCapabilities()</h3>
 <div class="fetchservercapabilities"><div class="es-services-web-eswebapi-fetchservercapabilities-page"><p>Function that returns the WEB API Server capabilities in terms of http(s). This service does not require
 authorization prior to call</p>
 </div><h5 id="methods_fetchservercapabilities_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchservercapabilities-page"><p>If success i.e. function(ret) { ... } <strong><em>ret</em></strong> is a JSON object of the current WEB API Server capabilities.
@@ -1236,7 +1778,7 @@ The return object has the following structure:</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L1774" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L1774" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
 <div class="fetchsessioninfo"><div class="es-services-web-eswebapi-fetchsessioninfo-page"><p>Function that returns Entersoft Application Server session information</p>
 </div><h5 id="methods_fetchsessioninfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchsessioninfo-page"><p>Returns a promise.</p>
 <ul>
@@ -1291,7 +1833,7 @@ $scope.fetchSessionInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L1665" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsimplescrollerroottable">fetchSimpleScrollerRootTable(groupID, filterID, params)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L1665" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsimplescrollerroottable">fetchSimpleScrollerRootTable(groupID, filterID, params)</h3>
 <div class="fetchsimplescrollerroottable"><div class="es-services-web-eswebapi-fetchsimplescrollerroottable-page"><p>Function that returns the data of the defined MasterTable for an Entersoft Scroller (simple or hierarchical) in JSON format.
 It is very similar to fetchScroller function with the <strong>MAIN</strong> difference that it only returns the data for the <strong>MASTER Table</strong> as
 defined by the creator at the Scroller Definition</p>
@@ -1397,7 +1939,7 @@ $scope.fetchSimpleScrollerRootTable = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L2013" class="view-source icon-eye-open"> </a><h3 id="methods_fetchstdzoom">fetchStdZoom(zoomID, pqOptions, useCache)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L2559" class="view-source icon-eye-open"> </a><h3 id="methods_fetchstdzoom">fetchStdZoom(zoomID, pqOptions, useCache)</h3>
 <div class="fetchstdzoom"><h5 id="methods_fetchstdzoom_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>zoomID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchstdzoom-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>pqOptions</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-fetchstdzoom-page"><p>Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
 pqOptions is a JSON object of the following type:</p>
@@ -1461,7 +2003,7 @@ The response has the typical form as follows:</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L1703" class="view-source icon-eye-open"> </a><h3 id="methods_fetchusersites">fetchUserSites(ebsuser)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L1703" class="view-source icon-eye-open"> </a><h3 id="methods_fetchusersites">fetchUserSites(ebsuser)</h3>
 <div class="fetchusersites"><div class="es-services-web-eswebapi-fetchusersites-page"><p>Function that returns ESGOSites of the current ESCompany that the given user has access to
 authorization prior to call</p>
 </div><h5 id="methods_fetchusersites_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>ebsuser</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchusersites-page"><p>The Entersoft Business Suite UserID for whom we want to fetch the ESGOSites of the current ESCompany
@@ -1490,7 +2032,7 @@ The return object has the following structure:</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L409" class="view-source icon-eye-open"> </a><h3 id="methods_getserverurl">getServerUrl()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L409" class="view-source icon-eye-open"> </a><h3 id="methods_getserverurl">getServerUrl()</h3>
 <div class="getserverurl"><div class="es-services-web-eswebapi-getserverurl-page"><p>Function that returns the full URL to the Entersoft WEB API Server as it has been resolved
 according to the configuration of the esWebApiProvider at the provider&#39;s configuration function of the AngularJS application.
 For more information, please  </p>
@@ -1507,7 +2049,7 @@ alert(sUrl);
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L618" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L618" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
 <div class="logout"><div class="es-services-web-eswebapi-logout-page"><p>Function that performs a web session logout. As a result of calling this function, all internal state
 related to the current web session, if any, is cleaned-up and no valid web session is available. The application/user must login again through <a href="#/api/es.Services.Web.esWebApi#methods_opensession">openSession</a>
 in order to be able to call any Entersoft WEB API autheticated method or service.</p>
@@ -1522,7 +2064,7 @@ $scope.doLogout = function ()
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/a11b46f/src/js/eswebservices.js#L570" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/278e084/src/js/eswebservices.js#L570" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
 <div class="opensession"><div class="es-services-web-eswebapi-opensession-page"><p>This is the function that enables for login and connect through the Entersoft WEB API Server to the Entersoft Application Server.
 The vast majority of the esWebApi service methods <strong>REQUIRE</strong> for an authorization token in order to be executed. This Authorization token is obtained 
 through a successfull call of the <strong><strong>openSession</strong></strong>  function and it is implicitly stored and managed by the esWebApi for its complete lifecycle.</p>

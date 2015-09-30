@@ -49,6 +49,7 @@
         <input type="text" ng-model="pGroup"  placeholder="PQ GroupID">
         <input type="text" ng-model="pFilter" placeholder="PQ FilterID">
         <button ng-click="fetchPQInfo()">fetchPublicQueryInfo</button>
+        <div kendo-grid k-ng-delay="esGridOptions" k-auto-bind="false" k-options="esGridOptions" />
     </span>
     <div>
         <span>

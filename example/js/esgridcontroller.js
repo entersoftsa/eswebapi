@@ -154,7 +154,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
                     // This is the kendo-grid based layout ready to be assigned to kendo-grid options attribute for rendering the results
                     // and for executing the corresponding Public Query
-                    $scope.esWebGridLayout = esWebUIHelper.esGridInfoToKInfo(esWebApi, $scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
+                    $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApi, $scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
                 }, function(err, status) {
                     alert(a.UserMessage || a.MessageID || "Generic Error");
                 });

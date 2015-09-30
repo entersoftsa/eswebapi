@@ -23,8 +23,5 @@
     "postinstall": "bower install"
   },
   "dependencies": {
-    "mime-db": "^1.19.0",
-    "mime-types": "^2.1.6",
-    "path": "^0.12.7"
   }
 }

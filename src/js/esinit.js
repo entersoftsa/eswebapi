@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.2.6";
+    var version = "1.2.7";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -21,6 +21,27 @@
     var esWebFramework = angular.module('es.Services.Web');
 
 
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esCacheProvider
+     * @kind provider
+     * @description
+     * esCacheProvider exposes a set of functions that can be used to configure the esCache servive prior to its use. Configuration usually takes place
+     * at the _app.js_ file of the AngularJS SPA in the _app.config_ function.
+     */
+
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esCache
+     * @module es.Services.Web
+     * @kind provider
+     * @description
+     * esCache is a service that provides chachinf functionality to the Entersoft AngularJS API library that can be also used from the application developer
+     * for the needs of his/her Single Page Application. Although, the functions offered by the service are not specific to any of the publicly 
+     * available javascript libraries, the current version of the service relies on jscache, but this can change any time in the future with 100%
+     * compatibility to the functions offered by the service i.e. the exposed functions and their signature is an **interface** to the client developer, but not the
+     * implementation.
+     */
     esWebFramework.provider('esCache', function() {
         var cache = null;
         var settings = {};
@@ -28,23 +49,62 @@
         settings.storage = null;
 
         return {
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esCacheProvider#setMaxSize
+             * @methodOf es.Services.Web.esCacheProvider
+             * @module es.Services.Web
+             * @kind function
+             * @description This function is used to set the maximum number of items that the cache can hold.
+             * @param {number} size the maximum number of items that the cache can hold. If parameter does not resolve to a number it is set to -1 i.e. 
+             * **no limitation** in the number of cache items.
+             **/
             setMaxSize: function(size) {
                 if (angular.isNumber(size)) {
                     settings.maxSize = size;
+                } else {
+                    settings.maxSize = -1;
                 }
             },
 
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esCacheProvider#getMaxSize
+             * @methodOf es.Services.Web.esCacheProvider
+             * @module es.Services.Web
+             * @kind function
+             * @description This function returns the current maxsize for the cache.
+             * @return {number} the maxSize that cache engine has been set to.
+             **/
             getMaxSize: function() {
                 return settings.maxSize;
             },
 
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esCacheProvider#getStorageSettings
+             * @methodOf es.Services.Web.esCacheProvider
+             * @module es.Services.Web
+             * @kind function
+             * @description This function returns the storage object that cache engine has been configured to use, if any.
+             * @return {Object} The storage object that cache engine has been configured to use, if any.
+             **/
             getStorageSettings: function() {
                 return settings.storage;
             },
 
-            setStorageSettings: function(setings) {
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esCacheProvider#setStorageSettings
+             * @methodOf es.Services.Web.esCacheProvider
+             * @module es.Services.Web
+             * @kind function
+             * @description This function sets the storage object to be used as a 2nd level cache by the cache engine.
+             * @param {Object} storage The storage object to be used by the cache engine for 2nd level cache.
+             **/
+            setStorageSettings: function(storage) {
                 if (settings) {
-                    settings.storage = settings;
+                    settings.storage = storage;
                 }
             },
 
@@ -56,32 +116,106 @@
                 cache = new Cache(settings.maxSize, false, settings.storage);
 
                 return {
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#getItem
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function is used to get a value that might exist in the cache under the unique id **key**.
+                     * @param {Object|string} key Typically _key_ is of type string but it can be an object.
+                     * @return {Object} If the key exists in the cache, the value of that key is returned, otherwise _undefined_
+                     **/
                     getItem: function(key) {
                         return cache.getItem(key);
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#setItem
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function is used to set a key, value pair in the cache. If the key is already in the cache, its value will 
+                     * be replaced by the new value i.e. val
+                     * @param {Object|string} key Typically _key_ is of type string but it can be an object.
+                     * @param {Object} val The value to be stored under the key
+                     * @param {Object=} options Caching options. For more information please visit [monsur jscache](https://github.com/monsur/jscache).
+                     **/
                     setItem: function(key, val, options) {
                         cache.setItem(key, val, options);
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#removeItem
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function is used to remove an entry from the cache identified by **key**
+                     * @param {Object|string} key Typically _key_ is of type string but it can be an object.
+                     **/
                     removeItem: function(key) {
                         cache.removeItem(key);
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#removeWhere
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function is used to remove entries from the cache according to the resolution of the f supplied function
+                     * @param {function(key, val)} f a function which takes two arguments (key, val) and it should return a boolean value. This function 
+                     * will called against all cache entries and those that this function qualifies to true will be deleted from the cache.
+                     **/
                     removeWhere: function(f) {
                         cache.removeWhere(function(k, v) {
                             return f(k, v);
                         });
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#size
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function returns the current number of entries that the cache holds.
+                     * @return {number} The current number of entries that the cache holds.
+                     **/
                     size: function() {
                         return cache.size();
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#clear
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function clears the cache, by removing **ALL** its entries.
+                     **/
                     clear: function() {
                         cache.clear();
                     },
 
+                    /**
+                     * @ngdoc function
+                     * @name es.Services.Web.esCache#stats
+                     * @methodOf es.Services.Web.esCache
+                     * @module es.Services.Web
+                     * @kind function
+                     * @description This function returns cache statistics
+                     * @return {object} It returns an object holding all cache statistics i.e.
+```js
+{
+    "hits": 5,
+    "misses": 1
+}
+
+```
+                     **/
                     stats: function() {
                         return cache.getStats();
                     }
@@ -154,7 +288,7 @@
              * @kind function
              * @description This function is used to raise - publish that an event-topic has occurred. As a consequence, all the subscribed to 
              * this topic-event subsciption callback functions will be triggered and executed sequentially.
-             * @param {arguments} args or more arguments, with the first being the string for the topic-event that occurred. The rest of the arguments
+             * @param {... number} args or more arguments, with the first being the string for the topic-event that occurred. The rest of the arguments
              * if any will be supplied to the callback functions that will be fired. These extra arguments are considered to be specific to the nature 
              * of the topic-event.
              * @example
