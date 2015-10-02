@@ -1,14 +1,12 @@
- <div class="boxc-col">
-        <label>{{esParamDef.caption}}</label>
-        <select kendo-combo-box
-                k-placeholder="esParamDef.toolTip"
-                k-template="'<span><b>#: Code #</b> -- #: Description #</span>'"
-                k-data-text-field="esParamDef.invSelectedMasterField"
-                k-data-value-field="esParamDef.invSelectedMasterField"
-                k-filter="'contains'"
-                k-auto-bind="false"
-                k-min-length="3"
-                ng-model="esParamVal[esParamDef.id].paramValue"
-                k-data-source="esParamLookupDS">
-        </select>
-    </div>
+<label>{{esParamDef.caption}}</label>
+<select kendo-combo-box
+    k-placeholder="esParamDef.toolTip"
+    k-template="'<span><b>#: Code #</b> -- #: Description #</span>'"
+    k-data-text-field="esParamDef.invSelectedMasterField"
+    k-data-value-field="esParamDef.invSelectedMasterField"
+    k-filter="'contains'"
+    k-auto-bind="false"
+    k-min-length="3"
+    ng-model="esParamVal[esParamDef.id].paramValue"
+    k-data-source="esParamLookupDS">
+</select>

@@ -113,6 +113,7 @@
                     throw "You must include jscache.js";
                 }
 
+                window.Cache = Cache;
                 cache = new Cache(settings.maxSize, false, settings.storage);
 
                 return {

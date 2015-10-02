@@ -1,16 +1,17 @@
-<div class="boxc-col">
-   <h4>{{esParamDef.caption}}</h4>
-   
-   <select class="es-prm-val" 
-            kendo-drop-down-list
-            ng-cloak
-            k-ng-delay="esParamDef"
-            k-data-text-field="'text'" 
-            k-data-value-field="'value'" 
-            k-auto-bind="true"
-            k-option-label="{ text: 'All', value: null}" 
-            k-data-source="esParamDef.enumList"
-            k-value-primitive="true"
-            k-ng-model="esParamVal[esParamDef.id].paramValue">
-    </select> 
+<div>
+   <label>{{esParamDef.caption}}</label>
+   <div>
+       <select 
+                kendo-drop-down-list
+                ng-cloak
+                k-ng-delay="esParamDef"
+                k-data-text-field="'text'" 
+                k-data-value-field="'value'" 
+                k-auto-bind="true"
+                k-option-label="{ text: 'All', value: null}" 
+                k-data-source="esParamDef.enumList"
+                k-value-primitive="true"
+                k-ng-model="esParamVal[esParamDef.id].paramValue">
+        </select> 
+    </div>
 </div>

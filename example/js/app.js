@@ -33,6 +33,10 @@
                     templateUrl: 'pq.html',
                     controller: 'pqCtrl'
                 })
+                .when('/webpq', {
+                    templateUrl: 'webpq.html',
+                    controller: 'webpqCtrl'
+                })
                 .when('/examples', {
                     templateUrl: 'examples.html',
                     controller: 'examplesCtrl'

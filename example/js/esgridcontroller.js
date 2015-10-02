@@ -7,14 +7,110 @@ var smeControllers = angular.module('smeControllers', ['kendo.directives', 'unde
 smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
     function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 
-        $scope.theGlobalUser = "";
+        /* boot strap configuration */
+        $scope.configure = function(e) {
+            $("#configurator-wrap").toggleClass("hidden-xs");
+        }
 
-        $scope.odscinfo = null;
-        $scope.press = function() {
-            esWebApiService.fetchOdsTableInfo("ESFICustomer").success(function(x) {
-                $scope.odscinfo = x;
-            });
+        $scope.dimension = "common-bootstrap";
+        $scope.dimensionOptions = {
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: [{
+                text: 'Default',
+                value: 'common'
+            }, {
+                text: 'Bootstrap',
+                value: 'common-bootstrap'
+            }],
+            change: function(e) {
+                window.kendoThemeChooser.changeCommon(this.value(), true);
+            }
         };
+
+        $scope.theme = "bootstrap";
+        $scope.themeOptions = {
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: [{
+                text: "Default",
+                value: "default"
+            }, {
+                text: "Blue Opal",
+                value: "blueopal"
+            }, {
+                text: "Bootstrap",
+                value: "bootstrap"
+            }, {
+                text: "Silver",
+                value: "silver"
+            }, {
+                text: "Uniform",
+                value: "uniform"
+            }, {
+                text: "Metro",
+                value: "metro"
+            }, {
+                text: "Black",
+                value: "black"
+            }, {
+                text: "Metro Black",
+                value: "metroblack"
+            }, {
+                text: "High Contrast",
+                value: "highcontrast"
+            }, {
+                text: "Moonlight",
+                value: "moonlight"
+            }, {
+                text: "Flat",
+                value: "flat"
+            }],
+            change: function(e) {
+                window.kendoThemeChooser.changeTheme($scope.theme, true);
+            }
+        };
+
+        
+        $scope.fontsizeOptions = {
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 14,
+            height: 204,
+            autoBind: true,
+            dataSource: [{
+                text: "10px",
+                value: 10
+            }, {
+                text: "12px",
+                value: 12
+            }, {
+                text: "14px",
+                value: 14
+            }, {
+                text: "16px",
+                value: 16
+            }, {
+                text: "18px",
+                value: 18
+            }, {
+                text: "20px",
+                value: 20
+            }],
+            change: changeFontSize
+        };
+        $scope.fontsize = 14;
+
+        function changeFontSize(e) {
+            $("body").css("font-size", $scope.fontsize + "px");
+        }
+
+        changeFontSize();
+
+
+        /* rest logic */
+
+        $scope.theGlobalUser = "";
 
         esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
             var s = esGlobals.getUserMessage(rejection, status);
@@ -109,7 +205,7 @@ smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'esW
     }
 ]);
 
-smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 
+smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache',
     function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache) {
 
         $scope.pGroup = "ESMMStockItem";
@@ -461,20 +557,20 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
             */
 
             $q.all([esWebApi.fetchES00DocumentByGID($scope.pES00Doc), esWebApi.fetchES00DocumentBlobDataByGID($scope.pES00Doc)])
-            .then(function(results) {
-                var esDoc = results[0].data;
-                var fileData = results[1].data;
+                .then(function(results) {
+                    var esDoc = results[0].data;
+                    var fileData = results[1].data;
 
-                var docType = esGlobals.getMimeTypeForExt(esDoc.FType);
-                $log.info("File " + $scope.pAsset + " ===> " + docType);
+                    var docType = esGlobals.getMimeTypeForExt(esDoc.FType);
+                    $log.info("File " + $scope.pAsset + " ===> " + docType);
                     var file = new Blob([fileData], {
                         type: docType
                     });
                     //saveAs(file, "test.pdf");
                     var fU = URL.createObjectURL(file);
                     window.open(fU);
-            })
-            .catch(function(err) {
+                })
+                .catch(function(err) {
                     $log.error("2nd error = " + JSON.stringify(err));
                 });
         }
@@ -506,5 +602,15 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
             pq.gridOptions.dataSource.read();
 
         }
+    }
+]);
+
+smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
+    function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+
+        $scope.theGroupId = "ESFICustomer";
+        $scope.theFilterId = "ESFITradeAccountCustomer_def";
+        $scope.theVals = {};
+        $scope.theGridOptions = null;
     }
 ]);

@@ -28,6 +28,7 @@
                 <img ngf-src="picFile" class="thumb">
                 <span class="progress" ng-show="picFile.progress >= 0">
                   <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'"></div>
+                  <div kendo-progress-bar="progressBar" k-min="0" k-max="100" ng-model="picFile.progress" style="width: 100%;"></div>
               </span>
                 <span ng-show="picFile.result">Upload Successful</span>
             </fieldset>

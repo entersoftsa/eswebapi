@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.7 - 2015-09-30
+/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-02
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -4346,6 +4346,7 @@ var resp = {
                     throw "You must include jscache.js";
                 }
 
+                window.Cache = Cache;
                 cache = new Cache(settings.maxSize, false, settings.storage);
 
                 return {

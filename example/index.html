@@ -3,37 +3,102 @@
 
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Entersoft ESWEB API Sample</title>
-    <link rel="stylesheet" href="lib/telerik/styles/kendo.common-material.min.css" />
+    <!--  <link rel="stylesheet" href="lib/telerik/styles/kendo.common-material.min.css" />
     <link rel="stylesheet" href="lib/telerik/styles/kendo.material.min.css" />
     <link rel="stylesheet" href="lib/telerik/styles/kendo.dataviz.min.css" />
-    <link rel="stylesheet" href="lib/telerik/styles/kendo.dataviz.material.min.css" />
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.dataviz.material.min.css" /> -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.common-bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.dataviz.bootstrap.min.css" />
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
-<body ng-cloak>
-    <div ng-controller="mainCtrl">
-        <span kendo-notification="esnotify" auto-hide-after="3000" ></span>
-        <button ng-click="press()">Press</button>
-        <div>
-            <ul kendo-menu>
-                <li>
-                    Select Page
-                    <ul>
-                        <li>
-                            <a href="#/login">Login</a>
-                        </li>
-                         <li>
-                            <a href="#/examples">Examples</a>
-                        </li>
-                        <li>
-                            <a href="#/properties">Properties</a>
-                        </li>
-                    </ul>
-                </li>
+<body ng-controller="mainCtrl" ng-cloak>
+    <header>
+        <div class="container" class="row">
+            <h1 class="col-sm-3 hidden-sm">Kendo UI &hearts; Bootstrap</h1>
+            <h1 class="col-sm-3 visible-sm">Kendo UI &hearts;<br/> Bootstrap</h1>
+            <button id="configure" ng-click="configure()" class="visible-xs"><span class="glyphicon glyphicon-align-justify"></span></button>
+            <div id="configurator-wrap" class="col-sm-9 hidden-xs">
+                <div id="configurator" class="row">
+                    <label class="col-sm-4">
+                        <div class="description">Dimensions</div>
+                        <select id="dimensions" kendo-drop-down-list k-options="dimensionOptions" k-ng-delay="dimensionOptions" k-value-primitive="true" k-ng-model="dimension">
+                        </select>
+                    </label>
+                    <label class="col-sm-4">
+                        <div class="description">Theme</div>
+                        <select id="theme" kendo-drop-down-list k-options="themeOptions" k-ng-delay="themeOptions" k-value-primitive="true" k-ng-model="theme"></select>
+                    </label>
+                    <label class="col-sm-4">
+                        <div class="description">Font-size</div>
+                        <select id="font-size" kendo-drop-down-list k-options="fontsizeOptions" k-ng-delay="fontsizeOptions" k-value-primitive="true" k-ng-model="fontsize"></select>
+                    </label>
+                </div>
+            </div>
         </div>
-        <div ng-view></div>
+    </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="example" class="container">
+        <div class="row">
+            <span kendo-notification="esnotify" auto-hide-after="3000"></span>
+            <ul kendo-menu id="menu">
+                <li>
+                    <a href="#/login">Login</a>
+                </li>
+                <li>
+                    <a href="#/examples">Examples</a>
+                </li>
+                <li>
+                    <a href="#/properties">Properties</a>
+                </li>
+                <li>
+                    <a href="#/pq">Public Query</a>
+                </li>
+                <li>
+                    <a href="#/webpq">Full Screen Report</a>
+                </li>
+            </ul>
+        </div>
+       
+        <div class="clearfix" ng-view>
+        </div>
+        <footer>Copyright &copy; 2015 <a href="http://www.entersoft.eu/">Entersoft SA</a>. All rights reserved.</footer>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/js/bootstrap.min.js" />
     <script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
@@ -50,9 +115,9 @@
     <script src="lib/telerik/js/jszip.min.js"></script>
     <script src="lib/telerik/js/cultures/kendo.culture.el-GR.min.js"></script>
     <script src="lib/telerik/js/kendo.all.min.js"></script>
-    <script src="bower_components/require/build/require.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/esgridcontroller.js"></script>
+    <script src="js/theme-chooser.js"></script>
 </body>
 
 </html>
