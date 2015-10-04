@@ -1,3 +1,4 @@
+/*
 @font-face {
     font-family: "Kendo UI";
     src: url("http://cdn.kendostatic.com/2013.3.1030/styles/images/kendoui.woff") format("woff"),
@@ -195,12 +196,16 @@ header .k-dropdown-wrap.k-state-default .k-input {
     color: #999;
     padding-bottom: 2em;
 }
+*/
 
+/* kendo full size controls in form group*/
 .form-group .k-widget,
 .form-group .k-textbox {
     width: 100%;
 }
 
+
+/*
 .buttons-wrap {
     border-top: 1px solid #e7e7e7;
     padding-top: .5em;
@@ -366,3 +371,4 @@ header .container h1.visible-sm {
     background-color: #212a33;
     color: #fff;
 }
+*/

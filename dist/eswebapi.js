@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-02
+/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-04
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7558,7 +7558,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', []);
+    var esWEBUI = angular.module('es.Web.UI', ['ui.bootstrap']);
 
     /*
         var dateRangeResolve = function(val, dateVal) {
@@ -8181,6 +8181,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 var pt = pParam.parameterType.toLowerCase()
 
+                // sme boot
+                return "esParamText";
+
                 //ESDateRange
 
                 if (pt.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
@@ -8194,7 +8197,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 //ESString
                 if (pt.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
-                    return "esParamAdvancedString";
+                    return "esParamText";
+                    
+                    // sme boot return "esParamAdvancedString";
                 }
 
                 // Numeric (Integer or Decimal)

@@ -1,11 +1,9 @@
+<label>{{esParamDef.caption}}</label>
 <div>
-    <label>{{esParamDef.caption}}</label>
-    <div>
-        <input kendo-numeric-text-box 
-        	align="right" 
-        	k-ng-model="esParamVal[esParamDef.id].paramValue" 
-        	k-spinners="false" 
-        	k-decimals="esParamDef.precision" 
-        	k-format="'n'+'{{esParamDef.precision}}'" />
-    </div>
+    <input kendo-numeric-text-box 
+    	align="right" 
+    	k-ng-model="esParamVal[esParamDef.id].paramValue" 
+    	k-spinners="false" 
+    	k-decimals="esParamDef.precision" 
+    	k-format="'n'+'{{esParamDef.precision}}'" />
 </div>

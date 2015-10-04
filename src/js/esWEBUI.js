@@ -9,7 +9,7 @@
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', []);
+    var esWEBUI = angular.module('es.Web.UI', ['ui.bootstrap']);
 
     /*
         var dateRangeResolve = function(val, dateVal) {
@@ -632,6 +632,9 @@
 
                 var pt = pParam.parameterType.toLowerCase()
 
+                // sme boot
+                return "esParamText";
+
                 //ESDateRange
 
                 if (pt.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
@@ -645,7 +648,9 @@
 
                 //ESString
                 if (pt.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
-                    return "esParamAdvancedString";
+                    return "esParamText";
+                    
+                    // sme boot return "esParamAdvancedString";
                 }
 
                 // Numeric (Integer or Decimal)

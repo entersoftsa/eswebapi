@@ -1,13 +1,11 @@
-<div>
-    <label>{{esParamDef.caption}}</label>
-    <select 
-        kendo-multi-select 
-        k-placeholder="esParamDef.toolTip"
-        k-data-text-field="'text'" 
-        k-data-value-field="'value'" 
-        k-auto-bind="false" 
-        k-value-primitive="true"
-        k-data-source="esParamDef.enumList" 
-        k-ng-model="esParamVal[esParamDef.id].paramValue">
-    </select>
-</div>
+<label>{{esParamDef.caption}}</label>
+<select 
+    kendo-multi-select 
+    k-placeholder="esParamDef.toolTip"
+    k-data-text-field="'text'" 
+    k-data-value-field="'value'" 
+    k-auto-bind="false" 
+    k-value-primitive="true"
+    k-data-source="esParamDef.enumList" 
+    k-ng-model="esParamVal[esParamDef.id].paramValue">
+</select>

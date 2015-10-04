@@ -1,16 +1,14 @@
-<div class="row">
-    <label>{{esParamDef.caption}}</label>
-    <div class="row">
-        <div class="col-xs-4">
-            <select kendo-drop-down-list ng-cloak k-ng-delay="esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="esWebUIHelper.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.oper">
-            </select>
-        </div>
-        <div class="col-xs-4">
-            <input class="col-xs-12 col-md-7" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.value" />
-        </div>
-        <div class="col-xs-4">
-            <input class="col-xs-12 col-md-12" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.valueTo" ng-hide="esParamVal[esParamDef.id].paramValue.oper != 'RANGE'" />
-        </div>
-    </div>
+<label>{{esParamDef.caption}}</label>
+
+<div>
+    <select kendo-drop-down-list ng-cloak k-ng-delay="esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="esWebUIHelper.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.oper">
+    </select>
 </div>
+
+<div>
+    <input class="col-xs-12 col-md-7" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.value" />
+</div>
+
+<div>
+    <input class="col-xs-12 col-md-12" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.valueTo" ng-hide="esParamVal[esParamDef.id].paramValue.oper != 'RANGE'" />
 </div>

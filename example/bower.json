@@ -18,6 +18,7 @@
     "angular": "~1.4.1",
     "angular-route": "~1.4.1",
     "angular-sanitize": "~1.4.1",
+    "bootstrap": "~3.3.5",
     "jquery": "~2.1.4",
     "jscache": "*",
     "log4javascript": "~1.4.9",
@@ -26,6 +27,7 @@
     "ngstorage": "~0.3.7",
     "require": "*",
     "stacktrace-js": "~0.6.4",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "angular-bootstrap": "~0.13.4"
   }
 }
