@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-04
+/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-05
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8181,25 +8181,24 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 var pt = pParam.parameterType.toLowerCase()
 
-                // sme boot
-                return "esParamText";
-
                 //ESDateRange
-
                 if (pt.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
-                    return "esParamDateRange";
+                    // sme boot
+                    return "esParamText";
+                    // return "esParamDateRange";
                 }
 
                 //ESNumeric
                 if (pt.indexOf("entersoft.framework.platform.esnumeric") == 0) {
-                    return "esParamAdvancedNumeric";
+                    // sme boot
+                    return "esParamText";
+
+                    // return "esParamAdvancedNumeric";
                 }
 
                 //ESString
                 if (pt.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
-                    return "esParamText";
-                    
-                    // sme boot return "esParamAdvancedString";
+                    return "esParamAdvancedString";
                 }
 
                 // Numeric (Integer or Decimal)
@@ -8299,6 +8298,22 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
             };
         }])
+        .controller('esModalAdvancedStringCtrl', ['$scope', '$modalInstance', 'esParamVal', 'esParamDef', 'esWebUIHelper', 'esWebApiService',
+            function($scope, $modalInstance, esParamVal, esParamDef, esWebUIHelper, esWebApiService) {
+
+            $scope.esParamVal = esParamVal;
+            $scope.esParamDef = esParamDef;
+            $scope.esWebUIHelper = esWebUIHelper;
+            $scope.esWebApiService = esWebApiService;
+
+            $scope.ok = function() {
+                $modalInstance.close($scope.esParamVal);
+            };
+
+            $scope.cancel = function() {
+                $modalInstance.dismiss('cancel');
+            };
+        }])
         /**
          * @ngdoc directive
          * @name es.Web.UI.directive:esParam
@@ -8309,7 +8324,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
          *
          * 
          */
-        .directive('esParam', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
+        .directive('esParam', ['$log', '$modal', 'esWebApi', 'esUIHelper', function($log, $modal, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -8326,6 +8341,31 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                     scope.esWebUIHelper = esWebUIHelper;
                     scope.esWebApiService = esWebApiService;
+
+                    /* popup */
+                    scope.popup = function() {
+                            var modalInstance = $modal.open({
+                                animation: true,
+                                templateUrl: 'src/partials/esModalAdvancedString.html',
+                                controller: 'esModalAdvancedStringCtrl',
+                                size: 'sm',
+                                resolve: {
+                                    esParamVal: function() {
+                                        return scope.esParamVal;
+                                    },
+                                    esParamDef: function() {
+                                        return scope.esParamDef;
+                                    },
+                                    esWebUIHelper: function() {
+                                        return scope.esWebUIHelper;
+                                    },
+                                    esWebApiService: function() {
+                                        return scope.esWebApiService;
+                                    }                                    
+                                }
+                            });
+                        }
+                        /* end popup */
 
                     if (scope.esParamDef.invSelectedMasterTable) {
                         scope.esParamLookupDS = prepareStdZoom($log, scope.esParamDef.invSelectedMasterTable, esWebApiService);

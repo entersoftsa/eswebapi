@@ -79,6 +79,26 @@
             </ul>
         </div>
 
+        <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{myVal.title}}</h3>
+        </div>
+        <div class="modal-body">
+            <label>{{myVal.description}}</label>
+            <input ng-model="myVal.value"/> 
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
+        <div>
+            <span class="k-textbox k-button k-space-right">
+                <input value="This is the value" />
+                <button title="K" class="k-icon" ng-click="mypopup()"></buton>
+            </span>
+        </div>
 
        
         <div class="clearfix" ng-view>
