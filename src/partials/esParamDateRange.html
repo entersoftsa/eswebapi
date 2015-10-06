@@ -1,9 +1,9 @@
-<div class="es-advanced-param-wrap">
+<div xxclass="es-advanced-param-wrap">
       <label class="control-label">{{esParamDef.caption}}</label> 
       <div>
-              <input class="form-control" kendo-masked-text-box ng-focus="bix = !bix" ng-click="bix = !bix" ng-model="esParamVal[esParamDef.id].strVal" ng-model-options="{ getterSetter: true }" />
+            <input class="form-control" kendo-masked-text-box ng-click="bix = !bix" ng-model="esParamVal[esParamDef.id].strVal" ng-model-options="{ getterSetter: true }" />
       </div>
-      <div class="es-advanced-param" ng-hide="!bix">
+      <div xxclass="es-advanced-param" ng-hide="!bix">
             <select 
                   class="form-control"
                   kendo-drop-down-list

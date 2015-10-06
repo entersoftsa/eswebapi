@@ -17,7 +17,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamAdvancedString.html',
-    "<div><label class=control-label>{{esParamDef.caption}}</label><input class=form-control kendo-masked-text-box ng-click=popup() ng-model=esParamVal[esParamDef.id].strVal ng-model-options=\"{ getterSetter: true }\"></div>"
+    "<div><div><label class=control-label>{{esParamDef.caption}}</label><input class=form-control kendo-masked-text-box ng-click=\"bix = !bix\" ng-model=esParamVal[esParamDef.id].strVal ng-model-options=\"{ getterSetter: true }\"></div><div ng-hide=!bix><div><select class=form-control kendo-drop-down-list style=\"min-width: 200px\" ng-cloak k-ng-delay=esParamDef k-data-text-field=\"'caption'\" k-data-value-field=\"'value'\" k-auto-bind=true k-data-source=esWebUIHelper.getesComplexParamFunctionOptions() k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.oper></select></div><div><label class=control-label>{{esParamVal[esParamDef.id].paramValue.oper != 'RANGE' ? 'Value' : 'From'}}</label><input class=form-control kendo-masked-text-box ng-model=\"esParamVal[esParamDef.id].paramValue.value\"></div><div ng-hide=\"esParamVal[esParamDef.id].paramValue.oper != 'RANGE'\"><label class=control-label>To</label><input class=form-control kendo-masked-text-box ng-model=\"esParamVal[esParamDef.id].paramValue.valueTo\"></div></div></div>"
   );
 
 
@@ -27,7 +27,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamDateRange.html',
-    "<div class=es-advanced-param-wrap><label class=control-label>{{esParamDef.caption}}</label><div><input class=form-control kendo-masked-text-box ng-focus=\"bix = !bix\" ng-click=\"bix = !bix\" ng-model=esParamVal[esParamDef.id].strVal ng-model-options=\"{ getterSetter: true }\"></div><div class=es-advanced-param ng-hide=!bix><select class=form-control kendo-drop-down-list k-data-text-field=\"'title'\" k-auto-bind=true k-data-value-field=\"'dValue'\" k-data-source=dateRangeOptions k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.dRange></select><span ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange > '1'\"><input kendo-date-picker k-ng-model=esParamVal[esParamDef.id].paramValue.fromD k-format=\"'dd/MM/yyyy'\"></span> <span ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange != '0'\"><input kendo-date-picker k-ng-model=esParamVal[esParamDef.id].paramValue.toD k-format=\"'dd/MM/yyyy'\"></span></div></div>"
+    "<div xxclass=es-advanced-param-wrap><label class=control-label>{{esParamDef.caption}}</label><div><input class=form-control kendo-masked-text-box ng-click=\"bix = !bix\" ng-model=esParamVal[esParamDef.id].strVal ng-model-options=\"{ getterSetter: true }\"></div><div xxclass=es-advanced-param ng-hide=!bix><select class=form-control kendo-drop-down-list k-data-text-field=\"'title'\" k-auto-bind=true k-data-value-field=\"'dValue'\" k-data-source=dateRangeOptions k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.dRange></select><span ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange > '1'\"><input kendo-date-picker k-ng-model=esParamVal[esParamDef.id].paramValue.fromD k-format=\"'dd/MM/yyyy'\"></span> <span ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange != '0'\"><input kendo-date-picker k-ng-model=esParamVal[esParamDef.id].paramValue.toD k-format=\"'dd/MM/yyyy'\"></span></div></div>"
   );
 
 
