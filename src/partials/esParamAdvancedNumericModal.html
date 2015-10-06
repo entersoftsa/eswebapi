@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h4 class="modal-title"><span class="glyphicon glyphicon-star"></span>{{esParamDef.caption}}</h4>
+</div>
+<div class="modal-body">
+    <form novalidate class="form">
+        <div class="row">
+            <div class="form-group col-xs-12 col-md-4">
+                <label class="control-label">Φίλτρο<label/>
+                    <select class="form-control" kendo-drop-down-list style="min-width: 150px" ng-cloak k-ng-delay="esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="esWebUIHelper.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.oper">
+                    </select>
+            </div>
+            <div class="form-group col-xs-12 col-md-4">
+                <label class="control-label">{{esParamVal[esParamDef.id].paramValue.oper != 'RANGE' ? 'Value' : 'From'}}</label>
+                <input kendo-numeric-text-box align="right" k-ng-model="esParamVal[esParamDef.id].paramValue.value" k-spinners="false" k-decimals="esParamDef.precision" k-format="'n'+'{{esParamDef.precision}}'" />
+            </div>
+            <div class="form-group col-xs-12 col-md-4" ng-hide="esParamVal[esParamDef.id].paramValue.oper != 'RANGE'">
+                <label class="control-label">To</label>
+                <input kendo-numeric-text-box align="right" k-ng-model="esParamVal[esParamDef.id].paramValue.valueTo" k-spinners="false" k-decimals="esParamDef.precision" k-format="'n'+'{{esParamDef.precision}}'" />
+            </div>
+        </div>
+        <form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+</div>

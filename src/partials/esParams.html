@@ -1,5 +1,5 @@
 <accordion>
-	<accordion-group heading="Parameters ..." is-open="true">
+	<accordion-group heading="Parameters ({{esParamsDef.length}})" is-open="true">
 		<form class="form">
 			<div class="row">
 				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="param in esParamsDef | filter:{visible: true} | orderBy:'aa'">

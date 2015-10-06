@@ -204,6 +204,16 @@ header .k-dropdown-wrap.k-state-default .k-input {
     width: 100%;
 }
 
+.es-advanced-param-wrap {
+    position: relative;
+}
+
+.es-advanced-param {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 2;
+}
 
 /*
 .buttons-wrap {

@@ -4,47 +4,14 @@
 
 var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap']);
 
-smeControllers.controller('ModalInstanceCtrl', function ($scope, $modalInstance, paramVal) {
-
-  $scope.myVal = paramVal;
-  
-  $scope.ok = function () {
-    $modalInstance.close($scope.myVal);
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-});
-
-smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', '$modal', 'esMessaging', 'esWebApi', 'esGlobals',
-    function($location, $scope, $log, $modal, esMessaging, esWebApiService, esGlobals) {
+smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
+    function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 
         $scope.vVal = {
             description: 'Please specify advanced param',
             title: 'Given Name',
             value: 'Hello World'
         };
-
-        $scope.mypopup = function() {
-            var modalInstance = $modal.open({
-                animation: true,
-                templateUrl: 'myModalContent.html',
-                controller: 'ModalInstanceCtrl',
-                size: 'sm',
-                resolve: {
-                    paramVal: function() {
-                        return $scope.vVal;
-                    }
-                }
-            });
-
-            modalInstance.result.then(function(selectedItem) {
-                $scope.selected = selectedItem;
-            }, function() {
-                $log.info('Modal dismissed at: ' + new Date());
-            });
-        }
 
         /* boot strap configuration */
         $scope.configure = function(e) {

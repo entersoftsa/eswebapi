@@ -11,227 +11,233 @@
     'use strict';
     var esWEBUI = angular.module('es.Web.UI', ['ui.bootstrap']);
 
-    /*
-        var dateRangeResolve = function(val, dateVal) {
-            var d = new Date();
-
-            switch (val.dType) {
-                case 0:
-                    {
-                        if (!dateVal || !(angular.isDate(dateVal.fromD) && angular.isDate(dateVal.toD))) {
-                            return val.title;
-                        }
-
-                        var s = "";
-                        if (angular.isDate(dateVal.fromD)) {
-                            s = dateVal.fromD.toLocaleDateString("el-GR");
-                        }
-                        s = s + " - ";
-
-                        var toS = "";
-                        if (angular.isDate(dateVal.toD)) {
-                            toS = dateVal.toD.toLocaleDateString("el-GR");
-                        }
-                        s = s + toS;
-                        return s;
-                    }
-                case 1:
-                    {
-                        if (!dateVal || !angular.isDate(dateVal.fromD)) {
-                            return val.title;
-                        }
-                        return dateVal.fromD.toLocaleDateString("el-GR");
-                    }
-                case 2:
-                    return val.title;
-                case 3:
-                    return d.toLocaleDateString();
-                case 4:
-                    return "-> " + d.toLocaleDateString();
-                case 5:
-                    return d.toLocaleDateString() + " ->";
-                case 6:
-                    {
-                        d.setDate(d.getDate() - 1);
-                        return d.toLocaleDateString();
-                    }
-                case 7:
-                    {
-                        d.setDate(d.getDate() - 1);
-                        return d.toLocaleDateString() + " ->";
-                    }
-                case 8:
-                    {
-                        d.setDate(d.getDate() + 1);
-                        return d.toLocaleDateString();
-                    }
-                case 9:
-                    {
-                        d.setDate(d.getDate() + 1);
-                        return d.toLocaleDateString() + " ->";
-                    }
-                case 10:
-                    {
-                        var cDay = d.getDay();
-                        var sDiff = (cDay == 0) ? 6 : (cDay - 1);
-
-                        var f = new Date(d);
-                        var t = new Date(d);
-                        f.setDate(d.getDate() - sDiff);
-                        t.setDate(f.getDate() + 6);
-
-                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                    }
-                case 11:
-                    {
-                        d.setDate(d.getDate() - 7);
-
-                        var cDay = d.getDay();
-                        var sDiff = (cDay == 0) ? 6 : (cDay - 1);
-
-                        var f = new Date(d);
-                        var t = new Date(d);
-                        f.setDate(d.getDate() - sDiff);
-                        t.setDate(f.getDate() + 6);
-
-                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                    }
-                case 12:
-                    {
-                        d.setDate(d.getDate() + 7);
-
-                        var cDay = d.getDay();
-                        var sDiff = (cDay == 0) ? 6 : (cDay - 1);
-
-                        var f = new Date(d);
-                        var t = new Date(d);
-                        f.setDate(d.getDate() - sDiff);
-                        t.setDate(f.getDate() + 6);
-
-                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                    }
-                case 13:
-                    {
-                        d.setDate(1);
-
-                        var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-                        return d.toLocaleDateString() + " - " + f.toLocaleDateString();
-                    }
-                case 14:
-                    {
-                        d.setDate(1);
-                        return d.toLocaleDateString() + " ->";
-                    }
-                case 15:
-                    {
-                        var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-                        return "-> " + f.toLocaleDateString();
-                    }
-                case 16:
-                    {
-                        var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-                        var t = new Date(d.getFullYear(), d.getMonth(), 0);
-                        return f.toLocaleDateString() + " - " + t.toLocaleDateString();
-                    }
-                case 17:
-                    {
-                        var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-                        return f.toLocaleDateString() + " ->";
-                    }
-                case 18:
-                    {
-                        var f = new Date(d.getFullYear(), d.getMonth(), 0);
-                        return "-> " + f.toLocaleDateString();
-                    }
-                case 19:
-                    {
-                        var m = d.getMonth();
-                        var r = m % 3;
-
-                        var f = new Date(d.getFullYear(), m - r, 1);
-                        var t = new Date(d.getFullYear(), m + (3 - r), 0);
-                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                    }
-                case 20:
-                    {
-                        var m = d.getMonth();
-                        var r = m % 3;
-
-                        var t = new Date(d.getFullYear(), m - r, 0);
-                        var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
-                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                    }
-                case 21:
-                    {
-                        var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
-                        var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
-                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                    }
-                case 22:
-                    {
-                        var f;
-                        var t;
-                        var y = d.getFullYear();
-                        if (m >= 6) {
-                            f = new Date(y, 0, 1);
-                            t = new Date(y, 5, 30);
-                        } else {
-                            f = new Date(y - 1, 6, 1);
-                            t = new Date(y - 1, 11, 31);
-                        }
-
-                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                    }
-
-                case 23:
-                    {
-                        var y = d.getFullYear();
-                        var f = new Date(y, 0, 1);
-                        var t = new Date(y, 11, 31);
-                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                    }
-
-                case 24:
-                    {
-                        var y = d.getFullYear() - 1;
-                        var f = new Date(y, 0, 1);
-                        var t = new Date(y, 11, 31);
-                        return f.toLocaleDateString() + " -> " + t.toLocaleDateString();
-                    }
-
-                default:
-                    return "ooops";
-            }
+    var dateRangeResolve = function(dateVal) {
+        if (!dateVal || !dateVal.dRange) {
+            return '';
         }
 
-        */
+        var d = new Date();
+
+        var dObj = _.findWhere(esDateRangeOptions, {dValue: dateVal.dRange});
+        if (!dObj) {
+            return '';
+        }
+
+        switch (dObj.dType) {
+            case 0:
+                {
+                    if (!angular.isDate(dateVal.fromD) && !angular.isDate(dateVal.toD)) {
+                        return "";
+                    }
+
+                    var s = "";
+                    if (angular.isDate(dateVal.fromD)) {
+                        s = dateVal.fromD.toLocaleDateString("el-GR");
+                    }
+                    s = s + " - ";
+
+                    var toS = "";
+                    if (angular.isDate(dateVal.toD)) {
+                        toS = dateVal.toD.toLocaleDateString("el-GR");
+                    }
+                    s = s + toS;
+                    return s;
+                }
+            case 1:
+                {
+                    if (!angular.isDate(dateVal.fromD)) {
+                        return "";
+                    }
+                    return dateVal.fromD.toLocaleDateString("el-GR");
+                }
+            case 2:
+                return "";
+            case 3:
+                return d.toLocaleDateString("el-GR");
+            case 4:
+                return "-> " + d.toLocaleDateString("el-GR");
+            case 5:
+                return d.toLocaleDateString("el-GR") + " ->";
+            case 6:
+                {
+                    d.setDate(d.getDate() - 1);
+                    return d.toLocaleDateString("el-GR");
+                }
+            case 7:
+                {
+                    d.setDate(d.getDate() - 1);
+                    return d.toLocaleDateString("el-GR") + " ->";
+                }
+            case 8:
+                {
+                    d.setDate(d.getDate() + 1);
+                    return d.toLocaleDateString("el-GR");
+                }
+            case 9:
+                {
+                    d.setDate(d.getDate() + 1);
+                    return d.toLocaleDateString("el-GR") + " ->";
+                }
+            case 10:
+                {
+                    var cDay = d.getDay();
+                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+
+                    var f = new Date(d);
+                    var t = new Date(d);
+                    f.setDate(d.getDate() - sDiff);
+                    t.setDate(f.getDate() + 6);
+
+                    return f.toLocaleDateString("el-GR") + " - " + t.toLocaleDateString("el-GR");
+                }
+            case 11:
+                {
+                    d.setDate(d.getDate() - 7);
+
+                    var cDay = d.getDay();
+                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+
+                    var f = new Date(d);
+                    var t = new Date(d);
+                    f.setDate(d.getDate() - sDiff);
+                    t.setDate(f.getDate() + 6);
+
+                    return f.toLocaleDateString("el-GR") + " - " + t.toLocaleDateString("el-GR");
+                }
+            case 12:
+                {
+                    d.setDate(d.getDate() + 7);
+
+                    var cDay = d.getDay();
+                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+
+                    var f = new Date(d);
+                    var t = new Date(d);
+                    f.setDate(d.getDate() - sDiff);
+                    t.setDate(f.getDate() + 6);
+
+                    return f.toLocaleDateString("el-GR") + " - " + t.toLocaleDateString("el-GR");
+                }
+            case 13:
+                {
+                    d.setDate(1);
+
+                    var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                    return d.toLocaleDateString("el-GR") + " - " + f.toLocaleDateString("el-GR");
+                }
+            case 14:
+                {
+                    d.setDate(1);
+                    return d.toLocaleDateString("el-GR") + " ->";
+                }
+            case 15:
+                {
+                    var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                    return "-> " + f.toLocaleDateString("el-GR");
+                }
+            case 16:
+                {
+                    var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                    var t = new Date(d.getFullYear(), d.getMonth(), 0);
+                    return f.toLocaleDateString("el-GR") + " - " + t.toLocaleDateString("el-GR");
+                }
+            case 17:
+                {
+                    var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                    return f.toLocaleDateString("el-GR") + " ->";
+                }
+            case 18:
+                {
+                    var f = new Date(d.getFullYear(), d.getMonth(), 0);
+                    return "-> " + f.toLocaleDateString("el-GR");
+                }
+            case 19:
+                {
+                    var m = d.getMonth();
+                    var r = m % 3;
+
+                    var f = new Date(d.getFullYear(), m - r, 1);
+                    var t = new Date(d.getFullYear(), m + (3 - r), 0);
+                    return f.toLocaleDateString("el-GR") + " -> " + t.toLocaleDateString("el-GR");
+                }
+            case 20:
+                {
+                    var m = d.getMonth();
+                    var r = m % 3;
+
+                    var t = new Date(d.getFullYear(), m - r, 0);
+                    var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
+                    return f.toLocaleDateString("el-GR") + " -> " + t.toLocaleDateString("el-GR");
+                }
+            case 21:
+                {
+                    var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
+                    var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
+                    return f.toLocaleDateString("el-GR") + " -> " + t.toLocaleDateString("el-GR");
+                }
+            case 22:
+                {
+                    var f;
+                    var t;
+                    var y = d.getFullYear();
+                    if (m >= 6) {
+                        f = new Date(y, 0, 1);
+                        t = new Date(y, 5, 30);
+                    } else {
+                        f = new Date(y - 1, 6, 1);
+                        t = new Date(y - 1, 11, 31);
+                    }
+
+                    return f.toLocaleDateString("el-GR") + " -> " + t.toLocaleDateString("el-GR");
+                }
+
+            case 23:
+                {
+                    var y = d.getFullYear();
+                    var f = new Date(y, 0, 1);
+                    var t = new Date(y, 11, 31);
+                    return f.toLocaleDateString("el-GR") + " -> " + t.toLocaleDateString("el-GR");
+                }
+
+            case 24:
+                {
+                    var y = d.getFullYear() - 1;
+                    var f = new Date(y, 0, 1);
+                    var t = new Date(y, 11, 31);
+                    return f.toLocaleDateString("el-GR") + " -> " + t.toLocaleDateString("el-GR");
+                }
+            default:
+                return dObj.title;
+        }
+    }
+
 
     var esComplexParamFunctionOptions = [{
-        caption: "=",
+        caption: "Ίσο",
         value: "EQ"
     }, {
-        caption: "<>",
+        caption: "Διαφορετικό",
         value: "NE"
     }, {
-        caption: "<",
+        caption: "Μικρότερο",
         value: "LT"
     }, {
-        caption: "<=",
+        caption: "Μικρότερο ή Ίσο",
         value: "LE"
     }, {
-        caption: ">",
+        caption: "Μεγαλύτερο",
         value: "GT"
     }, {
-        caption: ">=",
+        caption: "Μεγαλύτερο ή ίσο",
         value: "GE"
     }, {
-        caption: "...<=...<=...",
+        caption: "Από - Έως",
         value: "RANGE"
     }, {
-        caption: "Empty",
+        caption: "Κενό",
         value: "NULL"
     }, {
-        caption: "Not Empty",
+        caption: "Μη κενό",
         value: "NOTNULL"
     }];
 
@@ -375,6 +381,9 @@
         return this.paramValue;
     };
 
+    ESParamVal.prototype.strVal = function() {
+        return this.paramValue ? this.paramValue.toString() : '';
+    };
 
     function ESNumericParamVal(paramId, paramVal) {
         //call super constructor
@@ -384,6 +393,25 @@
     //inherit from ESParamval SuperClass
     ESNumericParamVal.prototype = Object.create(ESParamVal.prototype);
 
+    ESNumericParamVal.prototype.strVal = function() {
+        var zero = 0;
+        zero = zero.toString();
+        var froms = this.paramValue.value ? this.paramValue.value.toString() : zero;
+        var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : zero;
+        switch (this.paramValue.oper) {
+            case "RANGE":
+                return "ΑΠΟ " + froms + " ΕΩΣ " + tos;
+
+            case "NULL":
+                return "KENO";
+
+            case "NOTNULL":
+                return "MH KENO";
+
+            default:
+                return this.paramValue.oper.toString() + " " + froms;
+        }
+    }
 
     ESNumericParamVal.prototype.getExecuteVal = function() {
         switch (this.paramValue.oper) {
@@ -405,6 +433,23 @@
     //inherit from ESParamval SuperClass
     ESStringParamVal.prototype = Object.create(ESParamVal.prototype);
 
+    ESStringParamVal.prototype.strVal = function() {
+        var froms = this.paramValue.value ? this.paramValue.value.toString() : '';
+        var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : '';
+        switch (this.paramValue.oper) {
+            case "RANGE":
+                return "ΑΠΟ " + froms + " ΕΩΣ " + tos;
+
+            case "NULL":
+                return "KENO";
+
+            case "NOTNULL":
+                return "MH KENO";
+
+            default:
+                return this.paramValue.oper.toString() + " " + froms;
+        }
+    }
 
     ESStringParamVal.prototype.getExecuteVal = function() {
         switch (this.paramValue.oper) {
@@ -435,6 +480,10 @@
     }
 
     ESDateParamVal.prototype = Object.create(ESParamVal.prototype);
+
+    ESDateParamVal.prototype.strVal = function() {
+       return dateRangeResolve(this.paramValue);
+    }
 
     ESDateParamVal.prototype.getExecuteVal = function() {
         var s = this.paramValue.dRange;
@@ -630,13 +679,9 @@
                     return "";
                 }
 
-                var pt = pParam.parameterType.toLowerCase()
-
-                // sme boot
-                return "esParamText";
+                var pt = pParam.parameterType.toLowerCase();
 
                 //ESDateRange
-
                 if (pt.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
                     return "esParamDateRange";
                 }
@@ -648,9 +693,7 @@
 
                 //ESString
                 if (pt.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
-                    return "esParamText";
-                    
-                    // sme boot return "esParamAdvancedString";
+                    return "esParamAdvancedString";
                 }
 
                 // Numeric (Integer or Decimal)
@@ -750,6 +793,18 @@
                 }
             };
         }])
+        .controller('esModalCtrl', ['$scope', '$modalInstance',
+            function($scope, $modalInstance) {
+
+                $scope.ok = function() {
+                    $modalInstance.close();
+                };
+
+                $scope.cancel = function() {
+                    $modalInstance.dismiss('cancel');
+                };
+            }
+        ])
         /**
          * @ngdoc directive
          * @name es.Web.UI.directive:esParam
@@ -760,7 +815,7 @@
          *
          * 
          */
-        .directive('esParam', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
+        .directive('esParam', ['$log', '$modal', 'esWebApi', 'esUIHelper', function($log, $modal, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -777,6 +832,21 @@
 
                     scope.esWebUIHelper = esWebUIHelper;
                     scope.esWebApiService = esWebApiService;
+
+                    if (scope.esType == "esParamAdvancedString" || scope.esType == "esParamAdvancedNumeric") {
+                        /* popup */
+                        scope.popup = function() {
+                                var modalInstance = $modal.open({
+                                    animation: true,
+                                    templateUrl: 'src/partials/' + scope.esType + 'Modal.html',
+                                    controller: 'esModalCtrl',
+                                    scope: scope,
+                                    backdrop: 'static',
+                                    size: 'md'
+                                });
+                            }
+                            /* end popup */
+                    }
 
                     if (scope.esParamDef.invSelectedMasterTable) {
                         scope.esParamLookupDS = prepareStdZoom($log, scope.esParamDef.invSelectedMasterTable, esWebApiService);
