@@ -1,27 +1,18 @@
-<div xxclass="es-advanced-param-wrap">
-      <label class="control-label">{{esParamDef.caption}}</label> 
-      <div>
-            <input class="form-control" kendo-masked-text-box ng-click="bix = !bix" ng-model="esParamVal[esParamDef.id].strVal" ng-model-options="{ getterSetter: true }" />
-      </div>
-      <div xxclass="es-advanced-param" ng-hide="!bix">
-            <select 
-                  class="form-control"
-                  kendo-drop-down-list
-                  k-data-text-field="'title'" 
-                  k-auto-bind="true" 
-                  k-data-value-field="'dValue'" 
-                  k-data-source="dateRangeOptions" 
-                  k-value-primitive="true"
-                  k-ng-model="esParamVal[esParamDef.id].paramValue.dRange">
-            </select>
-            <span ng-hide="esParamVal[esParamDef.id].paramValue.dRange > '1'" >
-                  <input kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.fromD" k-format="'dd/MM/yyyy'" />
-            </span>
-
-            <span ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
-                  <input kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD" k-format="'dd/MM/yyyy'" />
-            </span>
-      </div>
+<label class="control-label">{{esParamDef.caption}}</label>
+<div class="row">
+    <div class="col-xs-12" ng-class="{'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0' || esParamVal[esParamDef.id].paramValue.dRange =='1'}">
+        <select 
+        class="form-control" 
+        kendo-drop-down-list 
+        tooltip="{{esParamVal[esParamDef.id].strVal()}}"
+        tooltip-trigger="mouseenter"
+        k-data-text-field="'title'" k-auto-bind="true" k-data-value-field="'dValue'" k-data-source="dateRangeOptions" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.dRange">
+        </select>
+    </div>
+    <div class="col-xs-12" ng-class="{'col-md-8': esParamVal[esParamDef.id].paramValue.dRange == '1', 'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0'}" ng-hide="esParamVal[esParamDef.id].paramValue.dRange > '1'">
+        <input kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.fromD" k-format="'dd/MM/yyyy'" />
+    </div>
+    <div class="col-xs-12" ng-class="{'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0'}" ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
+        <input kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD" k-format="'dd/MM/yyyy'" />
+    </div>
 </div>
-
-

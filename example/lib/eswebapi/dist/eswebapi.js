@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-06
+/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-07
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8342,18 +8342,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
             };
         }])
-        .controller('esModalCtrl', ['$scope', '$modalInstance',
-            function($scope, $modalInstance) {
-
-                $scope.ok = function() {
-                    $modalInstance.close();
-                };
-
-                $scope.cancel = function() {
-                    $modalInstance.dismiss('cancel');
-                };
-            }
-        ])
         /**
          * @ngdoc directive
          * @name es.Web.UI.directive:esParam
@@ -8381,21 +8369,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                     scope.esWebUIHelper = esWebUIHelper;
                     scope.esWebApiService = esWebApiService;
-
-                    if (scope.esType == "esParamAdvancedString" || scope.esType == "esParamAdvancedNumeric") {
-                        /* popup */
-                        scope.popup = function() {
-                                var modalInstance = $modal.open({
-                                    animation: true,
-                                    templateUrl: 'src/partials/' + scope.esType + 'Modal.html',
-                                    controller: 'esModalCtrl',
-                                    scope: scope,
-                                    backdrop: 'static',
-                                    size: 'md'
-                                });
-                            }
-                            /* end popup */
-                    }
 
                     if (scope.esParamDef.invSelectedMasterTable) {
                         scope.esParamLookupDS = prepareStdZoom($log, scope.esParamDef.invSelectedMasterTable, esWebApiService);
