@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-07
+/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-08
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7567,7 +7567,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
         var d = new Date();
 
-        var dObj = _.findWhere(esDateRangeOptions, {dValue: dateVal.dRange});
+        var dObj = _.findWhere(esDateRangeOptions, {
+            dValue: dateVal.dRange
+        });
         if (!dObj) {
             return '';
         }
@@ -8031,7 +8033,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
     ESDateParamVal.prototype = Object.create(ESParamVal.prototype);
 
     ESDateParamVal.prototype.strVal = function() {
-       return dateRangeResolve(this.paramValue);
+        return dateRangeResolve(this.paramValue);
     }
 
     ESDateParamVal.prototype.getExecuteVal = function() {
@@ -8763,74 +8765,97 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return val;
             }
 
+            function ESParamInfo() {
+                this.id = undefined;
+                this.aa = undefined;
+                this.caption = undefined;
+                this.toolTip = undefined;
+                this.controlType = undefined;
+                this.parameterType = undefined;
+                this.precision = undefined;
+                this.multiValued = undefined;
+                this.visible = undefined;
+                this.required = undefined;
+                this.oDSTag = undefined;
+                this.formatStrng = undefined;
+                this.tags = undefined;
+                this.visibility = undefined;
+                this.invSelectedMasterTable = undefined;
+                this.invSelectedMasterField = undefined;
+                this.invTableMappings = undefined;
+                this.defaultValues = undefined;
+                this.enumOptionAll = undefined;
+                this.enumList = undefined;
+            }
+
+            ESParamInfo.prototype.strVal = function() {
+                return "Hello World esParaminfo";
+            };
+
+            function ESParamsDefinitions(params)
+            {
+                this.definitions = params;
+            }
+
+            ESParamsDefinitions.prototype.strVal = function(vals) {
+                if (!vals || !this.definitions || this.definitions.length == 0) {
+                    return '';
+                }
+
+                var s = _.reduce(_.sortBy(_.where(this.definitions, {visible: true}), "aa"), function(memo, p) {
+                    return memo + p.caption + ": " + vals[p.id].strVal() + "<br/>";
+                }, '');
+
+                return s;
+            }
+            
             function winParamInfoToesParamInfo(winParamInfo, gridexInfo) {
                 if (!winParamInfo) {
                     return null;
                 }
 
-                var esParamInfo = {
-                    id: undefined,
-                    aa: undefined,
-                    caption: undefined,
-                    toolTip: undefined,
-                    controlType: undefined,
-                    parameterType: undefined,
-                    precision: undefined,
-                    multiValued: undefined,
-                    visible: undefined,
-                    required: undefined,
-                    oDSTag: undefined,
-                    formatStrng: undefined,
-                    tags: undefined,
-                    visibility: undefined,
-                    invSelectedMasterTable: undefined,
-                    invSelectedMasterField: undefined,
-                    invTableMappings: undefined,
-                    defaultValues: undefined,
-                    enumOptionAll: undefined,
-                    enumList: undefined
-                };
+                var espInfo = new ESParamInfo();
 
-                esParamInfo.id = winParamInfo.ID;
-                esParamInfo.aa = parseInt(winParamInfo.AA);
-                esParamInfo.caption = winParamInfo.Caption;
-                esParamInfo.toolTip = winParamInfo.Tooltip;
-                esParamInfo.controlType = parseInt(winParamInfo.ControlType);
-                esParamInfo.parameterType = winParamInfo.ParameterType;
-                esParamInfo.precision = parseInt(winParamInfo.Precision);
-                esParamInfo.multiValued = winParamInfo.MultiValued == "true";
-                esParamInfo.visible = winParamInfo.Visible == "true";
-                esParamInfo.required = winParamInfo.Required == "true";
-                esParamInfo.oDSTag = winParamInfo.ODSTag;
-                esParamInfo.tags = winParamInfo.Tags;
-                esParamInfo.visibility = parseInt(winParamInfo.Visibility);
-                esParamInfo.invSelectedMasterTable = winParamInfo.InvSelectedMasterTable;
-                esParamInfo.invSelectedMasterField = winParamInfo.InvSelectedMasterField;
-                esParamInfo.invTableMappings = winParamInfo.InvTableMappings;
+                espInfo.id = winParamInfo.ID;
+                espInfo.aa = parseInt(winParamInfo.AA);
+                espInfo.caption = winParamInfo.Caption;
+                espInfo.toolTip = winParamInfo.Tooltip;
+                espInfo.controlType = parseInt(winParamInfo.ControlType);
+                espInfo.parameterType = winParamInfo.ParameterType;
+                espInfo.precision = parseInt(winParamInfo.Precision);
+                espInfo.multiValued = winParamInfo.MultiValued == "true";
+                espInfo.visible = winParamInfo.Visible == "true";
+                espInfo.required = winParamInfo.Required == "true";
+                espInfo.oDSTag = winParamInfo.ODSTag;
+                espInfo.tags = winParamInfo.Tags;
+                espInfo.visibility = parseInt(winParamInfo.Visibility);
+                espInfo.invSelectedMasterTable = winParamInfo.InvSelectedMasterTable;
+                espInfo.invSelectedMasterField = winParamInfo.InvSelectedMasterField;
+                espInfo.invTableMappings = winParamInfo.InvTableMappings;
 
-                esParamInfo.enumOptionAll = winParamInfo.EnumOptionAll;
+                espInfo.enumOptionAll = winParamInfo.EnumOptionAll;
                 var enmList = _.sortBy(_.map(_.filter(gridexInfo.EnumItem, function(x) {
-                    return x.fParamID == esParamInfo.id && (typeof x.ID != 'undefined');
+                    return x.fParamID == espInfo.id && (typeof x.ID != 'undefined');
                 }), function(e) {
                     return {
-                        text: esParamInfo.oDSTag ? e.Caption.substring(e.Caption.indexOf(".") + 1) : e.Caption,
+                        text: espInfo.oDSTag ? e.Caption.substring(e.Caption.indexOf(".") + 1) : e.Caption,
                         value: !isNaN(e.ID) ? parseInt(e.ID) : null
                     };
                 }), "value");
 
-                esParamInfo.enumList = (enmList.length) ? enmList : undefined;
+                espInfo.enumList = (enmList.length) ? enmList : undefined;
 
 
                 var gxDef = gridexInfo.DefaultValue;
                 if (gxDef && angular.isArray(gxDef)) {
                     var dx = _.where(gxDef, {
-                        fParamID: esParamInfo.id
+                        fParamID: espInfo.id
                     });
 
-                    esParamInfo.defaultValues = getEsParamVal(esParamInfo, dx);
+                    espInfo.defaultValues = getEsParamVal(espInfo, dx);
                 }
 
-                return esParamInfo;
+                return espInfo;
             }
 
             function winGridInfoToESGridInfo(inGroupID, inFilterID, gridexInfo) {
@@ -8905,12 +8930,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 esGridInfo.columns = z3;
 
-                esGridInfo.params = _.map(gridexInfo.Param, function(p) {
+                esGridInfo.params = new ESParamsDefinitions(_.map(gridexInfo.Param, function(p) {
                     return winParamInfoToesParamInfo(p, gridexInfo);
-                });
+                }));
 
 
-                var dfValues = _.map(esGridInfo.params, function(p) {
+                var dfValues = _.map(esGridInfo.params.definitions, function(p) {
                     return p.defaultValues;
                 });
 

@@ -1,4 +1,4 @@
-<label class="control-label">{{esParamDef.caption}}</label>
+<label class="control-label">{{::esParamDef.caption}}</label>
    <select 
             class="form-control"
             kendo-drop-down-list
@@ -8,7 +8,7 @@
             k-data-value-field="'value'" 
             k-auto-bind="true"
             k-option-label="{ text: 'All', value: null}" 
-            k-data-source="esParamDef.enumList"
+            k-data-source="::esParamDef.enumList"
             k-value-primitive="true"
             k-ng-model="esParamVal[esParamDef.id].paramValue">
     </select> 

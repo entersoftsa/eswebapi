@@ -1,4 +1,4 @@
-<label class="control-label">{{esParamDef.caption}}</label>
+<label class="control-label">{{::esParamDef.caption}}</label>
     <input 
     class="form-control"
     kendo-numeric-text-box 
@@ -6,4 +6,4 @@
     	k-ng-model="esParamVal[esParamDef.id].paramValue" 
     	k-spinners="false" 
     	k-decimals="esParamDef.precision" 
-    	k-format="'n'+'{{esParamDef.precision}}'" />
+    	k-format="'n'+'{{::esParamDef.precision}}'" />

@@ -1,11 +1,17 @@
 <accordion>
-	<accordion-group heading="Parameters ({{esParamsDef.length}})" is-open="true">
-		<form class="form">
-			<div class="row">
-				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="param in esParamsDef | filter:{visible: true} | orderBy:'aa'">
-				    <es-param es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
-				</div>
-			</div>
-		</form>
-	</accordion-group>
-</accordion>			
+    <accordion-group is-open="esPanelOpen">
+        <accordion-heading>
+            Parameters ({{::esParamsDef.definitions.length}}) 
+           	<i class="pull-right glyphicon" tooltip="{{esParamsDef.strVal(esParamsValues)}}" tooltip-trigger="mouseenter" ng-class="{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}"></i>
+           	<div class="clearfix"></div>
+        </accordion-heading>
+
+        <form class="form">
+            <div class="row">
+                <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="param in esParamsDef.definitions | filter:{visible: true} | orderBy:'aa'">
+                    <es-param es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
+                </div>
+            </div>
+        </form>
+    </accordion-group>
+</accordion>
