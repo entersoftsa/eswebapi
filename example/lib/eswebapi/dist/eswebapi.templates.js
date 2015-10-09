@@ -52,7 +52,12 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParams.html',
-    "<accordion><accordion-group is-open=esPanelOpen><accordion-heading>Parameters ({{::esParamsDef.definitions.length}}) <i class=\"pull-right glyphicon\" tooltip={{esParamsDef.strVal(esParamsValues)}} tooltip-trigger=mouseenter ng-class=\"{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}\"></i><div class=clearfix></div></accordion-heading><form class=form><div class=row><div class=\"form-group col-xs-12 col-sm-6 col-md-4 col-lg-3\" ng-repeat=\"param in esParamsDef.definitions | filter:{visible: true} | orderBy:'aa'\"><es-param es-type=\"param | esParamTypeMapper\" es-param-val=esParamsValues es-param-def=param></es-param></div></div></form></accordion-group></accordion>"
+    "<accordion><accordion-group is-open=esPanelOpen><accordion-heading>Parameters <span class=badge>{{::esParamsDef.definitions.length}}</span> <i class=\"pull-right glyphicon\" popover-placement=left popover-template=\"'src/partials/esParamsPanelPopover.html'\" popover-title={{::esParamsDef.title}} popover-trigger=mouseenter ng-class=\"{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}\"></i><div class=clearfix></div></accordion-heading><form class=form><div class=row><div class=\"form-group col-xs-12 col-sm-6 col-md-4 col-lg-3\" ng-repeat=\"param in esParamsDef.definitions | filter:{visible: true} | orderBy:'aa'\"><es-param es-type=\"param | esParamTypeMapper\" es-param-val=esParamsValues es-param-def=param></es-param></div></div></form></accordion-group></accordion>"
+  );
+
+
+  $templateCache.put('src/partials/esParamsPanelPopover.html',
+    "<div class=row ng-repeat=\"param in esParamsDef.definitions | filter:{visible: true} | orderBy:'aa'\"><div ng-if=esParamsValues[param.id].strVal()><span class=\"col-xs-12 col-sm-6\"><strong>{{::param.caption}}<strong></strong></strong></span> <span class=\"col-xs-12 col-sm-6\">{{esParamsValues[param.id].strVal()}}</span></div></div>"
   );
 
 

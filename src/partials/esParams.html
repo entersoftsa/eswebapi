@@ -1,8 +1,8 @@
 <accordion>
     <accordion-group is-open="esPanelOpen">
         <accordion-heading>
-            Parameters ({{::esParamsDef.definitions.length}}) 
-           	<i class="pull-right glyphicon" tooltip="{{esParamsDef.strVal(esParamsValues)}}" tooltip-trigger="mouseenter" ng-class="{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}"></i>
+            Parameters <span class="badge">{{::esParamsDef.definitions.length}}</span> 
+           	<i class="pull-right glyphicon" popover-placement="left" popover-template="'src/partials/esParamsPanelPopover.html'" popover-title="{{::esParamsDef.title}}" popover-trigger="mouseenter" ng-class="{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}"></i>
            	<div class="clearfix"></div>
         </accordion-heading>
 
