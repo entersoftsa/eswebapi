@@ -1,11 +1,16 @@
 <div class="row">
-	<es-params-panel 
-		ng-cloak 
-		es-params-values="esParamsValues" 
-		es-group-id="esGroupId" 
-		es-filter-id="esFilterId" 
-		es-params-def="esParamsDef">
-	</es-params-panel>
+	<!-- <div class="col-xs-12 col-sm-10"> -->
+		<es-params-panel
+		    class="col-xs-12 col-sm-11"
+			ng-cloak 
+			es-params-values="esParamsValues" 
+			es-group-id="esGroupId" 
+			es-filter-id="esFilterId" 
+			es-params-def="esParamsDef">
+		</es-params-panel>
+	<!-- </div> -->
+	<button class="col-xs-12 col-sm-1 btn btn-primary">Execute</button>
+
 </div>
 <div class="row" ng-cloak>
     <es-grid es-group-id="esGroupId" es-filter-id="esFilterId" es-grid-options="esGridOptions"  es-execute-params="esParamsValues" />
