@@ -4,15 +4,15 @@
         <select 
         class="form-control" 
         kendo-drop-down-list 
-        tooltip="Hello World"
-        tooltip-trigger="mouseenter"
+        uib-tooltip="Hello World"
+        uib-tooltip-trigger="mouseenter"
         k-data-text-field="'title'" k-auto-bind="true" k-data-value-field="'dValue'" k-data-source="dateRangeOptions" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.dRange">
         </select>
     </div>
     <div class="col-xs-12" ng-class="{'col-md-8': esParamVal[esParamDef.id].paramValue.dRange == '1', 'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0'}" ng-hide="esParamVal[esParamDef.id].paramValue.dRange > '1'">
-        <input kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.fromD" k-format="'dd/MM/yyyy'" />
+        <input kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.fromD" fffk-format="'dd/MM/yyyy'" />
     </div>
     <div class="col-xs-12" ng-class="{'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0'}" ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
-        <input kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD" k-format="'dd/MM/yyyy'" />
+        <input kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD" fffk-format="'dd/MM/yyyy'" />
     </div>
 </div>

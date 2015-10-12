@@ -59,10 +59,8 @@
 
                 if (lt && session && session.connectionModel) {
                     lt.setCustomField("userId", session.connectionModel.UserID);
-                    if (session.credentials) {
-                        lt.setCustomField("branchId", session.credentials.BranchID);
-                        lt.setCustomField("langId", session.credentials.LangID);
-                    }
+                    lt.setCustomField("branchId", session.connectionModel.BranchID);
+                    lt.setCustomField("langId", session.connectionModel.LangID);
                 }
 
                 var hd = ajaxAppender.getHeaders();

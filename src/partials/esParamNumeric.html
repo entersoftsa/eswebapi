@@ -1,7 +1,9 @@
 <label class="control-label">{{::esParamDef.caption}}</label>
     <input 
     class="form-control"
-    kendo-numeric-text-box 
+    kendo-numeric-text-box
+    	name="{{::esParamDef.id}}"
+    	ng-required="::esParamDef.required"
     	align="right" 
     	k-ng-model="esParamVal[esParamDef.id].paramValue" 
     	k-spinners="false" 

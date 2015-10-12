@@ -2,6 +2,8 @@
    <select 
             class="form-control"
             kendo-drop-down-list
+            name="{{::esParamDef.id}}"
+            ng-required="::esParamDef.required"
             ng-cloak
             k-ng-delay="esParamDef"
             k-data-text-field="'text'" 

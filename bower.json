@@ -22,20 +22,20 @@
     "tests"
   ],
   "dependencies": {
-    "angularjs": "~1.4.1",
-    "angular-animate": "~1.4.1",
-    "angular-route": "~1.4.1",
-    "ngstorage": "~0.3.4",
-    "angular-sanitize": "~1.4.1",
-    "noty": "~2.3.5",
-    "bootstrap": "~3.3.4",
+    "angularjs": "~1.4.7",
+    "angular-animate": "~1.4.7",
+    "angular-route": "~1.4.7",
+    "angular-sanitize": "~1.4.7",
+    "angular-bootstrap": "~0.14.1",
+    "ngstorage": "~0.3.9",
+    "bootstrap": "~3.3.5",
     "jquery": "~2.1.4",
     "stacktrace-js": "~0.6.4",
     "log4javascript": "~1.4.9",
     "underscore": "~1.8.3",
     "jscache": "*",
     "moment": "~2.10.6",
-    "angular-bootstrap": "~0.13.4"
+    "ng-file-upload": "~9.0.9"
   },
   "private": false
 }

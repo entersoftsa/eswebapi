@@ -13,6 +13,20 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             value: 'Hello World'
         };
 
+        $scope.demo = [{
+            code: 1,
+            descr: 'one'
+        }, {
+            code: 2,
+            descr: 'two'
+        }, {
+            code: 3,
+            descr: 'three'
+        }];
+        $scope.countryVal = null;
+
+        
+
         /* boot strap configuration */
         $scope.configure = function(e) {
             $("#configurator-wrap").toggleClass("hidden-xs");

@@ -503,7 +503,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             // Private variables//
             var esClientSession = {
                 hostUrl: "",
-                credentials: null,
                 connectionModel: null,
 
                 getWebApiToken: function() {
@@ -3005,9 +3004,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 sessionOpened: function(data, credentials) {
                     try {
-                        esClientSession.setModel(data.Model);
-                        esClientSession.credentials = credentials;
+                        data.Model.LangID = data.Model.LangID || credentials.LangID;
+                        data.Model.LangID = data.Model.LangID || "el-GR";
 
+                        data.Model.BranchID = data.Model.BranchID || credentials.BranchID || "-";
+                        
+                        esClientSession.setModel(data.Model);
 
                         var esga = fgetGA();
                         if (angular.isDefined(esga)) {
@@ -3031,8 +3033,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
 
     esWebFramework.run(['esGlobals', 'esWebApi', function(esGlobals, esWebApi) {
+        /*
         var esSession = esGlobals.getClientSession();
         esSession.getModel();
         esSession.hostUrl = esWebApi.getServerUrl();
+        */
     }]);
 })();

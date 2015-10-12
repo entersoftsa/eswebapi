@@ -14,20 +14,23 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "angular": "~1.4.1",
-    "angular-route": "~1.4.1",
-    "angular-sanitize": "~1.4.1",
+  "dependencies":  {
+    "angularjs": "~1.4.7",
+    "angular-animate": "~1.4.7",
+    "angular-route": "~1.4.7",
+    "angular-sanitize": "~1.4.7",
+    "angular-bootstrap": "~0.14.1",
+    "ngstorage": "~0.3.9",
     "bootstrap": "~3.3.5",
     "jquery": "~2.1.4",
-    "jscache": "*",
-    "log4javascript": "~1.4.9",
-    "moment": "~2.10.6",
-    "ng-file-upload": "~7.3.6",
-    "ngstorage": "~0.3.7",
-    "require": "*",
     "stacktrace-js": "~0.6.4",
+    "log4javascript": "~1.4.9",
     "underscore": "~1.8.3",
-    "angular-bootstrap": "~0.13.4"
+    "jscache": "*",
+    "moment": "~2.10.6",
+    "ng-file-upload": "~9.0.9"
+  },
+  "resolutions": {
+    "angular": "1.4.7"
   }
 }
