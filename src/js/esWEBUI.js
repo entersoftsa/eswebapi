@@ -782,7 +782,6 @@
                         throw "You must set GroupID and FilterID for esgrid to work";
                     }
 
-
                     if (!scope.esGridOptions && !iAttrs.esGridOptions) {
                         // Now esGridOption explicitly assigned so ask the server 
                         esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
@@ -864,6 +863,10 @@
                 link: function(scope, iElement, iAttrs) {
                     if (!scope.esGroupId || !scope.esFilterId) {
                         throw "You must set the pair es-group-id and es-filter-id attrs";
+                    }
+
+                    scope.executePQ = function() {
+                        scope.esGridOptions.dataSource.read();
                     }
 
                     esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
@@ -954,12 +957,13 @@
             function esGridInfoToKInfo(esWebApiService, esGroupId, esFilterId, executeParams, esGridInfo) {
                 var grdopt = {
                     pageable: {
-                        refresh: true
+                        refresh: true,
+                        pageSizes: [20, 50, 100, "All"]
                     },
                     sortable: true,
                     filterable: true,
                     resizable: true,
-                    toolbar: ["excel"],
+                    toolbar: ["pdf", "excel"],
                     excel: {
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
@@ -1243,8 +1247,7 @@
                 return "Hello World esParaminfo";
             };
 
-            function ESParamsDefinitions(title, params)
-            {
+            function ESParamsDefinitions(title, params) {
                 this.title = title;
                 this.definitions = params;
             }
@@ -1254,13 +1257,15 @@
                     return '';
                 }
 
-                var s = _.reduce(_.sortBy(_.where(this.definitions, {visible: true}), "aa"), function(memo, p) {
+                var s = _.reduce(_.sortBy(_.where(this.definitions, {
+                    visible: true
+                }), "aa"), function(memo, p) {
                     return memo + "<h3>" + p.caption + ": </h3>" + vals[p.id].strVal() + "<br/>";
                 }, '');
 
                 return s;
             }
-            
+
             function winParamInfoToesParamInfo(winParamInfo, gridexInfo) {
                 if (!winParamInfo) {
                     return null;
@@ -1278,6 +1283,7 @@
                 espInfo.multiValued = winParamInfo.MultiValued == "true";
                 espInfo.visible = winParamInfo.Visible == "true";
                 espInfo.required = winParamInfo.Required == "true";
+                espInfo.required = true;
                 espInfo.oDSTag = winParamInfo.ODSTag;
                 espInfo.tags = winParamInfo.Tags;
                 espInfo.visibility = parseInt(winParamInfo.Visibility);

@@ -32,7 +32,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamMultiZoom.html',
-    "<label class=control-label>{{::esParamDef.caption}}</label><select class=form-control kendo-multi-select k-placeholder=esParamDef.caption k-template=\"'<span><b>#: Code #</b> -- #: Description #</span>'\" k-data-text-field=esParamDef.invSelectedMasterField k-data-value-field=esParamDef.invSelectedMasterField k-filter=\"'contains'\" k-auto-bind=false ng-model=esParamVal[esParamDef.id].paramValue k-data-source=esParamLookupDS></select>"
+    "<label class=\"control-label has-error\">{{::esParamDef.caption}}</label><select class=form-control kendo-multi-select k-placeholder=::esParamDef.caption k-template=\"'<span><b>#: Code #</b> -- #: Description #</span>'\" k-data-text-field=::esParamDef.invSelectedMasterField k-data-value-field=::esParamDef.invSelectedMasterField k-filter=\"'contains'\" k-auto-bind=false ng-required=::esParamDef.required ng-model=esParamVal[esParamDef.id].paramValue k-data-source=esParamLookupDS></select>"
   );
 
 
@@ -42,17 +42,17 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamText.html',
-    "<label class=control-label>{{::esParamDef.caption}}</label><input class=form-control kendo-masked-text-box k-mask=esParamDef.formatString ng-model=\"esParamVal[esParamDef.id].paramValue\">"
+    "<label class=control-label>{{::esParamDef.caption}}</label><input class=form-control kendo-masked-text-box name={{::esParamDef.id}} ng-required=::esParamDef.required k-mask=::esParamDef.formatString ng-model=\"esParamVal[esParamDef.id].paramValue\">"
   );
 
 
   $templateCache.put('src/partials/esParamZoom.html',
-    "<label class=control-label>{{::esParamDef.caption}}</label><select class=form-control kendo-combo-box k-placeholder=esParamDef.toolTip k-template=\"'<span><b>#: Code #</b> -- #: Description #</span>'\" k-data-text-field=esParamDef.invSelectedMasterField k-data-value-field=esParamDef.invSelectedMasterField k-filter=\"'contains'\" k-auto-bind=false k-min-length=3 ng-model=esParamVal[esParamDef.id].paramValue k-data-source=esParamLookupDS></select>"
+    "<label class=control-label>{{::esParamDef.caption}}</label><select class=form-control kendo-combo-box k-placeholder=::esParamDef.toolTip k-template=\"'<span><b>#: Code #</b> -- #: Description #</span>'\" k-data-text-field=::esParamDef.invSelectedMasterField k-data-value-field=::esParamDef.invSelectedMasterField k-filter=\"'contains'\" ng-required=::esParamDef.required k-auto-bind=false k-min-length=3 ng-model=esParamVal[esParamDef.id].paramValue k-data-source=esParamLookupDS></select>"
   );
 
 
   $templateCache.put('src/partials/esParams.html',
-    "<accordion><accordion-group is-open=esPanelOpen><accordion-heading>Parameters <span class=badge>{{::esParamsDef.definitions.length}}</span> <i class=\"pull-right glyphicon\" popover-placement=left popover-append-to-body=true popover-template=\"'src/partials/esParamsPanelPopover.html'\" popover-title={{::esParamsDef.title}} popover-trigger=mouseenter ng-class=\"{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}\"></i><div class=clearfix></div></accordion-heading><form class=form><div class=row><div class=\"form-group col-xs-12 col-sm-6 col-md-4 col-lg-3\" ng-repeat=\"param in esParamsDef.definitions | filter:{visible: true} | orderBy:'aa'\"><es-param es-type=\"param | esParamTypeMapper\" es-param-val=esParamsValues es-param-def=param></es-param></div></div></form></accordion-group></accordion>"
+    "<accordion><accordion-group is-open=esPanelOpen><accordion-heading>Parameters <span class=badge>{{::esParamsDef.definitions.length}}</span> <i class=\"pull-right glyphicon\" popover-placement=left popover-append-to-body=true popover-template=\"'src/partials/esParamsPanelPopover.html'\" popover-title={{::esParamsDef.title}} popover-trigger=mouseenter ng-class=\"{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}\"></i></accordion-heading><form novalidate class=form name=esParamsPanelForm><div class=row><div class=\"form-group col-xs-12 col-sm-6 col-md-4 col-lg-3\" ng-class=\"{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}\" ng-repeat=\"param in esParamsDef.definitions | filter:{visible: true} | orderBy:'aa'\"><es-param es-type=\"param | esParamTypeMapper\" es-param-val=esParamsValues es-param-def=param></es-param><div ng-show=\"esParamsPanelForm.$submitted || esParamsPanelForm.{{param.id}}.$touched\"><span ng-show=esParamsPanelForm.{{param.id}}.$error.required>Tell us your email.</span></div></div></div><div class=row><div class=col-xs-12><input type=submit value=\"Execute\"></div></div><div ng-if=!esParamsPanelForm.$valid class=\"row col-xs-12 alert alert-danger\" role=alert>valid = {{esParamsPanelForm.$valid}} - error = {{esParamsPanelForm.$error | json}}</div></form></accordion-group></accordion>"
   );
 
 
@@ -62,7 +62,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esWebPQ.html',
-    "<div class=row><es-params-panel class=\"col-xs-12 col-sm-11\" ng-cloak es-params-values=esParamsValues es-group-id=esGroupId es-filter-id=esFilterId es-params-def=esParamsDef></es-params-panel><button class=\"col-xs-12 col-sm-1 btn btn-primary\">Execute</button></div><div class=row ng-cloak><es-grid es-group-id=esGroupId es-filter-id=esFilterId es-grid-options=esGridOptions es-execute-params=\"esParamsValues\"></div>"
+    "<div class=row><es-params-panel ng-cloak es-params-values=esParamsValues es-group-id=esGroupId es-filter-id=esFilterId es-params-def=esParamsDef></es-params-panel></div><div class=row><kendo-pager auto-bind=false page-size=20 page-sizes=\"[20, 50, 100, 'All']\" refresh=true data-source=\"esGridOptions.dataSource\"></div><div class=row ng-cloak><es-grid es-group-id=esGroupId es-filter-id=esFilterId es-grid-options=esGridOptions es-execute-params=\"esParamsValues\"></div>"
   );
 
 }]);

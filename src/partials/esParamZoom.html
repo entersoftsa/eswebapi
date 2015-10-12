@@ -1,11 +1,12 @@
 <label class="control-label">{{::esParamDef.caption}}</label>
 <select class="form-control"
     kendo-combo-box
-    k-placeholder="esParamDef.toolTip"
+    k-placeholder="::esParamDef.toolTip"
     k-template="'<span><b>#: Code #</b> -- #: Description #</span>'"
-    k-data-text-field="esParamDef.invSelectedMasterField"
-    k-data-value-field="esParamDef.invSelectedMasterField"
+    k-data-text-field="::esParamDef.invSelectedMasterField"
+    k-data-value-field="::esParamDef.invSelectedMasterField"
     k-filter="'contains'"
+    ng-required="::esParamDef.required"
     k-auto-bind="false"
     k-min-length="3"
     ng-model="esParamVal[esParamDef.id].paramValue"

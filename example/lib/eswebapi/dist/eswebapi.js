@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-10
+/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-11
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8331,7 +8331,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         throw "You must set GroupID and FilterID for esgrid to work";
                     }
 
-
                     if (!scope.esGridOptions && !iAttrs.esGridOptions) {
                         // Now esGridOption explicitly assigned so ask the server 
                         esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
@@ -8413,6 +8412,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 link: function(scope, iElement, iAttrs) {
                     if (!scope.esGroupId || !scope.esFilterId) {
                         throw "You must set the pair es-group-id and es-filter-id attrs";
+                    }
+
+                    scope.executePQ = function() {
+                        scope.esGridOptions.dataSource.read();
                     }
 
                     esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
@@ -8503,12 +8506,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             function esGridInfoToKInfo(esWebApiService, esGroupId, esFilterId, executeParams, esGridInfo) {
                 var grdopt = {
                     pageable: {
-                        refresh: true
+                        refresh: true,
+                        pageSizes: [20, 50, 100, "All"]
                     },
                     sortable: true,
                     filterable: true,
                     resizable: true,
-                    toolbar: ["excel"],
+                    toolbar: ["pdf", "excel"],
                     excel: {
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
@@ -8792,8 +8796,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return "Hello World esParaminfo";
             };
 
-            function ESParamsDefinitions(title, params)
-            {
+            function ESParamsDefinitions(title, params) {
                 this.title = title;
                 this.definitions = params;
             }
@@ -8803,13 +8806,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return '';
                 }
 
-                var s = _.reduce(_.sortBy(_.where(this.definitions, {visible: true}), "aa"), function(memo, p) {
+                var s = _.reduce(_.sortBy(_.where(this.definitions, {
+                    visible: true
+                }), "aa"), function(memo, p) {
                     return memo + "<h3>" + p.caption + ": </h3>" + vals[p.id].strVal() + "<br/>";
                 }, '');
 
                 return s;
             }
-            
+
             function winParamInfoToesParamInfo(winParamInfo, gridexInfo) {
                 if (!winParamInfo) {
                     return null;
@@ -8827,6 +8832,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 espInfo.multiValued = winParamInfo.MultiValued == "true";
                 espInfo.visible = winParamInfo.Visible == "true";
                 espInfo.required = winParamInfo.Required == "true";
+                espInfo.required = true;
                 espInfo.oDSTag = winParamInfo.ODSTag;
                 espInfo.tags = winParamInfo.Tags;
                 espInfo.visibility = parseInt(winParamInfo.Visibility);

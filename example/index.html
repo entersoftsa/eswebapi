@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Entersoft ESWEB API Sample</title>
     <!--  <link rel="stylesheet" href="lib/telerik/styles/kendo.common-material.min.css" />
     <link rel="stylesheet" href="lib/telerik/styles/kendo.material.min.css" />
@@ -44,19 +43,6 @@
             </div>
         </div>
     </header>
-
-
-
-
-
-
-
-
-
-
-
-
-
     <div id="example" class="container">
         <div class="row">
             <span kendo-notification="esnotify" auto-hide-after="3000"></span>
@@ -78,14 +64,39 @@
                 </li>
             </ul>
         </div>
-
+        <div>
+            <form name="userForm">
+                <div class="form-group" ng-class="{ 'has-error': userForm.name.$invalid }">
+                    <label class="control-label">Hello</label>
+                    <input type="text" class="form-control" name="name" ng-model="user.name" required>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': userForm.email.$invalid }">
+                    <label class="control-label">Master</label>
+                    <select 
+                        class="form-control"
+                            name="bbb"
+                            kendo-multi-select 
+                            k-placeholder="hi"
+                            k-template="'<span><b>#: code #</b> -- #: descr #</span>'"
+                            k-data-text-field="descr"
+                            k-data-value-field="code"
+                            k-filter="'contains'"
+                            k-auto-bind="false"
+                            ng-required="'true'"
+                            k-ng-model="xxx"
+                            k-data-source="[{code: 1, descr: 'one'}, {code: 2, descr: 'two'}, {code: 3, descr: 'three'}]">
+                    </select>
+                </div>
+                <div>
+                    {{userForm.}}
+                </div>
+            </form>
+        </div>
+        <hr/>
         <div class="clearfix" ng-view>
-            
         </div>
         <footer>Copyright &copy; 2015 <a href="http://www.entersoft.eu/">Entersoft SA</a>. All rights reserved.</footer>
     </div>
-
-
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/js/bootstrap.min.js" />
     <script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
