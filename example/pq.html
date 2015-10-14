@@ -1,5 +1,8 @@
-<div ng-cloak ng-repeat="p in [1]">
-	<div>
-    	<es-web-pq es-group-id="theGroupId" es-grid-options="theGridOptions" es-params-values="theVals" es-filter-id="theFilterId"></es-web-pq>
-	</div>
+<div ng-cloak>
+    <div ng-cloak ng-repeat="p in pqs">
+        <div class="row">
+            <es-web-pq es-group-id="p.groupId" es-grid-options="p.gridOptions" es-params-values="p.pVals" es-filter-id="p.filterId"></es-web-pq>
+        </div>
+        <hr/>
+    </div>
 </div>

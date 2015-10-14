@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-14
+/*! Entersoft Application Server WEB API - v1.3.0 - 2015-10-14
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -2485,8 +2485,12 @@ function($scope, esWebApi, esWebUIHelper) {
                                 });
                                 processWEBAPIPromise(ht, tt)
                                     .then(function(ret) {
-                                        esCache.setItem(surl, ret);
+                                        if (useCache) {
+                                            esCache.setItem(surl, ret);
+                                        }
+                                        
                                         deferred.resolve(ret);
+
                                     }, function() {
                                         deferred.reject(arguments);
                                     });
@@ -4239,7 +4243,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.2.7";
+    var version = "1.3.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -8346,7 +8350,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         .directive('esGrid', ['esWebApi', 'esUIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
             return {
                 restrict: 'AE',
-                priority: 50,
                 scope: {
                     esGroupId: "=",
                     esFilterId: "=",
@@ -8357,18 +8360,18 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
                     return "src/partials/esGrid.html";
                 },
-                link: function(scope, iElement, iAttrs) {
-                    if (!scope.esGroupId || !scope.esFilterId) {
+                link: function($scope, iElement, iAttrs) {
+                    if (!$scope.esGroupId || !$scope.esFilterId) {
                         throw "You must set GroupID and FilterID for esgrid to work";
                     }
 
-                    if (!scope.esGridOptions && !iAttrs.esGridOptions) {
+                    if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
                         // Now esGridOption explicitly assigned so ask the server 
-                        esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
+                        esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
                             .then(function(ret) {
                                 var p1 = ret.data;
-                                var p2 = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, p1);
-                                scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, scope.esGroupId, scope.esFilterId, scope.esExecuteParams, p2);
+                                var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
+                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2);
                             });
                     }
                 }
@@ -8393,24 +8396,24 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esType: "="
                 },
                 template: '<div ng-include src="\'src/partials/\'+esType+\'.html\'"></div>',
-                link: function(scope, iElement, iAttrs) {
+                link: function($scope, iElement, iAttrs) {
 
-                    if (!scope.esParamDef) {
+                    if (!$scope.esParamDef) {
                         throw "You must set a param";
                     }
 
-                    scope.esWebUIHelper = esWebUIHelper;
-                    scope.esWebApiService = esWebApiService;
+                    $scope.esWebUIHelper = esWebUIHelper;
+                    $scope.esWebApiService = esWebApiService;
 
-                    if (scope.esParamDef.invSelectedMasterTable) {
-                        scope.esParamLookupDS = prepareStdZoom($log, scope.esParamDef.invSelectedMasterTable, esWebApiService);
+                    if ($scope.esParamDef.invSelectedMasterTable) {
+                        $scope.esParamLookupDS = prepareStdZoom($log, $scope.esParamDef.invSelectedMasterTable, esWebApiService);
                     }
 
                     // Case Date Range
-                    if (scope.esParamDef.controlType == 6 || scope.esParamDef.controlType == 20) {
-                        scope.dateRangeOptions = esWebUIHelper.getesDateRangeOptions(scope.esParamDef.controlType);
-                        scope.dateRangeResolution = function() {
-                            return "Hello World, I am parameter " + scope.esParamDef.caption;
+                    if ($scope.esParamDef.controlType == 6 || $scope.esParamDef.controlType == 20) {
+                        $scope.dateRangeOptions = esWebUIHelper.getesDateRangeOptions($scope.esParamDef.controlType);
+                        $scope.dateRangeResolution = function() {
+                            return "Hello World, I am parameter " + $scope.esParamDef.caption;
                         }
                     }
                 }
@@ -8430,7 +8433,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
-                priority: 2000,
                 scope: {
                     esGroupId: "=",
                     esFilterId: "=",
@@ -8441,21 +8443,21 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
                     return "src/partials/esWebPQ.html";
                 },
-                link: function(scope, iElement, iAttrs) {
-                    if (!scope.esGroupId || !scope.esFilterId) {
+                link: function($scope, iElement, iAttrs) {
+                    if (!$scope.esGroupId || !$scope.esFilterId) {
                         throw "You must set the pair es-group-id and es-filter-id attrs";
                     }
 
-                    scope.executePQ = function() {
-                        scope.esGridOptions.dataSource.read();
+                    $scope.executePQ = function() {
+                        $scope.esGridOptions.dataSource.read();
                     }
 
-                    esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
+                    esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
                         .then(function(ret) {
-                            var v = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, ret.data);
-                            scope.esParamsValues = v.defaultValues;
-                            scope.esParamsDef = v.params;
-                            scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, scope.esGroupId, scope.esFilterId, scope.esParamsValues, v);
+                            var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
+                            $scope.esParamsValues = v.defaultValues;
+                            $scope.esParamsDef = v.params;
+                            $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v);
                         });
                 }
             };
@@ -8473,7 +8475,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         .directive('esParamsPanel', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
-                priority: 70,
                 scope: {
                     esParamsDef: '=',
                     esPqInfo: '=',
@@ -8485,8 +8486,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
                     return "src/partials/esParams.html";
                 },
-                link: function(scope, iElement, iAttrs) {
-                    if (!iAttrs.esParamsDef && !iAttrs.esPqInfo && (!scope.esGroupId || !scope.esFilterId)) {
+                link: function($scope, iElement, iAttrs) {
+                    if (!iAttrs.esParamsDef && !iAttrs.esPqInfo && (!$scope.esGroupId || !$scope.esFilterId)) {
                         throw "You must set either the es-params-def or ea-pq-info or the pair es-group-id and es-filter-id attrs";
                     }
 
@@ -8494,14 +8495,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         if (!iAttrs.esPqInfo) {
                             // we are given groupid and filterid =>
                             // we must retrieve pqinfo on owr own
-                            esWebApiService.fetchPublicQueryInfo(scope.esGroupId, scope.esFilterId)
+                            esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
                                 .function(function(ret) {
-                                    var v = esWebUIHelper.winGridInfoToESGridInfo(scope.esGroupId, scope.esFilterId, ret.data);
-                                    scope.esParamsValues = v.defaultValues;
-                                    scope.esParamsDef = v.params;
+                                    var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
+                                    $scope.esParamsValues = v.defaultValues;
+                                    $scope.esParamsDef = v.params;
                                 });
                         } else {
-                            scope.esParamDef = esPqInfo.params;
+                            $scope.esParamDef = esPqInfo.params;
                         }
                     }
                 }

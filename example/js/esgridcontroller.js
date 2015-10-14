@@ -577,47 +577,37 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+       $scope.pqs = [{
+                groupId: "ESFICustomer",
+                filterId: "CS_CollectionPlanning",
+                gridOptions: null,
+                pVals: null
+            },
 
-        $scope.theGroupId = "ESFICustomer";
-        $scope.theFilterId = "ESFITradeAccountCustomer_def";
-        $scope.theVals = {};
-        $scope.theGridOptions = null;
+            {
+                groupId: "ESFICustomer",
+                filterId: "ESFITradeAccountCustomer_def",
+                gridOptions: {},
+                pVals: null
+            },
 
-        $scope.pqs = [
-            /*{
-                        groupId: "ESFICustomer",
-                        filterId: "CS_CollectionPlanning",
-                        gridOptions: null,
-                        pVals: null
-                    }, {
-                        groupId: "ESFICustomer",
-                        filterId: "ESFITradeAccountCustomer_def",
-                        gridOptions: null,
-                        pVals: null
-                    },
-                    */
             {
                 groupId: "ESMMStockItem",
                 filterId: "ESMMStockItem_def",
-                gridOptions: null,
+                gridOptions: {},
                 pVals: {}
             }
         ];
-
-
-        $scope.doRun = function(pq) {
-            pq.gridOptions.dataSource.read();
-
-        }
     }
 ]);
 
 smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
-        $scope.theGroupId = "ESFICustomer";
-        $scope.theFilterId = "ESFITradeAccountCustomer_def";
-        $scope.theVals = {};
-        $scope.theGridOptions = null;
+        $scope.webPQOptions = {};
+        $scope.webPQOptions.theGroupId = "ESFICustomer";
+        $scope.webPQOptions.theFilterId = "ESFITradeAccountCustomer_def";
+        $scope.webPQOptions.theVals = {};
+        $scope.webPQOptions.theGridOptions = {};
     }
 ]);

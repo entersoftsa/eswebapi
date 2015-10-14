@@ -2,7 +2,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('src/partials/esGrid.html',
-    "<div kendo-grid k-ng-delay=esGridOptions k-auto-bind=false k-options=\"esGridOptions\">"
+    "<div kendo-grid k-ng-delay=esGridOptions.dataSource k-auto-bind=false k-options=\"esGridOptions\">"
   );
 
 

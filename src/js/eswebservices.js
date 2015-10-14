@@ -2483,8 +2483,12 @@ function($scope, esWebApi, esWebUIHelper) {
                                 });
                                 processWEBAPIPromise(ht, tt)
                                     .then(function(ret) {
-                                        esCache.setItem(surl, ret);
+                                        if (useCache) {
+                                            esCache.setItem(surl, ret);
+                                        }
+                                        
                                         deferred.resolve(ret);
+
                                     }, function() {
                                         deferred.reject(arguments);
                                     });
