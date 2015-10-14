@@ -7,26 +7,6 @@ var smeControllers = angular.module('smeControllers', ['kendo.directives', 'unde
 smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
     function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 
-        $scope.vVal = {
-            description: 'Please specify advanced param',
-            title: 'Given Name',
-            value: 'Hello World'
-        };
-
-        $scope.demo = [{
-            code: 1,
-            descr: 'one'
-        }, {
-            code: 2,
-            descr: 'two'
-        }, {
-            code: 3,
-            descr: 'three'
-        }];
-        $scope.countryVal = null;
-
-        
-
         /* boot strap configuration */
         $scope.configure = function(e) {
             $("#configurator-wrap").toggleClass("hidden-xs");
@@ -145,8 +125,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             $scope.theGlobalUser = esSession.connectionModel.Name;
-
-            alert("Welcome " + JSON.stringify(a));
         });
     }
 ]);
@@ -600,22 +578,31 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
-        $scope.pqs = [{
-            groupId: "ESFICustomer",
-            filterId: "CS_CollectionPlanning",
-            gridOptions: null,
-            pVals: null
-        }, {
-            groupId: "ESFICustomer",
-            filterId: "ESFITradeAccountCustomer_def",
-            gridOptions: null,
-            pVals: null
-        }, {
-            groupId: "ESMMStockItem",
-            filterId: "ESMMStockItem_def",
-            gridOptions: null,
-            pVals: null
-        }];
+        $scope.theGroupId = "ESFICustomer";
+        $scope.theFilterId = "ESFITradeAccountCustomer_def";
+        $scope.theVals = {};
+        $scope.theGridOptions = null;
+
+        $scope.pqs = [
+            /*{
+                        groupId: "ESFICustomer",
+                        filterId: "CS_CollectionPlanning",
+                        gridOptions: null,
+                        pVals: null
+                    }, {
+                        groupId: "ESFICustomer",
+                        filterId: "ESFITradeAccountCustomer_def",
+                        gridOptions: null,
+                        pVals: null
+                    },
+                    */
+            {
+                groupId: "ESMMStockItem",
+                filterId: "ESMMStockItem_def",
+                gridOptions: null,
+                pVals: {}
+            }
+        ];
 
 
         $scope.doRun = function(pq) {

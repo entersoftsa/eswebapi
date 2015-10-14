@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-12
+/*! Entersoft Application Server WEB API - v1.2.7 - 2015-10-14
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7560,7 +7560,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', ['ui.bootstrap']);
+    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap']);
 
     esWEBUI.run(['esMessaging', function(esMessaging) {
 
@@ -7791,25 +7791,25 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
 
     var esComplexParamFunctionOptions = [{
-        caption: "Ίσο",
+        caption: "=",
         value: "EQ"
     }, {
-        caption: "Διαφορετικό",
+        caption: "<>",
         value: "NE"
     }, {
-        caption: "Μικρότερο",
+        caption: "<",
         value: "LT"
     }, {
-        caption: "Μικρότερο ή Ίσο",
+        caption: "<=",
         value: "LE"
     }, {
-        caption: "Μεγαλύτερο",
+        caption: ">",
         value: "GT"
     }, {
-        caption: "Μεγαλύτερο ή ίσο",
+        caption: ">=",
         value: "GE"
     }, {
-        caption: "Από - Έως",
+        caption: "[]",
         value: "RANGE"
     }, {
         caption: "Κενό",
@@ -8346,6 +8346,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         .directive('esGrid', ['esWebApi', 'esUIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
             return {
                 restrict: 'AE',
+                priority: 50,
                 scope: {
                     esGroupId: "=",
                     esFilterId: "=",
@@ -8429,6 +8430,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
+                priority: 2000,
                 scope: {
                     esGroupId: "=",
                     esFilterId: "=",
@@ -8471,6 +8473,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         .directive('esParamsPanel', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
+                priority: 70,
                 scope: {
                     esParamsDef: '=',
                     esPqInfo: '=',

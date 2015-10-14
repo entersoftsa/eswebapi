@@ -9,7 +9,7 @@
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', ['ui.bootstrap']);
+    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap']);
 
     esWEBUI.run(['esMessaging', function(esMessaging) {
 
@@ -240,25 +240,25 @@
 
 
     var esComplexParamFunctionOptions = [{
-        caption: "Ίσο",
+        caption: "=",
         value: "EQ"
     }, {
-        caption: "Διαφορετικό",
+        caption: "<>",
         value: "NE"
     }, {
-        caption: "Μικρότερο",
+        caption: "<",
         value: "LT"
     }, {
-        caption: "Μικρότερο ή Ίσο",
+        caption: "<=",
         value: "LE"
     }, {
-        caption: "Μεγαλύτερο",
+        caption: ">",
         value: "GT"
     }, {
-        caption: "Μεγαλύτερο ή ίσο",
+        caption: ">=",
         value: "GE"
     }, {
-        caption: "Από - Έως",
+        caption: "[]",
         value: "RANGE"
     }, {
         caption: "Κενό",
@@ -795,6 +795,7 @@
         .directive('esGrid', ['esWebApi', 'esUIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
             return {
                 restrict: 'AE',
+                priority: 50,
                 scope: {
                     esGroupId: "=",
                     esFilterId: "=",
@@ -878,6 +879,7 @@
         .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
+                priority: 2000,
                 scope: {
                     esGroupId: "=",
                     esFilterId: "=",
@@ -920,6 +922,7 @@
         .directive('esParamsPanel', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
             return {
                 restrict: 'AE',
+                priority: 70,
                 scope: {
                     esParamsDef: '=',
                     esPqInfo: '=',

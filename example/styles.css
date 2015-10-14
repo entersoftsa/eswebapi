@@ -198,12 +198,38 @@ header .k-dropdown-wrap.k-state-default .k-input {
 }
 */
 
-/* kendo full size controls in form group*/
-.form-group .k-widget,
-.form-group .k-textbox {
+
+/* sme tbo */
+
+
+/*
+es-param .form-control
+{
+    height: 34px;
+}
+*/
+/*
+.form-control  {
+    padding: 0;
     width: 100%;
+    height: 40px;
+}
+*/
+
+
+
+/* kendo full size controls in form group*/
+
+input.es-param-control,
+.es-param-control.k-dropdown
+{
+    height: 36px;
 }
 
+.es-param-control {
+    width: 100%;
+}
+/*
 .es-advanced-param-wrap {
     position: relative;
 }
@@ -214,6 +240,7 @@ header .k-dropdown-wrap.k-state-default .k-input {
     width: 100%;
     z-index: 2;
 }
+*/
 
 /*
 .buttons-wrap {

@@ -1,10 +1,5 @@
-<div ng-cloak>
-    <div ng-repeat="pq in pqs">
-        <h4>{{pq.groupId}} - {{pq.filterId}}</h4>
-        <h4>{{pq.pVals}}</h4>
-        <button ng-click="doRun(pq)">Execute</button>
-        <hr>
-        <es-web-pq es-group-id="pq.groupId" es-grid-options="pq.gridOptions" es-params-values="pq.pVals" es-filter-id="pq.filterId"></es-web-pq>
-        <hr>
-    </div>
+<div ng-cloak ng-repeat="p in [1]">
+	<div>
+    	<es-web-pq es-group-id="theGroupId" es-grid-options="theGridOptions" es-params-values="theVals" es-filter-id="theFilterId"></es-web-pq>
+	</div>
 </div>

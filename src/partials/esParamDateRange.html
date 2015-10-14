@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-xs-12" ng-class="{'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0' || esParamVal[esParamDef.id].paramValue.dRange =='1'}">
         <select 
-        class="form-control" 
+        class="form-control es-param-control" 
         kendo-drop-down-list 
         uib-tooltip="Hello World"
         uib-tooltip-trigger="mouseenter"
@@ -10,9 +10,9 @@
         </select>
     </div>
     <div class="col-xs-12" ng-class="{'col-md-8': esParamVal[esParamDef.id].paramValue.dRange == '1', 'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0'}" ng-hide="esParamVal[esParamDef.id].paramValue.dRange > '1'">
-        <input kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.fromD" fffk-format="'dd/MM/yyyy'" />
+        <input class="form-control es-param-control" kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.fromD"/>
     </div>
     <div class="col-xs-12" ng-class="{'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0'}" ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
-        <input kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD" fffk-format="'dd/MM/yyyy'" />
+        <input class="form-control es-param-control" kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD"/>
     </div>
 </div>

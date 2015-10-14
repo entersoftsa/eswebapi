@@ -1,14 +1,31 @@
 <label class="control-label">{{::esParamDef.caption}}</label>
+<!-- <input class="form-control" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].strVal()" ng-model-options="{getterSetter: true}" /> -->
+<!-- <uib-accordion close-others="oneAtATime">
+    <uib-accordion-group heading="{{esParamVal[esParamDef.id].strVal()}}">
+        <div class="row">
+            <select class="form-control" kendo-drop-down-list ng-cloak k-ng-delay="esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="esWebUIHelper.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.oper">
+            </select>
+        </div>
+        <div class="row" ng-hide="esParamVal[esParamDef.id].paramValue.oper == 'NULL' || esParamVal[esParamDef.id].paramValue.oper == 'NOTNULL'">
+            <input class="form-control" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.value" />
+        </div>
+        <div class="row" ng-hide="esParamVal[esParamDef.id].paramValue.oper != 'RANGE'">
+            <input class="form-control" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.valueTo" />
+        </div>
+        
+    </uib-accordion-group>
+</uib-accordion> -->
+
 <div class="row">
     <div class="col-xs-12 col-md-4">
-        <select class="form-control" kendo-drop-down-list ng-cloak k-ng-delay="esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="esWebUIHelper.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.oper">
+        <select class="form-control es-param-control" kendo-drop-down-list ng-cloak k-ng-delay="esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="esWebUIHelper.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.oper">
         </select>
     </div>
     <div class="col-xs-12" ng-class="{'col-md-8': esParamVal[esParamDef.id].paramValue.oper != 'RANGE', 'col-md-4': esParamVal[esParamDef.id].paramValue.oper == 'RANGE'}">
-        <input class="form-control" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.value" />
+        <input class="form-control es-param-control" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.value" />
     </div>
     <div class="col-xs-12 col-md-4" ng-hide="esParamVal[esParamDef.id].paramValue.oper != 'RANGE'">
-        <input class="form-control" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.valueTo" />
+        <input class="form-control es-param-control" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.valueTo" />
     </div>
 </div>
 
