@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.0 - 2015-10-14
+/*! Entersoft Application Server WEB API - v1.3.0 - 2015-10-15
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8223,7 +8223,21 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
             schema: {
                 data: "Rows",
-                total: "Count"
+                total: "Count",
+            }
+        }
+
+        if (esOptions && esOptions.SchemaColumns && esOptions.SchemaColumns.length) {
+            xParam.schema.parse = function(response) {
+                var fld = "ESDModified";
+                _.each(response.Rows, function(idx, elem) {
+                    _.each(esOptions.SchemaColumns, function(fld) {
+                        if (elem[fld] && typeof elem[fld] === "string") {
+                            elem[fld] = kendo.parseDate(elem[fld], "yyyy-MM-ddTHH:mm:ss.fff");
+                        }
+                    })
+                });
+                return response;
             }
         }
 
@@ -8521,18 +8535,38 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
     esWEBUI.factory('esUIHelper', ['esWebApi', '$log',
         function(esWebApiService, $log) {
 
-            function esColToKCol(esGridInfo, esCol) {
+            function esColToKCol(esCol) {
                 var tCol = {
                     field: esCol.field,
                     title: esCol.title,
                     width: esCol.width,
                     attributes: esCol.attributes,
                     values: esCol.enumValues,
-
+                    dataType: esCol.dataType,
                 }
 
-                if (esCol.formatString && esCol.formatString != "") {
-                    tCol.format = "{0:" + esCol.formatString + "}";
+                switch (esCol.dataType) {
+                    case "byte[]":
+                        {
+                            if (esCol.editType == "0") {
+                                tCol.template = "<img src='" + "#:kendo.format('data:image/jpg;base64,{0}', " + esCol.field + ")#" + "'/>";
+                            }
+                            break;
+                        }
+
+                    case "datetime":
+                        {
+                            var fStr = esCol.formatString || "d";
+                            tCol.format = "{0:" + fStr + "}";
+                            break;
+                        }
+                    default:
+                        {
+                            if (esCol.formatString && esCol.formatString != "") {
+                                tCol.format = "{0:" + esCol.formatString + "}";
+                            }
+                            break;
+                        }
                 }
                 return tCol;
             }
@@ -8555,7 +8589,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 };
 
                 var kdsoptions = {
-                    serverFiltering: true,
+                    serverSorting: false,
+                    serverFiltering: false,
                     serverPaging: true,
                     pageSize: 20
                 };
@@ -8566,7 +8601,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return {
                         GroupID: esGroupId,
                         FilterID: esFilterId,
-                        Params: executeParams
+                        Params: executeParams,
+                        SchemaColumns: _.where(grdopt.columns, {
+                            dataType: "datetime"
+                        }),
                     }
                 }, kdsoptions);
 
@@ -8583,11 +8621,18 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     attributes: undefined,
                     enumValues: undefined,
                     formatString: undefined,
+                    odsTag: undefined,
+                    dataType: undefined,
+                    editType: undefined,
                 };
 
                 esCol.AA = parseInt(jCol.AA);
                 esCol.field = jCol.ColName;
                 esCol.title = jCol.Caption;
+                esCol.odsTag - jCol.ODSTag;
+                esCol.dataType = jCol.DataTypeName ? jCol.DataTypeName.toLowerCase() : undefined;
+                esCol.editType = jCol.EditType;
+
                 esCol.formatString = jCol.FormatString;
                 esCol.visible = (jCol.Visible == "true");
 
@@ -8953,7 +8998,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 });
 
                 var z3 = _.map(z1, function(x) {
-                    return esColToKCol(esGridInfo, x);
+                    return esColToKCol(x);
                 });
 
                 filterInfo = filterInfo[0];
