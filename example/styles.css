@@ -229,6 +229,11 @@ input.es-param-control,
 .es-param-control {
     width: 100%;
 }
+
+.k-header .k-link{
+   text-align: center;
+}
+
 /*
 .es-advanced-param-wrap {
     position: relative;

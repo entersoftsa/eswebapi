@@ -1,4 +1,6 @@
-<label class="control-label es-param-label">{{::esParamDef.caption}}</label> 
+<label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
+          tooltip-placement="top"
+          tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label> 
 	<input class="form-control es-param-control" 
 			kendo-masked-text-box
 			name="{{::esParamDef.id}}"

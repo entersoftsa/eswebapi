@@ -37,5 +37,8 @@
     "moment": "~2.10.6",
     "ng-file-upload": "~9.0.9"
   },
-  "private": false
+  "private": false,
+  "resolutions": {
+    "angular": "1.4.7"
+  }
 }

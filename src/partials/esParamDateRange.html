@@ -1,4 +1,6 @@
-<label class="control-label">{{::esParamDef.caption}}</label>
+<label class="control-label" uib-tooltip="{{::esParamDef.toolTip}}"
+          tooltip-placement="top"
+          tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
 <div class="row">
     <div class="col-xs-12" ng-class="{'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0' || esParamVal[esParamDef.id].paramValue.dRange =='1'}">
         <select 

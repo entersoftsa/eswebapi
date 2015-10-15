@@ -620,14 +620,16 @@
 
 
     function prepareWebScroller(dsType, esWebApiService, $log, espqParams, esOptions) {
+        var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
+
+
         var xParam = {
             transport: {
                 read: function(options) {
 
-                    var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
                     $log.info("FETCHing PQ with PQParams ", JSON.stringify(qParams), " and gridoptions ", JSON.stringify(options));
-                    var pqOptions = {};
 
+                    var pqOptions = {};
                     if (options.data && options.data.page && options.data.pageSize) {
                         pqOptions.WithCount = true;
                         pqOptions.Page = options.data.page;
@@ -672,11 +674,11 @@
             }
         }
 
-        if (esOptions && esOptions.SchemaColumns && esOptions.SchemaColumns.length) {
+        if (qParams && qParams.SchemaColumns && qParams.SchemaColumns.length) {
             xParam.schema.parse = function(response) {
-                var fld = "ESDModified";
-                _.each(response.Rows, function(idx, elem) {
-                    _.each(esOptions.SchemaColumns, function(fld) {
+                _.each(response.Rows, function(elem) {
+                    _.each(qParams.SchemaColumns, function(col) {
+                        var fld = col.field;
                         if (elem[fld] && typeof elem[fld] === "string") {
                             elem[fld] = kendo.parseDate(elem[fld], "yyyy-MM-ddTHH:mm:ss.fff");
                         }
@@ -759,7 +761,7 @@
 
                 //case Enum 
                 if (pParam.enumList && (pParam.enumList.length > 1)) {
-                    if (pParam.enumOptionAll) {
+                    if (pParam.multiValued || pParam.enumOptionAll) {
                         return "esParamMultiEnum";
                     } else {
                         return "esParamEnum";
@@ -988,9 +990,20 @@
                     attributes: esCol.attributes,
                     values: esCol.enumValues,
                     dataType: esCol.dataType,
+                    hidden: !esCol.visible,
+
+                    template: undefined,
+
                 }
 
                 switch (esCol.dataType) {
+                    case "byte":
+                        {
+                            if (esCol.editType == "8") {
+                                tCol.template = kendo.format('<div align="center"><input type="checkbox" #={0} ? "checked=checked" : "" # disabled="disabled" ></input></div>', esCol.field);
+                            }
+                            break;
+                        }
                     case "byte[]":
                         {
                             if (esCol.editType == "0") {
@@ -999,6 +1012,16 @@
                             break;
                         }
 
+                    case "string":
+                        {
+                            if (esCol.field.toLowerCase().indexOf("email") != -1) {
+                                tCol.template = kendo.format("<a href='mailto:#={0}#'>#={0}#</a>", esCol.field);
+                            } else
+                            if (esCol.field.toLowerCase().indexOf("tele") != -1 || esCol.field.toLowerCase().indexOf("mobile") != -1) {
+                                tCol.template = kendo.format("<a href='tel:#={0}#'>#={0}#</a>", esCol.field);
+                            }
+                            break;
+                        }
                     case "datetime":
                         {
                             var fStr = esCol.formatString || "d";
@@ -1041,6 +1064,7 @@
                 };
 
                 grdopt.columns = esGridInfo.columns;
+                grdopt.columnMenu = true;
 
                 grdopt.dataSource = prepareWebScroller(null, esWebApiService, $log, function() {
                     return {
@@ -1074,17 +1098,30 @@
                 esCol.AA = parseInt(jCol.AA);
                 esCol.field = jCol.ColName;
                 esCol.title = jCol.Caption;
-                esCol.odsTag - jCol.ODSTag;
+                esCol.odsTag = jCol.ODSTag;
                 esCol.dataType = jCol.DataTypeName ? jCol.DataTypeName.toLowerCase() : undefined;
                 esCol.editType = jCol.EditType;
 
                 esCol.formatString = jCol.FormatString;
                 esCol.visible = (jCol.Visible == "true");
 
+                var esClass = esCol.dataType;
+                switch (esCol.dataType) {
+                    case "byte":
+                        {
+                            if (esCol.editType == 8) {
+                                esClass = "boolean-checkbox";
+                            }
+                            break;
+                        }
+                }
+
+                esCol.attributes = {
+                    "class": "es-grid-cell-" + esClass
+                }
+
                 if (jCol.TextAlignment == "3") {
-                    esCol.attributes = {
-                        style: "text-align: right;"
-                    };
+                    esCol.attributes.style = "text-align: right;";
                 }
 
                 //Enum Column
@@ -1356,12 +1393,6 @@
                 espInfo.multiValued = winParamInfo.MultiValued == "true";
                 espInfo.visible = winParamInfo.Visible == "true";
                 espInfo.required = winParamInfo.Required == "true";
-                // sme boot
-                //if (espInfo.id == "fRegionGroupCode" || espInfo.id == "Code4") {
-                if (true) {
-                    espInfo.required = true;
-                }
-                // boot
                 espInfo.oDSTag = winParamInfo.ODSTag;
                 espInfo.tags = winParamInfo.Tags;
                 espInfo.visibility = parseInt(winParamInfo.Visibility);
@@ -1431,16 +1462,16 @@
                 };
 
                 var z2 = _.map(_.filter(gridexInfo.LayoutColumn, function(y) {
-                    return y.fFilterID.toLowerCase() == fId;
+                    return (y.fFilterID.toLowerCase() == fId) && (y.DataTypeName != "Guid");
                 }), function(x) {
                     return winColToESCol(inGroupID, inFilterID, gridexInfo, x);
                 });
 
-                var z1 = _.sortBy(_.where(z2, {
-                    visible: true
-                }), function(x) {
+                
+                var z1 = _.sortBy(z2, function(x) {
                     return parseInt(x.AA);
                 });
+              
 
                 var z3 = _.map(z1, function(x) {
                     return esColToKCol(x);

@@ -1,4 +1,6 @@
-<label class="control-label" >{{::esParamDef.caption}}</label>
+<label class="control-label" uib-tooltip="{{::esParamDef.toolTip}}"
+          tooltip-placement="top"
+          tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
 <select 
 	class="form-control"
         kendo-multi-select 

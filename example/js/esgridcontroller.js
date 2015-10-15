@@ -582,6 +582,12 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
        $scope.pqs = [
        
             {
+                groupId: "ESTMSocialCRM",
+                filterId: "ESTMSMPersonList",
+                gridOptions: {},
+                pVals: {}
+            },
+            {
                 groupId: "ESMMStockItem",
                 filterId: "StockItemPhotoList",
                 gridOptions: {},
