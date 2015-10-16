@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.0 - 2015-10-16
+/*! Entersoft Application Server WEB API - v1.3.1 - 2015-10-16
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -4243,7 +4243,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.3.0";
+    var version = "1.3.1";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -7954,9 +7954,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         title: "Since start of FY up to last Fiscal Period"
     }, ];
 
-    function ESParamVal(paramId, paramVal) {
+    function ESParamVal(paramId, paramVal, enumList) {
         this.paramCode = paramId;
         this.paramValue = paramVal;
+        this.enumList = enumList;
     }
 
     ESParamVal.prototype.getExecuteVal = function() {
@@ -7964,7 +7965,27 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
     };
 
     ESParamVal.prototype.strVal = function() {
-        return this.paramValue ? this.paramValue.toString() : '';
+        var lst = this.enumList;
+        if (!lst || lst.length == 0) {
+            // typical case, not an enum / option
+            return this.paramValue ? this.paramValue.toString() : '';
+        }
+
+        if (!this.paramValue) {
+            return '';
+        }
+
+        var vals;
+        vals = angular.isArray(this.paramValue) ? this.paramValue : [this.paramValue];
+
+        var s = _.reduce(vals, function(memo, x) {
+            var es = _.findWhere(lst, {
+                value: x
+            });
+            return memo + (es ? es.text : x.toString()) + " + ";
+        }, '');
+
+        return s.substring(0, s.lastIndexOf(" + "));
     };
 
     function ESNumericParamVal(paramId, paramVal) {
@@ -8371,6 +8392,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esFilterId: "=",
                     esExecuteParams: "=",
                     esGridOptions: "=",
+                    esSrvPaging: "=",
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
@@ -8381,13 +8403,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         throw "You must set GroupID and FilterID for esgrid to work";
                     }
 
+
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
                         // Now esGridOption explicitly assigned so ask the server 
                         esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
                             .then(function(ret) {
                                 var p1 = ret.data;
                                 var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
-                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2);
+                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
                             });
                     }
                 }
@@ -8454,6 +8477,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esFilterId: "=",
                     esGridOptions: "=",
                     esParamsValues: "=",
+                    esSrvPaging: "=",
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
@@ -8473,7 +8497,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
                             $scope.esParamsValues = v.defaultValues;
                             $scope.esParamsDef = v.params;
-                            $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v);
+                            $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
                         });
                 }
             };
@@ -8546,7 +8570,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     values: esCol.enumValues,
                     dataType: esCol.dataType,
                     hidden: !esCol.visible,
-
+                    headerAttributes: {
+                        "class": "es-table-header-cell",
+                    },
                     template: undefined,
 
                 }
@@ -8569,11 +8595,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                     case "string":
                         {
+                            var ul = "";
                             if (esCol.field.toLowerCase().indexOf("email") != -1) {
-                                tCol.template = kendo.format("<a href='mailto:#={0}#'>#={0}#</a>", esCol.field);
-                            } else
-                            if (esCol.field.toLowerCase().indexOf("tele") != -1 || esCol.field.toLowerCase().indexOf("mobile") != -1) {
-                                tCol.template = kendo.format("<a href='tel:#={0}#'>#={0}#</a>", esCol.field);
+                                ul = "mailto:";
+                            } else if (esCol.field.toLowerCase().indexOf("tele") != -1 || esCol.field.toLowerCase().indexOf("mobile") != -1) {
+                                ul = "tel:";
+                            }
+
+                            if (ul) {
+                                tCol.template = kendo.format("<a href='{1}#={0}||''#'>#={0}||''#</a>", esCol.field, ul);
                             }
                             break;
                         }
@@ -8594,7 +8624,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return tCol;
             }
 
-            function esGridInfoToKInfo(esWebApiService, esGroupId, esFilterId, executeParams, esGridInfo) {
+            function esGridInfoToKInfo(esWebApiService, esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
                 var grdopt = {
                     pageable: {
                         refresh: true,
@@ -8603,7 +8633,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     sortable: true,
                     filterable: true,
                     resizable: true,
+                    groupable: true,
                     toolbar: ["pdf", "excel"],
+                    pdf: {
+                        allPages: true,
+                        fileName: esGroupId + "-" + esFilterId + ".pdf",
+                    },
                     excel: {
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
@@ -8611,10 +8646,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     }
                 };
 
-                var kdsoptions = {
+                var dsOptions = {
+                    serverGrouping: false,
                     serverSorting: false,
                     serverFiltering: false,
-                    serverPaging: true,
+                    serverPaging: angular.isUndefined(esSrvPaging) ? true : !!esSrvPaging,
                     pageSize: 20
                 };
 
@@ -8630,7 +8666,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             dataType: "datetime"
                         }),
                     }
-                }, kdsoptions);
+                }, dsOptions);
 
                 return grdopt;
             }
@@ -8855,7 +8891,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 //Not set
                 if (!dx || dx.length == 0) {
-                    return new ESParamVal(esParamInfo.id, null);
+                    return new ESParamVal(esParamInfo.id, null, esParamInfo.enumList);
                 }
 
                 var processedVals = _.map(dx, function(k) {
@@ -8865,7 +8901,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 if (processedVals.length == 1) {
                     processedVals = processedVals[0];
                 }
-                return new ESParamVal(esParamInfo.id, processedVals);
+                return new ESParamVal(esParamInfo.id, processedVals, esParamInfo.enumList);
             }
 
             function processStrToken(esParamInfo, val) {
@@ -9022,11 +9058,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return winColToESCol(inGroupID, inFilterID, gridexInfo, x);
                 });
 
-                
+
                 var z1 = _.sortBy(z2, function(x) {
                     return parseInt(x.AA);
                 });
-              
+
 
                 var z3 = _.map(z1, function(x) {
                     return esColToKCol(x);

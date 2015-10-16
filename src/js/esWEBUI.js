@@ -399,9 +399,10 @@
         title: "Since start of FY up to last Fiscal Period"
     }, ];
 
-    function ESParamVal(paramId, paramVal) {
+    function ESParamVal(paramId, paramVal, enumList) {
         this.paramCode = paramId;
         this.paramValue = paramVal;
+        this.enumList = enumList;
     }
 
     ESParamVal.prototype.getExecuteVal = function() {
@@ -409,7 +410,27 @@
     };
 
     ESParamVal.prototype.strVal = function() {
-        return this.paramValue ? this.paramValue.toString() : '';
+        var lst = this.enumList;
+        if (!lst || lst.length == 0) {
+            // typical case, not an enum / option
+            return this.paramValue ? this.paramValue.toString() : '';
+        }
+
+        if (!this.paramValue) {
+            return '';
+        }
+
+        var vals;
+        vals = angular.isArray(this.paramValue) ? this.paramValue : [this.paramValue];
+
+        var s = _.reduce(vals, function(memo, x) {
+            var es = _.findWhere(lst, {
+                value: x
+            });
+            return memo + (es ? es.text : x.toString()) + " + ";
+        }, '');
+
+        return s.substring(0, s.lastIndexOf(" + "));
     };
 
     function ESNumericParamVal(paramId, paramVal) {
@@ -816,6 +837,7 @@
                     esFilterId: "=",
                     esExecuteParams: "=",
                     esGridOptions: "=",
+                    esSrvPaging: "=",
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
@@ -826,13 +848,14 @@
                         throw "You must set GroupID and FilterID for esgrid to work";
                     }
 
+
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
                         // Now esGridOption explicitly assigned so ask the server 
                         esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
                             .then(function(ret) {
                                 var p1 = ret.data;
                                 var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
-                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2);
+                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
                             });
                     }
                 }
@@ -899,6 +922,7 @@
                     esFilterId: "=",
                     esGridOptions: "=",
                     esParamsValues: "=",
+                    esSrvPaging: "=",
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
@@ -918,7 +942,7 @@
                             var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
                             $scope.esParamsValues = v.defaultValues;
                             $scope.esParamsDef = v.params;
-                            $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v);
+                            $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
                         });
                 }
             };
@@ -991,7 +1015,9 @@
                     values: esCol.enumValues,
                     dataType: esCol.dataType,
                     hidden: !esCol.visible,
-
+                    headerAttributes: {
+                        "class": "es-table-header-cell",
+                    },
                     template: undefined,
 
                 }
@@ -1014,11 +1040,15 @@
 
                     case "string":
                         {
+                            var ul = "";
                             if (esCol.field.toLowerCase().indexOf("email") != -1) {
-                                tCol.template = kendo.format("<a href='mailto:#={0}#'>#={0}#</a>", esCol.field);
-                            } else
-                            if (esCol.field.toLowerCase().indexOf("tele") != -1 || esCol.field.toLowerCase().indexOf("mobile") != -1) {
-                                tCol.template = kendo.format("<a href='tel:#={0}#'>#={0}#</a>", esCol.field);
+                                ul = "mailto:";
+                            } else if (esCol.field.toLowerCase().indexOf("tele") != -1 || esCol.field.toLowerCase().indexOf("mobile") != -1) {
+                                ul = "tel:";
+                            }
+
+                            if (ul) {
+                                tCol.template = kendo.format("<a href='{1}#={0}||''#'>#={0}||''#</a>", esCol.field, ul);
                             }
                             break;
                         }
@@ -1039,7 +1069,7 @@
                 return tCol;
             }
 
-            function esGridInfoToKInfo(esWebApiService, esGroupId, esFilterId, executeParams, esGridInfo) {
+            function esGridInfoToKInfo(esWebApiService, esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
                 var grdopt = {
                     pageable: {
                         refresh: true,
@@ -1048,7 +1078,12 @@
                     sortable: true,
                     filterable: true,
                     resizable: true,
+                    groupable: true,
                     toolbar: ["pdf", "excel"],
+                    pdf: {
+                        allPages: true,
+                        fileName: esGroupId + "-" + esFilterId + ".pdf",
+                    },
                     excel: {
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
@@ -1056,10 +1091,11 @@
                     }
                 };
 
-                var kdsoptions = {
+                var dsOptions = {
+                    serverGrouping: false,
                     serverSorting: false,
                     serverFiltering: false,
-                    serverPaging: true,
+                    serverPaging: angular.isUndefined(esSrvPaging) ? true : !!esSrvPaging,
                     pageSize: 20
                 };
 
@@ -1075,7 +1111,7 @@
                             dataType: "datetime"
                         }),
                     }
-                }, kdsoptions);
+                }, dsOptions);
 
                 return grdopt;
             }
@@ -1300,7 +1336,7 @@
 
                 //Not set
                 if (!dx || dx.length == 0) {
-                    return new ESParamVal(esParamInfo.id, null);
+                    return new ESParamVal(esParamInfo.id, null, esParamInfo.enumList);
                 }
 
                 var processedVals = _.map(dx, function(k) {
@@ -1310,7 +1346,7 @@
                 if (processedVals.length == 1) {
                     processedVals = processedVals[0];
                 }
-                return new ESParamVal(esParamInfo.id, processedVals);
+                return new ESParamVal(esParamInfo.id, processedVals, esParamInfo.enumList);
             }
 
             function processStrToken(esParamInfo, val) {
@@ -1467,11 +1503,11 @@
                     return winColToESCol(inGroupID, inFilterID, gridexInfo, x);
                 });
 
-                
+
                 var z1 = _.sortBy(z2, function(x) {
                     return parseInt(x.AA);
                 });
-              
+
 
                 var z3 = _.map(z1, function(x) {
                     return esColToKCol(x);

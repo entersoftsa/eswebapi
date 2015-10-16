@@ -1,7 +1,8 @@
 <div ng-cloak>
     <div ng-cloak ng-repeat="p in pqs">
+    	<span>{{$index % 2}}</span>
         <div class="row">
-            <es-web-pq es-group-id="p.groupId" es-grid-options="p.gridOptions" es-params-values="p.pVals" es-filter-id="p.filterId"></es-web-pq>
+            <es-web-pq es-group-id="p.groupId" es-grid-options="p.gridOptions" es-srv-paging="$index % 2" es-params-values="p.pVals" es-filter-id="p.filterId"></es-web-pq>
         </div>
         <hr/>
     </div>
