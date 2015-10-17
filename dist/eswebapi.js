@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.1 - 2015-10-16
+/*! Entersoft Application Server WEB API - v1.3.1 - 2015-10-17
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8403,6 +8403,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         throw "You must set GroupID and FilterID for esgrid to work";
                     }
 
+                    $scope.esGridRun = function() {
+                        if ($scope.esGridCtrl) {
+                            $scope.esGridCtrl.dataSource.read();
+                        }
+                    }
+
 
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
                         // Now esGridOption explicitly assigned so ask the server 
@@ -8478,6 +8484,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esGridOptions: "=",
                     esParamsValues: "=",
                     esSrvPaging: "=",
+                    esShowTopPagination: "=",
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
@@ -8625,16 +8632,40 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             function esGridInfoToKInfo(esWebApiService, esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
+                var dsOptions = {
+                    serverGrouping: false,
+                    serverSorting: false,
+                    serverFiltering: false,
+                    serverPaging: (angular.isUndefined(esSrvPaging) || esSrvPaging == null) ? true : !!esSrvPaging,
+                    pageSize: 20
+                };
+
                 var grdopt = {
                     pageable: {
                         refresh: true,
                         pageSizes: [20, 50, 100, "All"]
                     },
                     sortable: true,
-                    filterable: true,
+                    selectable: "multiple, cell",
+                    allowCopy: true,
                     resizable: true,
-                    groupable: true,
-                    toolbar: ["pdf", "excel"],
+                    reorderable: true,
+                    navigatable: true,
+                    noRecords: {
+                        template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
+                    },
+
+                    filterable: !dsOptions.serverPaging,
+                    groupable: !dsOptions.serverPaging,
+                    toolbar: [
+                        {
+                            name: "run",
+                            text: "Run",
+                            template: "<a class=\"k-button btn btn-primary\" ng-click=\"esGridRun()\">Run</a>"
+                        },
+                        "pdf",
+                        "excel"
+                    ],
                     pdf: {
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".pdf",
@@ -8644,14 +8675,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
                         filterable: true
                     }
-                };
-
-                var dsOptions = {
-                    serverGrouping: false,
-                    serverSorting: false,
-                    serverFiltering: false,
-                    serverPaging: angular.isUndefined(esSrvPaging) ? true : !!esSrvPaging,
-                    pageSize: 20
                 };
 
                 grdopt.columns = esGridInfo.columns;
