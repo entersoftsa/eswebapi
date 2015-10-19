@@ -1,104 +1,44 @@
 <!doctype html>
-<html ng-app="ui.bootstrap.demo">
+<html>
 
 <head>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.common-bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.dataviz.bootstrap.min.css" />
 </head>
 
 <body>
-    <div ng-controller="DropdownCtrl">
-        <!-- Simple dropdown -->
-        <span uib-dropdown on-toggle="toggled(open)">
-      <a href id="simple-dropdown" uib-dropdown-toggle>
-        Click me for a dropdown, yo!
-      </a>
-      <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
-        <li ng-repeat="choice in items">
-          <a href>{{choice}}</a>
-        </li>
-      </ul>
-    </span>
-        <!-- Single button -->
-        <div class="btn-group" uib-dropdown is-open="status.isopen">
-            <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
-                Button dropdown <span class="caret"></span>
-            </button>
-            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="single-button">
-                <li role="menuitem"><a href="#">Action</a></li>
-                <li role="menuitem"><a href="#">Another action</a></li>
-                <li role="menuitem"><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li role="menuitem"><a href="#">Separated link</a></li>
-            </ul>
-        </div>
-        <!-- Split button -->
-        <div class="btn-group" uib-dropdown>
-            <button id="split-button" type="button" class="btn btn-danger">Action</button>
-            <button type="button" class="btn btn-danger" uib-dropdown-toggle>
-                <span class="caret"></span>
-                <span class="sr-only">Split button!</span>
-            </button>
-            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="split-button">
-                <li role="menuitem"><a href="#">Action</a></li>
-                <li role="menuitem"><a href="#">Another action</a></li>
-                <li role="menuitem"><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li role="menuitem"><a href="#">Separated link</a></li>
-            </ul>
-        </div>
-        <!-- Single button using append-to-body -->
-        <div class="btn-group" uib-dropdown dropdown-append-to-body>
-            <button id="btn-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle>
-                Dropdown on Body <span class="caret"></span>
-            </button>
-            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="btn-append-to-body">
-                <li role="menuitem"><a href="#">Action</a></li>
-                <li role="menuitem"><a href="#">Another action</a></li>
-                <li role="menuitem"><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li role="menuitem"><a href="#">Separated link</a></li>
-            </ul>
-        </div>
-        <!-- Single button using template-url -->
-        <div class="btn-group" uib-dropdown>
-            <button id="button-template-url" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
-                Dropdown using template <span class="caret"></span>
-            </button>
-            <ul class="uib-dropdown-menu" template-url="dropdown.html" aria-labelledby="button-template-url">
-            </ul>
-        </div>
-        <hr />
-        <p>
-            <button type="button" class="btn btn-default btn-sm" ng-click="toggleDropdown($event)">Toggle button dropdown</button>
-            <button type="button" class="btn btn-warning btn-sm" ng-click="disabled = !disabled">Enable/Disable</button>
-        </p>
-        <hr>
-        <!-- Single button with keyboard nav -->
-        <div class="btn-group" uib-dropdown uib-keyboard-nav>
-            <button id="simple-btn-keyboard-nav" type="button" class="btn btn-primary" uib-dropdown-toggle>
-                Dropdown with keyboard navigation <span class="caret"></span>
-            </button>
-            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
-                <li role="menuitem"><a href="#">Action</a></li>
-                <li role="menuitem"><a href="#">Another action</a></li>
-                <li role="menuitem"><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li role="menuitem"><a href="#">Separated link</a></li>
-            </ul>
-        </div>
-        <script type="text/ng-template" id="dropdown.html">
-            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="button-template-url">
-                <li role="menuitem"><a href="#">Action in Template</a></li>
-                <li role="menuitem"><a href="#">Another action in Template</a></li>
-                <li role="menuitem"><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li role="menuitem"><a href="#">Separated link in Template</a></li>
-            </ul>
-        </script>
-    </div>
+    <div id="grid"></div>
+    <script type="text/x-kendo-template" id="toolbar-template">
+        <button type="button" class="btn btn-danger" id="printGrid">Print Grid</button>
+
+        <button type="button" class="btn btn-primary" id="excel">Excel</button>
+    </script>
+
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/js/bootstrap.min.js" />
+    <script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/ngStorage/ngstorage.min.js"></script>
+    <script src="bower_components/stacktrace-js/dist/stacktrace.js"></script>
+    <script src="bower_components/log4javascript/js/log4javascript.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="bower_components/jscache/cache.js"></script>
+    <script src="bower_components/moment/min/moment-with-locales.min.js"></script>
+    <script src="lib/eswebapi/dist/eswebapi.js"></script>
+    <script src="lib/eswebapi/dist/eswebapi.templates.js"></script>
+    <script src="lib/telerik/js/jszip.min.js"></script>
+    <script src="lib/telerik/js/cultures/kendo.culture.el-GR.min.js"></script>
+    <script src="lib/telerik/js/kendo.all.min.js"></script>
+
     <script src="esbs.js"></script>
 </body>
 
