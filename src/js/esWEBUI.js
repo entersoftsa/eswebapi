@@ -1146,13 +1146,14 @@
                         refresh: true,
                         pageSizes: [20, 50, 100, "All"]
                     },
-                    sortable: true,
-                    selectable: "multiple, cell",
+                    sortable: !dsOptions.serverPaging,
+                    scrollable: !dsOptions.serverPaging,
+                    //selectable: "multiple, cell",
+                    //mobile: true,
                     allowCopy: true,
                     resizable: true,
                     reorderable: true,
                     navigatable: true,
-                    mobile: false,
                     noRecords: {
                         template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
                     },
@@ -1213,6 +1214,7 @@
                     odsTag: undefined,
                     dataType: undefined,
                     editType: undefined,
+                    columnSet: undefined,
                 };
 
                 esCol.AA = parseInt(jCol.AA);
@@ -1480,6 +1482,23 @@
             function ESParamsDefinitions(title, params) {
                 this.title = title;
                 this.definitions = params;
+                this.visibleDefinitions = function() {
+                    if (!this.definitions) {
+                        return [];
+                    }
+
+                    var f = this.definitions;
+                    return _.where(f, {
+                        visible: true
+                    });
+                }
+            }
+
+            ESParamsDefinitions.prototype.visibleDefinitions = function() {
+                var f = this.definitions;
+                return f ? _.where(f, {
+                    visible: true
+                }) : [];
             }
 
             ESParamsDefinitions.prototype.strVal = function(vals) {
@@ -1540,6 +1559,8 @@
                     });
 
                     espInfo.defaultValues = getEsParamVal(espInfo, dx);
+                } else {
+                    espInfo.defaultValues = getEsParamVal(espInfo, []);
                 }
 
                 return espInfo;
@@ -1565,17 +1586,7 @@
                     rootTable: undefined,
                     selectedMasterTable: undefined,
                     selectedMasterField: undefined,
-                    totalRow: undefined,
-                    columnHeaders: undefined,
-                    columnSetHeaders: undefined,
-                    columnSetRowCount: undefined,
-                    columnSetHeaderLines: undefined,
-                    headerLines: undefined,
-                    groupByBoxVisible: undefined,
-                    filterLineVisible: false,
-                    previewRow: undefined,
-                    previewRowMember: undefined,
-                    previewRowLines: undefined,
+                    columnSets: undefined,
                     columns: undefined,
                     params: undefined,
                     defaultValues: undefined,
@@ -1603,17 +1614,15 @@
                 esGridInfo.rootTable = filterInfo.RootTable;
                 esGridInfo.selectedMasterTable = filterInfo.SelectedMasterTable;
                 esGridInfo.selectedMasterField = filterInfo.SelectedMasterField;
-                esGridInfo.totalRow = filterInfo.TotalRow;
-                esGridInfo.columnHeaders = filterInfo.ColumnHeaders;
-                esGridInfo.columnSetHeaders = filterInfo.ColumnSetHeaders;
-                esGridInfo.columnSetRowCount = filterInfo.ColumnSetRowCount;
-                esGridInfo.columnSetHeaderLines = filterInfo.ColumnSetHeaderLines;
-                esGridInfo.headerLines = filterInfo.HeaderLines;
-                esGridInfo.groupByBoxVisible = filterInfo.GroupByBoxVisible;
-                esGridInfo.filterLineVisible = filterInfo.FilterLineVisible;
-                esGridInfo.previewRow = filterInfo.PreviewRow;
-                esGridInfo.previewRowMember = filterInfo.PreviewRowMember;
-                esGridInfo.previewRowLines = filterInfo.PreviewRowLines;
+                esGridInfo.columnSets = _.map(_.filter(filterInfo.LayoutColumnSet, function(x) {
+                    return x.fFilterID.toLowerCase() == fId;
+                }), function(p) {
+                    return {
+                        aa: p.Position,
+                        title: p.Caption,
+                        width: p.Width,
+                    };
+                });
 
                 esGridInfo.columns = z3;
 

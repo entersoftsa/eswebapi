@@ -14,7 +14,7 @@
     "test",
     "tests"
   ],
-  "dependencies":  {
+  "dependencies": {
     "angularjs": "~1.4.7",
     "angular-animate": "~1.4.7",
     "angular-route": "~1.4.7",
@@ -28,9 +28,12 @@
     "underscore": "~1.8.3",
     "jscache": "*",
     "moment": "~2.10.6",
-    "ng-file-upload": "~9.0.9"
+    "ng-file-upload": "~9.0.9",
+    "angular-google-maps": "~2.2.1",
+    "angular-simple-logger": "~0.1.4"
   },
   "resolutions": {
-    "angular": "1.4.7"
+    "angular": "1.4.7",
+    "angular-simple-logger": "~0.1.4"
   }
 }

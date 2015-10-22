@@ -2,24 +2,32 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="lib/telerik/styles/kendo.common-bootstrap.min.css" />
-    <link rel="stylesheet" href="lib/telerik/styles/kendo.bootstrap.min.css" />
-    <link rel="stylesheet" href="lib/telerik/styles/kendo.dataviz.min.css" />
-    <link rel="stylesheet" href="lib/telerik/styles/kendo.dataviz.bootstrap.min.css" />
+    <meta charset=utf-8>
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="lib/telerik/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="esbs.css" />
 </head>
 
-<body>
-    <div id="grid"></div>
-    <script type="text/x-kendo-template" id="toolbar-template">
-        <button type="button" class="btn btn-danger" id="printGrid">Print Grid</button>
+<body ng-app="esWorld">
+    <div ng-controller="esWorldCtrl">
+        <div>
+            <ui-gmap-google-map
+                class="thumbnail buying-map"
+                center="map.center" 
+                zoom="map.zoom" 
+                options="{ scrollwheel: true, streetViewControl: false }"
+                pan="true">
 
-        <button type="button" class="btn btn-primary" id="excel">Excel</button>
-    </script>
+            </ui-gmap-google-map>
+        </div>
 
-
+        <!-- <div>
+            <div ng-if="connected" ng-cloak>
+                <es-web-pq es-group-id="webPQOptions.theGroupId" es-grid-options="webPQOptions.theGridOptions" es-srv-paging="true" es-params-values="webPQOptions.theVals" es-filter-id="webPQOptions.theFilterId"></es-web-pq>
+            </div>
+        </div> -->
+    </div>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/js/bootstrap.min.js" />
     <script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
@@ -38,7 +46,9 @@
     <script src="lib/telerik/js/jszip.min.js"></script>
     <script src="lib/telerik/js/cultures/kendo.culture.el-GR.min.js"></script>
     <script src="lib/telerik/js/kendo.all.min.js"></script>
-
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=weather,visualization&sensor=false&language=en&v=3.17"></script>
+    <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.light.min.js"></script>
+    <script src="bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
     <script src="esbs.js"></script>
 </body>
 

@@ -579,9 +579,12 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
-        $scope.pqs = [
-
-            {
+        $scope.pqs = [{
+                groupId: "ESGOPerson",
+                filterId: "CRM_Personlist",
+                gridOptions: {},
+                pVals: {}
+            }, {
                 groupId: "ESTMSocialCRM",
                 filterId: "ESTMSMPersonList",
                 gridOptions: {},
@@ -611,6 +614,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 gridOptions: {},
                 pVals: {}
             }
+            
         ];
     }
 ]);

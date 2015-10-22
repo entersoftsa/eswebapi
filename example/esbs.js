@@ -1,79 +1,76 @@
-function printGrid() {
-    var gridElement = $('#grid'),
-        printableContent = '',
-        win = window.open('', '', 'width=800, height=500'),
-        doc = win.document.open();
+'use strict';
 
-    var htmlStart =
-            '<!DOCTYPE html>' +
-            '<html>' +
-            '<head>' +
-            '<meta charset="utf-8" />' +
-            '<title>Kendo UI Grid</title>' +
-            '<link href="http://kendo.cdn.telerik.com/' + kendo.version + '/styles/kendo.common.min.css" rel="stylesheet" /> ' +
-            '<style>' +
-            'html { font: 11pt sans-serif; }' +
-            '.k-grid { border-top-width: 0; }' +
-            '.k-grid, .k-grid-content { height: auto !important; }' +
-            '.k-grid-content { overflow: visible !important; }' +
-            '.k-grid .k-grid-header th { border-top: 1px solid; }' +
-            '.k-grid-toolbar, .k-grid-pager > .k-link { display: none; }' +
-            '</style>' +
-            '</head>' +
-            '<body>';
+/* Controllers */
 
-    var htmlEnd =
-            '</body>' +
-            '</html>';
+angular.module('esWorld', ['kendo.directives', 'underscore', 'es.Services.Web', 'es.Web.UI', 'uiGmapgoogle-maps'])
+    .config(['$logProvider',
+        'esWebApiProvider',
+        'uiGmapGoogleMapApiProvider',
+        function($logProvider, esWebApiServiceProvider, GoogleMapApi) {
 
-    var gridHeader = gridElement.children('.k-grid-header');
-    if (gridHeader[0]) {
-        var thead = gridHeader.find('thead').clone().addClass('k-grid-header');
-        printableContent = gridElement
-            .clone()
-                .children('.k-grid-header').remove()
-            .end()
-                .children('.k-grid-content')
-                    .find('table')
-                        .first()
-                            .children('tbody').before(thead)
-                        .end()
-                    .end()
-                .end()
-            .end()[0].outerHTML;
-    } else {
-        printableContent = gridElement.clone()[0].outerHTML;
-    }
+            $logProvider.addDefaultAppenders();
 
-    doc.write(htmlStart + printableContent + htmlEnd);
-    doc.close();
-    win.print();
-}
+            var subscriptionId = "";
+            esWebApiServiceProvider.setSettings({
+                //host: "eswebapialp.azurewebsites.net",
+                //host: "eswebapi.entersoft.gr",
+                host: "localhost/eswebapi",
+                //"host" : "192.168.1.190/eswebapi",
+                subscriptionId: subscriptionId,
+                subscriptionPassword: "passx",
+                allowUnsecureConnection: true
+            });
 
-$(document).ready(function () {
-    var grid = $('#grid').kendoGrid({
-        dataSource: {
-            type: 'odata',
-            transport: {
-                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products"
-            },
-            pageSize: 20,
-            serverPaging: true,
-            serverSorting: true,
-            serverFiltering: true
-        },
-        toolbar: kendo.template($('#toolbar-template').html()),
-        pageable: true,
-        columns: [
-            { field: 'ProductID', title: 'Product ID', width: 100 },
-            { field: 'ProductName', title: 'Product Name' },
-            { field: 'UnitPrice', title: 'Unit Price', width: 100 },
-            { field: 'QuantityPerUnit', title: 'Quantity Per Unit' }
-        ]
-    });
+            GoogleMapApi.configure({
+                key: "AIzaSyAsi8zLy4NrO5SLSWNS4XTsu_ATCaOStBg",
+                libraries: ''
+            });
+        }
+    ])
+    .run(['esWebApi', function(esWebApiService) {
+        var cre = {
+            UserID: 'admin',
+            Password: 'entersoft',
+            BranchID: 'ΑΘΗ',
+            LangID: 'el-GR'
+        };
 
-    $('#printGrid').click(function () {
-        printGrid();
-    });
+        esWebApiService.openSession(cre);
+    }])
+    .controller('esWorldCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals', 'uiGmapGoogleMapApi',
 
-});
+        function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals, GoogleMapApi) {
+
+            GoogleMapApi.then(function(maps) {
+                maps.visualRefresh = true;
+            });
+
+            $scope.map = {
+                zoom: 11,
+                center: {
+                    latitude: 47.6201,
+                    longitude: -122.1653
+                },
+            };
+
+            $scope.connected = false;
+
+            esMessaging.subscribe("AUTH_CHANGED", function(sess, apitoken) {
+                $scope.webPQOptions = {};
+                $scope.webPQOptions.theGroupId = "ESFICustomer";
+                $scope.webPQOptions.theFilterId = "ESFITradeAccountCustomer_def";
+                $scope.webPQOptions.theVals = {};
+                $scope.webPQOptions.theGridOptions = {};
+
+                $scope.staticPage = {
+                    serverGrouping: false,
+                    serverSorting: false,
+                    serverFiltering: false,
+                    serverPaging: false,
+                    pageSize: 12
+                };
+
+                $scope.connected = true;
+            });
+        }
+    ]);
