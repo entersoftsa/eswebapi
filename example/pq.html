@@ -4,8 +4,8 @@
             <es-web-pq 
             	es-group-id="p.groupId" 
             	es-grid-options="p.gridOptions" 
-            	es-show-top-pagination="!($index % 2)" 
-            	es-srv-paging="$index % 2" 
+            	es-show-top-pagination="false && !($index % 2)" 
+            	es-srv-paging="true || ($index % 2)" 
             	es-params-values="p.pVals" 
             	es-filter-id="p.filterId">
             </es-web-pq>

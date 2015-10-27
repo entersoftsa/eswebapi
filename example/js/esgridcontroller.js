@@ -219,7 +219,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
         $scope.uploadPic = function(myFile) {
             var okf = function(retFile) {
-                $log.information("file uploaded ....");
+                $log.info("file uploaded ....");
             };
 
             var errf = function(response) {
@@ -235,7 +235,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                 myFile.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             };
 
-            esWebApi.addES00Document("abcd", "fff", $scope.username, myFile, okf, errf, progressf);
+            esWebApi.addES00Document("abcd", "fff", $scope.username, myFile, okf, errf, progressf, 'http://localhost/esdocs');
         }
 
         //fetchPublicQueryInfo sample
@@ -523,7 +523,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         }
 
         $scope.fetchES00DocumentsByEntityGID = function() {
-            esWebApi.fetchES00DocumentsByEntityGID($scope.pES00Doc)
+            esWebApi.fetchES00DocumentsByEntityGID($scope.pES00Doc, 'http://esrdfiles.azurewebsites.net')
                 .then(function(ret) {
                         $scope.pES00DocResults = ret.data;
                     },
@@ -579,12 +579,15 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
-        $scope.pqs = [{
+        $scope.pqs = [
+         {
                 groupId: "ESGOPerson",
                 filterId: "CRM_Personlist",
                 gridOptions: {},
                 pVals: {}
-            }, {
+            },
+
+            /* {
                 groupId: "ESTMSocialCRM",
                 filterId: "ESTMSMPersonList",
                 gridOptions: {},
@@ -613,13 +616,33 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 filterId: "ESMMStockItem_def",
                 gridOptions: {},
                 pVals: {}
-            }
-            
+            },
+
+            */
         ];
     }
 ]);
 
 smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
+    function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+
+        $scope.webPQOptions = {};
+        $scope.webPQOptions.theGroupId = "ESFICustomer";
+        $scope.webPQOptions.theFilterId = "ESFITradeAccountCustomer_def";
+        $scope.webPQOptions.theVals = {};
+        $scope.webPQOptions.theGridOptions = {};
+
+        $scope.staticPage = {
+            serverGrouping: false,
+            serverSorting: false,
+            serverFiltering: false,
+            serverPaging: false,
+            pageSize: 12
+        };
+    }
+]);
+
+smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
         $scope.webPQOptions = {};

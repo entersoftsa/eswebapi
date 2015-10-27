@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.1 - 2015-10-22
+/*! Entersoft Application Server WEB API - v1.3.2 - 2015-10-27
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -3145,7 +3145,10 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 }
 ```
                              */
-                            fetchES00DocumentsByEntityGID: function(entityGID) {
+                            fetchES00DocumentsByEntityGID: function(entityGID, assetPath) {
+
+                                /* When ALP comes back we should change this as a correct implementation 
+
                                 entityGID = entityGID ? entityGID.trim() : "";
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BY_ENTITYGID__, entityGID);
                                 var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "FETCH", entityGID);
@@ -3159,19 +3162,32 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht, tt);
+                                */
+                               
+                               entityGID = entityGID ? entityGID.trim() : "";
+                                var surl = assetPath + "/api/photo";
+                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "FETCH", entityGID);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        esEntityGID: entityGID
+                                    },
+                                    url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
 
                             },
 
-                            addES00Document: function(entity, entityId, description, file, okfunc, errfunc, progressfunc) {
+                            addES00Document: function(entity, entityId, description, file, okfunc, errfunc, progressfunc, assetPath) {
 
                                 file.upload = Upload.upload({
-                                    url: 'http://esrdfiles.azurewebsites.net/api/photo',
+                                    url: assetPath + '/api/photo',
                                     method: 'POST',
-                                    headers: {
-                                        'my-header': 'my-header-value'
-                                    },
                                     fields: {
-                                        description: description
+                                        esEntityGID: entityId,
+                                        esDescription: description
                                     },
                                     file: file,
                                 });
@@ -4243,7 +4259,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.3.1";
+    var version = "1.3.2";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -8630,6 +8646,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     title: esCol.title,
                     width: esCol.width,
                     attributes: esCol.attributes,
+                    columnSet: esCol.columnSet,
                     values: esCol.enumValues,
                     dataType: esCol.dataType,
                     hidden: !esCol.visible,
@@ -8702,7 +8719,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         pageSizes: [20, 50, 100, "All"]
                     },
                     sortable: !dsOptions.serverPaging,
-                    scrollable: !dsOptions.serverPaging,
+                    scrollable: true,
                     //selectable: "multiple, cell",
                     //mobile: true,
                     allowCopy: true,
@@ -8776,6 +8793,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 esCol.field = jCol.ColName;
                 esCol.title = jCol.Caption;
                 esCol.odsTag = jCol.ODSTag;
+                esCol.columnSet = parseInt(jCol.ColumnSet);
                 esCol.dataType = jCol.DataTypeName ? jCol.DataTypeName.toLowerCase() : undefined;
                 esCol.editType = jCol.EditType;
 
@@ -8806,7 +8824,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     var l1 = _.sortBy(_.filter(gridexInfo.ValueList, function(x) {
                         var v = x.ColName == jCol.ColName;
                         v = v && (typeof x.Value != 'undefined');
-                        v = v && x.fFilterID == inFilterID;
+                        v = v && x.fFilterID.toLowerCase() == inFilterID;
                         return v;
                     }), function(x) {
                         return !isNaN(x.Value) ? parseInt(x.Value) : null;
@@ -9150,7 +9168,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 var z2 = _.map(_.filter(gridexInfo.LayoutColumn, function(y) {
                     return (y.fFilterID.toLowerCase() == fId) && (y.DataTypeName != "Guid");
                 }), function(x) {
-                    return winColToESCol(inGroupID, inFilterID, gridexInfo, x);
+                    return winColToESCol(inGroupID, fId, gridexInfo, x);
                 });
 
 
@@ -9169,17 +9187,32 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 esGridInfo.rootTable = filterInfo.RootTable;
                 esGridInfo.selectedMasterTable = filterInfo.SelectedMasterTable;
                 esGridInfo.selectedMasterField = filterInfo.SelectedMasterField;
-                esGridInfo.columnSets = _.map(_.filter(filterInfo.LayoutColumnSet, function(x) {
+                esGridInfo.columnSets = _.sortBy(_.map(_.filter(gridexInfo.LayoutColumnSet, function(x) {
                     return x.fFilterID.toLowerCase() == fId;
                 }), function(p) {
                     return {
-                        aa: p.Position,
+                        aa: parseInt(p.Position),
                         title: p.Caption,
-                        width: p.Width,
+                        columns: undefined
                     };
-                });
+                }), 'aa');
 
                 esGridInfo.columns = z3;
+                // now process the column sets
+                // put column sets first
+                if (esGridInfo.columnSets && esGridInfo.columnSets.length > 0) {
+                    var z4 = _.each(esGridInfo.columnSets, function(x) {
+                        x.columns = _.where(z3, {columnSet: x.aa});
+                        z3 = _.difference(z3, x.columns);
+                    });
+
+                    z3 = esGridInfo.columnSets.concat(z3);
+                    esGridInfo.columns = z3;
+
+                } else {
+                    // No column sets defined, so just list the columns
+                    esGridInfo.columns = z3;
+                }
 
                 esGridInfo.params = new ESParamsDefinitions(esGridInfo.caption, _.map(gridexInfo.Param, function(p) {
                     return winParamInfoToesParamInfo(p, gridexInfo);

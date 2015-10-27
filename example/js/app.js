@@ -38,6 +38,10 @@
                     templateUrl: 'webpq.html',
                     controller: 'webpqCtrl'
                 })
+                .when('/masdetpq', {
+                    templateUrl: 'masdetpq.html',
+                    controller: 'masdetpqCtrl'
+                })
                 .when('/examples', {
                     templateUrl: 'examples.html',
                     controller: 'examplesCtrl'

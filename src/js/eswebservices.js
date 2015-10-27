@@ -3143,7 +3143,10 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 }
 ```
                              */
-                            fetchES00DocumentsByEntityGID: function(entityGID) {
+                            fetchES00DocumentsByEntityGID: function(entityGID, assetPath) {
+
+                                /* When ALP comes back we should change this as a correct implementation 
+
                                 entityGID = entityGID ? entityGID.trim() : "";
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BY_ENTITYGID__, entityGID);
                                 var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "FETCH", entityGID);
@@ -3157,19 +3160,32 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht, tt);
+                                */
+                               
+                               entityGID = entityGID ? entityGID.trim() : "";
+                                var surl = assetPath + "/api/photo";
+                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "FETCH", entityGID);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        esEntityGID: entityGID
+                                    },
+                                    url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
 
                             },
 
-                            addES00Document: function(entity, entityId, description, file, okfunc, errfunc, progressfunc) {
+                            addES00Document: function(entity, entityId, description, file, okfunc, errfunc, progressfunc, assetPath) {
 
                                 file.upload = Upload.upload({
-                                    url: 'http://esrdfiles.azurewebsites.net/api/photo',
+                                    url: assetPath + '/api/photo',
                                     method: 'POST',
-                                    headers: {
-                                        'my-header': 'my-header-value'
-                                    },
                                     fields: {
-                                        description: description
+                                        esEntityGID: entityId,
+                                        esDescription: description
                                     },
                                     file: file,
                                 });

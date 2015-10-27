@@ -1075,6 +1075,7 @@
                     title: esCol.title,
                     width: esCol.width,
                     attributes: esCol.attributes,
+                    columnSet: esCol.columnSet,
                     values: esCol.enumValues,
                     dataType: esCol.dataType,
                     hidden: !esCol.visible,
@@ -1147,7 +1148,7 @@
                         pageSizes: [20, 50, 100, "All"]
                     },
                     sortable: !dsOptions.serverPaging,
-                    scrollable: !dsOptions.serverPaging,
+                    scrollable: true,
                     //selectable: "multiple, cell",
                     //mobile: true,
                     allowCopy: true,
@@ -1221,6 +1222,7 @@
                 esCol.field = jCol.ColName;
                 esCol.title = jCol.Caption;
                 esCol.odsTag = jCol.ODSTag;
+                esCol.columnSet = parseInt(jCol.ColumnSet);
                 esCol.dataType = jCol.DataTypeName ? jCol.DataTypeName.toLowerCase() : undefined;
                 esCol.editType = jCol.EditType;
 
@@ -1251,7 +1253,7 @@
                     var l1 = _.sortBy(_.filter(gridexInfo.ValueList, function(x) {
                         var v = x.ColName == jCol.ColName;
                         v = v && (typeof x.Value != 'undefined');
-                        v = v && x.fFilterID == inFilterID;
+                        v = v && x.fFilterID.toLowerCase() == inFilterID;
                         return v;
                     }), function(x) {
                         return !isNaN(x.Value) ? parseInt(x.Value) : null;
@@ -1595,7 +1597,7 @@
                 var z2 = _.map(_.filter(gridexInfo.LayoutColumn, function(y) {
                     return (y.fFilterID.toLowerCase() == fId) && (y.DataTypeName != "Guid");
                 }), function(x) {
-                    return winColToESCol(inGroupID, inFilterID, gridexInfo, x);
+                    return winColToESCol(inGroupID, fId, gridexInfo, x);
                 });
 
 
@@ -1614,17 +1616,32 @@
                 esGridInfo.rootTable = filterInfo.RootTable;
                 esGridInfo.selectedMasterTable = filterInfo.SelectedMasterTable;
                 esGridInfo.selectedMasterField = filterInfo.SelectedMasterField;
-                esGridInfo.columnSets = _.map(_.filter(filterInfo.LayoutColumnSet, function(x) {
+                esGridInfo.columnSets = _.sortBy(_.map(_.filter(gridexInfo.LayoutColumnSet, function(x) {
                     return x.fFilterID.toLowerCase() == fId;
                 }), function(p) {
                     return {
-                        aa: p.Position,
+                        aa: parseInt(p.Position),
                         title: p.Caption,
-                        width: p.Width,
+                        columns: undefined
                     };
-                });
+                }), 'aa');
 
                 esGridInfo.columns = z3;
+                // now process the column sets
+                // put column sets first
+                if (esGridInfo.columnSets && esGridInfo.columnSets.length > 0) {
+                    var z4 = _.each(esGridInfo.columnSets, function(x) {
+                        x.columns = _.where(z3, {columnSet: x.aa});
+                        z3 = _.difference(z3, x.columns);
+                    });
+
+                    z3 = esGridInfo.columnSets.concat(z3);
+                    esGridInfo.columns = z3;
+
+                } else {
+                    // No column sets defined, so just list the columns
+                    esGridInfo.columns = z3;
+                }
 
                 esGridInfo.params = new ESParamsDefinitions(esGridInfo.caption, _.map(gridexInfo.Param, function(p) {
                     return winParamInfoToesParamInfo(p, gridexInfo);
