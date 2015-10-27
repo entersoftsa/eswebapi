@@ -646,9 +646,10 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
         $scope.webPQOptions = {};
-        $scope.webPQOptions.theGroupId = "ESFICustomer";
-        $scope.webPQOptions.theFilterId = "ESFITradeAccountCustomer_def";
+        $scope.webPQOptions.theGroupId = "ESFIDocumentSales";
+        $scope.webPQOptions.theFilterId = "WebOrdersContext";
         $scope.webPQOptions.theVals = {};
+        $scope.webPQOptions.theVals["ISUDGID"] = new esWebUIHelper.ESParamVal("ISUDGID", "ffff");
         $scope.webPQOptions.theGridOptions = {};
 
         $scope.staticPage = {

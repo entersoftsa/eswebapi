@@ -1,8 +1,15 @@
 <div ng-cloak>
-    <es-web-pq 
+	<div>
+		<label class="control-label es-param-label" uib-tooltip="'Person GID'"
+          tooltip-placement="top"
+          tooltip-trigger="mouseenter">Person GID</label> 
+	<input class="form-control es-param-control" 
+			ng-model="webPQOptions.theVals['ISUDGID'].paramValue"/>
+	</div>
+   <!--  <es-web-pq 
     	es-group-id="webPQOptions.theGroupId" 
     	es-grid-options="webPQOptions.theGridOptions" 
     	es-srv-paging="true" 
     	es-params-values="webPQOptions.theVals" 
-    	es-filter-id="webPQOptions.theFilterId"></es-web-pq>
+    	es-filter-id="webPQOptions.theFilterId"></es-web-pq> -->
 </div>
