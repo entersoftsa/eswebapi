@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.2 - 2015-10-27
+/*! Entersoft Application Server WEB API - v1.3.2 - 2015-10-28
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8141,6 +8141,18 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         this.setParamValues(vals);
     }
 
+    ESParamValues.prototype.merge = function(val) {
+        var x = this;
+        if (val) {
+            for (var prop in val) {
+                if (!x.hasOwnProperty(prop)) {
+                    x[prop] = val[prop];
+                }
+            }
+        }
+        return this;
+    }
+
     ESParamValues.prototype.setParamValues = function(vals) {
         var x = this;
 
@@ -8272,7 +8284,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     _.each(qParams.SchemaColumns, function(col) {
                         var fld = col.field;
                         if (elem[fld] && typeof elem[fld] === "string") {
-                            elem[fld] = kendo.parseDate(elem[fld], "yyyy-MM-ddTHH:mm:ss.fff");
+                            elem[fld] = kendo.parseDate(elem[fld]);
                         }
                     })
                 });
@@ -8574,7 +8586,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
                         .then(function(ret) {
                             var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
-                            $scope.esParamsValues = v.defaultValues;
+                            if ($scope.esParamsValues && ($scope.esParamsValues instanceof ESParamValues)) {
+                                $scope.esParamsValues.merge(v.defaultValues);
+                            } else {
+                                $scope.esParamsValues = v.defaultValues;
+                            }
                             $scope.esParamsDef = v.params;
                             $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
                         });
@@ -8617,7 +8633,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
                                 .function(function(ret) {
                                     var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
-                                    $scope.esParamsValues = v.defaultValues;
+                                    if ($scope.esParamsValues && ($scope.esParamsValues instanceof ESParamValues)) {
+                                        $scope.esParamsValues.merge(v.defaultValues);
+                                    } else {
+                                        $scope.esParamsValues = v.defaultValues;
+                                    }
                                     $scope.esParamsDef = v.params;
                                 });
                         } else {
@@ -9202,7 +9222,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 // put column sets first
                 if (esGridInfo.columnSets && esGridInfo.columnSets.length > 0) {
                     var z4 = _.each(esGridInfo.columnSets, function(x) {
-                        x.columns = _.where(z3, {columnSet: x.aa});
+                        x.columns = _.where(z3, {
+                            columnSet: x.aa
+                        });
                         z3 = _.difference(z3, x.columns);
                     });
 
@@ -9228,6 +9250,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             return ({
+                ESParamValues: ESParamValues,
                 ESParamVal: ESParamVal,
                 ESNumericParamVal: ESNumericParamVal,
                 ESStringParamVal: ESStringParamVal,

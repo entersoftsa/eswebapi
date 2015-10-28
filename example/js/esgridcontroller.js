@@ -584,38 +584,38 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 groupId: "ESGOPerson",
                 filterId: "CRM_Personlist",
                 gridOptions: {},
-                pVals: {}
+                pVals: new esWebUIHelper.ESParamValues()
             },
 
             /* {
                 groupId: "ESTMSocialCRM",
                 filterId: "ESTMSMPersonList",
                 gridOptions: {},
-                pVals: {}
+                pVals: new esWebUIHelper.ESParamValues()
             }, {
                 groupId: "ESMMStockItem",
                 filterId: "StockItemPhotoList",
                 gridOptions: {},
-                pVals: {}
+                pVals: new esWebUIHelper.ESParamValues()
             }, {
                 groupId: "ESFICustomer",
                 filterId: "CS_CollectionPlanning",
                 gridOptions: {},
-                pVals: {}
+                pVals: new esWebUIHelper.ESParamValues()
             },
 
             {
                 groupId: "ESFICustomer",
                 filterId: "ESFITradeAccountCustomer_def",
                 gridOptions: {},
-                pVals: {}
+                pVals: new esWebUIHelper.ESParamValues()
             },
 
             {
                 groupId: "ESMMStockItem",
                 filterId: "ESMMStockItem_def",
                 gridOptions: {},
-                pVals: {}
+                pVals: new esWebUIHelper.ESParamValues()
             },
 
             */
@@ -629,7 +629,7 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
         $scope.webPQOptions = {};
         $scope.webPQOptions.theGroupId = "ESFICustomer";
         $scope.webPQOptions.theFilterId = "ESFITradeAccountCustomer_def";
-        $scope.webPQOptions.theVals = {};
+        $scope.webPQOptions.theVals = new esWebUIHelper.ESParamValues();
         $scope.webPQOptions.theGridOptions = {};
 
         $scope.staticPage = {
@@ -648,9 +648,12 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
         $scope.webPQOptions = {};
         $scope.webPQOptions.theGroupId = "ESFIDocumentSales";
         $scope.webPQOptions.theFilterId = "WebOrdersContext";
-        $scope.webPQOptions.theVals = {};
-        $scope.webPQOptions.theVals["ISUDGID"] = new esWebUIHelper.ESParamVal("ISUDGID", "ffff");
+        $scope.webPQOptions.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID", "68AC6A0F-B1E5-4B54-BC8E-A150FF13D96B")]);
         $scope.webPQOptions.theGridOptions = {};
+
+        $scope.refresh = function() {
+        	$scope.webPQOptions.theGridOptions.dataSource.read();
+        }
 
         $scope.staticPage = {
             serverGrouping: false,
