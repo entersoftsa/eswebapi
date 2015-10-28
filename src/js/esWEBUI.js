@@ -1021,7 +1021,9 @@
                                 $scope.esParamsValues = v.defaultValues;
                             }
                             $scope.esParamsDef = v.params;
-                            $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
+
+                            var p = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
+                            $scope.esGridOptions = angular.extend(p, $scope.esGridOptions);
                         });
                 }
             };
@@ -1169,7 +1171,7 @@
                     },
                     sortable: !dsOptions.serverPaging,
                     scrollable: true,
-                    //selectable: "multiple, cell",
+                    selectable: "row",
                     //mobile: true,
                     allowCopy: true,
                     resizable: true,
