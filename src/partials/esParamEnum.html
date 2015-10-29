@@ -14,7 +14,8 @@
             k-option-label="{ text: 'All', value: null}" 
             k-data-source="::esParamDef.enumList"
             k-value-primitive="true"
-            k-ng-model="esParamVal[esParamDef.id].paramValue">
+            ng-model-options="{getterSetter: true}"
+            ng-model="esParamVal[esParamDef.id].pValue">
     </select> 
 
 

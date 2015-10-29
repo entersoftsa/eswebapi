@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.2 - 2015-10-28
+/*! Entersoft Application Server WEB API - v1.3.2 - 2015-10-29
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7980,6 +7980,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         return this.paramValue;
     };
 
+    ESParamVal.prototype.pValue = function(v) {
+        if (!arguments || arguments.length == 0) {
+            // get
+            return this.paramValue;
+        }
+
+        this.paramValue = arguments[0];
+    }
+
     ESParamVal.prototype.strVal = function() {
         var lst = this.enumList;
         if (!lst || lst.length == 0) {
@@ -8187,6 +8196,71 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
         return ret;
     }
+
+    function ESMasterDetailGridRelation(relationID, detailGridOptions, detailGridParamCode) {
+        this.relationID = relationID;
+        this.detailGridOptions = detailGridOptions;
+        this.detailParamCode = detailGridParamCode;
+    }
+
+    function ESRequeryDetailGrids() {
+        this.registeredRelations = [];
+    }
+
+    ESRequeryDetailGrids.prototype.addDetailRelation = function(relInfo) {
+        if (!relInfo || !(relInfo instanceof ESMasterDetailGridRelation)) {
+            throw "relInfo parameter is null or is not of type ESMasterDetailGridRelation";
+        }
+
+        if (!relInfo.relationID) {
+            throw "The parameter does not contain relationID or is null/emptystring/undefined";
+        }
+
+        var newRelId = relInfo.relationID.toLowerCase();
+        var ix = _.findIndex(this.registeredRelations, function(x) {
+            return x.toLowerCase() == newRelId;
+        });
+        if (ix < 0) {
+            this.registeredRelations.push(relInfo);
+        } else {
+            this.registeredRelations[ix] = relInfo;
+        }
+        return this;
+    }
+
+    ESRequeryDetailGrids.prototype.getDetailRelation = function(relationId) {
+        if (!relationID) {
+            throw "relationID is null/emptystring/undefined";
+        }
+
+        var newRelId = relationID.toLowerCase();
+        var ix = _.findIndex(this.registeredRelations, function(x) {
+            return x.toLowerCase() == newRelId;
+        });
+        if (ix < 0) {
+            return null;
+        } else {
+            return this.registeredRelations[ix];
+        }
+    }
+
+    ESRequeryDetailGrids.prototype.removeDetailRelation = function(relationId) {
+        if (!relationID) {
+            throw "relationID is null/emptystring/undefined";
+        }
+
+        var newRelId = relationID.toLowerCase();
+        var ix = _.findIndex(this.registeredRelations, function(x) {
+            return x.toLowerCase() == newRelId;
+        });
+        if (ix < 0) {
+            return false;
+        } else {
+            this.registeredRelations = this.registeredRelations.splice(ix, 1);
+            return true;
+        }
+    }
+
 
     function prepareStdZoom($log, zoomID, esWebApiService, useCache) {
         var xParam = {
@@ -8412,7 +8486,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
          * In order to instantiate an esGrid with an Angular application, you have to provide the parameters esGroupId and esFilterId are required.
          * These two parameters along with esExecuteParams will be supplied to the {@link es.Web.UI.esUIHelper#methods_esGridInfoToKInfo esToKendoTransform function}
          */
-        .directive('esGrid', ['esWebApi', 'esUIHelper', '$log', function(esWebApiService, esWebUIHelper, $log) {
+        .directive('esGrid', ['esWebApi', 'esUIHelper', '$log', 'esMessaging', function(esWebApiService, esWebUIHelper, $log, esMessaging) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -8500,7 +8574,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             .then(function(ret) {
                                 var p1 = ret.data;
                                 var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
-                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
+                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, esMessaging, $scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
                             });
                     }
                 }
@@ -8559,7 +8633,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
          *
          * 
          */
-        .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
+        .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', 'esCache', function($log, esWebApiService, esWebUIHelper, esMessaging) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -8593,7 +8667,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             }
                             $scope.esParamsDef = v.params;
 
-                            var p = esWebUIHelper.esGridInfoToKInfo(esWebApiService, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
+                            var p = esWebUIHelper.esGridInfoToKInfo(esWebApiService, esMessaging, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
                             $scope.esGridOptions = angular.extend(p, $scope.esGridOptions);
                         });
                 }
@@ -8726,7 +8800,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return tCol;
             }
 
-            function esGridInfoToKInfo(esWebApiService, esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
+            function esGridInfoToKInfo(esWebApiService, esMessaging, esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
                 var dsOptions = {
                     serverGrouping: false,
                     serverSorting: false,
@@ -8791,6 +8865,17 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         }),
                     }
                 }, dsOptions);
+
+                grdopt.change = function(e) {
+                    var selectedRows = this.select();
+                    if (selectedRows && selectedRows.length == 1) {
+                        //sme mas-det
+                        var gid = this.dataItem(selectedRows[0])["GID"];
+                        if (gid) {
+                            esMessaging.publish("GRID_ROW_CHANGE", e, selectedRows[0], gid);
+                        }
+                    }
+                };
 
                 return grdopt;
             }
@@ -9257,6 +9342,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 ESNumericParamVal: ESNumericParamVal,
                 ESStringParamVal: ESStringParamVal,
                 ESDateParamVal: ESDateParamVal,
+                ESRequeryDetailGrids: ESRequeryDetailGrids,
+                ESMasterDetailGridRelation: ESMasterDetailGridRelation,
+
 
                 /**
                  * @ngdoc function

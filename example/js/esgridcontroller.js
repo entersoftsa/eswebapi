@@ -643,14 +643,24 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
 
 smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+    	$scope.detailOptions = {};
+        $scope.detailOptions.theGroupId = "ESFIDocumentSales";
+        $scope.detailOptions.theFilterId = "WebOrdersContext";
+        $scope.detailOptions.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID", "68AC6A0F-B1E5-4B54-BC8E-A150FF13D96B")]);
+        $scope.detailOptions.theGridOptions = {};
+
+    	var mds = new esWebUIHelper.ESRequeryDetailGrids();
+    	mds.addDetailRelation(new esWebUIHelper.ESMasterDetailGridRelation("abcd", $scope.detailOptions, "ISUDGID"));
 
         $scope.masterOptions = {};
         $scope.masterOptions.theGroupId = "ESGOPerson";
         $scope.masterOptions.theFilterId = "CRM_Personlist";
         $scope.masterOptions.theVals = null;
         $scope.masterOptions.theGridOptions = {
+        	masterDetailRelations: mds,
+        	
         	dataBinding: function(e) {
-        		$scope.detailOptions.theVals["ISUDGID"].paramValue = "";
+        		$scope.detailOptions.theVals["ISUDGID"].pValue('');
                 $scope.detailOptions.theGridOptions.dataSource.read();
         	},
             change: function(e) {
@@ -658,7 +668,7 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
                 if (selectedRows && selectedRows.length == 1) {
                 	var gid = this.dataItem(selectedRows[0])["GID"];
                 	if (gid) {
-                		$scope.detailOptions.theVals["ISUDGID"].paramValue = gid;
+                		$scope.detailOptions.theVals["ISUDGID"].pValue(gid);
                 		$scope.detailOptions.theGridOptions.dataSource.read();
                 	}
                 }
@@ -666,12 +676,7 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
             }
         };
 
-        $scope.detailOptions = {};
-        $scope.detailOptions.theGroupId = "ESFIDocumentSales";
-        $scope.detailOptions.theFilterId = "WebOrdersContext";
-        $scope.detailOptions.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID", "68AC6A0F-B1E5-4B54-BC8E-A150FF13D96B")]);
-        $scope.detailOptions.theGridOptions = {};
-
+        
         $scope.refresh = function() {
             $scope.detailOptions.theGridOptions.dataSource.read();
         }

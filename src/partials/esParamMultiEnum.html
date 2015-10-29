@@ -14,5 +14,6 @@
     k-auto-bind="false" 
     k-value-primitive="true"
     k-data-source="esParamDef.enumList" 
-    k-ng-model="esParamVal[esParamDef.id].paramValue">
+    ng-model-options="{getterSetter: true}"
+    ng-model="esParamVal[esParamDef.id].pValue">
 </select>

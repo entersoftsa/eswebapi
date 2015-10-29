@@ -6,4 +6,5 @@
 			name="{{::esParamDef.id}}"
 			ng-required="::esParamDef.required"
 			k-mask="::esParamDef.formatString"
-			ng-model="esParamVal[esParamDef.id].paramValue"/>
+			ng-model-options="{getterSetter: true}"
+			ng-model="esParamVal[esParamDef.id].pValue"/>
