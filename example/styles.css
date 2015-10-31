@@ -24,6 +24,9 @@ input.es-param-control,
     width: 100%;
 }
 
+.es-param-label {
+	text-overflow: ellipsis;
+}
 
 /* Make all the column headers centered */
 

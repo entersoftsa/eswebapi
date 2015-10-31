@@ -646,11 +646,18 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
     	$scope.detailOptions = {};
         $scope.detailOptions.theGroupId = "ESFIDocumentSales";
         $scope.detailOptions.theFilterId = "WebOrdersContext";
-        $scope.detailOptions.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID", "68AC6A0F-B1E5-4B54-BC8E-A150FF13D96B")]);
+        $scope.detailOptions.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID")]);
         $scope.detailOptions.theGridOptions = {};
 
+        $scope.detail2Options = {};
+        $scope.detail2Options.theGroupId = "ESTMSALESACTIVITIES";
+        $scope.detail2Options.theFilterId = "ContextSalesActs";
+        $scope.detail2Options.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID", "")]);
+        $scope.detail2Options.theGridOptions = {};
+
     	var mds = new esWebUIHelper.ESRequeryDetailGrids();
-    	mds.addDetailRelation(new esWebUIHelper.ESMasterDetailGridRelation("abcd", $scope.detailOptions, "ISUDGID"));
+    	mds.addDetailRelation(new esWebUIHelper.ESMasterDetailGridRelation("abcd", function() { return $scope.detailOptions.theGridOptions.dataSource;}, function() {return $scope.detailOptions.theVals;}, "ISUDGID"));
+    	mds.addDetailRelation(new esWebUIHelper.ESMasterDetailGridRelation("xyz", function() { return $scope.detail2Options.theGridOptions.dataSource;}, function() {return $scope.detail2Options.theVals;}));
 
         $scope.masterOptions = {};
         $scope.masterOptions.theGroupId = "ESGOPerson";
@@ -658,22 +665,6 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
         $scope.masterOptions.theVals = null;
         $scope.masterOptions.theGridOptions = {
         	masterDetailRelations: mds,
-        	
-        	dataBinding: function(e) {
-        		$scope.detailOptions.theVals["ISUDGID"].pValue('');
-                $scope.detailOptions.theGridOptions.dataSource.read();
-        	},
-            change: function(e) {
-                var selectedRows = this.select();
-                if (selectedRows && selectedRows.length == 1) {
-                	var gid = this.dataItem(selectedRows[0])["GID"];
-                	if (gid) {
-                		$scope.detailOptions.theVals["ISUDGID"].pValue(gid);
-                		$scope.detailOptions.theGridOptions.dataSource.read();
-                	}
-                }
-                
-            }
         };
 
         

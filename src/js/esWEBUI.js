@@ -415,7 +415,12 @@
             return this.paramValue;
         }
 
+        if (this.paramValue === arguments[0]) {
+            return false;
+        }
+
         this.paramValue = arguments[0];
+        return true;
     }
 
     ESParamVal.prototype.strVal = function() {
@@ -626,10 +631,11 @@
         return ret;
     }
 
-    function ESMasterDetailGridRelation(relationID, detailGridOptions, detailGridParamCode) {
+    function ESMasterDetailGridRelation(relationID, detailDataSource, detailParams, detailGridParamCode) {
         this.relationID = relationID;
-        this.detailGridOptions = detailGridOptions;
-        this.detailParamCode = detailGridParamCode;
+        this.detailDataSource = detailDataSource;
+        this.detailParams = detailParams;
+        this.detailParamCode = detailGridParamCode || "ISUDGID";
     }
 
     function ESRequeryDetailGrids() {
@@ -647,7 +653,7 @@
 
         var newRelId = relInfo.relationID.toLowerCase();
         var ix = _.findIndex(this.registeredRelations, function(x) {
-            return x.toLowerCase() == newRelId;
+            return x.relationID.toLowerCase() == newRelId;
         });
         if (ix < 0) {
             this.registeredRelations.push(relInfo);
@@ -915,7 +921,7 @@
          * In order to instantiate an esGrid with an Angular application, you have to provide the parameters esGroupId and esFilterId are required.
          * These two parameters along with esExecuteParams will be supplied to the {@link es.Web.UI.esUIHelper#methods_esGridInfoToKInfo esToKendoTransform function}
          */
-        .directive('esGrid', ['esWebApi', 'esUIHelper', '$log', 'esMessaging', function(esWebApiService, esWebUIHelper, $log, esMessaging) {
+        .directive('esGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', function($log, esWebApiService, esMessaging, esWebUIHelper) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -1062,7 +1068,7 @@
          *
          * 
          */
-        .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', 'esCache', function($log, esWebApiService, esWebUIHelper, esMessaging) {
+        .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', 'esMessaging', function($log, esWebApiService, esWebUIHelper, esMessaging) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -1162,8 +1168,8 @@
      * of schema model for a web grid to show the results of a PQ, Entersoft PQ Parameters meta-data manipulation , etc.
      * yh
      */
-    esWEBUI.factory('esUIHelper', ['esWebApi', '$log',
-        function(esWebApiService, $log) {
+    esWEBUI.factory('esUIHelper', ['$log', '$timeout', 'esMessaging', 'esWebApi',
+        function($log, $timeout, esMessaging, esWebApiService) {
 
             function esColToKCol(esCol) {
                 var tCol = {
@@ -1228,6 +1234,39 @@
                 }
                 return tCol;
             }
+
+            function handleChangeGridRow(e) {
+                var selectedRows = this.select();
+                var isSelected = false;
+                var gid = null;
+                if (selectedRows && selectedRows.length == 1) {
+                    //sme mas-det
+                    gid = this.dataItem(selectedRows[0])["GID"];
+                    isSelected = true;
+                }
+
+                if (this.options.masterDetailRelations) {
+                    if (!(this.options.masterDetailRelations instanceof ESRequeryDetailGrids)) {
+                        throw "masterDetailRelations should be of type ESRequeryDetailGrids";
+                    }
+
+                    _.each(this.options.masterDetailRelations.registeredRelations, function(elem) {
+                        if (elem instanceof ESMasterDetailGridRelation) {
+                            $timeout(function() {
+                                var params = elem.detailParams();
+                                var ds = elem.detailDataSource();
+                                if (ds && params && params[elem.detailParamCode]) {
+                                    if (params[elem.detailParamCode].pValue(gid)) {
+                                        ds.read();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+                esMessaging.publish("GRID_ROW_CHANGE", e, isSelected ? selectedRows[0] : null, gid);
+            }
+
 
             function esGridInfoToKInfo(esWebApiService, esMessaging, esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
                 var dsOptions = {
@@ -1295,16 +1334,8 @@
                     }
                 }, dsOptions);
 
-                grdopt.change = function(e) {
-                    var selectedRows = this.select();
-                    if (selectedRows && selectedRows.length == 1) {
-                        //sme mas-det
-                        var gid = this.dataItem(selectedRows[0])["GID"];
-                        if (gid) {
-                            esMessaging.publish("GRID_ROW_CHANGE", e, selectedRows[0], gid);
-                        }
-                    }
-                };
+                grdopt.change = handleChangeGridRow;
+                grdopt.dataBound = handleChangeGridRow;
 
                 return grdopt;
             }
