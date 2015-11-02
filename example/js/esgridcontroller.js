@@ -250,7 +250,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
                     // This is the kendo-grid based layout ready to be assigned to kendo-grid options attribute for rendering the results
                     // and for executing the corresponding Public Query
-                    $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApi, $scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
+                    $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
                 }, function(err, status) {
                     alert(a.UserMessage || a.MessageID || "Generic Error");
                 });
@@ -652,7 +652,7 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
         $scope.detail2Options = {};
         $scope.detail2Options.theGroupId = "ESTMSALESACTIVITIES";
         $scope.detail2Options.theFilterId = "ContextSalesActs";
-        $scope.detail2Options.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID", "")]);
+        $scope.detail2Options.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID")]);
         $scope.detail2Options.theGridOptions = {};
 
     	var mds = new esWebUIHelper.ESRequeryDetailGrids();

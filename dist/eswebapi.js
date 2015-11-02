@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.2 - 2015-10-30
+/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-01
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8268,120 +8268,42 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
     }
 
 
-    function prepareStdZoom($log, zoomID, esWebApiService, useCache) {
-        var xParam = {
-            transport: {
-                read: function(options) {
+    /*
+        function prepareStdZoom($log, zoomID, esWebApiService, useCache) {
+            var xParam = {
+                transport: {
+                    read: function(options) {
 
-                    $log.info("FETCHing ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
+                        $log.info("FETCHing ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
 
-                    var pqOptions = {};
-                    esWebApiService.fetchStdZoom(zoomID, pqOptions, useCache)
-                        .then(function(ret) {
-                            var pq = ret.data;
+                        var pqOptions = {};
+                        esWebApiService.fetchStdZoom(zoomID, pqOptions, useCache)
+                            .then(function(ret) {
+                                var pq = ret.data;
 
-                            // SME CHANGE THIS ONCE WE HAVE CORRECT PQ
-                            if (pq.Count == -1) {
-                                pq.Count = pq.Rows ? pq.Rows.length : 0;
-                            }
-                            // END tackling
+                                // SME CHANGE THIS ONCE WE HAVE CORRECT PQ
+                                if (pq.Count == -1) {
+                                    pq.Count = pq.Rows ? pq.Rows.length : 0;
+                                }
+                                // END tackling
 
-                            options.success(pq);
-                            $log.info("FETCHed ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
-                        }, function(err) {
-                            options.error(err);
-                        });
-                }
-
-            },
-            schema: {
-                data: "Rows",
-                total: "Count"
-            }
-        }
-        return new kendo.data.DataSource(xParam);
-    }
-
-
-    function prepareWebScroller(dsType, esWebApiService, $log, espqParams, esOptions) {
-        var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
-
-
-        var xParam = {
-            transport: {
-                read: function(options) {
-
-                    $log.info("FETCHing PQ with PQParams ", JSON.stringify(qParams), " and gridoptions ", JSON.stringify(options));
-
-                    var pqOptions = {};
-                    if (options.data && options.data.page && options.data.pageSize) {
-                        pqOptions.WithCount = true;
-                        pqOptions.Page = options.data.page;
-                        pqOptions.PageSize = options.data.pageSize
+                                options.success(pq);
+                                $log.info("FETCHed ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
+                            }, function(err) {
+                                options.error(err);
+                            });
                     }
 
-                    var executeParams = qParams.Params;
-                    if (executeParams instanceof ESParamValues) {
-                        executeParams = executeParams.getExecuteVals();
-                    }
-
-
-                    esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
-                        .success(function(pq) {
-
-                            if (!angular.isDefined(pq.Rows)) {
-                                pq.Rows = [];
-                                pq.Count = 0;
-                            }
-
-                            if (!angular.isDefined(pq.Count)) {
-                                pq.Count = -1;
-                            }
-
-                            options.success(pq);
-                            $log.info("FETCHed PQ with PQParams ", JSON.stringify(executeParams), " and gridoptions ", JSON.stringify(options));
-                        })
-                        .error(function(err) {
-                            $log.error("Error in DataSource ", err);
-                            options.error(err);
-                        });
                 },
-
-            },
-            requestStart: function(e) {
-                $log.info("request started ", e);
-            },
-
-            schema: {
-                data: "Rows",
-                total: "Count",
+                schema: {
+                    data: "Rows",
+                    total: "Count"
+                }
             }
-        }
-
-        if (qParams && qParams.SchemaColumns && qParams.SchemaColumns.length) {
-            xParam.schema.parse = function(response) {
-                _.each(response.Rows, function(elem) {
-                    _.each(qParams.SchemaColumns, function(col) {
-                        var fld = col.field;
-                        if (elem[fld] && typeof elem[fld] === "string") {
-                            elem[fld] = kendo.parseDate(elem[fld]);
-                        }
-                    })
-                });
-                return response;
-            }
-        }
-
-        if (esOptions) {
-            angular.extend(xParam, esOptions);
-        }
-
-        if (dsType && dsType === "pivot") {
-            return new kendo.data.PivotDataSource(xParam);
-        } else {
             return new kendo.data.DataSource(xParam);
         }
-    }
+
+    */
 
     /**
      * @ngdoc filter
@@ -8580,7 +8502,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             .then(function(ret) {
                                 var p1 = ret.data;
                                 var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
-                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApiService, esMessaging, $scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
+                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
                             });
                     }
                 }
@@ -8615,15 +8537,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     $scope.esWebApiService = esWebApiService;
 
                     if ($scope.esParamDef.invSelectedMasterTable) {
-                        $scope.esParamLookupDS = prepareStdZoom($log, $scope.esParamDef.invSelectedMasterTable, esWebApiService);
+                        $scope.esParamLookupDS = esWebUIHelper.getZoomDataSource($scope.esParamDef.invSelectedMasterTable);
                     }
 
                     // Case Date Range
                     if ($scope.esParamDef.controlType == 6 || $scope.esParamDef.controlType == 20) {
                         $scope.dateRangeOptions = esWebUIHelper.getesDateRangeOptions($scope.esParamDef.controlType);
-                        $scope.dateRangeResolution = function() {
-                            return "Hello World, I am parameter " + $scope.esParamDef.caption;
-                        }
                     }
                 }
             };
@@ -8673,7 +8592,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             }
                             $scope.esParamsDef = v.params;
 
-                            var p = esWebUIHelper.esGridInfoToKInfo(esWebApiService, esMessaging, $scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
+                            var p = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
                             $scope.esGridOptions = angular.extend(p, $scope.esGridOptions);
                         });
                 }
@@ -8809,7 +8728,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             function handleChangeGridRow(e) {
                 var selectedRows = this.select();
                 var isSelected = false;
-                var gid = null;
+                var gid = undefined;
                 if (selectedRows && selectedRows.length == 1) {
                     //sme mas-det
                     gid = this.dataItem(selectedRows[0])["GID"];
@@ -8838,8 +8757,123 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 esMessaging.publish("GRID_ROW_CHANGE", e, isSelected ? selectedRows[0] : null, gid);
             }
 
+            function prepareStdZoom(zoomID, useCache) {
+                var xParam = {
+                    transport: {
+                        read: function(options) {
 
-            function esGridInfoToKInfo(esWebApiService, esMessaging, esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
+                            $log.info("FETCHing ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
+
+                            var pqOptions = {};
+                            esWebApiService.fetchStdZoom(zoomID, pqOptions, useCache)
+                                .then(function(ret) {
+                                    var pq = ret.data;
+
+                                    // SME CHANGE THIS ONCE WE HAVE CORRECT PQ
+                                    if (pq.Count == -1) {
+                                        pq.Count = pq.Rows ? pq.Rows.length : 0;
+                                    }
+                                    // END tackling
+
+                                    options.success(pq);
+                                    $log.info("FETCHed ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
+                                }, function(err) {
+                                    options.error(err);
+                                });
+                        }
+
+                    },
+                    schema: {
+                        data: "Rows",
+                        total: "Count"
+                    }
+                }
+                return new kendo.data.DataSource(xParam);
+            }
+
+
+            function prepareWebScroller(dsType, espqParams, esOptions) {
+                var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
+
+
+                var xParam = {
+                    transport: {
+                        read: function(options) {
+
+                            $log.info("FETCHing PQ with PQParams ", JSON.stringify(qParams), " and gridoptions ", JSON.stringify(options));
+
+                            var pqOptions = {};
+                            if (options.data && options.data.page && options.data.pageSize) {
+                                pqOptions.WithCount = true;
+                                pqOptions.Page = options.data.page;
+                                pqOptions.PageSize = options.data.pageSize
+                            }
+
+                            var executeParams = qParams.Params;
+                            if (executeParams instanceof ESParamValues) {
+                                executeParams = executeParams.getExecuteVals();
+                            }
+
+
+                            esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
+                                .success(function(pq) {
+
+                                    if (!angular.isDefined(pq.Rows)) {
+                                        pq.Rows = [];
+                                        pq.Count = 0;
+                                    }
+
+                                    if (!angular.isDefined(pq.Count)) {
+                                        pq.Count = -1;
+                                    }
+
+                                    options.success(pq);
+                                    $log.info("FETCHed PQ with PQParams ", JSON.stringify(executeParams), " and gridoptions ", JSON.stringify(options));
+                                })
+                                .error(function(err) {
+                                    $log.error("Error in DataSource ", err);
+                                    options.error(err);
+                                });
+                        },
+
+                    },
+                    requestStart: function(e) {
+                        $log.info("request started ", e);
+                    },
+
+                    schema: {
+                        data: "Rows",
+                        total: "Count",
+                    }
+                }
+
+                if (qParams && qParams.SchemaColumns && qParams.SchemaColumns.length) {
+                    xParam.schema.parse = function(response) {
+                        _.each(response.Rows, function(elem) {
+                            _.each(qParams.SchemaColumns, function(col) {
+                                var fld = col.field;
+                                if (elem[fld] && typeof elem[fld] === "string") {
+                                    elem[fld] = kendo.parseDate(elem[fld]);
+                                }
+                            })
+                        });
+                        return response;
+                    }
+                }
+
+                if (esOptions) {
+                    angular.extend(xParam, esOptions);
+                }
+
+                if (dsType && dsType === "pivot") {
+                    return new kendo.data.PivotDataSource(xParam);
+                } else {
+                    return new kendo.data.DataSource(xParam);
+                }
+            }
+
+
+            function esGridInfoToKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
                 var dsOptions = {
                     serverGrouping: false,
                     serverSorting: false,
@@ -8872,7 +8906,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             name: "run",
                             text: "Run",
                             template: "<a class=\"btn btn-primary\" ng-click=\"esGridRun()\">Run</a>"
-                        }, {
+                        }, 
+                        
+                        {
                             name: "print",
                             text: "Print",
                             template: "<a class=\"k-button btn btn-primary\" ng-click=\"esGridPrint()\">Print</a>"
@@ -8894,7 +8930,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 grdopt.columns = esGridInfo.columns;
                 grdopt.columnMenu = true;
 
-                grdopt.dataSource = prepareWebScroller(null, esWebApiService, $log, function() {
+                grdopt.dataSource = prepareWebScroller(null, function() {
                     return {
                         GroupID: esGroupId,
                         FilterID: esFilterId,
@@ -10119,7 +10155,6 @@ var esgridInfo = esUIHelper.winGridInfoToESGridInfo(inGroupID, inFilterID, gride
                  * @kind function
                  * @description  This function processes and transforms an {@link es.Web.UI.esUIHelper#methods_winGridInfoToESGridInfo esgridInfo} object (abstract definition of gridexInfo)
                  * to a Telerik kendo-grid layout definition object.
-                 * @param {service} esWebApiService The {@link es.Services.Web.esWebApi esWebApi Service}.
                  * @param {string} inGroupID The Entersoft PQ (or Scroller) GroupID the the gridexInfo object describes
                  * @param {string} inFilterID The Entersoft PQ (or Scroller) FilterID the the gridexInfo object describes
                  * @param {object} executeParams The object that will hold or alread holds the values of the Entersoft Public Query Paramters i.e. the object
@@ -10148,7 +10183,7 @@ $scope.fetchPQInfo = function() {
 
             // This is the kendo-grid based layout ready to be assigned to kendo-grid options attribute for rendering the results
             // and for executing the corresponding Public Query
-            $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo(esWebApi, $scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
+            $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
         }, function(err, status) {
             alert(a.UserMessage || a.MessageID || "Generic Error");
         });
