@@ -1336,13 +1336,14 @@
                             text: "Run",
                             template: "<a class='k-button' ng-click=\"esGridRun()\">Run</a>"
                         }, 
-                        
+                        /*
                         {
                             name: "print",
                             text: "Print",
                             template: "<a class='k-button' ng-click=\"esGridPrint()\">Print</a>"
                         },
                         "pdf",
+                        */
                         "excel"
                     ],
                     pdf: {

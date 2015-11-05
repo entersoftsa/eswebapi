@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-04
+/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-05
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9000,13 +9000,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             text: "Run",
                             template: "<a class='k-button' ng-click=\"esGridRun()\">Run</a>"
                         }, 
-                        
+                        /*
                         {
                             name: "print",
                             text: "Print",
                             template: "<a class='k-button' ng-click=\"esGridPrint()\">Print</a>"
                         },
                         "pdf",
+                        */
                         "excel"
                     ],
                     pdf: {
