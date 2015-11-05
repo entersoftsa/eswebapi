@@ -1334,13 +1334,13 @@
                     toolbar: [{
                             name: "run",
                             text: "Run",
-                            template: "<a class=\"btn btn-primary\" ng-click=\"esGridRun()\">Run</a>"
+                            template: "<a class='k-button' ng-click=\"esGridRun()\">Run</a>"
                         }, 
                         
                         {
                             name: "print",
                             text: "Print",
-                            template: "<a class=\"k-button btn btn-primary\" ng-click=\"esGridPrint()\">Print</a>"
+                            template: "<a class='k-button' ng-click=\"esGridPrint()\">Print</a>"
                         },
                         "pdf",
                         "excel"

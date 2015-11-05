@@ -235,7 +235,15 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                 myFile.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             };
 
-            esWebApi.addES00Document("abcd", "fff", $scope.username, myFile, okf, errf, progressf, 'http://localhost/esdocs');
+            var doc = {
+                "GID": "3536eaa3-6c67-4d15-a8d9-3519711969c9",
+                "Title": "Hello File",
+                "Description": $scope.username,
+                "Caption": "Tehcnical Guide for Hello File",
+                "OriginalFN": "xxx.pdf"
+            };
+
+            esWebApi.addES00Document(doc, myFile, okf, errf, progressf);
         }
 
         //fetchPublicQueryInfo sample
@@ -272,7 +280,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                 Name: "ao*"
             };
 
-            esWebApi.fetchPublicQuery(group, filter, pqOptions, pqParams)
+            esWebApi.fetchPublicQuery(group, filter, pqOptions, pqParams, 'POST')
                 .then(function(ret) {
                         $scope.pqResult = ret.data;
                         $log.info(ret);
@@ -383,7 +391,30 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
         // fetchCompanyParam
         $scope.fetchCompanyParam = function() {
-            esWebApi.fetchCompanyParam($scope.pCompanyParam)
+            var pqParams = [{
+                    GroupID: "ESGOPerson",
+                    FilterID: "CRM_Personlist",
+                    Params: {
+                        Name: "εντ*"
+                    }
+                },
+
+                {
+                    GroupID: "bnm",
+                    FilterID: "uio",
+                    Params: {
+                        Name: "ao*",
+                        Code: "haha"
+                    }
+                }
+            ];
+
+            var p2 = {
+                list: pqParams
+            };
+
+            //esWebApi.fetchCompanyParam($scope.pCompanyParam)
+            esWebApi.multiPublicQuery(pqParams)
                 .then(function(x) {
                         $scope.pCompanyParamValue = x.data;
                     },
@@ -643,7 +674,7 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
 
 smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
-    	$scope.detailOptions = {};
+        $scope.detailOptions = {};
         $scope.detailOptions.theGroupId = "ESFIDocumentSales";
         $scope.detailOptions.theFilterId = "WebOrdersContext";
         $scope.detailOptions.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID")]);
@@ -655,19 +686,27 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
         $scope.detail2Options.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID")]);
         $scope.detail2Options.theGridOptions = {};
 
-    	var mds = new esWebUIHelper.ESRequeryDetailGrids();
-    	mds.addDetailRelation(new esWebUIHelper.ESMasterDetailGridRelation("abcd", function() { return $scope.detailOptions.theGridOptions.dataSource;}, function() {return $scope.detailOptions.theVals;}, "ISUDGID"));
-    	mds.addDetailRelation(new esWebUIHelper.ESMasterDetailGridRelation("xyz", function() { return $scope.detail2Options.theGridOptions.dataSource;}, function() {return $scope.detail2Options.theVals;}));
+        var mds = new esWebUIHelper.ESRequeryDetailGrids();
+        mds.addDetailRelation(new esWebUIHelper.ESMasterDetailGridRelation("abcd", function() {
+            return $scope.detailOptions.theGridOptions.dataSource;
+        }, function() {
+            return $scope.detailOptions.theVals;
+        }, "ISUDGID"));
+        mds.addDetailRelation(new esWebUIHelper.ESMasterDetailGridRelation("xyz", function() {
+            return $scope.detail2Options.theGridOptions.dataSource;
+        }, function() {
+            return $scope.detail2Options.theVals;
+        }));
 
         $scope.masterOptions = {};
         $scope.masterOptions.theGroupId = "ESGOPerson";
         $scope.masterOptions.theFilterId = "CRM_Personlist";
         $scope.masterOptions.theVals = null;
         $scope.masterOptions.theGridOptions = {
-        	masterDetailRelations: mds,
+            masterDetailRelations: mds,
         };
 
-        
+
         $scope.refresh = function() {
             $scope.detailOptions.theGridOptions.dataSource.read();
         }

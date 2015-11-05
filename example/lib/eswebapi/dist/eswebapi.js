@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-01
+/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-04
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -31,6 +31,7 @@
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login",
         __PUBLICQUERY__: "api/rpc/PublicQuery/",
+        __MULTI_PULIC_QUERY__: "api/rpc/MultiPublicQuery/",
         __PUBLICQUERY_INFO__: "api/rpc/PublicQueryInfo/",
         __USERSITES__: "api/Login/Usersites",
         __STANDARD_ZOOM__: "api/rpc/FetchStdZoom/",
@@ -56,6 +57,7 @@
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
         __FETCH_ES00DOCUMENT_BY_ENTITYGID__: "api/ES00Documents/InfoByEntityGid/",
         __FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__: "api/ES00Documents/BlobDataByGID/",
+        __ADD_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/addES00DocumentBlobData/",
     });
 
     esWebServices.value("__WEBAPI_RT__", {
@@ -777,7 +779,7 @@ $scope.fetchCompanyParams = function() {
 };
 ```
 */
-                            fetchCompanyParams: function(esparams) {
+                                fetchCompanyParams: function(esparams) {
                                 var surl;
                                 if (!esparams) {
                                     // get all parameters
@@ -2488,7 +2490,7 @@ function($scope, esWebApi, esWebUIHelper) {
                                         if (useCache) {
                                             esCache.setItem(surl, ret);
                                         }
-                                        
+
                                         deferred.resolve(ret);
 
                                     }, function() {
@@ -2825,6 +2827,88 @@ $scope.dofetchPublicQuery = function() {
                                 return processWEBAPIPromise(ht, tt);
                             },
 
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#multiPublicQuery
+                             * @methodOf es.Services.Web.esWebApi
+                             * @module es.Services.Web
+                             * @kind function
+                             * @description multiPublicQuery is similar to the {@link es.Services.Web.esWebApi#methods_fetchPublicQuery fetchPublicQuery} with the difference 
+                             * that it supports for multiple public queries execution with just one round-trip to the Entersoft WEB API Server and to the Entersoft
+                             * Application Server.
+                             * @param {object[]} pqDefs An array of one or more public query defintion objects that are to be executed to the server.
+                             * The object has the following structure:
+```js
+{
+    GroupID: //string representing the GroupIF of the Public Query,
+    FilterID: //string representing the FilterID of the Public Query,
+    Params: // object the params to be used for the execution of the Public Query
+    PQOptions: // the paging options for the Public Query Execution.
+}
+```
+                             * @return {MultPublicQueryResult[]} An array of equal size to the _pqDefs_ of objects each one of which holds the results of the 
+                             * corresponding public query. The structure of the MultPublicQueryResult object is as follows:
+```js
+{
+    GroupID: //string representing the GroupIF of the Public Query,
+    FilterID: //string representing the FilterID of the Public Query,
+    PQResults: // string that should be parsed by JSON.parse that holds the results of the Public Query,
+    Error: // string if null or undefined or empty string means that the specific Public Query was executed with no errors. Ohterwise, an error has occurred 
+    and the PQResults will be null or undefined.
+}```
+                             * @example
+```js
+var pqParams = [{
+        GroupID: "ESGOPerson",
+        FilterID: "CRM_Personlist",
+        Params: {
+            Name: "εντ*"
+        }
+    },
+
+    {
+        GroupID: "notdefined",
+        FilterID: "not exists",
+        Params: {
+            Name: "ao*",
+            Code: "noname"
+        }
+    }
+];
+
+esWebApi.MultiPublicQuery(pqParams)
+    .then(function(x) {
+            $scope.ret = x.data;
+        },
+        function(err) {
+            $scope.pCompanyParamValue = JSON.stringify(err);
+        });
+}
+```
+                             **/
+                            multiPublicQuery: function(pqDefs) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__MULTI_PULIC_QUERY__);
+                                var tt = esGlobals.trackTimer("MULTI-PQ", "FETCH", "");
+                                tt.startTime();
+
+                                /**
+                                 * $http object configuration
+                                 * @type {Object}
+                                 */
+                                var httpConfig = {
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    method: 'POST'
+                                };
+
+                                httpConfig.data = pqDefs;
+
+                                var ht = $http(httpConfig);
+                                return processWEBAPIPromise(ht, tt);
+                            },
+
                             /** 
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#fetchEASWebAsset
@@ -3145,10 +3229,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 }
 ```
                              */
-                            fetchES00DocumentsByEntityGID: function(entityGID, assetPath) {
-
-                                /* When ALP comes back we should change this as a correct implementation 
-
+                            fetchES00DocumentsByEntityGID: function(entityGID) {
                                 entityGID = entityGID ? entityGID.trim() : "";
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BY_ENTITYGID__, entityGID);
                                 var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "FETCH", entityGID);
@@ -3162,24 +3243,34 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht, tt);
-                                */
-                               
-                               entityGID = entityGID ? entityGID.trim() : "";
-                                var surl = assetPath + "/api/photo";
-                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "FETCH", entityGID);
-                                tt.startTime();
+                            },
 
-                                var ht = $http({
-                                    method: 'get',
+                            addES00Document: function(doc, file, okfunc, errfunc, progressfunc) {
+
+                                file.upload = Upload.upload({
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__ADD_ES00DOCUMENT_BLOBDATA__),
+                                    method: 'POST',
                                     headers: {
-                                        esEntityGID: entityGID
+                                        "Authorization": esGlobals.getWebApiToken()
                                     },
-                                    url: surl
+                                    fields: {
+                                        esdoc: JSON.stringify(doc)
+                                    },
+                                    file: file,
                                 });
-                                return processWEBAPIPromise(ht, tt);
+
+                                file.upload.then(function(response) {
+                                    $timeout(function() {
+                                        file.result = response.data;
+                                        okfunc(file);
+                                    });
+                                }, errfunc);
+
+                                file.upload.progress(progressfunc);
 
                             },
 
+                            /*
                             addES00Document: function(entity, entityId, description, file, okfunc, errfunc, progressfunc, assetPath) {
 
                                 file.upload = Upload.upload({
@@ -3202,6 +3293,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                 file.upload.progress(progressfunc);
 
                             },
+                            */
 
                             /** 
                              * @ngdoc function
@@ -3804,6 +3896,7 @@ var resp = {
     ]);
 
 }());
+
     (function() {
         'use strict';
 
@@ -8905,13 +8998,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     toolbar: [{
                             name: "run",
                             text: "Run",
-                            template: "<a class=\"btn btn-primary\" ng-click=\"esGridRun()\">Run</a>"
+                            template: "<a class='k-button' ng-click=\"esGridRun()\">Run</a>"
                         }, 
                         
                         {
                             name: "print",
                             text: "Print",
-                            template: "<a class=\"k-button btn btn-primary\" ng-click=\"esGridPrint()\">Print</a>"
+                            template: "<a class='k-button' ng-click=\"esGridPrint()\">Print</a>"
                         },
                         "pdf",
                         "excel"
