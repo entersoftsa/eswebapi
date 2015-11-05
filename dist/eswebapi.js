@@ -9006,8 +9006,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             text: "Print",
                             template: "<a class='k-button' ng-click=\"esGridPrint()\">Print</a>"
                         },
-                        "pdf",
                         */
+                        "pdf",
+
                         "excel"
                     ],
                     pdf: {
