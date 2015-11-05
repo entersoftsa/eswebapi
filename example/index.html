@@ -17,9 +17,12 @@
 
 <body ng-controller="mainCtrl" ng-cloak>
     <header>
+        <div class="yyy">
+            <img width="258px" height="59px" class="item" src="{{'data:image/jpg;base64,' + blob}}"/>
+            <img width="258px" height="59px" class="item" src="eslogo.png"/>
+        </div>
         <div class="container" class="row">
-            <h1 class="col-sm-3 hidden-sm">Kendo UI &hearts; Bootstrap</h1>
-            <h1 class="col-sm-3 visible-sm">Kendo UI &hearts;<br/> Bootstrap</h1>
+            <h3 class="col-sm-3 hidden-sm">Entersoft&hearts;Web Api</h3>
             <button id="configure" ng-click="configure()" class="visible-xs"><span class="glyphicon glyphicon-align-justify"></span></button>
             <div id="configurator-wrap" class="col-sm-9 hidden-xs">
                 <div id="configurator" class="row">
@@ -65,8 +68,6 @@
             </ul>
         </div>
         <hr/>
-        <img src="{{'data:image/jpg;base64,' + blob}}"/>
-
                 
         <div class="clearfix" ng-view>
         </div>

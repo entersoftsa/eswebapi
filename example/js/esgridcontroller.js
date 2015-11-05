@@ -617,7 +617,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 pVals: new esWebUIHelper.ESParamValues()
             },
 
-            /* {
+            {
                 groupId: "ESTMSocialCRM",
                 filterId: "ESTMSMPersonList",
                 gridOptions: {},
@@ -648,7 +648,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 pVals: new esWebUIHelper.ESParamValues()
             },
 
-            */
+         
         ];
     }
 ]);

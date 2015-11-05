@@ -18,15 +18,14 @@
 .yyy {
 	display: flex;
 	flex-wrap: wrap;
+  justify-content: center;
 }
 
-.yItem {
-	flex: 0 0 200px;
+.item {
+	flex: 0 0 auto;
+  margin: 20px;
 }
 
-.zItem {
-	flex: 1 1 auto;
-}
 
 input.es-param-control,
 .es-param-control.k-dropdown {
