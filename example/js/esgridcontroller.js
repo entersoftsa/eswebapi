@@ -648,7 +648,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 pVals: new esWebUIHelper.ESParamValues()
             },
 
-         
+
         ];
     }
 ]);
@@ -657,18 +657,84 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
         $scope.webPQOptions = {};
-        $scope.webPQOptions.theGroupId = "ESFICustomer";
-        $scope.webPQOptions.theFilterId = "ESFITradeAccountCustomer_def";
+        $scope.webPQOptions.theGroupId = "ESMMStockItem";
+        $scope.webPQOptions.theFilterId = "ESMMStockItem_def";
         $scope.webPQOptions.theVals = new esWebUIHelper.ESParamValues();
-        $scope.webPQOptions.theGridOptions = {};
+        $scope.webPQOptions.theGridOptions = {
+            detailTemplate: '<div kendo-grid k-options="esGridOptions.options1(dataItem)"></div>',
+            options1: function(dataItem) {
+                return {
+                    dataSource: {
+                        transport: {
+                            read: function(options) {
 
-        $scope.staticPage = {
-            serverGrouping: false,
-            serverSorting: false,
-            serverFiltering: false,
-            serverPaging: false,
-            pageSize: 12
+                                esWebApiService.fetchES00DocumentsByEntityGID(dataItem.ISUDGID)
+                                    .then(function(ret) {
+                                        options.success(ret);
+                                    }, function(err) {
+                                        options.error(err);
+                                    });
+                            }
+                        },
+                        schema: {
+                            data: "data",
+                            total: "data.length"
+                        },
+                        serverPaging: false,
+                        serverSorting: false,
+                        serverFiltering: false,
+                        pageSize: 5
+                    },
+                    scrollable: false,
+                    sortable: true,
+                    pageable: true,
+                    columns: [{
+                        field: "Code",
+                        title: "ID",
+                        width: "56px"
+                    }, {
+                        field: "Description",
+                        title: "Ship Country",
+                        width: "110px"
+                    }]
+                };
+            }
         };
+
+        var currentDocs = function(entityGID) {
+            var xParam = {
+                transport: {
+                    read: function(options) {
+
+                        esWebApiService.fetchES00DocumentsByEntityGID(entityGID)
+                            .then(function(ret) {
+                                options.success(ret);
+                            }, function(err) {
+                                options.error(err);
+                            });
+                    }
+
+                },
+                schema: {
+                    data: "data",
+                    total: "data.length"
+                }
+            };
+            return new kendo.data.DataSource(xParam);
+        }
+
+
+
+        var g = "ESGOCompany";
+        var f = "ES00DocumentsDetails";
+        esWebApiService.fetchPublicQueryInfo(g, f)
+            .then(function(ret) {
+                var p1 = ret.data;
+                var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
+                var opt = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
+                opt.dataSource = currentDocs("99F11BA8-B875-4EC9-B029-1C7FB8D3FF56");
+                $scope.docOptions = opt;
+            });
     }
 ]);
 

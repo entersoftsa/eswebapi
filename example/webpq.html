@@ -1,4 +1,8 @@
 <div ng-cloak>
+	<div>
+	<es-grid es-grid-options="docOptions" es-srv-paging="'false'" es-execute-params="docVals"/>
+</div>
+<div>
     <es-web-pq 
     	es-group-id="webPQOptions.theGroupId" 
     	es-grid-options="webPQOptions.theGridOptions" 
@@ -6,4 +10,5 @@
     	es-params-values="webPQOptions.theVals" 
     	es-filter-id="webPQOptions.theFilterId">
     </es-web-pq>
+  </div>
 </div>

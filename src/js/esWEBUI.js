@@ -858,10 +858,6 @@
                     return "src/partials/esGrid.html";
                 },
                 link: function($scope, iElement, iAttrs) {
-                    if (!$scope.esGroupId || !$scope.esFilterId) {
-                        throw "You must set GroupID and FilterID for esgrid to work";
-                    }
-
                     $scope.esGridRun = function() {
                         if ($scope.esGridCtrl) {
                             $scope.esGridCtrl.dataSource.read();
@@ -926,6 +922,9 @@
 
 
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
+                        if (!$scope.esGroupId || !$scope.esFilterId) {
+                            throw "esGridOptions NOT defined. In order to dynamically get the options you must set GroupID and FilterID for esgrid to work";
+                        }
                         // Now esGridOption explicitly assigned so ask the server 
                         esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
                             .then(function(ret) {
@@ -1335,7 +1334,7 @@
                             name: "run",
                             text: "Run",
                             template: "<a class='k-button' ng-click=\"esGridRun()\">Run</a>"
-                        }, 
+                        },
                         /*
                         {
                             name: "print",

@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-05
+/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-09
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8522,10 +8522,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return "src/partials/esGrid.html";
                 },
                 link: function($scope, iElement, iAttrs) {
-                    if (!$scope.esGroupId || !$scope.esFilterId) {
-                        throw "You must set GroupID and FilterID for esgrid to work";
-                    }
-
                     $scope.esGridRun = function() {
                         if ($scope.esGridCtrl) {
                             $scope.esGridCtrl.dataSource.read();
@@ -8590,6 +8586,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
 
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
+                        if (!$scope.esGroupId || !$scope.esFilterId) {
+                            throw "esGridOptions NOT defined. In order to dynamically get the options you must set GroupID and FilterID for esgrid to work";
+                        }
                         // Now esGridOption explicitly assigned so ask the server 
                         esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
                             .then(function(ret) {
@@ -8999,7 +8998,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             name: "run",
                             text: "Run",
                             template: "<a class='k-button' ng-click=\"esGridRun()\">Run</a>"
-                        }, 
+                        },
                         /*
                         {
                             name: "print",
