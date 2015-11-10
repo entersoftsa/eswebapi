@@ -1,8 +1,13 @@
 angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   'use strict';
 
+  $templateCache.put('src/partials/es00DocumentsDetail.html',
+    "<es-grid es-grid-options=detOptions es-srv-paging=\"false\">"
+  );
+
+
   $templateCache.put('src/partials/esGrid.html',
-    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions.dataSource es-srv-paging=esSrvPaging k-auto-bind=false k-options=esGridOptions></div>"
+    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions.dataSource es-srv-paging=esSrvPaging k-options=esGridOptions></div>"
   );
 
 

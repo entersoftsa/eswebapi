@@ -660,11 +660,17 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
         $scope.webPQOptions.theGroupId = "ESMMStockItem";
         $scope.webPQOptions.theFilterId = "ESMMStockItem_def";
         $scope.webPQOptions.theVals = new esWebUIHelper.ESParamValues();
-        $scope.webPQOptions.theGridOptions = {
-            detailTemplate: '<div kendo-grid k-options="esGridOptions.options1(dataItem)"></div>',
-            options1: function(dataItem) {
-                return {
-                    dataSource: {
+
+        var xxx = function(obj, dataItem) {
+            var g = "ESGOCompany";
+            var f = "ES00DocumentsDetails";
+
+            esWebApiService.fetchPublicQueryInfo(g, f, true)
+                .then(function(ret) {
+                    var p1 = ret.data;
+                    var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
+                    ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
+                    var xParam = {
                         transport: {
                             read: function(options) {
 
@@ -675,66 +681,30 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
                                         options.error(err);
                                     });
                             }
+
                         },
                         schema: {
                             data: "data",
                             total: "data.length"
-                        },
-                        serverPaging: false,
-                        serverSorting: false,
-                        serverFiltering: false,
-                        pageSize: 5
-                    },
-                    scrollable: false,
-                    sortable: true,
-                    pageable: true,
-                    columns: [{
-                        field: "Code",
-                        title: "ID",
-                        width: "56px"
-                    }, {
-                        field: "Description",
-                        title: "Ship Country",
-                        width: "110px"
-                    }]
-                };
-            }
-        };
+                        }
+                    };
 
-        var currentDocs = function(entityGID) {
-            var xParam = {
-                transport: {
-                    read: function(options) {
-
-                        esWebApiService.fetchES00DocumentsByEntityGID(entityGID)
-                            .then(function(ret) {
-                                options.success(ret);
-                            }, function(err) {
-                                options.error(err);
-                            });
-                    }
-
-                },
-                schema: {
-                    data: "data",
-                    total: "data.length"
-                }
-            };
-            return new kendo.data.DataSource(xParam);
+                    ret.autoBind = true;
+                    ret.toolbar = null;
+                    ret.groupable = false;
+                    ret.dataSource = new kendo.data.DataSource(xParam);
+                    obj.detOptions = ret;
+                });
         }
 
-
-
-        var g = "ESGOCompany";
-        var f = "ES00DocumentsDetails";
-        esWebApiService.fetchPublicQueryInfo(g, f)
-            .then(function(ret) {
-                var p1 = ret.data;
-                var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
-                var opt = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
-                opt.dataSource = currentDocs("99F11BA8-B875-4EC9-B029-1C7FB8D3FF56");
-                $scope.docOptions = opt;
-            });
+        $scope.webPQOptions.theGridOptions = {
+            detailTemplate: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
+            detailInit: function(op) {
+            	var detailRow = op.detailRow;
+            	var detailScope = detailRow.scope();
+            	xxx(detailScope, op.data);
+            }
+        };
     }
 ]);
 

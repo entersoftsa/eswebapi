@@ -1315,6 +1315,7 @@
                         refresh: true,
                         pageSizes: [20, 50, 100, "All"]
                     },
+                    autoBind: false,
                     sortable: !dsOptions.serverPaging,
                     scrollable: true,
                     selectable: "row",

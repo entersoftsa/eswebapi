@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-09
+/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-10
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8979,6 +8979,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         refresh: true,
                         pageSizes: [20, 50, 100, "All"]
                     },
+                    autoBind: false,
                     sortable: !dsOptions.serverPaging,
                     scrollable: true,
                     selectable: "row",
