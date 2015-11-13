@@ -2,7 +2,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('src/partials/es00DocumentsDetail.html',
-    "<es-grid es-grid-options=detOptions es-srv-paging=\"false\">"
+    "<es-grid es-grid-options=esDocumentGridOptions es-srv-paging=\"false\">"
   );
 
 

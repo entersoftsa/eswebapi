@@ -369,6 +369,25 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
     esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', '$injector' /* 'es.Services.GA' */ ,
         function($sessionStorage, $log, esMessaging, $injector) {
 
+            function ESMultiPublicQuery(ctxId, groupId, filterId, pqOptions, params) {
+                this.CtxID = ctxId;
+                this.GroupID = groupId;
+                this.FilterID = filterId;
+                this.PQOptions = pqOptions;
+                this.Params = params;
+            }
+
+            function ESMultiZoomDef(zoomId, pqOptions) {
+                this.ZoomID = zoomId;
+                this.PQOptions = pqOptions;
+            }
+
+            function ESPQOptions(page, pageSize, withCount) {
+                this.Page = page;
+                this.PageSize = pageSize;
+                this.WithCount = withCount;
+            }
+
             function fgetGA() {
                 if (!$injector) {
                     return undefined;
@@ -2994,6 +3013,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 ```             **/
                 getUserMessage: getUserMessage,
 
+                ESMultiPublicQuery: ESMultiPublicQuery,
+                ESMultiZoomDef: ESMultiZoomDef,
+                ESPQOptions: ESPQOptions,
+                
                 sessionClosed: function() {
                     esClientSession.setModel(null);
                 },
@@ -3008,7 +3031,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         data.Model.LangID = data.Model.LangID || "el-GR";
 
                         data.Model.BranchID = data.Model.BranchID || credentials.BranchID || "-";
-                        
+
                         esClientSession.setModel(data.Model);
 
                         var esga = fgetGA();
@@ -3030,13 +3053,4 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
         }
     ]);
-
-
-    esWebFramework.run(['esGlobals', 'esWebApi', function(esGlobals, esWebApi) {
-        /*
-        var esSession = esGlobals.getClientSession();
-        esSession.getModel();
-        esSession.hostUrl = esWebApi.getServerUrl();
-        */
-    }]);
 })();

@@ -661,48 +661,15 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
         $scope.webPQOptions.theFilterId = "ESMMStockItem_def";
         $scope.webPQOptions.theVals = new esWebUIHelper.ESParamValues();
 
-        var xxx = function(obj, dataItem) {
-            var g = "ESGOCompany";
-            var f = "ES00DocumentsDetails";
-
-            esWebApiService.fetchPublicQueryInfo(g, f, true)
-                .then(function(ret) {
-                    var p1 = ret.data;
-                    var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
-                    ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
-                    var xParam = {
-                        transport: {
-                            read: function(options) {
-
-                                esWebApiService.fetchES00DocumentsByEntityGID(dataItem.ISUDGID)
-                                    .then(function(ret) {
-                                        options.success(ret);
-                                    }, function(err) {
-                                        options.error(err);
-                                    });
-                            }
-
-                        },
-                        schema: {
-                            data: "data",
-                            total: "data.length"
-                        }
-                    };
-
-                    ret.autoBind = true;
-                    ret.toolbar = null;
-                    ret.groupable = false;
-                    ret.dataSource = new kendo.data.DataSource(xParam);
-                    obj.detOptions = ret;
-                });
-        }
-
         $scope.webPQOptions.theGridOptions = {
-            detailTemplate: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
-            detailInit: function(op) {
-            	var detailRow = op.detailRow;
-            	var detailScope = detailRow.scope();
-            	xxx(detailScope, op.data);
+            //detailTemplate: '<div><es00-documents-detail es-master-row-field="\'ISUDGID\'" /></div>',
+            detailTemplate: '<div><es00-documents-detail es-master-row-field="getMasterOptions().selectedMasterField" /></div>',
+            detailInit: function(e) {
+            	$log.info("hi");
+            	var detScope = e.detailRow.scope();
+            	detScope.getMasterOptions = function() {
+            		return $scope.webPQOptions.theGridOptions;
+            	};
             }
         };
     }

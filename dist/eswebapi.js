@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-10
+/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-13
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -2538,7 +2538,7 @@ var pqOptions = {
 var x = {
     Table: string, // The name of the standard i.e. in the form ESXXZxxxx provided in the **_zoomID_** parameter
     Rows: [{Record 1}, {Record 2}, ....], // An array of JSON objects each one representing a record in the form of fieldName: fieldValue
-    Count: int, // In contrast to fetchPublicQuery, for fetchZoom, Count will always have value no matter of the options parameter and fields.
+    Count: int, // In contrast to fetchPublicQuery, for fetchStdZoom, Count will always have value no matter of the options parameter and fields.
     Page: int, // If applicable the requested Page Number (1 based), otherwise -1
     PageSize: int, // If applicable the Number of records in the Page (i.e. less or equal to the requested PageSize) otherwise -1
 }
@@ -2573,7 +2573,7 @@ $scope.fetchStdZoom = function()
                                 if (useCache) {
                                     var it = esCache.getItem("ESZOOM_" + zoomID);
                                     if (it) {
-                                        $307ut(function() {
+                                        $timeout(function() {
                                             deferred.resolve(it);
                                         });
                                         return deferred.promise;
@@ -2603,6 +2603,15 @@ $scope.fetchStdZoom = function()
                                     deferred.reject(arguments);
                                 });
                                 return deferred.promise;
+                            },
+
+                            fetchMultiStdZoom: function(multizoomdefs) {
+                                var toFetchFromSrv = _.filter(multizoomdefs, function(x) {
+                                    if (x.useCache && esCache.getItem("ESZOOM_" + x.zoomID)) {
+                                        return false;
+                                    }
+                                    return false;
+                                });
                             },
 
                             /**
@@ -4714,6 +4723,25 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      */
     esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', '$injector' /* 'es.Services.GA' */ ,
         function($sessionStorage, $log, esMessaging, $injector) {
+
+            function ESMultiPublicQuery(ctxId, groupId, filterId, pqOptions, params) {
+                this.CtxID = ctxId;
+                this.GroupID = groupId;
+                this.FilterID = filterId;
+                this.PQOptions = pqOptions;
+                this.Params = params;
+            }
+
+            function ESMultiZoomDef(zoomId, pqOptions) {
+                this.ZoomID = zoomId;
+                this.PQOptions = pqOptions;
+            }
+
+            function ESPQOptions(page, pageSize, withCount) {
+                this.Page = page;
+                this.PageSize = pageSize;
+                this.WithCount = withCount;
+            }
 
             function fgetGA() {
                 if (!$injector) {
@@ -7340,6 +7368,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 ```             **/
                 getUserMessage: getUserMessage,
 
+                ESMultiPublicQuery: ESMultiPublicQuery,
+                ESMultiZoomDef: ESMultiZoomDef,
+                ESPQOptions: ESPQOptions,
+                
                 sessionClosed: function() {
                     esClientSession.setModel(null);
                 },
@@ -7354,7 +7386,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         data.Model.LangID = data.Model.LangID || "el-GR";
 
                         data.Model.BranchID = data.Model.BranchID || credentials.BranchID || "-";
-                        
+
                         esClientSession.setModel(data.Model);
 
                         var esga = fgetGA();
@@ -7376,15 +7408,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
         }
     ]);
-
-
-    esWebFramework.run(['esGlobals', 'esWebApi', function(esGlobals, esWebApi) {
-        /*
-        var esSession = esGlobals.getClientSession();
-        esSession.getModel();
-        esSession.hostUrl = esWebApi.getServerUrl();
-        */
-    }]);
 })();
 
 
@@ -8063,6 +8086,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         title: "Since start of FY up to last Fiscal Period"
     }, ];
 
+
     function ESParamVal(paramId, paramVal, enumList) {
         this.paramCode = paramId;
         this.paramValue = paramVal;
@@ -8110,6 +8134,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
         return s.substring(0, s.lastIndexOf(" + "));
     };
+
 
     function ESNumericParamVal(paramId, paramVal) {
         //call super constructor
@@ -8360,44 +8385,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     }
 
-
-    /*
-        function prepareStdZoom($log, zoomID, esWebApiService, useCache) {
-            var xParam = {
-                transport: {
-                    read: function(options) {
-
-                        $log.info("FETCHing ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
-
-                        var pqOptions = {};
-                        esWebApiService.fetchStdZoom(zoomID, pqOptions, useCache)
-                            .then(function(ret) {
-                                var pq = ret.data;
-
-                                // SME CHANGE THIS ONCE WE HAVE CORRECT PQ
-                                if (pq.Count == -1) {
-                                    pq.Count = pq.Rows ? pq.Rows.length : 0;
-                                }
-                                // END tackling
-
-                                options.success(pq);
-                                $log.info("FETCHed ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
-                            }, function(err) {
-                                options.error(err);
-                            });
-                    }
-
-                },
-                schema: {
-                    data: "Rows",
-                    total: "Count"
-                }
-            }
-            return new kendo.data.DataSource(xParam);
-        }
-
-    */
-
     /**
      * @ngdoc filter
      * @name es.Web.UI.filter:esTrustHtml
@@ -8597,6 +8584,88 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
                             });
                     }
+                }
+            };
+        }])
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:es00DocumentsDetail
+         * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
+         * @requires es.Web.UI.esUIHelper
+         * @requires $log
+         * @restrict AE
+         * @param {object=} esDocumentGridOptions A subset or full set of esGridOptions for the kendo-grid that will show the ES00Documents. 
+         * The ES00Documents kendo-grid will be initialized by the merge of the PublicQueryInfo gridoptions as retrieved for the GroupID = "ESGOCompany" and
+         * FilterID = "ES00DocumentsDetails" public query. 
+         * @param {string=} esMasterRowField The field of the master grid row that the ES00DocumentGrid will be a detail of. The value of this field in the master row will form
+         * the parameter for fetchES00DocumentsByGID service to retrieve the ES00DocumentRows.
+         *
+         * @description
+         *
+         * **TBD**
+         * This directive is responsible to render the html for the presentation of the ES00Documents as a detail of a kendo-grid
+         */
+        .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', function($log, $uibModal, esWebApiService, esWebUIHelper) {
+
+            return {
+                restrict: 'AE',
+                scope: {
+                    esDocumentGridOptions: "=",
+                    esMasterRowField: "="
+                },
+                template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
+                link: function($scope, iElement, iAttrs) {
+
+                    if (!$scope.esMasterRowField && !iAttrs.esMasterRowField) {
+                        $scope.esMasterRowField = "GID";
+                        $log.warn("esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
+                    }
+
+                    $log.info("es00DocumentsDetail directive");
+
+                    var getOptions = function() {
+                        var g = "ESGOCompany";
+                        var f = "ES00DocumentsDetails";
+                        var xParam = {
+                            serverGrouping: false,
+                            serverSorting: false,
+                            serverFiltering: false,
+                            serverPaging: false,
+                            pageSize: 20,
+                            transport: {
+                                read: function(options) {
+
+                                    esWebApiService.fetchES00DocumentsByEntityGID($scope.$parent.dataItem[$scope.esMasterRowField])
+                                        .then(function(ret) {
+                                            options.success(ret);
+                                        }, function(err) {
+                                            options.error(err);
+                                        });
+                                }
+
+                            },
+                            schema: {
+                                data: "data",
+                                total: "data.length"
+                            }
+                        };
+
+                        var xDS = new kendo.data.DataSource(xParam);
+
+                        esWebApiService.fetchPublicQueryInfo(g, f, true)
+                            .then(function(ret) {
+                                var p1 = ret.data;
+                                var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
+                                ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
+                                ret.autoBind = true;
+                                ret.toolbar = null;
+                                ret.groupable = false;
+                                ret.dataSource = xDS;
+                                $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
+                            });
+                    };
+
+                    getOptions();
                 }
             };
         }])
@@ -9023,6 +9092,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 };
 
                 grdopt.columns = esGridInfo.columns;
+                grdopt.selectedMasterField = esGridInfo.selectedMasterField;
+                grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
                 grdopt.columnMenu = true;
 
                 grdopt.dataSource = prepareWebScroller(null, function() {
@@ -9038,6 +9109,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 grdopt.change = handleChangeGridRow;
                 grdopt.dataBound = handleChangeGridRow;
+
 
                 return grdopt;
             }

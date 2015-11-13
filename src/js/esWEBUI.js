@@ -399,6 +399,7 @@
         title: "Since start of FY up to last Fiscal Period"
     }, ];
 
+
     function ESParamVal(paramId, paramVal, enumList) {
         this.paramCode = paramId;
         this.paramValue = paramVal;
@@ -446,6 +447,7 @@
 
         return s.substring(0, s.lastIndexOf(" + "));
     };
+
 
     function ESNumericParamVal(paramId, paramVal) {
         //call super constructor
@@ -696,44 +698,6 @@
         }
     }
 
-
-    /*
-        function prepareStdZoom($log, zoomID, esWebApiService, useCache) {
-            var xParam = {
-                transport: {
-                    read: function(options) {
-
-                        $log.info("FETCHing ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
-
-                        var pqOptions = {};
-                        esWebApiService.fetchStdZoom(zoomID, pqOptions, useCache)
-                            .then(function(ret) {
-                                var pq = ret.data;
-
-                                // SME CHANGE THIS ONCE WE HAVE CORRECT PQ
-                                if (pq.Count == -1) {
-                                    pq.Count = pq.Rows ? pq.Rows.length : 0;
-                                }
-                                // END tackling
-
-                                options.success(pq);
-                                $log.info("FETCHed ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
-                            }, function(err) {
-                                options.error(err);
-                            });
-                    }
-
-                },
-                schema: {
-                    data: "Rows",
-                    total: "Count"
-                }
-            }
-            return new kendo.data.DataSource(xParam);
-        }
-
-    */
-
     /**
      * @ngdoc filter
      * @name es.Web.UI.filter:esTrustHtml
@@ -933,6 +897,88 @@
                                 $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
                             });
                     }
+                }
+            };
+        }])
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:es00DocumentsDetail
+         * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
+         * @requires es.Web.UI.esUIHelper
+         * @requires $log
+         * @restrict AE
+         * @param {object=} esDocumentGridOptions A subset or full set of esGridOptions for the kendo-grid that will show the ES00Documents. 
+         * The ES00Documents kendo-grid will be initialized by the merge of the PublicQueryInfo gridoptions as retrieved for the GroupID = "ESGOCompany" and
+         * FilterID = "ES00DocumentsDetails" public query. 
+         * @param {string=} esMasterRowField The field of the master grid row that the ES00DocumentGrid will be a detail of. The value of this field in the master row will form
+         * the parameter for fetchES00DocumentsByGID service to retrieve the ES00DocumentRows.
+         *
+         * @description
+         *
+         * **TBD**
+         * This directive is responsible to render the html for the presentation of the ES00Documents as a detail of a kendo-grid
+         */
+        .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', function($log, $uibModal, esWebApiService, esWebUIHelper) {
+
+            return {
+                restrict: 'AE',
+                scope: {
+                    esDocumentGridOptions: "=",
+                    esMasterRowField: "="
+                },
+                template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
+                link: function($scope, iElement, iAttrs) {
+
+                    if (!$scope.esMasterRowField && !iAttrs.esMasterRowField) {
+                        $scope.esMasterRowField = "GID";
+                        $log.warn("esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
+                    }
+
+                    $log.info("es00DocumentsDetail directive");
+
+                    var getOptions = function() {
+                        var g = "ESGOCompany";
+                        var f = "ES00DocumentsDetails";
+                        var xParam = {
+                            serverGrouping: false,
+                            serverSorting: false,
+                            serverFiltering: false,
+                            serverPaging: false,
+                            pageSize: 20,
+                            transport: {
+                                read: function(options) {
+
+                                    esWebApiService.fetchES00DocumentsByEntityGID($scope.$parent.dataItem[$scope.esMasterRowField])
+                                        .then(function(ret) {
+                                            options.success(ret);
+                                        }, function(err) {
+                                            options.error(err);
+                                        });
+                                }
+
+                            },
+                            schema: {
+                                data: "data",
+                                total: "data.length"
+                            }
+                        };
+
+                        var xDS = new kendo.data.DataSource(xParam);
+
+                        esWebApiService.fetchPublicQueryInfo(g, f, true)
+                            .then(function(ret) {
+                                var p1 = ret.data;
+                                var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
+                                ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
+                                ret.autoBind = true;
+                                ret.toolbar = null;
+                                ret.groupable = false;
+                                ret.dataSource = xDS;
+                                $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
+                            });
+                    };
+
+                    getOptions();
                 }
             };
         }])
@@ -1359,6 +1405,8 @@
                 };
 
                 grdopt.columns = esGridInfo.columns;
+                grdopt.selectedMasterField = esGridInfo.selectedMasterField;
+                grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
                 grdopt.columnMenu = true;
 
                 grdopt.dataSource = prepareWebScroller(null, function() {
@@ -1374,6 +1422,7 @@
 
                 grdopt.change = handleChangeGridRow;
                 grdopt.dataBound = handleChangeGridRow;
+
 
                 return grdopt;
             }

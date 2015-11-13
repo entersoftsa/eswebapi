@@ -2536,7 +2536,7 @@ var pqOptions = {
 var x = {
     Table: string, // The name of the standard i.e. in the form ESXXZxxxx provided in the **_zoomID_** parameter
     Rows: [{Record 1}, {Record 2}, ....], // An array of JSON objects each one representing a record in the form of fieldName: fieldValue
-    Count: int, // In contrast to fetchPublicQuery, for fetchZoom, Count will always have value no matter of the options parameter and fields.
+    Count: int, // In contrast to fetchPublicQuery, for fetchStdZoom, Count will always have value no matter of the options parameter and fields.
     Page: int, // If applicable the requested Page Number (1 based), otherwise -1
     PageSize: int, // If applicable the Number of records in the Page (i.e. less or equal to the requested PageSize) otherwise -1
 }
@@ -2571,7 +2571,7 @@ $scope.fetchStdZoom = function()
                                 if (useCache) {
                                     var it = esCache.getItem("ESZOOM_" + zoomID);
                                     if (it) {
-                                        $307ut(function() {
+                                        $timeout(function() {
                                             deferred.resolve(it);
                                         });
                                         return deferred.promise;
@@ -2601,6 +2601,15 @@ $scope.fetchStdZoom = function()
                                     deferred.reject(arguments);
                                 });
                                 return deferred.promise;
+                            },
+
+                            fetchMultiStdZoom: function(multizoomdefs) {
+                                var toFetchFromSrv = _.filter(multizoomdefs, function(x) {
+                                    if (x.useCache && esCache.getItem("ESZOOM_" + x.zoomID)) {
+                                        return false;
+                                    }
+                                    return false;
+                                });
                             },
 
                             /**
