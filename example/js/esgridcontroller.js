@@ -270,14 +270,10 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
             var filter = "PersonList";
             $scope.pqResult = "";
 
-            var pqOptions = {
-                WithCount: false,
-                Page: 2,
-                PageSize: 5
-            };
+            var pqOptions = new esGlobals.ESPQOptions(2, 5, false);
 
             var pqParams = {
-                Name: "ao*"
+                Name: "*"
             };
 
             esWebApi.fetchPublicQuery(group, filter, pqOptions, pqParams, 'POST')
@@ -369,6 +365,21 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                 });
         }
 
+        $scope.multifetchStdZoom = function() {
+            var zoomOptions = new esGlobals.ESPQOptions(300, 5, false);
+
+            var zooms = _.map($scope.pZoomID.split(','), function(k) {
+            	return new esGlobals.ESMultiZoomDef(k, zoomOptions, true);
+            });
+
+            esWebApi.fetchMultiStdZoom(zooms)
+                .then(function(ret) {
+                    $scope.pZoomResults = ret;
+                }, function(err) {
+                    $scope.pZoomResults = JSON.stringify(err);
+                });
+        }
+
         $scope.fetchStdZoom = function() {
             var zoomOptions = {
                 WithCount: false,
@@ -389,8 +400,8 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
             esWebApi.logout();
         };
 
-        // fetchCompanyParam
-        $scope.fetchCompanyParam = function() {
+        // fetchMultiPublicQuery
+        $scope.fetchmultiPublicQuery = function() {
             var pqParams = [{
                     GroupID: "ESGOPerson",
                     FilterID: "CRM_Personlist",
@@ -413,7 +424,6 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                 list: pqParams
             };
 
-            //esWebApi.fetchCompanyParam($scope.pCompanyParam)
             esWebApi.multiPublicQuery(pqParams)
                 .then(function(x) {
                         $scope.pCompanyParamValue = x.data;
@@ -421,6 +431,16 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                     function(err) {
                         $scope.pCompanyParamValue = JSON.stringify(err);
                     });
+        }
+
+        //fetchCompanyParam 
+        $scope.fetchCompanyParam = function() {
+        	esWebApi.fetchCompanyParam($scope.pCompanyParam)
+        	.then(function(ret) {
+        		$scope.pCompanyParamValue = ret.data;
+        	}, function(err) {
+        		$scope.pCompanyParamValue = JSON.stringify(err);
+        	});
         }
 
         //fetchCompanyParams
@@ -519,7 +539,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                 .then(function(ret) {
                         $scope.pAssetResults = ret.data;
 
-                        var sType = esGlobals.getMimeTypeForExt($scope.pAsset);
+                        var sType = ret.headers()["content-type"];
                         $log.info("File " + $scope.pAsset + " ===> " + sType);
                         var file = new Blob([ret.data], {
                             type: sType
@@ -564,35 +584,11 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         }
 
         $scope.fetchES00DocumentBlobDataByGID = function() {
-            /*
-            esWebApi.fetchES00DocumentByGID($scope.pES00Doc)
-                .then(function(ret) {
-                    return ret.data;
-                })
-                .then(function(esDoc) {
-                    docType = esGlobals.getMimeTypeForExt(esDoc.FType);
-                    return esWebApi.fetchES00DocumentBlobDataByGID(esDoc.GID);
-                })
-                .then(function(fData) {
-                    $log.info("File " + $scope.pAsset + " ===> " + docType);
-                    var file = new Blob([fData.data], {
-                        type: docType
-                    });
-                    //saveAs(file, "test.pdf");
-                    var fU = URL.createObjectURL(file);
-                    window.open(fU);
-                })
-                .catch(function(err) {
-                    $log.error("2nd error = " + JSON.stringify(err));
-                });
-            */
+           esWebApi.fetchES00DocumentBlobDataByGID($scope.pES00Doc)
+                .then(function(result) {
+                    var fileData = result.data;
 
-            $q.all([esWebApi.fetchES00DocumentByGID($scope.pES00Doc), esWebApi.fetchES00DocumentBlobDataByGID($scope.pES00Doc)])
-                .then(function(results) {
-                    var esDoc = results[0].data;
-                    var fileData = results[1].data;
-
-                    var docType = esGlobals.getMimeTypeForExt(esDoc.FType);
+                    var docType = result.headers()["content-type"];
                     $log.info("File " + $scope.pAsset + " ===> " + docType);
                     var file = new Blob([fileData], {
                         type: docType

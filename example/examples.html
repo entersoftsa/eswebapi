@@ -65,6 +65,14 @@
         <<textarea>{{pqResult}}</textarea>
     </div>
     <hr/>
+
+    <div>
+        <h3> 2B. fetchPublicQuery</h3>
+        <button ng-click="doMultifetchPublicQuery()">MultifetchPublicQuery</button>
+        <<textarea>{{pqResult}}</textarea>
+    </div>
+    <hr/>
+
     <div>
         <h3>3. logout</h3>
         <button ng-click="doLogout()">Logout</button>
@@ -166,6 +174,15 @@
         <span>
             <input ng-model="pZoomID" placeholder="EBS Zoom ID">
             <button ng-click="fetchStdZoom()">fetchStdZoom</button>
+            <textarea>{{pZoomResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>14B. MultifetchStdZoom</h3>
+        <span>
+            <input ng-model="pZoomID" placeholder="EBS Zoom ID">
+            <button ng-click="multifetchStdZoom()">multifetchStdZoom</button>
             <textarea>{{pZoomResults}}</textarea>
         </span>
     </div>

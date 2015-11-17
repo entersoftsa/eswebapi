@@ -33,6 +33,7 @@
         __PUBLICQUERY_INFO__: "api/rpc/PublicQueryInfo/",
         __USERSITES__: "api/Login/Usersites",
         __STANDARD_ZOOM__: "api/rpc/FetchStdZoom/",
+        __MULTI_STANDARD_ZOOM__: "api/rpc/MultiFetchStdZoom/",
         __SCROLLERROOTTABLE__: "api/rpc/SimpleScrollerRootTable/",
         __SCROLLER__: "api/rpc/SimpleScroller/",
         __ENTITYACTION__: "api/Entity/",
@@ -55,6 +56,7 @@
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
         __FETCH_ES00DOCUMENT_BY_ENTITYGID__: "api/ES00Documents/InfoByEntityGid/",
         __FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__: "api/ES00Documents/BlobDataByGID/",
+        __FETCH_ES00DOCUMENT_MIME_TYPES__:  "api/ES00Documents/ESMimeTypes/",
         __ADD_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/addES00DocumentBlobData/",
     });
 
@@ -273,6 +275,38 @@ eskbApp.config(['$logProvider',
                                 $log.warn("Error logging failed");
                                 $log.error(loggingError);
                             }
+                        }
+
+                        function fGetMimeTypes() {
+                            var deferred = $q.defer();
+                            var cItem = esCache.getItem("ES_MIME_TYPES");
+                            if (cItem) {
+                                $timeout(function() {
+                                    deferred.resolve(cItem);
+                                });
+                                return deferred.promise;
+                            }
+
+                            var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_MIME_TYPES__);
+                            var tt = esGlobals.trackTimer("ES00DOCUMENT_MIME", "FETCH", "");
+                            tt.startTime();
+
+                            var httpConfig = {
+                                method: 'GET',
+                                headers: {
+                                    "Authorization": esGlobals.getWebApiToken()
+                                },
+                                url: surl,
+                            };
+                            var ht = $http(httpConfig);
+                            processWEBAPIPromise(ht, tt)
+                                .then(function(ret) {
+                                    esCache.setItem(ES_MIME_TYPES, ret.data);
+                                    deferred.resolve(ret);
+                                }, function() {
+                                    deferred.reject(arguments);
+                                });
+                            return deferred.promise;
                         }
 
                         function execScrollerCommand(scrollerCommandParams) {
@@ -777,7 +811,7 @@ $scope.fetchCompanyParams = function() {
 };
 ```
 */
-                                fetchCompanyParams: function(esparams) {
+                            fetchCompanyParams: function(esparams) {
                                 var surl;
                                 if (!esparams) {
                                     // get all parameters
@@ -2604,12 +2638,67 @@ $scope.fetchStdZoom = function()
                             },
 
                             fetchMultiStdZoom: function(multizoomdefs) {
+                                var deferred = $q.defer();
+                                var retzooms = [];
+
+                                multizoomdefs = multizoomdefs || [];
+
                                 var toFetchFromSrv = _.filter(multizoomdefs, function(x) {
-                                    if (x.useCache && esCache.getItem("ESZOOM_" + x.zoomID)) {
+                                    if (x.UseCache && esCache.getItem("ESZOOM_" + x.ZoomID)) {
                                         return false;
                                     }
-                                    return false;
+                                    return true;
                                 });
+
+                                if (toFetchFromSrv.length == 0) {
+                                    $timeout(function() {
+                                        var ix;
+                                        for (ix = 0; ix < multizoomdefs.length; ix++) {
+                                            retzooms.push(esCache.getItem("ESZOOM_" + multizoomdefs[ix].ZoomID))
+                                        }
+                                        deferred.resolve(retzooms);
+                                    });
+                                    return deferred.promise;
+                                }
+
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__MULTI_STANDARD_ZOOM__);
+                                var tt = esGlobals.trackTimer("ZOOM", "MULTI_FETCH", "");
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'POST',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    data: toFetchFromSrv,
+                                    url: surl
+                                });
+                                var sp = processWEBAPIPromise(ht, tt);
+
+                                sp.then(function(ret) {
+                                    var kx = 0;
+
+                                    _.each(multizoomdefs, function(element) {
+                                        if (element.UseCache && esCache.getItem("ESZOOM_" + element.ZoomID)) {
+                                            retzooms.push(esCache.getItem("ESZOOM_" + element.ZoomID));
+                                        } else {
+                                            var zx = ret[kx];
+                                            kx = kx + 1;
+
+                                            if (element.UseCache) {
+                                                esCache.setItem("ESZOOM_" + element.ZoomID, zx);
+                                            }
+                                            retzooms.push(zx);
+                                        }
+                                    });
+
+                                    deferred.resolve(retzooms);
+                                }, function() {
+                                    deferred.reject(arguments);
+                                });
+
+                                return deferred.promise;
                             },
 
                             /**
@@ -3047,6 +3136,9 @@ var options = {Accept: 'text/plain'}
                                 var ht = $http(httpConfig);
                                 return processWEBAPIPromise(ht, tt);
                             },
+
+                            getMimeTypes: fGetMimeTypes,
+
 
                             /** 
                              * @ngdoc function

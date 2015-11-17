@@ -1,4 +1,4 @@
-<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L100" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L102" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
 <div><span class="hint">service in module <code ng:non-bindable="">es.Services.Web</code>
 </span>
 </div>
@@ -22,7 +22,7 @@ Web API.</p>
 </li>
 </ul>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L3323" class="view-source icon-eye-open"> </a><h3 id="methods_esearch">eSearch(eUrl, eMethod, eBody)</h3>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L3415" class="view-source icon-eye-open"> </a><h3 id="methods_esearch">eSearch(eUrl, eMethod, eBody)</h3>
 <div class="esearch"><div class="es-services-web-eswebapi-esearch-page"><p>This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server.
 This function allows for almost any kind of operation can be executed by the ElasticSearch engine as an http method (i.e. GET, PUT, DELETE, POST, etc.)
 <a href="#/api/es.Services.Web.esElasticSearch#methods_searchindex">searchIndex</a>.</p>
@@ -36,7 +36,7 @@ the index or indices specified by the elasticSearchIndex parameter.</p>
 </div></td></tr></tbody></table><h5 id="methods_esearch_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-esearch-page"><p>The response that we get from Elastic Search service should we perform an AJAX call against the service</p>
 </div></td></tr></table></div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L688" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L722" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
 <div class="fetchcompanyparam"><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>Function that returns the ES Param for a requested ParamID.</p>
 </div><h5 id="methods_fetchcompanyparam_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParam</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>The ID of the ES CompanyParam. The ID should not contain the @ i.e. fetchCompanyParam(&quot;MyValidParamKey&quot;)</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchcompanyparam_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>Returns a promise.</p>
@@ -92,7 +92,7 @@ $scope.fetchCompanyParam = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L780" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L814" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
 <div class="fetchcompanyparams"><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>Function that returns the ES Params for the requested array of parameter id&#39;s</p>
 </div><h5 id="methods_fetchcompanyparams_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParams <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string[]</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>can be</p>
 <ul>
@@ -163,7 +163,7 @@ $scope.fetchCompanyParams = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L2977" class="view-source icon-eye-open"> </a><h3 id="methods_fetcheaswebasset">fetchEASWebAsset(assetUrlPath, options)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L3066" class="view-source icon-eye-open"> </a><h3 id="methods_fetcheaswebasset">fetchEASWebAsset(assetUrlPath, options)</h3>
 <div class="fetcheaswebasset"><div class="es-services-web-eswebapi-fetcheaswebasset-page"><p>This function returns the contents of a file asset stored in the Entersoft Application Server (EAS) <strong>ESWebAssets</strong>
 or <strong>CSWebAssets</strong> sub-directories of the EAS. </p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
@@ -210,7 +210,7 @@ the following string: &quot;data:image/png;base64,&quot; i.e. img_data = &quot;d
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L3030" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentblobdatabygid">fetchES00DocumentBlobDataByGID(es00DocumentGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L3119" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentblobdatabygid">fetchES00DocumentBlobDataByGID(es00DocumentGID)</h3>
 <div class="fetches00documentblobdatabygid"><div class="es-services-web-eswebapi-fetches00documentblobdatabygid-page"><p>This function returns the arraybuffer for the document stored in <strong>ES00Document</strong> as <strong>BLOBDATA</strong> for a given by GID ES00Document record.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentblobdatabygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentblobdatabygid-page"><p>The GID of the ES00Document record the blobdata of which we are looking for.</p>
@@ -221,7 +221,7 @@ the following string: &quot;data:image/png;base64,&quot; i.e. img_data = &quot;d
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L3169" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbycode">fetchES00DocumentByCode(es00DocumentCode)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L3261" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbycode">fetchES00DocumentByCode(es00DocumentCode)</h3>
 <div class="fetches00documentbycode"><div class="es-services-web-eswebapi-fetches00documentbycode-page"><p>This function returns the JSON object for the record of the ES00Document object that matches the es00DocumentCode parameter.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentbycode_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentCode</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentbycode-page"><p>The Code of the ES00Document record that we are looking for</p>
@@ -265,7 +265,7 @@ var sampleDoc = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L3102" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbygid">fetchES00DocumentByGID(es00DocumentGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L3194" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbygid">fetchES00DocumentByGID(es00DocumentGID)</h3>
 <div class="fetches00documentbygid"><div class="es-services-web-eswebapi-fetches00documentbygid-page"><p>This function returns the JSON object for the record of the ES00Document object that matches the es00DocumentGID parameter.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentbygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentbygid-page"><p>The GID of the ES00Document record that we are looking for</p>
@@ -309,7 +309,7 @@ var sampleDoc = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L3239" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentsbyentitygid">fetchES00DocumentsByEntityGID(entityGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L3331" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentsbyentitygid">fetchES00DocumentsByEntityGID(entityGID)</h3>
 <div class="fetches00documentsbyentitygid"><div class="es-services-web-eswebapi-fetches00documentsbyentitygid-page"><p>This function returns an array of JSON objects for the records of type ES00Document that belong to entity with GID equal to entityGID.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentsbyentitygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>entityGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentsbyentitygid-page"><p>The GID of the entity for which we want to get all the registered ES00Documents</p>
@@ -356,7 +356,7 @@ var listOfDocs = [{
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L1032" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodscolumninfo">fetchOdsColumnInfo(tableID, columnID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L1066" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodscolumninfo">fetchOdsColumnInfo(tableID, columnID)</h3>
 <div class="fetchodscolumninfo"><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><p>Function that returns the ODSTable definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodscolumninfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;. If columnID parameter is undefined, null or empty string <strong>then</strong>
 additional forms of tableid-column id definition are available:</p>
@@ -426,7 +426,7 @@ $scope.fetchOdsColumnInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L1367" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsdetailrelationsinfo">fetchOdsDetailRelationsInfo(tableID, columnID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L1401" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsdetailrelationsinfo">fetchOdsDetailRelationsInfo(tableID, columnID)</h3>
 <div class="fetchodsdetailrelationsinfo"><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><p>Function that returns the Detail ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given ColumnID of the Master TableID
 from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodsdetailrelationsinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;.</p>
@@ -529,7 +529,7 @@ $scope.fetchOdsDetailRelationsInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L1254" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsmasterrelationsinfo">fetchOdsMasterRelationsInfo(tableID, columnID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L1288" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsmasterrelationsinfo">fetchOdsMasterRelationsInfo(tableID, columnID)</h3>
 <div class="fetchodsmasterrelationsinfo"><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><p>Function that returns the Master Relations ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given foreign ColumnID of the Master TableID
 from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodsmasterrelationsinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;.</p>
@@ -626,7 +626,7 @@ $scope.fetchOdsMasterRelationsInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L1148" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsrelationinfo">fetchOdsRelationInfo(relationID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L1182" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsrelationinfo">fetchOdsRelationInfo(relationID)</h3>
 <div class="fetchodsrelationinfo"><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>Function that returns the ODS Releation definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodsrelationinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>relationID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>The ODS Relation ID or the ODS Relation GID in string (guid) to retrieve</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchodsrelationinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">promise</a></td><td><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>Returns a promise.</p>
@@ -720,7 +720,7 @@ $scope.fetchOdsRelationInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L955" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodstableinfo">fetchOdsTableInfo(tableID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L989" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodstableinfo">fetchOdsTableInfo(tableID)</h3>
 <div class="fetchodstableinfo"><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>Function that returns the ODSTable definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodstableinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>The ODS Table ID or the ODS Table GID in string (guid) to retrieve</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchodstableinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">promise</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>Returns a promise.</p>
@@ -866,7 +866,7 @@ $scope.fetchOdsTableInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L2800" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L2889" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
 <div class="fetchpublicquery"><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>fetchPublicQuery is one of the most important functions of the esWebApi Service as it is the most preferable and
 strongly recommended way to get data from the Entersoft Application Server through the Entersoft WEB API Sever.</p>
 <p><strong>Public Queries</strong> is a new Entersoft Data Retrieval component introduced since 4.0.28.0 version of EBS. Public Queries can be defined and managed 
@@ -1046,7 +1046,7 @@ END IF
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L2462" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID, useCache)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L2496" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID, useCache)</h3>
 <div class="fetchpublicqueryinfo"><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Function that returns the Entersoft Janus based GridExLayout as a JSON object.</p>
 </div><h5 id="methods_fetchpublicqueryinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>GroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>FilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query FilterID</p>
@@ -1626,7 +1626,7 @@ var ret = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L1554" class="view-source icon-eye-open"> </a><h3 id="methods_fetchscroller">fetchScroller(groupID, filterID, params)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L1588" class="view-source icon-eye-open"> </a><h3 id="methods_fetchscroller">fetchScroller(groupID, filterID, params)</h3>
 <div class="fetchscroller"><div class="es-services-web-eswebapi-fetchscroller-page"><p>Function that returns the results of the execution of an Entersoft Scroller (simple or hierarchical) in JSON format</p>
 </div><h5 id="methods_fetchscroller_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>groupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchscroller-page"><p>Entersoft Scroller GroupID</p>
 </div></td></tr><tr><td>filterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchscroller-page"><p>Entersoft Scroller FilterID</p>
@@ -1748,7 +1748,7 @@ $scope.fetchScroller = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L1408" class="view-source icon-eye-open"> </a><h3 id="methods_fetchservercapabilities">fetchServerCapabilities()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L1442" class="view-source icon-eye-open"> </a><h3 id="methods_fetchservercapabilities">fetchServerCapabilities()</h3>
 <div class="fetchservercapabilities"><div class="es-services-web-eswebapi-fetchservercapabilities-page"><p>Function that returns the WEB API Server capabilities in terms of http(s). This service does not require
 authorization prior to call</p>
 </div><h5 id="methods_fetchservercapabilities_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchservercapabilities-page"><p>If success i.e. function(ret) { ... } <strong><em>ret</em></strong> is a JSON object of the current WEB API Server capabilities.
@@ -1778,7 +1778,7 @@ The return object has the following structure:</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L1776" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L1810" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
 <div class="fetchsessioninfo"><div class="es-services-web-eswebapi-fetchsessioninfo-page"><p>Function that returns Entersoft Application Server session information</p>
 </div><h5 id="methods_fetchsessioninfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchsessioninfo-page"><p>Returns a promise.</p>
 <ul>
@@ -1833,7 +1833,7 @@ $scope.fetchSessionInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L1667" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsimplescrollerroottable">fetchSimpleScrollerRootTable(groupID, filterID, params)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L1701" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsimplescrollerroottable">fetchSimpleScrollerRootTable(groupID, filterID, params)</h3>
 <div class="fetchsimplescrollerroottable"><div class="es-services-web-eswebapi-fetchsimplescrollerroottable-page"><p>Function that returns the data of the defined MasterTable for an Entersoft Scroller (simple or hierarchical) in JSON format.
 It is very similar to fetchScroller function with the <strong>MAIN</strong> difference that it only returns the data for the <strong>MASTER Table</strong> as
 defined by the creator at the Scroller Definition</p>
@@ -1939,7 +1939,7 @@ $scope.fetchSimpleScrollerRootTable = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L2565" class="view-source icon-eye-open"> </a><h3 id="methods_fetchstdzoom">fetchStdZoom(zoomID, pqOptions, useCache)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L2599" class="view-source icon-eye-open"> </a><h3 id="methods_fetchstdzoom">fetchStdZoom(zoomID, pqOptions, useCache)</h3>
 <div class="fetchstdzoom"><h5 id="methods_fetchstdzoom_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>zoomID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchstdzoom-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>pqOptions</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-fetchstdzoom-page"><p>Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
 pqOptions is a JSON object of the following type:</p>
@@ -2003,7 +2003,7 @@ The response has the typical form as follows:</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L1705" class="view-source icon-eye-open"> </a><h3 id="methods_fetchusersites">fetchUserSites(ebsuser)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L1739" class="view-source icon-eye-open"> </a><h3 id="methods_fetchusersites">fetchUserSites(ebsuser)</h3>
 <div class="fetchusersites"><div class="es-services-web-eswebapi-fetchusersites-page"><p>Function that returns ESGOSites of the current ESCompany that the given user has access to
 authorization prior to call</p>
 </div><h5 id="methods_fetchusersites_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>ebsuser</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchusersites-page"><p>The Entersoft Business Suite UserID for whom we want to fetch the ESGOSites of the current ESCompany
@@ -2032,7 +2032,7 @@ The return object has the following structure:</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L411" class="view-source icon-eye-open"> </a><h3 id="methods_getserverurl">getServerUrl()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L445" class="view-source icon-eye-open"> </a><h3 id="methods_getserverurl">getServerUrl()</h3>
 <div class="getserverurl"><div class="es-services-web-eswebapi-getserverurl-page"><p>Function that returns the full URL to the Entersoft WEB API Server as it has been resolved
 according to the configuration of the esWebApiProvider at the provider&#39;s configuration function of the AngularJS application.
 For more information, please  </p>
@@ -2049,7 +2049,7 @@ alert(sUrl);
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L620" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L654" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
 <div class="logout"><div class="es-services-web-eswebapi-logout-page"><p>Function that performs a web session logout. As a result of calling this function, all internal state
 related to the current web session, if any, is cleaned-up and no valid web session is available. The application/user must login again through <a href="#/api/es.Services.Web.esWebApi#methods_opensession">openSession</a>
 in order to be able to call any Entersoft WEB API autheticated method or service.</p>
@@ -2064,7 +2064,7 @@ $scope.doLogout = function ()
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L2896" class="view-source icon-eye-open"> </a><h3 id="methods_multipublicquery">multiPublicQuery(pqDefs)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L2985" class="view-source icon-eye-open"> </a><h3 id="methods_multipublicquery">multiPublicQuery(pqDefs)</h3>
 <div class="multipublicquery"><div class="es-services-web-eswebapi-multipublicquery-page"><p>multiPublicQuery is similar to the <a href="#/api/es.Services.Web.esWebApi#methods_fetchpublicquery">fetchPublicQuery</a> with the difference
 that it supports for multiple public queries execution with just one round-trip to the Entersoft WEB API Server and to the Entersoft
 Application Server.</p>
@@ -2118,7 +2118,7 @@ esWebApi.MultiPublicQuery(pqParams)
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/b5049e5/src/js/eswebservices.js#L572" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/afd0cac/src/js/eswebservices.js#L606" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
 <div class="opensession"><div class="es-services-web-eswebapi-opensession-page"><p>This is the function that enables for login and connect through the Entersoft WEB API Server to the Entersoft Application Server.
 The vast majority of the esWebApi service methods <strong>REQUIRE</strong> for an authorization token in order to be executed. This Authorization token is obtained 
 through a successfull call of the <strong><strong>openSession</strong></strong>  function and it is implicitly stored and managed by the esWebApi for its complete lifecycle.</p>
