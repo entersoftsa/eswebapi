@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-17
+/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-19
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -58,7 +58,8 @@
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
         __FETCH_ES00DOCUMENT_BY_ENTITYGID__: "api/ES00Documents/InfoByEntityGid/",
         __FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__: "api/ES00Documents/BlobDataByGID/",
-        __FETCH_ES00DOCUMENT_MIME_TYPES__:  "api/ES00Documents/ESMimeTypes/",
+        __FETCH_ES00DOCUMENT_MIME_TYPES__: "api/ES00Documents/ESMimeTypes/",
+        __DELETE_ES00DOCUMENT__: "api/ES00Documents/DeleteES00Document/",
         __ADD_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/addES00DocumentBlobData/",
     });
 
@@ -303,8 +304,8 @@ eskbApp.config(['$logProvider',
                             var ht = $http(httpConfig);
                             processWEBAPIPromise(ht, tt)
                                 .then(function(ret) {
-                                    esCache.setItem(ES_MIME_TYPES, ret.data);
-                                    deferred.resolve(ret);
+                                    esCache.setItem("ES_MIME_TYPES", ret.data);
+                                    deferred.resolve(ret.data);
                                 }, function() {
                                     deferred.reject(arguments);
                                 });
@@ -3139,6 +3140,42 @@ var options = {Accept: 'text/plain'}
                                 return processWEBAPIPromise(ht, tt);
                             },
 
+                            /**
+                             @ngdoc function
+                             * @name es.Services.Web.esWebApi#getMimeTypes
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function returns an array of JSON objects representing the Mime types that the ES WEB API server supports
+                             * @return {object[]} Array of json objects of the form {mime: string, extension: string, IsText: boolean}
+                             * @example
+```js
+esWebApi.getMimeTypes()
+    .then(function(ret) {
+        $scope.pMimeTypes = JSON.stringify(ret);
+    },
+    function(err) {
+        $scope.pMimeTypes = JSON.stringify(err);
+    });
+
+// The result will be like:
+[{
+    "mime": "application/andrew-inset",
+    "extension": ["ez"],
+    "IsText": false
+}, {
+    "mime": "application/applixware",
+    "extension": ["aw"],
+    "IsText": false
+}, {
+    "mime": "application/atom+xml",
+    "extension": ["atom"],
+    "IsText": false
+},
+...
+]
+
+```
+                             */
                             getMimeTypes: fGetMimeTypes,
 
 
@@ -3342,6 +3379,53 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                         "Authorization": esGlobals.getWebApiToken()
                                     },
                                     url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
+                            },
+
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#deleteES00Document
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description Deletes the ES00DocumentInfo record as specified by the parameters and returns the current set of ES00Documents
+                             * that are corelated to the specified Entity object
+                             * @param {object} es00Document The JSON object representation of the ES00Documen to be deleted. The following attributes are mandatory:
+                             * * __GID__
+                             * * __TableID__
+                             * * __TableName__
+                             * * __fGID__
+                             * @example
+```js
+ $scope.deleteES00Document = function() {
+    esWebApi.deleteES00Document($scope.pEntityType, $scope.pEntityGID, $scope.pDocumentGID)
+        .then(function(ret) {
+                $scope.pES00DocResults = ret.data;
+            },
+            function(err) {
+                $scope.pES00DocResults = err;
+            });
+}
+```
+                             */
+                            deleteES00Document: function(es00Document) {
+                                es00Document = es00Document || {};
+
+                                if (!es00Document.TableID || !es00Document.TableName || !es00Document.GID || !es00Document.fGID) {
+                                    throw "Invalid parameter. One or more of the properties TableID, TableName, fGID and GID are not specified";
+                                }
+
+                                var surl = ESWEBAPI_URL.__DELETE_ES00DOCUMENT__;
+                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "DELETE", es00Document.fGID);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'post',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    data: es00Document
                                 });
                                 return processWEBAPIPromise(ht, tt);
                             },
@@ -5029,6 +5113,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return this;
             }
 
+
+
             return {
 
                 /**
@@ -5051,6 +5137,84 @@ var esAPIversion = {
                     return esAngularAPIVer;
                 },
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#getMimeTypeForExt
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns the mime-type for the given input filename or extension.
+                 * 
+                 * **REQUIRES ESWebAPIServer >= 1.7.9**
+                 *
+                 * @param {object[]} mimelist An array of objects of type {mime: string, extension: string, IsText: boolean} that holds a mime representation record.
+                 * For more information on how to get a list of supported mime types please read {@link es.Services.Web.esWebApi#methods_getMimeTypes mimeTypes}.
+                 * @param {string} filenamewithext the fullpath or just the filename or just the extension for which we want to have the corresponding mime-type
+                 * i.e. "/abc/xyz/masterfile.pdf" or "docx" or ".xlsx", etc.
+                 * @return {string} The mime-type string for the extension or filename provided in the _filenamewithext_ param. If no mime-type is registered for 
+                 * this extension the function returns an empty string ''.
+                 * @example
+                 * 
+```js
+var mimeType = esGlobals.getMimeTypeForExt(mimelist, "myfile.docx");
+// mimeType will be "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+```
+                */
+                getMimeTypeForExt: function(mimelist, filenamewithext) {
+                    if (!filenamewithext) {
+                        return "";
+                    }
+                    var parts = filenamewithext.split(".");
+                    var ext = parts[parts.length - 1].toLowerCase();
+                    if (!ext) {
+                        return "";
+                    }
+
+                    var mime = _.find(mimelist, function(x) {
+                        return x.extension.indexOf(ext) != -1;
+                    });
+                    if (mime) {
+                        return mime.mime;
+                    }
+                    return "";
+                },
+
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#getExtensionsForMimeType
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns an array of extensions that match the given mimeType
+                 * 
+                 * **REQUIRES ESWebAPIServer >= 1.7.9**
+                 *
+                 * @param {object[]} mimelist An array of objects of type {mime: string, extension: string, IsText: boolean} that holds a mime representation record.
+                 * For more information on how to get a list of supported mime types please read {@link es.Services.Web.esWebApi#methods_getMimeTypes mimeTypes}.
+                 * @param {string} mimeType The mimeType string for which we want the string array of extensions that are mapped to this mimeType
+                 * @return {array} The array of strings that are mapped to this mimeType. If no map is found, an empty array i.e. [] will be returned
+                 * @example
+                 * 
+```js
+var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
+//exts will be ["txt", "text", "conf", "def", "list", "log", "in"]
+```
+                */
+                getExtensionsForMimeType: function(mimilist, mimeType) {
+                    if (!mimeType) {
+                        return [];
+                    }
+
+                    mimeType = mimeType.toLowerCase();
+                    var mime = _.find(mimelist, function(x) {
+                        return x.mime == mimeType;
+                    });
+
+                    if (mime) {
+                        return mime.extension;
+                    }
+                    return [];
+                },
 
                 getGA: fgetGA,
 
@@ -5092,7 +5256,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 ESMultiPublicQuery: ESMultiPublicQuery,
                 ESMultiZoomDef: ESMultiZoomDef,
                 ESPQOptions: ESPQOptions,
-
+                
                 sessionClosed: function() {
                     esClientSession.setModel(null);
                 },

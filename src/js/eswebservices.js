@@ -56,7 +56,8 @@
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
         __FETCH_ES00DOCUMENT_BY_ENTITYGID__: "api/ES00Documents/InfoByEntityGid/",
         __FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__: "api/ES00Documents/BlobDataByGID/",
-        __FETCH_ES00DOCUMENT_MIME_TYPES__:  "api/ES00Documents/ESMimeTypes/",
+        __FETCH_ES00DOCUMENT_MIME_TYPES__: "api/ES00Documents/ESMimeTypes/",
+        __DELETE_ES00DOCUMENT__: "api/ES00Documents/DeleteES00Document/",
         __ADD_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/addES00DocumentBlobData/",
     });
 
@@ -301,8 +302,8 @@ eskbApp.config(['$logProvider',
                             var ht = $http(httpConfig);
                             processWEBAPIPromise(ht, tt)
                                 .then(function(ret) {
-                                    esCache.setItem(ES_MIME_TYPES, ret.data);
-                                    deferred.resolve(ret);
+                                    esCache.setItem("ES_MIME_TYPES", ret.data);
+                                    deferred.resolve(ret.data);
                                 }, function() {
                                     deferred.reject(arguments);
                                 });
@@ -3137,6 +3138,42 @@ var options = {Accept: 'text/plain'}
                                 return processWEBAPIPromise(ht, tt);
                             },
 
+                            /**
+                             @ngdoc function
+                             * @name es.Services.Web.esWebApi#getMimeTypes
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function returns an array of JSON objects representing the Mime types that the ES WEB API server supports
+                             * @return {object[]} Array of json objects of the form {mime: string, extension: string, IsText: boolean}
+                             * @example
+```js
+esWebApi.getMimeTypes()
+    .then(function(ret) {
+        $scope.pMimeTypes = JSON.stringify(ret);
+    },
+    function(err) {
+        $scope.pMimeTypes = JSON.stringify(err);
+    });
+
+// The result will be like:
+[{
+    "mime": "application/andrew-inset",
+    "extension": ["ez"],
+    "IsText": false
+}, {
+    "mime": "application/applixware",
+    "extension": ["aw"],
+    "IsText": false
+}, {
+    "mime": "application/atom+xml",
+    "extension": ["atom"],
+    "IsText": false
+},
+...
+]
+
+```
+                             */
                             getMimeTypes: fGetMimeTypes,
 
 
@@ -3340,6 +3377,53 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                         "Authorization": esGlobals.getWebApiToken()
                                     },
                                     url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
+                            },
+
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#deleteES00Document
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description Deletes the ES00DocumentInfo record as specified by the parameters and returns the current set of ES00Documents
+                             * that are corelated to the specified Entity object
+                             * @param {object} es00Document The JSON object representation of the ES00Documen to be deleted. The following attributes are mandatory:
+                             * * __GID__
+                             * * __TableID__
+                             * * __TableName__
+                             * * __fGID__
+                             * @example
+```js
+ $scope.deleteES00Document = function() {
+    esWebApi.deleteES00Document($scope.pEntityType, $scope.pEntityGID, $scope.pDocumentGID)
+        .then(function(ret) {
+                $scope.pES00DocResults = ret.data;
+            },
+            function(err) {
+                $scope.pES00DocResults = err;
+            });
+}
+```
+                             */
+                            deleteES00Document: function(es00Document) {
+                                es00Document = es00Document || {};
+
+                                if (!es00Document.TableID || !es00Document.TableName || !es00Document.GID || !es00Document.fGID) {
+                                    throw "Invalid parameter. One or more of the properties TableID, TableName, fGID and GID are not specified";
+                                }
+
+                                var surl = ESWEBAPI_URL.__DELETE_ES00DOCUMENT__;
+                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "DELETE", es00Document.fGID);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'post',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    data: es00Document
                                 });
                                 return processWEBAPIPromise(ht, tt);
                             },

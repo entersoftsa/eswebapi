@@ -601,6 +601,26 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                     $log.error("2nd error = " + JSON.stringify(err));
                 });
         }
+
+        $scope.deleteES00Document = function() {
+        	esWebApi.deleteES00Document($scope.pEntityType, $scope.pEntityGID, $scope.pDocumentGID)
+                .then(function(ret) {
+                        $scope.pES00DocResults = ret.data;
+                    },
+                    function(err) {
+                        $scope.pES00DocResults = err;
+                    });	
+        }
+
+        $scope.getMimeList = function() {
+        	esWebApi.getMimeTypes()
+        		.then(function(ret) {
+        			$scope.pMimeTypes = JSON.stringify(ret);
+        		},
+        		function(err) {
+        			$scope.pMimeTypes = JSON.stringify(err);
+        		});
+        }
     }
 ]);
 

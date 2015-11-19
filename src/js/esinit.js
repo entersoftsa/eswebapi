@@ -582,6 +582,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return this;
             }
 
+
+
             return {
 
                 /**
@@ -604,6 +606,84 @@ var esAPIversion = {
                     return esAngularAPIVer;
                 },
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#getMimeTypeForExt
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns the mime-type for the given input filename or extension.
+                 * 
+                 * **REQUIRES ESWebAPIServer >= 1.7.9**
+                 *
+                 * @param {object[]} mimelist An array of objects of type {mime: string, extension: string, IsText: boolean} that holds a mime representation record.
+                 * For more information on how to get a list of supported mime types please read {@link es.Services.Web.esWebApi#methods_getMimeTypes mimeTypes}.
+                 * @param {string} filenamewithext the fullpath or just the filename or just the extension for which we want to have the corresponding mime-type
+                 * i.e. "/abc/xyz/masterfile.pdf" or "docx" or ".xlsx", etc.
+                 * @return {string} The mime-type string for the extension or filename provided in the _filenamewithext_ param. If no mime-type is registered for 
+                 * this extension the function returns an empty string ''.
+                 * @example
+                 * 
+```js
+var mimeType = esGlobals.getMimeTypeForExt(mimelist, "myfile.docx");
+// mimeType will be "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+```
+                */
+                getMimeTypeForExt: function(mimelist, filenamewithext) {
+                    if (!filenamewithext) {
+                        return "";
+                    }
+                    var parts = filenamewithext.split(".");
+                    var ext = parts[parts.length - 1].toLowerCase();
+                    if (!ext) {
+                        return "";
+                    }
+
+                    var mime = _.find(mimelist, function(x) {
+                        return x.extension.indexOf(ext) != -1;
+                    });
+                    if (mime) {
+                        return mime.mime;
+                    }
+                    return "";
+                },
+
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#getExtensionsForMimeType
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns an array of extensions that match the given mimeType
+                 * 
+                 * **REQUIRES ESWebAPIServer >= 1.7.9**
+                 *
+                 * @param {object[]} mimelist An array of objects of type {mime: string, extension: string, IsText: boolean} that holds a mime representation record.
+                 * For more information on how to get a list of supported mime types please read {@link es.Services.Web.esWebApi#methods_getMimeTypes mimeTypes}.
+                 * @param {string} mimeType The mimeType string for which we want the string array of extensions that are mapped to this mimeType
+                 * @return {array} The array of strings that are mapped to this mimeType. If no map is found, an empty array i.e. [] will be returned
+                 * @example
+                 * 
+```js
+var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
+//exts will be ["txt", "text", "conf", "def", "list", "log", "in"]
+```
+                */
+                getExtensionsForMimeType: function(mimilist, mimeType) {
+                    if (!mimeType) {
+                        return [];
+                    }
+
+                    mimeType = mimeType.toLowerCase();
+                    var mime = _.find(mimelist, function(x) {
+                        return x.mime == mimeType;
+                    });
+
+                    if (mime) {
+                        return mime.extension;
+                    }
+                    return [];
+                },
 
                 getGA: fgetGA,
 
@@ -645,7 +725,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 ESMultiPublicQuery: ESMultiPublicQuery,
                 ESMultiZoomDef: ESMultiZoomDef,
                 ESPQOptions: ESPQOptions,
-
+                
                 sessionClosed: function() {
                     esClientSession.setModel(null);
                 },

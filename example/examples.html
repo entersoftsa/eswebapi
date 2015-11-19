@@ -272,13 +272,32 @@
         </span>
     </div>
 
-        <hr/>
+    <hr/>
     <div>
         <h3>24. fetchES00DocumentBLOB Data</h3>
         <span>
             <input type="text" ng-model="pES00Doc"  placeholder="ES00Document Entity GID">
             <button ng-click="fetchES00DocumentBlobDataByGID()">fetchES00DocumentBlobDataByGID</button>
             <textarea>{{pES00DocResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>25. delete es00document</h3>
+        <span>
+            <input type="text" ng-model="pEntityType"  placeholder="ES00Document Entity Type">
+            <input type="text" ng-model="pEntityGID"  placeholder="ES00Document Entity GID">
+            <input type="text" ng-model="pDocumentGID"  placeholder="ES00Document GID">
+            <button ng-click="deleteES00Document()">deleteES00Document</button>
+            <textarea>{{pES00DocResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>26. getMimeList</h3>
+        <span>
+            <button ng-click="getMimeList()">getMimeList</button>
+            <textarea>{{pMimeTypes}}</textarea>
         </span>
     </div>
 </div>
