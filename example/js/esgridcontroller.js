@@ -637,6 +637,16 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         			$scope.pMimeTypes = JSON.stringify(err);
         		});
         }
+
+        $scope.fetchEntity = function() {
+        	esWebApi.fetchEntity($scope.pEntityClass, $scope.pEntityKey)
+        	.then(function(ret) {
+        		$scope.pEntityDS = ret.data;
+        	}, 
+        	function(err) {
+        		$scope.pEntityDS = err;
+        	})
+        }
     }
 ]);
 

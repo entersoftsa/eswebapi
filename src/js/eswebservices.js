@@ -52,6 +52,7 @@
         __FETCH_ODS_DETAIL_RELATIONS_INFO__: "api/rpc/FetchOdsDetailRelationsInfo/",
         __FETCH_ODS_MASTER_RELATIONS_INFO__: "api/rpc/FetchOdsMasterRelationsInfo/",
         __FI_IMPORTDOCUMENT___: "api/rpc/FIImportDocument/",
+        __FETCH_ENTITY__: "api/rpc/fetchEntity/",
         __FETCH_WEB_EAS_ASSET__: "api/asset/",
         __FETCH_ES00DOCUMENT_BY_GID__: "api/ES00Documents/InfoByGID/",
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
@@ -2775,9 +2776,13 @@ $scope.fetchStdZoom = function()
                              ** BINARY* type fields are supported BUT not explicitly converted to any web or javascript recommended BASE64 representation. The use of fields of binary type
                              * in the PQ schema should be extemely rare for many reasons (web performance, security, javascript's limitations & restrictions, etc.).
                              * 
-                             * @param {string} pqGroupID Entersoft Public Query GroupID
+                             * @param {string|ESMultiPublicQuery} pqGroupID if string then Entersoft Public Query GroupID or a ESMultiPublicQuery object that defines the rest of the parameters
+                             * @param {string} pqGroupID.GroupID Entersoft Public Query GroupID
+                             * @param {string} pqGroupID.FilterID Public Query FilterID
+                             * @param {ESPQOptions} pqGroupID.PQOptions Entersoft Public Query execution options
+                             * @param {object} pqGroupID.Params Parameters that will be used for the execution of the Public Query at the Entersoft Application Server
                              * @param {string} pqFilterID Entersoft Public Query FilterID
-                             * @param {object} pqOptions Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
+                             * @param {ESPQOptions} pqOptions Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
                              * pqOptions is a JSON object of the following type:
  ```js
 var pqOptions = {
@@ -2889,11 +2894,19 @@ $scope.dofetchPublicQuery = function() {
 ```
                              */
                             fetchPublicQuery: function(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb) {
-                                pqGroupID = pqGroupID ? pqGroupID.trim() : "";
-                                pqFilterID = pqFilterID ? pqFilterID.trim() : "";
+                                var group;
+                                if (pqGroupID instanceof esGlobals.ESMultiPublicQuery) {
+                                    group = (pqGroupID.GroupID || "").trim();
+                                    pqFilterID = (pqGroupID.FilterID || "").trim();
+                                    pqOptions = pqGroupID.PQOptions;
+                                    pqParams = pqGroupID.Params;
+                                } else {
+                                    group = pqGroupID ? pqGroupID.trim() : "";
+                                    pqFilterID = pqFilterID ? pqFilterID.trim() : "";
+                                }
 
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY__, pqGroupID, "/", pqFilterID);
-                                var tt = esGlobals.trackTimer("PQ", "FETCH", pqGroupID.concat("/", pqFilterID));
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY__, group, "/", pqFilterID);
+                                var tt = esGlobals.trackTimer("PQ", "FETCH", group.concat("/", pqFilterID));
                                 tt.startTime();
 
                                 /**
@@ -3100,6 +3113,25 @@ var options = {Accept: 'text/plain'}
                                 }
 
                                 var ht = $http(httpConfig);
+                                return processWEBAPIPromise(ht, tt);
+                            },
+
+                            fetchEntity: function(entityclass, key) {
+                                if (!entityclass || !key) {
+                                    throw "invliad parameters";
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ENTITY__, "/", entityclass, "/", key);
+                                var tt = esGlobals.trackTimer("FETCH_ENTITY", entityclass, key);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl
+                                });
                                 return processWEBAPIPromise(ht, tt);
                             },
 
