@@ -583,6 +583,15 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                     });
         }
 
+        $scope.fiImportDocument = function() {
+        	esWebApi.fiImportDocument($scope.xmldocstr)
+        		.then(function(ret) {
+        			$scope.xmldocret = ret.data;
+        		}, function(err) {
+        			$scope.xmldocret = err;
+        		})
+        }
+
         $scope.fetchES00DocumentBlobDataByGID = function() {
            esWebApi.fetchES00DocumentBlobDataByGID($scope.pES00Doc)
                 .then(function(result) {
@@ -603,7 +612,14 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         }
 
         $scope.deleteES00Document = function() {
-        	esWebApi.deleteES00Document($scope.pEntityType, $scope.pEntityGID, $scope.pDocumentGID)
+        	var doc = {
+        		GID: $scope.pDocumentGID,
+        		TableID: $scope.pEntityType,
+        		TableName: $scope.pEntityTable,
+        		fGID: $scope.pEntityGID
+        	};
+
+        	esWebApi.deleteES00Document(doc)
                 .then(function(ret) {
                         $scope.pES00DocResults = ret.data;
                     },

@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.3.2 - 2015-11-19
+/*! Entersoft Application Server WEB API - v1.4.0 - 2015-11-20
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -53,6 +53,7 @@
         __FETCH_ODS_RELATION_INFO__: "api/rpc/FetchOdsRelationInfo/",
         __FETCH_ODS_DETAIL_RELATIONS_INFO__: "api/rpc/FetchOdsDetailRelationsInfo/",
         __FETCH_ODS_MASTER_RELATIONS_INFO__: "api/rpc/FetchOdsMasterRelationsInfo/",
+        __FI_IMPORTDOCUMENT___: "api/rpc/FIImportDocument/",
         __FETCH_WEB_EAS_ASSET__: "api/asset/",
         __FETCH_ES00DOCUMENT_BY_GID__: "api/ES00Documents/InfoByGID/",
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
@@ -60,7 +61,7 @@
         __FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__: "api/ES00Documents/BlobDataByGID/",
         __FETCH_ES00DOCUMENT_MIME_TYPES__: "api/ES00Documents/ESMimeTypes/",
         __DELETE_ES00DOCUMENT__: "api/ES00Documents/DeleteES00Document/",
-        __ADD_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/addES00DocumentBlobData/",
+        __ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/AddOrUpdateES00DocumentBlobData/",
     });
 
     esWebServices.value("__WEBAPI_RT__", {
@@ -3104,6 +3105,38 @@ var options = {Accept: 'text/plain'}
                                 return processWEBAPIPromise(ht, tt);
                             },
 
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fiImportDocument
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function imports a ESFIDocument of all the supported classes i.e.(Trade, Cash, Adjustment and Stock) through the FIImportDoc service of the Entersoft Application Server.
+                             * @param {string} xmldocstr The XML representation of the financial document to be inserted/updates through the
+                             * Entersoft Application Server FIImportDocument service. For more, see the relative {@link http://www.entersoft.gr/KBArticle/%CE%94%CE%B9%CE%B1%CE%B4%CE%B9%CE%BA%CE%B1%CF%83%CE%AF%CE%B1%20%CE%B5%CE%B9%CF%83%CE%B1%CE%B3%CF%89%CE%B3%CE%AE%CF%82%20%CF%80%CE%B1%CF%81%CE%B1%CF%83%CF%84%CE%B1%CF%84%CE%B9%CE%BA%CF%8E%CE%BD%20%CE%B1%CF%80%CF%8C%20XML/MEMBERS_slh_KnowledgeBase Entersoft Knowledge Base article}.
+                             * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains the string result of the FIImportDocument function.
+                             */
+                            fiImportDocument: function(xmldocstr) {
+
+                                if (!xmldocstr) {
+                                    throw "xmldocstr is not a valid string";
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FI_IMPORTDOCUMENT___);
+                                var tt = esGlobals.trackTimer("ESGENERAL", "FIMPORTDOCUMENT");
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'post',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl,
+                                    data: xmldocstr
+                                });
+                                return processWEBAPIPromise(ht, tt);
+
+                            },
+
                             /** 
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#fetchES00DocumentBlobDataByGID
@@ -3415,8 +3448,8 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     throw "Invalid parameter. One or more of the properties TableID, TableName, fGID and GID are not specified";
                                 }
 
-                                var surl = ESWEBAPI_URL.__DELETE_ES00DOCUMENT__;
-                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "DELETE", es00Document.fGID);
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DELETE_ES00DOCUMENT__);
+                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "DELETE", es00Document.GID);
                                 tt.startTime();
 
                                 var ht = $http({
@@ -3430,10 +3463,57 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                 return processWEBAPIPromise(ht, tt);
                             },
 
-                            addES00Document: function(doc, file, okfunc, errfunc, progressfunc) {
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#addOrUpdateES00Document
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description Deletes the ES00DocumentInfo record as specified by the parameters and returns the current set of ES00Documents
+                             * that are corelated to the specified Entity object
+                             * @param {object} doc The JSON object representation of the ES00Document to be added or updated (in case that it exists)
+                             * @param {file} file The file object holding the value of the <input> element of type file
+                             * @param {function=} okfunc a function that will be called when the upload is completed
+                             * @param {function=} errfunc a function that will called should an error occurs while uploading the file
+                             * @param {function=} progressfunc a function that will be called as many times as necessary to indicate the progress of the
+                             * uploading of the file i.e. to inform the user about the percentage of the bytes that have been uploaded so far
+                             * @return {promise} a promise that upon successful completion you can get the results by hooking th then function i.e.
+                             * .then(function(ret) { ... })
+                             * @example
+```js
+ $scope.uploadPic = function(myFile) {
+    var okf = function(retFile) {
+        $log.info("file uploaded ....");
+    };
+
+    var errf = function(response) {
+        if (response.status > 0)
+            $scope.errorMsg = response.status + ': ' + response.data;
+        else {
+            $scope.errorMsg = "Ooops something wnet wrong";
+        }
+        $log.error($scope.errorMsg);
+    };
+
+    var progressf = function(evt) {
+        myFile.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+    };
+
+    var doc = {
+        "GID": "3536eaa3-6c67-4d15-a8d9-3519711969c9",
+        "Title": "Hello File",
+        "Description": $scope.username,
+        "Caption": "Tehcnical Guide for Hello File",
+        "OriginalFN": "xxx.pdf"
+    };
+
+    esWebApi.addES00Document(doc, myFile, okf, errf, progressf);
+}
+```
+                             */
+                            addOrUpdateES00Document: function(doc, file, okfunc, errfunc, progressfunc) {
 
                                 file.upload = Upload.upload({
-                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__ADD_ES00DOCUMENT_BLOBDATA__),
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__),
                                     method: 'POST',
                                     headers: {
                                         "Authorization": esGlobals.getWebApiToken()
@@ -3444,29 +3524,6 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     file: file,
                                 });
 
-                                file.upload.then(function(response) {
-                                    $timeout(function() {
-                                        file.result = response.data;
-                                        okfunc(file);
-                                    });
-                                }, errfunc);
-
-                                file.upload.progress(progressfunc);
-
-                            },
-
-                            /*
-                            addES00Document: function(entity, entityId, description, file, okfunc, errfunc, progressfunc, assetPath) {
-
-                                file.upload = Upload.upload({
-                                    url: assetPath + '/api/photo',
-                                    method: 'POST',
-                                    fields: {
-                                        esEntityGID: entityId,
-                                        esDescription: description
-                                    },
-                                    file: file,
-                                });
 
                                 file.upload.then(function(response) {
                                     $timeout(function() {
@@ -3477,8 +3534,9 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 
                                 file.upload.progress(progressfunc);
 
+                                return file.upload;
+
                             },
-                            */
 
                             /** 
                              * @ngdoc function
@@ -4537,7 +4595,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.3.2";
+    var version = "1.4.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });

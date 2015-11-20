@@ -286,6 +286,7 @@
         <h3>25. delete es00document</h3>
         <span>
             <input type="text" ng-model="pEntityType"  placeholder="ES00Document Entity Type">
+            <input type="text" ng-model="pEntityTable"  placeholder="ES00Document Entity Table">
             <input type="text" ng-model="pEntityGID"  placeholder="ES00Document Entity GID">
             <input type="text" ng-model="pDocumentGID"  placeholder="ES00Document GID">
             <button ng-click="deleteES00Document()">deleteES00Document</button>
@@ -298,6 +299,16 @@
         <span>
             <button ng-click="getMimeList()">getMimeList</button>
             <textarea>{{pMimeTypes}}</textarea>
+        </span>
+    </div>
+
+    <hr/>
+    <div>
+        <h3>27. FIImportDocument</h3>
+        <span>
+            <textarea ng-model="xmldocstr"></textarea>
+            <button ng-click="fiImportDocument()">fiImportDocument</button>
+            <textarea>{{xmldocret}}</textarea>
         </span>
     </div>
 </div>
