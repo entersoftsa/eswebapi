@@ -2,7 +2,7 @@
   "name": "eswebapi",
   "title": "Entersoft Application Server WEB API",
   "description": "Entersoft Application Server WEB API",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "readme": "README.md",
   "license": "Apache-2.0",
   "licenses": [

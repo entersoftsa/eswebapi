@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.4.0 - 2015-11-20
+/*! Entersoft Application Server WEB API - v1.5.0 - 2015-11-23
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -2543,16 +2543,8 @@ function($scope, esWebApi, esWebUIHelper) {
                              * @module es.Services.Web
                              * @kind function
                              * @param {string} zoomID Entersoft Public Query GroupID
-                             * @param {object} pqOptions Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
-                             * pqOptions is a JSON object of the following type:
- ```js
-var pqOptions = {
-    WithCount: boolean,
-    Page: int,
-    PageSize: int
-};
-```
-                             *
+                             * @param {ESPQOptions} pqOptions Entersoft Public Query execution options with respect to Paging, PageSize and WithCount.
+                             * See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}
                              ** If pqOptions is null or undefined OR pqOptions.Page is null OR undefined OR NaN OR less than or equal to 0 THEN
                              * the Public Query will be executed at the Entersoft Application Server with no paging at all, which means that ALL the 
                              * rows will be returned.
@@ -2642,6 +2634,34 @@ $scope.fetchStdZoom = function()
                                 return deferred.promise;
                             },
 
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchMultiStdZoom
+                             * @methodOf es.Services.Web.esWebApi
+                             * @module es.Services.Web
+                             * @kind function
+                             * @description a function that fetches with just one round-trip for the browser to the Entersoft Application Server
+                             * the contebts of one or more ES Zooms as sepcified by the input parameter
+                             * @param {ESMultiZoomDef[]} multizoomdefs An array of {@link es.Services.Web.esGlobals#methods_ESMultiZoomDef ESMultiZoomDef} objects each one of which specifies the ES Zoom to be retrieved from the server.
+                             * @return {promise} Returns a promise that once resolved the returned object will hold an array with the Zoom contents in one-to-one mapping with the input array
+                             * @example
+```js
+$scope.multifetchStdZoom = function() {
+    var zoomOptions = new esGlobals.ESPQOptions(300, 5, false);
+
+    var zooms = _.map($scope.pZoomID.split(','), function(k) {
+        return new esGlobals.ESMultiZoomDef(k, zoomOptions, true);
+    });
+
+    esWebApi.fetchMultiStdZoom(zooms)
+        .then(function(ret) {
+            $scope.pZoomResults = ret;
+        }, function(err) {
+            $scope.pZoomResults = JSON.stringify(err);
+        });
+}
+```
+                             */
                             fetchMultiStdZoom: function(multizoomdefs) {
                                 var deferred = $q.defer();
                                 var retzooms = [];
@@ -2778,22 +2798,10 @@ $scope.fetchStdZoom = function()
                              ** BINARY* type fields are supported BUT not explicitly converted to any web or javascript recommended BASE64 representation. The use of fields of binary type
                              * in the PQ schema should be extemely rare for many reasons (web performance, security, javascript's limitations & restrictions, etc.).
                              * 
-                             * @param {string|ESMultiPublicQuery} pqGroupID if string then Entersoft Public Query GroupID or a ESMultiPublicQuery object that defines the rest of the parameters
-                             * @param {string} pqGroupID.GroupID Entersoft Public Query GroupID
-                             * @param {string} pqGroupID.FilterID Public Query FilterID
-                             * @param {ESPQOptions} pqGroupID.PQOptions Entersoft Public Query execution options
-                             * @param {object} pqGroupID.Params Parameters that will be used for the execution of the Public Query at the Entersoft Application Server
+                             * @param {string|ESMultiPublicQuery} pqGroupID if string then Entersoft Public Query GroupID or a {@link es.Services.Web.esGlobals#methods_ESMultiPublicQuery ESMultiPublicQuery} object that defines the rest of the parameters
                              * @param {string} pqFilterID Entersoft Public Query FilterID
-                             * @param {ESPQOptions} pqOptions Entersoft Public Query execution options with respect to Paging, PageSize and CountOf.
-                             * pqOptions is a JSON object of the following type:
- ```js
-var pqOptions = {
-    WithCount: boolean,
-    Page: int,
-    PageSize: int
-};
-```
-                             *
+                             * @param {ESPQOptions} pqOptions Entersoft Public Query execution options. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
+                             * 
                              ** If pqOptions is null or undefined OR pqOptions.Page is null OR undefined OR NaN OR less than or equal to 0 THEN
                              * the Public Query will be executed at the Entersoft Application Server with no paging at all, which means that ALL the 
                              * rows will be returned.
@@ -2949,16 +2957,12 @@ $scope.dofetchPublicQuery = function() {
                              * @description multiPublicQuery is similar to the {@link es.Services.Web.esWebApi#methods_fetchPublicQuery fetchPublicQuery} with the difference 
                              * that it supports for multiple public queries execution with just one round-trip to the Entersoft WEB API Server and to the Entersoft
                              * Application Server.
-                             * @param {object[]} pqDefs An array of one or more public query defintion objects that are to be executed to the server.
+                             * @param {ESMultiPublicQuery[]} pqDefs An array of one or more public query defintion objects that are to be executed to the server.
                              * The object has the following structure:
-```js
-{
-    GroupID: //string representing the GroupIF of the Public Query,
-    FilterID: //string representing the FilterID of the Public Query,
-    Params: // object the params to be used for the execution of the Public Query
-    PQOptions: // the paging options for the Public Query Execution.
-}
-```
+                             * @param {string} pqDefs.GroupID The GroupID of the Public Query
+                             * @param {string} pqDefs.FilterID The FilterID of the Public Query
+                             * @param {object} pqDefs.Params The params to be used for the execution of the Public Query
+                             * @param {ESPQOptions} pqDefs.PQOptions The paging options for the Public Query Execution. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
                              * @return {MultPublicQueryResult[]} An array of equal size to the _pqDefs_ of objects each one of which holds the results of the 
                              * corresponding public query. The structure of the MultPublicQueryResult object is as follows:
 ```js
@@ -3118,13 +3122,361 @@ var options = {Accept: 'text/plain'}
                                 return processWEBAPIPromise(ht, tt);
                             },
 
-                            fetchEntity: function(entityclass, key) {
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchEntity
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function returns the Entersoft Entity ISUD dataset in JSON representation
+                             * @param {string} entityclass The Entersoft ODS object ID the ISUD record to be retrieved
+                             * @param {string} entitygid The gid in string format that represents the Primary Key of the record to be retrieved
+                             * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains JSON object of the ISUD dataset.
+                             * @example
+```js
+$scope.fetchEntity = function() {
+    esWebApi.fetchEntity("esmmstockitem", "B485C0C2-D9A9-47A6-88A3-039A40CA0157")
+        .then(function(ret) {
+                $scope.pEntityDS = ret.data;
+            },
+            function(err) {
+                $scope.pEntityDS = err;
+            })
+}
+
+var x = {
+    "ESMMStockItem": [{
+        "GID": "b485c0c2-d9a9-47a6-88a3-039a40ca0157",
+        "Code": "ΘΡ.ΑΛ.425",
+        "Description": "ΛΟΥΚ.Τ.ΦΡΑΓΚΦ.18ΧΛ.400ΓΡ -20%",
+        "AlternativeDescription": "SAUSAGE FRANFURT 18ΧΛ.400ΓΡ -20%",
+        "InternationalCode": "ΘΡ.ΑΛ.425",
+        "AlternativeCode": "THR.AL.425",
+        "AssemblyType": 0,
+        "ItemClass": 1,
+        "ItemType": 0,
+        "fMainSupplierGID": "f6f24cba-6c22-49ef-b072-7165ad834592",
+        "fItemPricingCategoryCode": "ΕΜΠΟΡΕΥΜΑΤΑ",
+        "Price": 35,
+        "RetailPrice": 42,
+        "MarkupOnPrice": 11,
+        "MarkupOnRetailPrice": 14,
+        "PriceIncludedVAT": 0,
+        "RetailPriceIncludedVAT": 1,
+        "fMainMUGID": "ac431509-66a2-4fdb-9b75-ac1cd5b9c1e7",
+        "fVATCategoryCode": "1111",
+        "Discount": 4,
+        "MaxDiscount": 6,
+        "MinProfitMargin": 8,
+        "MinSalesOrderQty": 0,
+        "UsualPurchaseOrderQty": 0,
+        "fCommissionLevelCode": "M.FLAT",
+        "fItemFamilyCode": "ΤΡΟΦΙΜΑ",
+        "fItemGroupCode": "ΧΑΙΤΟΓΛΟΥ",
+        "fItemCategoryCode": "ΛΟΥΚΑΝΙΚΑ",
+        "StandardCost": 3.6,
+        "ValuationMethod": 0,
+        "fItemControlProfileGID": "134fe00c-3212-440a-8237-0abd89e5b02c",
+        "IncludedTaxReports": 0,
+        "SerialNumberMgmt": 0,
+        "LotMgmt": 0,
+        "ColorMgmt": 0,
+        "SizeMgmt": 0,
+        "StockDim1Mgmt": 0,
+        "StockDim2Mgmt": 0,
+        "fCatalogueItemGID": "c1f5f5b1-6a9e-4100-9186-49385878f18d",
+        "DateField1": "2006-11-16T00:00:00",
+        "NumericField1": 0,
+        "NumericField2": 0,
+        "NumericField3": 0,
+        "NumericField4": 0,
+        "NumericField5": 0,
+        "NumericField6": 0,
+        "NumericField7": 0,
+        "NumericField8": 0,
+        "NumericField9": 0,
+        "NumericField10": 0,
+        "Flag1": 0,
+        "Flag2": 0,
+        "Flag3": 0,
+        "Flag4": 0,
+        "Flag5": 0,
+        "Flag6": 0,
+        "Flag7": 0,
+        "Flag8": 0,
+        "Flag9": 0,
+        "Flag10": 0,
+        "Flag11": 0,
+        "Flag12": 0,
+        "fBusinessActivityCode": "ΤΡΟΦΙΜΑ",
+        "fGLSegCode": "Εμπορεύματα",
+        "Price1": 0,
+        "Price2": 0,
+        "Price3": 0,
+        "Price1IncludedVAT": false,
+        "Price2IncludedVAT": false,
+        "Price3IncludedVAT": false,
+        "fMUServiceCode": "ΤΕΜ",
+        "fMUMainCode": "ΤΕΜ",
+        "MainSupplier": "f9eef0bf-2995-45cc-85b6-473a03a25a0d",
+        "VATCalculationValue": 1,
+        "Web": 1,
+        "ValuationMethodAnalysis": 0,
+        "MainCode": 1,
+        "ValuationPerPeriod": 0,
+        "ServiceMUType": 0,
+        "Mobile": 0,
+        "SelectInMobileOrder": 1,
+        "PerCentOfTaxExclusion": 0,
+        "MarkupOnPrice1": 0,
+        "MarkupOnPrice2": 0,
+        "MarkupOnPrice3": 0,
+        "OpeningPerFiscalYear": 1,
+        "LotCharacteristicsMgmt": 0,
+        "CatalogueItemBehaviour": 0,
+        "NS_MainSupplierDescription_Col": "ZOLOTAS Α.Ε..",
+        "NS_MainMUDescription_Col": "Τεμάχια",
+        "NS_MainSupplierItemCode_Col": "ΘΡ.ΑΛ.425",
+        "NS_MainSupplierCurrency_Col": "EUR",
+        "fCurrencyRateGroupCode": "1",
+        "SetDate": "2015-11-23T00:00:00",
+        "CurrencyExchangePriceType": 2,
+        "CurrencyRate": 1,
+        "NS_MainSupplierPrice_Col": 0,
+        "ESDCREATED": "2006-11-16T13:51:19.86",
+        "ESDMODIFIED": "2013-09-30T11:42:29.65",
+        "ESUCREATED": "esmaster",
+        "ESUMODIFIED": "KAR",
+        "INACTIVE": 0,
+        "fCompanyCode": "ES"
+    }],
+    "ESMMCatalogueItemRelation": [],
+    "ESMMCatalogueItemRelationStockDimSetMap": [],
+    "ESMMItemStorageLocation": [],
+    "ESMMItemCodes": [{
+        "ItemGID": "b485c0c2-d9a9-47a6-88a3-039a40ca0157",
+        "Code": "ΘΡ.ΑΛ.425",
+        "fMUGID": "ac431509-66a2-4fdb-9b75-ac1cd5b9c1e7",
+        "Description": "ΛΟΥΚ.Τ.ΦΡΑΓΚΦ.18ΧΛ.400ΓΡ -20%",
+        "RequiresBCProcessing": 0,
+        "NumericField1": 0,
+        "NumericField2": 0,
+        "Flag1": false,
+        "Flag2": false,
+        "INACTIVE": 0,
+        "fCompanyCode": "ES"
+    }],
+    "ESMMItemMU": [{
+        "GID": "ac431509-66a2-4fdb-9b75-ac1cd5b9c1e7",
+        "fItemGID": "b485c0c2-d9a9-47a6-88a3-039a40ca0157",
+        "fMUCode": "ΤΕΜ",
+        "Relation": 1,
+        "EditRelation": 0,
+        "DefaultVar2": 1,
+        "DefaultVar3": 1,
+        "DefaultVar4": 0,
+        "RelationType": 0,
+        "ApplyOnUserSelection": 0,
+        "INACTIVE": 0,
+        "fCompanyCode": "ES"
+    }],
+    "ESMMSISupplier": [{
+        "GID": "f6f24cba-6c22-49ef-b072-7165ad834592",
+        "fItemGID": "b485c0c2-d9a9-47a6-88a3-039a40ca0157",
+        "fSupplierGID": "f9eef0bf-2995-45cc-85b6-473a03a25a0d",
+        "SupplierItemCode": "ΘΡ.ΑΛ.425",
+        "fCurrencyCode": "EUR",
+        "Price": 0,
+        "CurrencyPrice": 0,
+        "DeliveryDays": 2,
+        "Discount": 10,
+        "fMUCode": "ΤΕΜ",
+        "MinOrderQty": 0,
+        "OptionLevel": "1",
+        "OfferPrice": 0,
+        "RequiresBCProcessing": 0,
+        "PurchaseNetPrice": 0,
+        "CurrencyPurchaseNetPrice": 0,
+        "CrossCompanyID": "7jgU4Jjao1LMuhSJe6fjJg==",
+        "fCurrencyRateGroupCode": "1",
+        "SetDate": "2015-11-23T00:00:00",
+        "CurrencyExchangePriceType": 2,
+        "CurrencyRate": 1,
+        "fCompanyCode": "ES",
+        "SeqNum": 1
+    }],
+    "ESMMItemWH": [{
+        "GID": "9f88e587-185d-4e2a-8bd2-14eb4c169c9e",
+        "fItemGID": "b485c0c2-d9a9-47a6-88a3-039a40ca0157",
+        "fWareHouseGID": "86947579-6885-4e86-914e-46378db3794f",
+        "BottomLevel": 1,
+        "SecurityLevel": 0,
+        "ReorderLevel": 0,
+        "UpperLevel": 0,
+        "DebitQty": 100,
+        "CreditQty": 2,
+        "ReservedStock": 0,
+        "Remainder": 98,
+        "Available": 98,
+        "BottomLevelAltMU": 0,
+        "SecurityLevelAltMU": 0,
+        "ReorderLevelAltMU": 0,
+        "UpperLevelAltMU": 0,
+        "DebitQtyAltMU": 0,
+        "CreditQtyAltMU": 0,
+        "ReservedStockAltMU": 0,
+        "RemainderAltMU": 0,
+        "AvailableAltMU": 0,
+        "NumericField1": 0,
+        "NumericField2": 0,
+        "NumericField3": 0,
+        "NumericField4": 0,
+        "NumericField5": 0,
+        "AnalysisDebitQty": 0,
+        "AnalysisCreditQty": 0,
+        "AnalysisReservedStock": 0,
+        "AnalysisRemainder": 0,
+        "AnalysisAvailable": 0,
+        "AnalysisDebitQtyAltMU": 0,
+        "AnalysisCreditQtyAltMU": 0,
+        "AnalysisReservedStockAltMU": 0,
+        "AnalysisRemainderAltMU": 0,
+        "AnalysisAvailableAltMU": 0,
+        "fCompanyCode": "ES"
+    }],
+    "ESMMItemCostPrices": [],
+    "ESMMItemDimensionPrices": [],
+    "ESFIItemCategory": [],
+    "ESMMDimensionalAnalysis": [{
+        "GID": "098ec252-57c1-4d68-8f2d-65966c57c567",
+        "fItemGID": "b485c0c2-d9a9-47a6-88a3-039a40ca0157",
+        "fItemMUGID": "ac431509-66a2-4fdb-9b75-ac1cd5b9c1e7",
+        "Length": 0,
+        "Width": 0,
+        "Height": 0,
+        "SurfaceArea": 0,
+        "Volume": 0,
+        "NetWeight": 0,
+        "GrossWeight": 0
+    }],
+    "ESMMItemMURelation": [],
+    "ESWMItemContainerType": [],
+    "FK_ESFIItem_ESMMCommercialProfile": [],
+    "FK_ESFIItem_ESMMItemControlPolicy": [{
+        "GID": "134fe00c-3212-440a-8237-0abd89e5b02c",
+        "Code": "ΠΟΛ-ΔΙΑ-02",
+        "Description": "Απαγόρευση Αρνητικών & Ελεγχος Διαστάσεων",
+        "Display": "ΠΟΛ-ΔΙΑ-02 / Απαγόρευση Αρνητικών & Ελεγχος Διαστάσεων"
+    }],
+    "FK_ESFIItemCategory_ESTMTaskCategoryValue": [],
+    "FK_ESFIItem_ESTMContractTerm": [],
+    "FK_ESFIItem_TaxDifferencesAccount": [],
+    "FK_ESFIItem_ESMMZIntrastatCode": [],
+    "FK_ESMMStockItem_ES00PropertySet": [],
+    "ESTMPCatalogueItem": [],
+    "FK_ESMMCatalogueItemRelation_ESMMStockDimSetMap_Color": [],
+    "FK_ESMMCatalogueItemRelation_ESMMStockDimSetMap_Size": [],
+    "FK_ESMMCatalogueItemRelation_ESMMStockDimSetMap_StockDim1": [],
+    "FK_ESMMCatalogueItemRelation_ESMMStockDimSetMap_StockDim2": [],
+    "FK_ESMMCatalogueItemRelationStockDimSetMap_ESMMStockDimSetMap_Color": [],
+    "FK_ESMMCatalogueItemRelationStockDimSetMap_ESMMStockDimSetMap_Size": [],
+    "FK_ESMMCatalogueItemRelationStockDimSetMap_ESMMStockDimSetMap_StockDim1": [],
+    "FK_ESMMCatalogueItemRelationStockDimSetMap_ESMMStockDimSetMap_StockDim2": [],
+    "FK_ESMMStockItem_ESFIItem": [],
+    "FK_ESMMStockItem_ESBGAllocationProfile": [],
+    "FK_ESMMItemCodes_ESMMZColor": [],
+    "FK_ESMMItemCodes_ESMMZSize": [],
+    "FK_ESMMItemCodes_ESMMZStockDim1": [],
+    "FK_ESMMItemCodes_ESMMZStockDim2": [],
+    "FK_ESMMStockItem_ESFIItemAllocationProfile": [],
+    "FK_ESFIItem_ESFISpecialAccountGroup_DiscountGroup": [],
+    "FK_ESFIItem_ESFISpecialAccountGroup_TaxesGroup": [],
+    "FK_ESFIItem_ESFISpecialAccountGroup_ChargesGroup": [],
+    "FK_ESFIItem_ESFISpecialAccountGroup_DeductionGroup": [],
+    "FK_ESFIItem_ESFISpecialAccountGroup_BonusGroup": [],
+    "FK_ESFIItem_ESMMStockDimSet_Color": [],
+    "FK_ESFIItem_ESMMStockDimSet_Size": [],
+    "FK_ESFIItem_ESMMStockDimSet_1": [],
+    "FK_ESFIItem_ESMMStockDimSet_2": [],
+    "FK_ESMMSISupplier_ESFITradeAccount": [{
+        "GID": "f9eef0bf-2995-45cc-85b6-473a03a25a0d",
+        "Code": "ΠΡΟΜ00020",
+        "Type": 1,
+        "Name": "ZOLOTAS Α.Ε..",
+        "fTradeCurrencyCode": "EUR"
+    }],
+    "FK_ESWMItemContainerType_ESWMContainerType": [],
+    "FK_ESFIItem_ESWMItemControlPolicy": [],
+    "FK_ESMMLot_ESMMItemDimensionPrices": [],
+    "FK_ESMMZColor_ESMMItemDimensionPrices": [],
+    "FK_ESMMZSize_ESMMItemDimensionPrices": [],
+    "FK_ESMMZStockDim1_ESMMItemDimensionPrices": [],
+    "FK_ESMMZStockDim2_ESMMItemDimensionPrices": [],
+    "FK_ESFIItem_ESFIItemNetProfitCodes": [],
+    "FK_Supplier": [{
+        "GID": "f9eef0bf-2995-45cc-85b6-473a03a25a0d",
+        "Code": "ΠΡΟΜ00020",
+        "Name": "ZOLOTAS Α.Ε.."
+    }],
+    "FK_FamilyCode": [{
+        "Code": "ΤΡΟΦΙΜΑ",
+        "Description": "ΤΡΟΦΙΜΑ",
+        "Display": "ΤΡΟΦΙΜΑ / ΤΡΟΦΙΜΑ"
+    }],
+    "FK_CategoryCode": [{
+        "Code": "ΛΟΥΚΑΝΙΚΑ",
+        "fParentCode": "ΧΑΙΤΟΓΛΟΥ",
+        "Description": "ΛΟΥΚΑΝΙΚΑ",
+        "Display": "ΛΟΥΚΑΝΙΚΑ / ΛΟΥΚΑΝΙΚΑ"
+    }],
+    "FK_GroupCode": [{
+        "Code": "ΧΑΙΤΟΓΛΟΥ",
+        "fParentCode": "ΤΡΟΦΙΜΑ",
+        "Description": "ΧΑΙΤΟΓΛΟΥ",
+        "Display": "ΧΑΙΤΟΓΛΟΥ / ΧΑΙΤΟΓΛΟΥ"
+    }],
+    "FK_SubCategoryCode": [],
+    "FK_ESFIItem_ESGOZBusinessUnit": [],
+    "FK_ESFIItem_ESGOZBusinessActivity": [{
+        "Code": "ΤΡΟΦΙΜΑ",
+        "Description": "ΤΡΟΦΙΜΑ",
+        "Display": "ΤΡΟΦΙΜΑ / ΤΡΟΦΙΜΑ"
+    }],
+    "FK_ESMMItemUnit_ESMMZMeasurementUnit": [{
+        "Code": "ΤΕΜ",
+        "Description": "Τεμάχια",
+        "DefaultRelation": 1,
+        "Symbol": "ΤΕΜ"
+    }],
+    "FK_ESFIItem_ESGOPerson_Manufacturer": [],
+    "FK_ESMMStorageLocation_ESGOSites_WareHouse": [],
+    "FK_ESMMItemWH_ESGOSites": [{
+        "GID": "86947579-6885-4e86-914e-46378db3794f",
+        "Code": "ΑΘΗ",
+        "Description": "Κεντρικά Entersoft",
+        "Address1": "ΛΕΩΦΌΡΟΣ ΣΥΓΓΡΟΎ 362"
+    }],
+    "FK_ESMMItemCostPrices_ESGOFiscalYear": [],
+    "FK_ESMMItemCostPrices_ESGOFiscalPeriod": [],
+    "FK_ESFIItem_ESMMBOM_Base": [],
+    "FK_ESFIItem_ESMMCatalogueItem": [{
+        "GID": "c1f5f5b1-6a9e-4100-9186-49385878f18d",
+        "Code": "ΘΡ.ΑΛ.425",
+        "Description": "ΛΟΥΚ.Τ.ΦΡΑΓΚΦ.18ΧΛ.400ΓΡ -20%"
+    }],
+    "FK_ESFIItem_ESCOCostElementType": [],
+    "ES00Documents": [],
+    "ES00Properties": [],
+    "ES00PropertiesMultipleValues": []
+};
+```
+                             */
+                            fetchEntity: function(entityclass, entitygid) {
                                 if (!entityclass || !key) {
                                     throw "invliad parameters";
                                 }
 
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ENTITY__, "/", entityclass, "/", key);
-                                var tt = esGlobals.trackTimer("FETCH_ENTITY", entityclass, key);
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ENTITY__, "/", entityclass, "/", entitygid);
+                                var tt = esGlobals.trackTimer("FETCH_ENTITY", entityclass, entitygid);
                                 tt.startTime();
 
                                 var ht = $http({
@@ -4627,7 +4979,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.4.0";
+    var version = "1.5.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -5282,7 +5634,7 @@ var mimeType = esGlobals.getMimeTypeForExt(mimelist, "myfile.docx");
                  * @param {object[]} mimelist An array of objects of type {mime: string, extension: string, IsText: boolean} that holds a mime representation record.
                  * For more information on how to get a list of supported mime types please read {@link es.Services.Web.esWebApi#methods_getMimeTypes mimeTypes}.
                  * @param {string} mimeType The mimeType string for which we want the string array of extensions that are mapped to this mimeType
-                 * @return {array} The array of strings that are mapped to this mimeType. If no map is found, an empty array i.e. [] will be returned
+                 * @return {string[]} The array of strings that are mapped to this mimeType. If no map is found, an empty array i.e. [] will be returned
                  * @example
                  * 
 ```js
@@ -5325,7 +5677,7 @@ var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
                  * @description This function is used to process the error obejct as well as the status code of any type of error in order to get the best match
                  * for a user **Error Message** string to be presented to the user.
                  * @param {object} err The error object we got from i.e. http or promise failure. 
-                 * @param {int=} status The status int code we got from an http or promise failure
+                 * @param {number=} status The status int code we got from an http or promise failure
                  * @return {string} The string for the best match for user message
                  * @example
 ```js
@@ -5343,8 +5695,48 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 ```             **/
                 getUserMessage: getUserMessage,
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#ESMultiPublicQuery
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind constructor
+                 * @constructor
+                 * @description Constructs an ESMultiPublicQuery object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
+                 * @param {string} CtxID A unique identifier for this PQ execution call (unique in the context of the array of ESMultiPublicQuery that will be used in the execution of multiPublicQuery)
+                 * @param {string} GroupID The GroupID of the Public Query
+                 * @param {string} FilterID The FilterID of the Public Query
+                 * @param {ESPQOptions} The paging options for the Public Query Execution. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
+                 * @param {object} Params The params to be used for the execution of the Public Query
+                 */
                 ESMultiPublicQuery: ESMultiPublicQuery,
+
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#ESMultiZoomDef
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind constructor
+                 * @constructor
+                 * @description Constructs an ESMultiPublicQuery object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
+                 * @param {string} ZoomID The ID of the ES Zoom to be retrieved i.e. "__ESGOZCountry__"
+                 * @param {ESPQOptions} PQOptions The server side paging options to be used for the Zoom retrieval. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
+                 * @param {boolean} UseCache A boolean value indicating whether the contents of this specific Zoom will be retrieved and stored in the ESWebAPI client-side memory cache.
+                 */
                 ESMultiZoomDef: ESMultiZoomDef,
+
+                /**
+                 * @ngdoc constructor
+                 * @name es.Services.Web.esGlobals#ESPQOptions
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind constructor
+                 * @constructor
+                 * @description Constructs an ESPQOptions object that specifies the server side paging options of a Public Query execution
+                 * @param {number} Page The Server Side Page Number (__1-based__) to be retrieved. Valid is considered any value represeting a number >= 1
+                 * @param {number} PageSize The Server Side size of page (> =1) to be retrieved from the server. 
+                 * @param {boolean} WithCount If true, the result of the execution will also have the total number of records that exist for this execution run of the PQ
+                 */
                 ESPQOptions: ESPQOptions,
                 
                 sessionClosed: function() {

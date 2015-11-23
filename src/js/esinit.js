@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.4.0";
+    var version = "1.5.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -661,7 +661,7 @@ var mimeType = esGlobals.getMimeTypeForExt(mimelist, "myfile.docx");
                  * @param {object[]} mimelist An array of objects of type {mime: string, extension: string, IsText: boolean} that holds a mime representation record.
                  * For more information on how to get a list of supported mime types please read {@link es.Services.Web.esWebApi#methods_getMimeTypes mimeTypes}.
                  * @param {string} mimeType The mimeType string for which we want the string array of extensions that are mapped to this mimeType
-                 * @return {array} The array of strings that are mapped to this mimeType. If no map is found, an empty array i.e. [] will be returned
+                 * @return {string[]} The array of strings that are mapped to this mimeType. If no map is found, an empty array i.e. [] will be returned
                  * @example
                  * 
 ```js
@@ -704,7 +704,7 @@ var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
                  * @description This function is used to process the error obejct as well as the status code of any type of error in order to get the best match
                  * for a user **Error Message** string to be presented to the user.
                  * @param {object} err The error object we got from i.e. http or promise failure. 
-                 * @param {int=} status The status int code we got from an http or promise failure
+                 * @param {number=} status The status int code we got from an http or promise failure
                  * @return {string} The string for the best match for user message
                  * @example
 ```js
@@ -722,8 +722,48 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 ```             **/
                 getUserMessage: getUserMessage,
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#ESMultiPublicQuery
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind constructor
+                 * @constructor
+                 * @description Constructs an ESMultiPublicQuery object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
+                 * @param {string} CtxID A unique identifier for this PQ execution call (unique in the context of the array of ESMultiPublicQuery that will be used in the execution of multiPublicQuery)
+                 * @param {string} GroupID The GroupID of the Public Query
+                 * @param {string} FilterID The FilterID of the Public Query
+                 * @param {ESPQOptions} The paging options for the Public Query Execution. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
+                 * @param {object} Params The params to be used for the execution of the Public Query
+                 */
                 ESMultiPublicQuery: ESMultiPublicQuery,
+
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#ESMultiZoomDef
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind constructor
+                 * @constructor
+                 * @description Constructs an ESMultiPublicQuery object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
+                 * @param {string} ZoomID The ID of the ES Zoom to be retrieved i.e. "__ESGOZCountry__"
+                 * @param {ESPQOptions} PQOptions The server side paging options to be used for the Zoom retrieval. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
+                 * @param {boolean} UseCache A boolean value indicating whether the contents of this specific Zoom will be retrieved and stored in the ESWebAPI client-side memory cache.
+                 */
                 ESMultiZoomDef: ESMultiZoomDef,
+
+                /**
+                 * @ngdoc constructor
+                 * @name es.Services.Web.esGlobals#ESPQOptions
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind constructor
+                 * @constructor
+                 * @description Constructs an ESPQOptions object that specifies the server side paging options of a Public Query execution
+                 * @param {number} Page The Server Side Page Number (__1-based__) to be retrieved. Valid is considered any value represeting a number >= 1
+                 * @param {number} PageSize The Server Side size of page (> =1) to be retrieved from the server. 
+                 * @param {boolean} WithCount If true, the result of the execution will also have the total number of records that exist for this execution run of the PQ
+                 */
                 ESPQOptions: ESPQOptions,
                 
                 sessionClosed: function() {
