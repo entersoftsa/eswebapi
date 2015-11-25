@@ -22,7 +22,7 @@ Web API.</p>
 </li>
 </ul>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3895" class="view-source icon-eye-open"> </a><h3 id="methods_addorupdatees00document">addOrUpdateES00Document(doc, file, okfunc, errfunc, progressfunc)</h3>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3896" class="view-source icon-eye-open"> </a><h3 id="methods_addorupdatees00document">addOrUpdateES00Document(doc, file, okfunc, errfunc, progressfunc)</h3>
 <div class="addorupdatees00document"><div class="es-services-web-eswebapi-addorupdatees00document-page"><p>Deletes the ES00DocumentInfo record as specified by the parameters and returns the current set of ES00Documents
 that are corelated to the specified Entity object</p>
 </div><h5 id="methods_addorupdatees00document_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>doc</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-addorupdatees00document-page"><p>The JSON object representation of the ES00Document to be added or updated (in case that it exists)</p>
@@ -66,7 +66,7 @@ uploading of the file i.e. to inform the user about the percentage of the bytes 
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3826" class="view-source icon-eye-open"> </a><h3 id="methods_deletees00document">deleteES00Document(es00Document)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3827" class="view-source icon-eye-open"> </a><h3 id="methods_deletees00document">deleteES00Document(es00Document)</h3>
 <div class="deletees00document"><div class="es-services-web-eswebapi-deletees00document-page"><p>Deletes the ES00DocumentInfo record as specified by the parameters and returns the current set of ES00Documents
 that are corelated to the specified Entity object</p>
 </div><h5 id="methods_deletees00document_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00Document</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-deletees00document-page"><p>The JSON object representation of the ES00Documen to be deleted. The following attributes are mandatory:</p>
@@ -90,7 +90,7 @@ that are corelated to the specified Entity object</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3941" class="view-source icon-eye-open"> </a><h3 id="methods_esearch">eSearch(eUrl, eMethod, eBody)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3942" class="view-source icon-eye-open"> </a><h3 id="methods_esearch">eSearch(eUrl, eMethod, eBody)</h3>
 <div class="esearch"><div class="es-services-web-eswebapi-esearch-page"><p>This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server.
 This function allows for almost any kind of operation can be executed by the ElasticSearch engine as an http method (i.e. GET, PUT, DELETE, POST, etc.)
 <a href="#/api/es.Services.Web.esElasticSearch#methods_searchindex">searchIndex</a>.</p>
@@ -231,7 +231,7 @@ $scope.fetchCompanyParams = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3085" class="view-source icon-eye-open"> </a><h3 id="methods_fetcheaswebasset">fetchEASWebAsset(assetUrlPath, options)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3086" class="view-source icon-eye-open"> </a><h3 id="methods_fetcheaswebasset">fetchEASWebAsset(assetUrlPath, options)</h3>
 <div class="fetcheaswebasset"><div class="es-services-web-eswebapi-fetcheaswebasset-page"><p>This function returns the contents of a file asset stored in the Entersoft Application Server (EAS) <strong>ESWebAssets</strong>
 or <strong>CSWebAssets</strong> sub-directories of the EAS. </p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
@@ -274,11 +274,12 @@ the following string: &quot;data:image/png;base64,&quot; i.e. img_data = &quot;d
 // call this function
 // esWebApi.fetchEASWebAsset(&quot;xx/yy/abcd.txt&quot;, {Accept: &#39;text/plain&#39;})
 // will return the contents of the file.
+// sample
 </code></pre>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3537" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentblobdatabygid">fetchES00DocumentBlobDataByGID(es00DocumentGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3538" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentblobdatabygid">fetchES00DocumentBlobDataByGID(es00DocumentGID)</h3>
 <div class="fetches00documentblobdatabygid"><div class="es-services-web-eswebapi-fetches00documentblobdatabygid-page"><p>This function returns the arraybuffer for the document stored in <strong>ES00Document</strong> as <strong>BLOBDATA</strong> for a given by GID ES00Document record.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentblobdatabygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentblobdatabygid-page"><p>The GID of the ES00Document record the blobdata of which we are looking for.</p>
@@ -289,7 +290,7 @@ the following string: &quot;data:image/png;base64,&quot; i.e. img_data = &quot;d
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3715" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbycode">fetchES00DocumentByCode(es00DocumentCode)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3716" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbycode">fetchES00DocumentByCode(es00DocumentCode)</h3>
 <div class="fetches00documentbycode"><div class="es-services-web-eswebapi-fetches00documentbycode-page"><p>This function returns the JSON object for the record of the ES00Document object that matches the es00DocumentCode parameter.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentbycode_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentCode</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentbycode-page"><p>The Code of the ES00Document record that we are looking for</p>
@@ -333,7 +334,7 @@ var sampleDoc = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3648" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbygid">fetchES00DocumentByGID(es00DocumentGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3649" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbygid">fetchES00DocumentByGID(es00DocumentGID)</h3>
 <div class="fetches00documentbygid"><div class="es-services-web-eswebapi-fetches00documentbygid-page"><p>This function returns the JSON object for the record of the ES00Document object that matches the es00DocumentGID parameter.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentbygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentbygid-page"><p>The GID of the ES00Document record that we are looking for</p>
@@ -377,7 +378,7 @@ var sampleDoc = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3785" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentsbyentitygid">fetchES00DocumentsByEntityGID(entityGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3786" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentsbyentitygid">fetchES00DocumentsByEntityGID(entityGID)</h3>
 <div class="fetches00documentsbyentitygid"><div class="es-services-web-eswebapi-fetches00documentsbyentitygid-page"><p>This function returns an array of JSON objects for the records of type ES00Document that belong to entity with GID equal to entityGID.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentsbyentitygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>entityGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentsbyentitygid-page"><p>The GID of the entity for which we want to get all the registered ES00Documents</p>
@@ -424,7 +425,7 @@ var listOfDocs = [{
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3471" class="view-source icon-eye-open"> </a><h3 id="methods_fetchentity">fetchEntity(entityclass, entitygid)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3472" class="view-source icon-eye-open"> </a><h3 id="methods_fetchentity">fetchEntity(entityclass, entitygid)</h3>
 <div class="fetchentity"><div class="es-services-web-eswebapi-fetchentity-page"><p>This function returns the Entersoft Entity ISUD dataset in JSON representation</p>
 </div><h5 id="methods_fetchentity_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>entityclass</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchentity-page"><p>The Entersoft ODS object ID the ISUD record to be retrieved</p>
 </div></td></tr><tr><td>entitygid</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchentity-page"><p>The gid in string format that represents the Primary Key of the record to be retrieved</p>
@@ -2456,14 +2457,14 @@ The return object has the following structure:</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3500" class="view-source icon-eye-open"> </a><h3 id="methods_fiimportdocument">fiImportDocument(xmldocstr)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3501" class="view-source icon-eye-open"> </a><h3 id="methods_fiimportdocument">fiImportDocument(xmldocstr)</h3>
 <div class="fiimportdocument"><div class="es-services-web-eswebapi-fiimportdocument-page"><p>This function imports a ESFIDocument of all the supported classes i.e.(Trade, Cash, Adjustment and Stock) through the FIImportDoc service of the Entersoft Application Server.</p>
 </div><h5 id="methods_fiimportdocument_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>xmldocstr</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fiimportdocument-page"><p>The XML representation of the financial document to be inserted/updates through the
 Entersoft Application Server FIImportDocument service. For more, see the relative <a href="http://www.entersoft.gr/KBArticle/%CE%94%CE%B9%CE%B1%CE%B4%CE%B9%CE%BA%CE%B1%CF%83%CE%AF%CE%B1%20%CE%B5%CE%B9%CF%83%CE%B1%CE%B3%CF%89%CE%B3%CE%AE%CF%82%20%CF%80%CE%B1%CF%81%CE%B1%CF%83%CF%84%CE%B1%CF%84%CE%B9%CE%BA%CF%8E%CE%BD%20%CE%B1%CF%80%CF%8C%20XML/MEMBERS_slh_KnowledgeBase">Entersoft Knowledge Base article</a>.</p>
 </div></td></tr></tbody></table><h5 id="methods_fiimportdocument_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fiimportdocument-page"><p>If success i.e. function(ret) { ...} the ret.data contains the string result of the FIImportDocument function.</p>
 </div></td></tr></table></div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3594" class="view-source icon-eye-open"> </a><h3 id="methods_getmimetypes">getMimeTypes()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/77f9174/src/js/eswebservices.js#L3595" class="view-source icon-eye-open"> </a><h3 id="methods_getmimetypes">getMimeTypes()</h3>
 <div class="getmimetypes"><div class="es-services-web-eswebapi-getmimetypes-page"><p>This function returns an array of JSON objects representing the Mime types that the ES WEB API server supports</p>
 </div><h5 id="methods_getmimetypes_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">object[]</a></td><td><div class="es-services-web-eswebapi-getmimetypes-page"><p>Array of json objects of the form {mime: string, extension: string, IsText: boolean}</p>
 </div></td></tr></table><h4 id="methods_getmimetypes_example">Example</h4>
