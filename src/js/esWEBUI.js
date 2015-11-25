@@ -590,8 +590,23 @@
         var x = this;
         if (val) {
             for (var prop in val) {
+                if (!val[prop] || !val[prop] instanceof ESParamVal) {
+                    throw new Error("Invalid paramter type in merge function in paramvalues");
+                }
+
                 if (!x.hasOwnProperty(prop)) {
+                    // property xxx i.e. param xxx does not exist at all. So we must add it during the merge
                     x[prop] = val[prop];
+                } else {
+                    //property xxx i.e. param xxx already exists. Check the type of the value
+                    if (x[prop] instanceof ESParamVal) {
+                        
+                        x[prop].enumList = val[prop].enumList;
+                    } else {
+                        // existing property i.e. param is not of ESParamVal type. In that case we override the value to the source one
+                        x[prop] = val[prop];
+                    }
+
                 }
             }
         }
@@ -1855,12 +1870,16 @@
                 // now process the column sets
                 // put column sets first
                 if (esGridInfo.columnSets && esGridInfo.columnSets.length > 0) {
-                    var z4 = _.each(esGridInfo.columnSets, function(x) {
+                    _.each(esGridInfo.columnSets, function(x) {
                         x.columns = _.where(z3, {
                             columnSet: x.aa
                         });
                         z3 = _.difference(z3, x.columns);
                     });
+
+                    esGridInfo.columnSets = _.sortBy(_.filter(esGridInfo.columnSets, function(x) {
+                        return x.columns && x.columns.length > 0;
+                    }), 'aa');
 
                     z3 = esGridInfo.columnSets.concat(z3);
                     esGridInfo.columns = z3;

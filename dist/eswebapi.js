@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.5.0 - 2015-11-23
+/*! Entersoft Application Server WEB API - v1.5.1 - 2015-11-25
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -2798,7 +2798,7 @@ $scope.multifetchStdZoom = function() {
                              ** BINARY* type fields are supported BUT not explicitly converted to any web or javascript recommended BASE64 representation. The use of fields of binary type
                              * in the PQ schema should be extemely rare for many reasons (web performance, security, javascript's limitations & restrictions, etc.).
                              * 
-                             * @param {string|ESMultiPublicQuery} pqGroupID if string then Entersoft Public Query GroupID or a {@link es.Services.Web.esGlobals#methods_ESMultiPublicQuery ESMultiPublicQuery} object that defines the rest of the parameters
+                             * @param {string|ESPublicQueryDef} pqGroupID if string then Entersoft Public Query GroupID or a {@link es.Services.Web.esGlobals#methods_ESPublicQueryDef ESPublicQueryDef} object that defines the rest of the parameters
                              * @param {string} pqFilterID Entersoft Public Query FilterID
                              * @param {ESPQOptions} pqOptions Entersoft Public Query execution options. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
                              * 
@@ -2905,7 +2905,7 @@ $scope.dofetchPublicQuery = function() {
                              */
                             fetchPublicQuery: function(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb) {
                                 var group;
-                                if (pqGroupID instanceof esGlobals.ESMultiPublicQuery) {
+                                if (pqGroupID instanceof esGlobals.ESPublicQueryDef) {
                                     group = (pqGroupID.GroupID || "").trim();
                                     pqFilterID = (pqGroupID.FilterID || "").trim();
                                     pqOptions = pqGroupID.PQOptions;
@@ -2957,7 +2957,7 @@ $scope.dofetchPublicQuery = function() {
                              * @description multiPublicQuery is similar to the {@link es.Services.Web.esWebApi#methods_fetchPublicQuery fetchPublicQuery} with the difference 
                              * that it supports for multiple public queries execution with just one round-trip to the Entersoft WEB API Server and to the Entersoft
                              * Application Server.
-                             * @param {ESMultiPublicQuery[]} pqDefs An array of one or more public query defintion objects that are to be executed to the server.
+                             * @param {ESPublicQueryDef[]} pqDefs An array of one or more public query defintion objects that are to be executed to the server.
                              * The object has the following structure:
                              * @param {string} pqDefs.GroupID The GroupID of the Public Query
                              * @param {string} pqDefs.FilterID The FilterID of the Public Query
@@ -3082,6 +3082,7 @@ var options = {Accept: 'text/plain'}
 // call this function
 // esWebApi.fetchEASWebAsset("xx/yy/abcd.txt", {Accept: 'text/plain'})
 // will return the contents of the file.
+// sample
 ```
                              */
                             fetchEASWebAsset: function(assetUrlPath, options) {
@@ -3471,7 +3472,7 @@ var x = {
 ```
                              */
                             fetchEntity: function(entityclass, entitygid) {
-                                if (!entityclass || !key) {
+                                if (!entityclass || !entitygid) {
                                     throw "invliad parameters";
                                 }
 
@@ -4979,7 +4980,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.5.0";
+    var version = "1.5.1";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -5339,10 +5340,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      * esGlobals is a factory service that provides functions, constructs and messaging events for common _global_ nature in the context of a typical
      * AngularJS SPA based on Entersoft AngularJS API.
      */
-    esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', '$injector' /* 'es.Services.GA' */ ,
-        function($sessionStorage, $log, esMessaging, $injector) {
+    esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' /* 'es.Services.GA' */ ,
+        function($sessionStorage, $log, esMessaging, esCache, $injector) {
 
-            function ESMultiPublicQuery(ctxId, groupId, filterId, pqOptions, params) {
+            function ESPublicQueryDef(ctxId, groupId, filterId, pqOptions, params) {
                 this.CtxID = ctxId;
                 this.GroupID = groupId;
                 this.FilterID = filterId;
@@ -5697,19 +5698,19 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 /**
                  * @ngdoc function
-                 * @name es.Services.Web.esGlobals#ESMultiPublicQuery
+                 * @name es.Services.Web.esGlobals#ESPublicQueryDef
                  * @methodOf es.Services.Web.esGlobals
                  * @module es.Services.Web
                  * @kind constructor
                  * @constructor
-                 * @description Constructs an ESMultiPublicQuery object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
-                 * @param {string} CtxID A unique identifier for this PQ execution call (unique in the context of the array of ESMultiPublicQuery that will be used in the execution of multiPublicQuery)
+                 * @description Constructs an ESPublicQueryDef object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
+                 * @param {string} CtxID A unique identifier for this PQ execution call (unique in the context of the array of ESPublicQueryDef that will be used in the execution of multiPublicQuery)
                  * @param {string} GroupID The GroupID of the Public Query
                  * @param {string} FilterID The FilterID of the Public Query
                  * @param {ESPQOptions} The paging options for the Public Query Execution. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
                  * @param {object} Params The params to be used for the execution of the Public Query
                  */
-                ESMultiPublicQuery: ESMultiPublicQuery,
+                ESPublicQueryDef: ESPublicQueryDef,
 
                 /**
                  * @ngdoc function
@@ -5718,7 +5719,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                  * @module es.Services.Web
                  * @kind constructor
                  * @constructor
-                 * @description Constructs an ESMultiPublicQuery object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
+                 * @description Constructs an ESPublicQueryDef object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
                  * @param {string} ZoomID The ID of the ES Zoom to be retrieved i.e. "__ESGOZCountry__"
                  * @param {ESPQOptions} PQOptions The server side paging options to be used for the Zoom retrieval. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
                  * @param {boolean} UseCache A boolean value indicating whether the contents of this specific Zoom will be retrieved and stored in the ESWebAPI client-side memory cache.
@@ -5738,9 +5739,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                  * @param {boolean} WithCount If true, the result of the execution will also have the total number of records that exist for this execution run of the PQ
                  */
                 ESPQOptions: ESPQOptions,
-                
+
                 sessionClosed: function() {
                     esClientSession.setModel(null);
+                    try {
+                        esCache.clear();
+                    } catch (x) {
+
+                    }
                 },
 
                 trackTimer: function(category, variable, opt_label) {
@@ -5749,6 +5755,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 sessionOpened: function(data, credentials) {
                     try {
+                        try {
+                            esCache.clear();
+                        } catch (x) {
+
+                        }
+
                         data.Model.LangID = data.Model.LangID || credentials.LangID;
                         data.Model.LangID = data.Model.LangID || "el-GR";
 
@@ -6644,8 +6656,23 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         var x = this;
         if (val) {
             for (var prop in val) {
+                if (!val[prop] || !val[prop] instanceof ESParamVal) {
+                    throw new Error("Invalid paramter type in merge function in paramvalues");
+                }
+
                 if (!x.hasOwnProperty(prop)) {
+                    // property xxx i.e. param xxx does not exist at all. So we must add it during the merge
                     x[prop] = val[prop];
+                } else {
+                    //property xxx i.e. param xxx already exists. Check the type of the value
+                    if (x[prop] instanceof ESParamVal) {
+                        
+                        x[prop].enumList = val[prop].enumList;
+                    } else {
+                        // existing property i.e. param is not of ESParamVal type. In that case we override the value to the source one
+                        x[prop] = val[prop];
+                    }
+
                 }
             }
         }
@@ -7909,12 +7936,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 // now process the column sets
                 // put column sets first
                 if (esGridInfo.columnSets && esGridInfo.columnSets.length > 0) {
-                    var z4 = _.each(esGridInfo.columnSets, function(x) {
+                    _.each(esGridInfo.columnSets, function(x) {
                         x.columns = _.where(z3, {
                             columnSet: x.aa
                         });
                         z3 = _.difference(z3, x.columns);
                     });
+
+                    esGridInfo.columnSets = _.sortBy(_.filter(esGridInfo.columnSets, function(x) {
+                        return x.columns && x.columns.length > 0;
+                    }), 'aa');
 
                     z3 = esGridInfo.columnSets.concat(z3);
                     esGridInfo.columns = z3;

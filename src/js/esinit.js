@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.5.0";
+    var version = "1.5.1";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -366,10 +366,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      * esGlobals is a factory service that provides functions, constructs and messaging events for common _global_ nature in the context of a typical
      * AngularJS SPA based on Entersoft AngularJS API.
      */
-    esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', '$injector' /* 'es.Services.GA' */ ,
-        function($sessionStorage, $log, esMessaging, $injector) {
+    esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' /* 'es.Services.GA' */ ,
+        function($sessionStorage, $log, esMessaging, esCache, $injector) {
 
-            function ESMultiPublicQuery(ctxId, groupId, filterId, pqOptions, params) {
+            function ESPublicQueryDef(ctxId, groupId, filterId, pqOptions, params) {
                 this.CtxID = ctxId;
                 this.GroupID = groupId;
                 this.FilterID = filterId;
@@ -724,19 +724,19 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 /**
                  * @ngdoc function
-                 * @name es.Services.Web.esGlobals#ESMultiPublicQuery
+                 * @name es.Services.Web.esGlobals#ESPublicQueryDef
                  * @methodOf es.Services.Web.esGlobals
                  * @module es.Services.Web
                  * @kind constructor
                  * @constructor
-                 * @description Constructs an ESMultiPublicQuery object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
-                 * @param {string} CtxID A unique identifier for this PQ execution call (unique in the context of the array of ESMultiPublicQuery that will be used in the execution of multiPublicQuery)
+                 * @description Constructs an ESPublicQueryDef object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
+                 * @param {string} CtxID A unique identifier for this PQ execution call (unique in the context of the array of ESPublicQueryDef that will be used in the execution of multiPublicQuery)
                  * @param {string} GroupID The GroupID of the Public Query
                  * @param {string} FilterID The FilterID of the Public Query
                  * @param {ESPQOptions} The paging options for the Public Query Execution. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
                  * @param {object} Params The params to be used for the execution of the Public Query
                  */
-                ESMultiPublicQuery: ESMultiPublicQuery,
+                ESPublicQueryDef: ESPublicQueryDef,
 
                 /**
                  * @ngdoc function
@@ -745,7 +745,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                  * @module es.Services.Web
                  * @kind constructor
                  * @constructor
-                 * @description Constructs an ESMultiPublicQuery object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
+                 * @description Constructs an ESPublicQueryDef object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery
                  * @param {string} ZoomID The ID of the ES Zoom to be retrieved i.e. "__ESGOZCountry__"
                  * @param {ESPQOptions} PQOptions The server side paging options to be used for the Zoom retrieval. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
                  * @param {boolean} UseCache A boolean value indicating whether the contents of this specific Zoom will be retrieved and stored in the ESWebAPI client-side memory cache.
@@ -765,9 +765,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                  * @param {boolean} WithCount If true, the result of the execution will also have the total number of records that exist for this execution run of the PQ
                  */
                 ESPQOptions: ESPQOptions,
-                
+
                 sessionClosed: function() {
                     esClientSession.setModel(null);
+                    try {
+                        esCache.clear();
+                    } catch (x) {
+
+                    }
                 },
 
                 trackTimer: function(category, variable, opt_label) {
@@ -776,6 +781,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 sessionOpened: function(data, credentials) {
                     try {
+                        try {
+                            esCache.clear();
+                        } catch (x) {
+
+                        }
+
                         data.Model.LangID = data.Model.LangID || credentials.LangID;
                         data.Model.LangID = data.Model.LangID || "el-GR";
 

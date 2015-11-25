@@ -42,6 +42,10 @@
                     templateUrl: 'masdetpq.html',
                     controller: 'masdetpqCtrl'
                 })
+                .when('/opportunities', {
+                    templateUrl: 'opportunities.html',
+                    controller: 'opportunitiesCtrl'
+                })
                 .when('/examples', {
                     templateUrl: 'examples.html',
                     controller: 'examplesCtrl'
@@ -62,7 +66,7 @@
                 allowUnsecureConnection: true
             });
 
-            // $logProvider.addESWebApiAppender(esWebApiServiceProvider.getServerUrl(), subscriptionId);
+            $logProvider.addESWebApiAppender(esWebApiServiceProvider.getServerUrl(), subscriptionId);
 
         }
     ]);

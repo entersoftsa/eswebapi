@@ -2796,7 +2796,7 @@ $scope.multifetchStdZoom = function() {
                              ** BINARY* type fields are supported BUT not explicitly converted to any web or javascript recommended BASE64 representation. The use of fields of binary type
                              * in the PQ schema should be extemely rare for many reasons (web performance, security, javascript's limitations & restrictions, etc.).
                              * 
-                             * @param {string|ESMultiPublicQuery} pqGroupID if string then Entersoft Public Query GroupID or a {@link es.Services.Web.esGlobals#methods_ESMultiPublicQuery ESMultiPublicQuery} object that defines the rest of the parameters
+                             * @param {string|ESPublicQueryDef} pqGroupID if string then Entersoft Public Query GroupID or a {@link es.Services.Web.esGlobals#methods_ESPublicQueryDef ESPublicQueryDef} object that defines the rest of the parameters
                              * @param {string} pqFilterID Entersoft Public Query FilterID
                              * @param {ESPQOptions} pqOptions Entersoft Public Query execution options. See {@link es.Services.Web.esGlobals#methods_ESPQOptions ESPQOptions}.
                              * 
@@ -2903,7 +2903,7 @@ $scope.dofetchPublicQuery = function() {
                              */
                             fetchPublicQuery: function(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb) {
                                 var group;
-                                if (pqGroupID instanceof esGlobals.ESMultiPublicQuery) {
+                                if (pqGroupID instanceof esGlobals.ESPublicQueryDef) {
                                     group = (pqGroupID.GroupID || "").trim();
                                     pqFilterID = (pqGroupID.FilterID || "").trim();
                                     pqOptions = pqGroupID.PQOptions;
@@ -2955,7 +2955,7 @@ $scope.dofetchPublicQuery = function() {
                              * @description multiPublicQuery is similar to the {@link es.Services.Web.esWebApi#methods_fetchPublicQuery fetchPublicQuery} with the difference 
                              * that it supports for multiple public queries execution with just one round-trip to the Entersoft WEB API Server and to the Entersoft
                              * Application Server.
-                             * @param {ESMultiPublicQuery[]} pqDefs An array of one or more public query defintion objects that are to be executed to the server.
+                             * @param {ESPublicQueryDef[]} pqDefs An array of one or more public query defintion objects that are to be executed to the server.
                              * The object has the following structure:
                              * @param {string} pqDefs.GroupID The GroupID of the Public Query
                              * @param {string} pqDefs.FilterID The FilterID of the Public Query
@@ -3080,6 +3080,7 @@ var options = {Accept: 'text/plain'}
 // call this function
 // esWebApi.fetchEASWebAsset("xx/yy/abcd.txt", {Accept: 'text/plain'})
 // will return the contents of the file.
+// sample
 ```
                              */
                             fetchEASWebAsset: function(assetUrlPath, options) {
@@ -3469,7 +3470,7 @@ var x = {
 ```
                              */
                             fetchEntity: function(entityclass, entitygid) {
-                                if (!entityclass || !key) {
+                                if (!entityclass || !entitygid) {
                                     throw "invliad parameters";
                                 }
 

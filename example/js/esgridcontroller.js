@@ -369,7 +369,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
             var zoomOptions = new esGlobals.ESPQOptions(300, 5, false);
 
             var zooms = _.map($scope.pZoomID.split(','), function(k) {
-            	return new esGlobals.ESMultiZoomDef(k, zoomOptions, true);
+                return new esGlobals.ESMultiZoomDef(k, zoomOptions, true);
             });
 
             esWebApi.fetchMultiStdZoom(zooms)
@@ -435,12 +435,12 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
         //fetchCompanyParam 
         $scope.fetchCompanyParam = function() {
-        	esWebApi.fetchCompanyParam($scope.pCompanyParam)
-        	.then(function(ret) {
-        		$scope.pCompanyParamValue = ret.data;
-        	}, function(err) {
-        		$scope.pCompanyParamValue = JSON.stringify(err);
-        	});
+            esWebApi.fetchCompanyParam($scope.pCompanyParam)
+                .then(function(ret) {
+                    $scope.pCompanyParamValue = ret.data;
+                }, function(err) {
+                    $scope.pCompanyParamValue = JSON.stringify(err);
+                });
         }
 
         //fetchCompanyParams
@@ -584,16 +584,16 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         }
 
         $scope.fiImportDocument = function() {
-        	esWebApi.fiImportDocument($scope.xmldocstr)
-        		.then(function(ret) {
-        			$scope.xmldocret = ret.data;
-        		}, function(err) {
-        			$scope.xmldocret = err;
-        		})
+            esWebApi.fiImportDocument($scope.xmldocstr)
+                .then(function(ret) {
+                    $scope.xmldocret = ret.data;
+                }, function(err) {
+                    $scope.xmldocret = err;
+                })
         }
 
         $scope.fetchES00DocumentBlobDataByGID = function() {
-           esWebApi.fetchES00DocumentBlobDataByGID($scope.pES00Doc)
+            esWebApi.fetchES00DocumentBlobDataByGID($scope.pES00Doc)
                 .then(function(result) {
                     var fileData = result.data;
 
@@ -612,40 +612,40 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         }
 
         $scope.deleteES00Document = function() {
-        	var doc = {
-        		GID: $scope.pDocumentGID,
-        		TableID: $scope.pEntityType,
-        		TableName: $scope.pEntityTable,
-        		fGID: $scope.pEntityGID
-        	};
+            var doc = {
+                GID: $scope.pDocumentGID,
+                TableID: $scope.pEntityType,
+                TableName: $scope.pEntityTable,
+                fGID: $scope.pEntityGID
+            };
 
-        	esWebApi.deleteES00Document(doc)
+            esWebApi.deleteES00Document(doc)
                 .then(function(ret) {
                         $scope.pES00DocResults = ret.data;
                     },
                     function(err) {
                         $scope.pES00DocResults = err;
-                    });	
+                    });
         }
 
         $scope.getMimeList = function() {
-        	esWebApi.getMimeTypes()
-        		.then(function(ret) {
-        			$scope.pMimeTypes = JSON.stringify(ret);
-        		},
-        		function(err) {
-        			$scope.pMimeTypes = JSON.stringify(err);
-        		});
+            esWebApi.getMimeTypes()
+                .then(function(ret) {
+                        $scope.pMimeTypes = JSON.stringify(ret);
+                    },
+                    function(err) {
+                        $scope.pMimeTypes = JSON.stringify(err);
+                    });
         }
 
         $scope.fetchEntity = function() {
-        	esWebApi.fetchEntity($scope.pEntityClass, $scope.pEntityKey)
-        	.then(function(ret) {
-        		$scope.pEntityDS = ret.data;
-        	}, 
-        	function(err) {
-        		$scope.pEntityDS = err;
-        	})
+            esWebApi.fetchEntity($scope.pEntityClass, $scope.pEntityKey)
+                .then(function(ret) {
+                        $scope.pEntityDS = ret.data;
+                    },
+                    function(err) {
+                        $scope.pEntityDS = err;
+                    })
         }
     }
 ]);
@@ -707,11 +707,11 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
             //detailTemplate: '<div><es00-documents-detail es-master-row-field="\'ISUDGID\'" /></div>',
             detailTemplate: '<div><es00-documents-detail es-master-row-field="getMasterOptions().selectedMasterField" /></div>',
             detailInit: function(e) {
-            	$log.info("hi");
-            	var detScope = e.detailRow.scope();
-            	detScope.getMasterOptions = function() {
-            		return $scope.webPQOptions.theGridOptions;
-            	};
+                $log.info("hi");
+                var detScope = e.detailRow.scope();
+                detScope.getMasterOptions = function() {
+                    return $scope.webPQOptions.theGridOptions;
+                };
             }
         };
     }
@@ -757,5 +757,54 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
         }
 
 
+    }
+]);
+
+smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
+    function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+
+        $scope.seriesClick = function(e) {
+            if ($scope.masterOptions.Params.fLeadSourceCode.pValue(e.category)) {
+            	$scope.masterOptions.theGridOptions.dataSource.read();
+            }
+        };
+
+        var pqOptions = new esGlobals.ESPQOptions(-1, -1, true);
+        var params = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ClosingDate", 3)]);
+
+        $scope.masterOptions = new esGlobals.ESPublicQueryDef("", "ESTMOpportunity", "ESTMOpportunityManagement", pqOptions, params);
+        $scope.cDS = esWebUIHelper.getPQDataSource("ds", $scope.masterOptions);
+
+        $scope.chartOptions = {
+            title: "Leads by Lead Source",
+            series: [{
+                type: 'bar',
+                field: 'OppRevenue',
+                categoryField: 'fLeadSourceCode',
+                aggregate: 'sum'
+            }],
+            tooltip: {
+                visible: true,
+                template: "#= category #: #= value #"
+            },
+            pannable: {
+                lock: "x"
+            },
+            zoomable: {
+                mousewheel: {
+                    lock: "x"
+                },
+                selection: {
+                    lock: "x"
+                }
+            },
+
+
+            seriesClick: $scope.seriesClick,
+            dataSource: $scope.cDS
+        };
+
+
+        $scope.masterOptions.theGridOptions = {};
     }
 ]);
