@@ -1,0 +1,13 @@
+{
+    tabs: [{
+        id: 0,
+        title: "General",
+        aa: 0,
+        visible: true
+    }, {
+        id: 1,
+        title: "Billing",
+        aa: 1,
+        visible: true
+    }]
+}

@@ -653,6 +653,11 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.pqs = [{
+                groupId: "ESMMStockItem",
+                filterId: "StockItemPhotoList",
+                gridOptions: {},
+                pVals: new esWebUIHelper.ESParamValues()
+            }, {
                 groupId: "ESGOPerson",
                 filterId: "CRM_Personlist",
                 gridOptions: {},
@@ -662,11 +667,6 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
             {
                 groupId: "ESTMSocialCRM",
                 filterId: "ESTMSMPersonList",
-                gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
-            }, {
-                groupId: "ESMMStockItem",
-                filterId: "StockItemPhotoList",
                 gridOptions: {},
                 pVals: new esWebUIHelper.ESParamValues()
             }, {
@@ -765,7 +765,7 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
 
         $scope.seriesClick = function(e) {
             if ($scope.masterOptions.Params.fLeadSourceCode.pValue(e.category)) {
-            	$scope.masterOptions.theGridOptions.dataSource.read();
+                $scope.masterOptions.theGridOptions.dataSource.read();
             }
         };
 
