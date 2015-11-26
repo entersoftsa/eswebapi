@@ -652,7 +652,15 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
-        $scope.pqs = [{
+        $scope.pqs = [
+            /*{
+                            groupId: "ESFICustomer",
+                            filterId: "CS_CollectionPlanning",
+                            gridOptions: {},
+                            pVals: new esWebUIHelper.ESParamValues()
+                        },
+                        */
+            {
                 groupId: "ESMMStockItem",
                 filterId: "StockItemPhotoList",
                 gridOptions: {},
@@ -669,9 +677,12 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 filterId: "ESTMSMPersonList",
                 gridOptions: {},
                 pVals: new esWebUIHelper.ESParamValues()
-            }, {
-                groupId: "ESFICustomer",
-                filterId: "CS_CollectionPlanning",
+            },
+
+
+            {
+                groupId: "ESFIItem",
+                filterId: "ESFIItem_def",
                 gridOptions: {},
                 pVals: new esWebUIHelper.ESParamValues()
             },
@@ -778,11 +789,39 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
         $scope.chartOptions = {
             title: "Leads by Lead Source",
             series: [{
-                type: 'bar',
+                type: 'column',
                 field: 'OppRevenue',
                 categoryField: 'fLeadSourceCode',
-                aggregate: 'sum'
+                aggregate: 'sum',
+                axis: "Revenue"
+            }, {
+                type: 'line',
+                field: 'OppRevenue',
+                categoryField: 'fLeadSourceCode',
+                aggregate: 'count',
+                axis: "CountOf"
             }],
+
+            valueAxes: [{
+                name: "Revenue",
+                title: {
+                    text: "Turnover (euros)"
+                }
+            }, {
+                name: "CountOf",
+                title: {
+                    text: "Count Of"
+                }
+            }],
+
+            categoryAxis: {
+                labels: {
+                    rotation: 90
+                },
+                axisCrossingValues: [0, 205]
+            },
+
+
             tooltip: {
                 visible: true,
                 template: "#= category #: #= value #"

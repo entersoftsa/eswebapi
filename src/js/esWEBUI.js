@@ -600,7 +600,7 @@
                 } else {
                     //property xxx i.e. param xxx already exists. Check the type of the value
                     if (x[prop] instanceof ESParamVal) {
-                        
+
                         x[prop].enumList = val[prop].enumList;
                     } else {
                         // existing property i.e. param is not of ESParamVal type. In that case we override the value to the source one
@@ -944,6 +944,10 @@
                 template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
 
+                    $scope.downloadBlob = function(gid) {
+                        alert(gid);
+                    };
+
                     if (!$scope.esMasterRowField && !iAttrs.esMasterRowField) {
                         $scope.esMasterRowField = "GID";
                         $log.warn("esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
@@ -989,6 +993,11 @@
                                 ret.toolbar = null;
                                 ret.groupable = false;
                                 ret.dataSource = xDS;
+                                // Add the download column
+                                ret.columns.push({
+                                    template: "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">Download</button>"
+                                });
+
                                 $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
                             });
                     };
@@ -1168,6 +1177,7 @@
                 }
 
                 switch (esCol.dataType) {
+                    case "int32":
                     case "byte":
                         {
                             if (esCol.editType == "8") {
