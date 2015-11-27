@@ -6909,6 +6909,25 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         }
                     }
 
+                    $scope.downloadBlob = function(gid) {
+                        esWebApiService.fetchES00DocumentBlobDataByGID(gid)
+                            .then(function(result) {
+                                var fileData = result.data;
+
+                                var docType = result.headers()["content-type"];
+                                $log.info("File " + $scope.pAsset + " ===> " + docType);
+                                var file = new Blob([fileData], {
+                                    type: docType
+                                });
+                                //saveAs(file, "test.pdf");
+                                var fU = URL.createObjectURL(file);
+                                window.open(fU);
+                            })
+                            .catch(function(err) {
+                                $log.error("2nd error = " + JSON.stringify(err));
+                            });
+                    };
+
                     $scope.esGridPrint = function() {
                         if (!$scope.esGridCtrl) {
                             return;

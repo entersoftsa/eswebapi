@@ -59,8 +59,9 @@
             esWebApiServiceProvider.setSettings({
                 //host: "eswebapialp.azurewebsites.net",
                 //host: "eswebapi.entersoft.gr",
-                host: "localhost/eswebapijti",
+                //host: "localhost/eswebapijti",
                 //"host" : "192.168.1.190/eswebapijti",
+                host: "10.211.55.7/esapi180",
                 subscriptionId: subscriptionId,
                 subscriptionPassword: "passx",
                 allowUnsecureConnection: true
