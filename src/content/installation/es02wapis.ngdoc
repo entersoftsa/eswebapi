@@ -17,7 +17,7 @@ The latest version of Entersoft WEB API Server (EWAPIS) can be found on GitHub a
 3.	Go to the node “Default Web Site” and choose Deploy -> Import Application
 
 
-**ATTENTION Web Deploy**
+**ATTENTION: Web Deploy Fetaure**
 
 If Deloy Action is not available in your IIS Intallation, then you have to install Web Deploy on the IIS. 
 Instructions on how to install Web Deploy on IIS Manager can be found in 
