@@ -389,6 +389,79 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.WithCount = withCount;
             }
 
+            function ESPropertySet(
+                GID,
+                Code,
+                Description,
+                AlternativeDescription,
+                ESDCreated,
+                ESUCreated,
+                ESDModified,
+                ESUModified,
+                Inactive,
+                fCategoryGID,
+                MapProfile,
+                GridLayout,
+                Type,
+                TS,
+                MobileSurvey, 
+                Lines) 
+            {
+                this.GID = GID;
+                this.Code = Code;
+                this.Description = Description;
+                this.AlternativeDescription = AlternativeDescription;
+                this.ESDCreated = ESDCreated;
+                this.ESUCreated = ESUCreated;
+                this.ESDModified = ESDModified;
+                this.ESUModified = ESUModified;
+                this.Inactive = Inactive;
+                this.fCategoryGID = fCategoryGID;
+                this.MapProfile = MapProfile;
+                this.GridLayout = GridLayout;
+                this.Type = Type;
+                this.TS = TS;
+                this.MobileSurvey = MobileSurvey;
+                this.Lines = Lines;
+            }
+
+            function ESPropertySetLine(
+                GID,
+                fPropertySetGID,
+                SeqNum,
+                fPropertyGID,
+                fPropertyCategoryCode,
+                ESDCreated,
+                ESUCreated,
+                ESDModified,
+                ESUModified,
+                DefaultValue,
+                DefaultDisplayValue,
+                Mandatory,
+                VisualizationStyle,
+                Inactive,
+                PhotoRelated,
+                NotApplicable,
+                TS) {
+                this.GID = GID;
+                this.fPropertySetGID = fPropertySetGID;
+                this.SeqNum = SeqNum;
+                this.fPropertyGID = fPropertyGID;
+                this.fPropertyCategoryCode = fPropertyCategoryCode;
+                this.ESDCreated = ESDCreated;
+                this.ESUCreated = ESUCreated;
+                this.ESDModified = ESDModified;
+                this.ESUModified = ESUModified;
+                this.DefaultValue = DefaultValue;
+                this.DefaultDisplayValue = DefaultDisplayValue;
+                this.Mandatory = Mandatory;
+                this.VisualizationStyle = VisualizationStyle;
+                this.Inactive = Inactive;
+                this.PhotoRelated = PhotoRelated;
+                this.NotApplicable = NotApplicable;
+                this.TS = TS;
+            }
+
             function fgetGA() {
                 if (!$injector) {
                     return undefined;
@@ -765,6 +838,62 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                  * @param {boolean} WithCount If true, the result of the execution will also have the total number of records that exist for this execution run of the PQ
                  */
                 ESPQOptions: ESPQOptions,
+
+                /**
+                * @ngdoc constructor
+                * @name es.Services.Web.esGlobals#ESPropertySet
+                * @methodOf es.Services.Web.esGlobals
+                * @module es.Services.Web
+                * @kind constructor
+                * @constructor
+                * @description Constructs an ESPropertySet object that corresponds to a Questionnaire Defininition
+                * @param {string} GID TBD 
+                * @param {string} Code TBD 
+                * @param {string} Description TBD 
+                * @param {string} AlternativeDescription TBD 
+                * @param {date} ESDCreated TBD 
+                * @param {string} ESUCreated TBD 
+                * @param {date} ESDModified TBD 
+                * @param {string} ESUModified TBD 
+                * @param {boolean} Inactive TBD 
+                * @param {string} fCategoryGID TBD 
+                * @param {string} MapProfile TBD 
+                * @param {string} GridLayout TBD 
+                * @param {string} Type TBD 
+                * @param {number} TS TBD 
+                * @param {boolean} MobileSurvey  TBD 
+                * @param {ESPropertySetLine[]} Lines TBD 
+                */
+                ESPropertySet: ESPropertySet,
+
+                /**
+                * @ngdoc constructor
+                * @name es.Services.Web.esGlobals#ESPropertySetLine
+                * @methodOf es.Services.Web.esGlobals
+                * @module es.Services.Web
+                * @kind constructor
+                * @constructor
+                * @description Constructs an ESPropertySet object that corresponds to a Questionnaire question Defininition
+                * @param {string} GID TBD 
+                * @param {string} fPropertySetGID TBD 
+                * @param {number} SeqNum TBD 
+                * @param {string} fPropertyGID TBD 
+                * @param {string} fPropertyCategoryCode TBD 
+                * @param {date} ESDCreated TBD 
+                * @param {string} ESUCreated TBD 
+                * @param {date} ESDModified TBD 
+                * @param {string} ESUModified TBD 
+                * @param {string} DefaultValue TBD 
+                * @param {string} DefaultDisplayValue TBD 
+                * @param {boolean} Mandatory TBD 
+                * @param {string} VisualizationStyle TBD 
+                * @param {boolean} Inactive TBD 
+                * @param {boolean} PhotoRelated TBD 
+                * @param {boolean} NotApplicable TBD 
+                * @param {number} TS TBD
+                */
+                ESPropertySetLine: ESPropertySetLine,
+
 
                 sessionClosed: function() {
                     esClientSession.setModel(null);

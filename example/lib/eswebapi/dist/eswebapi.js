@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.5.3 - 2015-11-29
+/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-01
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -30,6 +30,7 @@
     esWebServices.
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login",
+        __STICKY_LOGIN__: "api/Login/StickyLogin",
         __PUBLICQUERY__: "api/rpc/PublicQuery/",
         __MULTI_PULIC_QUERY__: "api/rpc/MultiPublicQuery/",
         __PUBLICQUERY_INFO__: "api/rpc/PublicQueryInfo/",
@@ -615,6 +616,65 @@ $scope.doLogin = function() {
                                 var promise = $http({
                                     method: 'post',
                                     url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
+                                    data: {
+                                        SubscriptionID: esConfigSettings.subscriptionId,
+                                        SubscriptionPassword: esConfigSettings.subscriptionPassword,
+                                        Model: credentials
+                                    }
+                                }).
+                                success(function(data) {
+                                    esGlobals.sessionOpened(data, credentials);
+                                    tt.endTime().send();
+                                }).
+                                error(function(data, status, headers, config) {
+                                    esGlobals.sessionClosed();
+                                    if (data) {
+                                        $log.error(data);
+                                    } else {
+                                        console.log("Generic Http error");
+                                    }
+                                });
+
+                                return processWEBAPIPromise(promise);
+                            },
+
+
+                             /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#stickySession
+                             * @methodOf es.Services.Web.esWebApi
+                             * @module es.Services.Web
+                             * @kind function
+                             * @description This function is similar to {@link es.Services.Web.esWebApi#methods_opensession openSession} with the difference 
+                             * that it requires / mandates the Entersoft WEB API Server to route all the subsequent calls to the same server side session object
+                             * i.e. stick to the initial session. That means that in case that more than one Entersoft Application Servers have been registered in the
+                             * web api server config.json file as shown in the image below
+                             * 
+                             * ![Load-Balanced WEB API Server servers](images/api/es011loadbalance.png)
+                             * 
+                             * the server that will be selected to full fill the stickySession request will be the same that will serve all the subsequent
+                             * calls for this session, i.e. all calls will be serverd by the same ESSession of the same server.
+                             * On the other hand, openSession instructs Entersoft WEB API Server to fully use load balancing and fault-tolerant logic by
+                             * randomly selecting one of the available server to fullfil any susequent call on a per call basis. 
+                             * @param {object} credentials Entersoft Business Suite login credentials in the form of a JSON object with the following form:
+                             ```js
+                             var credentials  = {
+                                UserID: "xxxx", //Entersoft User id 
+                                Password: "this is my password", // Entersoft User's password
+                                BranchID: "Branch", // a valid Branch that the user has access rights and will be used as default for all operations requiring a BranchID
+                                LangID: "el-GR"
+                             }
+                             ```
+                             * @return {httpPromise} Returns a promise.
+                             * For more information please see {@link es.Services.Web.esWebApi#methods_opensession openSession}
+                             */
+                            stickySession: function(credentials) {
+                                var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
+                                tt.startTime();
+
+                                var promise = $http({
+                                    method: 'post',
+                                    url: urlWEBAPI + ESWEBAPI_URL.__STICKY_LOGIN__,
                                     data: {
                                         SubscriptionID: esConfigSettings.subscriptionId,
                                         SubscriptionPassword: esConfigSettings.subscriptionPassword,
@@ -5363,6 +5423,79 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.WithCount = withCount;
             }
 
+            function ESPropertySet(
+                GID,
+                Code,
+                Description,
+                AlternativeDescription,
+                ESDCreated,
+                ESUCreated,
+                ESDModified,
+                ESUModified,
+                Inactive,
+                fCategoryGID,
+                MapProfile,
+                GridLayout,
+                Type,
+                TS,
+                MobileSurvey, 
+                Lines) 
+            {
+                this.GID = GID;
+                this.Code = Code;
+                this.Description = Description;
+                this.AlternativeDescription = AlternativeDescription;
+                this.ESDCreated = ESDCreated;
+                this.ESUCreated = ESUCreated;
+                this.ESDModified = ESDModified;
+                this.ESUModified = ESUModified;
+                this.Inactive = Inactive;
+                this.fCategoryGID = fCategoryGID;
+                this.MapProfile = MapProfile;
+                this.GridLayout = GridLayout;
+                this.Type = Type;
+                this.TS = TS;
+                this.MobileSurvey = MobileSurvey;
+                this.Lines = Lines;
+            }
+
+            function ESPropertySetLine(
+                GID,
+                fPropertySetGID,
+                SeqNum,
+                fPropertyGID,
+                fPropertyCategoryCode,
+                ESDCreated,
+                ESUCreated,
+                ESDModified,
+                ESUModified,
+                DefaultValue,
+                DefaultDisplayValue,
+                Mandatory,
+                VisualizationStyle,
+                Inactive,
+                PhotoRelated,
+                NotApplicable,
+                TS) {
+                this.GID = GID;
+                this.fPropertySetGID = fPropertySetGID;
+                this.SeqNum = SeqNum;
+                this.fPropertyGID = fPropertyGID;
+                this.fPropertyCategoryCode = fPropertyCategoryCode;
+                this.ESDCreated = ESDCreated;
+                this.ESUCreated = ESUCreated;
+                this.ESDModified = ESDModified;
+                this.ESUModified = ESUModified;
+                this.DefaultValue = DefaultValue;
+                this.DefaultDisplayValue = DefaultDisplayValue;
+                this.Mandatory = Mandatory;
+                this.VisualizationStyle = VisualizationStyle;
+                this.Inactive = Inactive;
+                this.PhotoRelated = PhotoRelated;
+                this.NotApplicable = NotApplicable;
+                this.TS = TS;
+            }
+
             function fgetGA() {
                 if (!$injector) {
                     return undefined;
@@ -5739,6 +5872,62 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                  * @param {boolean} WithCount If true, the result of the execution will also have the total number of records that exist for this execution run of the PQ
                  */
                 ESPQOptions: ESPQOptions,
+
+                /**
+                * @ngdoc constructor
+                * @name es.Services.Web.esGlobals#ESPropertySet
+                * @methodOf es.Services.Web.esGlobals
+                * @module es.Services.Web
+                * @kind constructor
+                * @constructor
+                * @description Constructs an ESPropertySet object that corresponds to a Questionnaire Defininition
+                * @param {string} GID TBD 
+                * @param {string} Code TBD 
+                * @param {string} Description TBD 
+                * @param {string} AlternativeDescription TBD 
+                * @param {date} ESDCreated TBD 
+                * @param {string} ESUCreated TBD 
+                * @param {date} ESDModified TBD 
+                * @param {string} ESUModified TBD 
+                * @param {boolean} Inactive TBD 
+                * @param {string} fCategoryGID TBD 
+                * @param {string} MapProfile TBD 
+                * @param {string} GridLayout TBD 
+                * @param {string} Type TBD 
+                * @param {number} TS TBD 
+                * @param {boolean} MobileSurvey  TBD 
+                * @param {ESPropertySetLine[]} Lines TBD 
+                */
+                ESPropertySet: ESPropertySet,
+
+                /**
+                * @ngdoc constructor
+                * @name es.Services.Web.esGlobals#ESPropertySetLine
+                * @methodOf es.Services.Web.esGlobals
+                * @module es.Services.Web
+                * @kind constructor
+                * @constructor
+                * @description Constructs an ESPropertySet object that corresponds to a Questionnaire question Defininition
+                * @param {string} GID TBD 
+                * @param {string} fPropertySetGID TBD 
+                * @param {number} SeqNum TBD 
+                * @param {string} fPropertyGID TBD 
+                * @param {string} fPropertyCategoryCode TBD 
+                * @param {date} ESDCreated TBD 
+                * @param {string} ESUCreated TBD 
+                * @param {date} ESDModified TBD 
+                * @param {string} ESUModified TBD 
+                * @param {string} DefaultValue TBD 
+                * @param {string} DefaultDisplayValue TBD 
+                * @param {boolean} Mandatory TBD 
+                * @param {string} VisualizationStyle TBD 
+                * @param {boolean} Inactive TBD 
+                * @param {boolean} PhotoRelated TBD 
+                * @param {boolean} NotApplicable TBD 
+                * @param {number} TS TBD
+                */
+                ESPropertySetLine: ESPropertySetLine,
+
 
                 sessionClosed: function() {
                     esClientSession.setModel(null);

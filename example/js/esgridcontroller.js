@@ -141,7 +141,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
         };
 
         $scope.doLogin = function() {
-            esWebApiService.openSession($scope.credentials)
+            ($scope.stickyMode ? esWebApiService.stickySession($scope.credentials) : esWebApiService.openSession($scope.credentials))
                 .then(function(rep) {
                         $log.info(rep);
                         $location.path("/pq");

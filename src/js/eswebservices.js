@@ -28,6 +28,7 @@
     esWebServices.
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login",
+        __STICKY_LOGIN__: "api/Login/StickyLogin",
         __PUBLICQUERY__: "api/rpc/PublicQuery/",
         __MULTI_PULIC_QUERY__: "api/rpc/MultiPublicQuery/",
         __PUBLICQUERY_INFO__: "api/rpc/PublicQueryInfo/",
@@ -613,6 +614,65 @@ $scope.doLogin = function() {
                                 var promise = $http({
                                     method: 'post',
                                     url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
+                                    data: {
+                                        SubscriptionID: esConfigSettings.subscriptionId,
+                                        SubscriptionPassword: esConfigSettings.subscriptionPassword,
+                                        Model: credentials
+                                    }
+                                }).
+                                success(function(data) {
+                                    esGlobals.sessionOpened(data, credentials);
+                                    tt.endTime().send();
+                                }).
+                                error(function(data, status, headers, config) {
+                                    esGlobals.sessionClosed();
+                                    if (data) {
+                                        $log.error(data);
+                                    } else {
+                                        console.log("Generic Http error");
+                                    }
+                                });
+
+                                return processWEBAPIPromise(promise);
+                            },
+
+
+                             /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#stickySession
+                             * @methodOf es.Services.Web.esWebApi
+                             * @module es.Services.Web
+                             * @kind function
+                             * @description This function is similar to {@link es.Services.Web.esWebApi#methods_opensession openSession} with the difference 
+                             * that it requires / mandates the Entersoft WEB API Server to route all the subsequent calls to the same server side session object
+                             * i.e. stick to the initial session. That means that in case that more than one Entersoft Application Servers have been registered in the
+                             * web api server config.json file as shown in the image below
+                             * 
+                             * ![Load-Balanced WEB API Server servers](images/api/es011loadbalance.png)
+                             * 
+                             * the server that will be selected to full fill the stickySession request will be the same that will serve all the subsequent
+                             * calls for this session, i.e. all calls will be serverd by the same ESSession of the same server.
+                             * On the other hand, openSession instructs Entersoft WEB API Server to fully use load balancing and fault-tolerant logic by
+                             * randomly selecting one of the available server to fullfil any susequent call on a per call basis. 
+                             * @param {object} credentials Entersoft Business Suite login credentials in the form of a JSON object with the following form:
+                             ```js
+                             var credentials  = {
+                                UserID: "xxxx", //Entersoft User id 
+                                Password: "this is my password", // Entersoft User's password
+                                BranchID: "Branch", // a valid Branch that the user has access rights and will be used as default for all operations requiring a BranchID
+                                LangID: "el-GR"
+                             }
+                             ```
+                             * @return {httpPromise} Returns a promise.
+                             * For more information please see {@link es.Services.Web.esWebApi#methods_opensession openSession}
+                             */
+                            stickySession: function(credentials) {
+                                var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
+                                tt.startTime();
+
+                                var promise = $http({
+                                    method: 'post',
+                                    url: urlWEBAPI + ESWEBAPI_URL.__STICKY_LOGIN__,
                                     data: {
                                         SubscriptionID: esConfigSettings.subscriptionId,
                                         SubscriptionPassword: esConfigSettings.subscriptionPassword,
