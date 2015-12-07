@@ -598,6 +598,18 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 hostUrl: "",
                 connectionModel: null,
 
+                setWebApiToken: function(newToken, reqUrl) {
+                     if (esClientSession.connectionModel && newToken && angular.isString(newToken)) {
+                        var newT = 'Bearer ' + newToken;
+                        if (newT !== esClientSession.connectionModel.WebApiToken) {
+                            esClientSession.connectionModel.WebApiToken = newT;
+                            $log.warn("Changing wep api token for [" + reqUrl + "]");
+                        } else {
+                            $log.warn("[" + reqUrl + "] => For some strange reason I have been ordered to store a new web api token but the new one is the same to the old");
+                        }
+                     }
+                },
+
                 getWebApiToken: function() {
                     //sme fake
                     var s = getAuthToken(fgetModel());
@@ -759,6 +771,8 @@ var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
                 },
 
                 getGA: fgetGA,
+
+                setWebApiToken: esClientSession.setWebApiToken,
 
                 getWebApiToken: function() {
                     return esClientSession.getWebApiToken();

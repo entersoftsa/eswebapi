@@ -260,7 +260,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                     // and for executing the corresponding Public Query
                     $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.pGroup, $scope.pFilter, {}, $scope.esWebGridInfo);
                 }, function(err, status) {
-                    alert(a.UserMessage || a.MessageID || "Generic Error");
+                    alert(err.UserMessage || err.MessageID || "Generic Error");
                 });
         }
 
