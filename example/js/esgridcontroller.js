@@ -142,13 +142,13 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
 
         $scope.doLogin = function() {
             ($scope.stickyMode ? esWebApiService.stickySession($scope.credentials) : esWebApiService.openSession($scope.credentials))
-                .then(function(rep) {
-                        $log.info(rep);
-                        $location.path("/pq");
-                    },
-                    function(err) {
-                        $log.error(err);
-                    });
+            .then(function(rep) {
+                    $log.info(rep);
+                    $location.path("/pq");
+                },
+                function(err) {
+                    $log.error(err);
+                });
         }
 
         $scope.version = {};
@@ -647,6 +647,32 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                         $scope.pEntityDS = err;
                     })
         }
+
+        $scope.eventLog = function() {
+            esWebApi.eventLog({
+                    ID: $scope.eID,
+                    Description: $scope.eDescription,
+                    TypeID: $scope.eSeverity
+                })
+                .then(function(ret) {
+                        $scope.eRet = ret.data;
+                    },
+                    function(err) {
+                        $scope.eRet = err;
+                    });
+        }
+
+        $scope.fetchUserLogo = function() {
+            esWebApi.fetchUserLogo($scope.lUserID)
+                .then(function(ret) {
+                        $scope.userPhoto = ret.data;
+                    },
+                    function(err) {
+                        $scope.userPhoto = "";
+                    });
+        }
+
+
     }
 ]);
 

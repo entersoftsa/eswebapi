@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-07
+/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-09
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -30,6 +30,7 @@
     esWebServices.
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login",
+        __USER_LOGO__: "api/Login/UserLogo/",
         __EVENTLOG__: "api/rpc/EventLog/",
         __STICKY_LOGIN__: "api/Login/StickyLogin",
         __PUBLICQUERY__: "api/rpc/PublicQuery/",
@@ -438,6 +439,16 @@ eskbApp.config(['$logProvider',
                             }
 
                             promise.error(function(a, b) {
+                                if (tt) {
+                                    tt.endTime().send();
+                                }
+
+                                if (a) {
+                                    $log.error(a);
+                                } else {
+                                    console.log("Generic Http error");
+                                }
+
                                 esMessaging.publish("ES_HTTP_CORE_ERR", a, b);
                             });
                             return promise;
@@ -641,45 +652,130 @@ $scope.doLogin = function() {
                                 }).
                                 success(function(data) {
                                     esGlobals.sessionOpened(data, credentials);
-                                    tt.endTime().send();
                                 }).
                                 error(function(data, status, headers, config) {
                                     esGlobals.sessionClosed();
-                                    if (data) {
-                                        $log.error(data);
-                                    } else {
-                                        console.log("Generic Http error");
-                                    }
                                 });
 
-                                return processWEBAPIPromise(promise);
+                                return processWEBAPIPromise(promise, tt);
                             },
 
+                            /**
+                            * @ngdoc function
+                            * @name es.Services.Web.esWebApi#eventLog
+                            * @methodOf es.Services.Web.esWebApi
+                            * @module es.Services.Web
+                            * @kind function
+                            * @description This function inserts a new log entry in the ES00EventLog Entersoft Application Server subsystem
+                            * @param {object} esLog a simple JSON object with the following properties:
+                            * @param {string} esLog.ID The ID (class identifier) for the event to be logged.
+                            * @param {string} esLog.Description The description of the event to be logged.
+                            * @param {number} esLog.TypeID TypeID The severity of the event to be logged, where:
+                            * 0 = _Information_
+                            * 
+                            * 1 = _Warning_
+                            * 
+                            * 2 = _Error_
+                            * 
+                            * 3 = _Fatal Error_
+                            * @return {promise} A promise that denotes either success or error. No data are expected to be retrieved from the promise success function
+                            * @example
+```html
+<div>
+        <h3>29. eventLog</h3>
+        <span>
+            <input type="text" ng-model="eID" placeholder="Event ID"/>
+            <input type="text" ng-model="eDescription" placeholder="Event Description"/>
+            <input type="number" ng-model="eSeverity" placeholder="Event Severity"/>
+
+            <button ng-click="eventLog()">Log an Event</button>
+            <textarea>{{eRet}}</textarea>
+        </span>
+    </div>
+```
+```js
+$scope.eventLog = function() {
+    esWebApi.eventLog({
+            ID: $scope.eID,
+            Description: $scope.eDescription,
+            TypeID: $scope.eSeverity
+        })
+        .then(function(ret) {
+                $scope.eRet = ret.data;
+            },
+            function(err) {
+                $scope.eRet = err;
+            });
+}
+```
+                            */
                             eventLog: function(esLog) {
                                 if (!esLog) {
                                     throw new Error("esLog parameter cannot be empty");
                                 }
 
-                                var tt = esGlobals.trackTimer("AUTH", "EVENTLOG", "");
+                                var tt = esGlobals.trackTimer("AUTH", "EVENTLOG", esLog.ID || "NO-ID");
                                 tt.startTime();
 
                                 var promise = $http({
                                     method: 'post',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
                                     url: urlWEBAPI + ESWEBAPI_URL.__EVENTLOG__,
                                     data: JSON.stringify(esLog)
-                                }).
-                                success(function(data) {
-                                    tt.endTime().send();
-                                }).
-                                error(function(data, status, headers, config) {
-                                    if (data) {
-                                        $log.error(data);
-                                    } else {
-                                        console.log("eventLog => Generic Http error");
-                                    }
                                 });
+                                return processWEBAPIPromise(promise, tt);
+                            },
 
-                                return processWEBAPIPromise(promise);
+                            /**
+                            * @ngdoc function
+                            * @name es.Services.Web.esWebApi#fetchUserLogo
+                            * @methodOf es.Services.Web.esWebApi
+                            * @module es.Services.Web
+                            * @kind function
+                            * @description This function inserts a new log entry in the ES00EventLog Entersoft Application Server subsystem
+                            * @param {string|guid=} userID Either the code of the user (ESGOUser) or the GID of the ESGOUser the logo of which we are interested in.
+                            * If empty, null or undefined, the logo of the current logged-in user will be requested
+                            * @return  {httpPromise} If success i.e. function(ret) { ...} the ret.data contains the string __base64__ of the image that corresponds to the requested logo.
+                            * If the ESGOUser exists BUT there is no logo stored for the given user an empty string will be returned.
+                            * If the ESGOUser does not exist an error 404 will be returned.
+                            * @example
+```html
+<div>
+        <h3>30. fetchUserLogo</h3>
+        <span>
+            <input type="text" ng-model="lUserID" placeholder="User ID or GID"/>
+
+            <button ng-click="fetchUserLogo()">Get the PHOTO</button>
+            <img ng-if="userPhoto" data-ng-src="{{'data:image/jpg;base64,' + userPhoto}}"/>
+        </span>
+    </div>
+```
+```js
+$scope.fetchUserLogo = function() {
+    esWebApi.fetchUserLogo($scope.lUserID)
+        .then(function(ret) {
+                $scope.userPhoto = ret.data;
+            },
+            function(err) {
+                $scope.userPhoto = "";
+            });
+}
+```
+                            */
+                            fetchUserLogo: function(userID) {
+                                var tt = esGlobals.trackTimer("USER", "LOGO", userID || "NO-ID");
+                                tt.startTime();
+
+                                var promise = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__USER_LOGO__, userID || ""),
+                                });
+                                return processWEBAPIPromise(promise, tt);
                             },
 
 
@@ -712,7 +808,7 @@ $scope.doLogin = function() {
                             * @return {httpPromise} Returns a promise.
                             * For more information please see {@link es.Services.Web.esWebApi#methods_opensession openSession}
                             */
-                                stickySession: function(credentials) {
+                            stickySession: function(credentials) {
                                 var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
                                 tt.startTime();
 
@@ -727,18 +823,12 @@ $scope.doLogin = function() {
                                 }).
                                 success(function(data) {
                                     esGlobals.sessionOpened(data, credentials);
-                                    tt.endTime().send();
                                 }).
                                 error(function(data, status, headers, config) {
                                     esGlobals.sessionClosed();
-                                    if (data) {
-                                        $log.error(data);
-                                    } else {
-                                        console.log("Generic Http error");
-                                    }
                                 });
 
-                                return processWEBAPIPromise(promise);
+                                return processWEBAPIPromise(promise, tt);
                             },
 
                             /**
@@ -4000,7 +4090,8 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 ```
                              */
                             addOrUpdateES00Document: function(doc, file, okfunc, errfunc, progressfunc) {
-
+                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "UPLOAD", file);
+                                tt.startTime();
                                 file.upload = Upload.upload({
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__),
                                     method: 'POST',
@@ -4017,6 +4108,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                 file.upload.then(function(response) {
                                     $timeout(function() {
                                         file.result = response.data;
+                                        tt.endTime().send();
                                         okfunc(file);
                                     });
                                 }, errfunc);
@@ -4047,6 +4139,8 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                              */
                             eSearch: function(eUrl, eMethod, eBody) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ELASTICSEARCH__, eUrl);
+                                var tt = esGlobals.trackTimer("ELASTIC_SEARCH", eMethod || "", eBody || "");
+                                tt.startTime();
 
                                 var ht = $http({
                                     method: eMethod,
@@ -4057,6 +4151,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     data: eBody
                                 }).success(function(data) {
                                     // if google analytics are enabled register the exception as well
+                                    tt.endTime().send();
                                     var esGA = esGlobals.getGA();
                                     if (esGA) {
                                         esGA.registerEventTrack({
@@ -4067,6 +4162,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     }
                                 }).error(function(err) {
                                     try {
+                                        tt.endTime().send();
                                         fregisterException(err);
                                     } catch (exc) {
 

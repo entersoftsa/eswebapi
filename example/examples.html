@@ -221,7 +221,7 @@
         <span>
             <input type="text" ng-model="pAsset"  placeholder="EAS Asset to fetch">
             <button ng-click="ImagefetchEASWebAsset({base64: true})">ImagefetchEASWebAsset</button>
-            <img data-ng-src="{{'data:image/jpg;base64,' + pImageResults}}"/>
+            <img ng-if="pImageResults" data-ng-src="{{'data:image/jpg;base64,' + pImageResults}}"/>
         </span>
     </div>
     <hr/>
@@ -327,11 +327,22 @@
     <div>
         <h3>29. eventLog</h3>
         <span>
-            <input type="text" ng-model="pJobID" placeholder="EventLog JobID"/>
-            <input type="text" ng-model="pDescription" placeholder="EventLog Description"/>
-            
-            <button ng-click="fetchEntity()">fetchEntity</button>
-            <textarea>{{pEntityDS}}</textarea>
+            <input type="text" ng-model="eID" placeholder="Event ID"/>
+            <input type="text" ng-model="eDescription" placeholder="Event Description"/>
+            <input type="number" ng-model="eSeverity" placeholder="Event Severity"/>
+
+            <button ng-click="eventLog()">Log an Event</button>
+            <textarea>{{eRet}}</textarea>
+        </span>
+    </div>
+
+    <div>
+        <h3>30. fetchUserLogo</h3>
+        <span>
+            <input type="text" ng-model="lUserID" placeholder="User ID or GID"/>
+
+            <button ng-click="fetchUserLogo()">Get the PHOTO</button>
+            <img  class="img-circle" width="304" height="236" ng-if="userPhoto" data-ng-src="{{'data:image/jpg;base64,' + userPhoto}}"/>
         </span>
     </div>
 </div>
