@@ -29,6 +29,7 @@
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login",
         __USER_LOGO__: "api/Login/UserLogo/",
+        __POST_USER_LOGO__: "api/Login/UpdateUserLogo/",
         __EVENTLOG__: "api/rpc/EventLog/",
         __STICKY_LOGIN__: "api/Login/StickyLogin",
         __PUBLICQUERY__: "api/rpc/PublicQuery/",
@@ -774,6 +775,71 @@ $scope.fetchUserLogo = function() {
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__USER_LOGO__, userID || ""),
                                 });
                                 return processWEBAPIPromise(promise, tt);
+                            },
+
+                            /**
+                            * @ngdoc function
+                            * @name es.Services.Web.esWebApi#uploadUserLogo
+                            * @methodOf es.Services.Web.esWebApi
+                            * @module es.Services.Web
+                            * @kind function
+                            * @description This function uploads and stores in the EAS an image as the current logged-in User's Logo
+                            * @param {file} file The file that should be of type image that will be uploaded and stored in the EAS
+                            * @param {function=} okfunc a function that will be called when the upload is completed
+                            * @param {function=} errfunc a function that will called should an error occurs while uploading the file
+                            * @param {function=} progressfunc a function that will be called as many times as necessary to indicate the progress of the
+                            * uploading of the file i.e. to inform the user about the percentage of the bytes that have been uploaded so far
+                            * @return {Upload} An object of type Upload. For detailed documentation please visit {@link https://github.com/danialfarid/ng-file-upload ng-file-upload}.
+                            * @example
+```html
+<div>
+        <h3>31. uploadUserLogo</h3>
+        <span>
+            <input type="file" ngf-select ng-model="userLogoImage" name="file" accept="image/*" required>
+            <button ng-click="uploadUserLogo()">Upload Photo</button>
+        </span>
+        <div ng-if="userLogoImage.progress">
+            <div kendo-progress-bar k-min="0" k-max="100" ng-model="userLogoImage.progress" style="width: 100%;"></div>
+        </div>
+    </div>
+```
+```js
+$scope.uploadUserLogo = function() {
+var progressf = function(evt) {
+    $scope.userLogoImage.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+};
+var errf = function(x) {
+    alert(x);
+}
+esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
+}
+```
+                            */
+                            uploadUserLogo: function(file, okfunc, errfunc, progressfunc) {
+
+                                var tt = esGlobals.trackTimer("USER", "UPLOAD LOGO", file);
+                                tt.startTime();
+                                file.upload = Upload.upload({
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__POST_USER_LOGO__),
+                                    method: 'POST',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    file: file,
+                                });
+
+
+                                file.upload.then(function(response) {
+                                    $timeout(function() {
+                                        file.result = response.data;
+                                        tt.endTime().send();
+                                        okfunc(file);
+                                    });
+                                }, errfunc);
+
+                                file.upload.progress(progressfunc);
+
+                                return file.upload;
                             },
 
 
@@ -4053,8 +4119,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                              * @param {function=} errfunc a function that will called should an error occurs while uploading the file
                              * @param {function=} progressfunc a function that will be called as many times as necessary to indicate the progress of the
                              * uploading of the file i.e. to inform the user about the percentage of the bytes that have been uploaded so far
-                             * @return {promise} a promise that upon successful completion you can get the results by hooking th then function i.e.
-                             * .then(function(ret) { ... })
+                             * @return {Upload} An object of type Upload. For detailed documentation please visit {@link https://github.com/danialfarid/ng-file-upload ng-file-upload}.
                              * @example
 ```js
  $scope.uploadPic = function(myFile) {

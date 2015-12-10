@@ -45,6 +45,7 @@ Instructions on how to install Web Deploy on IIS Manager can be found in
 ```js
 {
     "TokenLifetimeInMinutes": 100,
+    "RefreshTokenIfWithinRemainingPercentage": 0,
     "AdminPassword": "4T0WVxO/s4A=",
     "AllowInsecureHttp":  true,
 
@@ -83,6 +84,83 @@ Instructions on how to install Web Deploy on IIS Manager can be found in
 # Config file
 
 __TokenLifetimeInMinutes__ is the number in minutes that the generated token will be valid. After that period of time the token will expire and any subsequent calls using this access token will be denied. It should be greater or equal to 1.
+
+__RefreshTokenIfWithinRemainingPercentage__ is the percentage threshold that any call taking place below that threshold a new web api access token will be generated on next api call.
+Default value is 0 which means that during the TokenLifetimeInMinutes duration NO regeneration of token will take place. 100 means that a new token will be generated on every api call with the exception the _login_ and _stickySession_.
+
+_Examples_
+-RefreshTokenIfWithinRemainingPercentage = 0 (default)
+Generate refresh tokens in the last 0% of 60 min = 0 min – no refresh tokens
+
+-RefreshTokenIfWithinRemainingPercentage = 25 
+Generate refresh tokens in the last 25% of 60 min = 15 min
+
+-RefreshTokenIfWithinRemainingPercentage = 50 
+Generate refresh tokens in the last 50% of 60 min = 30 min
+
+-RefreshTokenIfWithinRemainingPercentage = 75 
+Generate refresh token in the last 75% of 60 min = 45 min
+
+-RefreshTokenIfWithinRemainingPercentage = 100
+Generate refresh token in the last 100% of 60 min = 60 min i.e. generate a new token on every api call.
+
+A good option is a value of 50 or 75. For renewing and contiuous work without any possible interruption then 100 is the recommended value.
+
+```js
+{
+    "TokenLifetimeInMinutes": 60,
+    "RefreshTokenIfWithinRemainingPercentage": 100,
+    "AdminPassword": "4T0WVxO/s4A=",
+    "AllowInsecureHttp" :  true,
+
+    "Subscriptions": [
+        {
+            "SubscriptionID": "",
+            "SubscriptionPassword": "CgJHAQYVg+iChKZvXcEKHA==",
+            "Bridges": [
+                {
+                    "BridgeID": "",
+                    "DatabaseID": "smedb",
+                    "CompanyID": "ES",
+                    "DefaultUserCredentials": {
+                        "UserID": "admin",
+                        "Password": "z7qlymQ0lBrXzhrg+d01BMTBi84orE4x",
+                        "BranchID": "ΑΘΗ",
+                        "LangID": "el-GR"
+                    },
+                    "Services": [
+                        {
+                            "ServiceID": ""
+                        }
+                    ],
+                    "ERPServers": [
+                        {
+                            "Host": "sme-pc",
+                            "Port": 5555
+                        },
+                        {
+                            "Host": "sme-pc",
+                            "Port": 3333
+                        },
+                        {
+                            "Host": "sme-pc",
+                            "Port": 2222
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+__Load Balancing__
+In the example above, we have registred more than one Entersoft Application Servers to be available as a pool for use by the Entersoft WEB API Server.
+If so, then by a random selection algorithm, every call from the Entersoft WEB API to the Entersoft Application Server will be directed to one of those EASs
+found in the pool. If for some reason, an Application Server that comes from the pool fails to respond, Entersoft WEB API Server marks it for NOT Use and directs both the current and the subsequent calls to any of the other EASs available in the pool.
+
+If for some reason or some kind of applications, a web api client needs to interact with a specific instance of the EAS that initially served its login 
+process then the client has to use the __stickySession__ function of webapi rather than the login. After the initial call to stickysession in order get access
+to the appi server, all subsequent calls will be directed to the specific session that was selected from the pool to serve the stickySession.
 
 **AdminPassword**
 

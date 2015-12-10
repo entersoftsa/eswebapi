@@ -65,14 +65,12 @@
         <<textarea>{{pqResult}}</textarea>
     </div>
     <hr/>
-
     <div>
         <h3> 2B. fetchPublicQuery</h3>
         <button ng-click="doMultifetchPublicQuery()">MultifetchPublicQuery</button>
         <<textarea>{{pqResult}}</textarea>
     </div>
     <hr/>
-
     <div>
         <h3>3. logout</h3>
         <button ng-click="doLogout()">Logout</button>
@@ -242,8 +240,6 @@
             <textarea>{{pAssetResults}}</textarea>
         </span>
     </div>
-
-
     <hr/>
     <div>
         <h3>21. fetchES00DocumentByGID</h3>
@@ -271,7 +267,6 @@
             <textarea>{{pES00DocResults}}</textarea>
         </span>
     </div>
-
     <hr/>
     <div>
         <h3>24. fetchES00DocumentBLOB Data</h3>
@@ -301,7 +296,6 @@
             <textarea>{{pMimeTypes}}</textarea>
         </span>
     </div>
-
     <hr/>
     <div>
         <h3>27. FIImportDocument</h3>
@@ -311,7 +305,6 @@
             <textarea>{{xmldocret}}</textarea>
         </span>
     </div>
-
     <hr/>
     <div>
         <h3>28. fetchEntity</h3>
@@ -322,8 +315,7 @@
             <textarea>{{pEntityDS}}</textarea>
         </span>
     </div>
-
-        <hr/>
+    <hr/>
     <div>
         <h3>29. eventLog</h3>
         <span>
@@ -335,7 +327,7 @@
             <textarea>{{eRet}}</textarea>
         </span>
     </div>
-
+    <hr/>
     <div>
         <h3>30. fetchUserLogo</h3>
         <span>
@@ -344,5 +336,16 @@
             <button ng-click="fetchUserLogo()">Get the PHOTO</button>
             <img  class="img-circle" width="304" height="236" ng-if="userPhoto" data-ng-src="{{'data:image/jpg;base64,' + userPhoto}}"/>
         </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>31. uploadUserLogo</h3>
+        <span>
+            <input type="file" ngf-select ng-model="userLogoImage" name="file" accept="*/*" required>
+            <button ng-click="uploadUserLogo()">Upload Photo</button>
+        </span>
+        <div ng-if="userLogoImage.progress">
+            <div kendo-progress-bar k-min="0" k-max="100" ng-model="userLogoImage.progress" style="width: 100%;"></div>
+        </div>
     </div>
 </div>

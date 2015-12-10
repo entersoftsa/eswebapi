@@ -672,6 +672,16 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                     });
         }
 
+        $scope.uploadUserLogo = function() {
+        	var progressf = function(evt) {
+                $scope.userLogoImage.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            };
+            var errf = function(x) {
+            	alert(x);
+            }
+        	esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
+        }
+
 
     }
 ]);
