@@ -673,15 +673,23 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         }
 
         $scope.uploadUserLogo = function() {
-        	var progressf = function(evt) {
+            var progressf = function(evt) {
                 $scope.userLogoImage.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             };
             var errf = function(x) {
-            	alert(x);
+                alert(x);
             }
-        	esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
+            esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
         }
 
+        $scope.fetchPropertySet = function() {
+            esWebApi.fetchPropertySet($scope.psCode)
+                .then(function(ret) {
+                    $scope.psData = ret.data;
+                }, function(err) {
+                    $scope.psData = JSON.stringify(err);
+                });
+        }
 
     }
 ]);
@@ -806,6 +814,39 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
 
     }
 ]);
+
+smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
+    function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+
+        $scope.surveyDef = {};
+
+        $scope.surveyAns = {};
+        $scope.loadSurvey = function() {
+            esWebApiService.fetchPropertySet($scope.surveyCode)
+                .then(function(ret) {
+                        $scope.surveyDef = ret.data;
+                    },
+                    function(err) {
+                        $scope.surveyDef = {};
+                        alert(err);
+                    });
+        }
+    }
+]);
+
+smeControllers.directive('esPropertySet', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', function($log, $uibModal, esWebApiService, esWebUIHelper) {
+    return {
+        restrict: 'AE',
+        scope: {
+            esPsDef: "=",
+            esPsVal: "="
+        },
+        template: '<div ng-include src="\'dSurvey.html\'"></div>',
+        link: function($scope, iElement, iAttrs) {}
+    };
+}]);
+
+
 
 smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {

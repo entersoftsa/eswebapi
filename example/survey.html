@@ -1,0 +1,11 @@
+<div>
+	<div class="row">
+		<label>Survey ID</label>
+		<input type="text" ng-model="surveyCode"/>
+		<button class="btn-primary" ng-click="loadSurvey()">Load Survey</button>
+		<hr/>
+	</div>
+	<div class="row">
+		<es-property-set es-ps-def="surveyDef" es-ps-val="surveyAns"/>
+	</div>
+</div>

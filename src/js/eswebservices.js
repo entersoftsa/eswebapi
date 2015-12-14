@@ -31,7 +31,6 @@
         __USER_LOGO__: "api/Login/UserLogo/",
         __POST_USER_LOGO__: "api/Login/UpdateUserLogo/",
         __EVENTLOG__: "api/rpc/EventLog/",
-        __STICKY_LOGIN__: "api/Login/StickyLogin",
         __PUBLICQUERY__: "api/rpc/PublicQuery/",
         __MULTI_PULIC_QUERY__: "api/rpc/MultiPublicQuery/",
         __PUBLICQUERY_INFO__: "api/rpc/PublicQueryInfo/",
@@ -57,6 +56,7 @@
         __FETCH_ODS_MASTER_RELATIONS_INFO__: "api/rpc/FetchOdsMasterRelationsInfo/",
         __FI_IMPORTDOCUMENT___: "api/rpc/FIImportDocument/",
         __FETCH_ENTITY__: "api/rpc/fetchEntity/",
+        __FETCH_ESPROPERTY_SET__: "api/rpc/fetchPropertySet/",
         __FETCH_WEB_EAS_ASSET__: "api/asset/",
         __FETCH_ES00DOCUMENT_BY_GID__: "api/ES00Documents/InfoByGID/",
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
@@ -221,7 +221,7 @@ eskbApp.config(['$logProvider',
                         }
 
                         if (esConfigSettings.host == "") {
-                            throw "host for Entersoft WEB API Server is not specified";
+                            throw new Error("host for Entersoft WEB API Server is not specified");
                         }
 
                         if (!endsWith(esConfigSettings.host, "/")) {
@@ -238,7 +238,7 @@ eskbApp.config(['$logProvider',
                         }
 
                     } else {
-                        throw "host for Entersoft WEB API Server is not specified";
+                        throw new Error("host for Entersoft WEB API Server is not specified");
                     }
                     return this;
                 },
@@ -318,7 +318,7 @@ eskbApp.config(['$logProvider',
 
                         function execScrollerCommand(scrollerCommandParams) {
                             if (!scrollerCommandParams || !scrollerCommandParams.ScrollerID || !scrollerCommandParams.CommandID) {
-                                throw "ScrollerID and CommandID properties must be defined";
+                                throw new Error("ScrollerID and CommandID properties must be defined");
                             }
                             var surl = ESWEBAPI_URL.__SCROLLER_COMMAND__;
 
@@ -375,7 +375,7 @@ eskbApp.config(['$logProvider',
 
                         function execFormCommand(formCommandParams) {
                             if (!formCommandParams || !formCommandParams.EntityID || !formCommandParams.CommandID) {
-                                throw "EntityID and CommandID properties must be defined";
+                                throw new Error("EntityID and CommandID properties must be defined");
                             }
                             var surl = urlWEBAPI + ESWEBAPI_URL.__FORM_COMMAND__;
 
@@ -878,11 +878,12 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
 
                                 var promise = $http({
                                     method: 'post',
-                                    url: urlWEBAPI + ESWEBAPI_URL.__STICKY_LOGIN__,
+                                    url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
                                     data: {
                                         SubscriptionID: esConfigSettings.subscriptionId,
                                         SubscriptionPassword: esConfigSettings.subscriptionPassword,
-                                        Model: credentials
+                                        Model: credentials,
+                                        SessionSpec: '*'
                                     }
                                 }).
                                 success(function(data) {
@@ -3731,11 +3732,30 @@ var x = {
                              */
                             fetchEntity: function(entityclass, entitygid) {
                                 if (!entityclass || !entitygid) {
-                                    throw "invliad parameters";
+                                    throw new Error("Invalid parameters");
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ENTITY__, "/", entityclass, "/", entitygid);
                                 var tt = esGlobals.trackTimer("FETCH_ENTITY", entityclass, entitygid);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
+                            },
+
+                            fetchPropertySet: function(psCode) {
+                                if (!psCode) {
+                                    throw new Error("Invalid parameters");
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESPROPERTY_SET__, "/", psCode);
+                                var tt = esGlobals.trackTimer("FETCH", "PROPERTY_SET", psCode);
                                 tt.startTime();
 
                                 var ht = $http({
@@ -3761,7 +3781,7 @@ var x = {
                             fiImportDocument: function(xmldocstr) {
 
                                 if (!xmldocstr) {
-                                    throw "xmldocstr is not a valid string";
+                                    throw new Error("xmldocstr is not a valid string");
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FI_IMPORTDOCUMENT___);
@@ -4088,7 +4108,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                 es00Document = es00Document || {};
 
                                 if (!es00Document.TableID || !es00Document.TableName || !es00Document.GID || !es00Document.fGID) {
-                                    throw "Invalid parameter. One or more of the properties TableID, TableName, fGID and GID are not specified";
+                                    throw new Error("Invalid parameter. One or more of the properties TableID, TableName, fGID and GID are not specified");
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DELETE_ES00DOCUMENT__);

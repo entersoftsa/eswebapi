@@ -1,0 +1,21 @@
+<div>
+	<form novalidate class="form" name="esParamsPanelForm">
+        <div class="row">
+            <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="(key, prop) in esPsDef track by key">
+                <label class="control-label">{{key}}</label>
+                <input class="form-control" ng-model="esPsDef[key]" readonly/> 
+            </div>
+        </div>
+	</form>
+
+	<hr/>
+
+	<div class="row">
+		<div ng-repeat="section in esPsDef.Sections">
+            <h2>Section {{$index + 1}} - {{section.Description}} [{{section.Code}}]</h2>
+	            <div ng-repeat="question in esPsDef.Lines | filter: {Category_Code: section.Code}">
+	            	<label>Question {{$index + 1}} - {{question.Description}} [{{question.Code}}]</label>
+	        	</div>
+        </div>
+	</div>
+</div>

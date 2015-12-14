@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-10
+/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-14
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -33,7 +33,6 @@
         __USER_LOGO__: "api/Login/UserLogo/",
         __POST_USER_LOGO__: "api/Login/UpdateUserLogo/",
         __EVENTLOG__: "api/rpc/EventLog/",
-        __STICKY_LOGIN__: "api/Login/StickyLogin",
         __PUBLICQUERY__: "api/rpc/PublicQuery/",
         __MULTI_PULIC_QUERY__: "api/rpc/MultiPublicQuery/",
         __PUBLICQUERY_INFO__: "api/rpc/PublicQueryInfo/",
@@ -59,6 +58,7 @@
         __FETCH_ODS_MASTER_RELATIONS_INFO__: "api/rpc/FetchOdsMasterRelationsInfo/",
         __FI_IMPORTDOCUMENT___: "api/rpc/FIImportDocument/",
         __FETCH_ENTITY__: "api/rpc/fetchEntity/",
+        __FETCH_ESPROPERTY_SET__: "api/rpc/fetchPropertySet/",
         __FETCH_WEB_EAS_ASSET__: "api/asset/",
         __FETCH_ES00DOCUMENT_BY_GID__: "api/ES00Documents/InfoByGID/",
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
@@ -223,7 +223,7 @@ eskbApp.config(['$logProvider',
                         }
 
                         if (esConfigSettings.host == "") {
-                            throw "host for Entersoft WEB API Server is not specified";
+                            throw new Error("host for Entersoft WEB API Server is not specified");
                         }
 
                         if (!endsWith(esConfigSettings.host, "/")) {
@@ -240,7 +240,7 @@ eskbApp.config(['$logProvider',
                         }
 
                     } else {
-                        throw "host for Entersoft WEB API Server is not specified";
+                        throw new Error("host for Entersoft WEB API Server is not specified");
                     }
                     return this;
                 },
@@ -320,7 +320,7 @@ eskbApp.config(['$logProvider',
 
                         function execScrollerCommand(scrollerCommandParams) {
                             if (!scrollerCommandParams || !scrollerCommandParams.ScrollerID || !scrollerCommandParams.CommandID) {
-                                throw "ScrollerID and CommandID properties must be defined";
+                                throw new Error("ScrollerID and CommandID properties must be defined");
                             }
                             var surl = ESWEBAPI_URL.__SCROLLER_COMMAND__;
 
@@ -377,7 +377,7 @@ eskbApp.config(['$logProvider',
 
                         function execFormCommand(formCommandParams) {
                             if (!formCommandParams || !formCommandParams.EntityID || !formCommandParams.CommandID) {
-                                throw "EntityID and CommandID properties must be defined";
+                                throw new Error("EntityID and CommandID properties must be defined");
                             }
                             var surl = urlWEBAPI + ESWEBAPI_URL.__FORM_COMMAND__;
 
@@ -792,6 +792,30 @@ $scope.fetchUserLogo = function() {
                             * @param {function=} progressfunc a function that will be called as many times as necessary to indicate the progress of the
                             * uploading of the file i.e. to inform the user about the percentage of the bytes that have been uploaded so far
                             * @return {Upload} An object of type Upload. For detailed documentation please visit {@link https://github.com/danialfarid/ng-file-upload ng-file-upload}.
+                            * @example
+```html
+<div>
+        <h3>31. uploadUserLogo</h3>
+        <span>
+            <input type="file" ngf-select ng-model="userLogoImage" name="file" accept="image/*" required>
+            <button ng-click="uploadUserLogo()">Upload Photo</button>
+        </span>
+        <div ng-if="userLogoImage.progress">
+            <div kendo-progress-bar k-min="0" k-max="100" ng-model="userLogoImage.progress" style="width: 100%;"></div>
+        </div>
+    </div>
+```
+```js
+$scope.uploadUserLogo = function() {
+var progressf = function(evt) {
+    $scope.userLogoImage.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+};
+var errf = function(x) {
+    alert(x);
+}
+esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
+}
+```
                             */
                             uploadUserLogo: function(file, okfunc, errfunc, progressfunc) {
 
@@ -856,11 +880,12 @@ $scope.fetchUserLogo = function() {
 
                                 var promise = $http({
                                     method: 'post',
-                                    url: urlWEBAPI + ESWEBAPI_URL.__STICKY_LOGIN__,
+                                    url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
                                     data: {
                                         SubscriptionID: esConfigSettings.subscriptionId,
                                         SubscriptionPassword: esConfigSettings.subscriptionPassword,
-                                        Model: credentials
+                                        Model: credentials,
+                                        SessionSpec: '*'
                                     }
                                 }).
                                 success(function(data) {
@@ -3709,11 +3734,30 @@ var x = {
                              */
                             fetchEntity: function(entityclass, entitygid) {
                                 if (!entityclass || !entitygid) {
-                                    throw "invliad parameters";
+                                    throw new Error("Invalid parameters");
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ENTITY__, "/", entityclass, "/", entitygid);
                                 var tt = esGlobals.trackTimer("FETCH_ENTITY", entityclass, entitygid);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
+                            },
+
+                            fetchPropertySet: function(psCode) {
+                                if (!psCode) {
+                                    throw new Error("Invalid parameters");
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESPROPERTY_SET__, "/", psCode);
+                                var tt = esGlobals.trackTimer("FETCH", "PROPERTY_SET", psCode);
                                 tt.startTime();
 
                                 var ht = $http({
@@ -3739,7 +3783,7 @@ var x = {
                             fiImportDocument: function(xmldocstr) {
 
                                 if (!xmldocstr) {
-                                    throw "xmldocstr is not a valid string";
+                                    throw new Error("xmldocstr is not a valid string");
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FI_IMPORTDOCUMENT___);
@@ -4066,7 +4110,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                 es00Document = es00Document || {};
 
                                 if (!es00Document.TableID || !es00Document.TableName || !es00Document.GID || !es00Document.fGID) {
-                                    throw "Invalid parameter. One or more of the properties TableID, TableName, fGID and GID are not specified";
+                                    throw new Error("Invalid parameter. One or more of the properties TableID, TableName, fGID and GID are not specified");
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DELETE_ES00DOCUMENT__);
@@ -5604,79 +5648,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.WithCount = withCount;
             }
 
-            function ESPropertySet(
-                GID,
-                Code,
-                Description,
-                AlternativeDescription,
-                ESDCreated,
-                ESUCreated,
-                ESDModified,
-                ESUModified,
-                Inactive,
-                fCategoryGID,
-                MapProfile,
-                GridLayout,
-                Type,
-                TS,
-                MobileSurvey, 
-                Lines) 
-            {
-                this.GID = GID;
-                this.Code = Code;
-                this.Description = Description;
-                this.AlternativeDescription = AlternativeDescription;
-                this.ESDCreated = ESDCreated;
-                this.ESUCreated = ESUCreated;
-                this.ESDModified = ESDModified;
-                this.ESUModified = ESUModified;
-                this.Inactive = Inactive;
-                this.fCategoryGID = fCategoryGID;
-                this.MapProfile = MapProfile;
-                this.GridLayout = GridLayout;
-                this.Type = Type;
-                this.TS = TS;
-                this.MobileSurvey = MobileSurvey;
-                this.Lines = Lines;
-            }
-
-            function ESPropertySetLine(
-                GID,
-                fPropertySetGID,
-                SeqNum,
-                fPropertyGID,
-                fPropertyCategoryCode,
-                ESDCreated,
-                ESUCreated,
-                ESDModified,
-                ESUModified,
-                DefaultValue,
-                DefaultDisplayValue,
-                Mandatory,
-                VisualizationStyle,
-                Inactive,
-                PhotoRelated,
-                NotApplicable,
-                TS) {
-                this.GID = GID;
-                this.fPropertySetGID = fPropertySetGID;
-                this.SeqNum = SeqNum;
-                this.fPropertyGID = fPropertyGID;
-                this.fPropertyCategoryCode = fPropertyCategoryCode;
-                this.ESDCreated = ESDCreated;
-                this.ESUCreated = ESUCreated;
-                this.ESDModified = ESDModified;
-                this.ESUModified = ESUModified;
-                this.DefaultValue = DefaultValue;
-                this.DefaultDisplayValue = DefaultDisplayValue;
-                this.Mandatory = Mandatory;
-                this.VisualizationStyle = VisualizationStyle;
-                this.Inactive = Inactive;
-                this.PhotoRelated = PhotoRelated;
-                this.NotApplicable = NotApplicable;
-                this.TS = TS;
-            }
-
             function fgetGA() {
                 if (!$injector) {
                     return undefined;
@@ -5815,9 +5786,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 setWebApiToken: function(newToken, reqUrl) {
                      if (esClientSession.connectionModel && newToken && angular.isString(newToken)) {
-                        var newT = 'Bearer ' + newToken;
-                        if (newT !== esClientSession.connectionModel.WebApiToken) {
-                            esClientSession.connectionModel.WebApiToken = newT;
+                        if (newToken !== esClientSession.connectionModel.WebApiToken) {
+                            esClientSession.connectionModel.WebApiToken = newToken;
                             $log.warn("Changing wep api token for [" + reqUrl + "]");
                         } else {
                             $log.warn("[" + reqUrl + "] => For some strange reason I have been ordered to store a new web api token but the new one is the same to the old");
@@ -6068,62 +6038,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                  */
                 ESPQOptions: ESPQOptions,
 
-                /**
-                * @ngdoc constructor
-                * @name es.Services.Web.esGlobals#ESPropertySet
-                * @methodOf es.Services.Web.esGlobals
-                * @module es.Services.Web
-                * @kind constructor
-                * @constructor
-                * @description Constructs an ESPropertySet object that corresponds to a Questionnaire Defininition
-                * @param {string} GID TBD 
-                * @param {string} Code TBD 
-                * @param {string} Description TBD 
-                * @param {string} AlternativeDescription TBD 
-                * @param {date} ESDCreated TBD 
-                * @param {string} ESUCreated TBD 
-                * @param {date} ESDModified TBD 
-                * @param {string} ESUModified TBD 
-                * @param {boolean} Inactive TBD 
-                * @param {string} fCategoryGID TBD 
-                * @param {string} MapProfile TBD 
-                * @param {string} GridLayout TBD 
-                * @param {string} Type TBD 
-                * @param {number} TS TBD 
-                * @param {boolean} MobileSurvey  TBD 
-                * @param {ESPropertySetLine[]} Lines TBD 
-                */
-                ESPropertySet: ESPropertySet,
-
-                /**
-                * @ngdoc constructor
-                * @name es.Services.Web.esGlobals#ESPropertySetLine
-                * @methodOf es.Services.Web.esGlobals
-                * @module es.Services.Web
-                * @kind constructor
-                * @constructor
-                * @description Constructs an ESPropertySet object that corresponds to a Questionnaire question Defininition
-                * @param {string} GID TBD 
-                * @param {string} fPropertySetGID TBD 
-                * @param {number} SeqNum TBD 
-                * @param {string} fPropertyGID TBD 
-                * @param {string} fPropertyCategoryCode TBD 
-                * @param {date} ESDCreated TBD 
-                * @param {string} ESUCreated TBD 
-                * @param {date} ESDModified TBD 
-                * @param {string} ESUModified TBD 
-                * @param {string} DefaultValue TBD 
-                * @param {string} DefaultDisplayValue TBD 
-                * @param {boolean} Mandatory TBD 
-                * @param {string} VisualizationStyle TBD 
-                * @param {boolean} Inactive TBD 
-                * @param {boolean} PhotoRelated TBD 
-                * @param {boolean} NotApplicable TBD 
-                * @param {number} TS TBD
-                */
-                ESPropertySetLine: ESPropertySetLine,
-
-
+                
                 sessionClosed: function() {
                     esClientSession.setModel(null);
                     try {
