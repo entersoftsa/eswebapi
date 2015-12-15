@@ -351,9 +351,9 @@
     <div>
         <h3>32. fetchPropertySet</h3>
         <form name="surveyForm">
-            <div class="form-group" ng-class="{ 'has-error': surveyForm.surv.$invalid }">
+            <div class="form-group"  ng-class="{ 'has-error': surveyForm.Code.$invalid }">
                 <span>
-                <input type="text" ng-model="psCode" name="surv" required>
+                <input class="form-control" type="text" ng-model="psCode" name="Code" ng-required="'true'">
                 <button ng-click="fetchPropertySet()">fetchPropertySet</button>
                 <textarea>{{psData}}</textarea>
             </span>

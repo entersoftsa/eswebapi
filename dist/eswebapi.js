@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-14
+/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-15
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -5627,6 +5627,20 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      */
     esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' /* 'es.Services.GA' */ ,
         function($sessionStorage, $log, esMessaging, esCache, $injector) {
+
+            function ESPropertySet(ps) {
+                this.ps = ps;
+            }
+
+            ESPropertySet.prototype.getSections = function() {
+                var p = this.ps;
+
+                if (!p || !p.Lines) {
+                    return [];
+                }
+
+                return _.groupBy(p.Lines, 'Category_Code');
+            }
 
             function ESPublicQueryDef(ctxId, groupId, filterId, pqOptions, params) {
                 this.CtxID = ctxId;
