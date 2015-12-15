@@ -820,6 +820,8 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
 
         $scope.surveyDef = {};
 
+        $scope.surveyCode = "usage_s1";
+
         $scope.surveyAns = {};
         $scope.loadSurvey = function() {
             esWebApiService.fetchPropertySet($scope.surveyCode)
@@ -833,6 +835,19 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
         }
     }
 ]);
+
+smeControllers.directive('esPropertySection', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', function($log, $uibModal, esWebApiService, esWebUIHelper) {
+    return {
+        restrict: 'AE',
+        scope: {
+        	esSectionIdx: "=",
+            esPsDef: "=",
+            esPsVal: "="
+        },
+        template: '<div ng-include src="\'dSection.html\'"></div>',
+        link: function($scope, iElement, iAttrs) {}
+    };
+}]);
 
 smeControllers.directive('esPropertySet', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', function($log, $uibModal, esWebApiService, esWebUIHelper) {
     return {

@@ -1,0 +1,14 @@
+<div class="row">
+    <h2>Section {{esSectionIdx + 1}} - {{esPsDef.Sections[esSectionIdx].Description}} [{{esPsDef.Sections[esSectionIdx].Code}}]</h2>
+    <form class="form" name="espsform">
+        <div class="row">
+            <div class="form-group col-xs-12" ng-class="{'has-error': espsform.{{::question.Code}}.$invalid}" ng-repeat="question in esPsDef.Lines | filter: {Category_Code: esPsDef.Sections[esSectionIdx].Code} | orderBy:'SeqNum'">
+                <label class="control-label es-question">Question {{$index + 1}} - {{question.Description}} [{{question.Code}}]</label>
+                <input class="form-control es-param-control" 
+					name="{{::question.Code}}"
+					ng-required="true"
+					ng-model="esPsVal[question.Code]"/>
+            </div>
+        </div>
+    </form>
+</div>

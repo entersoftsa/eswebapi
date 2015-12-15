@@ -12,10 +12,7 @@
 
 	<div class="row">
 		<div ng-repeat="section in esPsDef.Sections">
-            <h2>Section {{$index + 1}} - {{section.Description}} [{{section.Code}}]</h2>
-	            <div ng-repeat="question in esPsDef.Lines | filter: {Category_Code: section.Code}">
-	            	<label>Question {{$index + 1}} - {{question.Description}} [{{question.Code}}]</label>
-	        	</div>
+            <es-property-section es-section-idx="$index" es-ps-def="esPsDef" es-ps-val="esPsVal"/>
         </div>
 	</div>
 </div>

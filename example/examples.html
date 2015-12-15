@@ -348,13 +348,16 @@
             <div kendo-progress-bar k-min="0" k-max="100" ng-model="userLogoImage.progress" style="width: 100%;"></div>
         </div>
     </div>
-
     <div>
         <h3>32. fetchPropertySet</h3>
-        <span>
-            <input type="text" ng-model="psCode">
-            <button ng-click="fetchPropertySet()">fetchPropertySet</button>
-            <textarea>{{psData}}</textarea>
-        </span>
+        <form name="surveyForm">
+            <div class="form-group" ng-class="{ 'has-error': surveyForm.surv.$invalid }">
+                <span>
+                <input type="text" ng-model="psCode" name="surv" required>
+                <button ng-click="fetchPropertySet()">fetchPropertySet</button>
+                <textarea>{{psData}}</textarea>
+            </span>
+            </div>
+        </form>
     </div>
 </div>
