@@ -369,6 +369,25 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
     esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' /* 'es.Services.GA' */ ,
         function($sessionStorage, $log, esMessaging, esCache, $injector) {
 
+            function esConvertGIDtoId(gid) {
+                if (!gid) {
+                    return 'gid';
+                }
+                return 'gid' + gid.replace(/-/g, '_');
+            }
+
+            function esConvertIDtoGID(id) {
+                if (!id) {
+                    return '';
+                }
+
+                if (id.slice(0, 'gid'.length) != 'gid')
+                {
+                    return id;
+                }
+                return id.slice(3).replace(/_/g, '-');
+            }
+
             function ESPropertySet(ps) {
                 this.ps = ps;
             }
@@ -610,6 +629,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
 
             return {
+
+                esConvertGIDtoId: esConvertGIDtoId,
+
+                esConvertIDtoGID: esConvertIDtoGID,
+
 
                 /**
                  * @ngdoc function

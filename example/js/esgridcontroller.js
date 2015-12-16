@@ -820,7 +820,7 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
 
         $scope.surveyDef = {};
 
-        $scope.ps = { Code: "usage_s1" };
+        $scope.surveyCode = "usage_s1";
 
         $scope.surveyAns = {};
         $scope.loadSurvey = function() {
@@ -836,7 +836,8 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
     }
 ]);
 
-smeControllers.directive('esPropertySection', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', function($log, $uibModal, esWebApiService, esWebUIHelper) {
+smeControllers.directive('esPropertySection', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
+	function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals) {
     return {
         restrict: 'AE',
         scope: {
@@ -845,7 +846,9 @@ smeControllers.directive('esPropertySection', ['$log', '$uibModal', 'esWebApi', 
             esPsVal: "="
         },
         template: '<div ng-include src="\'dSection.html\'"></div>',
-        link: function($scope, iElement, iAttrs) {}
+        link: function($scope, iElement, iAttrs) {
+        	$scope.esGlobals = esGlobals;
+        }
     };
 }]);
 

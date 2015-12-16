@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-15
+/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-16
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -3756,7 +3756,7 @@ var x = {
                                     throw new Error("Invalid parameters");
                                 }
 
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESPROPERTY_SET__, "/", psCode);
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESPROPERTY_SET__, psCode);
                                 var tt = esGlobals.trackTimer("FETCH", "PROPERTY_SET", psCode);
                                 tt.startTime();
 
@@ -5628,6 +5628,25 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
     esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' /* 'es.Services.GA' */ ,
         function($sessionStorage, $log, esMessaging, esCache, $injector) {
 
+            function esConvertGIDtoId(gid) {
+                if (!gid) {
+                    return 'gid';
+                }
+                return 'gid' + gid.replace(/-/g, '_');
+            }
+
+            function esConvertIDtoGID(id) {
+                if (!id) {
+                    return '';
+                }
+
+                if (id.slice(0, 'gid'.length) != 'gid')
+                {
+                    return id;
+                }
+                return id.slice(3).replace(/_/g, '-');
+            }
+
             function ESPropertySet(ps) {
                 this.ps = ps;
             }
@@ -5869,6 +5888,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
 
             return {
+
+                esConvertGIDtoId: esConvertGIDtoId,
+
+                esConvertIDtoGID: esConvertIDtoGID,
+
 
                 /**
                  * @ngdoc function
