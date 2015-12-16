@@ -820,7 +820,7 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
 
         $scope.surveyDef = {};
 
-        $scope.surveyCode = "usage_s1";
+        $scope.surveyCode = "usage_s1/2E035E80-BFED-4B45-91D2-1CEB64C2BB7B";
 
         $scope.surveyAns = {};
         $scope.loadSurvey = function() {

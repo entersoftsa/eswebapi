@@ -9,7 +9,11 @@
 	</form>
 
 	<hr/>
-
+	<div ng-bind-html="::esPsDef.Campaign.TaskNotes">
+	</div>
+	<hr/>
+	{{esPsVal | json}}
+	<hr/>
 	<div class="row">
 		<div ng-repeat="section in esPsDef.Sections">
             <es-property-section es-section-idx="$index" es-ps-def="esPsDef" es-ps-val="esPsVal"/>

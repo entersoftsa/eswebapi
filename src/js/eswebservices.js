@@ -3735,7 +3735,7 @@ var x = {
                                     throw new Error("Invalid parameters");
                                 }
 
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ENTITY__, "/", entityclass, "/", entitygid);
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ENTITY__, entityclass, "/", entitygid);
                                 var tt = esGlobals.trackTimer("FETCH_ENTITY", entityclass, entitygid);
                                 tt.startTime();
 
