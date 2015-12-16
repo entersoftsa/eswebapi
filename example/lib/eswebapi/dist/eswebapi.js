@@ -3751,9 +3751,13 @@ var x = {
                                 return processWEBAPIPromise(ht, tt);
                             },
 
-                            fetchPropertySet: function(psCode) {
+                            fetchPropertySet: function(psCode, campaignGID) {
                                 if (!psCode) {
-                                    throw new Error("Invalid parameters");
+                                    throw new Error("Invalid parameter");
+                                }
+
+                                if (campaignGID) {
+                                    psCode = psCode + "/" + campaignGID;
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESPROPERTY_SET__, psCode);

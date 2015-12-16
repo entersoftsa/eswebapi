@@ -820,11 +820,12 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
 
         $scope.surveyDef = {};
 
-        $scope.surveyCode = "usage_s1/2E035E80-BFED-4B45-91D2-1CEB64C2BB7B";
-
+        $scope.startFrom = 3;
+        $scope.surveyCode = "usage_s1";
         $scope.surveyAns = {};
+
         $scope.loadSurvey = function() {
-            esWebApiService.fetchPropertySet($scope.surveyCode)
+            esWebApiService.fetchPropertySet($scope.surveyCode, "2E035E80-BFED-4B45-91D2-1CEB64C2BB7B")
                 .then(function(ret) {
                         $scope.surveyDef = ret.data;
                     },
@@ -836,8 +837,8 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
     }
 ]);
 
-smeControllers.directive('esPropertySection', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
-	function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals) {
+smeControllers.directive('esPropertySection', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', 
+	function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
     return {
         restrict: 'AE',
         scope: {
