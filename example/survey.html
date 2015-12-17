@@ -8,7 +8,9 @@
 		</div>
 	</form>
 	<div class="row">
-		<!-- <es-property-set es-ps-def="surveyDef" es-ps-val="surveyAns"/> -->
+		<div>
+			{{surveyAns | json}}
+		</div>
 
 		<es-property-set es-section-idx="startFrom" es-ps-def="surveyDef" es-ps-val="surveyAns"/>
 

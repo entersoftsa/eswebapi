@@ -1,9 +1,9 @@
 <input 
-    class="es-survey-question-control es-param-control" 
-    kendo-numeric-text-box
+    class="es-survey-question-control form-control" 
+    type="number"
     	name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
     	ng-required="esQuestion.Mandatory" 
     	align="right" 
-    	k-ng-model="esPsVal[esQuestion.Code]" 
-    	k-spinners="false" 
+    	ng-model="esPsVal[esQuestion.Code]" 
+    	spinners="false" 
 />
