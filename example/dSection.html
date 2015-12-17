@@ -1,29 +1,34 @@
 <div class="row">
-	<div ng-if="esSectionIdx < 0" class="es-survey-introduction">
-		<div>
-			<div ng-bind-html="esPsDef.Campaign.TaskNotes"/>
-			<button class="btn btn-primary" ng-disabled="section_{{esSectionIdx + 1}}.$invalid">Next</button>
-		</div>
-	</div>
+    <div ng-if="isIntroduction()" class="es-survey-introduction">
+        <div>
+            <div ng-bind-html="esPsDef.Campaign.TaskNotes" />
+            <button class="btn btn-primary" ng-click="advanceStep()">Start</button>
+        </div>
+    </div>
     <div ng-show="esSectionIdx >= 0">
-        <h2>SectioN {{esSectionIdx + 1}} - {{esPsDef.Sections[esSectionIdx].Description}} [{{esPsDef.Sections[esSectionIdx].Code}}]</h2>
-        <form novalidate class="form" name="section_{{esSectionIdx + 1}}">
+        <h2>{{esSectionIdx + 1}}. {{esPsDef.Sections[esSectionIdx].Description}}</h2>
+        <form novalidate kendo-validator="essurveyvalidator" class="form" name="esqsection">
             <div class="row">
-                <div class="es-survey-question form-group col-xs-12 " ng-class="{'has-error': section_{{esSectionIdx + 1}}.{{::esGlobals.esConvertGIDtoId(question.GID)}}.$invalid && section_{{esSectionIdx + 1}}.{{::esGlobals.esConvertGIDtoId(question.GID)}}.$dirty}" ng-repeat="question in esPsDef.Lines | filter: {Category_Code: esPsDef.Sections[esSectionIdx].Code} | orderBy:'SeqNum'">
-                    <label class="control-label es-survey-question-label">Question {{$index + 1}} - {{question.Description}} [{{question.Code}}]</label>
-                    {{question.PType}}
-                    <!-- <div ng-repeat="option in esPsDef.Choices | filter: {ChoiceCode: question.PArg} | orderBy:'OrderPriority'">
-                        <label>
-                            <input type="radio" name="{{::esGlobals.esConvertGIDtoId(question.GID)}}" ng-required="!esPsVal[question.Code]" ng-model="esPsVal[question.Code]" ng-value="{{option.Value}}"> {{option.Description}}
+                <ng-form name="esqsection">
+                    <div class="es-survey-question form-group col-xs-12 " ng-class="{'has-error': esqsection.{{esGlobals.esConvertGIDtoId(question.GID)}}.$invalid && esqsection.{{esGlobals.esConvertGIDtoId(question.GID)}}.$dirty}" ng-repeat="question in esPsDef.Lines | filter: {Category_Code: esPsDef.Sections[esSectionIdx].Code} | orderBy:'SeqNum'">
+                        <label class="control-label es-survey-question-label">{{$index + 1}}. {{question.Description}} - {{question.PType}}
+                            <span ng-if="question.Mandatory"> (*)</span>
                         </label>
-                    </div> -->
-                    <input class="form-control es-survey-question-control" 
-					name="{{::esGlobals.esConvertGIDtoId(question.GID)}}"
-					ng-required="true"
-					ng-model="esPsVal[question.Code]"/>
-                </div>
-                <button class="btn btn-primary" ng-disabled="section_{{esSectionIdx + 1}}.$invalid">Next</button>
+                        <label class="es-survey-question-hint">{{question.AlternativeDescription}}</label>
+
+                        <es-property-question es-ps-def="esPsDef" es-question="question" es-ps-val="esPsVal"/>
+                    </div>
+                    
+                    <div class="row">
+                        <button class="btn btn-primary" ng-click="backStep()" ng-disabled="isIntroduction()">Previous</button>
+                        <button class="btn btn-primary" ng-click="advanceStep()" ng-hide="isLast()" ng-disabled="esqsection.$invalid">Next</button>
+                        <button class="btn btn-primary" ng-click="saveAndComplete()" ng-show="isLast()" ng-disabled="esqsection.$invalid">Save and Close</button>
+                    </div>
+                </ng-form>
             </div>
         </form>
+    </div>
+    <div class="row es-survey-progress">
+        <uib-progressbar ng-show="!isIntroduction()" animate="true" value="progress()" type="success"><b>{{progress()}}%</b></uib-progressbar>
     </div>
 </div>

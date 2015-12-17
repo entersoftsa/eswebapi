@@ -820,7 +820,7 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
 
         $scope.surveyDef = {};
 
-        $scope.startFrom = 3;
+        $scope.startFrom = -1;
         $scope.surveyCode = "usage_s1";
         $scope.surveyAns = {};
 
@@ -828,6 +828,9 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
             esWebApiService.fetchPropertySet($scope.surveyCode, "2E035E80-BFED-4B45-91D2-1CEB64C2BB7B")
                 .then(function(ret) {
                         $scope.surveyDef = ret.data;
+                        $scope.startFrom = -1;
+                        $scope.surveyCode = "usage_s1";
+                        $scope.surveyAns = {};
                     },
                     function(err) {
                         $scope.surveyDef = {};
@@ -837,33 +840,77 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
     }
 ]);
 
-smeControllers.directive('esPropertySection', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', 
-	function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
-    return {
-        restrict: 'AE',
-        scope: {
-        	esSectionIdx: "=",
-            esPsDef: "=",
-            esPsVal: "="
-        },
-        template: '<div ng-include src="\'dSection.html\'"></div>',
-        link: function($scope, iElement, iAttrs) {
-        	$scope.esGlobals = esGlobals;
-        }
-    };
-}]);
+smeControllers.directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+    function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+        return {
+            restrict: 'AE',
+            scope: {
+                esQuestion: "=",
+                esPsDef: "=",
+                esPsVal: "="
+            },
+            template: '<div ng-include src="\'esPropertyQuestion_\'+esQuestion.PType+\'.html\'"></div>',
+            link: function($scope, iElement, iAttrs) {
+            	$scope.esGlobals = esGlobals;
+            }
+        };
+    }
+]);
 
-smeControllers.directive('esPropertySet', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', function($log, $uibModal, esWebApiService, esWebUIHelper) {
-    return {
-        restrict: 'AE',
-        scope: {
-            esPsDef: "=",
-            esPsVal: "="
-        },
-        template: '<div ng-include src="\'dSurvey.html\'"></div>',
-        link: function($scope, iElement, iAttrs) {}
-    };
-}]);
+smeControllers.directive('esPropertySet', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+    function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+        return {
+            restrict: 'AE',
+            scope: {
+                esSectionIdx: "=",
+                esPsDef: "=",
+                esPsVal: "="
+            },
+            template: '<div ng-include src="\'dSection.html\'"></div>',
+            link: function($scope, iElement, iAttrs) {
+                $scope.esGlobals = esGlobals;
+
+                $scope.isIntroduction = function() {
+                    return ($scope.esSectionIdx < 0);
+                }
+
+                $scope.isLast = function() {
+                    if (!$scope.esPsDef || !$scope.esPsDef.Sections) {
+                        return true;
+                    }
+                    return ($scope.esSectionIdx == $scope.esPsDef.Sections.length - 1);
+                }
+
+                $scope.saveAndComplete = function() {
+
+                }
+
+                $scope.progress = function() {
+                    if ($scope.esSectionIdx < 0 || !$scope.esPsDef || !$scope.esPsDef.Sections || !$scope.esPsDef.Sections.length) {
+                        return 0;
+                    }
+
+                    return Math.round((($scope.esSectionIdx + 1) / $scope.esPsDef.Sections.length) * 100);
+                }
+
+                $scope.advanceStep = function() {
+                    if ($scope.isLast()) {
+                        alert("You are done !!!");
+                        return;
+                    }
+                    $scope.esSectionIdx += 1;
+                }
+
+                $scope.backStep = function() {
+                    if ($scope.isIntroduction()) {
+                        return;
+                    }
+                    $scope.esSectionIdx -= 1;
+                }
+            }
+        };
+    }
+]);
 
 
 
