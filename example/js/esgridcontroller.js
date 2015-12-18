@@ -851,7 +851,27 @@ smeControllers.directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi',
             },
             template: '<div ng-include src="\'esPropertyQuestion_\'+esQuestion.PType+\'.html\'"></div>',
             link: function($scope, iElement, iAttrs) {
-            	$scope.esGlobals = esGlobals;
+                $scope.esGlobals = esGlobals;
+
+                $scope.openCalendar = function($event) {
+                    $scope.calendarStatus.opened = true;
+                };
+
+                $scope.calendarStatus = {
+                    opened: false
+                };
+
+                $scope.calendarFormat = 'dd-MMMM-yyyy';
+
+                $scope.getChoicesOfQuestion = function() {
+                    if (!$scope.esQuestion || !$scope.esQuestion.PArg || !$scope.esPsDef || !$scope.esPsDef.Choices) {
+                        return [];
+                    }
+
+                    return _.sortBy(_.where($scope.esPsDef.Choices, {
+                        ChoiceCode: $scope.esQuestion.PArg
+                    }), "OrderPriority");
+                }
             }
         };
     }
@@ -883,6 +903,21 @@ smeControllers.directive('esPropertySet', ['$log', '$uibModal', 'esWebApi', 'esU
 
                 $scope.saveAndComplete = function() {
 
+                }
+
+                $scope.getQuestionsofSection = function() {
+                    if (!$scope.esPsDef || !$scope.esPsDef.Sections || $scope.esSectionIdx < 0 || $scope.esSectionId >= $scope.esPsDef.Sections.length) {
+                        return [];
+                    }
+
+                    var sect = $scope.esPsDef.Sections[$scope.esSectionIdx].Code;
+                    if (!sect) {
+                        return [];
+                    }
+
+                    return _.sortBy(_.where($scope.esPsDef.Lines, {
+                        Category_Code: sect
+                    }), "SeqNum");
                 }
 
                 $scope.progress = function() {

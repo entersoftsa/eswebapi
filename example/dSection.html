@@ -10,7 +10,7 @@
         <form novalidate class="form" name="esqsection">
             <div class="row">
                 <ng-form name="esqsection">
-                    <div class="es-survey-question form-group col-xs-12 " ng-class="{'has-error': esqsection.{{esGlobals.esConvertGIDtoId(question.GID)}}.$invalid && esqsection.{{esGlobals.esConvertGIDtoId(question.GID)}}.$dirty}" ng-repeat="question in esPsDef.Lines | filter: {Category_Code: esPsDef.Sections[esSectionIdx].Code} | orderBy:'SeqNum'">
+                    <div class="es-survey-question form-group col-xs-12 " ng-class="{'has-error': esqsection.{{esGlobals.esConvertGIDtoId(question.GID)}}.$invalid && esqsection.{{esGlobals.esConvertGIDtoId(question.GID)}}.$dirty}" ng-repeat="question in getQuestionsofSection()">
                         <label class="control-label es-survey-question-label">{{$index + 1}}. {{question.Description}} - {{question.PType}}
                             <span ng-if="question.Mandatory"> (*)</span>
                         </label>

@@ -1,4 +1,5 @@
-<input 
+<input
+	ng-if="!esQuestion.PArg"
     class="es-survey-question-control form-control" 
     type="number"
     	name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
@@ -7,3 +8,12 @@
     	pattern="[0-9]+"
     	ng-model="esPsVal[esQuestion.Code]" 
 />
+
+<uib-rating
+	ng-if="esQuestion.PArg"
+	name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
+	ng-required="esQuestion.Mandatory" 
+	ng-model="esPsVal[esQuestion.Code]"
+	max="{{esQuestion.PArg}}">
+</uib-rating>
+{{esQuestion.PArg}}

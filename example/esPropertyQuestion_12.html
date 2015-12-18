@@ -1,7 +1,9 @@
-<input 
+<uib-timepicker 
 	class="es-survey-question-control es-param-control" 
-	kendo-time-picker
-    name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
+	name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
     ng-required="esQuestion.Mandatory" 
     ng-model="esPsVal[esQuestion.Code]" 
-/>
+	hour-step="1"
+	minute-step="30"
+	show-meridian="false">
+</uib-timepicker>
