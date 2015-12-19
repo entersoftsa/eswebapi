@@ -863,6 +863,14 @@ smeControllers.directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi',
 
                 $scope.calendarFormat = 'dd-MMMM-yyyy';
 
+                $scope.getScale = function(upTo) {
+                	if (!upTo || isNaN(upTo)) {
+                		return [];
+                	}
+
+                	return _.range(1, Math.abs(parseInt(upTo)) + 1);
+                }
+
                 $scope.getChoicesOfQuestion = function() {
                     if (!$scope.esQuestion || !$scope.esQuestion.PArg || !$scope.esPsDef || !$scope.esPsDef.Choices) {
                         return [];
