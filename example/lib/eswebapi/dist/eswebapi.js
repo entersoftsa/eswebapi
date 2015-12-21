@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-16
+/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-20
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7208,28 +7208,181 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
             return f;
         })
-        /**
-         * @ngdoc directive
-         * @name es.Web.UI.directive:esGrid
-         * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
-         * @requires es.Web.UI.esUIHelper
-         * @requires $log
-         * @restrict AE
-         * @param {template} esGroupId The Entersoft Public Query Group ID
-         * @param {template} esFilterId The Entersoft Public Query Filter ID
-         * @param {esGridInfoOptions=} esGridOptions should grid options are already available you can explicitly assign
-         * @param {object=} esExecuteParams Params object that will be used when executing the public query
-         *
-         * @description
-         *
-         * **TBD**
-         * This directive is responsible to render the html for the presentation of the results / data of an Entersoft Public Query.
-         * The esGrid generates a Telerik kendo-grid web ui element {@link http://docs.telerik.com/KENDO-UI/api/javascript/ui/grid kendo-grid}.
-         * 
-         * In order to instantiate an esGrid with an Angular application, you have to provide the parameters esGroupId and esFilterId are required.
-         * These two parameters along with esExecuteParams will be supplied to the {@link es.Web.UI.esUIHelper#methods_esGridInfoToKInfo esToKendoTransform function}
-         */
-        .directive('esGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', function($log, esWebApiService, esMessaging, esWebUIHelper) {
+
+    .directive('esChecklistModel', ['$parse', '$compile', function($parse, $compile) {
+        // contains
+        function contains(arr, item, comparator) {
+            if (angular.isArray(arr)) {
+                for (var i = arr.length; i--;) {
+                    if (comparator(arr[i], item)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        // add
+        function add(arr, item, comparator) {
+            arr = angular.isArray(arr) ? arr : [];
+            if (!contains(arr, item, comparator)) {
+                arr.push(item);
+            }
+            return arr;
+        }
+
+        // remove
+        function remove(arr, item, comparator) {
+            if (angular.isArray(arr)) {
+                for (var i = arr.length; i--;) {
+                    if (comparator(arr[i], item)) {
+                        arr.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+            return arr;
+        }
+
+        // http://stackoverflow.com/a/19228302/1458162
+        function postLinkFn(scope, elem, attrs) {
+            // exclude recursion, but still keep the model
+            var esChecklistModel = attrs.esChecklistModel;
+            attrs.$set("esChecklistModel", null);
+            // compile with `ng-model` pointing to `checked`
+            $compile(elem)(scope);
+            attrs.$set("esChecklistModel", esChecklistModel);
+
+            // getter for original model
+            var esChecklistModelGetter = $parse(esChecklistModel);
+            var checklistChange = $parse(attrs.checklistChange);
+            var checklistBeforeChange = $parse(attrs.checklistBeforeChange);
+            var ngModelGetter = $parse(attrs.ngModel);
+
+/*
+            ctrl.$validators.esCount = function(modelValue, viewValue) {
+                return true;
+            };
+*/
+            var comparator = angular.equals;
+
+            if (attrs.hasOwnProperty('checklistComparator')) {
+                if (attrs.checklistComparator[0] == '.') {
+                    var comparatorExpression = attrs.checklistComparator.substring(1);
+                    comparator = function(a, b) {
+                        return a[comparatorExpression] === b[comparatorExpression];
+                    };
+
+                } else {
+                    comparator = $parse(attrs.checklistComparator)(scope.$parent);
+                }
+            }
+
+            // watch UI checked change
+            scope.$watch(attrs.ngModel, function(newValue, oldValue) {
+                if (newValue === oldValue) {
+                    return;
+                }
+
+                if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
+                    ngModelGetter.assign(scope, contains(esChecklistModelGetter(scope.$parent), getChecklistValue(), comparator));
+                    return;
+                }
+
+                setValueInesChecklistModel(getChecklistValue(), newValue);
+
+                if (checklistChange) {
+                    checklistChange(scope);
+                }
+            });
+
+            // watches for value change of esChecklistValue (Credit to @blingerson)
+            scope.$watch(getChecklistValue, function(newValue, oldValue) {
+                if (newValue != oldValue && angular.isDefined(oldValue) && scope[attrs.ngModel] === true) {
+                    var current = esChecklistModelGetter(scope.$parent);
+                    esChecklistModelGetter.assign(scope.$parent, remove(current, oldValue, comparator));
+                    esChecklistModelGetter.assign(scope.$parent, add(current, newValue, comparator));
+                }
+            });
+
+            function getChecklistValue() {
+                return attrs.esChecklistValue ? $parse(attrs.esChecklistValue)(scope.$parent) : attrs.value;
+            }
+
+            function setValueInesChecklistModel(value, checked) {
+                var current = esChecklistModelGetter(scope.$parent);
+                if (angular.isFunction(esChecklistModelGetter.assign)) {
+                    if (checked === true) {
+                        esChecklistModelGetter.assign(scope.$parent, add(current, value, comparator));
+                    } else {
+                        esChecklistModelGetter.assign(scope.$parent, remove(current, value, comparator));
+                    }
+                }
+
+            }
+
+            // declare one function to be used for both $watch functions
+            function setChecked(newArr, oldArr) {
+                if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
+                    setValueInesChecklistModel(getChecklistValue(), ngModelGetter(scope));
+                    return;
+                }
+                ngModelGetter.assign(scope, contains(newArr, getChecklistValue(), comparator));
+            }
+
+            // watch original model change
+            // use the faster $watchCollection method if it's available
+            if (angular.isFunction(scope.$parent.$watchCollection)) {
+                scope.$parent.$watchCollection(esChecklistModel, setChecked);
+            } else {
+                scope.$parent.$watch(esChecklistModel, setChecked, true);
+            }
+        }
+
+        return {
+            restrict: 'A',
+            priority: 1000,
+            terminal: true,
+            scope: true,
+            compile: function(tElement, tAttrs) {
+
+                if (!tAttrs.esChecklistValue && !tAttrs.value) {
+                    throw 'You should provide `value` or `checklist-value`.';
+                }
+
+                // by default ngModel is 'checked', so we set it if not specified
+                if (!tAttrs.ngModel) {
+                    // local scope var storing individual checkbox model
+                    tAttrs.$set("ngModel", "checked");
+                }
+
+                return postLinkFn;
+            }
+        };
+    }])
+
+    /**
+     * @ngdoc directive
+     * @name es.Web.UI.directive:esGrid
+     * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
+     * @requires es.Web.UI.esUIHelper
+     * @requires $log
+     * @restrict AE
+     * @param {template} esGroupId The Entersoft Public Query Group ID
+     * @param {template} esFilterId The Entersoft Public Query Filter ID
+     * @param {esGridInfoOptions=} esGridOptions should grid options are already available you can explicitly assign
+     * @param {object=} esExecuteParams Params object that will be used when executing the public query
+     *
+     * @description
+     *
+     * **TBD**
+     * This directive is responsible to render the html for the presentation of the results / data of an Entersoft Public Query.
+     * The esGrid generates a Telerik kendo-grid web ui element {@link http://docs.telerik.com/KENDO-UI/api/javascript/ui/grid kendo-grid}.
+     * 
+     * In order to instantiate an esGrid with an Angular application, you have to provide the parameters esGroupId and esFilterId are required.
+     * These two parameters along with esExecuteParams will be supplied to the {@link es.Web.UI.esUIHelper#methods_esGridInfoToKInfo esToKendoTransform function}
+     */
+    .directive('esGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', function($log, esWebApiService, esMessaging, esWebUIHelper) {
             return {
                 restrict: 'AE',
                 scope: {

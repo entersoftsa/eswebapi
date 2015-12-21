@@ -840,6 +840,45 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
     }
 ]);
 
+smeControllers.directive('esPositiveInteger', ['$parse', function($parse) {
+    var INTEGER_REGEXP = /^\+?\d+$/;
+    return {
+        require: 'ngModel',
+        restrict: 'A',
+        link: function(scope, iElement, iAttrs, ctrl) {
+
+            var AllowZero = false;
+
+
+            if (angular.isDefined(iAttrs.esPositiveInteger)) {
+                try {
+                    AllowZero = $parse(iAttrs.esPositiveInteger)(scope);
+                } catch(ex) {
+
+                }
+            }
+
+            ctrl.$validators.esPositiveInteger = function(modelValue, viewValue) {
+
+                if (ctrl.$isEmpty(modelValue) || AllowZero ? (modelValue < 0) : (modelValue <= 0)) {
+                    // consider empty models to be valid
+                    return false;
+                }
+
+
+                if (INTEGER_REGEXP.test(viewValue)) {
+                    // it is valid
+                    return true;
+                }
+
+                // it is invalid
+                return false;
+            };
+
+        }
+    };
+}]);
+
 smeControllers.directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
     function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
         return {
@@ -864,11 +903,11 @@ smeControllers.directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi',
                 $scope.calendarFormat = 'dd-MMMM-yyyy';
 
                 $scope.getScale = function(upTo) {
-                	if (!upTo || isNaN(upTo)) {
-                		return [];
-                	}
+                    if (!upTo || isNaN(upTo)) {
+                        return [];
+                    }
 
-                	return _.range(1, Math.abs(parseInt(upTo)) + 1);
+                    return _.range(1, Math.abs(parseInt(upTo)) + 1);
                 }
 
                 $scope.getChoicesOfQuestion = function() {

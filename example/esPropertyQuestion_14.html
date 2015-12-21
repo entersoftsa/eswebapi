@@ -1,5 +1,9 @@
-<div ng-repeat="option in esPsDef.Choices | filter: {ChoiceCode: esQuestion.PArg} | orderBy:'OrderPriority'">
-    <label>
-        <input type="radio" name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" ng-required="esQuestion.Mandatory && !esPsVal[esQuestion.Code]" ng-model="esPsVal[esQuestion.Code]" ng-value="{{option.Value}}">{{option.Description}}
-    </label>
+<div ng-repeat="option in getChoicesOfQuestion()">
+	<label>
+        <input
+        	ng-required="true"
+        	type="checkbox" 
+        	es-checklist-model="esPsVal[esQuestion.Code]" 
+        	es-checklist-value="option.Value">{{option.Description}}
+	</label>
 </div>

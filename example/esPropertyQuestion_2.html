@@ -12,7 +12,7 @@
 <uib-rating
 	ng-if="esQuestion.PArg && (esQuestion.PArg.slice(0, 1) != '-')"
 	name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
-	ng-required="esQuestion.Mandatory" 
+    es-positive-integer="!esQuestion.Mandatory"
 	ng-model="esPsVal[esQuestion.Code]"
 	max="{{esQuestion.PArg}}">
 </uib-rating>
