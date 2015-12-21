@@ -892,6 +892,12 @@ smeControllers.directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi',
             link: function($scope, iElement, iAttrs) {
                 $scope.esGlobals = esGlobals;
 
+                //Check for ZoomDS
+                var qs = $scope.esQuestion;
+            	if (qs && qs.PArg && qs.PType == 7) {
+           			$scope[qs.PArg + "_DS"] = esWebUIHelper.getZoomDataSource(qs.PArg);
+            	}
+
                 $scope.openCalendar = function($event) {
                     $scope.calendarStatus.opened = true;
                 };
@@ -909,6 +915,7 @@ smeControllers.directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi',
 
                     return _.range(1, Math.abs(parseInt(upTo)) + 1);
                 }
+
 
                 $scope.getChoicesOfQuestion = function() {
                     if (!$scope.esQuestion || !$scope.esQuestion.PArg || !$scope.esPsDef || !$scope.esPsDef.Choices) {

@@ -1,0 +1,11 @@
+<select kendo-drop-down-list
+	name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
+	ng-required="esQuestion.Mandatory" 
+    k-data-text-field="'Description'"
+    k-data-value-field="'Code'"
+    k-auto-bind="false"
+    k-ng-delay="esQuestion"
+    k-data-source="{{esQuestion.PArg + '_DS'}}"
+    k-value-primitive="true"
+    ng-model="esPsVal[esQuestion.Code]"
+    style="width: 100%"></select>

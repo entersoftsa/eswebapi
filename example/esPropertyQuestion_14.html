@@ -1,7 +1,7 @@
 <div ng-repeat="option in getChoicesOfQuestion()">
 	<label>
         <input
-        	ng-required="true"
+        	name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
         	type="checkbox" 
         	es-checklist-model="esPsVal[esQuestion.Code]" 
         	es-checklist-value="option.Value">{{option.Description}}
