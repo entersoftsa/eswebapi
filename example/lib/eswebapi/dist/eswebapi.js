@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-21
+/*! Entersoft Application Server WEB API - v1.5.3 - 2015-12-22
 * Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7209,6 +7209,167 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             return f;
         })
 
+    .directive('esPositiveInteger', ['$parse', function($parse) {
+        var INTEGER_REGEXP = /^\+?\d+$/;
+        return {
+            require: 'ngModel',
+            restrict: 'A',
+            link: function(scope, iElement, iAttrs, ctrl) {
+
+                var AllowZero = false;
+
+
+                if (angular.isDefined(iAttrs.esPositiveInteger)) {
+                    try {
+                        AllowZero = $parse(iAttrs.esPositiveInteger)(scope);
+                    } catch (ex) {
+
+                    }
+                }
+
+                ctrl.$validators.esPositiveInteger = function(modelValue, viewValue) {
+
+                    if (ctrl.$isEmpty(modelValue) || AllowZero ? (modelValue < 0) : (modelValue <= 0)) {
+                        // consider empty models to be valid
+                        return false;
+                    }
+
+
+                    if (INTEGER_REGEXP.test(viewValue)) {
+                        // it is valid
+                        return true;
+                    }
+
+                    // it is invalid
+                    return false;
+                };
+
+            }
+        };
+    }])
+
+    .directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esQuestion: "=",
+                    esPsDef: "=",
+                    esPsVal: "="
+                },
+                template: '<div ng-include src="\'src/partials/esSurvey/esPropertyQuestion_\'+esQuestion.PType+\'.html\'"></div>',
+                link: function($scope, iElement, iAttrs) {
+                    $scope.esGlobals = esGlobals;
+
+                    //Check for ZoomDS
+                    var qs = $scope.esQuestion;
+                    if (qs && qs.PArg && qs.PType == 7) {
+                        $scope[qs.PArg + "_DS"] = esWebUIHelper.getZoomDataSource(qs.PArg);
+                    }
+
+                    $scope.openCalendar = function($event) {
+                        $scope.calendarStatus.opened = true;
+                    };
+
+                    $scope.calendarStatus = {
+                        opened: false
+                    };
+
+                    $scope.calendarFormat = 'dd-MMMM-yyyy';
+
+                    $scope.getScale = function(upTo) {
+                        if (!upTo || isNaN(upTo)) {
+                            return [];
+                        }
+
+                        return _.range(1, Math.abs(parseInt(upTo)) + 1);
+                    }
+
+
+                    $scope.getChoicesOfQuestion = function() {
+                        if (!$scope.esQuestion || !$scope.esQuestion.PArg || !$scope.esPsDef || !$scope.esPsDef.Choices) {
+                            return [];
+                        }
+
+                        return _.sortBy(_.where($scope.esPsDef.Choices, {
+                            ChoiceCode: $scope.esQuestion.PArg
+                        }), "OrderPriority");
+                    }
+                }
+            };
+        }
+    ])
+
+    .directive('esSurvey', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esSectionIdx: "=",
+                    esPsDef: "=",
+                    esPsVal: "="
+                },
+                template: '<div ng-include src="\'src/partials/esSurvey/esSurvey.html\'"></div>',
+                link: function($scope, iElement, iAttrs) {
+                    $scope.esGlobals = esGlobals;
+
+                    $scope.isIntroduction = function() {
+                        return ($scope.esSectionIdx < 0);
+                    }
+
+                    $scope.isLast = function() {
+                        if (!$scope.esPsDef || !$scope.esPsDef.Sections) {
+                            return true;
+                        }
+                        return ($scope.esSectionIdx == $scope.esPsDef.Sections.length - 1);
+                    }
+
+                    $scope.saveAndComplete = function() {
+
+                    }
+
+                    $scope.getQuestionsofSection = function() {
+                        if (!$scope.esPsDef || !$scope.esPsDef.Sections || $scope.esSectionIdx < 0 || $scope.esSectionId >= $scope.esPsDef.Sections.length) {
+                            return [];
+                        }
+
+                        var sect = $scope.esPsDef.Sections[$scope.esSectionIdx].Code;
+                        if (!sect) {
+                            return [];
+                        }
+
+                        return _.sortBy(_.where($scope.esPsDef.Lines, {
+                            Category_Code: sect
+                        }), "SeqNum");
+                    }
+
+                    $scope.progress = function() {
+                        if ($scope.esSectionIdx < 0 || !$scope.esPsDef || !$scope.esPsDef.Sections || !$scope.esPsDef.Sections.length) {
+                            return 0;
+                        }
+
+                        return Math.round((($scope.esSectionIdx + 1) / $scope.esPsDef.Sections.length) * 100);
+                    }
+
+                    $scope.advanceStep = function() {
+                        if ($scope.isLast()) {
+                            alert("You are done !!!");
+                            return;
+                        }
+                        $scope.esSectionIdx += 1;
+                    }
+
+                    $scope.backStep = function() {
+                        if ($scope.isIntroduction()) {
+                            return;
+                        }
+                        $scope.esSectionIdx -= 1;
+                    }
+                }
+            };
+        }
+    ])
+
     .directive('esChecklistModel', ['$parse', '$compile', function($parse, $compile) {
         // contains
         function contains(arr, item, comparator) {
@@ -7259,11 +7420,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             var checklistBeforeChange = $parse(attrs.checklistBeforeChange);
             var ngModelGetter = $parse(attrs.ngModel);
 
-/*
-            ctrl.$validators.esCount = function(modelValue, viewValue) {
-                return true;
-            };
-*/
+            /*
+                        ctrl.$validators.esCount = function(modelValue, viewValue) {
+                            return true;
+                        };
+            */
             var comparator = angular.equals;
 
             if (attrs.hasOwnProperty('checklistComparator')) {

@@ -102,7 +102,7 @@ module.exports = function(grunt) {
          */
         ngtemplates: {
             app: {
-                src: ['src/partials/**.html'],
+                src: ['src/partials/**.html', 'src/partials/esSurvey/**.html'],
                 dest: 'dist/<%= pkg.name %>.templates.js',
                 options: {
                     module: 'es.Web.UI',
