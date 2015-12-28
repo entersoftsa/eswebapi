@@ -648,6 +648,16 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                     })
         }
 
+        $scope.fetchEntityByCode = function() {
+            esWebApi.fetchEntityByCode($scope.pEntityClass, $scope.pEntityCode)
+                .then(function(ret) {
+                        $scope.pEntityDS = ret.data;
+                    },
+                    function(err) {
+                        $scope.pEntityDS = err;
+                    })
+        }
+
         $scope.eventLog = function() {
             esWebApi.eventLog({
                     ID: $scope.eID,
@@ -672,6 +682,10 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                     });
         }
 
+        $scope.removeCurrentUserLogo = function() {
+        	esWebApi.removeCurrentUserLogo();
+        }
+
         $scope.uploadUserLogo = function() {
             var progressf = function(evt) {
                 $scope.userLogoImage.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
@@ -689,6 +703,13 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                 }, function(err) {
                     $scope.psData = JSON.stringify(err);
                 });
+        }
+
+        $scope.fetchPersonlogo = function() {
+        	esWebApi.fetchPersonLogo($scope.PersonGID)
+        		.then(function(x) {
+        			$scope.personPhoto = x.data;
+        		});
         }
 
     }

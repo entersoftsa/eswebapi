@@ -29,6 +29,8 @@
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login",
         __USER_LOGO__: "api/Login/UserLogo/",
+        __REMOVE_USER_LOGO__: "api/Login/RemoveUserLogo/",
+        __PERSON_LOGO__: "api/rpc/personLogo/",
         __POST_USER_LOGO__: "api/Login/UpdateUserLogo/",
         __EVENTLOG__: "api/rpc/EventLog/",
         __PUBLICQUERY__: "api/rpc/PublicQuery/",
@@ -56,6 +58,7 @@
         __FETCH_ODS_MASTER_RELATIONS_INFO__: "api/rpc/FetchOdsMasterRelationsInfo/",
         __FI_IMPORTDOCUMENT___: "api/rpc/FIImportDocument/",
         __FETCH_ENTITY__: "api/rpc/fetchEntity/",
+        __FETCH_ENTITY_BY_CODE__: "api/rpc/fetchEntityByCode/",
         __FETCH_ESPROPERTY_SET__: "api/rpc/fetchPropertySet/",
         __FETCH_WEB_EAS_ASSET__: "api/asset/",
         __FETCH_ES00DOCUMENT_BY_GID__: "api/ES00Documents/InfoByGID/",
@@ -817,6 +820,10 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
                             */
                             uploadUserLogo: function(file, okfunc, errfunc, progressfunc) {
 
+                                if (!file) {
+                                    throw new Error("Invalid File");
+                                }
+
                                 var tt = esGlobals.trackTimer("USER", "UPLOAD LOGO", file);
                                 tt.startTime();
                                 file.upload = Upload.upload({
@@ -833,13 +840,73 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
                                     $timeout(function() {
                                         file.result = response.data;
                                         tt.endTime().send();
-                                        okfunc(file);
+                                        if (angular.isFunction(okfunc)) {
+                                            okfunc(file);
+                                        }
                                     });
                                 }, errfunc);
 
                                 file.upload.progress(progressfunc);
 
                                 return file.upload;
+                            },
+
+                            /**
+                            * @ngdoc function
+                            * @name es.Services.Web.esWebApi#removeCurrentUserLogo
+                            * @methodOf es.Services.Web.esWebApi
+                            * @module es.Services.Web
+                            * @kind function
+                            * @description This function delete the current logged in user logo from the Entersoft Application. 
+                            * @return {httpPromise} Returns an httpPromise that once resolved, it has a status code OK if everything went OK, or BadRequest if an error occurred.
+                            * @example
+```html
+<div>
+        <h3>30. fetchUserLogo</h3>
+        <span>
+            <input type="text" ng-model="lUserID" placeholder="User ID or GID"/>
+
+            <button ng-click="fetchUserLogo()">Get the PHOTO</button>
+            <img  class="img-circle" width="304" height="236" ng-if="userPhoto" data-ng-src="{{'data:image/jpg;base64,' + userPhoto}}"/>
+            <button ng-click="removeCurrentUserLogo()">Remove Current User Logo</button>
+        </span>
+    </div>
+```
+```js
+$scope.removeCurrentUserLogo = function() {
+    esWebApi.removeCurrentUserLogo();
+}
+```
+                            */
+                            removeCurrentUserLogo: function() {
+                                var tt = esGlobals.trackTimer("USER", "REMOCE LOGO", "");
+                                tt.startTime();
+                                var promise = $http({
+                                    method: 'POST',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__REMOVE_USER_LOGO__),
+                                });
+                                return processWEBAPIPromise(promise, tt);
+                            },
+
+                            fetchPersonLogo: function(personGID) {
+                                if (!personGID) {
+                                    throw new Error("Invalid personGID");
+                                }
+
+                                var tt = esGlobals.trackTimer("PERSON", "LOGO", personGID);
+                                tt.startTime();
+
+                                var promise = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__PERSON_LOGO__, personGID),
+                                });
+                                return processWEBAPIPromise(promise, tt);
                             },
 
 
@@ -3749,6 +3816,492 @@ var x = {
                                 return processWEBAPIPromise(ht, tt);
                             },
 
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchEntity
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function returns the Entersoft Entity ISUD dataset in JSON representation
+                             * @param {string} entityclass The Entersoft ODS object ID the ISUD record to be retrieved
+                             * @param {string} entityCode The string code that represents the unique human understandable key of the record to be retrieved
+                             * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains JSON object of the ISUD dataset.
+                             * @example
+```js
+$scope.fetchEntityByCode = function() {
+    esWebApi.fetchEntityByCode("esmmstockitem", "ΕLΕ.Q.CΑΤΗ")
+        .then(function(ret) {
+                $scope.pEntityDS = ret.data;
+            },
+            function(err) {
+                $scope.pEntityDS = err;
+            })
+}
+                            */
+                            fetchEntityByCode: function(entityclass, entityCode) {
+                                if (!entityclass || !entityCode) {
+                                    throw new Error("Invalid parameters");
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ENTITY_BY_CODE__, entityclass, "/", entityCode);
+                                var tt = esGlobals.trackTimer("FETCH_ENTITY", entityclass, entityCode);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
+                            },
+
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchPropertySet
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function returns the property set / survey identified by the psCode parameter that is optionally linked / attached to the 
+                             * campaignID specified by the campaignGID parameter 
+                             * @param {string} psCode The Entersoft ODS object ID the ISUD record to be retrieved
+                             * @param {string} campaignGID The gid in string format that represents the gid of the campaign that is of type sruvey
+                             * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains JSON object of the ESPropertySet object.
+                             * @example
+```js
+smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
+    function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+
+        $scope.surveyDef = {};
+
+        $scope.startFrom = -1;
+        $scope.surveyCode = "usage_s1";
+        $scope.surveyAns = {};
+
+        $scope.loadSurvey = function() {
+            esWebApiService.fetchPropertySet($scope.surveyCode, "2E035E80-BFED-4B45-91D2-1CEB64C2BB7B")
+                .then(function(ret) {
+                        $scope.surveyDef = ret.data;
+                        $scope.startFrom = -1;
+                        $scope.surveyCode = "usage_s1";
+                        $scope.surveyAns = {};
+                    },
+                    function(err) {
+                        $scope.surveyDef = {};
+                        alert(err);
+                    });
+        }
+    }
+]);
+```
+                            * and the result would be similar to the example below according to the following defintion in EBS:
+                            * ![Entersoft Survey Marketing Campaign](images/api/es012propertySet.png)
+                            *
+                            * ![Entersoft Survey Definition](images/api/es013propertySet.png)
+                            *
+                            * ![Entersoft Survey Choice List](images/api/es014propertySet.png)
+                            *
+                            * and the JSON model for this definition would be as follows:
+```js
+{
+    "GID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+    "Code": "usage_s1",
+    "Description": "Survey for RFA Usage",
+    "ESDCreated": "2015-12-07T15:46:05.193",
+    "ESUCreated": "ADMIN",
+    "ESDModified": "0001-01-01T00:00:00",
+    "Inactive": false,
+    "Type": 1,
+    "MobileSurvey": false,
+    "Lines": [{
+        "GID": "184b1993-db48-4c38-ac39-b31958b6cf0c",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 1,
+        "Category_Code": "Γενικές Ερωτήσεις",
+        "Category_OrderPriority": 0,
+        "ESDModified": "0001-01-01T00:00:00",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-17T18:34:12.373",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q001",
+        "Description": "Profit",
+        "PType": 1
+    }, {
+        "GID": "032d0b05-5fd5-46fa-a909-1cac51c5d766",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 2,
+        "Category_Code": "Ειδικά Στοιχεία",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-20T13:02:57.067",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-07T15:46:05.263",
+        "Mandatory": true,
+        "VisualizationStyle": 1,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q002",
+        "Description": "Age",
+        "AlternativeDescription": "you should answer with care",
+        "PArg": "AgeScale",
+        "PType": 4
+    }, {
+        "GID": "57526e4c-ccf7-4d2b-92f1-754d31590771",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 3,
+        "Category_Code": "Ειδικά Στοιχεία",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-17T18:34:12.353",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-07T15:46:05.32",
+        "Mandatory": true,
+        "VisualizationStyle": 2,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q003",
+        "Description": "Colors",
+        "PArg": "ColorsType",
+        "PType": 14
+    }, {
+        "GID": "f4af1a79-16ee-45fa-b7fd-31654fd6876a",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 4,
+        "Category_Code": "Εμπορικά Θέματα",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-17T18:34:12.353",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-07T15:46:05.34",
+        "Mandatory": true,
+        "VisualizationStyle": 4,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "ES.YesNoDontKnow",
+        "Description": "Σας αρέσει το EBS?",
+        "PArg": "ES.YesNoDontKnow",
+        "PType": 4
+    }, {
+        "GID": "753e2d67-28df-4054-877c-2706f8179711",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 5,
+        "Category_Code": "Εμπορικά Θέματα",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-17T18:34:12.353",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-07T15:46:05.34",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q005",
+        "Description": "Άλλα Στοιχεια",
+        "PType": 0
+    }, {
+        "GID": "1708e894-c3c7-446c-8af7-595c07233cb2",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 6,
+        "Category_Code": "Εμπορικά Θέματα",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-17T18:34:12.357",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-07T15:46:05.343",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q006",
+        "Description": "Τζίρος",
+        "PArg": "3",
+        "PType": 1
+    }, {
+        "GID": "9c79a9d6-6943-42e2-b4af-108e440f9ec9",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 7,
+        "Category_Code": "Εμπορικά Θέματα",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-17T18:34:12.357",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-07T15:46:05.343",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q007",
+        "Description": "Αριθμός Υπαλλήλων",
+        "PType": 2
+    }, {
+        "GID": "4c6a89e2-6d0e-48e0-9a34-c3603019c3d6",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 8,
+        "Category_Code": "Εμπορικά Θέματα",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-17T18:34:12.357",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-07T15:46:05.343",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q008",
+        "Description": "Ετος Ίδρυσης",
+        "PType": 3
+    }, {
+        "GID": "51ca7792-a339-452a-bf68-023029fc7bad",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 9,
+        "Category_Code": "Ερωτηματολόγιο",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-17T18:34:12.357",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-07T15:46:05.347",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q009",
+        "Description": "Εναρξη Ημέρας",
+        "PType": 12
+    }, {
+        "GID": "a408bc3c-75d8-49b7-a989-0c3cbbf686d3",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 10,
+        "Category_Code": "Ερωτηματολόγιο",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-17T18:34:12.357",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-07T15:46:05.347",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q010",
+        "Description": "Ραντεβού",
+        "PType": 11
+    }, {
+        "GID": "f1e8406c-418a-4aa1-b1fe-e57e4aca09b7",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 11,
+        "Category_Code": "Ερωτηματολόγιο",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-17T18:34:12.36",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-07T15:46:05.35",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q011",
+        "Description": "Κατανομή Εσόδων",
+        "PArg": "9",
+        "PType": 15
+    }, {
+        "GID": "ce67f1ec-0ffb-4046-b2d9-512cf16ed7bc",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 12,
+        "Category_Code": "Γενικές Ερωτήσεις",
+        "Category_OrderPriority": 0,
+        "ESDModified": "0001-01-01T00:00:00",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-17T19:36:02.473",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q012",
+        "Description": "Statisfaction",
+        "AlternativeDescription": "0=δυσαρεστημένος και με το 5=ευχαριστημένος",
+        "PArg": "5Scale",
+        "PType": 4
+    }, {
+        "GID": "a3064835-afe2-4da9-bc90-db17d3980e33",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 13,
+        "Category_Code": "Ειδικά Στοιχεία",
+        "Category_OrderPriority": 0,
+        "ESDModified": "2015-12-20T13:02:57.48",
+        "ESUModified": "ADMIN",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-18T10:51:01.857",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q013",
+        "Description": "Πώς αξιολογείτε την Υποστήριξη",
+        "AlternativeDescription": "0 = χαμηλά 4 = άριστα",
+        "PArg": "9",
+        "PType": 2
+    }, {
+        "GID": "00c75e94-a9e6-42a9-b5b0-e9b1f48cc0e9",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 14,
+        "Category_Code": "Γενικές Ερωτήσεις",
+        "Category_OrderPriority": 0,
+        "ESDModified": "0001-01-01T00:00:00",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-21T08:57:06.54",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q014",
+        "Description": "Χώρα Προέλευσης",
+        "PArg": "ESGOZCountry",
+        "PType": 4
+    }, {
+        "GID": "57aaa798-9d49-499f-8807-4ce9daef6260",
+        "fPropertySetGID": "254feeb8-b56e-4c57-bcd3-6c023b085cc6",
+        "SeqNum": 15,
+        "Category_Code": "Γενικές Ερωτήσεις",
+        "Category_OrderPriority": 0,
+        "ESDModified": "0001-01-01T00:00:00",
+        "ESUCreated": "ADMIN",
+        "ESDCreated": "2015-12-21T09:35:19.923",
+        "Mandatory": true,
+        "VisualizationStyle": 0,
+        "Inactive": false,
+        "PhotoRelated": false,
+        "NotApplicable": false,
+        "Code": "usage_s1 - Q015",
+        "Description": "Μερίδιο Αγοράς",
+        "PType": 15
+    }],
+    "Choices": [{
+        "ChoiceCode": "5Scale",
+        "Code": "0",
+        "Description": "Καθόλου Ικανοποιημένος",
+        "Value": "0",
+        "OrderPriority": 1
+    }, {
+        "ChoiceCode": "5Scale",
+        "Code": "1",
+        "Description": "-",
+        "Value": "1",
+        "OrderPriority": 2
+    }, {
+        "ChoiceCode": "5Scale",
+        "Code": "22",
+        "Description": "-",
+        "Value": "22",
+        "OrderPriority": 3
+    }, {
+        "ChoiceCode": "5Scale",
+        "Code": "33",
+        "Description": "-",
+        "Value": "33",
+        "OrderPriority": 4
+    }, {
+        "ChoiceCode": "5Scale",
+        "Code": "4",
+        "Description": "Εξαιρετικά Ικανοποιημένος",
+        "Value": "4",
+        "OrderPriority": 5
+    }, {
+        "ChoiceCode": "AgeScale",
+        "Code": "1",
+        "Description": "18-25",
+        "Value": "1",
+        "OrderPriority": 1
+    }, {
+        "ChoiceCode": "AgeScale",
+        "Code": "2",
+        "Description": "26-35",
+        "Value": "2",
+        "OrderPriority": 2
+    }, {
+        "ChoiceCode": "AgeScale",
+        "Code": "3",
+        "Description": ">36",
+        "Value": "3",
+        "OrderPriority": 3
+    }, {
+        "ChoiceCode": "ColorsType",
+        "Code": "1",
+        "Description": "Red",
+        "Value": "1",
+        "OrderPriority": 1
+    }, {
+        "ChoiceCode": "ColorsType",
+        "Code": "2",
+        "Description": "Green",
+        "Value": "2",
+        "OrderPriority": 2
+    }, {
+        "ChoiceCode": "ColorsType",
+        "Code": "3",
+        "Description": "Blue",
+        "Value": "3",
+        "OrderPriority": 3
+    }, {
+        "ChoiceCode": "ES.YesNoDontKnow",
+        "Code": "55",
+        "Description": "Όχι",
+        "Value": "55",
+        "AlternativeDescription": "No",
+        "OrderPriority": 1
+    }, {
+        "ChoiceCode": "ES.YesNoDontKnow",
+        "Code": "Yes",
+        "Description": "Ναι",
+        "Value": "1",
+        "AlternativeDescription": "Yes",
+        "OrderPriority": 2
+    }, {
+        "ChoiceCode": "ES.YesNoDontKnow",
+        "Code": "DontKnow",
+        "Description": "Δεν γνωρίζω/Δεν απαντώ",
+        "Value": "2",
+        "AlternativeDescription": "Don't know",
+        "OrderPriority": 3
+    }],
+    "Sections": [{
+        "Code": "Γενικές Ερωτήσεις",
+        "Description": "Γενικές Ερωτήσεις",
+        "Inactive": false,
+        "OrderPriority": 0
+    }, {
+        "Code": "Ειδικά Στοιχεία",
+        "Description": "Ειδικά Χαρακτηριστικά Είδους",
+        "Inactive": false,
+        "OrderPriority": 0
+    }, {
+        "Code": "Εμπορικά Θέματα",
+        "Description": "Εμπορικά Θέματα Είδους",
+        "Inactive": false,
+        "OrderPriority": 0
+    }, {
+        "Code": "Ερωτηματολόγιο",
+        "Description": "Ερωτηματολόγιο",
+        "Inactive": false,
+        "OrderPriority": 0
+    }]
+}
+``` 
+                            */
                             fetchPropertySet: function(psCode, campaignGID) {
                                 if (!psCode) {
                                     throw new Error("Invalid parameter");

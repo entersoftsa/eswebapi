@@ -317,6 +317,17 @@
     </div>
     <hr/>
     <div>
+        <h3>28B. fetchEntityByCode</h3>
+        <span>
+            <input type="text" ng-model="pEntityClass" placeholder="Entity Class"/>
+            <input type="text" ng-model="pEntityCode" placeholder="Entity Human String Code"/>
+            <button ng-click="fetchEntityByCode()">fetchEntityByCode</button>
+            <textarea>{{pEntityDS}}</textarea>
+        </span>
+    </div>
+
+    <hr/>
+    <div>
         <h3>29. eventLog</h3>
         <span>
             <input type="text" ng-model="eID" placeholder="Event ID"/>
@@ -335,6 +346,7 @@
 
             <button ng-click="fetchUserLogo()">Get the PHOTO</button>
             <img  class="img-circle" width="304" height="236" ng-if="userPhoto" data-ng-src="{{'data:image/jpg;base64,' + userPhoto}}"/>
+            <button ng-click="removeCurrentUserLogo()">Remove Current User Logo</button>
         </span>
     </div>
     <hr/>
@@ -344,10 +356,11 @@
             <input type="file" ngf-select ng-model="userLogoImage" name="file" accept="*/*" required>
             <button ng-click="uploadUserLogo()">Upload Photo</button>
         </span>
-        <div ng-if="userLogoImage.progress">
-            <div kendo-progress-bar k-min="0" k-max="100" ng-model="userLogoImage.progress" style="width: 100%;"></div>
+        <div class="row es-survey-progress">
+            <uib-progressbar ng-show="userLogoImage.progress" animate="true" value="userLogoImage.progress" type="success"><b>{{userLogoImage.progress}}%</b></uib-progressbar>
         </div>
     </div>
+    <hr/>
     <div>
         <h3>32. fetchPropertySet</h3>
         <form name="surveyForm">
@@ -359,5 +372,16 @@
             </span>
             </div>
         </form>
+    </div>
+    <hr/>
+    <div>
+        <h3>33. fetchPersonLogo</h3>
+        <span>
+            <input type="text" ng-model="PersonGID" placeholder="PersonGID"/>
+
+            <button ng-click="fetchPersonlogo()">Get Person Logo</button>
+            <img  class="img-circle" width="304" height="236" ng-if="personPhoto" data-ng-src="{{'data:image/jpg;base64,' + personPhoto}}"/>
+            
+        </span>
     </div>
 </div>
