@@ -712,6 +712,15 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         		});
         }
 
+        $scope.execEbsService = function() {
+        	esWebApi.ebsService($scope.netAssembly, $scope.netNamespace, $scope.netClass, $scope.netMethod, $scope.netParam)
+        	.then(function(ret) {
+        		$scope.ebsret = ret.data;
+        	}, function(err) {
+        		$scope.ebsret = JSON.stringify(err);
+        	});
+        }
+
     }
 ]);
 

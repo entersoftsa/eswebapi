@@ -50,6 +50,7 @@
         __FETCH_COMPANY_PARAMS__: "api/rpc/FetchCompanyParams/",
         __SCROLLER_COMMAND__: "api/rpc/ScrollerCommand/",
         __FORM_COMMAND__: "api/rpc/FormCommand/",
+        __EBS_SERVICE__: "api/rpc/EbsService/",
         __FETCH_SESSION_INFO__: "api/rpc/FetchSessionInfo/",
         __FETCH_ODS_TABLE_INFO__: "api/rpc/FetchOdsTableInfo/",
         __FETCH_ODS_COLUMN_INFO__: "api/rpc/FetchOdsColumnInfo/",
@@ -730,6 +731,37 @@ $scope.eventLog = function() {
                                 return processWEBAPIPromise(promise, tt);
                             },
 
+                            ebsService: function(netAssembly, netNamespace, netClass, netMethod, paramObject) {
+                                if (!netAssembly || !netNamespace || !netClass || !netMethod) {
+                                    throw new Error("netAssembly, netNamespace, netClass, netMethod parameters MUST ALL have value");
+                                }
+
+                                var sPart = netAssembly.concat("/", netNamespace, "/", netClass, "/", netMethod);
+                                var dData = paramObject || "";
+
+                                if (angular.isObject(dData)) {
+                                    dData = JSON.stringify(dData);
+                                }
+
+                                if (!angular.isString(dData)) {
+                                    throw new Error("paramObject must be a POCO javascript object or a string representation of a POCO javascript object");
+                                }
+
+                                var tt = esGlobals.trackTimer("EBS_SERVICE", netMethod, sPart);
+                                tt.startTime();
+
+                                var promise = $http({
+                                    method: 'post',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__EBS_SERVICE__, sPart),
+                                    contentType: "application/json; charset=utf-8",
+                                    data: dData
+                                });
+                                return processWEBAPIPromise(promise, tt);  
+                            },
+
                             /**
                             * @ngdoc function
                             * @name es.Services.Web.esWebApi#fetchUserLogo
@@ -891,6 +923,40 @@ $scope.removeCurrentUserLogo = function() {
                                 return processWEBAPIPromise(promise, tt);
                             },
 
+                            /**
+                            * @ngdoc function
+                            * @name es.Services.Web.esWebApi#fetchPersonLogo
+                            * @methodOf es.Services.Web.esWebApi
+                            * @module es.Services.Web
+                            * @kind function
+                            * @description This function delete the current logged in user logo from the Entersoft Application. 
+                            * @param {string} personGID The GID of the ESGOPerson in string format, the logo of which we are looking for
+                            * @return {httpPromise} Returns an httpPromise that once resolved, the ret.data contains the base64 string for the logo image
+                            * of the specified person
+                            * @example
+```html
+<hr/>
+<div>
+    <h3>33. fetchPersonLogo</h3>
+    <span>
+        <input type="text" ng-model="PersonGID" placeholder="PersonGID"/>
+
+        <button ng-click="fetchPersonlogo()">Get Person Logo</button>
+        <img  class="img-circle" width="304" height="236" ng-if="personPhoto" data-ng-src="{{'data:image/jpg;base64,' + personPhoto}}"/>
+        
+    </span>
+</div>
+```
+* and the controller's part
+```js
+        $scope.fetchPersonlogo = function() {
+            esWebApi.fetchPersonLogo($scope.PersonGID)
+                .then(function(x) {
+                    $scope.personPhoto = x.data;
+                });
+        }
+```
+                            */
                             fetchPersonLogo: function(personGID) {
                                 if (!personGID) {
                                     throw new Error("Invalid personGID");
@@ -3818,7 +3884,7 @@ var x = {
 
                             /**
                              * @ngdoc function
-                             * @name es.Services.Web.esWebApi#fetchEntity
+                             * @name es.Services.Web.esWebApi#fetchEntityByCode
                              * @methodOf es.Services.Web.esWebApi
                              * @kind function
                              * @description This function returns the Entersoft Entity ISUD dataset in JSON representation
