@@ -712,8 +712,15 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         		});
         }
 
+        $scope.serviceObj = {
+        	netAssembly: "esbotestapiservice",
+        	netNamespace: "esbotestapiservice/Generic",
+        	netClass: "ESWebApiCustomService",
+        	netMethod: ""
+        }
+
         $scope.execEbsService = function() {
-        	esWebApi.ebsService($scope.netAssembly, $scope.netNamespace, $scope.netClass, $scope.netMethod, $scope.netParam)
+        	esWebApi.ebsService($scope.serviceObj, $scope.netParam)
         	.then(function(ret) {
         		$scope.ebsret = ret.data;
         	}, function(err) {

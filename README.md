@@ -2,14 +2,18 @@
 
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
-**Version 1.6.0 Requires ES WEB API 1.8.2 or later**
+**Version 1.6.0 Requires ES WEB API 1.8.3 or later**
 - stickySession
 - fetchUserLogo
 - uploadUserLogo
+- removeCurrentUserLogo
+- fetchPersonLogo
+- ebsService
 - eventLog
 - multiPublicQuery
 - fetchMultiStdZoom
 - fetchEntity
+- fetchEntityByCode
 - RenewToken on every % time 
 - ESPQOptions object
 - ESMultiZoomDef object
@@ -17,7 +21,7 @@ Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.
 - addOrUpdateES00Document
 - deleteES00Document
 - fiImportDocument
-
+- fetchPropertySet
 
 **Version 1.2.7**
 - More documentation on fetchPublicQueryInfo

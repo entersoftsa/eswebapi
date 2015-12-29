@@ -731,23 +731,356 @@ $scope.eventLog = function() {
                                 return processWEBAPIPromise(promise, tt);
                             },
 
-                            ebsService: function(netAssembly, netNamespace, netClass, netMethod, paramObject) {
-                                if (!netAssembly || !netNamespace || !netClass || !netMethod) {
-                                    throw new Error("netAssembly, netNamespace, netClass, netMethod parameters MUST ALL have value");
+                             /**
+                            * @ngdoc function
+                            * @name es.Services.Web.esWebApi#ebsService
+                            * @methodOf es.Services.Web.esWebApi
+                            * @module es.Services.Web
+                            * @kind function
+                            * @description This function executes an EBS service method defined and registered at the Entersoft Application Server.
+                            * For such an example you may download the Microsoft VS2015 C# project and solution that has the implementation of such an example project.
+                            * Download the zip file from [esbotestapiservice.zip](images/esbotestapiservice.zip) 
+                            * Once you download and extract the zip, please resolve the .NET Assembly References to the required dlls by pointing the Reference Path to the run-time
+                            * directory where the Entersoft Application Server is installed and running. 
+                            * Compile the assembly and copy the built DLL in the run-time directory of the EAS.
+                            * @param {object} serviceObj a simple JSON object with the following properties:
+                            * @param {string} serviceObj.netAssembly The .NET assembly name that contains the service class to be executed. You should specify 
+                            * only the assembly name without any extension i.e. .dll or .EXE. For example, _esbotestapiservice_
+                            * @param {string} serviceObj.netNamespace The .NET namespace where the service class is defined. In case that the name space 
+                            * has more than one depth i.e. esbotestapiservice.Generic then instead of . you should use / so in the previous case
+                            * the namespace will be _esbotestapiservice/Generic_
+                            * @param {string} serviceObj.netClass The .NET class that holds the service method i.e. __ESWebApiCustomService__
+                            * @param {string} serviceObj.netMethod The .NET method of the class that will be executed i.e. Identity2
+                            * @param {object|string|number|date|*} paramObject the object that will be passed as parameter to the method call. It should be compatible and
+                            * consistent to what the service method expects in the .NET space. In case that .NET method expects a POCO class or struct as the type of the 
+                            * function's argument you can pass a javascript POCO class with respect to property names and types
+                            * @return {httpPromise} Returns a promise that upon success the ret.data contains the result of the service
+                            * @example
+* __.NET Assembly and class definitions __
+```cs
+using Entersoft.Framework.Platform;
+using Entersoft.Web.Api;
+using Entersoft.Web.Api.Text;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace esbotestapiservice.Generic
+{
+    public class ESWebApiCustomService
+    {
+        public class Identity2Payload
+        {
+            public string TextValue { get; set; }
+            public int IntValue { get; set; }
+            public byte[] ByteArray { get; set; }
+            public int[] IntArray { get; set; }
+        }
+
+        public struct Identity2Struct
+        {
+            public string TextValue { get; set; }
+            public int IntValue { get; set; }
+            public byte[] ByteArray { get; set; }
+            public int[] IntArray { get; set; }
+        }
+
+
+        [EbsService]
+        public static Identity2Payload Identity2(ESSession session, Identity2Payload payload)
+        {
+            payload.TextValue += payload.TextValue;
+            payload.IntValue += payload.IntValue;
+            payload.ByteArray = Enumerable.Range(1, 10).Select(i => (byte)i).ToArray();
+            payload.IntArray = Enumerable.Range(1, 10).ToArray();
+            return payload;
+        }
+
+        [EbsService]
+        public static Identity2Struct Identity2Structure(ESSession session, Identity2Struct payload)
+        {
+            payload.TextValue += payload.TextValue;
+            payload.IntValue += payload.IntValue;
+            payload.ByteArray = Enumerable.Range(1, 10).Select(i => (byte)i).ToArray();
+            payload.IntArray = Enumerable.Range(1, 10).ToArray();
+            return payload;
+        }
+
+        [EbsService]
+        public static Identity2Payload ReturnNull(ESSession session, Identity2Payload payload)
+        {
+            return null;
+        }
+
+        [EbsService]
+        public static int SimpleInt(ESSession session, int x)
+        {
+            return x * x;
+        }
+
+        [EbsService]
+        public static string ReturnString(ESSession session, Identity2Payload payload)
+        {
+            return "{0}-{1}".SafeFormat(payload.IntValue, payload.TextValue);
+        }
+
+
+        [EbsService]
+        public static int ReturnInt(ESSession session, Identity2Payload payload)
+        {
+            return payload.IntValue * 2;
+        }
+
+        [EbsService]
+        public static byte[] ReturnByteArray(ESSession session, Identity2Payload payload)
+        {
+            return Enumerable.Range(0, payload.IntValue).Select(i => (byte)i).ToArray();
+
+        }
+
+        public static int InvalidService(ESSession session, Identity2Payload payload)
+        {
+            return payload.IntValue * 2;
+        }
+    }
+}
+```
+
+* __Ajax calls sample __
+```js
+tester.register_ajax_call({
+    caption: 'execute an EBS service - returns null',
+    ajax_options: function () {
+        return {
+            //    /api/rpc/EbsService/<assembly>/<namespace>/<namespace>/<namespace>/<class>/<method>,
+            url: '/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/ReturnNull',
+            type: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: "hello",
+                IntValue: 123
+            }),
+            contentType: "application/json; charset=utf-8"
+        }
+    },
+    done: function (results) {
+        assert.are_equal(null, results);
+        logger.ok();
+    }
+});
+
+tester.register_ajax_call({
+    caption: 'execute an EBS service - returns a complex object ',
+    ajax_options: function () {
+        return {
+            //    /api/rpc/EbsService/<assembly>/<namespace>/<namespace>/<namespace>/<class>/<method>,
+            url: '/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/Identity2',
+            type: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                    TextValue: "hello",
+                    IntValue: 123
+            }),
+            contentType: "application/json; charset=utf-8"
+        }
+    },
+    done: function (results) {
+        assert.existy(results);
+        assert.are_equal("hellohello", results.TextValue);
+        assert.are_equal("246", results.IntValue);
+        logger.ok();
+    }
+});
+
+tester.register_ajax_call({
+    caption: 'execute an EBS service - returns a struct' ,
+    ajax_options: function () {
+        return {
+            //    /api/rpc/EbsService/<assembly>/<namespace>/<namespace>/<namespace>/<class>/<method>,
+            url: '/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/Identity2Structure',
+            type: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: "hello",
+                IntValue: 123
+            }),
+            contentType: "application/json; charset=utf-8"
+        }
+    },
+    done: function (results) {
+        assert.existy(results);
+        assert.are_equal("hellohello", results.TextValue);
+        assert.are_equal("246", results.IntValue);
+        logger.ok();
+    }
+});
+
+
+tester.register_ajax_call({
+    caption: 'execute an EBS service - returns a string',
+    ajax_options: function () {
+        return {
+            //    /api/rpc/EbsService/<assembly>/<namespace>/<namespace>/<namespace>/<class>/<method>,
+            url: '/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/ReturnString',
+            type: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: "hello",
+                IntValue: 123
+            }),
+            contentType: "application/json; charset=utf-8"
+        }
+    },
+    done: function (results) {
+        assert.existy(results);
+        assert.are_equal("123-hello", results);
+        logger.ok();
+    }
+});
+
+tester.register_ajax_call({
+    caption: 'execute an EBS service - returns an integer',
+    ajax_options: function () {
+        return {
+            //    /api/rpc/EbsService/<assembly>/<namespace>/<namespace>/<namespace>/<class>/<method>,
+            url: '/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/ReturnInt',
+            type: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: "hello",
+                IntValue: 123
+            }),
+            contentType: "application/json; charset=utf-8"
+        }
+    },
+    done: function (results) {
+        assert.existy(results);
+        assert.are_equal(246, results);
+        logger.ok();
+    }
+});
+
+
+tester.register_ajax_call({
+    caption: 'execute an EBS service - returns a byte array',
+    ajax_options: function () {
+        return {
+            url: '/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/ReturnByteArray',
+            type: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: "hello",
+                IntValue: 10
+            }),
+            contentType: "application/json; charset=utf-8"
+        }
+    },
+    done: function (results) {
+        assert.existy(results);
+        assert.are_equal("AAECAwQFBgcICQ==", results);
+        var byteCharacters = atob(results);
+        //logger.ok(byteCharacters.to_s());
+        assert.are_equal(0, byteCharacters.charCodeAt(0));
+        //assert.are_equal(10, byteCharacters.length);
+        logger.ok();
+    }
+});
+
+
+tester.register_ajax_call({
+    caption: 'execute an invaldid EBS service',
+    ajax_options: function () {
+        return {
+            url: '/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/InvalidService',
+            type: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: "hello",
+                IntValue: 10
+            }),
+            contentType: "application/json; charset=utf-8"
+        }
+    },
+    done: function (user) {
+        assert.fail('invaldid EBS service')
+    }, error: function (jqXHR, textStatus, errorThrown) {
+        assert.are_equal(403, jqXHR.status);
+        var data = jqXHR.responseJSON;
+        assert.are_equal("invalid-service", data.MessageID)
+        logger.ok();
+        return true;
+    }
+});
+```
+* __javascript sample__
+```js
+$scope.serviceObj = {
+    netAssembly: "esbotestapiservice",
+    netNamespace: "esbotestapiservice/Generic",
+    netClass: "ESWebApiCustomService",
+    netMethod: ""
+}
+
+$scope.execEbsService = function() {
+    esWebApi.ebsService($scope.serviceObj, $scope.netParam)
+    .then(function(ret) {
+        $scope.ebsret = ret.data;
+    }, function(err) {
+        $scope.ebsret = JSON.stringify(err);
+    });
+}
+```
+* __html sample__
+```html
+<hr/>
+    <div>
+        <h3>34. esService</h3>
+        <span>
+            <input type="text" ng-model="serviceObj.netAssembly" placeholder=".NET Assembly name"/>
+            <input type="text" ng-model="serviceObj.netNamespace" placeholder=".NET Namespace"/>
+            <input type="text" ng-model="serviceObj.netClass" placeholder=".NET Class"/>
+            <input type="text" ng-model="serviceObj.netMethod" placeholder=".NET Method"/>
+            <input type="text" ng-model="netParam" placeholder="POCO Object in string format"/>
+
+            <button ng-click="execEbsService()">Execute EBS Service</button>
+        </span>
+        <textarea>{{ebsret}}</textarea>
+    </div>
+```
+
+                            **/
+                            ebsService: function(serviceObj, paramObject) {
+                                if (!serviceObj || !serviceObj.netAssembly || !serviceObj.netNamespace || !serviceObj.netClass || !serviceObj.netMethod) {
+                                    throw new Error("serviceObj.netAssembly, serviceObj.netNamespace, serviceObj.netClass, serviceObj.netMethod properties MUST ALL have value");
                                 }
 
-                                var sPart = netAssembly.concat("/", netNamespace, "/", netClass, "/", netMethod);
-                                var dData = paramObject || "";
+                                var sPart = serviceObj.netAssembly.concat("/", serviceObj.netNamespace, "/", serviceObj.netClass, "/", serviceObj.netMethod);
+                                var dData = paramObject;
 
-                                if (angular.isObject(dData)) {
-                                    dData = JSON.stringify(dData);
-                                }
-
-                                if (!angular.isString(dData)) {
-                                    throw new Error("paramObject must be a POCO javascript object or a string representation of a POCO javascript object");
-                                }
-
-                                var tt = esGlobals.trackTimer("EBS_SERVICE", netMethod, sPart);
+                                var tt = esGlobals.trackTimer("EBS_SERVICE", serviceObj.netMethod, sPart);
                                 tt.startTime();
 
                                 var promise = $http({
