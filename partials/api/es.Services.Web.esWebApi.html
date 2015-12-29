@@ -1,4 +1,4 @@
-<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L105" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/eswebservices.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L113" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esWebApi</code>
 <div><span class="hint">service in module <code ng:non-bindable="">es.Services.Web</code>
 </span>
 </div>
@@ -22,7 +22,7 @@ Web API.</p>
 </li>
 </ul>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3896" class="view-source icon-eye-open"> </a><h3 id="methods_addorupdatees00document">addOrUpdateES00Document(doc, file, okfunc, errfunc, progressfunc)</h3>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L5131" class="view-source icon-eye-open"> </a><h3 id="methods_addorupdatees00document">addOrUpdateES00Document(doc, file, okfunc, errfunc, progressfunc)</h3>
 <div class="addorupdatees00document"><div class="es-services-web-eswebapi-addorupdatees00document-page"><p>Deletes the ES00DocumentInfo record as specified by the parameters and returns the current set of ES00Documents
 that are corelated to the specified Entity object</p>
 </div><h5 id="methods_addorupdatees00document_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>doc</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-addorupdatees00document-page"><p>The JSON object representation of the ES00Document to be added or updated (in case that it exists)</p>
@@ -31,8 +31,7 @@ that are corelated to the specified Entity object</p>
 </div></td></tr><tr><td>errfunc <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="es-services-web-eswebapi-addorupdatees00document-page"><p>a function that will called should an error occurs while uploading the file</p>
 </div></td></tr><tr><td>progressfunc <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="es-services-web-eswebapi-addorupdatees00document-page"><p>a function that will be called as many times as necessary to indicate the progress of the
 uploading of the file i.e. to inform the user about the percentage of the bytes that have been uploaded so far</p>
-</div></td></tr></tbody></table><h5 id="methods_addorupdatees00document_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">promise</a></td><td><div class="es-services-web-eswebapi-addorupdatees00document-page"><p>a promise that upon successful completion you can get the results by hooking th then function i.e.
-.then(function(ret) { ... })</p>
+</div></td></tr></tbody></table><h5 id="methods_addorupdatees00document_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-upload">Upload</a></td><td><div class="es-services-web-eswebapi-addorupdatees00document-page"><p>An object of type Upload. For detailed documentation please visit <a href="https://github.com/danialfarid/ng-file-upload">ng-file-upload</a>.</p>
 </div></td></tr></table><h4 id="methods_addorupdatees00document_example">Example</h4>
 <div class="example"><div class="es-services-web-eswebapi-addorupdatees00document-page"><pre><code class="lang-js">$scope.uploadPic = function(myFile) {
    var okf = function(retFile) {
@@ -66,7 +65,7 @@ uploading of the file i.e. to inform the user about the percentage of the bytes 
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3827" class="view-source icon-eye-open"> </a><h3 id="methods_deletees00document">deleteES00Document(es00Document)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L5063" class="view-source icon-eye-open"> </a><h3 id="methods_deletees00document">deleteES00Document(es00Document)</h3>
 <div class="deletees00document"><div class="es-services-web-eswebapi-deletees00document-page"><p>Deletes the ES00DocumentInfo record as specified by the parameters and returns the current set of ES00Documents
 that are corelated to the specified Entity object</p>
 </div><h5 id="methods_deletees00document_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00Document</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-deletees00document-page"><p>The JSON object representation of the ES00Documen to be deleted. The following attributes are mandatory:</p>
@@ -90,7 +89,7 @@ that are corelated to the specified Entity object</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3942" class="view-source icon-eye-open"> </a><h3 id="methods_esearch">eSearch(eUrl, eMethod, eBody)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L5179" class="view-source icon-eye-open"> </a><h3 id="methods_esearch">eSearch(eUrl, eMethod, eBody)</h3>
 <div class="esearch"><div class="es-services-web-eswebapi-esearch-page"><p>This function acts as a facade to the Elastic Search Engine that has been registered with Entersoft WEB API Server.
 This function allows for almost any kind of operation can be executed by the ElasticSearch engine as an http method (i.e. GET, PUT, DELETE, POST, etc.)
 <a href="#/api/es.Services.Web.esElasticSearch#methods_searchindex">searchIndex</a>.</p>
@@ -104,7 +103,380 @@ the index or indices specified by the elasticSearchIndex parameter.</p>
 </div></td></tr></tbody></table><h5 id="methods_esearch_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-esearch-page"><p>The response that we get from Elastic Search service should we perform an AJAX call against the service</p>
 </div></td></tr></table></div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L725" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1075" class="view-source icon-eye-open"> </a><h3 id="methods_ebsservice">ebsService(serviceObj, paramObject)</h3>
+<div class="ebsservice"><div class="es-services-web-eswebapi-ebsservice-page"><p>This function executes an EBS service method defined and registered at the Entersoft Application Server.
+For such an example you may download the Microsoft VS2015 C# project and solution that has the implementation of such an example project.
+Download the zip file from <a href="images/esbotestapiservice.zip">esbotestapiservice.zip</a> 
+Once you download and extract the zip, please resolve the .NET Assembly References to the required dlls by pointing the Reference Path to the run-time
+directory where the Entersoft Application Server is installed and running. 
+Compile the assembly and copy the built DLL in the run-time directory of the EAS.</p>
+</div><h5 id="methods_ebsservice_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serviceObj</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-ebsservice-page"><p>a simple JSON object with the following properties:</p>
+</div><table><thead><tr><th>Property</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>netAssembly</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-ebsservice-page"><p>The .NET assembly name that contains the service class to be executed. You should specify
+only the assembly name without any extension i.e. .dll or .EXE. For example, <em>esbotestapiservice</em></p>
+</div></td></tr><tr><td>netNamespace</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-ebsservice-page"><p>The .NET namespace where the service class is defined. In case that the name space
+has more than one depth i.e. esbotestapiservice.Generic then instead of . you should use / so in the previous case
+the namespace will be <em>esbotestapiservice/Generic</em></p>
+</div></td></tr><tr><td>netClass</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-ebsservice-page"><p>The .NET class that holds the service method i.e. <strong>ESWebApiCustomService</strong></p>
+</div></td></tr><tr><td>netMethod</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-ebsservice-page"><p>The .NET method of the class that will be executed i.e. Identity2</p>
+</div></td></tr></tbody></table></td></tr><tr><td>paramObject</td><td><a href="" class="label type-hint type-hint-object">object</a><a href="" class="label type-hint type-hint-string">string</a><a href="" class="label type-hint type-hint-number">number</a><a href="" class="label type-hint type-hint-date">date</a><a href="" class="label type-hint type-hint-object">*</a></td><td><div class="es-services-web-eswebapi-ebsservice-page"><p>the object that will be passed as parameter to the method call. It should be compatible and
+consistent to what the service method expects in the .NET space. In case that .NET method expects a POCO class or struct as the type of the 
+function&#39;s argument you can pass a javascript POCO class with respect to property names and types</p>
+</div></td></tr></tbody></table><h5 id="methods_ebsservice_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-ebsservice-page"><p>Returns a promise that upon success the ret.data contains the result of the service</p>
+</div></td></tr></table><h4 id="methods_ebsservice_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-ebsservice-page"><p><strong>.NET Assembly and class definitions </strong></p>
+<pre><code class="lang-cs">using Entersoft.Framework.Platform;
+using Entersoft.Web.Api;
+using Entersoft.Web.Api.Text;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace esbotestapiservice.Generic
+{
+    public class ESWebApiCustomService
+    {
+        public class Identity2Payload
+        {
+            public string TextValue { get; set; }
+            public int IntValue { get; set; }
+            public byte[] ByteArray { get; set; }
+            public int[] IntArray { get; set; }
+        }
+
+        public struct Identity2Struct
+        {
+            public string TextValue { get; set; }
+            public int IntValue { get; set; }
+            public byte[] ByteArray { get; set; }
+            public int[] IntArray { get; set; }
+        }
+
+
+        [EbsService]
+        public static Identity2Payload Identity2(ESSession session, Identity2Payload payload)
+        {
+            payload.TextValue += payload.TextValue;
+            payload.IntValue += payload.IntValue;
+            payload.ByteArray = Enumerable.Range(1, 10).Select(i =&gt; (byte)i).ToArray();
+            payload.IntArray = Enumerable.Range(1, 10).ToArray();
+            return payload;
+        }
+
+        [EbsService]
+        public static Identity2Struct Identity2Structure(ESSession session, Identity2Struct payload)
+        {
+            payload.TextValue += payload.TextValue;
+            payload.IntValue += payload.IntValue;
+            payload.ByteArray = Enumerable.Range(1, 10).Select(i =&gt; (byte)i).ToArray();
+            payload.IntArray = Enumerable.Range(1, 10).ToArray();
+            return payload;
+        }
+
+        [EbsService]
+        public static Identity2Payload ReturnNull(ESSession session, Identity2Payload payload)
+        {
+            return null;
+        }
+
+        [EbsService]
+        public static int SimpleInt(ESSession session, int x)
+        {
+            return x * x;
+        }
+
+        [EbsService]
+        public static string ReturnString(ESSession session, Identity2Payload payload)
+        {
+            return &quot;{0}-{1}&quot;.SafeFormat(payload.IntValue, payload.TextValue);
+        }
+
+
+        [EbsService]
+        public static int ReturnInt(ESSession session, Identity2Payload payload)
+        {
+            return payload.IntValue * 2;
+        }
+
+        [EbsService]
+        public static byte[] ReturnByteArray(ESSession session, Identity2Payload payload)
+        {
+            return Enumerable.Range(0, payload.IntValue).Select(i =&gt; (byte)i).ToArray();
+
+        }
+
+        public static int InvalidService(ESSession session, Identity2Payload payload)
+        {
+            return payload.IntValue * 2;
+        }
+    }
+}
+</code></pre>
+<p><strong>Ajax calls sample </strong></p>
+<pre><code class="lang-js">tester.register_ajax_call({
+    caption: &#39;execute an EBS service - returns null&#39;,
+    ajax_options: function () {
+        return {
+            //    /api/rpc/EbsService/&lt;assembly&gt;/&lt;namespace&gt;/&lt;namespace&gt;/&lt;namespace&gt;/&lt;class&gt;/&lt;method&gt;,
+            url: &#39;/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/ReturnNull&#39;,
+            type: &#39;POST&#39;,
+            headers: {
+                Authorization: &#39;Bearer &#39; + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: &quot;hello&quot;,
+                IntValue: 123
+            }),
+            contentType: &quot;application/json; charset=utf-8&quot;
+        }
+    },
+    done: function (results) {
+        assert.are_equal(null, results);
+        logger.ok();
+    }
+});
+
+tester.register_ajax_call({
+    caption: &#39;execute an EBS service - returns a complex object &#39;,
+    ajax_options: function () {
+        return {
+            //    /api/rpc/EbsService/&lt;assembly&gt;/&lt;namespace&gt;/&lt;namespace&gt;/&lt;namespace&gt;/&lt;class&gt;/&lt;method&gt;,
+            url: &#39;/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/Identity2&#39;,
+            type: &#39;POST&#39;,
+            headers: {
+                Authorization: &#39;Bearer &#39; + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                    TextValue: &quot;hello&quot;,
+                    IntValue: 123
+            }),
+            contentType: &quot;application/json; charset=utf-8&quot;
+        }
+    },
+    done: function (results) {
+        assert.existy(results);
+        assert.are_equal(&quot;hellohello&quot;, results.TextValue);
+        assert.are_equal(&quot;246&quot;, results.IntValue);
+        logger.ok();
+    }
+});
+
+tester.register_ajax_call({
+    caption: &#39;execute an EBS service - returns a struct&#39; ,
+    ajax_options: function () {
+        return {
+            //    /api/rpc/EbsService/&lt;assembly&gt;/&lt;namespace&gt;/&lt;namespace&gt;/&lt;namespace&gt;/&lt;class&gt;/&lt;method&gt;,
+            url: &#39;/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/Identity2Structure&#39;,
+            type: &#39;POST&#39;,
+            headers: {
+                Authorization: &#39;Bearer &#39; + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: &quot;hello&quot;,
+                IntValue: 123
+            }),
+            contentType: &quot;application/json; charset=utf-8&quot;
+        }
+    },
+    done: function (results) {
+        assert.existy(results);
+        assert.are_equal(&quot;hellohello&quot;, results.TextValue);
+        assert.are_equal(&quot;246&quot;, results.IntValue);
+        logger.ok();
+    }
+});
+
+
+tester.register_ajax_call({
+    caption: &#39;execute an EBS service - returns a string&#39;,
+    ajax_options: function () {
+        return {
+            //    /api/rpc/EbsService/&lt;assembly&gt;/&lt;namespace&gt;/&lt;namespace&gt;/&lt;namespace&gt;/&lt;class&gt;/&lt;method&gt;,
+            url: &#39;/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/ReturnString&#39;,
+            type: &#39;POST&#39;,
+            headers: {
+                Authorization: &#39;Bearer &#39; + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: &quot;hello&quot;,
+                IntValue: 123
+            }),
+            contentType: &quot;application/json; charset=utf-8&quot;
+        }
+    },
+    done: function (results) {
+        assert.existy(results);
+        assert.are_equal(&quot;123-hello&quot;, results);
+        logger.ok();
+    }
+});
+
+tester.register_ajax_call({
+    caption: &#39;execute an EBS service - returns an integer&#39;,
+    ajax_options: function () {
+        return {
+            //    /api/rpc/EbsService/&lt;assembly&gt;/&lt;namespace&gt;/&lt;namespace&gt;/&lt;namespace&gt;/&lt;class&gt;/&lt;method&gt;,
+            url: &#39;/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/ReturnInt&#39;,
+            type: &#39;POST&#39;,
+            headers: {
+                Authorization: &#39;Bearer &#39; + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: &quot;hello&quot;,
+                IntValue: 123
+            }),
+            contentType: &quot;application/json; charset=utf-8&quot;
+        }
+    },
+    done: function (results) {
+        assert.existy(results);
+        assert.are_equal(246, results);
+        logger.ok();
+    }
+});
+
+
+tester.register_ajax_call({
+    caption: &#39;execute an EBS service - returns a byte array&#39;,
+    ajax_options: function () {
+        return {
+            url: &#39;/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/ReturnByteArray&#39;,
+            type: &#39;POST&#39;,
+            headers: {
+                Authorization: &#39;Bearer &#39; + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: &quot;hello&quot;,
+                IntValue: 10
+            }),
+            contentType: &quot;application/json; charset=utf-8&quot;
+        }
+    },
+    done: function (results) {
+        assert.existy(results);
+        assert.are_equal(&quot;AAECAwQFBgcICQ==&quot;, results);
+        var byteCharacters = atob(results);
+        //logger.ok(byteCharacters.to_s());
+        assert.are_equal(0, byteCharacters.charCodeAt(0));
+        //assert.are_equal(10, byteCharacters.length);
+        logger.ok();
+    }
+});
+
+
+tester.register_ajax_call({
+    caption: &#39;execute an invaldid EBS service&#39;,
+    ajax_options: function () {
+        return {
+            url: &#39;/api/rpc/EbsService/ESWebApiServices/Entersoft/Web/Test/EbsServiceTest/InvalidService&#39;,
+            type: &#39;POST&#39;,
+            headers: {
+                Authorization: &#39;Bearer &#39; + tester.user.Model.WebApiToken
+            },
+
+            data: JSON.stringify({
+                TextValue: &quot;hello&quot;,
+                IntValue: 10
+            }),
+            contentType: &quot;application/json; charset=utf-8&quot;
+        }
+    },
+    done: function (user) {
+        assert.fail(&#39;invaldid EBS service&#39;)
+    }, error: function (jqXHR, textStatus, errorThrown) {
+        assert.are_equal(403, jqXHR.status);
+        var data = jqXHR.responseJSON;
+        assert.are_equal(&quot;invalid-service&quot;, data.MessageID)
+        logger.ok();
+        return true;
+    }
+});
+</code></pre>
+<p><strong>javascript sample</strong></p>
+<pre><code class="lang-js">$scope.serviceObj = {
+    netAssembly: &quot;esbotestapiservice&quot;,
+    netNamespace: &quot;esbotestapiservice/Generic&quot;,
+    netClass: &quot;ESWebApiCustomService&quot;,
+    netMethod: &quot;&quot;
+}
+
+$scope.execEbsService = function() {
+    esWebApi.ebsService($scope.serviceObj, $scope.netParam)
+    .then(function(ret) {
+        $scope.ebsret = ret.data;
+    }, function(err) {
+        $scope.ebsret = JSON.stringify(err);
+    });
+}
+</code></pre>
+<p><strong>html sample</strong></p>
+<pre><code class="lang-html">&lt;hr/&gt;
+    &lt;div&gt;
+        &lt;h3&gt;34. esService&lt;/h3&gt;
+        &lt;span&gt;
+            &lt;input type=&quot;text&quot; ng-model=&quot;serviceObj.netAssembly&quot; placeholder=&quot;.NET Assembly name&quot;/&gt;
+            &lt;input type=&quot;text&quot; ng-model=&quot;serviceObj.netNamespace&quot; placeholder=&quot;.NET Namespace&quot;/&gt;
+            &lt;input type=&quot;text&quot; ng-model=&quot;serviceObj.netClass&quot; placeholder=&quot;.NET Class&quot;/&gt;
+            &lt;input type=&quot;text&quot; ng-model=&quot;serviceObj.netMethod&quot; placeholder=&quot;.NET Method&quot;/&gt;
+            &lt;input type=&quot;text&quot; ng-model=&quot;netParam&quot; placeholder=&quot;POCO Object in string format&quot;/&gt;
+
+            &lt;button ng-click=&quot;execEbsService()&quot;&gt;Execute EBS Service&lt;/button&gt;
+        &lt;/span&gt;
+        &lt;textarea&gt;{{ebsret}}&lt;/textarea&gt;
+    &lt;/div&gt;
+</code></pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L715" class="view-source icon-eye-open"> </a><h3 id="methods_eventlog">eventLog(esLog)</h3>
+<div class="eventlog"><div class="es-services-web-eswebapi-eventlog-page"><p>This function inserts a new log entry in the ES00EventLog Entersoft Application Server subsystem</p>
+</div><h5 id="methods_eventlog_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esLog</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-eventlog-page"><p>a simple JSON object with the following properties:</p>
+</div><table><thead><tr><th>Property</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>ID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-eventlog-page"><p>The ID (class identifier) for the event to be logged.</p>
+</div></td></tr><tr><td>Description</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-eventlog-page"><p>The description of the event to be logged.</p>
+</div></td></tr><tr><td>TypeID</td><td><a href="" class="label type-hint type-hint-number">number</a></td><td><div class="es-services-web-eswebapi-eventlog-page"><p>TypeID The severity of the event to be logged, where:
+0 = <em>Information</em></p>
+<p>1 = <em>Warning</em></p>
+<p>2 = <em>Error</em></p>
+<p>3 = <em>Fatal Error</em></p>
+</div></td></tr></tbody></table></td></tr></tbody></table><h5 id="methods_eventlog_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">promise</a></td><td><div class="es-services-web-eswebapi-eventlog-page"><p>A promise that denotes either success or error. No data are expected to be retrieved from the promise success function</p>
+</div></td></tr></table><h4 id="methods_eventlog_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-eventlog-page"><pre><code class="lang-html">&lt;div&gt;
+        &lt;h3&gt;29. eventLog&lt;/h3&gt;
+        &lt;span&gt;
+            &lt;input type=&quot;text&quot; ng-model=&quot;eID&quot; placeholder=&quot;Event ID&quot;/&gt;
+            &lt;input type=&quot;text&quot; ng-model=&quot;eDescription&quot; placeholder=&quot;Event Description&quot;/&gt;
+            &lt;input type=&quot;number&quot; ng-model=&quot;eSeverity&quot; placeholder=&quot;Event Severity&quot;/&gt;
+
+            &lt;button ng-click=&quot;eventLog()&quot;&gt;Log an Event&lt;/button&gt;
+            &lt;textarea&gt;{{eRet}}&lt;/textarea&gt;
+        &lt;/span&gt;
+    &lt;/div&gt;
+</code></pre>
+<pre><code class="lang-js">$scope.eventLog = function() {
+    esWebApi.eventLog({
+            ID: $scope.eID,
+            Description: $scope.eDescription,
+            TypeID: $scope.eSeverity
+        })
+        .then(function(ret) {
+                $scope.eRet = ret.data;
+            },
+            function(err) {
+                $scope.eRet = err;
+            });
+}
+</code></pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1452" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparam">fetchCompanyParam(esParam)</h3>
 <div class="fetchcompanyparam"><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>Function that returns the ES Param for a requested ParamID.</p>
 </div><h5 id="methods_fetchcompanyparam_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParam</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>The ID of the ES CompanyParam. The ID should not contain the @ i.e. fetchCompanyParam(&quot;MyValidParamKey&quot;)</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchcompanyparam_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparam-page"><p>Returns a promise.</p>
@@ -160,7 +532,7 @@ $scope.fetchCompanyParam = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L817" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1544" class="view-source icon-eye-open"> </a><h3 id="methods_fetchcompanyparams">fetchCompanyParams(esParams)</h3>
 <div class="fetchcompanyparams"><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>Function that returns the ES Params for the requested array of parameter id&#39;s</p>
 </div><h5 id="methods_fetchcompanyparams_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>esParams <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string[]</a></td><td><div class="es-services-web-eswebapi-fetchcompanyparams-page"><p>can be</p>
 <ul>
@@ -231,7 +603,7 @@ $scope.fetchCompanyParams = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3086" class="view-source icon-eye-open"> </a><h3 id="methods_fetcheaswebasset">fetchEASWebAsset(assetUrlPath, options)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L3813" class="view-source icon-eye-open"> </a><h3 id="methods_fetcheaswebasset">fetchEASWebAsset(assetUrlPath, options)</h3>
 <div class="fetcheaswebasset"><div class="es-services-web-eswebapi-fetcheaswebasset-page"><p>This function returns the contents of a file asset stored in the Entersoft Application Server (EAS) <strong>ESWebAssets</strong>
 or <strong>CSWebAssets</strong> sub-directories of the EAS. </p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
@@ -279,7 +651,7 @@ the following string: &quot;data:image/png;base64,&quot; i.e. img_data = &quot;d
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3538" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentblobdatabygid">fetchES00DocumentBlobDataByGID(es00DocumentGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L4774" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentblobdatabygid">fetchES00DocumentBlobDataByGID(es00DocumentGID)</h3>
 <div class="fetches00documentblobdatabygid"><div class="es-services-web-eswebapi-fetches00documentblobdatabygid-page"><p>This function returns the arraybuffer for the document stored in <strong>ES00Document</strong> as <strong>BLOBDATA</strong> for a given by GID ES00Document record.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentblobdatabygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentblobdatabygid-page"><p>The GID of the ES00Document record the blobdata of which we are looking for.</p>
@@ -290,7 +662,7 @@ the following string: &quot;data:image/png;base64,&quot; i.e. img_data = &quot;d
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3716" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbycode">fetchES00DocumentByCode(es00DocumentCode)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L4952" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbycode">fetchES00DocumentByCode(es00DocumentCode)</h3>
 <div class="fetches00documentbycode"><div class="es-services-web-eswebapi-fetches00documentbycode-page"><p>This function returns the JSON object for the record of the ES00Document object that matches the es00DocumentCode parameter.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentbycode_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentCode</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentbycode-page"><p>The Code of the ES00Document record that we are looking for</p>
@@ -334,7 +706,7 @@ var sampleDoc = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3649" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbygid">fetchES00DocumentByGID(es00DocumentGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L4885" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentbygid">fetchES00DocumentByGID(es00DocumentGID)</h3>
 <div class="fetches00documentbygid"><div class="es-services-web-eswebapi-fetches00documentbygid-page"><p>This function returns the JSON object for the record of the ES00Document object that matches the es00DocumentGID parameter.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentbygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>es00DocumentGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentbygid-page"><p>The GID of the ES00Document record that we are looking for</p>
@@ -378,7 +750,7 @@ var sampleDoc = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3786" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentsbyentitygid">fetchES00DocumentsByEntityGID(entityGID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L5022" class="view-source icon-eye-open"> </a><h3 id="methods_fetches00documentsbyentitygid">fetchES00DocumentsByEntityGID(entityGID)</h3>
 <div class="fetches00documentsbyentitygid"><div class="es-services-web-eswebapi-fetches00documentsbyentitygid-page"><p>This function returns an array of JSON objects for the records of type ES00Document that belong to entity with GID equal to entityGID.</p>
 <p><strong>REQUIRES ESWebAPIServer &gt;= 1.7.9</strong></p>
 </div><h5 id="methods_fetches00documentsbyentitygid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>entityGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetches00documentsbyentitygid-page"><p>The GID of the entity for which we want to get all the registered ES00Documents</p>
@@ -425,7 +797,7 @@ var listOfDocs = [{
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3472" class="view-source icon-eye-open"> </a><h3 id="methods_fetchentity">fetchEntity(entityclass, entitygid)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L4199" class="view-source icon-eye-open"> </a><h3 id="methods_fetchentity">fetchEntity(entityclass, entitygid)</h3>
 <div class="fetchentity"><div class="es-services-web-eswebapi-fetchentity-page"><p>This function returns the Entersoft Entity ISUD dataset in JSON representation</p>
 </div><h5 id="methods_fetchentity_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>entityclass</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchentity-page"><p>The Entersoft ODS object ID the ISUD record to be retrieved</p>
 </div></td></tr><tr><td>entitygid</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchentity-page"><p>The gid in string format that represents the Primary Key of the record to be retrieved</p>
@@ -770,7 +1142,26 @@ var x = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L2663" class="view-source icon-eye-open"> </a><h3 id="methods_fetchmultistdzoom">fetchMultiStdZoom(multizoomdefs)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L4239" class="view-source icon-eye-open"> </a><h3 id="methods_fetchentitybycode">fetchEntityByCode(entityclass, entityCode)</h3>
+<div class="fetchentitybycode"><div class="es-services-web-eswebapi-fetchentitybycode-page"><p>This function returns the Entersoft Entity ISUD dataset in JSON representation</p>
+</div><h5 id="methods_fetchentitybycode_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>entityclass</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchentitybycode-page"><p>The Entersoft ODS object ID the ISUD record to be retrieved</p>
+</div></td></tr><tr><td>entityCode</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchentitybycode-page"><p>The string code that represents the unique human understandable key of the record to be retrieved</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchentitybycode_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchentitybycode-page"><p>If success i.e. function(ret) { ...} the ret.data contains JSON object of the ISUD dataset.</p>
+</div></td></tr></table><h4 id="methods_fetchentitybycode_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchentitybycode-page"><p>```js
+$scope.fetchEntityByCode = function() {
+    esWebApi.fetchEntityByCode(&quot;esmmstockitem&quot;, &quot;ΕLΕ.Q.CΑΤΗ&quot;)
+        .then(function(ret) {
+                $scope.pEntityDS = ret.data;
+            },
+            function(err) {
+                $scope.pEntityDS = err;
+            })
+}</p>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L3390" class="view-source icon-eye-open"> </a><h3 id="methods_fetchmultistdzoom">fetchMultiStdZoom(multizoomdefs)</h3>
 <div class="fetchmultistdzoom"><div class="es-services-web-eswebapi-fetchmultistdzoom-page"><p>a function that fetches with just one round-trip for the browser to the Entersoft Application Server
 the contebts of one or more ES Zooms as sepcified by the input parameter</p>
 </div><h5 id="methods_fetchmultistdzoom_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>multizoomdefs</td><td><a href="" class="label type-hint type-hint-esmultizoomdef">ESMultiZoomDef[]</a></td><td><div class="es-services-web-eswebapi-fetchmultistdzoom-page"><p>An array of <a href="#/api/es.Services.Web.esGlobals#methods_esmultizoomdef">ESMultiZoomDef</a> objects each one of which specifies the ES Zoom to be retrieved from the server.</p>
@@ -794,7 +1185,7 @@ the contebts of one or more ES Zooms as sepcified by the input parameter</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L1069" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodscolumninfo">fetchOdsColumnInfo(tableID, columnID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1796" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodscolumninfo">fetchOdsColumnInfo(tableID, columnID)</h3>
 <div class="fetchodscolumninfo"><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><p>Function that returns the ODSTable definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodscolumninfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodscolumninfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;. If columnID parameter is undefined, null or empty string <strong>then</strong>
 additional forms of tableid-column id definition are available:</p>
@@ -864,7 +1255,7 @@ $scope.fetchOdsColumnInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L1404" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsdetailrelationsinfo">fetchOdsDetailRelationsInfo(tableID, columnID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L2131" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsdetailrelationsinfo">fetchOdsDetailRelationsInfo(tableID, columnID)</h3>
 <div class="fetchodsdetailrelationsinfo"><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><p>Function that returns the Detail ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given ColumnID of the Master TableID
 from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodsdetailrelationsinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsdetailrelationsinfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;.</p>
@@ -967,7 +1358,7 @@ $scope.fetchOdsDetailRelationsInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L1291" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsmasterrelationsinfo">fetchOdsMasterRelationsInfo(tableID, columnID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L2018" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsmasterrelationsinfo">fetchOdsMasterRelationsInfo(tableID, columnID)</h3>
 <div class="fetchodsmasterrelationsinfo"><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><p>Function that returns the Master Relations ODS Relation definitions that exist in the ODS Repository for a given Master TableID on a given foreign ColumnID of the Master TableID
 from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodsmasterrelationsinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsmasterrelationsinfo-page"><p>The ODS Table ID i.e. &quot;ESFFitem&quot;.</p>
@@ -1064,7 +1455,7 @@ $scope.fetchOdsMasterRelationsInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L1185" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsrelationinfo">fetchOdsRelationInfo(relationID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1912" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodsrelationinfo">fetchOdsRelationInfo(relationID)</h3>
 <div class="fetchodsrelationinfo"><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>Function that returns the ODS Releation definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodsrelationinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>relationID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>The ODS Relation ID or the ODS Relation GID in string (guid) to retrieve</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchodsrelationinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">promise</a></td><td><div class="es-services-web-eswebapi-fetchodsrelationinfo-page"><p>Returns a promise.</p>
@@ -1158,7 +1549,7 @@ $scope.fetchOdsRelationInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L992" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodstableinfo">fetchOdsTableInfo(tableID)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1719" class="view-source icon-eye-open"> </a><h3 id="methods_fetchodstableinfo">fetchOdsTableInfo(tableID)</h3>
 <div class="fetchodstableinfo"><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>Function that returns the ODSTable definition from the <strong> Entersoft Object Description System (ODS)</strong> repository.</p>
 </div><h5 id="methods_fetchodstableinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tableID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>The ODS Table ID or the ODS Table GID in string (guid) to retrieve</p>
 </div></td></tr></tbody></table><h5 id="methods_fetchodstableinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">promise</a></td><td><div class="es-services-web-eswebapi-fetchodstableinfo-page"><p>Returns a promise.</p>
@@ -1304,7 +1695,475 @@ $scope.fetchOdsTableInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L2904" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1293" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpersonlogo">fetchPersonLogo(personGID)</h3>
+<div class="fetchpersonlogo"><div class="es-services-web-eswebapi-fetchpersonlogo-page"><p>This function delete the current logged in user logo from the Entersoft Application.</p>
+</div><h5 id="methods_fetchpersonlogo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>personGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpersonlogo-page"><p>The GID of the ESGOPerson in string format, the logo of which we are looking for</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchpersonlogo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchpersonlogo-page"><p>Returns an httpPromise that once resolved, the ret.data contains the base64 string for the logo image
+of the specified person</p>
+</div></td></tr></table><h4 id="methods_fetchpersonlogo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchpersonlogo-page"><pre><code class="lang-html">&lt;hr/&gt;
+&lt;div&gt;
+    &lt;h3&gt;33. fetchPersonLogo&lt;/h3&gt;
+    &lt;span&gt;
+        &lt;input type=&quot;text&quot; ng-model=&quot;PersonGID&quot; placeholder=&quot;PersonGID&quot;/&gt;
+
+        &lt;button ng-click=&quot;fetchPersonlogo()&quot;&gt;Get Person Logo&lt;/button&gt;
+        &lt;img  class=&quot;img-circle&quot; width=&quot;304&quot; height=&quot;236&quot; ng-if=&quot;personPhoto&quot; data-ng-src=&quot;{{&#39;data:image/jpg;base64,&#39; + personPhoto}}&quot;/&gt;
+
+    &lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<p>and the controller&#39;s part</p>
+<pre><code class="lang-js">        $scope.fetchPersonlogo = function() {
+            esWebApi.fetchPersonLogo($scope.PersonGID)
+                .then(function(x) {
+                    $scope.personPhoto = x.data;
+                });
+        }
+</code></pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L4704" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpropertyset">fetchPropertySet(psCode, campaignGID)</h3>
+<div class="fetchpropertyset"><div class="es-services-web-eswebapi-fetchpropertyset-page"><p>This function returns the property set / survey identified by the psCode parameter that is optionally linked / attached to the
+campaignID specified by the campaignGID parameter </p>
+</div><h5 id="methods_fetchpropertyset_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>psCode</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpropertyset-page"><p>The Entersoft ODS object ID the ISUD record to be retrieved</p>
+</div></td></tr><tr><td>campaignGID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpropertyset-page"><p>The gid in string format that represents the gid of the campaign that is of type sruvey</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchpropertyset_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchpropertyset-page"><p>If success i.e. function(ret) { ...} the ret.data contains JSON object of the ESPropertySet object.</p>
+</div></td></tr></table><h4 id="methods_fetchpropertyset_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchpropertyset-page"><pre><code class="lang-js">smeControllers.controller(&#39;surveyCtrl&#39;, [&#39;$location&#39;, &#39;$scope&#39;, &#39;$log&#39;, &#39;esWebApi&#39;, &#39;esUIHelper&#39;, &#39;_&#39;, &#39;esCache&#39;, &#39;esMessaging&#39;, &#39;esGlobals&#39;,
+    function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+
+        $scope.surveyDef = {};
+
+        $scope.startFrom = -1;
+        $scope.surveyCode = &quot;usage_s1&quot;;
+        $scope.surveyAns = {};
+
+        $scope.loadSurvey = function() {
+            esWebApiService.fetchPropertySet($scope.surveyCode, &quot;2E035E80-BFED-4B45-91D2-1CEB64C2BB7B&quot;)
+                .then(function(ret) {
+                        $scope.surveyDef = ret.data;
+                        $scope.startFrom = -1;
+                        $scope.surveyCode = &quot;usage_s1&quot;;
+                        $scope.surveyAns = {};
+                    },
+                    function(err) {
+                        $scope.surveyDef = {};
+                        alert(err);
+                    });
+        }
+    }
+]);
+</code></pre>
+<p>and the result would be similar to the example below according to the following defintion in EBS:
+<img src="images/api/es012propertySet.png" alt="Entersoft Survey Marketing Campaign"></p>
+<p><img src="images/api/es013propertySet.png" alt="Entersoft Survey Definition"></p>
+<p><img src="images/api/es014propertySet.png" alt="Entersoft Survey Choice List"></p>
+<p>and the JSON model for this definition would be as follows:</p>
+<pre><code class="lang-js">{
+    &quot;GID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+    &quot;Code&quot;: &quot;usage_s1&quot;,
+    &quot;Description&quot;: &quot;Survey for RFA Usage&quot;,
+    &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.193&quot;,
+    &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+    &quot;ESDModified&quot;: &quot;0001-01-01T00:00:00&quot;,
+    &quot;Inactive&quot;: false,
+    &quot;Type&quot;: 1,
+    &quot;MobileSurvey&quot;: false,
+    &quot;Lines&quot;: [{
+        &quot;GID&quot;: &quot;184b1993-db48-4c38-ac39-b31958b6cf0c&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 1,
+        &quot;Category_Code&quot;: &quot;Γενικές Ερωτήσεις&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;0001-01-01T00:00:00&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-17T18:34:12.373&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q001&quot;,
+        &quot;Description&quot;: &quot;Profit&quot;,
+        &quot;PType&quot;: 1
+    }, {
+        &quot;GID&quot;: &quot;032d0b05-5fd5-46fa-a909-1cac51c5d766&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 2,
+        &quot;Category_Code&quot;: &quot;Ειδικά Στοιχεία&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-20T13:02:57.067&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.263&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 1,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q002&quot;,
+        &quot;Description&quot;: &quot;Age&quot;,
+        &quot;AlternativeDescription&quot;: &quot;you should answer with care&quot;,
+        &quot;PArg&quot;: &quot;AgeScale&quot;,
+        &quot;PType&quot;: 4
+    }, {
+        &quot;GID&quot;: &quot;57526e4c-ccf7-4d2b-92f1-754d31590771&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 3,
+        &quot;Category_Code&quot;: &quot;Ειδικά Στοιχεία&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-17T18:34:12.353&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.32&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 2,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q003&quot;,
+        &quot;Description&quot;: &quot;Colors&quot;,
+        &quot;PArg&quot;: &quot;ColorsType&quot;,
+        &quot;PType&quot;: 14
+    }, {
+        &quot;GID&quot;: &quot;f4af1a79-16ee-45fa-b7fd-31654fd6876a&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 4,
+        &quot;Category_Code&quot;: &quot;Εμπορικά Θέματα&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-17T18:34:12.353&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.34&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 4,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;ES.YesNoDontKnow&quot;,
+        &quot;Description&quot;: &quot;Σας αρέσει το EBS?&quot;,
+        &quot;PArg&quot;: &quot;ES.YesNoDontKnow&quot;,
+        &quot;PType&quot;: 4
+    }, {
+        &quot;GID&quot;: &quot;753e2d67-28df-4054-877c-2706f8179711&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 5,
+        &quot;Category_Code&quot;: &quot;Εμπορικά Θέματα&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-17T18:34:12.353&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.34&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q005&quot;,
+        &quot;Description&quot;: &quot;Άλλα Στοιχεια&quot;,
+        &quot;PType&quot;: 0
+    }, {
+        &quot;GID&quot;: &quot;1708e894-c3c7-446c-8af7-595c07233cb2&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 6,
+        &quot;Category_Code&quot;: &quot;Εμπορικά Θέματα&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-17T18:34:12.357&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.343&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q006&quot;,
+        &quot;Description&quot;: &quot;Τζίρος&quot;,
+        &quot;PArg&quot;: &quot;3&quot;,
+        &quot;PType&quot;: 1
+    }, {
+        &quot;GID&quot;: &quot;9c79a9d6-6943-42e2-b4af-108e440f9ec9&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 7,
+        &quot;Category_Code&quot;: &quot;Εμπορικά Θέματα&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-17T18:34:12.357&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.343&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q007&quot;,
+        &quot;Description&quot;: &quot;Αριθμός Υπαλλήλων&quot;,
+        &quot;PType&quot;: 2
+    }, {
+        &quot;GID&quot;: &quot;4c6a89e2-6d0e-48e0-9a34-c3603019c3d6&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 8,
+        &quot;Category_Code&quot;: &quot;Εμπορικά Θέματα&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-17T18:34:12.357&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.343&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q008&quot;,
+        &quot;Description&quot;: &quot;Ετος Ίδρυσης&quot;,
+        &quot;PType&quot;: 3
+    }, {
+        &quot;GID&quot;: &quot;51ca7792-a339-452a-bf68-023029fc7bad&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 9,
+        &quot;Category_Code&quot;: &quot;Ερωτηματολόγιο&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-17T18:34:12.357&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.347&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q009&quot;,
+        &quot;Description&quot;: &quot;Εναρξη Ημέρας&quot;,
+        &quot;PType&quot;: 12
+    }, {
+        &quot;GID&quot;: &quot;a408bc3c-75d8-49b7-a989-0c3cbbf686d3&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 10,
+        &quot;Category_Code&quot;: &quot;Ερωτηματολόγιο&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-17T18:34:12.357&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.347&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q010&quot;,
+        &quot;Description&quot;: &quot;Ραντεβού&quot;,
+        &quot;PType&quot;: 11
+    }, {
+        &quot;GID&quot;: &quot;f1e8406c-418a-4aa1-b1fe-e57e4aca09b7&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 11,
+        &quot;Category_Code&quot;: &quot;Ερωτηματολόγιο&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-17T18:34:12.36&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-07T15:46:05.35&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q011&quot;,
+        &quot;Description&quot;: &quot;Κατανομή Εσόδων&quot;,
+        &quot;PArg&quot;: &quot;9&quot;,
+        &quot;PType&quot;: 15
+    }, {
+        &quot;GID&quot;: &quot;ce67f1ec-0ffb-4046-b2d9-512cf16ed7bc&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 12,
+        &quot;Category_Code&quot;: &quot;Γενικές Ερωτήσεις&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;0001-01-01T00:00:00&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-17T19:36:02.473&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q012&quot;,
+        &quot;Description&quot;: &quot;Statisfaction&quot;,
+        &quot;AlternativeDescription&quot;: &quot;0=δυσαρεστημένος και με το 5=ευχαριστημένος&quot;,
+        &quot;PArg&quot;: &quot;5Scale&quot;,
+        &quot;PType&quot;: 4
+    }, {
+        &quot;GID&quot;: &quot;a3064835-afe2-4da9-bc90-db17d3980e33&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 13,
+        &quot;Category_Code&quot;: &quot;Ειδικά Στοιχεία&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;2015-12-20T13:02:57.48&quot;,
+        &quot;ESUModified&quot;: &quot;ADMIN&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-18T10:51:01.857&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q013&quot;,
+        &quot;Description&quot;: &quot;Πώς αξιολογείτε την Υποστήριξη&quot;,
+        &quot;AlternativeDescription&quot;: &quot;0 = χαμηλά 4 = άριστα&quot;,
+        &quot;PArg&quot;: &quot;9&quot;,
+        &quot;PType&quot;: 2
+    }, {
+        &quot;GID&quot;: &quot;00c75e94-a9e6-42a9-b5b0-e9b1f48cc0e9&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 14,
+        &quot;Category_Code&quot;: &quot;Γενικές Ερωτήσεις&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;0001-01-01T00:00:00&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-21T08:57:06.54&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q014&quot;,
+        &quot;Description&quot;: &quot;Χώρα Προέλευσης&quot;,
+        &quot;PArg&quot;: &quot;ESGOZCountry&quot;,
+        &quot;PType&quot;: 4
+    }, {
+        &quot;GID&quot;: &quot;57aaa798-9d49-499f-8807-4ce9daef6260&quot;,
+        &quot;fPropertySetGID&quot;: &quot;254feeb8-b56e-4c57-bcd3-6c023b085cc6&quot;,
+        &quot;SeqNum&quot;: 15,
+        &quot;Category_Code&quot;: &quot;Γενικές Ερωτήσεις&quot;,
+        &quot;Category_OrderPriority&quot;: 0,
+        &quot;ESDModified&quot;: &quot;0001-01-01T00:00:00&quot;,
+        &quot;ESUCreated&quot;: &quot;ADMIN&quot;,
+        &quot;ESDCreated&quot;: &quot;2015-12-21T09:35:19.923&quot;,
+        &quot;Mandatory&quot;: true,
+        &quot;VisualizationStyle&quot;: 0,
+        &quot;Inactive&quot;: false,
+        &quot;PhotoRelated&quot;: false,
+        &quot;NotApplicable&quot;: false,
+        &quot;Code&quot;: &quot;usage_s1 - Q015&quot;,
+        &quot;Description&quot;: &quot;Μερίδιο Αγοράς&quot;,
+        &quot;PType&quot;: 15
+    }],
+    &quot;Choices&quot;: [{
+        &quot;ChoiceCode&quot;: &quot;5Scale&quot;,
+        &quot;Code&quot;: &quot;0&quot;,
+        &quot;Description&quot;: &quot;Καθόλου Ικανοποιημένος&quot;,
+        &quot;Value&quot;: &quot;0&quot;,
+        &quot;OrderPriority&quot;: 1
+    }, {
+        &quot;ChoiceCode&quot;: &quot;5Scale&quot;,
+        &quot;Code&quot;: &quot;1&quot;,
+        &quot;Description&quot;: &quot;-&quot;,
+        &quot;Value&quot;: &quot;1&quot;,
+        &quot;OrderPriority&quot;: 2
+    }, {
+        &quot;ChoiceCode&quot;: &quot;5Scale&quot;,
+        &quot;Code&quot;: &quot;22&quot;,
+        &quot;Description&quot;: &quot;-&quot;,
+        &quot;Value&quot;: &quot;22&quot;,
+        &quot;OrderPriority&quot;: 3
+    }, {
+        &quot;ChoiceCode&quot;: &quot;5Scale&quot;,
+        &quot;Code&quot;: &quot;33&quot;,
+        &quot;Description&quot;: &quot;-&quot;,
+        &quot;Value&quot;: &quot;33&quot;,
+        &quot;OrderPriority&quot;: 4
+    }, {
+        &quot;ChoiceCode&quot;: &quot;5Scale&quot;,
+        &quot;Code&quot;: &quot;4&quot;,
+        &quot;Description&quot;: &quot;Εξαιρετικά Ικανοποιημένος&quot;,
+        &quot;Value&quot;: &quot;4&quot;,
+        &quot;OrderPriority&quot;: 5
+    }, {
+        &quot;ChoiceCode&quot;: &quot;AgeScale&quot;,
+        &quot;Code&quot;: &quot;1&quot;,
+        &quot;Description&quot;: &quot;18-25&quot;,
+        &quot;Value&quot;: &quot;1&quot;,
+        &quot;OrderPriority&quot;: 1
+    }, {
+        &quot;ChoiceCode&quot;: &quot;AgeScale&quot;,
+        &quot;Code&quot;: &quot;2&quot;,
+        &quot;Description&quot;: &quot;26-35&quot;,
+        &quot;Value&quot;: &quot;2&quot;,
+        &quot;OrderPriority&quot;: 2
+    }, {
+        &quot;ChoiceCode&quot;: &quot;AgeScale&quot;,
+        &quot;Code&quot;: &quot;3&quot;,
+        &quot;Description&quot;: &quot;&gt;36&quot;,
+        &quot;Value&quot;: &quot;3&quot;,
+        &quot;OrderPriority&quot;: 3
+    }, {
+        &quot;ChoiceCode&quot;: &quot;ColorsType&quot;,
+        &quot;Code&quot;: &quot;1&quot;,
+        &quot;Description&quot;: &quot;Red&quot;,
+        &quot;Value&quot;: &quot;1&quot;,
+        &quot;OrderPriority&quot;: 1
+    }, {
+        &quot;ChoiceCode&quot;: &quot;ColorsType&quot;,
+        &quot;Code&quot;: &quot;2&quot;,
+        &quot;Description&quot;: &quot;Green&quot;,
+        &quot;Value&quot;: &quot;2&quot;,
+        &quot;OrderPriority&quot;: 2
+    }, {
+        &quot;ChoiceCode&quot;: &quot;ColorsType&quot;,
+        &quot;Code&quot;: &quot;3&quot;,
+        &quot;Description&quot;: &quot;Blue&quot;,
+        &quot;Value&quot;: &quot;3&quot;,
+        &quot;OrderPriority&quot;: 3
+    }, {
+        &quot;ChoiceCode&quot;: &quot;ES.YesNoDontKnow&quot;,
+        &quot;Code&quot;: &quot;55&quot;,
+        &quot;Description&quot;: &quot;Όχι&quot;,
+        &quot;Value&quot;: &quot;55&quot;,
+        &quot;AlternativeDescription&quot;: &quot;No&quot;,
+        &quot;OrderPriority&quot;: 1
+    }, {
+        &quot;ChoiceCode&quot;: &quot;ES.YesNoDontKnow&quot;,
+        &quot;Code&quot;: &quot;Yes&quot;,
+        &quot;Description&quot;: &quot;Ναι&quot;,
+        &quot;Value&quot;: &quot;1&quot;,
+        &quot;AlternativeDescription&quot;: &quot;Yes&quot;,
+        &quot;OrderPriority&quot;: 2
+    }, {
+        &quot;ChoiceCode&quot;: &quot;ES.YesNoDontKnow&quot;,
+        &quot;Code&quot;: &quot;DontKnow&quot;,
+        &quot;Description&quot;: &quot;Δεν γνωρίζω/Δεν απαντώ&quot;,
+        &quot;Value&quot;: &quot;2&quot;,
+        &quot;AlternativeDescription&quot;: &quot;Don&#39;t know&quot;,
+        &quot;OrderPriority&quot;: 3
+    }],
+    &quot;Sections&quot;: [{
+        &quot;Code&quot;: &quot;Γενικές Ερωτήσεις&quot;,
+        &quot;Description&quot;: &quot;Γενικές Ερωτήσεις&quot;,
+        &quot;Inactive&quot;: false,
+        &quot;OrderPriority&quot;: 0
+    }, {
+        &quot;Code&quot;: &quot;Ειδικά Στοιχεία&quot;,
+        &quot;Description&quot;: &quot;Ειδικά Χαρακτηριστικά Είδους&quot;,
+        &quot;Inactive&quot;: false,
+        &quot;OrderPriority&quot;: 0
+    }, {
+        &quot;Code&quot;: &quot;Εμπορικά Θέματα&quot;,
+        &quot;Description&quot;: &quot;Εμπορικά Θέματα Είδους&quot;,
+        &quot;Inactive&quot;: false,
+        &quot;OrderPriority&quot;: 0
+    }, {
+        &quot;Code&quot;: &quot;Ερωτηματολόγιο&quot;,
+        &quot;Description&quot;: &quot;Ερωτηματολόγιο&quot;,
+        &quot;Inactive&quot;: false,
+        &quot;OrderPriority&quot;: 0
+    }]
+}
+</code></pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L3631" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicquery">fetchPublicQuery(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb)</h3>
 <div class="fetchpublicquery"><div class="es-services-web-eswebapi-fetchpublicquery-page"><p>fetchPublicQuery is one of the most important functions of the esWebApi Service as it is the most preferable and
 strongly recommended way to get data from the Entersoft Application Server through the Entersoft WEB API Sever.</p>
 <p><strong>Public Queries</strong> is a new Entersoft Data Retrieval component introduced since 4.0.28.0 version of EBS. Public Queries can be defined and managed 
@@ -1477,7 +2336,7 @@ END IF
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L2499" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID, useCache)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L3226" class="view-source icon-eye-open"> </a><h3 id="methods_fetchpublicqueryinfo">fetchPublicQueryInfo(GroupID, FilterID, useCache)</h3>
 <div class="fetchpublicqueryinfo"><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Function that returns the Entersoft Janus based GridExLayout as a JSON object.</p>
 </div><h5 id="methods_fetchpublicqueryinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>GroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>FilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchpublicqueryinfo-page"><p>Entersoft Public Query FilterID</p>
@@ -2057,7 +2916,7 @@ var ret = {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L1591" class="view-source icon-eye-open"> </a><h3 id="methods_fetchscroller">fetchScroller(groupID, filterID, params)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L2318" class="view-source icon-eye-open"> </a><h3 id="methods_fetchscroller">fetchScroller(groupID, filterID, params)</h3>
 <div class="fetchscroller"><div class="es-services-web-eswebapi-fetchscroller-page"><p>Function that returns the results of the execution of an Entersoft Scroller (simple or hierarchical) in JSON format</p>
 </div><h5 id="methods_fetchscroller_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>groupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchscroller-page"><p>Entersoft Scroller GroupID</p>
 </div></td></tr><tr><td>filterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchscroller-page"><p>Entersoft Scroller FilterID</p>
@@ -2179,7 +3038,7 @@ $scope.fetchScroller = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L1445" class="view-source icon-eye-open"> </a><h3 id="methods_fetchservercapabilities">fetchServerCapabilities()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L2172" class="view-source icon-eye-open"> </a><h3 id="methods_fetchservercapabilities">fetchServerCapabilities()</h3>
 <div class="fetchservercapabilities"><div class="es-services-web-eswebapi-fetchservercapabilities-page"><p>Function that returns the WEB API Server capabilities in terms of http(s). This service does not require
 authorization prior to call</p>
 </div><h5 id="methods_fetchservercapabilities_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchservercapabilities-page"><p>If success i.e. function(ret) { ... } <strong><em>ret</em></strong> is a JSON object of the current WEB API Server capabilities.
@@ -2209,7 +3068,7 @@ The return object has the following structure:</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L1813" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L2540" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsessioninfo">fetchSessionInfo()</h3>
 <div class="fetchsessioninfo"><div class="es-services-web-eswebapi-fetchsessioninfo-page"><p>Function that returns Entersoft Application Server session information</p>
 </div><h5 id="methods_fetchsessioninfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchsessioninfo-page"><p>Returns a promise.</p>
 <ul>
@@ -2264,7 +3123,7 @@ $scope.fetchSessionInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L1704" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsimplescrollerroottable">fetchSimpleScrollerRootTable(groupID, filterID, params)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L2431" class="view-source icon-eye-open"> </a><h3 id="methods_fetchsimplescrollerroottable">fetchSimpleScrollerRootTable(groupID, filterID, params)</h3>
 <div class="fetchsimplescrollerroottable"><div class="es-services-web-eswebapi-fetchsimplescrollerroottable-page"><p>Function that returns the data of the defined MasterTable for an Entersoft Scroller (simple or hierarchical) in JSON format.
 It is very similar to fetchScroller function with the <strong>MAIN</strong> difference that it only returns the data for the <strong>MASTER Table</strong> as
 defined by the creator at the Scroller Definition</p>
@@ -2370,7 +3229,7 @@ $scope.fetchSimpleScrollerRootTable = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L2594" class="view-source icon-eye-open"> </a><h3 id="methods_fetchstdzoom">fetchStdZoom(zoomID, pqOptions, useCache)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L3321" class="view-source icon-eye-open"> </a><h3 id="methods_fetchstdzoom">fetchStdZoom(zoomID, pqOptions, useCache)</h3>
 <div class="fetchstdzoom"><h5 id="methods_fetchstdzoom_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>zoomID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchstdzoom-page"><p>Entersoft Public Query GroupID</p>
 </div></td></tr><tr><td>pqOptions</td><td><a href="" class="label type-hint type-hint-espqoptions">ESPQOptions</a></td><td><div class="es-services-web-eswebapi-fetchstdzoom-page"><p>Entersoft Public Query execution options with respect to Paging, PageSize and WithCount.
 See <a href="#/api/es.Services.Web.esGlobals#methods_espqoptions">ESPQOptions</a></p>
@@ -2428,7 +3287,38 @@ The response has the typical form as follows:</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L1742" class="view-source icon-eye-open"> </a><h3 id="methods_fetchusersites">fetchUserSites(ebsuser)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1134" class="view-source icon-eye-open"> </a><h3 id="methods_fetchuserlogo">fetchUserLogo(userID)</h3>
+<div class="fetchuserlogo"><div class="es-services-web-eswebapi-fetchuserlogo-page"><p>This function inserts a new log entry in the ES00EventLog Entersoft Application Server subsystem</p>
+</div><h5 id="methods_fetchuserlogo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>userID <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a><a href="" class="label type-hint type-hint-guid">guid</a></td><td><div class="es-services-web-eswebapi-fetchuserlogo-page"><p>Either the code of the user (ESGOUser) or the GID of the ESGOUser the logo of which we are interested in.
+If empty, null or undefined, the logo of the current logged-in user will be requested</p>
+</div></td></tr></tbody></table><h5 id="methods_fetchuserlogo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fetchuserlogo-page"><p>If success i.e. function(ret) { ...} the ret.data contains the string <strong>base64</strong> of the image that corresponds to the requested logo.
+If the ESGOUser exists BUT there is no logo stored for the given user an empty string will be returned.
+If the ESGOUser does not exist an error 404 will be returned.</p>
+</div></td></tr></table><h4 id="methods_fetchuserlogo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-fetchuserlogo-page"><pre><code class="lang-html">&lt;div&gt;
+        &lt;h3&gt;30. fetchUserLogo&lt;/h3&gt;
+        &lt;span&gt;
+            &lt;input type=&quot;text&quot; ng-model=&quot;lUserID&quot; placeholder=&quot;User ID or GID&quot;/&gt;
+
+            &lt;button ng-click=&quot;fetchUserLogo()&quot;&gt;Get the PHOTO&lt;/button&gt;
+            &lt;img ng-if=&quot;userPhoto&quot; data-ng-src=&quot;{{&#39;data:image/jpg;base64,&#39; + userPhoto}}&quot;/&gt;
+        &lt;/span&gt;
+    &lt;/div&gt;
+</code></pre>
+<pre><code class="lang-js">$scope.fetchUserLogo = function() {
+    esWebApi.fetchUserLogo($scope.lUserID)
+        .then(function(ret) {
+                $scope.userPhoto = ret.data;
+            },
+            function(err) {
+                $scope.userPhoto = &quot;&quot;;
+            });
+}
+</code></pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L2469" class="view-source icon-eye-open"> </a><h3 id="methods_fetchusersites">fetchUserSites(ebsuser)</h3>
 <div class="fetchusersites"><div class="es-services-web-eswebapi-fetchusersites-page"><p>Function that returns ESGOSites of the current ESCompany that the given user has access to
 authorization prior to call</p>
 </div><h5 id="methods_fetchusersites_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>ebsuser</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fetchusersites-page"><p>The Entersoft Business Suite UserID for whom we want to fetch the ESGOSites of the current ESCompany
@@ -2457,14 +3347,14 @@ The return object has the following structure:</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3501" class="view-source icon-eye-open"> </a><h3 id="methods_fiimportdocument">fiImportDocument(xmldocstr)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L4737" class="view-source icon-eye-open"> </a><h3 id="methods_fiimportdocument">fiImportDocument(xmldocstr)</h3>
 <div class="fiimportdocument"><div class="es-services-web-eswebapi-fiimportdocument-page"><p>This function imports a ESFIDocument of all the supported classes i.e.(Trade, Cash, Adjustment and Stock) through the FIImportDoc service of the Entersoft Application Server.</p>
 </div><h5 id="methods_fiimportdocument_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>xmldocstr</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapi-fiimportdocument-page"><p>The XML representation of the financial document to be inserted/updates through the
 Entersoft Application Server FIImportDocument service. For more, see the relative <a href="http://www.entersoft.gr/KBArticle/%CE%94%CE%B9%CE%B1%CE%B4%CE%B9%CE%BA%CE%B1%CF%83%CE%AF%CE%B1%20%CE%B5%CE%B9%CF%83%CE%B1%CE%B3%CF%89%CE%B3%CE%AE%CF%82%20%CF%80%CE%B1%CF%81%CE%B1%CF%83%CF%84%CE%B1%CF%84%CE%B9%CE%BA%CF%8E%CE%BD%20%CE%B1%CF%80%CF%8C%20XML/MEMBERS_slh_KnowledgeBase">Entersoft Knowledge Base article</a>.</p>
 </div></td></tr></tbody></table><h5 id="methods_fiimportdocument_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-fiimportdocument-page"><p>If success i.e. function(ret) { ...} the ret.data contains the string result of the FIImportDocument function.</p>
 </div></td></tr></table></div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3595" class="view-source icon-eye-open"> </a><h3 id="methods_getmimetypes">getMimeTypes()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L4831" class="view-source icon-eye-open"> </a><h3 id="methods_getmimetypes">getMimeTypes()</h3>
 <div class="getmimetypes"><div class="es-services-web-eswebapi-getmimetypes-page"><p>This function returns an array of JSON objects representing the Mime types that the ES WEB API server supports</p>
 </div><h5 id="methods_getmimetypes_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">object[]</a></td><td><div class="es-services-web-eswebapi-getmimetypes-page"><p>Array of json objects of the form {mime: string, extension: string, IsText: boolean}</p>
 </div></td></tr></table><h4 id="methods_getmimetypes_example">Example</h4>
@@ -2496,7 +3386,7 @@ Entersoft Application Server FIImportDocument service. For more, see the relativ
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L448" class="view-source icon-eye-open"> </a><h3 id="methods_getserverurl">getServerUrl()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L482" class="view-source icon-eye-open"> </a><h3 id="methods_getserverurl">getServerUrl()</h3>
 <div class="getserverurl"><div class="es-services-web-eswebapi-getserverurl-page"><p>Function that returns the full URL to the Entersoft WEB API Server as it has been resolved
 according to the configuration of the esWebApiProvider at the provider&#39;s configuration function of the AngularJS application.
 For more information, please  </p>
@@ -2513,7 +3403,7 @@ alert(sUrl);
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L657" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1384" class="view-source icon-eye-open"> </a><h3 id="methods_logout">logout()</h3>
 <div class="logout"><div class="es-services-web-eswebapi-logout-page"><p>Function that performs a web session logout. As a result of calling this function, all internal state
 related to the current web session, if any, is cleaned-up and no valid web session is available. The application/user must login again through <a href="#/api/es.Services.Web.esWebApi#methods_opensession">openSession</a>
 in order to be able to call any Entersoft WEB API autheticated method or service.</p>
@@ -2528,7 +3418,7 @@ $scope.doLogout = function ()
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L3004" class="view-source icon-eye-open"> </a><h3 id="methods_multipublicquery">multiPublicQuery(pqDefs)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L3731" class="view-source icon-eye-open"> </a><h3 id="methods_multipublicquery">multiPublicQuery(pqDefs)</h3>
 <div class="multipublicquery"><div class="es-services-web-eswebapi-multipublicquery-page"><p>multiPublicQuery is similar to the <a href="#/api/es.Services.Web.esWebApi#methods_fetchpublicquery">fetchPublicQuery</a> with the difference
 that it supports for multiple public queries execution with just one round-trip to the Entersoft WEB API Server and to the Entersoft
 Application Server.</p>
@@ -2579,7 +3469,7 @@ esWebApi.MultiPublicQuery(pqParams)
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/1a1b836/src/js/eswebservices.js#L609" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L643" class="view-source icon-eye-open"> </a><h3 id="methods_opensession">openSession(credentials)</h3>
 <div class="opensession"><div class="es-services-web-eswebapi-opensession-page"><p>This is the function that enables for login and connect through the Entersoft WEB API Server to the Entersoft Application Server.
 The vast majority of the esWebApi service methods <strong>REQUIRE</strong> for an authorization token in order to be executed. This Authorization token is obtained 
 through a successfull call of the <strong><strong>openSession</strong></strong>  function and it is implicitly stored and managed by the esWebApi for its complete lifecycle.</p>
@@ -2723,6 +3613,84 @@ $scope.doLogin = function() {
             function(err) {
                 $log.error(err);
             });
+}
+</code></pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1246" class="view-source icon-eye-open"> </a><h3 id="methods_removecurrentuserlogo">removeCurrentUserLogo()</h3>
+<div class="removecurrentuserlogo"><div class="es-services-web-eswebapi-removecurrentuserlogo-page"><p>This function delete the current logged in user logo from the Entersoft Application.</p>
+</div><h5 id="methods_removecurrentuserlogo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-removecurrentuserlogo-page"><p>Returns an httpPromise that once resolved, it has a status code OK if everything went OK, or BadRequest if an error occurred.</p>
+</div></td></tr></table><h4 id="methods_removecurrentuserlogo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-removecurrentuserlogo-page"><pre><code class="lang-html">&lt;div&gt;
+        &lt;h3&gt;30. fetchUserLogo&lt;/h3&gt;
+        &lt;span&gt;
+            &lt;input type=&quot;text&quot; ng-model=&quot;lUserID&quot; placeholder=&quot;User ID or GID&quot;/&gt;
+
+            &lt;button ng-click=&quot;fetchUserLogo()&quot;&gt;Get the PHOTO&lt;/button&gt;
+            &lt;img  class=&quot;img-circle&quot; width=&quot;304&quot; height=&quot;236&quot; ng-if=&quot;userPhoto&quot; data-ng-src=&quot;{{&#39;data:image/jpg;base64,&#39; + userPhoto}}&quot;/&gt;
+            &lt;button ng-click=&quot;removeCurrentUserLogo()&quot;&gt;Remove Current User Logo&lt;/button&gt;
+        &lt;/span&gt;
+    &lt;/div&gt;
+</code></pre>
+<pre><code class="lang-js">$scope.removeCurrentUserLogo = function() {
+    esWebApi.removeCurrentUserLogo();
+}
+</code></pre>
+</div></div>
+</div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1341" class="view-source icon-eye-open"> </a><h3 id="methods_stickysession">stickySession(credentials)</h3>
+<div class="stickysession"><div class="es-services-web-eswebapi-stickysession-page"><p>This function is similar to <a href="#/api/es.Services.Web.esWebApi#methods_opensession">openSession</a> with the difference
+that it requires / mandates the Entersoft WEB API Server to route all the subsequent calls to the same server side session object
+i.e. stick to the initial session. That means that in case that more than one Entersoft Application Servers have been registered in the
+web api server config.json file as shown in the image below</p>
+<p><img src="images/api/es011loadbalance.png" alt="Load-Balanced WEB API Server servers"></p>
+<p>the server that will be selected to full fill the stickySession request will be the same that will serve all the subsequent
+calls for this session, i.e. all calls will be serverd by the same ESSession of the same server.
+On the other hand, openSession instructs Entersoft WEB API Server to fully use load balancing and fault-tolerant logic by
+randomly selecting one of the available server to fullfil any susequent call on a per call basis. </p>
+</div><h5 id="methods_stickysession_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>credentials</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapi-stickysession-page"><p>Entersoft Business Suite login credentials in the form of a JSON object with the following form:</p>
+<pre><code class="lang-js">var credentials  = {
+   UserID: &quot;xxxx&quot;, //Entersoft User id 
+   Password: &quot;this is my password&quot;, // Entersoft User&#39;s password
+   BranchID: &quot;Branch&quot;, // a valid Branch that the user has access rights and will be used as default for all operations requiring a BranchID
+   LangID: &quot;el-GR&quot;
+}
+</code></pre>
+</div></td></tr></tbody></table><h5 id="methods_stickysession_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-httppromise">httpPromise</a></td><td><div class="es-services-web-eswebapi-stickysession-page"><p>Returns a promise.
+For more information please see <a href="#/api/es.Services.Web.esWebApi#methods_opensession">openSession</a></p>
+</div></td></tr></table></div>
+</li>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/eswebservices.js#L1186" class="view-source icon-eye-open"> </a><h3 id="methods_uploaduserlogo">uploadUserLogo(file, okfunc, errfunc, progressfunc)</h3>
+<div class="uploaduserlogo"><div class="es-services-web-eswebapi-uploaduserlogo-page"><p>This function uploads and stores in the EAS an image as the current logged-in User&#39;s Logo</p>
+</div><h5 id="methods_uploaduserlogo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>file</td><td><a href="" class="label type-hint type-hint-file">file</a></td><td><div class="es-services-web-eswebapi-uploaduserlogo-page"><p>The file that should be of type image that will be uploaded and stored in the EAS</p>
+</div></td></tr><tr><td>okfunc <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="es-services-web-eswebapi-uploaduserlogo-page"><p>a function that will be called when the upload is completed</p>
+</div></td></tr><tr><td>errfunc <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="es-services-web-eswebapi-uploaduserlogo-page"><p>a function that will called should an error occurs while uploading the file</p>
+</div></td></tr><tr><td>progressfunc <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="es-services-web-eswebapi-uploaduserlogo-page"><p>a function that will be called as many times as necessary to indicate the progress of the
+uploading of the file i.e. to inform the user about the percentage of the bytes that have been uploaded so far</p>
+</div></td></tr></tbody></table><h5 id="methods_uploaduserlogo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-upload">Upload</a></td><td><div class="es-services-web-eswebapi-uploaduserlogo-page"><p>An object of type Upload. For detailed documentation please visit <a href="https://github.com/danialfarid/ng-file-upload">ng-file-upload</a>.</p>
+</div></td></tr></table><h4 id="methods_uploaduserlogo_example">Example</h4>
+<div class="example"><div class="es-services-web-eswebapi-uploaduserlogo-page"><pre><code class="lang-html">&lt;div&gt;
+        &lt;h3&gt;31. uploadUserLogo&lt;/h3&gt;
+        &lt;span&gt;
+            &lt;input type=&quot;file&quot; ngf-select ng-model=&quot;userLogoImage&quot; name=&quot;file&quot; accept=&quot;image/*&quot; required&gt;
+            &lt;button ng-click=&quot;uploadUserLogo()&quot;&gt;Upload Photo&lt;/button&gt;
+        &lt;/span&gt;
+        &lt;div ng-if=&quot;userLogoImage.progress&quot;&gt;
+            &lt;div kendo-progress-bar k-min=&quot;0&quot; k-max=&quot;100&quot; ng-model=&quot;userLogoImage.progress&quot; style=&quot;width: 100%;&quot;&gt;
+&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+</code></pre>
+<pre><code class="lang-js">$scope.uploadUserLogo = function() {
+var progressf = function(evt) {
+    $scope.userLogoImage.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+};
+var errf = function(x) {
+    alert(x);
+}
+esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
 }
 </code></pre>
 </div></div>

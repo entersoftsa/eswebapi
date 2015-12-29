@@ -39,6 +39,7 @@ Instructions on how to install Web Deploy on IIS Manager can be found in
 <li><p>Edit the file _App<em>Data\config.json</em> in order to register the Entersoft Application Server(s) that this WEB API Server will serve. For a single EAS the settings will be as following</p>
 <pre><code class="lang-js">{
 &quot;TokenLifetimeInMinutes&quot;: 100,
+&quot;RefreshTokenIfWithinRemainingPercentage&quot;: 0,
 &quot;AdminPassword&quot;: &quot;4T0WVxO/s4A=&quot;,
 &quot;AllowInsecureHttp&quot;:  true,
 
@@ -78,6 +79,73 @@ Instructions on how to install Web Deploy on IIS Manager can be found in
 </li>
 </ol>
 <p><strong>TokenLifetimeInMinutes</strong> is the number in minutes that the generated token will be valid. After that period of time the token will expire and any subsequent calls using this access token will be denied. It should be greater or equal to 1.</p>
+<p><strong>RefreshTokenIfWithinRemainingPercentage</strong> is the percentage threshold that any call taking place below that threshold a new web api access token will be generated on next api call.
+Default value is 0 which means that during the TokenLifetimeInMinutes duration NO regeneration of token will take place. 100 means that a new token will be generated on every api call with the exception the <em>login</em> and <em>stickySession</em>.</p>
+<p><em>Examples</em>
+-RefreshTokenIfWithinRemainingPercentage = 0 (default)
+Generate refresh tokens in the last 0% of 60 min = 0 min – no refresh tokens</p>
+<p>-RefreshTokenIfWithinRemainingPercentage = 25 
+Generate refresh tokens in the last 25% of 60 min = 15 min</p>
+<p>-RefreshTokenIfWithinRemainingPercentage = 50 
+Generate refresh tokens in the last 50% of 60 min = 30 min</p>
+<p>-RefreshTokenIfWithinRemainingPercentage = 75 
+Generate refresh token in the last 75% of 60 min = 45 min</p>
+<p>-RefreshTokenIfWithinRemainingPercentage = 100
+Generate refresh token in the last 100% of 60 min = 60 min i.e. generate a new token on every api call.</p>
+<p>A good option is a value of 50 or 75. For renewing and contiuous work without any possible interruption then 100 is the recommended value.</p>
+<pre><code class="lang-js">{
+    &quot;TokenLifetimeInMinutes&quot;: 60,
+    &quot;RefreshTokenIfWithinRemainingPercentage&quot;: 100,
+    &quot;AdminPassword&quot;: &quot;4T0WVxO/s4A=&quot;,
+    &quot;AllowInsecureHttp&quot; :  true,
+
+    &quot;Subscriptions&quot;: [
+        {
+            &quot;SubscriptionID&quot;: &quot;&quot;,
+            &quot;SubscriptionPassword&quot;: &quot;CgJHAQYVg+iChKZvXcEKHA==&quot;,
+            &quot;Bridges&quot;: [
+                {
+                    &quot;BridgeID&quot;: &quot;&quot;,
+                    &quot;DatabaseID&quot;: &quot;smedb&quot;,
+                    &quot;CompanyID&quot;: &quot;ES&quot;,
+                    &quot;DefaultUserCredentials&quot;: {
+                        &quot;UserID&quot;: &quot;admin&quot;,
+                        &quot;Password&quot;: &quot;z7qlymQ0lBrXzhrg+d01BMTBi84orE4x&quot;,
+                        &quot;BranchID&quot;: &quot;ΑΘΗ&quot;,
+                        &quot;LangID&quot;: &quot;el-GR&quot;
+                    },
+                    &quot;Services&quot;: [
+                        {
+                            &quot;ServiceID&quot;: &quot;&quot;
+                        }
+                    ],
+                    &quot;ERPServers&quot;: [
+                        {
+                            &quot;Host&quot;: &quot;sme-pc&quot;,
+                            &quot;Port&quot;: 5555
+                        },
+                        {
+                            &quot;Host&quot;: &quot;sme-pc&quot;,
+                            &quot;Port&quot;: 3333
+                        },
+                        {
+                            &quot;Host&quot;: &quot;sme-pc&quot;,
+                            &quot;Port&quot;: 2222
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+</code></pre>
+<p><strong>Load Balancing</strong>
+In the example above, we have registred more than one Entersoft Application Servers to be available as a pool for use by the Entersoft WEB API Server.
+If so, then by a random selection algorithm, every call from the Entersoft WEB API to the Entersoft Application Server will be directed to one of those EASs
+found in the pool. If for some reason, an Application Server that comes from the pool fails to respond, Entersoft WEB API Server marks it for NOT Use and directs both the current and the subsequent calls to any of the other EASs available in the pool.</p>
+<p>If for some reason or some kind of applications, a web api client needs to interact with a specific instance of the EAS that initially served its login 
+process then the client has to use the <strong>stickySession</strong> function of webapi rather than the login. After the initial call to stickysession in order get access
+to the appi server, all subsequent calls will be directed to the specific session that was selected from the pool to serve the stickySession.</p>
 <p><strong>AdminPassword</strong></p>
 <p><strong>AllowInsecureHttp</strong> if set to true, this instance of the EWAPIS will respond to calls through plain HTTP, otherwise HTTPS (secure HTTP) will be required and no calls (except one that queries the EWAPIS for its capabilities) will be accepted unless they are under https. If in a production environment the use of HTTPS is strongly recommended because sensitive information could be travelling between the client and the server. In order to deploy an HTTPS solution you will need a valid certificate to be installed on the IIS Server, issued by one of the valid and trusted security authorities (VeriSign, GoDaddy, etc.). In case that for any reason you want to bypass the HTTPS requirement, it is strongly recommended to go for alternative solutions in order to secure the communication between the client and the EWAPIS such as VPN, IP security firewalls, etc., assuming that we are referring to intranet applications – clients that are well known to the system and the access can be controlled.</p>
 <p>An instance of EWAPIS can serve one or more EAS either of the same Tax Accounting Entity or of different entities (multi-tenant mode). Each EAS should be registered in the config.json file. For this registration we encounter the following concepts / nodes:</p>
