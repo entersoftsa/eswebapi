@@ -2,7 +2,15 @@
 
 /* Controllers */
 
-var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap']);
+var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap', 'uiGmapgoogle-maps']);
+
+smeControllers.config(['uiGmapGoogleMapApiProvider', function(GoogleMapApi) {
+    GoogleMapApi.configure({
+        //    key: 'your api key',
+        // v: '3.20',
+        libraries: 'weather,geometry,visualization'
+    });
+}]);
 
 smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
     function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
@@ -205,8 +213,8 @@ smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'esW
     }
 ]);
 
-smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache',
-    function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache) {
+smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
+    function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
 
         $scope.pGroup = "ESMMStockItem";
         $scope.pFilter = "ESMMStockItem_def";
@@ -364,6 +372,81 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                     $scope.pUserSites = err;
                 });
         }
+
+        $scope.GPSPosition = null;
+        $scope.myMarkers = [];
+        $scope.map = {};
+        $scope.getMyPosition = function() {
+            $scope.GPSPosition = null;
+            esGeoLocationSrv.getCurrentPosition()
+                .then(function(x) {
+                    $scope.GPSPosition = x;
+                    var vPos = {
+                        latitude: x.coords.latitude,
+                        longitude: x.coords.longitude
+                    };
+
+                    $scope.myMarkers = [{
+                        id: "abcd-00",
+                        gps: vPos,
+                        templ: 'gmapwindow.html',
+                        title: "Hello " + new Date(),
+                        obj: {
+                        	message: "Hi from stavros"
+                        },
+                    }];
+
+                    $scope.mapOptions.center = vPos;
+
+                }, function(err) {
+                    alert(err.message + " - " + err.code);
+                });
+        }
+
+        $scope.resetpos = function() {
+            esWebApi.fetchPublicQuery("ESCMS", "View_ES00GPSLog")
+            .then(function(ret) {
+            	$scope.myMarkers = _.map(ret.data.Rows, function(r) {
+            		return {
+            			id: r.GID,
+            			longitude: r.Longitude,
+            			latitude: r.Latitude,
+            			esTempl: 'gmapwindow.html',
+            			esObj: r
+            		};
+            	});
+            });
+        }
+
+
+        GoogleMapApi.then(function(maps) {
+            $log.info("Google maps ver = " + maps.version);
+            $scope.mapOptions = {
+                center: {
+                    latitude: 35.784,
+                    longitude: -78.670
+                },
+                zoom: 15,
+                mapTypeId: maps.MapTypeId.ROADMAP
+            };
+            maps.visualRefresh = true;
+        });
+
+        $scope.inp = {};
+        $scope.inp.templatedInfoWindow = {
+            coords: {
+                latitude: 35.784,
+                longitude: -78.670
+            },
+            options: {
+                disableAutoPan: true
+            },
+            show: true,
+            templateUrl: 'gmapwindow.html',
+            templateParameter: {
+                message: 'STAVROS JUST passed in from the opener'
+            }
+        };
 
         $scope.multifetchStdZoom = function() {
             var zoomOptions = new esGlobals.ESPQOptions(300, 5, false);
@@ -683,7 +766,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         }
 
         $scope.removeCurrentUserLogo = function() {
-        	esWebApi.removeCurrentUserLogo();
+            esWebApi.removeCurrentUserLogo();
         }
 
         $scope.uploadUserLogo = function() {
@@ -706,26 +789,27 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         }
 
         $scope.fetchPersonlogo = function() {
-        	esWebApi.fetchPersonLogo($scope.PersonGID)
-        		.then(function(x) {
-        			$scope.personPhoto = x.data;
-        		});
+            esWebApi.fetchPersonLogo($scope.PersonGID)
+                .then(function(x) {
+                    $scope.personPhoto = x.data;
+                });
         }
 
         $scope.serviceObj = {
-        	netAssembly: "esbotestapiservice",
-        	netNamespace: "esbotestapiservice/Generic",
-        	netClass: "ESWebApiCustomService",
-        	netMethod: ""
+            netAssembly: "esbotestapiservice",
+            netNamespace: "esbotestapiservice/Generic",
+            netClass: "ESWebApiCustomService",
+            netIsBinaryResult: false,
+            netMethod: ""
         }
 
         $scope.execEbsService = function() {
-        	esWebApi.ebsService($scope.serviceObj, $scope.netParam)
-        	.then(function(ret) {
-        		$scope.ebsret = ret.data;
-        	}, function(err) {
-        		$scope.ebsret = JSON.stringify(err);
-        	});
+            esWebApi.ebsService($scope.serviceObj, $scope.netParam)
+                .then(function(ret) {
+                    $scope.ebsret = ret.data;
+                }, function(err) {
+                    $scope.ebsret = JSON.stringify(err);
+                });
         }
 
     }

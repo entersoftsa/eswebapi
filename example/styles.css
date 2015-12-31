@@ -16,16 +16,15 @@
 }
 
 .yyy {
-	display: flex;
-	flex-wrap: wrap;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .item {
-	flex: 0 0 auto;
-  margin: 20px;
+    flex: 0 0 auto;
+    margin: 20px;
 }
-
 
 input.es-param-control,
 .es-param-control.k-dropdown {
@@ -37,11 +36,17 @@ input.es-param-control,
 }
 
 .es-param-label {
-	text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
+
 
 /* Make all the column headers centered */
 
 .es-table-header-cell {
     text-align: center !important;
+}
+
+.angular-google-map-container {
+    width: 100%;
+    height: 600px;
 }

@@ -353,6 +353,40 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         return service;
     });
 
+    /**
+     * @ngdoc service
+     * @name es.Services.Web.esGeoLocationSrv
+     * @requires $q
+     * @requires $window
+     * @kind factory
+     * @description
+     * esGeoLocationSrv is a factory service that provides Html5 geolocation services to the API developer.
+     */
+    esWebFramework.factory('esGeoLocationSrv', ['$q', '$window', function($q, $window) {
+        'use strict';
+        function getCurrentPosition() {
+            var deferred = $q.defer();
+
+            if (!$window.navigator.geolocation) {
+                deferred.reject('Geolocation not supported.');
+            } else {
+                $window.navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        deferred.resolve(position);
+                    },
+                    function(err) {
+                        deferred.reject(err);
+                    });
+            }
+
+            return deferred.promise;
+        }
+
+        return {
+            getCurrentPosition: getCurrentPosition
+        };
+    }]);
+
 
     /**
      * @ngdoc service
@@ -381,8 +415,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return '';
                 }
 
-                if (id.slice(0, 'gid'.length) != 'gid')
-                {
+                if (id.slice(0, 'gid'.length) != 'gid') {
                     return id;
                 }
                 return id.slice(3).replace(/_/g, '-');
@@ -559,14 +592,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 connectionModel: null,
 
                 setWebApiToken: function(newToken, reqUrl) {
-                     if (esClientSession.connectionModel && newToken && angular.isString(newToken)) {
+                    if (esClientSession.connectionModel && newToken && angular.isString(newToken)) {
                         if (newToken !== esClientSession.connectionModel.WebApiToken) {
                             esClientSession.connectionModel.WebApiToken = newToken;
                             $log.warn("Changing wep api token for [" + reqUrl + "]");
                         } else {
                             $log.warn("[" + reqUrl + "] => For some strange reason I have been ordered to store a new web api token but the new one is the same to the old");
                         }
-                     }
+                    }
                 },
 
                 getWebApiToken: function() {
@@ -817,7 +850,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                  */
                 ESPQOptions: ESPQOptions,
 
-                
+
                 sessionClosed: function() {
                     esClientSession.setModel(null);
                     try {

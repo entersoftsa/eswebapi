@@ -353,7 +353,7 @@
     <div>
         <h3>31. uploadUserLogo</h3>
         <span>
-            <input type="file" ngf-select ng-model="userLogoImage" name="file" accept="*/*" required>
+            <input type="file" ngf-select ng-model="userLogoImage" name="file" accept="image/*;capture=camera" required>
             <button ng-click="uploadUserLogo()">Upload Photo</button>
         </span>
         <div class="row es-survey-progress">
@@ -393,9 +393,48 @@
             <input type="text" ng-model="serviceObj.netClass" placeholder=".NET Class"/>
             <input type="text" ng-model="serviceObj.netMethod" placeholder=".NET Method"/>
             <input type="text" ng-model="netParam" placeholder="POCO Object in string format"/>
+            <label>Binary Result: 
+                <input type="checkbox" ng-model="serviceObj.netIsBinaryResult">
+            </label>
 
             <button ng-click="execEbsService()">Execute EBS Service</button>
         </span>
         <textarea>{{ebsret}}</textarea>
+    </div>
+    <hr/>
+    <div>
+        <h3>35. esGPSLocation</h3>
+        <button ng-click="getMyPosition()">Where am I?</button>
+        <button ng-click="resetpos()">Reset me Please</button>
+        <div class="row">
+            <ui-gmap-google-map
+                center="mapOptions.center"
+                zoom="mapOptions.zoom"
+                control="map"
+                pan="true">
+
+                <ui-gmap-window 
+                    show="inp.templatedInfoWindow.show" 
+                    coords="inp.templatedInfoWindow.coords"
+                    options="inp.templatedInfoWindow.options"
+                    templateUrl="inp.templatedInfoWindow.templateUrl"
+                    templateParameter="inp.templatedInfoWindow.templateParameter" ng-cloak>
+                </ui-gmap-window>
+
+                <ui-gmap-markers models="myMarkers" coords="'self'" click="clackMarker" >
+                    <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" templateUrl="'esTempl'" templateParameter="'esObj'" ng-cloak>
+                        <!-- <div>
+                            <h4 ng-non-bindable>{{ title }}</h4>
+                            <p>Dynamic Marker created via a delay!</p>
+                            <p ng-non-bindable>This is an info window at {{ gps.latitude | number:4 }}, {{ gps.longitude | number:4 }}!</p>
+                            <p class="muted">My marker will stay open when the window is popped up!</p>
+                        </div> -->
+                    </ui-gmap-windows>
+
+                </ui-gmap-markers>
+
+            </ui-gmap-google-map>
+        </div>
+
     </div>
 </div>

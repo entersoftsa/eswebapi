@@ -51,6 +51,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "es.Services.Web.esGeoLocationSrv",
+      "shortName": "es.Services.Web.esGeoLocationSrv",
+      "type": "service",
+      "moduleName": "es.Services.Web",
+      "shortDescription": "esGeoLocationSrv is a factory service that provides Html5 geolocation services to the API developer.",
+      "keywords": "$q $window api developer es esgeolocationsrv factory geolocation html5 service services web"
+    },
+    {
+      "section": "api",
       "id": "es.Services.Web.esGlobals",
       "shortName": "es.Services.Web.esGlobals",
       "type": "service",
