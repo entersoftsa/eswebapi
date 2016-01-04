@@ -736,7 +736,7 @@
                 },
                 esObj: r
             };
-            
+
             ix += 1;
             return s;
         });
@@ -938,25 +938,43 @@
                 restrict: 'AE',
                 replace: true,
                 scope: {
+                    esMarkers: "=",
                     esRows: "=",
                     esPqInfo: "=",
                     esShowWindow: "=",
+                    esTypeOptions: "=",
+                    esType: "=",
                     esClick: "&",
                 },
                 template: '<div ng-include src="\'src/partials/esMap.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
-                    $scope.$watch("esRows", function(newData) {
-                        $scope.esInfoWindowOptions = {
-                            disableAutoPan: true
-                        };
-                        $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
-                        $scope.clusterOptions = {
-                            "title": "sme says Hi I am a Cluster!",
-                            "gridSize": 60,
-                            "ignoreHidden": true,
-                            "minimumClusterSize": 2
+
+                    if (iAttrs.esMarkers && iAttrs.esRows) {
+                        throw new Error("Only one of the esMarkers or esRows must be specified, not both");
+                    }
+
+                    if (!$scope.esType) {
+                        $scope.esType = 'standard';
+                    }
+
+                    if (!$scope.esTypeOptions) {
+                        $scope.esTypeOptions = {
+                            title: "cluster",
+                            gridSize: 60,
+                            ignoreHidden: true,
+                            minimumClusterSize: 2
                         }
-                    });
+                    }
+
+                    $scope.esInfoWindowOptions = {
+                        disableAutoPan: true
+                    };
+
+                    if (iAttrs.esRows) {
+                        $scope.$watch("esRows", function(newData) {
+                            $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
+                        });
+                    }
                 }
             };
         }

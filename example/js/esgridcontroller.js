@@ -377,6 +377,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         $scope.myMarkers = [];
         $scope.myDS = [];
         $scope.map = {};
+        $scope.clusterType = 'cluster';
         $scope.getMyPosition = function() {
             $scope.GPSPosition = null;
             esGeoLocationSrv.getCurrentPosition()

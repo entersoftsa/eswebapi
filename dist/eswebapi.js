@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.6.0 - 2016-01-03
+/*! Entersoft Application Server WEB API - v1.6.0 - 2016-01-04
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8146,7 +8146,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 },
                 esObj: r
             };
-            
+
             ix += 1;
             return s;
         });
@@ -8348,25 +8348,43 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 restrict: 'AE',
                 replace: true,
                 scope: {
+                    esMarkers: "=",
                     esRows: "=",
                     esPqInfo: "=",
                     esShowWindow: "=",
+                    esTypeOptions: "=",
+                    esType: "=",
                     esClick: "&",
                 },
                 template: '<div ng-include src="\'src/partials/esMap.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
-                    $scope.$watch("esRows", function(newData) {
-                        $scope.esInfoWindowOptions = {
-                            disableAutoPan: true
-                        };
-                        $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
-                        $scope.clusterOptions = {
-                            "title": "sme says Hi I am a Cluster!",
-                            "gridSize": 60,
-                            "ignoreHidden": true,
-                            "minimumClusterSize": 2
+
+                    if (iAttrs.esMarkers && iAttrs.esRows) {
+                        throw new Error("Only one of the esMarkers or esRows must be specified, not both");
+                    }
+
+                    if (!$scope.esType) {
+                        $scope.esType = 'standard';
+                    }
+
+                    if (!$scope.esTypeOptions) {
+                        $scope.esTypeOptions = {
+                            title: "cluster",
+                            gridSize: 60,
+                            ignoreHidden: true,
+                            minimumClusterSize: 2
                         }
-                    });
+                    }
+
+                    $scope.esInfoWindowOptions = {
+                        disableAutoPan: true
+                    };
+
+                    if (iAttrs.esRows) {
+                        $scope.$watch("esRows", function(newData) {
+                            $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
+                        });
+                    }
                 }
             };
         }

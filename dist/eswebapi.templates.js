@@ -12,7 +12,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esMap.html',
-    "<ui-gmap-markers models=esMarkers coords=\"'self'\" click=esClick() options=\"'esOptions'\" fit=\"'true'\" dorebuildall=true type=\"'cluster'\" typeoptions=\"{&quot;title&quot;:&quot;hello Hi I am a Cluster!&quot;,gridSize: 60,&quot;ignoreHidden&quot;:true,&quot;minimumClusterSize&quot;:2}\" modelsbyref=true><ui-gmap-windows ng-if=esShowWindow show=\"'showWindow'\" dorebuildall=true templateurl=\"'esTempl'\" options=\"'esInfoWindowOptions'\" templateparameter=\"'esObj'\" ng-cloak></ui-gmap-windows></ui-gmap-markers>"
+    "<ui-gmap-markers models=esMarkers coords=\"'self'\" click=esClick() options=\"'esOptions'\" fit=\"'true'\" dorebuildall=true type=esType typeoptions=esTypeOptions modelsbyref=true><ui-gmap-windows ng-if=esShowWindow show=\"'showWindow'\" dorebuildall=true templateurl=\"'esTempl'\" options=\"'esInfoWindowOptions'\" templateparameter=\"'esObj'\" ng-cloak></ui-gmap-windows></ui-gmap-markers>"
   );
 
 
