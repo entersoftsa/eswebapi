@@ -2,6 +2,9 @@
 
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
+**Version 1.6.1 next**
+- googlemaps
+
 **Version 1.6.0 Requires ES WEB API 1.8.3 or later**
 - stickySession
 - fetchUserLogo
