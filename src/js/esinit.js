@@ -450,9 +450,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             function ESPQOptions(page, pageSize, withCount) {
-                this.Page = page;
-                this.PageSize = pageSize;
-                this.WithCount = withCount;
+                this.Page = page || -1;
+                this.PageSize = pageSize || -1;
+                this.WithCount = !!withCount;
             }
 
             function fgetGA() {

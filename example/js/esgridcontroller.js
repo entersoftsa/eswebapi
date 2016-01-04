@@ -1038,7 +1038,14 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
         $scope.myMarkers = [];
         $scope.myDS = [];
         $scope.map = {};
-        $scope.pqInfo = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog");
+        $scope.mapOptions = {
+            center: {
+                longitude: 0,
+                latitude: 0
+            },
+            zoom: 15,
+        };
+        $scope.pqInfo = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esWebUIHelper.ESParamValues());
 
         $scope.getMyPosition = function() {
             $scope.GPSPosition = null;
@@ -1073,8 +1080,6 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
                 });
         }
 
-        $scope.getMyPosition();
-
         $scope.resetpos = function() {
             esWebApi.fetchPublicQuery($scope.pqInfo)
                 .then(function(ret) {
@@ -1086,23 +1091,18 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
                 });
         }
 
-        $scope.myMarkerClick = function(marker, b, c) {
-            alert("Hi Marker ");
+        $scope.runPQ = function() {
+            esWebApi.fetchPublicQuery($scope.pqInfo)
+                .then(function(ret) {
+                    $scope.myDS = ret.data.Rows;
+                });
         }
 
 
         GoogleMapApi.then(function(maps) {
             $log.info("Google maps ver = " + maps.version);
-            $scope.mapOptions = {
-                center: {
-                    latitude: 35.784,
-                    longitude: -78.670
-                },
-                zoom: 15,
-                mapTypeId: maps.MapTypeId.ROADMAP
-            };
+            $scope.getMyPosition();
             maps.visualRefresh = true;
         });
     }
 ]);
-

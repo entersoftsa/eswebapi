@@ -6692,9 +6692,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             function ESPQOptions(page, pageSize, withCount) {
-                this.Page = page;
-                this.PageSize = pageSize;
-                this.WithCount = withCount;
+                this.Page = page || -1;
+                this.PageSize = pageSize || -1;
+                this.WithCount = !!withCount;
             }
 
             function fgetGA() {
@@ -8385,15 +8385,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         }
                     }
 
-                        $scope.esInfoWindowOptions = {
-                            disableAutoPan: true
-                        };
+                    $scope.esInfoWindowOptions = {
+                        disableAutoPan: true
+                    };
 
                     if (iAttrs.esRows) {
                         $scope.$watch("esRows", function(newData) {
-                        $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
+                            $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
                         });
-                        }
+                    }
                 }
             };
         }
@@ -8954,6 +8954,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esParamsValues: '=',
                     esGroupId: "=",
                     esFilterId: "=",
+                    esRunClick: "&"
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
@@ -8966,6 +8967,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 throw new Error("You must set either the es-params-def or es-pq-info or the pair es-group-id and es-filter-id attrs");
                             }
                         }
+                    }
+
+                    if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef && !iAttrs.esParamsValues) {
+                        $scope.esParamsValues = $scope.esGroupId.Params;
                     }
 
                     if (!iAttrs.esParamsDef) {
@@ -9298,7 +9303,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             function winColToESCol(xGroupID, xFilterID, gridexInfo, jCol) {
                 var inFilterID;
                 var inGroupID;
-                
+
                 if (angular.isObject(xGroupID)) {
                     inGroupID = xGroupID.GroupID;
                     inFilterID = xGroupID.FilterID;

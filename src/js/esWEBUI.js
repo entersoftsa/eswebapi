@@ -966,15 +966,15 @@
                         }
                     }
 
-                        $scope.esInfoWindowOptions = {
-                            disableAutoPan: true
-                        };
+                    $scope.esInfoWindowOptions = {
+                        disableAutoPan: true
+                    };
 
                     if (iAttrs.esRows) {
                         $scope.$watch("esRows", function(newData) {
-                        $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
+                            $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
                         });
-                        }
+                    }
                 }
             };
         }
@@ -1535,6 +1535,7 @@
                     esParamsValues: '=',
                     esGroupId: "=",
                     esFilterId: "=",
+                    esRunClick: "&"
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
@@ -1547,6 +1548,10 @@
                                 throw new Error("You must set either the es-params-def or es-pq-info or the pair es-group-id and es-filter-id attrs");
                             }
                         }
+                    }
+
+                    if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef && !iAttrs.esParamsValues) {
+                        $scope.esParamsValues = $scope.esGroupId.Params;
                     }
 
                     if (!iAttrs.esParamsDef) {
@@ -1879,7 +1884,7 @@
             function winColToESCol(xGroupID, xFilterID, gridexInfo, jCol) {
                 var inFilterID;
                 var inGroupID;
-                
+
                 if (angular.isObject(xGroupID)) {
                     inGroupID = xGroupID.GroupID;
                     inFilterID = xGroupID.FilterID;
