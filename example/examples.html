@@ -406,6 +406,7 @@
         <h3>35. esGPSLocation</h3>
         <button ng-click="getMyPosition()">Where am I?</button>
         <button ng-click="resetpos()">Reset me Please</button>
+        <input type="text" ng-model="clusterType" placeholder="cluster type (standard, cluster, spider)"
         <div class="row">
             <ui-gmap-google-map
                 center="mapOptions.center"
@@ -413,7 +414,7 @@
                 control="map"
                 pan="true">
 
-                <es-map es-rows="myDS" es-pq-info="myPQInfo" es-show-window="true" type es-click="myMarkerClick">
+                <es-map es-rows="myDS" es-pq-info="myPQInfo" xes-markers="myMarkers" es-type="clusterType" es-show-window="true" type es-click="myMarkerClick">
                 </es-map>
 
             </ui-gmap-google-map>
