@@ -1,6 +1,15 @@
 <div style="white-space:nowrap" ng-cloak>
-    <h4>{{ parameter.message }}</h4>
-    <p>Dynamic Marker created via a delay!</p>
-    <p ng-non-bindable>This is an info window at {{ gps.latitude | number:4 }}, {{ gps.longitude | number:4 }}!</p>
-    <p class="muted">My marker will stay open when the window is popped up!</p>
+    
+    <div class="row">
+    	<h4 class="col-xs-12"> {{parameter.esTitle}}</h4>
+    </div>
+    <hr/>
+    <form novalidate class="form">
+            <div class="row">
+                <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="(key, value) in parameter">
+                    <label class="control-label">{{::key}}</label>
+                    <input class="form-control" ng-readonly="true" value="{{::value}}"></input>
+                </div>
+            </div>
+        </form>
 </div>

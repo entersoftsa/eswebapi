@@ -11,6 +11,11 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('src/partials/esMap.html',
+    "<ui-gmap-markers models=esMarkers coords=\"'self'\" click=esClick() options=\"'esOptions'\" fit=\"'true'\" dorebuildall=true type=\"'cluster'\" typeoptions=\"{&quot;title&quot;:&quot;hello Hi I am a Cluster!&quot;,gridSize: 60,&quot;ignoreHidden&quot;:true,&quot;minimumClusterSize&quot;:2}\" modelsbyref=true><ui-gmap-windows ng-if=esShowWindow show=\"'showWindow'\" dorebuildall=true templateurl=\"'esTempl'\" options=\"'esInfoWindowOptions'\" templateparameter=\"'esObj'\" ng-cloak></ui-gmap-windows></ui-gmap-markers>"
+  );
+
+
   $templateCache.put('src/partials/esParamAdvancedNumeric.html',
     "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><div class=row><div class=\"col-xs-12 col-md-4\"><select class=\"form-control es-param-control\" kendo-drop-down-list ng-cloak k-ng-delay=esParamDef k-data-text-field=\"'caption'\" k-data-value-field=\"'value'\" k-auto-bind=true k-data-source=esWebUIHelper.getesComplexParamFunctionOptions() k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.oper></select></div><div class=col-xs-12 ng-class=\"{'col-md-8': esParamVal[esParamDef.id].paramValue.oper != 'RANGE', 'col-md-4': esParamVal[esParamDef.id].paramValue.oper == 'RANGE'}\"><input type=number class=es-param-control kendo-numeric-text-box align=right k-ng-model=esParamVal[esParamDef.id].paramValue.value k-spinners=false k-decimals=esParamDef.precision k-format=\"'n'+'{{::esParamDef.precision}}'\"></div><div class=\"col-xs-12 col-md-4\" ng-hide=\"esParamVal[esParamDef.id].paramValue.oper != 'RANGE'\"><input class=es-param-control kendo-numeric-text-box align=right k-ng-model=esParamVal[esParamDef.id].paramValue.valueTo k-spinners=false k-decimals=esParamDef.precision k-format=\"'n'+'{{::esParamDef.precision}}'\"></div></div>"
   );

@@ -375,6 +375,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
         $scope.GPSPosition = null;
         $scope.myMarkers = [];
+        $scope.myDS = [];
         $scope.map = {};
         $scope.getMyPosition = function() {
             $scope.GPSPosition = null;
@@ -388,10 +389,16 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
                     $scope.myMarkers = [{
                         id: "abcd-00",
-                        gps: vPos,
-                        templ: 'gmapwindow.html',
-                        title: "Hello " + new Date(),
-                        obj: {
+                        longitude: vPos.longitude,
+                        latitude: vPos.latitude,
+                        esTempl: 'gmapwindow.html',
+                        options: {
+                        	title: "Hello " + new Date(),
+                        	label: "Label "+ new Date(),
+                        	icon: "abcd.png"
+                        },
+
+                        esObj: {
                         	message: "Hi from stavros"
                         },
                     }];
@@ -406,16 +413,16 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
         $scope.resetpos = function() {
             esWebApi.fetchPublicQuery("ESCMS", "View_ES00GPSLog")
             .then(function(ret) {
-            	$scope.myMarkers = _.map(ret.data.Rows, function(r) {
-            		return {
-            			id: r.GID,
-            			longitude: r.Longitude,
-            			latitude: r.Latitude,
-            			esTempl: 'gmapwindow.html',
-            			esObj: r
-            		};
-            	});
+            	$scope.myDS = ret.data.Rows;
+            	esWebApi.fetchPublicQueryInfo("ESCMS", "View_ES00GPSLog")
+            	.then(function(f) {
+            		$scope.myPQInfo = esWebUIHelper.winGridInfoToESGridInfo("ESCMS", "View_ES00GPSLog", f.data);
+            	})
             });
+        }
+
+        $scope.myMarkerClick = function(marker, b, c) {
+        	alert("Hi Marker ");
         }
 
 
@@ -432,21 +439,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
             maps.visualRefresh = true;
         });
 
-        $scope.inp = {};
-        $scope.inp.templatedInfoWindow = {
-            coords: {
-                latitude: 35.784,
-                longitude: -78.670
-            },
-            options: {
-                disableAutoPan: true
-            },
-            show: true,
-            templateUrl: 'gmapwindow.html',
-            templateParameter: {
-                message: 'STAVROS JUST passed in from the opener'
-            }
-        };
+        
 
         $scope.multifetchStdZoom = function() {
             var zoomOptions = new esGlobals.ESPQOptions(300, 5, false);

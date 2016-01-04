@@ -713,6 +713,40 @@
         }
     }
 
+    function convertPQRowsToMapRows(rows, click) {
+        if (!rows) {
+            return rows;
+        }
+
+        if (angular.isArray(rows) && rows.length == 0) {
+            return rows;
+        }
+
+        var ix = 1;
+        var ts = _.map(rows, function(r) {
+            var s = {
+                id: ix,
+                longitude: r.Longitude || r.longitude,
+                latitude: r.Latitude || r.latitude,
+                esTempl: r.esTempl,
+                esOptions: {
+                    title: r.esTitle,
+                    label: r.esLabel,
+                    icon: r.esIcon
+                },
+                esObj: r
+            };
+            
+            ix += 1;
+            return s;
+        });
+
+        return _.filter(ts, function(x) {
+            return x.longitude != 0 && x.latitude != 0;
+        });
+    };
+
+
     /**
      * @ngdoc filter
      * @name es.Web.UI.filter:esTrustHtml
@@ -888,6 +922,41 @@
                             ChoiceCode: $scope.esQuestion.PArg
                         }), "OrderPriority");
                     }
+                }
+            };
+        }
+    ])
+
+    .filter('esPQDSToesMapDS', function() {
+
+        return convertPQRowsToMapRows;
+    })
+
+    .directive('esMap', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+            return {
+                restrict: 'AE',
+                replace: true,
+                scope: {
+                    esRows: "=",
+                    esPqInfo: "=",
+                    esShowWindow: "=",
+                    esClick: "&",
+                },
+                template: '<div ng-include src="\'src/partials/esMap.html\'"></div>',
+                link: function($scope, iElement, iAttrs) {
+                    $scope.$watch("esRows", function(newData) {
+                        $scope.esInfoWindowOptions = {
+                            disableAutoPan: true
+                        };
+                        $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
+                        $scope.clusterOptions = {
+                            "title": "sme says Hi I am a Cluster!",
+                            "gridSize": 60,
+                            "ignoreHidden": true,
+                            "minimumClusterSize": 2
+                        }
+                    });
                 }
             };
         }

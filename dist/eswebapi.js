@@ -1,5 +1,5 @@
-/*! Entersoft Application Server WEB API - v1.6.0 - 2015-12-30
-* Copyright (c) 2015 Entersoft SA; Licensed Apache-2.0 */
+/*! Entersoft Application Server WEB API - v1.6.0 - 2016-01-03
+* Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
  * http://www.entersoft.eu
@@ -753,6 +753,8 @@ $scope.eventLog = function() {
                             * the namespace will be _esbotestapiservice/Generic_
                             * @param {string} serviceObj.netClass The .NET class that holds the service method i.e. __ESWebApiCustomService__
                             * @param {string} serviceObj.netMethod The .NET method of the class that will be executed i.e. Identity2
+                            * @param {boolean=} serviceObj.netIsBinaryResult Indicates whether the expected result is a byt array i.e. binary. By default this parameter is false. 
+                            * When calling a service that returns a byte array the set this parameter to true and the ret.data response will contain an Angular arrayBuffer.
                             * @param {object|string|number|date|*} paramObject the object that will be passed as parameter to the method call. It should be compatible and
                             * consistent to what the service method expects in the .NET space. In case that .NET method expects a POCO class or struct as the type of the 
                             * function's argument you can pass a javascript POCO class with respect to property names and types
@@ -789,6 +791,11 @@ namespace esbotestapiservice.Generic
             public int[] IntArray { get; set; }
         }
 
+        [EbsService]
+        public static byte[] SanRebel(ESSession session, string Message)
+        {
+            return Enumerable.Range(64, 90).Select(i => (byte)i).ToArray();
+        }
 
         [EbsService]
         public static Identity2Payload Identity2(ESSession session, Identity2Payload payload)
@@ -1043,6 +1050,7 @@ $scope.serviceObj = {
     netAssembly: "esbotestapiservice",
     netNamespace: "esbotestapiservice/Generic",
     netClass: "ESWebApiCustomService",
+    netIsBinaryResult: false,
     netMethod: ""
 }
 
@@ -1066,13 +1074,15 @@ $scope.execEbsService = function() {
             <input type="text" ng-model="serviceObj.netClass" placeholder=".NET Class"/>
             <input type="text" ng-model="serviceObj.netMethod" placeholder=".NET Method"/>
             <input type="text" ng-model="netParam" placeholder="POCO Object in string format"/>
+            <label>Binary Result: 
+                <input type="checkbox" ng-model="serviceObj.netIsBinaryResult">
+            </label>
 
             <button ng-click="execEbsService()">Execute EBS Service</button>
         </span>
         <textarea>{{ebsret}}</textarea>
     </div>
 ```
-
                             **/
                             ebsService: function(serviceObj, paramObject) {
                                 if (!serviceObj || !serviceObj.netAssembly || !serviceObj.netNamespace || !serviceObj.netClass || !serviceObj.netMethod) {
@@ -8113,6 +8123,40 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     }
 
+    function convertPQRowsToMapRows(rows, click) {
+        if (!rows) {
+            return rows;
+        }
+
+        if (angular.isArray(rows) && rows.length == 0) {
+            return rows;
+        }
+
+        var ix = 1;
+        var ts = _.map(rows, function(r) {
+            var s = {
+                id: ix,
+                longitude: r.Longitude || r.longitude,
+                latitude: r.Latitude || r.latitude,
+                esTempl: r.esTempl,
+                esOptions: {
+                    title: r.esTitle,
+                    label: r.esLabel,
+                    icon: r.esIcon
+                },
+                esObj: r
+            };
+            
+            ix += 1;
+            return s;
+        });
+
+        return _.filter(ts, function(x) {
+            return x.longitude != 0 && x.latitude != 0;
+        });
+    };
+
+
     /**
      * @ngdoc filter
      * @name es.Web.UI.filter:esTrustHtml
@@ -8288,6 +8332,41 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             ChoiceCode: $scope.esQuestion.PArg
                         }), "OrderPriority");
                     }
+                }
+            };
+        }
+    ])
+
+    .filter('esPQDSToesMapDS', function() {
+
+        return convertPQRowsToMapRows;
+    })
+
+    .directive('esMap', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+            return {
+                restrict: 'AE',
+                replace: true,
+                scope: {
+                    esRows: "=",
+                    esPqInfo: "=",
+                    esShowWindow: "=",
+                    esClick: "&",
+                },
+                template: '<div ng-include src="\'src/partials/esMap.html\'"></div>',
+                link: function($scope, iElement, iAttrs) {
+                    $scope.$watch("esRows", function(newData) {
+                        $scope.esInfoWindowOptions = {
+                            disableAutoPan: true
+                        };
+                        $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
+                        $scope.clusterOptions = {
+                            "title": "sme says Hi I am a Cluster!",
+                            "gridSize": 60,
+                            "ignoreHidden": true,
+                            "minimumClusterSize": 2
+                        }
+                    });
                 }
             };
         }

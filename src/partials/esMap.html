@@ -1,0 +1,13 @@
+<ui-gmap-markers 
+    models="esMarkers" 
+    coords="'self'" 
+    click="esClick()" 
+    options="'esOptions'" 
+    fit="'true'" 
+    doRebuildAll="true" 
+    type="'cluster'" 
+    typeOptions='{"title":"hello Hi I am a Cluster!",gridSize: 60,"ignoreHidden":true,"minimumClusterSize":2}' 
+    modelsbyref="true">
+        <ui-gmap-windows ng-if="esShowWindow" show="'showWindow'" doRebuildAll="true" templateUrl="'esTempl'" options="'esInfoWindowOptions'" templateParameter="'esObj'" ng-cloak>
+        </ui-gmap-windows>
+</ui-gmap-markers>

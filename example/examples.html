@@ -413,25 +413,8 @@
                 control="map"
                 pan="true">
 
-                <ui-gmap-window 
-                    show="inp.templatedInfoWindow.show" 
-                    coords="inp.templatedInfoWindow.coords"
-                    options="inp.templatedInfoWindow.options"
-                    templateUrl="inp.templatedInfoWindow.templateUrl"
-                    templateParameter="inp.templatedInfoWindow.templateParameter" ng-cloak>
-                </ui-gmap-window>
-
-                <ui-gmap-markers models="myMarkers" coords="'self'" click="clackMarker" >
-                    <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" templateUrl="'esTempl'" templateParameter="'esObj'" ng-cloak>
-                        <!-- <div>
-                            <h4 ng-non-bindable>{{ title }}</h4>
-                            <p>Dynamic Marker created via a delay!</p>
-                            <p ng-non-bindable>This is an info window at {{ gps.latitude | number:4 }}, {{ gps.longitude | number:4 }}!</p>
-                            <p class="muted">My marker will stay open when the window is popped up!</p>
-                        </div> -->
-                    </ui-gmap-windows>
-
-                </ui-gmap-markers>
+                <es-map es-rows="myDS" es-pq-info="myPQInfo" es-show-window="true" type es-click="myMarkerClick">
+                </es-map>
 
             </ui-gmap-google-map>
         </div>
