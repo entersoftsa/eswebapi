@@ -2663,8 +2663,8 @@ $scope.fetchUserSites = function()
                              * @description Function that returns the Entersoft Janus based GridExLayout as a JSON object.
                              * @module es.Services.Web
                              * @kind function
-                             * @param {string} GroupID Entersoft Public Query GroupID
-                             * @param {string} FilterID Entersoft Public Query FilterID
+                             * @param {string|ESPublicQueryDef} pqGroupID if string then Entersoft Public Query GroupID or a {@link es.Services.Web.esGlobals#methods_ESPublicQueryDef ESPublicQueryDef} object that defines the rest of the parameters
+                             * @param {string} pqFilterID Entersoft Public Query FilterID. In case that pqGroupID is ESPublicQueryDef type then this parameter can be null or undefined
                              * @param {boolean} useCache If true, then the results of the fetchPublicQueryInfo will be cached by the framework for any
                              * subsequent calls.
                              * @return {httpPromise} Returns a promise. 
@@ -3241,8 +3241,17 @@ function($scope, esWebApi, esWebUIHelper) {
 }
 ```
                              */
-                            fetchPublicQueryInfo: function(GroupID, FilterID, useCache) {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, GroupID, "/", FilterID);
+                            fetchPublicQueryInfo: function(pqGroupID, pqFilterID, useCache) {
+                                var group = "";
+                                if (pqGroupID instanceof esGlobals.ESPublicQueryDef) {
+                                    group = (pqGroupID.GroupID || "").trim();
+                                    pqFilterID = (pqGroupID.FilterID || "").trim();
+                                } else {
+                                    group = pqGroupID ? pqGroupID.trim() : "";
+                                    pqFilterID = pqFilterID ? pqFilterID.trim() : "";
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, group, "/", pqFilterID);
 
                                 var deferred = $q.defer();
                                 if (useCache) {
@@ -3255,7 +3264,7 @@ function($scope, esWebApi, esWebUIHelper) {
                                     }
                                 }
 
-                                var tt = esGlobals.trackTimer("PQ", "INFO", GroupID.concat("/", FilterID));
+                                var tt = esGlobals.trackTimer("PQ", "INFO", group.concat("/", pqFilterID));
                                 tt.startTime();
 
                                 var ht = $http({

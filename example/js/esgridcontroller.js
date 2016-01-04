@@ -393,13 +393,13 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                         latitude: vPos.latitude,
                         esTempl: 'gmapwindow.html',
                         options: {
-                        	title: "Hello " + new Date(),
-                        	label: "Label "+ new Date(),
-                        	icon: "abcd.png"
+                            title: "Hello " + new Date(),
+                            label: "Label " + new Date(),
+                            icon: "abcd.png"
                         },
 
                         esObj: {
-                        	message: "Hi from stavros"
+                            message: "Hi from stavros"
                         },
                     }];
 
@@ -412,17 +412,17 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
         $scope.resetpos = function() {
             esWebApi.fetchPublicQuery("ESCMS", "View_ES00GPSLog")
-            .then(function(ret) {
-            	$scope.myDS = ret.data.Rows;
-            	esWebApi.fetchPublicQueryInfo("ESCMS", "View_ES00GPSLog")
-            	.then(function(f) {
-            		$scope.myPQInfo = esWebUIHelper.winGridInfoToESGridInfo("ESCMS", "View_ES00GPSLog", f.data);
-            	})
-            });
+                .then(function(ret) {
+                    $scope.myDS = ret.data.Rows;
+                    esWebApi.fetchPublicQueryInfo("ESCMS", "View_ES00GPSLog")
+                        .then(function(f) {
+                            $scope.myPQInfo = esWebUIHelper.winGridInfoToESGridInfo("ESCMS", "View_ES00GPSLog", f.data);
+                        })
+                });
         }
 
         $scope.myMarkerClick = function(marker, b, c) {
-        	alert("Hi Marker ");
+            alert("Hi Marker ");
         }
 
 
@@ -439,7 +439,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
             maps.visualRefresh = true;
         });
 
-        
+
 
         $scope.multifetchStdZoom = function() {
             var zoomOptions = new esGlobals.ESPQOptions(300, 5, false);
@@ -954,7 +954,6 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
     }
 ]);
 
-
 smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
@@ -1030,4 +1029,79 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
 
         $scope.masterOptions.theGridOptions = {};
     }
+])
+
+smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
+    function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
+        $scope.GPSPosition = null;
+        $scope.myMarkers = [];
+        $scope.myDS = [];
+        $scope.map = {};
+        $scope.pqInfo = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog");
+
+        $scope.getMyPosition = function() {
+            $scope.GPSPosition = null;
+            esGeoLocationSrv.getCurrentPosition()
+                .then(function(x) {
+                    $scope.GPSPosition = x;
+                    var vPos = {
+                        latitude: x.coords.latitude,
+                        longitude: x.coords.longitude
+                    };
+
+                    $scope.myMarkers = [{
+                        id: "abcd-00",
+                        longitude: vPos.longitude,
+                        latitude: vPos.latitude,
+                        esTempl: 'gmapwindow.html',
+                        options: {
+                            title: "Hello " + new Date(),
+                            label: "Label " + new Date(),
+                            icon: "abcd.png"
+                        },
+
+                        esObj: {
+                            message: "Hi from stavros"
+                        },
+                    }];
+
+                    $scope.mapOptions.center = vPos;
+
+                }, function(err) {
+                    alert(err.message + " - " + err.code);
+                });
+        }
+
+        $scope.getMyPosition();
+
+        $scope.resetpos = function() {
+            esWebApi.fetchPublicQuery($scope.pqInfo)
+                .then(function(ret) {
+                    $scope.myDS = ret.data.Rows;
+                    esWebApi.fetchPublicQueryInfo($scope.pqInfo)
+                        .then(function(f) {
+                            $scope.myPQInfo = esWebUIHelper.winGridInfoToESGridInfo($scope.pqInfo.GroupID, $scope.pqInfo.FilterID, f.data);
+                        })
+                });
+        }
+
+        $scope.myMarkerClick = function(marker, b, c) {
+            alert("Hi Marker ");
+        }
+
+
+        GoogleMapApi.then(function(maps) {
+            $log.info("Google maps ver = " + maps.version);
+            $scope.mapOptions = {
+                center: {
+                    latitude: 35.784,
+                    longitude: -78.670
+                },
+                zoom: 15,
+                mapTypeId: maps.MapTypeId.ROADMAP
+            };
+            maps.visualRefresh = true;
+        });
+    }
 ]);
+

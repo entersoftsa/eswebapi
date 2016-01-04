@@ -1,0 +1,15 @@
+<div class="row">
+	<es-params-panel ng-cloak zes-params-values="esParamsValues" es-group-id="pqInfo" zes-filter-id="esFilterId" zes-params-def="esParamsDef">
+    </es-params-panel>
+
+    <ui-gmap-google-map
+        center="mapOptions.center"
+        zoom="mapOptions.zoom"
+        control="map"
+        pan="true">
+
+        <es-map es-rows="myDS" es-pq-info="myPQInfo" es-show-window="true" type es-click="myMarkerClick">
+        </es-map>
+
+    </ui-gmap-google-map>
+</div>
