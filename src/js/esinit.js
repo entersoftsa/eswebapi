@@ -364,6 +364,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      */
     esWebFramework.factory('esGeoLocationSrv', ['$q', '$window', function($q, $window) {
         'use strict';
+
         function getCurrentPosition() {
             var deferred = $q.defer();
 
@@ -453,6 +454,623 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.Page = page || -1;
                 this.PageSize = pageSize || -1;
                 this.WithCount = !!withCount;
+            }
+
+            var esComplexParamFunctionOptions = [{
+                caption: "=",
+                value: "EQ"
+            }, {
+                caption: "<>",
+                value: "NE"
+            }, {
+                caption: "<",
+                value: "LT"
+            }, {
+                caption: "<=",
+                value: "LE"
+            }, {
+                caption: ">",
+                value: "GT"
+            }, {
+                caption: ">=",
+                value: "GE"
+            }, {
+                caption: "[]",
+                value: "RANGE"
+            }, {
+                caption: "Κενό",
+                value: "NULL"
+            }, {
+                caption: "Μη κενό",
+                value: "NOTNULL"
+            }];
+
+            var dDateRangeClass = {
+                6: [0, 1, 2, 3, 6, 8, 10, 11, 12, 13, 16, 19, 20, 21, 22, 23, 24],
+                20: [0, 1, 25, 26, 27, 28, 29, 30],
+            };
+
+            var esDateRangeOptions = [{
+                dValue: "0",
+                dType: 0,
+                title: "Specific Date Range"
+            }, {
+                dValue: "1",
+                dType: 1,
+                title: "Specific Date"
+            }, {
+                dValue: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
+                dType: 2,
+                title: "Anything"
+            }, {
+                dValue: "ESDateRange(Day)",
+                dType: 3,
+                title: "Today"
+            }, {
+                dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)',
+                dType: 4,
+                title: "Up Today"
+            }, {
+                dValue: 'ESDateRange(Day, 0, SpecificDate, #9999/01/01#)',
+                dType: 5,
+                title: "Starting from Today"
+            }, {
+                dValue: "ESDateRange(Day, -1)",
+                dType: 6,
+                title: "Yesterday"
+            }, {
+                dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, -1)',
+                dType: 7,
+                title: "Up To Yesterday"
+            }, {
+                dValue: "ESDateRange(Day, 1)",
+                dType: 8,
+                title: "Tomorrow"
+            }, {
+                dValue: 'ESDateRange(Day, 1, SpecificDate, #9999/01/01#)',
+                dType: 9,
+                title: "Starting from Tomorrow"
+            }, {
+                dValue: "ESDateRange(Week)",
+                dType: 10,
+                title: "Current week"
+            }, {
+                dValue: "ESDateRange(Week, -1)",
+                dType: 11,
+                title: "Previous week"
+            }, {
+                dValue: "ESDateRange(Week, 1)",
+                dType: 12,
+                title: "Next week"
+            }, {
+                dValue: "ESDateRange(Month)",
+                dType: 13,
+                title: "Current month"
+            }, {
+                dValue: 'ESDateRange(Month, 0, SpecificDate, #9999/01/01#)',
+                dType: 14,
+                title: "Since 1st of month"
+            }, {
+                dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, 0)',
+                dType: 15,
+                title: "Up to end of month"
+            }, {
+                dValue: "ESDateRange(Month, -1)",
+                dType: 16,
+                title: "Last month"
+            }, {
+                dValue: 'ESDateRange(Month, -1, SpecificDate, #9999/01/01#)',
+                dType: 17,
+                title: "Since 1st of last month"
+            }, {
+                dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, -1)',
+                dType: 18,
+                title: "Up to end of last month"
+            }, {
+                dValue: "ESDateRange(Quarter)",
+                dType: 19,
+                title: "Current quarter"
+            }, {
+                dValue: "ESDateRange(Quarter, -1)",
+                dType: 20,
+                title: "Last quarter"
+            }, {
+                dValue: "ESDateRange(SixMonth)",
+                dType: 21,
+                title: "This HY"
+            }, {
+                dValue: "ESDateRange(SixMonth, -1)",
+                dType: 22,
+                title: "Last HY"
+            }, {
+                dValue: "ESDateRange(Year)",
+                dType: 23,
+                title: "Current Year"
+            }, {
+                dValue: "ESDateRange(Year, -1)",
+                dType: 24,
+                title: "Last Year"
+            }, {
+                dValue: "ESDateRange(FiscalPeriod, 0)",
+                dType: 25,
+                title: "Current Fiscal Period"
+            }, {
+                dValue: "ESDateRange(FiscalYear, 0, Day, 0)",
+                dType: 26,
+                title: "Since start of FY up today"
+            }, {
+                dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, 0)",
+                dType: 27,
+                title: "Since start of FY up to end of Fiscal Period"
+            }, {
+                dValue: "ESDateRange(FiscalPeriod, -1)",
+                dType: 28,
+                title: "Last Fiscal Period"
+            }, {
+                dValue: "ESDateRange(FiscalPeriod, -1, Day, 0)",
+                dType: 29,
+                title: "Since start of last Fiscal Period up today"
+            }, {
+                dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, -1)",
+                dType: 30,
+                title: "Since start of FY up to last Fiscal Period"
+            }, ];
+
+            var dateRangeResolve = function(dateVal) {
+                if (!dateVal || !dateVal.dRange) {
+                    return '';
+                }
+
+                var d = new Date();
+
+                var dObj = _.findWhere(esDateRangeOptions, {
+                    dValue: dateVal.dRange
+                });
+                if (!dObj) {
+                    return '';
+                }
+
+                var loc = "el-GR";
+                var t = esClientSession;
+                if (t && t.connectionModel && t.connectionModel.LangID) {
+                    loc = t.connectionModel.LangID;
+                }
+
+                switch (dObj.dType) {
+                    case 0:
+                        {
+                            if (!angular.isDate(dateVal.fromD) && !angular.isDate(dateVal.toD)) {
+                                return "";
+                            }
+
+                            var s = "";
+                            if (angular.isDate(dateVal.fromD)) {
+                                s = dateVal.fromD.toLocaleDateString(loc);
+                            }
+                            s = s + " - ";
+
+                            var toS = "";
+                            if (angular.isDate(dateVal.toD)) {
+                                toS = dateVal.toD.toLocaleDateString(loc);
+                            }
+                            s = s + toS;
+                            return s;
+                        }
+                    case 1:
+                        {
+                            if (!angular.isDate(dateVal.fromD)) {
+                                return "";
+                            }
+                            return dateVal.fromD.toLocaleDateString(loc);
+                        }
+                    case 2:
+                        return "";
+                    case 3:
+                        return d.toLocaleDateString(loc);
+                    case 4:
+                        return "-> " + d.toLocaleDateString(loc);
+                    case 5:
+                        return d.toLocaleDateString(loc) + " ->";
+                    case 6:
+                        {
+                            d.setDate(d.getDate() - 1);
+                            return d.toLocaleDateString(loc);
+                        }
+                    case 7:
+                        {
+                            d.setDate(d.getDate() - 1);
+                            return d.toLocaleDateString(loc) + " ->";
+                        }
+                    case 8:
+                        {
+                            d.setDate(d.getDate() + 1);
+                            return d.toLocaleDateString(loc);
+                        }
+                    case 9:
+                        {
+                            d.setDate(d.getDate() + 1);
+                            return d.toLocaleDateString(loc) + " ->";
+                        }
+                    case 10:
+                        {
+                            var cDay = d.getDay();
+                            var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+
+                            var f = new Date(d);
+                            var t = new Date(d);
+                            f.setDate(d.getDate() - sDiff);
+                            t.setDate(f.getDate() + 6);
+
+                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
+                        }
+                    case 11:
+                        {
+                            d.setDate(d.getDate() - 7);
+
+                            var cDay = d.getDay();
+                            var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+
+                            var f = new Date(d);
+                            var t = new Date(d);
+                            f.setDate(d.getDate() - sDiff);
+                            t.setDate(f.getDate() + 6);
+
+                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
+                        }
+                    case 12:
+                        {
+                            d.setDate(d.getDate() + 7);
+
+                            var cDay = d.getDay();
+                            var sDiff = (cDay == 0) ? 6 : (cDay - 1);
+
+                            var f = new Date(d);
+                            var t = new Date(d);
+                            f.setDate(d.getDate() - sDiff);
+                            t.setDate(f.getDate() + 6);
+
+                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
+                        }
+                    case 13:
+                        {
+                            d.setDate(1);
+
+                            var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                            return d.toLocaleDateString(loc) + " - " + f.toLocaleDateString(loc);
+                        }
+                    case 14:
+                        {
+                            d.setDate(1);
+                            return d.toLocaleDateString(loc) + " ->";
+                        }
+                    case 15:
+                        {
+                            var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                            return "-> " + f.toLocaleDateString(loc);
+                        }
+                    case 16:
+                        {
+                            var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                            var t = new Date(d.getFullYear(), d.getMonth(), 0);
+                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
+                        }
+                    case 17:
+                        {
+                            var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                            return f.toLocaleDateString(loc) + " ->";
+                        }
+                    case 18:
+                        {
+                            var f = new Date(d.getFullYear(), d.getMonth(), 0);
+                            return "-> " + f.toLocaleDateString(loc);
+                        }
+                    case 19:
+                        {
+                            var m = d.getMonth();
+                            var r = m % 3;
+
+                            var f = new Date(d.getFullYear(), m - r, 1);
+                            var t = new Date(d.getFullYear(), m + (3 - r), 0);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                        }
+                    case 20:
+                        {
+                            var m = d.getMonth();
+                            var r = m % 3;
+
+                            var t = new Date(d.getFullYear(), m - r, 0);
+                            var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                        }
+                    case 21:
+                        {
+                            var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
+                            var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                        }
+                    case 22:
+                        {
+                            var f;
+                            var t;
+                            var y = d.getFullYear();
+                            if (m >= 6) {
+                                f = new Date(y, 0, 1);
+                                t = new Date(y, 5, 30);
+                            } else {
+                                f = new Date(y - 1, 6, 1);
+                                t = new Date(y - 1, 11, 31);
+                            }
+
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                        }
+
+                    case 23:
+                        {
+                            var y = d.getFullYear();
+                            var f = new Date(y, 0, 1);
+                            var t = new Date(y, 11, 31);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                        }
+
+                    case 24:
+                        {
+                            var y = d.getFullYear() - 1;
+                            var f = new Date(y, 0, 1);
+                            var t = new Date(y, 11, 31);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                        }
+                    default:
+                        return dObj.title;
+                }
+            }
+
+
+            function ESParamVal(paramId, paramVal, enumList) {
+                this.paramCode = paramId;
+                this.paramValue = paramVal;
+                this.enumList = enumList;
+            }
+
+            ESParamVal.prototype.getExecuteVal = function() {
+                return this.paramValue;
+            };
+
+            ESParamVal.prototype.pValue = function(v) {
+                if (!arguments || arguments.length == 0) {
+                    // get
+                    return this.paramValue;
+                }
+
+                if (this.paramValue === arguments[0]) {
+                    return false;
+                }
+
+                this.paramValue = arguments[0];
+                return true;
+            }
+
+            ESParamVal.prototype.strVal = function() {
+                var lst = this.enumList;
+                if (!lst || lst.length == 0) {
+                    // typical case, not an enum / option
+                    return this.paramValue ? this.paramValue.toString() : '';
+                }
+
+                if (!this.paramValue) {
+                    return '';
+                }
+
+                var vals;
+                vals = angular.isArray(this.paramValue) ? this.paramValue : [this.paramValue];
+
+                var s = _.reduce(vals, function(memo, x) {
+                    var es = _.findWhere(lst, {
+                        value: x
+                    });
+                    return memo + (es ? es.text : x.toString()) + " + ";
+                }, '');
+
+                return s.substring(0, s.lastIndexOf(" + "));
+            };
+
+
+            function ESNumericParamVal(paramId, paramVal) {
+                //call super constructor
+                ESParamVal.call(this, paramId, paramVal);
+            }
+
+            //inherit from ESParamval SuperClass
+            ESNumericParamVal.prototype = Object.create(ESParamVal.prototype);
+
+            ESNumericParamVal.prototype.strVal = function() {
+                var zero = 0;
+                zero = zero.toString();
+                var froms = this.paramValue.value ? this.paramValue.value.toString() : zero;
+                var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : zero;
+                switch (this.paramValue.oper) {
+                    case "RANGE":
+                        return "ΑΠΟ " + froms + " ΕΩΣ " + tos;
+
+                    case "NULL":
+                        return "KENO";
+
+                    case "NOTNULL":
+                        return "MH KENO";
+
+                    default:
+                        return this.paramValue.oper.toString() + " " + froms;
+                }
+            }
+
+            ESNumericParamVal.prototype.getExecuteVal = function() {
+                this.paramValue.value = this.paramValue.value || 0;
+                this.paramValue.valueTo = this.paramValue.valueTo || 0;
+
+                switch (this.paramValue.oper) {
+                    case "RANGE":
+                        return "ESNumeric(" + this.paramValue.oper + ", '" + this.paramValue.value + "', '" + this.paramValue.valueTo + "')";
+                    case "NULL":
+                    case "NOTNULL":
+                        return "ESNumeric(" + this.paramValue.oper + ", '0')";
+                    default:
+                        return "ESNumeric(" + this.paramValue.oper + ", '" + this.paramValue.value + "')";
+                }
+            }
+
+            function ESStringParamVal(paramId, paramVal) {
+                //call super constructor
+                ESParamVal.call(this, paramId, paramVal);
+            }
+
+            //inherit from ESParamval SuperClass
+            ESStringParamVal.prototype = Object.create(ESParamVal.prototype);
+
+            ESStringParamVal.prototype.strVal = function() {
+                var froms = this.paramValue.value ? this.paramValue.value.toString() : '';
+                var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : '';
+                switch (this.paramValue.oper) {
+                    case "RANGE":
+                        return "ΑΠΟ " + froms + " ΕΩΣ " + tos;
+
+                    case "NULL":
+                        return "KENO";
+
+                    case "NOTNULL":
+                        return "MH KENO";
+
+                    default:
+                        return this.paramValue.oper.toString() + " " + froms;
+                }
+            }
+
+            ESStringParamVal.prototype.getExecuteVal = function() {
+                switch (this.paramValue.oper) {
+                    case "EQ":
+                        return this.paramValue.value;
+                    case "RANGE":
+                        return "ESString(" + this.paramValue.oper + ", '" + this.paramValue.value + "', '" + this.paramValue.valueTo + "')";
+                    case "NULL":
+                    case "NOTNULL":
+                        return "ESString(" + this.paramValue.oper + ", '')";
+                    default:
+                        return "ESString(" + this.paramValue.oper + ", '" + this.paramValue.value + "')";
+                }
+            }
+
+            function ESDateParamVal(paramId, paramVal) {
+                //call super constructor
+                //param id will be given at a later assignment
+                if (!paramVal) {
+                    paramVal = {
+                        // empty date range is treated as ANYTHING
+                        dRange: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
+                        fromD: null,
+                        toD: null
+                    };
+                }
+                ESParamVal.call(this, paramId, paramVal);
+            }
+
+            ESDateParamVal.prototype = Object.create(ESParamVal.prototype);
+
+            ESDateParamVal.prototype.strVal = function() {
+                return dateRangeResolve(this.paramValue);
+            }
+
+            ESDateParamVal.prototype.getExecuteVal = function() {
+                var s = this.paramValue.dRange;
+                if (s == "0" || s == "1") {
+                    var sFromD = "#1753/01/01#";
+                    var sToD = "#9999/01/01#";
+                    var isEmpty = true;
+
+                    // Fix the fromD
+                    var mFromD = moment(this.paramValue.fromD);
+                    if (mFromD.isValid()) {
+                        isEmpty = false;
+                        sFromD = mFromD.format('YYYY/MM/DD');
+                    }
+
+                    var mToD = moment(this.paramValue.toD);
+                    if (mToD.isValid()) {
+                        isEmpty = false;
+                        sToD = mToD.format('YYYY/MM/DD');
+                    }
+
+                    if (s == "0" || isEmpty) {
+                        return "ESDateRange(SpecificDate, " + "#" + sFromD + "#" + ", SpecificDate, " + "#" + sToD + "#" + ")";
+                    }
+
+                    return "ESDateRange(SpecificDate, " + "#" + sFromD + "#" + ")";
+                }
+
+                return this.paramValue.dRange;
+            }
+
+            function ESParamValues(vals) {
+                this.setParamValues(vals);
+            }
+
+            ESParamValues.prototype.merge = function(val) {
+                var x = this;
+                if (val) {
+                    for (var prop in val) {
+                        if (!val[prop] || !val[prop] instanceof ESParamVal) {
+                            throw new Error("Invalid paramter type in merge function in paramvalues");
+                        }
+
+                        if (!x.hasOwnProperty(prop)) {
+                            // property xxx i.e. param xxx does not exist at all. So we must add it during the merge
+                            x[prop] = val[prop];
+                        } else {
+                            //property xxx i.e. param xxx already exists. Check the type of the value
+                            if (x[prop] instanceof ESParamVal) {
+
+                                x[prop].enumList = val[prop].enumList;
+                            } else {
+                                // existing property i.e. param is not of ESParamVal type. In that case we override the value to the source one
+                                x[prop] = val[prop];
+                            }
+
+                        }
+                    }
+                }
+                return this;
+            }
+
+            ESParamValues.prototype.setParamValues = function(vals) {
+                var x = this;
+
+                //delete any previsously assigned properties
+                for (var prop in x) {
+                    if (x.hasOwnProperty(prop)) {
+                        delete x[prop];
+                    }
+                };
+
+                //asign new properties
+                if (!vals || !_.isArray(vals) || vals.length == 0) {
+                    return;
+                }
+
+                vals.forEach(function(element, index, array) {
+                    x[element.paramCode] = element;
+                });
+            }
+
+            ESParamValues.prototype.getExecuteVals = function() {
+                var x = this;
+                var ret = {};
+                for (var prop in x) {
+                    if (x.hasOwnProperty(prop)) {
+                        var p = x[prop];
+
+                        if (p.paramValue || (angular.isNumber(p.paramValue) && p.paramValue == 0)) {
+                            ret[p.paramCode] = p.getExecuteVal();
+                        }
+                    }
+                }
+                return ret;
             }
 
             function fgetGA() {
@@ -849,6 +1467,34 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                  * @param {boolean} WithCount If true, the result of the execution will also have the total number of records that exist for this execution run of the PQ
                  */
                 ESPQOptions: ESPQOptions,
+
+                ESParamValues: ESParamValues,
+                ESParamVal: ESParamVal,
+                ESNumericParamVal: ESNumericParamVal,
+                ESStringParamVal: ESStringParamVal,
+                ESDateParamVal: ESDateParamVal,
+
+                getesDateRangeOptions: function(dateRangeClass) {
+                    if (!dateRangeClass || !dDateRangeClass[dateRangeClass]) {
+                        return esDateRangeOptions;
+                    }
+
+                    var arr = dDateRangeClass[dateRangeClass];
+                    if (!_.isArray(arr) || arr.length == 0) {
+                        return esDateRangeOptions;
+                    }
+
+                    var x = [];
+                    var i;
+                    for (i = 0; i < arr.length; i++) {
+                        x[i] = esDateRangeOptions[arr[i]];
+                    }
+                    return x;
+                },
+
+                getesComplexParamFunctionOptions: function() {
+                    return esComplexParamFunctionOptions;
+                },
 
 
                 sessionClosed: function() {

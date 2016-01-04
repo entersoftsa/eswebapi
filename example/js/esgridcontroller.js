@@ -178,7 +178,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             //kendoEvent.sender.text(mapper(kendoEvent.sender.dataItem(), $scope.myDateVal));
         }
 
-        $scope.myDateVal = new esWebUIHelper.ESDateParamVal("myP", {
+        $scope.myDateVal = new esGlobals.ESDateParamVal("myP", {
             //dRange: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)', ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)
             dRange: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
             fromD: null,
@@ -816,26 +816,26 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                             groupId: "ESFICustomer",
                             filterId: "CS_CollectionPlanning",
                             gridOptions: {},
-                            pVals: new esWebUIHelper.ESParamValues()
+                            pVals: new esGlobals.ESParamValues()
                         },
                         */
             {
                 groupId: "ESMMStockItem",
                 filterId: "StockItemPhotoList",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             }, {
                 groupId: "ESGOPerson",
                 filterId: "CRM_Personlist",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             },
 
             {
                 groupId: "ESTMSocialCRM",
                 filterId: "ESTMSMPersonList",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             },
 
 
@@ -843,21 +843,21 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 groupId: "ESFIItem",
                 filterId: "ESFIItem_def",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             },
 
             {
                 groupId: "ESFICustomer",
                 filterId: "ESFITradeAccountCustomer_def",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             },
 
             {
                 groupId: "ESMMStockItem",
                 filterId: "ESMMStockItem_def",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             },
 
 
@@ -871,7 +871,7 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
         $scope.webPQOptions = {};
         $scope.webPQOptions.theGroupId = "ESMMStockItem";
         $scope.webPQOptions.theFilterId = "ESMMStockItem_def";
-        $scope.webPQOptions.theVals = new esWebUIHelper.ESParamValues();
+        $scope.webPQOptions.theVals = new esGlobals.ESParamValues();
 
         $scope.webPQOptions.theGridOptions = {
             //detailTemplate: '<div><es00-documents-detail es-master-row-field="\'ISUDGID\'" /></div>',
@@ -892,13 +892,13 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
         $scope.detailOptions = {};
         $scope.detailOptions.theGroupId = "ESFIDocumentSales";
         $scope.detailOptions.theFilterId = "WebOrdersContext";
-        $scope.detailOptions.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID")]);
+        $scope.detailOptions.theVals = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ISUDGID")]);
         $scope.detailOptions.theGridOptions = {};
 
         $scope.detail2Options = {};
         $scope.detail2Options.theGroupId = "ESTMSALESACTIVITIES";
         $scope.detail2Options.theFilterId = "ContextSalesActs";
-        $scope.detail2Options.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID")]);
+        $scope.detail2Options.theVals = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ISUDGID")]);
         $scope.detail2Options.theGridOptions = {};
 
         var mds = new esWebUIHelper.ESRequeryDetailGrids();
@@ -965,7 +965,7 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
         };
 
         var pqOptions = new esGlobals.ESPQOptions(-1, -1, true);
-        var params = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ClosingDate", 3)]);
+        var params = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ClosingDate", 3)]);
 
         $scope.masterOptions = new esGlobals.ESPublicQueryDef("", "ESTMOpportunity", "ESTMOpportunityManagement", pqOptions, params);
         $scope.cDS = esWebUIHelper.getPQDataSource("ds", $scope.masterOptions);
@@ -1045,7 +1045,7 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
             },
             zoom: 15,
         };
-        $scope.pqInfo = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esWebUIHelper.ESParamValues());
+        $scope.pqInfo = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
 
         $scope.getMyPosition = function() {
             $scope.GPSPosition = null;
