@@ -846,22 +846,22 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 pVals: new esGlobals.ESParamValues()
             },
 
-/*
-            {
-                groupId: "ESFICustomer",
-                filterId: "ESFITradeAccountCustomer_def",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
+            /*
+                        {
+                            groupId: "ESFICustomer",
+                            filterId: "ESFITradeAccountCustomer_def",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
 
-            {
-                groupId: "ESMMStockItem",
-                filterId: "ESMMStockItem_def",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
+                        {
+                            groupId: "ESMMStockItem",
+                            filterId: "ESMMStockItem_def",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
 
-*/
+            */
         ];
     }
 ]);
@@ -1037,7 +1037,25 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
     function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
         $scope.GPSPosition = null;
         $scope.myMarkers = [];
-        $scope.myDS = [];
+        $scope.myDS = [{
+            "GID": "b4da1514-9682-4d23-8da0-11597626360e",
+            "Latitude": 37.97633167,
+            "Longitude": 23.70813333,
+            "SatelliteTime": "2013-03-02T10:00:00",
+            "TowerID": 0,
+            "LocationAreaCode": 0,
+            "Network": 0,
+            "Country": 0,
+            "RecordType": 1,
+            "DeviceID": "KOG",
+            "RecordOrigin": 0,
+            "fGID": null,
+            "esIcon": "",
+            "esLabel": "7",
+            "esTitle": "Hi KFIMar  2 2013 10:00AM",
+            "esTempl": "gmapwindow.html"
+        }];
+        $scope.mapDS = new kendo.data.ObservableArray($scope.myDS);
         $scope.map = {};
         $scope.mapOptions = {
             center: {
@@ -1081,24 +1099,13 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
                 });
         }
 
-        $scope.resetpos = function() {
-            esWebApi.fetchPublicQuery($scope.pqInfo)
-                .then(function(ret) {
-                    $scope.myDS = ret.data.Rows;
-                    esWebApi.fetchPublicQueryInfo($scope.pqInfo)
-                        .then(function(f) {
-                            $scope.myPQInfo = esWebUIHelper.winGridInfoToESGridInfo($scope.pqInfo.GroupID, $scope.pqInfo.FilterID, f.data);
-                        })
-                });
-        }
-
         $scope.runPQ = function() {
             esWebApi.fetchPublicQuery($scope.pqInfo)
                 .then(function(ret) {
-                    $scope.myDS = ret.data.Rows;
+                    $scope.mapDS = new kendo.data.ObservableArray(ret.data.Rows);
                 });
-        }
 
+        }
 
         GoogleMapApi.then(function(maps) {
             $log.info("Google maps ver = " + maps.version);

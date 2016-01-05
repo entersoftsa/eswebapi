@@ -1,20 +1,28 @@
+
 <div class="row">
-	<es-params-panel ng-cloak 
-        zes-params-values="esParamsValues" 
-        es-group-id="pqInfo" 
-        es-run-click="runPQ()"
-        zes-filter-id="esFilterId" 
-        zes-params-def="esParamsDef">
-    </es-params-panel>
+    <div class="col-xs-12">
+        <es-params-panel ng-cloak 
+                    es-group-id="pqInfo" 
+                    es-run-click="runPQ()"
+                    es-show-run="'true'"
+                    es-run-title="'Execute'">
+        </es-params-panel>
+    </div>
+</div>
 
-    <ui-gmap-google-map
-        center="mapOptions.center"
-        zoom="mapOptions.zoom"
-        control="map"
-        pan="true">
+<div class="row">
+    
+        <ui-gmap-google-map class="col-xs-12 col-sm-9"
+            center="mapOptions.center"
+            zoom="mapOptions.zoom"
+            control="map"
+            pan="true">
 
-        <es-map es-rows="myDS" es-pq-info="myPQInfo" es-show-window="true" es-click="myMarkerClick">
-        </es-map>
-
-    </ui-gmap-google-map>
+            <es-map-markers es-rows="mapDS" es-pq-info="myPQInfo" es-show-window="true" es-click="myMarkerClick">
+            </es-map-markers>
+        </ui-gmap-google-map>
+    
+    
+    <es-local-grid class="col-xs-12 col-sm-3" es-grid-options="pqInfo.esGridOptions" es-data-source="mapDS" />
+    
 </div>

@@ -11,7 +11,12 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('src/partials/esMap.html',
+  $templateCache.put('src/partials/esLocalGrid.html',
+    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions k-data-source=esDataSource k-auto-bind=true k-options=esGridOptions></div>"
+  );
+
+
+  $templateCache.put('src/partials/esMapMarkers.html',
     "<ui-gmap-markers models=esMarkers coords=\"'self'\" click=esClick() options=\"'esOptions'\" fit=\"'true'\" dorebuildall=true type=esType typeoptions=esTypeOptions modelsbyref=true><ui-gmap-windows ng-if=esShowWindow show=\"'showWindow'\" dorebuildall=true templateurl=\"'esTempl'\" options=\"'esInfoWindowOptions'\" templateparameter=\"'esObj'\" ng-cloak></ui-gmap-windows></ui-gmap-markers>"
   );
 
@@ -27,7 +32,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamDateRange.html',
-    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><div class=row><div class=col-xs-12 ng-class=\"{'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0' || esParamVal[esParamDef.id].paramValue.dRange =='1'}\"><select class=\"form-control es-param-control\" kendo-drop-down-list uib-tooltip=\"Hello World\" uib-tooltip-trigger=mouseenter k-data-text-field=\"'title'\" k-auto-bind=true k-data-value-field=\"'dValue'\" k-data-source=dateRangeOptions k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.dRange></select></div><div class=col-xs-12 ng-class=\"{'col-md-8': esParamVal[esParamDef.id].paramValue.dRange == '1', 'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0'}\" ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange > '1'\"><input class=\"form-control es-param-control\" kendo-date-picker k-ng-model=\"esParamVal[esParamDef.id].paramValue.fromD\"></div><div class=col-xs-12 ng-class=\"{'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0'}\" ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange != '0'\"><input class=\"form-control es-param-control\" kendo-date-picker k-ng-model=\"esParamVal[esParamDef.id].paramValue.toD\"></div></div>"
+    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><div class=row><div class=col-xs-12 ng-class=\"{'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0' || esParamVal[esParamDef.id].paramValue.dRange =='1'}\"><select class=\"form-control es-param-control\" kendo-drop-down-list uib-tooltip=\"Hello World\" uib-tooltip-trigger=mouseenter k-data-text-field=\"'title'\" k-auto-bind=true k-data-value-field=\"'dValue'\" k-data-source=\"::esGlobals.getesDateRangeOptions({dateRangeClass: esParamDef.controlType})\" k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.dRange></select></div><div class=col-xs-12 ng-class=\"{'col-md-8': esParamVal[esParamDef.id].paramValue.dRange == '1', 'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0'}\" ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange > '1'\"><input class=\"form-control es-param-control\" kendo-date-picker k-ng-model=\"esParamVal[esParamDef.id].paramValue.fromD\"></div><div class=col-xs-12 ng-class=\"{'col-md-4': esParamVal[esParamDef.id].paramValue.dRange == '0'}\" ng-hide=\"esParamVal[esParamDef.id].paramValue.dRange != '0'\"><input class=\"form-control es-param-control\" kendo-date-picker k-ng-model=\"esParamVal[esParamDef.id].paramValue.toD\"></div></div>"
   );
 
 
@@ -62,7 +67,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParams.html',
-    "<uib-accordion><uib-accordion-group is-open=esPanelOpen><uib-accordion-heading>{{::esParamsDef.title}} - Parameters <span class=badge>{{::esParamsDef.visibleDefinitions().length}}</span> <i class=\"pull-right glyphicon\" uib-popover-placement=left uib-popover-append-to-body=true uib-popover-template=\"'src/partials/esParamsPanelPopover.html'\" popover-title={{::esParamsDef.title}} popover-trigger=mouseenter ng-class=\"{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}\"></i></uib-accordion-heading><form novalidate class=form name=esParamsPanelForm><div class=row><div class=\"form-group col-xs-12 col-sm-6 col-md-4 col-lg-3\" ng-class=\"{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}\" ng-repeat=\"param in esParamsDef.visibleDefinitions() | orderBy:'aa'\"><es-param class=es-param es-type=\"param | esParamTypeMapper\" es-param-val=esParamsValues es-param-def=param></es-param></div></div></form><div ng-if=esRunClick><button type=button class=\"btn btn-primary\" ng-click=esRunClick()>Run</button></div></uib-accordion-group></uib-accordion>"
+    "<uib-accordion><uib-accordion-group is-open=esPanelOpen><uib-accordion-heading>{{::esParamsDef.title}} - Parameters <span class=badge>{{::esParamsDef.visibleDefinitions().length}}</span> <i class=\"pull-right glyphicon\" uib-popover-placement=left uib-popover-append-to-body=true uib-popover-template=\"'src/partials/esParamsPanelPopover.html'\" popover-title={{::esParamsDef.title}} popover-trigger=mouseenter ng-class=\"{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}\"></i></uib-accordion-heading><form novalidate class=form name=esParamsPanelForm><div class=row><div class=\"form-group col-xs-12 col-sm-6 col-md-4 col-lg-3\" ng-class=\"{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}\" ng-repeat=\"param in esParamsDef.visibleDefinitions() | orderBy:'aa'\"><es-param class=es-param es-type=\"param | esParamTypeMapper\" es-param-val=esParamsValues es-param-def=param></es-param></div></div></form><div ng-if=esShowRun><button type=button class=\"btn btn-primary\" ng-click=esRunClick()>{{::esRunTitle}}</button></div></uib-accordion-group></uib-accordion>"
   );
 
 

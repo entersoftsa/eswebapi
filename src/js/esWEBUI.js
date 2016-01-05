@@ -309,7 +309,7 @@
         return convertPQRowsToMapRows;
     })
 
-    .directive('esMap', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+    .directive('esMapMarkers', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
         function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
             return {
                 restrict: 'AE',
@@ -323,7 +323,7 @@
                     esType: "=",
                     esClick: "&",
                 },
-                template: '<div ng-include src="\'src/partials/esMap.html\'"></div>',
+                template: '<div ng-include src="\'src/partials/esMapMarkers.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
 
                     if (iAttrs.esMarkers && iAttrs.esRows) {
@@ -601,138 +601,181 @@
      * These two parameters along with esExecuteParams will be supplied to the {@link es.Web.UI.esUIHelper#methods_esGridInfoToKInfo esToKendoTransform function}
      */
     .directive('esGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-            function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
-                return {
-                    restrict: 'AE',
-                    scope: {
-                        esGroupId: "=",
-                        esFilterId: "=",
-                        esExecuteParams: "=",
-                        esGridOptions: "=",
-                        esSrvPaging: "=",
-                    },
-                    templateUrl: function(element, attrs) {
-                        $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
-                        return "src/partials/esGrid.html";
-                    },
-                    link: function($scope, iElement, iAttrs) {
-                        $scope.esGridRun = function() {
-                            if ($scope.esGridCtrl) {
-                                $scope.esGridCtrl.dataSource.read();
-                            }
-                        }
-
-                        $scope.downloadBlob = function(gid) {
-                            esWebApiService.fetchES00DocumentBlobDataByGID(gid)
-                                .then(function(result) {
-                                    var fileData = result.data;
-
-                                    var docType = result.headers()["content-type"];
-                                    $log.info("File " + $scope.pAsset + " ===> " + docType);
-                                    var file = new Blob([fileData], {
-                                        type: docType
-                                    });
-                                    //saveAs(file, "test.pdf");
-                                    var fU = URL.createObjectURL(file);
-                                    window.open(fU);
-                                })
-                                .catch(function(err) {
-                                    $log.error("2nd error = " + JSON.stringify(err));
-                                });
-                        };
-
-                        $scope.esGridPrint = function() {
-                            if (!$scope.esGridCtrl) {
-                                return;
-                            }
-
-                            var gridElement = $scope.esGridCtrl.element,
-                                printableContent = '',
-                                win = window.open('', '', 'width=800, height=500'),
-                                doc = win.document.open();
-
-                            var htmlStart =
-                                '<!DOCTYPE html>' +
-                                '<html>' +
-                                '<head>' +
-                                '<meta charset="utf-8" />' +
-                                '<title>Kendo UI Grid</title>' +
-                                '<link href="http://kendo.cdn.telerik.com/' + kendo.version + '/styles/kendo.common.min.css" rel="stylesheet" /> ' +
-                                '<style>' +
-                                'html { font: 11pt sans-serif; }' +
-                                '.k-grid { border-top-width: 0; }' +
-                                '.k-grid, .k-grid-content { height: auto !important; }' +
-                                '.k-grid-content { overflow: visible !important; }' +
-                                '.k-grid .k-grid-header th { border-top: 1px solid; }' +
-                                '.k-grid-toolbar, .k-grid-pager > .k-link { display: none; }' +
-                                '</style>' +
-                                '</head>' +
-                                '<body>';
-
-                            var htmlEnd =
-                                '</body>' +
-                                '</html>';
-
-                            var gridHeader = gridElement.children('.k-grid-header');
-                            if (gridHeader[0]) {
-                                var thead = gridHeader.find('thead').clone().addClass('k-grid-header');
-                                printableContent = gridElement
-                                    .clone()
-                                    .children('.k-grid-header').remove()
-                                    .end()
-                                    .children('.k-grid-content')
-                                    .find('table')
-                                    .first()
-                                    .children('tbody').before(thead)
-                                    .end()
-                                    .end()
-                                    .end()
-                                    .end()[0].outerHTML;
-                            } else {
-                                printableContent = gridElement.clone()[0].outerHTML;
-                            }
-
-                            doc.write(htmlStart + printableContent + htmlEnd);
-                            doc.close();
-                            win.print();
-                        }
-
-
-                        if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
-                            if (!$scope.esGroupId || !$scope.esFilterId) {
-                                throw "esGridOptions NOT defined. In order to dynamically get the options you must set GroupID and FilterID for esgrid to work";
-                            }
-                            // Now esGridOption explicitly assigned so ask the server 
-                            esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
-                                .then(function(ret) {
-                                    var p1 = ret.data;
-                                    var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
-                                    $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
-                                });
+        function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esGroupId: "=",
+                    esFilterId: "=",
+                    esExecuteParams: "=",
+                    esGridOptions: "=",
+                    esSrvPaging: "=",
+                    esDataSource: "=",
+                },
+                templateUrl: function(element, attrs) {
+                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
+                    return "src/partials/esGrid.html";
+                },
+                link: function($scope, iElement, iAttrs) {
+                    $scope.esGridRun = function() {
+                        if ($scope.esGridCtrl) {
+                            $scope.esGridCtrl.dataSource.read();
                         }
                     }
-                };
-            }
-        ])
-        /**
-         * @ngdoc directive
-         * @name es.Web.UI.directive:es00DocumentsDetail
-         * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
-         * @requires es.Web.UI.esUIHelper
-         * @requires $log
-         * @restrict AE
-         * @param {object=} esDocumentGridOptions A subset or full set of esGridOptions for the kendo-grid that will show the ES00Documents. 
-         * The ES00Documents kendo-grid will be initialized by the merge of the PublicQueryInfo gridoptions as retrieved for the GroupID = "ESGOCompany" and
-         * FilterID = "ES00DocumentsDetails" public query. 
-         * @param {string=} esMasterRowField The field of the master grid row that the ES00DocumentGrid will be a detail of. The value of this field in the master row will form
-         * the parameter for fetchES00DocumentsByGID service to retrieve the ES00DocumentRows.
-         *
-         * @description
-         *
-         * **TBD**
-         * This directive is responsible to render the html for the presentation of the ES00Documents as a detail of a kendo-grid
-         */
-        .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
+
+                    $scope.downloadBlob = function(gid) {
+                        esWebApiService.fetchES00DocumentBlobDataByGID(gid)
+                            .then(function(result) {
+                                var fileData = result.data;
+
+                                var docType = result.headers()["content-type"];
+                                $log.info("File " + $scope.pAsset + " ===> " + docType);
+                                var file = new Blob([fileData], {
+                                    type: docType
+                                });
+                                //saveAs(file, "test.pdf");
+                                var fU = URL.createObjectURL(file);
+                                window.open(fU);
+                            })
+                            .catch(function(err) {
+                                $log.error("2nd error = " + JSON.stringify(err));
+                            });
+                    };
+
+                    $scope.esGridPrint = function() {
+                        if (!$scope.esGridCtrl) {
+                            return;
+                        }
+
+                        var gridElement = $scope.esGridCtrl.element,
+                            printableContent = '',
+                            win = window.open('', '', 'width=800, height=500'),
+                            doc = win.document.open();
+
+                        var htmlStart =
+                            '<!DOCTYPE html>' +
+                            '<html>' +
+                            '<head>' +
+                            '<meta charset="utf-8" />' +
+                            '<title>Kendo UI Grid</title>' +
+                            '<link href="http://kendo.cdn.telerik.com/' + kendo.version + '/styles/kendo.common.min.css" rel="stylesheet" /> ' +
+                            '<style>' +
+                            'html { font: 11pt sans-serif; }' +
+                            '.k-grid { border-top-width: 0; }' +
+                            '.k-grid, .k-grid-content { height: auto !important; }' +
+                            '.k-grid-content { overflow: visible !important; }' +
+                            '.k-grid .k-grid-header th { border-top: 1px solid; }' +
+                            '.k-grid-toolbar, .k-grid-pager > .k-link { display: none; }' +
+                            '</style>' +
+                            '</head>' +
+                            '<body>';
+
+                        var htmlEnd =
+                            '</body>' +
+                            '</html>';
+
+                        var gridHeader = gridElement.children('.k-grid-header');
+                        if (gridHeader[0]) {
+                            var thead = gridHeader.find('thead').clone().addClass('k-grid-header');
+                            printableContent = gridElement
+                                .clone()
+                                .children('.k-grid-header').remove()
+                                .end()
+                                .children('.k-grid-content')
+                                .find('table')
+                                .first()
+                                .children('tbody').before(thead)
+                                .end()
+                                .end()
+                                .end()
+                                .end()[0].outerHTML;
+                        } else {
+                            printableContent = gridElement.clone()[0].outerHTML;
+                        }
+
+                        doc.write(htmlStart + printableContent + htmlEnd);
+                        doc.close();
+                        win.print();
+                    }
+
+                    if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
+                        if (!$scope.esGroupId || !$scope.esFilterId) {
+                            throw "esGridOptions NOT defined. In order to dynamically get the options you must set GroupID and FilterID for esgrid to work";
+                        }
+                        // Now esGridOption explicitly assigned so ask the server 
+                        esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
+                            .then(function(ret) {
+                                var p1 = ret.data;
+                                var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
+                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
+                            });
+                    }
+                }
+            };
+        }
+    ])
+
+    .directive('esLocalGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esGridOptions: "=",
+                    esDataSource: "=",
+                },
+                templateUrl: function(element, attrs) {
+                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
+                    return "src/partials/esLocalGrid.html";
+                },
+                link: function($scope, iElement, iAttrs) {
+                    $scope.esGridRun = function() {
+                        if ($scope.esGridCtrl) {
+                            $scope.esGridCtrl.dataSource.read();
+                        }
+                    }
+
+                    $scope.downloadBlob = function(gid) {
+                        esWebApiService.fetchES00DocumentBlobDataByGID(gid)
+                            .then(function(result) {
+                                var fileData = result.data;
+
+                                var docType = result.headers()["content-type"];
+                                $log.info("File " + $scope.pAsset + " ===> " + docType);
+                                var file = new Blob([fileData], {
+                                    type: docType
+                                });
+                                //saveAs(file, "test.pdf");
+                                var fU = URL.createObjectURL(file);
+                                window.open(fU);
+                            })
+                            .catch(function(err) {
+                                $log.error("2nd error = " + JSON.stringify(err));
+                            });
+                    };
+                }
+            };
+        }
+    ])
+
+    /**
+     * @ngdoc directive
+     * @name es.Web.UI.directive:es00DocumentsDetail
+     * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
+     * @requires es.Web.UI.esUIHelper
+     * @requires $log
+     * @restrict AE
+     * @param {object=} esDocumentGridOptions A subset or full set of esGridOptions for the kendo-grid that will show the ES00Documents. 
+     * The ES00Documents kendo-grid will be initialized by the merge of the PublicQueryInfo gridoptions as retrieved for the GroupID = "ESGOCompany" and
+     * FilterID = "ES00DocumentsDetails" public query. 
+     * @param {string=} esMasterRowField The field of the master grid row that the ES00DocumentGrid will be a detail of. The value of this field in the master row will form
+     * the parameter for fetchES00DocumentsByGID service to retrieve the ES00DocumentRows.
+     *
+     * @description
+     *
+     * **TBD**
+     * This directive is responsible to render the html for the presentation of the ES00Documents as a detail of a kendo-grid
+     */
+    .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
             function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals) {
 
                 return {
@@ -833,6 +876,7 @@
                             throw "You must set a param";
                         }
 
+                        $scope.esGlobals = esGlobals;
                         $scope.esWebUIHelper = esWebUIHelper;
                         $scope.esWebApiService = esWebApiService;
 
@@ -921,7 +965,9 @@
                         esParamsValues: '=',
                         esGroupId: "=",
                         esFilterId: "=",
-                        esRunClick: "&"
+                        esRunClick: "&",
+                        esRunTitle: "=",
+                        esShowRun: "="
                     },
                     templateUrl: function(element, attrs) {
                         $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
@@ -936,6 +982,10 @@
                             }
                         }
 
+                        if ($scope.esShowRun && !$scope.esRunTitle) {
+                            $scope.esRunTitle = "Apply";
+                        }
+
                         if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef && !iAttrs.esParamsValues) {
                             $scope.esParamsValues = $scope.esGroupId.Params;
                         }
@@ -947,6 +997,11 @@
                                 esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
                                     .then(function(ret) {
                                         var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
+
+                                        if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef) {
+                                            $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, false);
+                                        }
+
                                         if ($scope.esParamsValues && ($scope.esParamsValues instanceof esGlobals.ESParamValues)) {
                                             $scope.esParamsValues.merge(v.defaultValues);
                                         } else {
@@ -1113,6 +1168,13 @@
 
                 var xParam = {
                     transport: {
+                        requestEnd: function(e) {
+                            var response = e.response;
+                            var type = e.type;
+                            console.log(type); // displays "read"
+                            console.log(response.length); // displays "77"
+                        },
+
                         read: function(options) {
 
                             $log.info("FETCHing PQ with PQParams ", JSON.stringify(qParams), " and gridoptions ", JSON.stringify(options));
@@ -1187,6 +1249,54 @@
                 }
             }
 
+            function esGridInfoToLocalKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esDataSource) {
+                var grdopt = {
+                    pageable: {
+                        refresh: true,
+                        pageSizes: [20, 50, 100]
+                    },
+                    autoBind: true,
+                    sortable: true,
+                    scrollable: true,
+                    selectable: "row",
+                    //mobile: true,
+                    allowCopy: true,
+                    resizable: true,
+                    reorderable: true,
+                    navigatable: true,
+                    noRecords: {
+                        template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
+                    },
+
+
+                    filterable: true,
+                    groupable: true,
+                    toolbar: [
+                        "pdf",
+                        "excel"
+                    ],
+                    pdf: {
+                        allPages: true,
+                        fileName: esGroupId + "-" + esFilterId + ".pdf",
+                    },
+                    excel: {
+                        allPages: true,
+                        fileName: esGroupId + "-" + esFilterId + ".xlsx",
+                        filterable: true
+                    }
+                };
+
+                grdopt.columns = esGridInfo.columns;
+                grdopt.selectedMasterField = esGridInfo.selectedMasterField;
+                grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
+                grdopt.columnMenu = true;
+
+                if (esDataSource) {
+                    grdopt.dataSource = esDataSource;    
+                }
+
+                return grdopt;
+            }
 
             function esGridInfoToKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
                 var dsOptions = {
@@ -1264,7 +1374,6 @@
                 grdopt.change = handleChangeGridRow;
                 grdopt.dataBound = handleChangeGridRow;
 
-
                 return grdopt;
             }
 
@@ -1301,6 +1410,7 @@
                 esCol.columnSet = parseInt(jCol.ColumnSet);
                 esCol.dataType = jCol.DataTypeName ? jCol.DataTypeName.toLowerCase() : undefined;
                 esCol.editType = jCol.EditType;
+                esCol.width = parseInt(jCol.Width);
 
                 esCol.formatString = jCol.FormatString;
                 esCol.visible = (jCol.Visible == "true");
@@ -2486,6 +2596,7 @@ var esgridInfo = esUIHelper.winGridInfoToESGridInfo(inGroupID, inFilterID, gride
 
                 winColToESCol: winColToESCol,
                 esColToKCol: esColToKCol,
+                esGridInfoToLocalKInfo: esGridInfoToLocalKInfo,
 
                 /**
                  * @ngdoc function

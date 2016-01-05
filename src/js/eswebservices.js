@@ -3657,14 +3657,20 @@ $scope.dofetchPublicQuery = function() {
                              */
                             fetchPublicQuery: function(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb) {
                                 var group;
+                                var execParams;
                                 if (pqGroupID instanceof esGlobals.ESPublicQueryDef) {
                                     group = (pqGroupID.GroupID || "").trim();
                                     pqFilterID = (pqGroupID.FilterID || "").trim();
                                     pqOptions = pqGroupID.PQOptions;
-                                    pqParams = pqGroupID.Params;
+                                    execParams = pqGroupID.Params;
                                 } else {
                                     group = pqGroupID ? pqGroupID.trim() : "";
                                     pqFilterID = pqFilterID ? pqFilterID.trim() : "";
+                                    execParams = pqParams;
+                                }
+
+                                if (execParams && execParams instanceof esGlobals.ESParamValues) {
+                                    execParams = execParams.getExecuteVals();
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY__, group, "/", pqFilterID);
@@ -3680,7 +3686,7 @@ $scope.dofetchPublicQuery = function() {
                                         "Authorization": esGlobals.getWebApiToken()
                                     },
                                     url: surl,
-                                    params: pqParams
+                                    params: execParams
                                 };
 
                                 if (pqOptions) {
