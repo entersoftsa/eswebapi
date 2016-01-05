@@ -818,7 +818,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                             gridOptions: {},
                             pVals: new esGlobals.ESParamValues()
                         },
-                        */
+                        
             {
                 groupId: "ESMMStockItem",
                 filterId: "StockItemPhotoList",
@@ -838,7 +838,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 pVals: new esGlobals.ESParamValues()
             },
 
-
+*/
             {
                 groupId: "ESFIItem",
                 filterId: "ESFIItem_def",
@@ -846,6 +846,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 pVals: new esGlobals.ESParamValues()
             },
 
+/*
             {
                 groupId: "ESFICustomer",
                 filterId: "ESFITradeAccountCustomer_def",
@@ -860,7 +861,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 pVals: new esGlobals.ESParamValues()
             },
 
-
+*/
         ];
     }
 ]);
