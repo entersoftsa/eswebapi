@@ -28,10 +28,10 @@
         <ui-gmap-google-map ng-hide="esToggleData == 'Data'" ng-class="{ 'col-xs-12 col-sm-6': esToggleData == 'Both', 'col-xs-12' : esToggleData == 'Map'}"
             center="esMapOptions.center"
             zoom="esMapOptions.zoom"
-            control="map"
+            control="esMapControl"
             pan="true">
 
-            <es-map-markers es-rows="mapDS" es-pq-info="myPQInfo" es-type="esType" es-type-options="esTypeOptions" es-show-window="esShowWindow" es-click="esClick">
+            <es-map-markers es-rows="mapDS" es-pq-info="myPQInfo" es-type="esType" es-type-options="esTypeOptions" es-show-window="esShowWindow" es-click="esClick()">
             </es-map-markers>
         </ui-gmap-google-map>
     

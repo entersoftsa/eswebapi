@@ -8392,11 +8392,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esShowWindow: "=",
                     esTypeOptions: "=",
                     esType: "=",
+                    esMapControl: "=",
                     esClick: "&",
                 },
                 template: '<div ng-include src="\'src/partials/esMapPQ.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
                     $scope.mapDS = new kendo.data.ObservableArray([]);
+
+                    if (!$scope.esMapControl) {
+                        $scope.esMapControl = {};
+                    }
 
                     if (!$scope.esType) {
                         $scope.esType = 'standard';
