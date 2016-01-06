@@ -1,28 +1,9 @@
-
-<div class="row">
-    <div class="col-xs-12">
-        <es-params-panel ng-cloak 
-                    es-group-id="pqInfo" 
-                    es-run-click="runPQ()"
-                    es-show-run="'true'"
-                    es-run-title="'Execute'">
-        </es-params-panel>
-    </div>
-</div>
-
-<div class="row">
-    
-        <ui-gmap-google-map class="col-xs-12 col-sm-9"
-            center="mapOptions.center"
-            zoom="mapOptions.zoom"
-            control="map"
-            pan="true">
-
-            <es-map-markers es-rows="mapDS" es-pq-info="myPQInfo" es-show-window="true" es-click="myMarkerClick">
-            </es-map-markers>
-        </ui-gmap-google-map>
-    
-    
-    <es-local-grid class="col-xs-12 col-sm-3" es-grid-options="pqInfo.esGridOptions" es-data-source="mapDS" />
-    
-</div>
+ <es-map-pq 
+    es-map-options="myMapOptions"
+    es-pq-def="myPQDef"
+    es-show-window="myShowWindow"
+    es-type="myType"
+    es-type-options="myTypeOptions"
+    es-click="myMapMarkerClick"
+    >
+</es-map-pq>

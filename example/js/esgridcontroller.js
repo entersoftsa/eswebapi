@@ -811,14 +811,13 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
-        $scope.pqs = [
-            /*{
-                            groupId: "ESFICustomer",
-                            filterId: "CS_CollectionPlanning",
-                            gridOptions: {},
-                            pVals: new esGlobals.ESParamValues()
-                        },
-                        
+        $scope.pqs = [{
+                groupId: "ESFICustomer",
+                filterId: "CS_CollectionPlanning",
+                gridOptions: {},
+                pVals: new esGlobals.ESParamValues()
+            },
+
             {
                 groupId: "ESMMStockItem",
                 filterId: "StockItemPhotoList",
@@ -838,7 +837,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 pVals: new esGlobals.ESParamValues()
             },
 
-*/
+
             {
                 groupId: "ESFIItem",
                 filterId: "ESFIItem_def",
@@ -846,22 +845,22 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 pVals: new esGlobals.ESParamValues()
             },
 
-            /*
-                        {
-                            groupId: "ESFICustomer",
-                            filterId: "ESFITradeAccountCustomer_def",
-                            gridOptions: {},
-                            pVals: new esGlobals.ESParamValues()
-                        },
 
-                        {
-                            groupId: "ESMMStockItem",
-                            filterId: "ESMMStockItem_def",
-                            gridOptions: {},
-                            pVals: new esGlobals.ESParamValues()
-                        },
+            {
+                groupId: "ESFICustomer",
+                filterId: "ESFITradeAccountCustomer_def",
+                gridOptions: {},
+                pVals: new esGlobals.ESParamValues()
+            },
 
-            */
+            {
+                groupId: "ESMMStockItem",
+                filterId: "ESMMStockItem_def",
+                gridOptions: {},
+                pVals: new esGlobals.ESParamValues()
+            },
+
+
         ];
     }
 ]);
@@ -1035,82 +1034,26 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
 
 smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
     function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
-        $scope.GPSPosition = null;
-        $scope.myMarkers = [];
-        $scope.myDS = [{
-            "GID": "b4da1514-9682-4d23-8da0-11597626360e",
-            "Latitude": 37.97633167,
-            "Longitude": 23.70813333,
-            "SatelliteTime": "2013-03-02T10:00:00",
-            "TowerID": 0,
-            "LocationAreaCode": 0,
-            "Network": 0,
-            "Country": 0,
-            "RecordType": 1,
-            "DeviceID": "KOG",
-            "RecordOrigin": 0,
-            "fGID": null,
-            "esIcon": "",
-            "esLabel": "7",
-            "esTitle": "Hi KFIMar  2 2013 10:00AM",
-            "esTempl": "gmapwindow.html"
-        }];
-        $scope.mapDS = new kendo.data.ObservableArray($scope.myDS);
-        $scope.map = {};
-        $scope.mapOptions = {
+
+        $scope.myMapOptions = {
             center: {
                 longitude: 0,
                 latitude: 0
             },
-            zoom: 15,
+            zoom: 2,
         };
-        $scope.pqInfo = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+        $scope.myPQDef = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+        $scope.MyShowWindow = false;
+        $scope.myType = "standard";
+        $scope.myTypeOptions = null;
 
-        $scope.getMyPosition = function() {
-            $scope.GPSPosition = null;
-            esGeoLocationSrv.getCurrentPosition()
-                .then(function(x) {
-                    $scope.GPSPosition = x;
-                    var vPos = {
-                        latitude: x.coords.latitude,
-                        longitude: x.coords.longitude
-                    };
 
-                    $scope.myMarkers = [{
-                        id: "abcd-00",
-                        longitude: vPos.longitude,
-                        latitude: vPos.latitude,
-                        esTempl: 'gmapwindow.html',
-                        options: {
-                            title: "Hello " + new Date(),
-                            label: "Label " + new Date(),
-                            icon: "abcd.png"
-                        },
-
-                        esObj: {
-                            message: "Hi from stavros"
-                        },
-                    }];
-
-                    $scope.mapOptions.center = vPos;
-
-                }, function(err) {
-                    alert(err.message + " - " + err.code);
-                });
+        
+        $scope.myMapMarkerClick = function(a, b, c) {
+            $log.info("Click");
+            alert("I am a label clicked !!!");
         }
 
-        $scope.runPQ = function() {
-            esWebApi.fetchPublicQuery($scope.pqInfo)
-                .then(function(ret) {
-                    $scope.mapDS = new kendo.data.ObservableArray(ret.data.Rows);
-                });
 
-        }
-
-        GoogleMapApi.then(function(maps) {
-            $log.info("Google maps ver = " + maps.version);
-            $scope.getMyPosition();
-            maps.visualRefresh = true;
-        });
     }
 ]);

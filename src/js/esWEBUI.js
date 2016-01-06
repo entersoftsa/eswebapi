@@ -309,6 +309,41 @@
         return convertPQRowsToMapRows;
     })
 
+
+    .directive('esMapPq', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+            return {
+                restrict: 'AE',
+                replace: true,
+                scope: {
+                    esMapOptions: "=",
+                    esPqDef: "=",
+                    esShowWindow: "=",
+                    esTypeOptions: "=",
+                    esType: "=",
+                    esClick: "&",
+                },
+                template: '<div ng-include src="\'src/partials/esMapPQ.html\'"></div>',
+                link: function($scope, iElement, iAttrs) {
+                    $scope.mapDS = new kendo.data.ObservableArray([]);
+
+                    if (!$scope.esType) {
+                        $scope.esType = 'standard';
+                    }
+
+                    $scope.esToggleData = 'Map';
+
+                    $scope.executePQ = function() {
+                        esWebApiService.fetchPublicQuery($scope.esPqDef)
+                            .then(function(ret) {
+                                $scope.mapDS = new kendo.data.ObservableArray(ret.data.Rows);
+                            });
+                    }
+                }
+            };
+        }
+    ])
+
     .directive('esMapMarkers', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
         function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
             return {
@@ -967,7 +1002,8 @@
                         esFilterId: "=",
                         esRunClick: "&",
                         esRunTitle: "=",
-                        esShowRun: "="
+                        esShowRun: "=",
+                        esLocalDataSource: "="
                     },
                     templateUrl: function(element, attrs) {
                         $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
@@ -999,7 +1035,11 @@
                                         var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
 
                                         if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef) {
-                                            $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, false);
+                                            if ($scope.esLocalDataSource) {
+                                                $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToLocalKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v);
+                                            } else {
+                                                $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, false);
+                                            }
                                         }
 
                                         if ($scope.esParamsValues && ($scope.esParamsValues instanceof esGlobals.ESParamValues)) {
@@ -1292,7 +1332,7 @@
                 grdopt.columnMenu = true;
 
                 if (esDataSource) {
-                    grdopt.dataSource = esDataSource;    
+                    grdopt.dataSource = esDataSource;
                 }
 
                 return grdopt;
