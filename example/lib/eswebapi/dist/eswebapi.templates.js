@@ -7,12 +7,12 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esGrid.html',
-    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions.dataSource es-srv-paging=esSrvPaging k-options=esGridOptions></div>"
+    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions.dataSource es-srv-paging=esSrvPaging k-options=esGridOptions k-rebind=esGridOptions.reBind></div>"
   );
 
 
   $templateCache.put('src/partials/esLocalGrid.html',
-    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions k-data-source=esDataSource k-auto-bind=true k-options=esGridOptions></div>"
+    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions k-data-source=esDataSource k-auto-bind=true k-rebind=esGridOptions.reBind k-options=esGridOptions></div>"
   );
 
 
@@ -22,7 +22,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esMapPQ.html',
-    "<div class=row><div class=col-xs-12><es-params-panel ng-cloak es-group-id=esPqDef es-run-click=executePQ() es-show-run=\"'true'\" es-local-data-source=\"'true'\" es-run-title=\"'Run Map'\"></es-params-panel></div><div class=\"btn-group col-xs-6\"><label class=\"btn btn-primary\" ng-model=esToggleData uib-btn-radio=\"'Map'\">Map</label><label class=\"btn btn-primary\" ng-model=esToggleData uib-btn-radio=\"'Data'\">Data</label><label class=\"btn btn-primary\" ng-model=esToggleData uib-btn-radio=\"'Both'\">Both</label></div><div class=\"btn-group col-xs-6\"><label class=\"btn btn-primary\" ng-model=esType uib-btn-radio=\"'standard'\">Standard</label><label class=\"btn btn-primary\" ng-model=esType uib-btn-radio=\"'cluster'\">Cluster</label><label class=\"btn btn-primary\" ng-model=esType uib-btn-radio=\"'spider'\">Spider</label></div></div><div class=row><ui-gmap-google-map ng-hide=\"esToggleData == 'Data'\" ng-class=\"{ 'col-xs-12 col-sm-6': esToggleData == 'Both', 'col-xs-12' : esToggleData == 'Map'}\" center=esMapOptions.center zoom=esMapOptions.zoom control=esMapControl pan=true><es-map-markers es-rows=mapDS es-pq-info=myPQInfo es-type=esType es-type-options=esTypeOptions es-show-window=esShowWindow es-click=esClick()></es-map-markers></ui-gmap-google-map><es-local-grid ng-hide=\"esToggleData == 'Map'\" ng-class=\"{ 'col-xs-12 col-sm-6': esToggleData == 'Both', 'col-xs-12' : esToggleData == 'Data'}\" es-grid-options=esPqDef.esGridOptions es-data-source=\"mapDS\"></div>"
+    "<div class=row><div class=col-xs-12><es-params-panel ng-cloak es-group-id=esPqDef es-run-click=executePQ() es-show-run=\"'true'\" es-local-data-source=\"'true'\" es-run-title=\"'Run Map'\"></es-params-panel></div><div class=\"btn-group col-xs-6\"><label class=\"btn btn-primary\" ng-model=esToggleData uib-btn-radio=\"'Map'\">Map</label><label class=\"btn btn-primary\" ng-model=esToggleData uib-btn-radio=\"'Data'\">Data</label><label class=\"btn btn-primary\" ng-model=esToggleData uib-btn-radio=\"'Both'\">Both</label></div><div class=\"btn-group col-xs-6\"><label class=\"btn btn-primary\" ng-model=esType uib-btn-radio=\"'standard'\">Standard</label><label class=\"btn btn-primary\" ng-model=esType uib-btn-radio=\"'cluster'\">Cluster</label><label class=\"btn btn-primary\" ng-model=esType uib-btn-radio=\"'spider'\">Spider</label></div></div><div class=row><ui-gmap-google-map ng-hide=\"esToggleData == 'Data'\" ng-class=\"{ 'col-xs-12 col-sm-6': esToggleData == 'Both', 'col-xs-12' : esToggleData == 'Map'}\" center=esMapOptions.center zoom=esMapOptions.zoom control=esMapControl pan=true><es-map-markers es-rows=mapDS es-pq-info=myPQInfo es-high-light=esHighLight es-type=esType es-type-options=esTypeOptions es-show-window=esShowWindow es-click=esClick()></es-map-markers></ui-gmap-google-map><es-local-grid ng-hide=\"esToggleData == 'Map'\" ng-class=\"{ 'col-xs-12 col-sm-6': esToggleData == 'Both', 'col-xs-12' : esToggleData == 'Data'}\" es-grid-options=esPqDef.esGridOptions es-data-source=\"mapDS\"></div>"
   );
 
 

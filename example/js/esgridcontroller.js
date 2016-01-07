@@ -1052,6 +1052,7 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
         $scope.myMapMarkerClick = function(a, b, c) {
             $log.info("Click");
             alert("I am a label clicked !!!");
+            $scope.myHL = "9c484a74-9b8a-49c2-9721-8d301a4863bf";
         }
 
 

@@ -90,40 +90,6 @@
         }
     }
 
-    function convertPQRowsToMapRows(rows, click) {
-        if (!rows) {
-            return rows;
-        }
-
-        if (angular.isArray(rows) && rows.length == 0) {
-            return rows;
-        }
-
-        var ix = 1;
-        var ts = _.map(rows, function(r) {
-            var s = {
-                id: ix,
-                longitude: r.Longitude || r.longitude,
-                latitude: r.Latitude || r.latitude,
-                esTempl: r.esTempl,
-                esOptions: {
-                    title: r.esTitle,
-                    label: r.esLabel,
-                    icon: r.esIcon
-                },
-                esObj: r
-            };
-
-            ix += 1;
-            return s;
-        });
-
-        return _.filter(ts, function(x) {
-            return x.longitude != 0 && x.latitude != 0;
-        });
-    };
-
-
     /**
      * @ngdoc filter
      * @name es.Web.UI.filter:esTrustHtml
@@ -302,16 +268,46 @@
                 }
             };
         }
-    ])
+    ]);
 
-    .filter('esPQDSToesMapDS', function() {
+    function convertPQRowsToMapRows(rows, click) {
+        if (!rows) {
+            return rows;
+        }
 
-        return convertPQRowsToMapRows;
-    })
+        if (angular.isArray(rows) && rows.length == 0) {
+            return rows;
+        }
 
+        var ts = _.map(rows, function(r) {
+            var s = {
+                id: r.GID,
+                longitude: r.Longitude || r.longitude,
+                latitude: r.Latitude || r.latitude,
+                esTempl: r.esTempl,
+                esOptions: {
+                    title: r.esTitle,
+                    label: r.esLabel,
+                    icon: r.esIcon
+                },
+                esObj: r
+            };
+            return s;
+        });
 
-    .directive('esMapPq', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
-        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+        return _.filter(ts, function(x) {
+            return x.longitude != 0 && x.latitude != 0;
+        });
+    };
+
+    esWEBUI
+        .filter('esPQDSToesMapDS', function() {
+
+            return convertPQRowsToMapRows;
+        })
+
+    .directive('esMapPq', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$timeout', 'uiGmapGoogleMapApi', 
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize, $timeout, GoogleMapApi) {
             return {
                 restrict: 'AE',
                 replace: true,
@@ -322,6 +318,7 @@
                     esTypeOptions: "=",
                     esType: "=",
                     esMapControl: "=",
+                    esHighLight: "=",
                     esClick: "&",
                 },
                 template: '<div ng-include src="\'src/partials/esMapPQ.html\'"></div>',
@@ -332,6 +329,10 @@
                         $scope.esMapControl = {};
                     }
 
+                    GoogleMapApi.then(function(maps) {
+                        $log.info("Google maps ver = " + maps.version);
+                    });
+
                     if (!$scope.esType) {
                         $scope.esType = 'standard';
                     }
@@ -339,6 +340,22 @@
                     $scope.esToggleData = 'Map';
 
                     $scope.executePQ = function() {
+                        if (!$scope.esPqDef.esGridOptions.change) {
+                            $scope.esPqDef.esGridOptions.change = function(e) {
+                                var selectedRows = this.select();
+                                if (selectedRows && selectedRows.length == 1) {
+                                    var gid = this.dataItem(selectedRows[0])["GID"];
+                                    if (gid) {
+                                        $timeout(function() {
+                                            $scope.esHighLight = gid;
+                                        });
+                                    }
+                                }
+
+                            }
+                            $scope.esPqDef.esGridOptions.reBind += 1;
+                        }
+
                         esWebApiService.fetchPublicQuery($scope.esPqDef)
                             .then(function(ret) {
                                 $scope.mapDS = new kendo.data.ObservableArray(ret.data.Rows);
@@ -349,8 +366,8 @@
         }
     ])
 
-    .directive('esMapMarkers', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
-        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+    .directive('esMapMarkers', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$timeout',
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize, $timeout) {
             return {
                 restrict: 'AE',
                 replace: true,
@@ -361,10 +378,33 @@
                     esShowWindow: "=",
                     esTypeOptions: "=",
                     esType: "=",
+                    esHighLight: "=",
                     esClick: "&",
                 },
                 template: '<div ng-include src="\'src/partials/esMapMarkers.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
+
+                    $scope.$watch("esHighLight", function(newData) {
+                        var ms = $scope.esMarkers;
+                        if (!ms) {
+                            return;
+                        }
+
+                        _.map(ms, function(m) {
+                            m.esOptions.animation = 0;
+                        });
+                        if (!newData) {
+                            return;
+                        }
+
+                        var it = _.find(ms, function(m) {
+                            return m.id == newData;
+                        });
+                        if (it) {
+                            it.esOptions.animation = 1;
+                            $scope.esMarkers.splice(0, 1);
+                        }
+                    });
 
                     if (iAttrs.esMarkers && iAttrs.esRows) {
                         throw new Error("Only one of the esMarkers or esRows must be specified, not both");
@@ -1340,6 +1380,8 @@
                     grdopt.dataSource = esDataSource;
                 }
 
+                grdopt.reBind = 0;
+
                 return grdopt;
             }
 
@@ -1418,6 +1460,8 @@
 
                 grdopt.change = handleChangeGridRow;
                 grdopt.dataBound = handleChangeGridRow;
+
+                grdopt.reBind = 0;
 
                 return grdopt;
             }
