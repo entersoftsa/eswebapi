@@ -1007,16 +1007,47 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return this.paramValue.dRange;
             }
 
+            /**
+             * @ngdoc constructor
+             * @name es.Services.Web.esGlobals#ESParamValues
+             * @methodOf es.Services.Web.esGlobals
+             * @module es.Services.Web
+             * @kind constructor
+             * @constructor
+             * @description Constructs an ESParamValues object to be used in es-params-panel directive or public query execution
+             * @param {object=} vals a JSON object with key-value properties representing the params
+             * @return {ESParamValues} Returns a new instance of the ESParamValue class.
+             * @example
+```js
+var esVals = new esGlobals.ESParamValues({pCode: 'Hello World'});
+var esVals2 = new esGlobals.ESParamValues();
+```
+            */
             function ESParamValues(vals) {
                 this.setParamValues(vals);
             }
 
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esGlobals#ESParamValues.merge
+             * @methodOf es.Services.Web.esGlobals
+             * @module es.Services.Web
+             * @kind function
+             * @description Merges into the current instance of the ESParamValues object the values provided by the val parameter
+             * @param {ESParamValues|object} val an object that is either of type ESParamValues or a simple JSON object with key-value pairs
+             * with the constraint that the value should be of type {@link es.Services.Web.esGlobals#methods_ESParamVal ESParamVal}.
+             * @example
+```js
+var pA = new esGlobals.ESParamValues({p1: 'Hello', p2: 5});
+var pA = new esGlobals.ESParamValues({p3: 'Hello'})
+```
+            */
             ESParamValues.prototype.merge = function(val) {
                 var x = this;
                 if (val) {
                     for (var prop in val) {
                         if (!val[prop] || !val[prop] instanceof ESParamVal) {
-                            throw new Error("Invalid paramter type in merge function in paramvalues");
+                            throw new Error("Invalid parameter type in merge function in paramvalues");
                         }
 
                         if (!x.hasOwnProperty(prop)) {
@@ -1281,8 +1312,42 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
             return {
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#esConvertGIDtoId
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Converts a string value represeting a GID to a string value that can act as a value for the name attribute in html elements.
+                 * This is a useful function that can be used to convert a gid to an id that can be assigned as an HTML element name i.e. in a form field declartion.
+                 * @param {string} gid the gid in string value representation to be converted
+                 * @return {string} the converted value to string that is of the form "gid" + gid as string BUT with the - char replaced to _.
+                 * If the parameter is null or undefined then the static string "gid" is returned.
+                 * @example
+```html
+<input 
+    class="es-survey-question-control es-param-control" 
+    kendo-date-time-picker
+        name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
+        ng-required="esQuestion.Mandatory" 
+        ng-model="esPsVal[esQuestion.Code]" 
+/>
+```
+                 **/
                 esConvertGIDtoId: esConvertGIDtoId,
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#esConvertIDtoGID
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Converts a string value represeting a GID to a string value that can act as a value for the name attribute in html elements.
+                 * This is a useful function that can be used to convert a gid to an id that can be assigned as an HTML element name i.e. in a form field declartion.
+                 * @param {string} id the string value representation of a gid (as a result of the {@link es.Services.Web.esGlobals#methods_esConvertGIDtoId esConvertGIDtoId function call}) to be converted back to a gid string
+                 * @return {string} the original gid value in string representation.
+                 * If the parameter is null or undefined then the static string "gid" is returned.
+                 **/
                 esConvertIDtoGID: esConvertIDtoGID,
 
 

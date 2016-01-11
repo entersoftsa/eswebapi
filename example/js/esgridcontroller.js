@@ -812,7 +812,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.pqs = [{
-                groupId: "ESFICustomer",
+                groupId: "smeESFICustomer",
                 filterId: "CS_CollectionPlanning",
                 gridOptions: {},
                 pVals: new esGlobals.ESParamValues()
@@ -1046,13 +1046,13 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
         $scope.MyShowWindow = false;
         $scope.myType = "standard";
         $scope.myTypeOptions = null;
+        $scope.myCtrl = {};
 
 
         
         $scope.myMapMarkerClick = function(a, b, c) {
             $log.info("Click");
             alert("I am a label clicked !!!");
-            $scope.myHL = "9c484a74-9b8a-49c2-9721-8d301a4863bf";
         }
 
 

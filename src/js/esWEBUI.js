@@ -402,7 +402,6 @@
                         });
                         if (it) {
                             it.esOptions.animation = 1;
-                            $scope.esMarkers.splice(0, 1);
                         }
                     });
 
