@@ -1490,7 +1490,7 @@ $scope.fetchCompanyParam = function() {
                              * @description Function that returns the ES Params for the requested array of parameter id's
                              * @module es.Services.Web
                              * @kind function
-                             * @param {string[]=} esParams can be
+                             * @param {string[]|string} esParams can be
                              ** an array of strings
                              ** a comma separated string of values
                              ** a string of comma separated list of es params the values of which we want to be returned.

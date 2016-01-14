@@ -1492,7 +1492,7 @@ $scope.fetchCompanyParam = function() {
                              * @description Function that returns the ES Params for the requested array of parameter id's
                              * @module es.Services.Web
                              * @kind function
-                             * @param {string[]=} esParams can be
+                             * @param {string[]|string} esParams can be
                              ** an array of strings
                              ** a comma separated string of values
                              ** a string of comma separated list of es params the values of which we want to be returned.
@@ -6136,52 +6136,33 @@ var resp = {
 (function(angular) {
     'use strict';
 
-    /**
-     * @module
-     * @name  es.Services.Web#Environment
-     * @description 
-     * provides mutators ofr environment options.
-     */
+   
     angular.module('es.services.Web.Environment', [])
         .provider('Environment', [function () {
-            /**
-             * @private @type {Object}
-             * @description holds domain to stage mappings
-             */
+            
             var domainConfig = {dev: [], prod: [], staging: []};
             var _stage = 'dev';
             var _assetsPath = '/KB/app/images';
             var _templatesPath = '/KB/app/templates';
 
-            /**
-             * attempts to get base domain from url
-             * @return {string | null} domain will be null if check fails
-             */
+            
             function _getDomain() {
                 var matches = document.location.href.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
                 return (matches && matches[1]);
             }
 
             return {
-                /**
-                 * manually set stage
-                 * @param {string env
-                 */
+                
                 setStage: function (env) {
                     _stage = env;
                 },
 
-                /**
-                 * read the current stage
-                 * @return {string}
-                 */
+                
                 getStage: function () {
                     return _stage;
                 },
 
-                /**
-                 * path mutators
-                 */
+                
                 setAssetsPath: function (path) {
                     _assetsPath = path;
                 },
@@ -6189,10 +6170,7 @@ var resp = {
                     _templatesPath = path;
                 },
 
-                /**
-                 * declares domains that run development codebase
-                 * @param {array} domains
-                 */
+                
                 addDevelopmentDomains: function (domains) {
                     domainConfig.dev = domains;
                     return this;
@@ -6206,9 +6184,6 @@ var resp = {
                     return this;
                 },
 
-                /**
-                 * attempts to automatically set stage from domain url based on the domainConfig object
-                 */
                 setStageFromDomain: function() {
                     var domain;
                     for (var stage in domainConfig) {
@@ -6537,7 +6512,7 @@ var resp = {
              * @kind function
              * @description This function is used to raise - publish that an event-topic has occurred. As a consequence, all the subscribed to 
              * this topic-event subsciption callback functions will be triggered and executed sequentially.
-             * @param {... number} args or more arguments, with the first being the string for the topic-event that occurred. The rest of the arguments
+             * @param {object} args One or more arguments, with the first being the string for the topic-event that occurred. The rest of the arguments
              * if any will be supplied to the callback functions that will be fired. These extra arguments are considered to be specific to the nature 
              * of the topic-event.
              * @example
@@ -7287,7 +7262,10 @@ var esVals2 = new esGlobals.ESParamValues();
              * @example
 ```js
 var pA = new esGlobals.ESParamValues({p1: 'Hello', p2: 5});
-var pA = new esGlobals.ESParamValues({p3: 'Hello'})
+var pB = new esGlobals.ESParamValues({p3: 'Hello'});
+pA.merge(pB);
+$log.info(JSON.stringify(pA));
+// will result into p1, p2, p3
 ```
             */
             ESParamValues.prototype.merge = function(val) {
@@ -7317,6 +7295,22 @@ var pA = new esGlobals.ESParamValues({p3: 'Hello'})
                 return this;
             }
 
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esGlobals#ESParamValues.setParamValues
+             * @methodOf es.Services.Web.esGlobals
+             * @module es.Services.Web
+             * @kind function
+             * @description Assigns or merges into the current instance of ESParamValues the given vals. If the current instance 
+             * already holds parameter values then their values will be replaced by the vals property values if they exists or unmodified
+             * if the they do not exists in the vals object
+             * @param {object=} vals a JSON object with key-value properties representing the params
+             * @example
+```js
+var x = new esGlobals.ESParamValues();
+x.setParamValues({p1: 'Hello World'});
+```
+            */
             ESParamValues.prototype.setParamValues = function(vals) {
                 var x = this;
 

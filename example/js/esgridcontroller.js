@@ -272,25 +272,22 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                 });
         }
 
+        $scope.pqParams = "";
         // fetchPublicQuery sample
         $scope.dofetchPublicQuery = function() {
-            var group = "ESGOPerson";
-            var filter = "PersonList";
+            var group = $scope.pGroup;
+            var filter = $scope.pFilter;
             $scope.pqResult = "";
 
-            var pqOptions = new esGlobals.ESPQOptions(2, 5, false);
-
-            var pqParams = {
-                Name: "*"
-            };
-
-            esWebApi.fetchPublicQuery(group, filter, pqOptions, pqParams, 'POST')
+            var pqOptions = new esGlobals.ESPQOptions(-1, -1, false);
+            var pars = $scope.pqParams ? JSON.parse($scope.pqParams) : null;
+            esWebApi.fetchPublicQuery(group, filter, pqOptions, pars, 'POST')
                 .then(function(ret) {
                         $scope.pqResult = ret.data;
                         $log.info(ret);
                     },
                     function(err) {
-                        $scope.pqResult = ret;
+                        $scope.pqResult = err;
                         $log.error(err);
                     });
         }
@@ -812,8 +809,8 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.pqs = [{
-                groupId: "smeESFICustomer",
-                filterId: "CS_CollectionPlanning",
+                groupId: "esmmstockitem",
+                filterId: "pricecheckmobile",
                 gridOptions: {},
                 pVals: new esGlobals.ESParamValues()
             },

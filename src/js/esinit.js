@@ -289,7 +289,7 @@
              * @kind function
              * @description This function is used to raise - publish that an event-topic has occurred. As a consequence, all the subscribed to 
              * this topic-event subsciption callback functions will be triggered and executed sequentially.
-             * @param {... number} args or more arguments, with the first being the string for the topic-event that occurred. The rest of the arguments
+             * @param {object} args One or more arguments, with the first being the string for the topic-event that occurred. The rest of the arguments
              * if any will be supplied to the callback functions that will be fired. These extra arguments are considered to be specific to the nature 
              * of the topic-event.
              * @example
@@ -1039,7 +1039,10 @@ var esVals2 = new esGlobals.ESParamValues();
              * @example
 ```js
 var pA = new esGlobals.ESParamValues({p1: 'Hello', p2: 5});
-var pA = new esGlobals.ESParamValues({p3: 'Hello'})
+var pB = new esGlobals.ESParamValues({p3: 'Hello'});
+pA.merge(pB);
+$log.info(JSON.stringify(pA));
+// will result into p1, p2, p3
 ```
             */
             ESParamValues.prototype.merge = function(val) {
@@ -1069,6 +1072,22 @@ var pA = new esGlobals.ESParamValues({p3: 'Hello'})
                 return this;
             }
 
+            /**
+             * @ngdoc function
+             * @name es.Services.Web.esGlobals#ESParamValues.setParamValues
+             * @methodOf es.Services.Web.esGlobals
+             * @module es.Services.Web
+             * @kind function
+             * @description Assigns or merges into the current instance of ESParamValues the given vals. If the current instance 
+             * already holds parameter values then their values will be replaced by the vals property values if they exists or unmodified
+             * if the they do not exists in the vals object
+             * @param {object=} vals a JSON object with key-value properties representing the params
+             * @example
+```js
+var x = new esGlobals.ESParamValues();
+x.setParamValues({p1: 'Hello World'});
+```
+            */
             ESParamValues.prototype.setParamValues = function(vals) {
                 var x = this;
 
