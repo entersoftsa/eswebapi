@@ -1,0 +1,15 @@
+<div>
+    <br>
+    <form name="priceCheckForm" ng-submit="submit()">
+        Code:
+        <input type="text" ng-model="searchCode" name="searchCode" ng-required="true" />
+        <input type="submit" id="submit" value="Search" ng-disabled="isWorking || priceCheckForm.$invalid" />
+    </form>
+    <hr/>
+    <div ng-if="stockRecord">
+    	<div ng-repeat="(key, value) in stockRecord">
+    		<label>{{key}}</label>{{value}}
+    		<br>
+    	<div>
+    </div>
+</div>

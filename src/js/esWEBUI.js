@@ -9,7 +9,7 @@
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap']);
+    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize']);
 
     esWEBUI.run(['esMessaging', function(esMessaging) {
 

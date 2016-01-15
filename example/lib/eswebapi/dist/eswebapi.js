@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.6.0 - 2016-01-11
+/*! Entersoft Application Server WEB API - v1.6.0 - 2016-01-15
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -12,7 +12,7 @@
  * @name es.Services.Web
  * @module es.Services.Web
  * @requires ngStorage
- * @requires ngSanitize
+ * @requires ngFileUpload
  * @kind module
  * @description
  * This module encapsulates the services, providers, factories and constants for the **Entersoft AngularJS WEB API** services that can be used
@@ -25,7 +25,7 @@
 
     /* Services */
 
-    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngSanitize', 'ngFileUpload' /*, 'es.Services.Analytics' */ ]);
+    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngFileUpload' /*, 'es.Services.Analytics' */ ]);
 
     esWebServices.
     constant('ESWEBAPI_URL', {
@@ -3701,7 +3701,7 @@ $scope.dofetchPublicQuery = function() {
                                 //if not a GET request, switch to data instead of params
                                 if (httpConfig.method !== 'GET') {
                                     delete httpConfig.params;
-                                    httpConfig.data = pqParams;
+                                    httpConfig.data = execParams;
                                 }
 
                                 var ht = $http(httpConfig);
@@ -8139,7 +8139,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap']);
+    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize']);
 
     esWEBUI.run(['esMessaging', function(esMessaging) {
 

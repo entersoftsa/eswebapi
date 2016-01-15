@@ -1,0 +1,47 @@
+HTML CSS Result Edit on body {
+    margin: 0;
+    padding: 0;
+    background: #ccc;
+}
+
+.nav ul {
+    list-style: none;
+    background-color: #444;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+.nav li {
+    font-size: 0.8em;
+    line-height: 40px;
+    height: 40px;
+    border-bottom: 1px solid #888;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #fff;
+    display: block;
+}
+
+@media screen and (min-width: 600px) {
+    .nav li {
+        width: 120px;
+        border-bottom: none;
+        height: 50px;
+        line-height: 40px;
+        font-size: 0.8em;
+    }
+    .nav li {
+        float: left;
+    }
+    .nav ul {
+        overflow: auto;
+        width: 600px;
+        margin: 0 auto;
+    }
+    .nav {
+        background-color: #444;
+    }
+}

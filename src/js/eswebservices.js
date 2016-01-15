@@ -10,7 +10,7 @@
  * @name es.Services.Web
  * @module es.Services.Web
  * @requires ngStorage
- * @requires ngSanitize
+ * @requires ngFileUpload
  * @kind module
  * @description
  * This module encapsulates the services, providers, factories and constants for the **Entersoft AngularJS WEB API** services that can be used
@@ -23,7 +23,7 @@
 
     /* Services */
 
-    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngSanitize', 'ngFileUpload' /*, 'es.Services.Analytics' */ ]);
+    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngFileUpload' /*, 'es.Services.Analytics' */ ]);
 
     esWebServices.
     constant('ESWEBAPI_URL', {
@@ -3699,7 +3699,7 @@ $scope.dofetchPublicQuery = function() {
                                 //if not a GET request, switch to data instead of params
                                 if (httpConfig.method !== 'GET') {
                                     delete httpConfig.params;
-                                    httpConfig.data = pqParams;
+                                    httpConfig.data = execParams;
                                 }
 
                                 var ht = $http(httpConfig);
