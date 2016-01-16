@@ -1,4 +1,4 @@
-<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/esWEBUI.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/esWEBUI.js#L1492" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esUIHelper</code>
+<a href="https://github.com/entersoftsa/eswebapi/edit/master/src/js/esWEBUI.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/entersoftsa/eswebapi/blob/0b79b21/src/js/esWEBUI.js#L1114" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">esUIHelper</code>
 <div><span class="hint">service in module <code ng:non-bindable="">es.Web.UI</code>
 </span>
 </div>
@@ -16,7 +16,7 @@ yh</p>
 </li>
 </ul>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/esWEBUI.js#L3044" class="view-source icon-eye-open"> </a><h3 id="methods_esgridinfotokinfo">esGridInfoToKInfo(inGroupID, inFilterID, executeParams, esGridInfo)</h3>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/0b79b21/src/js/esWEBUI.js#L2741" class="view-source icon-eye-open"> </a><h3 id="methods_esgridinfotokinfo">esGridInfoToKInfo(inGroupID, inFilterID, executeParams, esGridInfo)</h3>
 <div class="esgridinfotokinfo"><div class="es-web-ui-esuihelper-esgridinfotokinfo-page"><p>This function processes and transforms an <a href="#/api/es.Web.UI.esUIHelper#methods_wingridinfotoesgridinfo">esgridInfo</a> object (abstract definition of gridexInfo)
 to a Telerik kendo-grid layout definition object.</p>
 </div><h5 id="methods_esgridinfotokinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>inGroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-web-ui-esuihelper-esgridinfotokinfo-page"><p>The Entersoft PQ (or Scroller) GroupID the the gridexInfo object describes</p>
@@ -61,12 +61,12 @@ $scope.fetchPQInfo = function() {
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/fd7a082/src/js/esWEBUI.js#L2987" class="view-source icon-eye-open"> </a><h3 id="methods_wingridinfotoesgridinfo">winGridInfoToESGridInfo(inGroupID, inFilterID, gridexInfo)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/0b79b21/src/js/esWEBUI.js#L2683" class="view-source icon-eye-open"> </a><h3 id="methods_wingridinfotoesgridinfo">winGridInfoToESGridInfo(xGroupID, xFilterID, gridexInfo)</h3>
 <div class="wingridinfotoesgridinfo"><div class="es-web-ui-esuihelper-wingridinfotoesgridinfo-page"><p>This function processes and transforms an Entersoft Windows - Janus specific definition of the UI layout of an
 Entersoft Public Query or Entersoft Scroller to an abstract web-oriented defintion of the layout to be used by WEB UI components
 such as telerik kendo-ui, jQuery grids, etc.</p>
-</div><h5 id="methods_wingridinfotoesgridinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>inGroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-web-ui-esuihelper-wingridinfotoesgridinfo-page"><p>The Entersoft PQ (or Scroller) GroupID the the gridexInfo object describes</p>
-</div></td></tr><tr><td>inFilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-web-ui-esuihelper-wingridinfotoesgridinfo-page"><p>The Entersoft PQ (or Scroller) FilterID the the gridexInfo object describes</p>
+</div><h5 id="methods_wingridinfotoesgridinfo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>xGroupID</td><td><a href="" class="label type-hint type-hint-string">string</a><a href="" class="label type-hint type-hint-espublicquerydef">ESPublicQueryDef</a></td><td><div class="es-web-ui-esuihelper-wingridinfotoesgridinfo-page"><p>if string then Entersoft Public Query GroupID or a <a href="#/api/es.Services.Web.esGlobals#methods_espublicquerydef">ESPublicQueryDef</a> object that defines the rest of the parameters</p>
+</div></td></tr><tr><td>xFilterID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-web-ui-esuihelper-wingridinfotoesgridinfo-page"><p>Entersoft Public Query FilterID. In case that pqGroupID is ESPublicQueryDef type then this parameter can be null or undefined</p>
 </div></td></tr><tr><td>gridexInfo</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-web-ui-esuihelper-wingridinfotoesgridinfo-page"><p>The definition object for an Entersoft Public Query (or Scroller) as provided by the result
 of the function <a href="#/api/es.Services.Web.esWebApi#methods_fetchpublicqueryinfo">fetchPublicQueryInfo</a>.</p>
 </div></td></tr></tbody></table><h5 id="methods_wingridinfotoesgridinfo_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-web-ui-esuihelper-wingridinfotoesgridinfo-page"><p>Returns an object that is the abstract (not Janus specific) representation of the gridexInfo.</p>
