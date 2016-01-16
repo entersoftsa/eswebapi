@@ -164,7 +164,7 @@ If for some reason or some kind of applications, a web api client needs to inter
 process then the client has to use the __stickySession__ function of webapi rather than the login. After the initial call to stickysession in order get access
 to the appi server, all subsequent calls will be directed to the specific session that was selected from the pool to serve the stickySession.
 
-**AdminPassword**
+**AdminPassword** This is to be used later in future releases.
 
 **AllowInsecureHttp** if set to true, this instance of the EWAPIS will respond to calls through plain HTTP, otherwise HTTPS (secure HTTP) will be required and no calls (except one that queries the EWAPIS for its capabilities) will be accepted unless they are under https. If in a production environment the use of HTTPS is strongly recommended because sensitive information could be travelling between the client and the server. In order to deploy an HTTPS solution you will need a valid certificate to be installed on the IIS Server, issued by one of the valid and trusted security authorities (VeriSign, GoDaddy, etc.). In case that for any reason you want to bypass the HTTPS requirement, it is strongly recommended to go for alternative solutions in order to secure the communication between the client and the EWAPIS such as VPN, IP security firewalls, etc., assuming that we are referring to intranet applications – clients that are well known to the system and the access can be controlled.
 
