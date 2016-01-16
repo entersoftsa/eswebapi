@@ -2,8 +2,11 @@
 
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
-**Version 1.6.1 next**
-- googlemaps
+**Version 1.7.2
+- googlemaps integration with Entersoft Public Query
+- Enhanced documentation 
+- change in the esGlobals.getUserMessage 
+- A new example found in the StoreExample directory
 
 **Version 1.6.0 Requires ES WEB API 1.8.3 or later**
 - stickySession

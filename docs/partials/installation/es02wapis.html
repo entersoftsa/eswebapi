@@ -155,6 +155,17 @@ to the appi server, all subsequent calls will be directed to the specific sessio
 <ul>
 <li>A list of Subscriptions.</li>
 <li>Each Subscription has <strong>SubscriptionID</strong> which must be unique and a hashed value for a password stored in the <strong>SubscriptionPassword</strong> field.</li>
+</ul>
+<p>The Subscription password is required and it should be encrypted. In order to create an encrypted password you may use the Entersoft WEB API test page. This page is available through the browser.
+Navigate to the url of the server/site that you have installed and configured your Entersoft WEB API Server installation e.g. <a href="http://localhost/esebapi">http://localhost/esebapi</a>. </p>
+<p><img src="images/installation/10.png" alt="Subscription Password"></p>
+<p>In the bottom section of this page you will find the password encryption tool. In the figure above, we have entered the password <strong>passx</strong> clicked on the encrypt button and we got the encrypted result e.g. 
+<strong>CgJHAQYVg+iChKZvXcEKHA==</strong> (for the given password passx). We copy this value and we paste it in the config.json file as the value of the property SubscriptionPasswordas shown in the image below:</p>
+<p><img src="images/installation/11.png" alt="Subscription Password in config.json"></p>
+<p><strong>ATTENTION</strong>
+<strong>Since the passx as well as its encrypted value are being used in all our public sources and examples it is strongly recommended to change the SubscriptionPassword in your live or publicly available solutions. 
+Otherwise your solution will be vulnerable to intruders.</strong></p>
+<ul>
 <li>Each Subscription has a list of Bridges that represent a specific connections to an EAS under a unique combination of DatabaseID and CompanyID as specified in the EAS.</li>
 <li>Each Bridge has the following attributes that need to be specified:</li>
 <li><strong>BridgeID</strong> a unique identifier for the specific Bridge</li>

@@ -171,6 +171,21 @@ to the appi server, all subsequent calls will be directed to the specific sessio
 An instance of EWAPIS can serve one or more EAS either of the same Tax Accounting Entity or of different entities (multi-tenant mode). Each EAS should be registered in the config.json file. For this registration we encounter the following concepts / nodes:
 * A list of Subscriptions.
 * Each Subscription has **SubscriptionID** which must be unique and a hashed value for a password stored in the **SubscriptionPassword** field.
+
+The Subscription password is required and it should be encrypted. In order to create an encrypted password you may use the Entersoft WEB API test page. This page is available through the browser.
+Navigate to the url of the server/site that you have installed and configured your Entersoft WEB API Server installation e.g. http://localhost/esebapi. 
+
+![Subscription Password](images/installation/10.png)
+
+In the bottom section of this page you will find the password encryption tool. In the figure above, we have entered the password **passx** clicked on the encrypt button and we got the encrypted result e.g. 
+**CgJHAQYVg+iChKZvXcEKHA==** (for the given password passx). We copy this value and we paste it in the config.json file as the value of the property SubscriptionPasswordas shown in the image below:
+
+![Subscription Password in config.json](images/installation/11.png)
+
+**ATTENTION**
+**Since the passx as well as its encrypted value are being used in all our public sources and examples it is strongly recommended to change the SubscriptionPassword in your live or publicly available solutions. 
+Otherwise your solution will be vulnerable to intruders.**
+
 * Each Subscription has a list of Bridges that represent a specific connections to an EAS under a unique combination of DatabaseID and CompanyID as specified in the EAS.
 * Each Bridge has the following attributes that need to be specified:
 * **BridgeID** a unique identifier for the specific Bridge
