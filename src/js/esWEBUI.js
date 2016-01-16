@@ -9,7 +9,7 @@
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap']);
+    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize']);
 
     esWEBUI.run(['esMessaging', function(esMessaging) {
 
@@ -24,629 +24,6 @@
             }
         });
     }]);
-
-    var dateRangeResolve = function(dateVal) {
-        if (!dateVal || !dateVal.dRange) {
-            return '';
-        }
-
-        var d = new Date();
-
-        var dObj = _.findWhere(esDateRangeOptions, {
-            dValue: dateVal.dRange
-        });
-        if (!dObj) {
-            return '';
-        }
-
-        var loc = "el-GR";
-        var injector = angular.element(document.querySelector('[ng-app]')).injector();
-
-        var v = injector.get('esGlobals');
-        if (v) {
-            var t = v.getClientSession();
-            if (t && t.connectionModel && t.connectionModel.LangID) {
-                loc = t.connectionModel.LangID;
-            }
-        }
-
-        switch (dObj.dType) {
-            case 0:
-                {
-                    if (!angular.isDate(dateVal.fromD) && !angular.isDate(dateVal.toD)) {
-                        return "";
-                    }
-
-                    var s = "";
-                    if (angular.isDate(dateVal.fromD)) {
-                        s = dateVal.fromD.toLocaleDateString(loc);
-                    }
-                    s = s + " - ";
-
-                    var toS = "";
-                    if (angular.isDate(dateVal.toD)) {
-                        toS = dateVal.toD.toLocaleDateString(loc);
-                    }
-                    s = s + toS;
-                    return s;
-                }
-            case 1:
-                {
-                    if (!angular.isDate(dateVal.fromD)) {
-                        return "";
-                    }
-                    return dateVal.fromD.toLocaleDateString(loc);
-                }
-            case 2:
-                return "";
-            case 3:
-                return d.toLocaleDateString(loc);
-            case 4:
-                return "-> " + d.toLocaleDateString(loc);
-            case 5:
-                return d.toLocaleDateString(loc) + " ->";
-            case 6:
-                {
-                    d.setDate(d.getDate() - 1);
-                    return d.toLocaleDateString(loc);
-                }
-            case 7:
-                {
-                    d.setDate(d.getDate() - 1);
-                    return d.toLocaleDateString(loc) + " ->";
-                }
-            case 8:
-                {
-                    d.setDate(d.getDate() + 1);
-                    return d.toLocaleDateString(loc);
-                }
-            case 9:
-                {
-                    d.setDate(d.getDate() + 1);
-                    return d.toLocaleDateString(loc) + " ->";
-                }
-            case 10:
-                {
-                    var cDay = d.getDay();
-                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
-
-                    var f = new Date(d);
-                    var t = new Date(d);
-                    f.setDate(d.getDate() - sDiff);
-                    t.setDate(f.getDate() + 6);
-
-                    return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
-                }
-            case 11:
-                {
-                    d.setDate(d.getDate() - 7);
-
-                    var cDay = d.getDay();
-                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
-
-                    var f = new Date(d);
-                    var t = new Date(d);
-                    f.setDate(d.getDate() - sDiff);
-                    t.setDate(f.getDate() + 6);
-
-                    return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
-                }
-            case 12:
-                {
-                    d.setDate(d.getDate() + 7);
-
-                    var cDay = d.getDay();
-                    var sDiff = (cDay == 0) ? 6 : (cDay - 1);
-
-                    var f = new Date(d);
-                    var t = new Date(d);
-                    f.setDate(d.getDate() - sDiff);
-                    t.setDate(f.getDate() + 6);
-
-                    return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
-                }
-            case 13:
-                {
-                    d.setDate(1);
-
-                    var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-                    return d.toLocaleDateString(loc) + " - " + f.toLocaleDateString(loc);
-                }
-            case 14:
-                {
-                    d.setDate(1);
-                    return d.toLocaleDateString(loc) + " ->";
-                }
-            case 15:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-                    return "-> " + f.toLocaleDateString(loc);
-                }
-            case 16:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-                    var t = new Date(d.getFullYear(), d.getMonth(), 0);
-                    return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
-                }
-            case 17:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-                    return f.toLocaleDateString(loc) + " ->";
-                }
-            case 18:
-                {
-                    var f = new Date(d.getFullYear(), d.getMonth(), 0);
-                    return "-> " + f.toLocaleDateString(loc);
-                }
-            case 19:
-                {
-                    var m = d.getMonth();
-                    var r = m % 3;
-
-                    var f = new Date(d.getFullYear(), m - r, 1);
-                    var t = new Date(d.getFullYear(), m + (3 - r), 0);
-                    return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
-                }
-            case 20:
-                {
-                    var m = d.getMonth();
-                    var r = m % 3;
-
-                    var t = new Date(d.getFullYear(), m - r, 0);
-                    var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
-                    return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
-                }
-            case 21:
-                {
-                    var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
-                    var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
-                    return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
-                }
-            case 22:
-                {
-                    var f;
-                    var t;
-                    var y = d.getFullYear();
-                    if (m >= 6) {
-                        f = new Date(y, 0, 1);
-                        t = new Date(y, 5, 30);
-                    } else {
-                        f = new Date(y - 1, 6, 1);
-                        t = new Date(y - 1, 11, 31);
-                    }
-
-                    return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
-                }
-
-            case 23:
-                {
-                    var y = d.getFullYear();
-                    var f = new Date(y, 0, 1);
-                    var t = new Date(y, 11, 31);
-                    return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
-                }
-
-            case 24:
-                {
-                    var y = d.getFullYear() - 1;
-                    var f = new Date(y, 0, 1);
-                    var t = new Date(y, 11, 31);
-                    return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
-                }
-            default:
-                return dObj.title;
-        }
-    }
-
-
-    var esComplexParamFunctionOptions = [{
-        caption: "=",
-        value: "EQ"
-    }, {
-        caption: "<>",
-        value: "NE"
-    }, {
-        caption: "<",
-        value: "LT"
-    }, {
-        caption: "<=",
-        value: "LE"
-    }, {
-        caption: ">",
-        value: "GT"
-    }, {
-        caption: ">=",
-        value: "GE"
-    }, {
-        caption: "[]",
-        value: "RANGE"
-    }, {
-        caption: "Κενό",
-        value: "NULL"
-    }, {
-        caption: "Μη κενό",
-        value: "NOTNULL"
-    }];
-
-    var dDateRangeClass = {
-        6: [0, 1, 2, 3, 6, 8, 10, 11, 12, 13, 16, 19, 20, 21, 22, 23, 24],
-        20: [0, 1, 25, 26, 27, 28, 29, 30],
-    };
-
-    var esDateRangeOptions = [{
-        dValue: "0",
-        dType: 0,
-        title: "Specific Date Range"
-    }, {
-        dValue: "1",
-        dType: 1,
-        title: "Specific Date"
-    }, {
-        dValue: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
-        dType: 2,
-        title: "Anything"
-    }, {
-        dValue: "ESDateRange(Day)",
-        dType: 3,
-        title: "Today"
-    }, {
-        dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)',
-        dType: 4,
-        title: "Up Today"
-    }, {
-        dValue: 'ESDateRange(Day, 0, SpecificDate, #9999/01/01#)',
-        dType: 5,
-        title: "Starting from Today"
-    }, {
-        dValue: "ESDateRange(Day, -1)",
-        dType: 6,
-        title: "Yesterday"
-    }, {
-        dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, -1)',
-        dType: 7,
-        title: "Up To Yesterday"
-    }, {
-        dValue: "ESDateRange(Day, 1)",
-        dType: 8,
-        title: "Tomorrow"
-    }, {
-        dValue: 'ESDateRange(Day, 1, SpecificDate, #9999/01/01#)',
-        dType: 9,
-        title: "Starting from Tomorrow"
-    }, {
-        dValue: "ESDateRange(Week)",
-        dType: 10,
-        title: "Current week"
-    }, {
-        dValue: "ESDateRange(Week, -1)",
-        dType: 11,
-        title: "Previous week"
-    }, {
-        dValue: "ESDateRange(Week, 1)",
-        dType: 12,
-        title: "Next week"
-    }, {
-        dValue: "ESDateRange(Month)",
-        dType: 13,
-        title: "Current month"
-    }, {
-        dValue: 'ESDateRange(Month, 0, SpecificDate, #9999/01/01#)',
-        dType: 14,
-        title: "Since 1st of month"
-    }, {
-        dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, 0)',
-        dType: 15,
-        title: "Up to end of month"
-    }, {
-        dValue: "ESDateRange(Month, -1)",
-        dType: 16,
-        title: "Last month"
-    }, {
-        dValue: 'ESDateRange(Month, -1, SpecificDate, #9999/01/01#)',
-        dType: 17,
-        title: "Since 1st of last month"
-    }, {
-        dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, -1)',
-        dType: 18,
-        title: "Up to end of last month"
-    }, {
-        dValue: "ESDateRange(Quarter)",
-        dType: 19,
-        title: "Current quarter"
-    }, {
-        dValue: "ESDateRange(Quarter, -1)",
-        dType: 20,
-        title: "Last quarter"
-    }, {
-        dValue: "ESDateRange(SixMonth)",
-        dType: 21,
-        title: "This HY"
-    }, {
-        dValue: "ESDateRange(SixMonth, -1)",
-        dType: 22,
-        title: "Last HY"
-    }, {
-        dValue: "ESDateRange(Year)",
-        dType: 23,
-        title: "Current Year"
-    }, {
-        dValue: "ESDateRange(Year, -1)",
-        dType: 24,
-        title: "Last Year"
-    }, {
-        dValue: "ESDateRange(FiscalPeriod, 0)",
-        dType: 25,
-        title: "Current Fiscal Period"
-    }, {
-        dValue: "ESDateRange(FiscalYear, 0, Day, 0)",
-        dType: 26,
-        title: "Since start of FY up today"
-    }, {
-        dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, 0)",
-        dType: 27,
-        title: "Since start of FY up to end of Fiscal Period"
-    }, {
-        dValue: "ESDateRange(FiscalPeriod, -1)",
-        dType: 28,
-        title: "Last Fiscal Period"
-    }, {
-        dValue: "ESDateRange(FiscalPeriod, -1, Day, 0)",
-        dType: 29,
-        title: "Since start of last Fiscal Period up today"
-    }, {
-        dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, -1)",
-        dType: 30,
-        title: "Since start of FY up to last Fiscal Period"
-    }, ];
-
-
-    function ESParamVal(paramId, paramVal, enumList) {
-        this.paramCode = paramId;
-        this.paramValue = paramVal;
-        this.enumList = enumList;
-    }
-
-    ESParamVal.prototype.getExecuteVal = function() {
-        return this.paramValue;
-    };
-
-    ESParamVal.prototype.pValue = function(v) {
-        if (!arguments || arguments.length == 0) {
-            // get
-            return this.paramValue;
-        }
-
-        if (this.paramValue === arguments[0]) {
-            return false;
-        }
-
-        this.paramValue = arguments[0];
-        return true;
-    }
-
-    ESParamVal.prototype.strVal = function() {
-        var lst = this.enumList;
-        if (!lst || lst.length == 0) {
-            // typical case, not an enum / option
-            return this.paramValue ? this.paramValue.toString() : '';
-        }
-
-        if (!this.paramValue) {
-            return '';
-        }
-
-        var vals;
-        vals = angular.isArray(this.paramValue) ? this.paramValue : [this.paramValue];
-
-        var s = _.reduce(vals, function(memo, x) {
-            var es = _.findWhere(lst, {
-                value: x
-            });
-            return memo + (es ? es.text : x.toString()) + " + ";
-        }, '');
-
-        return s.substring(0, s.lastIndexOf(" + "));
-    };
-
-
-    function ESNumericParamVal(paramId, paramVal) {
-        //call super constructor
-        ESParamVal.call(this, paramId, paramVal);
-    }
-
-    //inherit from ESParamval SuperClass
-    ESNumericParamVal.prototype = Object.create(ESParamVal.prototype);
-
-    ESNumericParamVal.prototype.strVal = function() {
-        var zero = 0;
-        zero = zero.toString();
-        var froms = this.paramValue.value ? this.paramValue.value.toString() : zero;
-        var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : zero;
-        switch (this.paramValue.oper) {
-            case "RANGE":
-                return "ΑΠΟ " + froms + " ΕΩΣ " + tos;
-
-            case "NULL":
-                return "KENO";
-
-            case "NOTNULL":
-                return "MH KENO";
-
-            default:
-                return this.paramValue.oper.toString() + " " + froms;
-        }
-    }
-
-    ESNumericParamVal.prototype.getExecuteVal = function() {
-        this.paramValue.value = this.paramValue.value || 0;
-        this.paramValue.valueTo = this.paramValue.valueTo || 0;
-
-        switch (this.paramValue.oper) {
-            case "RANGE":
-                return "ESNumeric(" + this.paramValue.oper + ", '" + this.paramValue.value + "', '" + this.paramValue.valueTo + "')";
-            case "NULL":
-            case "NOTNULL":
-                return "ESNumeric(" + this.paramValue.oper + ", '0')";
-            default:
-                return "ESNumeric(" + this.paramValue.oper + ", '" + this.paramValue.value + "')";
-        }
-    }
-
-    function ESStringParamVal(paramId, paramVal) {
-        //call super constructor
-        ESParamVal.call(this, paramId, paramVal);
-    }
-
-    //inherit from ESParamval SuperClass
-    ESStringParamVal.prototype = Object.create(ESParamVal.prototype);
-
-    ESStringParamVal.prototype.strVal = function() {
-        var froms = this.paramValue.value ? this.paramValue.value.toString() : '';
-        var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : '';
-        switch (this.paramValue.oper) {
-            case "RANGE":
-                return "ΑΠΟ " + froms + " ΕΩΣ " + tos;
-
-            case "NULL":
-                return "KENO";
-
-            case "NOTNULL":
-                return "MH KENO";
-
-            default:
-                return this.paramValue.oper.toString() + " " + froms;
-        }
-    }
-
-    ESStringParamVal.prototype.getExecuteVal = function() {
-        switch (this.paramValue.oper) {
-            case "EQ":
-                return this.paramValue.value;
-            case "RANGE":
-                return "ESString(" + this.paramValue.oper + ", '" + this.paramValue.value + "', '" + this.paramValue.valueTo + "')";
-            case "NULL":
-            case "NOTNULL":
-                return "ESString(" + this.paramValue.oper + ", '')";
-            default:
-                return "ESString(" + this.paramValue.oper + ", '" + this.paramValue.value + "')";
-        }
-    }
-
-    function ESDateParamVal(paramId, paramVal) {
-        //call super constructor
-        //param id will be given at a later assignment
-        if (!paramVal) {
-            paramVal = {
-                // empty date range is treated as ANYTHING
-                dRange: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
-                fromD: null,
-                toD: null
-            };
-        }
-        ESParamVal.call(this, paramId, paramVal);
-    }
-
-    ESDateParamVal.prototype = Object.create(ESParamVal.prototype);
-
-    ESDateParamVal.prototype.strVal = function() {
-        return dateRangeResolve(this.paramValue);
-    }
-
-    ESDateParamVal.prototype.getExecuteVal = function() {
-        var s = this.paramValue.dRange;
-        if (s == "0" || s == "1") {
-            var sFromD = "#1753/01/01#";
-            var sToD = "#9999/01/01#";
-            var isEmpty = true;
-
-            // Fix the fromD
-            var mFromD = moment(this.paramValue.fromD);
-            if (mFromD.isValid()) {
-                isEmpty = false;
-                sFromD = mFromD.format('YYYY/MM/DD');
-            }
-
-            var mToD = moment(this.paramValue.toD);
-            if (mToD.isValid()) {
-                isEmpty = false;
-                sToD = mToD.format('YYYY/MM/DD');
-            }
-
-            if (s == "0" || isEmpty) {
-                return "ESDateRange(SpecificDate, " + "#" + sFromD + "#" + ", SpecificDate, " + "#" + sToD + "#" + ")";
-            }
-
-            return "ESDateRange(SpecificDate, " + "#" + sFromD + "#" + ")";
-        }
-
-        return this.paramValue.dRange;
-    }
-
-    function ESParamValues(vals) {
-        this.setParamValues(vals);
-    }
-
-    ESParamValues.prototype.merge = function(val) {
-        var x = this;
-        if (val) {
-            for (var prop in val) {
-                if (!val[prop] || !val[prop] instanceof ESParamVal) {
-                    throw new Error("Invalid paramter type in merge function in paramvalues");
-                }
-
-                if (!x.hasOwnProperty(prop)) {
-                    // property xxx i.e. param xxx does not exist at all. So we must add it during the merge
-                    x[prop] = val[prop];
-                } else {
-                    //property xxx i.e. param xxx already exists. Check the type of the value
-                    if (x[prop] instanceof ESParamVal) {
-
-                        x[prop].enumList = val[prop].enumList;
-                    } else {
-                        // existing property i.e. param is not of ESParamVal type. In that case we override the value to the source one
-                        x[prop] = val[prop];
-                    }
-
-                }
-            }
-        }
-        return this;
-    }
-
-    ESParamValues.prototype.setParamValues = function(vals) {
-        var x = this;
-
-        //delete any previsously assigned properties
-        for (var prop in x) {
-            if (x.hasOwnProperty(prop)) {
-                delete x[prop];
-            }
-        };
-
-        //asign new properties
-        if (!vals || !_.isArray(vals) || vals.length == 0) {
-            return;
-        }
-
-        vals.forEach(function(element, index, array) {
-            x[element.paramCode] = element;
-        });
-    }
-
-    ESParamValues.prototype.getExecuteVals = function() {
-        var x = this;
-        var ret = {};
-        for (var prop in x) {
-            if (x.hasOwnProperty(prop)) {
-                var p = x[prop];
-
-                if (p.paramValue || (angular.isNumber(p.paramValue) && p.paramValue == 0)) {
-                    ret[p.paramCode] = p.getExecuteVal();
-                }
-            }
-        }
-        return ret;
-    }
 
     function ESMasterDetailGridRelation(relationID, detailDataSource, detailParams, detailGridParamCode) {
         this.relationID = relationID;
@@ -712,40 +89,6 @@
             return true;
         }
     }
-
-    function convertPQRowsToMapRows(rows, click) {
-        if (!rows) {
-            return rows;
-        }
-
-        if (angular.isArray(rows) && rows.length == 0) {
-            return rows;
-        }
-
-        var ix = 1;
-        var ts = _.map(rows, function(r) {
-            var s = {
-                id: ix,
-                longitude: r.Longitude || r.longitude,
-                latitude: r.Latitude || r.latitude,
-                esTempl: r.esTempl,
-                esOptions: {
-                    title: r.esTitle,
-                    label: r.esLabel,
-                    icon: r.esIcon
-                },
-                esObj: r
-            };
-
-            ix += 1;
-            return s;
-        });
-
-        return _.filter(ts, function(x) {
-            return x.longitude != 0 && x.latitude != 0;
-        });
-    };
-
 
     /**
      * @ngdoc filter
@@ -925,15 +268,106 @@
                 }
             };
         }
+    ]);
+
+    function convertPQRowsToMapRows(rows, click) {
+        if (!rows) {
+            return rows;
+        }
+
+        if (angular.isArray(rows) && rows.length == 0) {
+            return rows;
+        }
+
+        var ts = _.map(rows, function(r) {
+            var s = {
+                id: r.GID,
+                longitude: r.Longitude || r.longitude,
+                latitude: r.Latitude || r.latitude,
+                esTempl: r.esTempl,
+                esOptions: {
+                    title: r.esTitle,
+                    label: r.esLabel,
+                    icon: r.esIcon
+                },
+                esObj: r
+            };
+            return s;
+        });
+
+        return _.filter(ts, function(x) {
+            return x.longitude != 0 && x.latitude != 0;
+        });
+    };
+
+    esWEBUI
+        .filter('esPQDSToesMapDS', function() {
+
+            return convertPQRowsToMapRows;
+        })
+
+    .directive('esMapPq', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$timeout', 'uiGmapGoogleMapApi', 
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize, $timeout, GoogleMapApi) {
+            return {
+                restrict: 'AE',
+                replace: true,
+                scope: {
+                    esMapOptions: "=",
+                    esPqDef: "=",
+                    esShowWindow: "=",
+                    esTypeOptions: "=",
+                    esType: "=",
+                    esMapControl: "=",
+                    esHighLight: "=",
+                    esClick: "&",
+                },
+                template: '<div ng-include src="\'src/partials/esMapPQ.html\'"></div>',
+                link: function($scope, iElement, iAttrs) {
+                    $scope.mapDS = new kendo.data.ObservableArray([]);
+
+                    if (!$scope.esMapControl) {
+                        $scope.esMapControl = {};
+                    }
+
+                    GoogleMapApi.then(function(maps) {
+                        $log.info("Google maps ver = " + maps.version);
+                    });
+
+                    if (!$scope.esType) {
+                        $scope.esType = 'standard';
+                    }
+
+                    $scope.esToggleData = 'Map';
+
+                    $scope.executePQ = function() {
+                        if (!$scope.esPqDef.esGridOptions.change) {
+                            $scope.esPqDef.esGridOptions.change = function(e) {
+                                var selectedRows = this.select();
+                                if (selectedRows && selectedRows.length == 1) {
+                                    var gid = this.dataItem(selectedRows[0])["GID"];
+                                    if (gid) {
+                                        $timeout(function() {
+                                            $scope.esHighLight = gid;
+                                        });
+                                    }
+                                }
+
+                            }
+                            $scope.esPqDef.esGridOptions.reBind += 1;
+                        }
+
+                        esWebApiService.fetchPublicQuery($scope.esPqDef)
+                            .then(function(ret) {
+                                $scope.mapDS = new kendo.data.ObservableArray(ret.data.Rows);
+                            });
+                    }
+                }
+            };
+        }
     ])
 
-    .filter('esPQDSToesMapDS', function() {
-
-        return convertPQRowsToMapRows;
-    })
-
-    .directive('esMap', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
-        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+    .directive('esMapMarkers', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$timeout',
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize, $timeout) {
             return {
                 restrict: 'AE',
                 replace: true,
@@ -944,10 +378,32 @@
                     esShowWindow: "=",
                     esTypeOptions: "=",
                     esType: "=",
+                    esHighLight: "=",
                     esClick: "&",
                 },
-                template: '<div ng-include src="\'src/partials/esMap.html\'"></div>',
+                template: '<div ng-include src="\'src/partials/esMapMarkers.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
+
+                    $scope.$watch("esHighLight", function(newData) {
+                        var ms = $scope.esMarkers;
+                        if (!ms) {
+                            return;
+                        }
+
+                        _.map(ms, function(m) {
+                            m.esOptions.animation = 0;
+                        });
+                        if (!newData) {
+                            return;
+                        }
+
+                        var it = _.find(ms, function(m) {
+                            return m.id == newData;
+                        });
+                        if (it) {
+                            it.esOptions.animation = 1;
+                        }
+                    });
 
                     if (iAttrs.esMarkers && iAttrs.esRows) {
                         throw new Error("Only one of the esMarkers or esRows must be specified, not both");
@@ -1223,7 +679,8 @@
      * In order to instantiate an esGrid with an Angular application, you have to provide the parameters esGroupId and esFilterId are required.
      * These two parameters along with esExecuteParams will be supplied to the {@link es.Web.UI.esUIHelper#methods_esGridInfoToKInfo esToKendoTransform function}
      */
-    .directive('esGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', function($log, esWebApiService, esMessaging, esWebUIHelper) {
+    .directive('esGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -1232,6 +689,7 @@
                     esExecuteParams: "=",
                     esGridOptions: "=",
                     esSrvPaging: "=",
+                    esDataSource: "=",
                 },
                 templateUrl: function(element, attrs) {
                     $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
@@ -1319,7 +777,6 @@
                         win.print();
                     }
 
-
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
                         if (!$scope.esGroupId || !$scope.esFilterId) {
                             throw "esGridOptions NOT defined. In order to dynamically get the options you must set GroupID and FilterID for esgrid to work";
@@ -1334,98 +791,144 @@
                     }
                 }
             };
-        }])
-        /**
-         * @ngdoc directive
-         * @name es.Web.UI.directive:es00DocumentsDetail
-         * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
-         * @requires es.Web.UI.esUIHelper
-         * @requires $log
-         * @restrict AE
-         * @param {object=} esDocumentGridOptions A subset or full set of esGridOptions for the kendo-grid that will show the ES00Documents. 
-         * The ES00Documents kendo-grid will be initialized by the merge of the PublicQueryInfo gridoptions as retrieved for the GroupID = "ESGOCompany" and
-         * FilterID = "ES00DocumentsDetails" public query. 
-         * @param {string=} esMasterRowField The field of the master grid row that the ES00DocumentGrid will be a detail of. The value of this field in the master row will form
-         * the parameter for fetchES00DocumentsByGID service to retrieve the ES00DocumentRows.
-         *
-         * @description
-         *
-         * **TBD**
-         * This directive is responsible to render the html for the presentation of the ES00Documents as a detail of a kendo-grid
-         */
-        .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', function($log, $uibModal, esWebApiService, esWebUIHelper) {
+        }
+    ])
 
+    .directive('esLocalGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
             return {
                 restrict: 'AE',
                 scope: {
-                    esDocumentGridOptions: "=",
-                    esMasterRowField: "="
+                    esGridOptions: "=",
+                    esDataSource: "=",
                 },
-                template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
+                templateUrl: function(element, attrs) {
+                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
+                    return "src/partials/esLocalGrid.html";
+                },
                 link: function($scope, iElement, iAttrs) {
-
-                    $scope.downloadBlob = function(gid) {
-                        alert(gid);
-                    };
-
-                    if (!$scope.esMasterRowField && !iAttrs.esMasterRowField) {
-                        $scope.esMasterRowField = "GID";
-                        $log.warn("esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
+                    $scope.esGridRun = function() {
+                        if ($scope.esGridCtrl) {
+                            $scope.esGridCtrl.dataSource.read();
+                        }
                     }
 
-                    $log.info("es00DocumentsDetail directive");
+                    $scope.downloadBlob = function(gid) {
+                        esWebApiService.fetchES00DocumentBlobDataByGID(gid)
+                            .then(function(result) {
+                                var fileData = result.data;
 
-                    var getOptions = function() {
-                        var g = "ESGOCompany";
-                        var f = "ES00DocumentsDetails";
-                        var xParam = {
-                            serverGrouping: false,
-                            serverSorting: false,
-                            serverFiltering: false,
-                            serverPaging: false,
-                            pageSize: 20,
-                            transport: {
-                                read: function(options) {
-
-                                    esWebApiService.fetchES00DocumentsByEntityGID($scope.$parent.dataItem[$scope.esMasterRowField])
-                                        .then(function(ret) {
-                                            options.success(ret);
-                                        }, function(err) {
-                                            options.error(err);
-                                        });
-                                }
-
-                            },
-                            schema: {
-                                data: "data",
-                                total: "data.length"
-                            }
-                        };
-
-                        var xDS = new kendo.data.DataSource(xParam);
-
-                        esWebApiService.fetchPublicQueryInfo(g, f, true)
-                            .then(function(ret) {
-                                var p1 = ret.data;
-                                var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
-                                ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
-                                ret.autoBind = true;
-                                ret.toolbar = null;
-                                ret.groupable = false;
-                                ret.dataSource = xDS;
-                                // Add the download column
-                                ret.columns.push({
-                                    template: "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">Download</button>"
+                                var docType = result.headers()["content-type"];
+                                $log.info("File " + $scope.pAsset + " ===> " + docType);
+                                var file = new Blob([fileData], {
+                                    type: docType
                                 });
-
-                                $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
+                                //saveAs(file, "test.pdf");
+                                var fU = URL.createObjectURL(file);
+                                window.open(fU);
+                            })
+                            .catch(function(err) {
+                                $log.error("2nd error = " + JSON.stringify(err));
                             });
                     };
-
-                    getOptions();
                 }
             };
-        }])
+        }
+    ])
+
+    /**
+     * @ngdoc directive
+     * @name es.Web.UI.directive:es00DocumentsDetail
+     * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
+     * @requires es.Web.UI.esUIHelper
+     * @requires $log
+     * @restrict AE
+     * @param {object=} esDocumentGridOptions A subset or full set of esGridOptions for the kendo-grid that will show the ES00Documents. 
+     * The ES00Documents kendo-grid will be initialized by the merge of the PublicQueryInfo gridoptions as retrieved for the GroupID = "ESGOCompany" and
+     * FilterID = "ES00DocumentsDetails" public query. 
+     * @param {string=} esMasterRowField The field of the master grid row that the ES00DocumentGrid will be a detail of. The value of this field in the master row will form
+     * the parameter for fetchES00DocumentsByGID service to retrieve the ES00DocumentRows.
+     *
+     * @description
+     *
+     * **TBD**
+     * This directive is responsible to render the html for the presentation of the ES00Documents as a detail of a kendo-grid
+     */
+    .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
+            function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals) {
+
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esDocumentGridOptions: "=",
+                        esMasterRowField: "="
+                    },
+                    template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
+                    link: function($scope, iElement, iAttrs) {
+
+                        $scope.downloadBlob = function(gid) {
+                            alert(gid);
+                        };
+
+                        if (!$scope.esMasterRowField && !iAttrs.esMasterRowField) {
+                            $scope.esMasterRowField = "GID";
+                            $log.warn("esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
+                        }
+
+                        $log.info("es00DocumentsDetail directive");
+
+                        var getOptions = function() {
+                            var g = "ESGOCompany";
+                            var f = "ES00DocumentsDetails";
+                            var xParam = {
+                                serverGrouping: false,
+                                serverSorting: false,
+                                serverFiltering: false,
+                                serverPaging: false,
+                                pageSize: 20,
+                                transport: {
+                                    read: function(options) {
+
+                                        esWebApiService.fetchES00DocumentsByEntityGID($scope.$parent.dataItem[$scope.esMasterRowField])
+                                            .then(function(ret) {
+                                                options.success(ret);
+                                            }, function(err) {
+                                                options.error(err);
+                                            });
+                                    }
+
+                                },
+                                schema: {
+                                    data: "data",
+                                    total: "data.length"
+                                }
+                            };
+
+                            var xDS = new kendo.data.DataSource(xParam);
+
+                            esWebApiService.fetchPublicQueryInfo(g, f, true)
+                                .then(function(ret) {
+                                    var p1 = ret.data;
+                                    var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
+                                    ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
+                                    ret.autoBind = true;
+                                    ret.toolbar = null;
+                                    ret.groupable = false;
+                                    ret.dataSource = xDS;
+                                    // Add the download column
+                                    ret.columns.push({
+                                        template: "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">Download</button>"
+                                    });
+
+                                    $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
+                                });
+                        };
+
+                        getOptions();
+                    }
+                };
+            }
+        ])
         /**
          * @ngdoc directive
          * @name es.Web.UI.directive:esParam
@@ -1436,35 +939,38 @@
          *
          * 
          */
-        .directive('esParam', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', function($log, $uibModal, esWebApiService, esWebUIHelper) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esParamDef: "=",
-                    esParamVal: "=",
-                    esType: "="
-                },
-                template: '<div ng-include src="\'src/partials/\'+esType+\'.html\'"></div>',
-                link: function($scope, iElement, iAttrs) {
+        .directive('esParam', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
+            function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esParamDef: "=",
+                        esParamVal: "=",
+                        esType: "="
+                    },
+                    template: '<div ng-include src="\'src/partials/\'+esType+\'.html\'"></div>',
+                    link: function($scope, iElement, iAttrs) {
 
-                    if (!$scope.esParamDef) {
-                        throw "You must set a param";
+                        if (!$scope.esParamDef) {
+                            throw "You must set a param";
+                        }
+
+                        $scope.esGlobals = esGlobals;
+                        $scope.esWebUIHelper = esWebUIHelper;
+                        $scope.esWebApiService = esWebApiService;
+
+                        if ($scope.esParamDef.invSelectedMasterTable) {
+                            $scope.esParamLookupDS = esWebUIHelper.getZoomDataSource($scope.esParamDef.invSelectedMasterTable);
+                        }
+
+                        // Case Date Range
+                        if ($scope.esParamDef.controlType == 6 || $scope.esParamDef.controlType == 20) {
+                            $scope.dateRangeOptions = esGlobals.getesDateRangeOptions($scope.esParamDef.controlType);
+                        }
                     }
-
-                    $scope.esWebUIHelper = esWebUIHelper;
-                    $scope.esWebApiService = esWebApiService;
-
-                    if ($scope.esParamDef.invSelectedMasterTable) {
-                        $scope.esParamLookupDS = esWebUIHelper.getZoomDataSource($scope.esParamDef.invSelectedMasterTable);
-                    }
-
-                    // Case Date Range
-                    if ($scope.esParamDef.controlType == 6 || $scope.esParamDef.controlType == 20) {
-                        $scope.dateRangeOptions = esWebUIHelper.getesDateRangeOptions($scope.esParamDef.controlType);
-                    }
-                }
-            };
-        }])
+                };
+            }
+        ])
         /**
          * @ngdoc directive
          * @name es.Web.UI.directive:esWebPq
@@ -1476,46 +982,48 @@
          *
          * 
          */
-        .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', 'esMessaging', function($log, esWebApiService, esWebUIHelper, esMessaging) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esGroupId: "=",
-                    esFilterId: "=",
-                    esGridOptions: "=",
-                    esParamsValues: "=",
-                    esSrvPaging: "=",
-                    esShowTopPagination: "=",
-                },
-                templateUrl: function(element, attrs) {
-                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
-                    return "src/partials/esWebPQ.html";
-                },
-                link: function($scope, iElement, iAttrs) {
-                    if (!$scope.esGroupId || !$scope.esFilterId) {
-                        throw "You must set the pair es-group-id and es-filter-id attrs";
+        .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', 'esMessaging', 'esGlobals',
+            function($log, esWebApiService, esWebUIHelper, esMessaging, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esGroupId: "=",
+                        esFilterId: "=",
+                        esGridOptions: "=",
+                        esParamsValues: "=",
+                        esSrvPaging: "=",
+                        esShowTopPagination: "=",
+                    },
+                    templateUrl: function(element, attrs) {
+                        $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
+                        return "src/partials/esWebPQ.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        if (!$scope.esGroupId || !$scope.esFilterId) {
+                            throw "You must set the pair es-group-id and es-filter-id attrs";
+                        }
+
+                        $scope.executePQ = function() {
+                            $scope.esGridOptions.dataSource.read();
+                        }
+
+                        esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
+                            .then(function(ret) {
+                                var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
+                                if ($scope.esParamsValues && ($scope.esParamsValues instanceof esGlobals.ESParamValues)) {
+                                    $scope.esParamsValues.merge(v.defaultValues);
+                                } else {
+                                    $scope.esParamsValues = v.defaultValues;
+                                }
+                                $scope.esParamsDef = v.params;
+
+                                var p = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
+                                $scope.esGridOptions = angular.extend(p, $scope.esGridOptions);
+                            });
                     }
-
-                    $scope.executePQ = function() {
-                        $scope.esGridOptions.dataSource.read();
-                    }
-
-                    esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
-                        .then(function(ret) {
-                            var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
-                            if ($scope.esParamsValues && ($scope.esParamsValues instanceof ESParamValues)) {
-                                $scope.esParamsValues.merge(v.defaultValues);
-                            } else {
-                                $scope.esParamsValues = v.defaultValues;
-                            }
-                            $scope.esParamsDef = v.params;
-
-                            var p = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
-                            $scope.esGridOptions = angular.extend(p, $scope.esGridOptions);
-                        });
-                }
-            };
-        }])
+                };
+            }
+        ])
         /**
          * @ngdoc directive
          * @name es.Web.UI.directive:esParamsPanel
@@ -1526,46 +1034,73 @@
          *
          * 
          */
-        .directive('esParamsPanel', ['$log', 'esWebApi', 'esUIHelper', function($log, esWebApiService, esWebUIHelper) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esParamsDef: '=',
-                    esPqInfo: '=',
-                    esParamsValues: '=',
-                    esGroupId: "=",
-                    esFilterId: "=",
-                },
-                templateUrl: function(element, attrs) {
-                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
-                    return "src/partials/esParams.html";
-                },
-                link: function($scope, iElement, iAttrs) {
-                    if (!iAttrs.esParamsDef && !iAttrs.esPqInfo && (!$scope.esGroupId || !$scope.esFilterId)) {
-                        throw "You must set either the es-params-def or ea-pq-info or the pair es-group-id and es-filter-id attrs";
-                    }
+        .directive('esParamsPanel', ['$log', 'esWebApi', 'esUIHelper', 'esGlobals',
+            function($log, esWebApiService, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esParamsDef: '=',
+                        esPqInfo: '=',
+                        esParamsValues: '=',
+                        esGroupId: "=",
+                        esFilterId: "=",
+                        esRunClick: "&",
+                        esRunTitle: "=",
+                        esShowRun: "=",
+                        esLocalDataSource: "="
+                    },
+                    templateUrl: function(element, attrs) {
+                        $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
+                        return "src/partials/esParams.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        if (!iAttrs.esParamsDef && !iAttrs.esPqInfo) {
+                            if (!($scope.esGroupId instanceof esGlobals.ESPublicQueryDef)) {
+                                if (!$scope.esGroupId || !$scope.esFilterId) {
+                                    throw new Error("You must set either the es-params-def or es-pq-info or the pair es-group-id and es-filter-id attrs");
+                                }
+                            }
+                        }
 
-                    if (!iAttrs.esParamsDef) {
-                        if (!iAttrs.esPqInfo) {
-                            // we are given groupid and filterid =>
-                            // we must retrieve pqinfo on owr own
-                            esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
-                                .function(function(ret) {
-                                    var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
-                                    if ($scope.esParamsValues && ($scope.esParamsValues instanceof ESParamValues)) {
-                                        $scope.esParamsValues.merge(v.defaultValues);
-                                    } else {
-                                        $scope.esParamsValues = v.defaultValues;
-                                    }
-                                    $scope.esParamsDef = v.params;
-                                });
-                        } else {
-                            $scope.esParamDef = esPqInfo.params;
+                        if ($scope.esShowRun && !$scope.esRunTitle) {
+                            $scope.esRunTitle = "Apply";
+                        }
+
+                        if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef && !iAttrs.esParamsValues) {
+                            $scope.esParamsValues = $scope.esGroupId.Params;
+                        }
+
+                        if (!iAttrs.esParamsDef) {
+                            if (!iAttrs.esPqInfo) {
+                                // we are given groupid and filterid =>
+                                // we must retrieve pqinfo on owr own
+                                esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
+                                    .then(function(ret) {
+                                        var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
+
+                                        if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef) {
+                                            if ($scope.esLocalDataSource) {
+                                                $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToLocalKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v);
+                                            } else {
+                                                $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, false);
+                                            }
+                                        }
+
+                                        if ($scope.esParamsValues && ($scope.esParamsValues instanceof esGlobals.ESParamValues)) {
+                                            $scope.esParamsValues.merge(v.defaultValues);
+                                        } else {
+                                            $scope.esParamsValues = v.defaultValues;
+                                        }
+                                        $scope.esParamsDef = v.params;
+                                    });
+                            } else {
+                                $scope.esParamDef = esPqInfo.params;
+                            }
                         }
                     }
-                }
-            };
-        }]);
+                };
+            }
+        ]);
 
     /**
      * @ngdoc service
@@ -1576,8 +1111,8 @@
      * of schema model for a web grid to show the results of a PQ, Entersoft PQ Parameters meta-data manipulation , etc.
      * yh
      */
-    esWEBUI.factory('esUIHelper', ['$log', '$timeout', 'esMessaging', 'esWebApi',
-        function($log, $timeout, esMessaging, esWebApiService) {
+    esWEBUI.factory('esUIHelper', ['$log', '$timeout', 'esMessaging', 'esWebApi', 'esGlobals',
+        function($log, $timeout, esMessaging, esWebApiService, esGlobals) {
 
             function esColToKCol(esCol) {
                 var tCol = {
@@ -1717,6 +1252,13 @@
 
                 var xParam = {
                     transport: {
+                        requestEnd: function(e) {
+                            var response = e.response;
+                            var type = e.type;
+                            console.log(type); // displays "read"
+                            console.log(response.length); // displays "77"
+                        },
+
                         read: function(options) {
 
                             $log.info("FETCHing PQ with PQParams ", JSON.stringify(qParams), " and gridoptions ", JSON.stringify(options));
@@ -1729,7 +1271,7 @@
                             }
 
                             var executeParams = qParams.Params;
-                            if (executeParams instanceof ESParamValues) {
+                            if (executeParams instanceof esGlobals.ESParamValues) {
                                 executeParams = executeParams.getExecuteVals();
                             }
 
@@ -1791,6 +1333,56 @@
                 }
             }
 
+            function esGridInfoToLocalKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esDataSource) {
+                var grdopt = {
+                    pageable: {
+                        refresh: true,
+                        pageSizes: [20, 50, 100]
+                    },
+                    autoBind: true,
+                    sortable: true,
+                    scrollable: true,
+                    selectable: "row",
+                    //mobile: true,
+                    allowCopy: true,
+                    resizable: true,
+                    reorderable: true,
+                    navigatable: true,
+                    noRecords: {
+                        template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
+                    },
+
+
+                    filterable: true,
+                    groupable: true,
+                    toolbar: [
+                        "pdf",
+                        "excel"
+                    ],
+                    pdf: {
+                        allPages: true,
+                        fileName: esGroupId + "-" + esFilterId + ".pdf",
+                    },
+                    excel: {
+                        allPages: true,
+                        fileName: esGroupId + "-" + esFilterId + ".xlsx",
+                        filterable: true
+                    }
+                };
+
+                grdopt.columns = esGridInfo.columns;
+                grdopt.selectedMasterField = esGridInfo.selectedMasterField;
+                grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
+                grdopt.columnMenu = true;
+
+                if (esDataSource) {
+                    grdopt.dataSource = esDataSource;
+                }
+
+                grdopt.reBind = 0;
+
+                return grdopt;
+            }
 
             function esGridInfoToKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
                 var dsOptions = {
@@ -1868,11 +1460,22 @@
                 grdopt.change = handleChangeGridRow;
                 grdopt.dataBound = handleChangeGridRow;
 
+                grdopt.reBind = 0;
 
                 return grdopt;
             }
 
-            function winColToESCol(inGroupID, inFilterID, gridexInfo, jCol) {
+            function winColToESCol(xGroupID, xFilterID, gridexInfo, jCol) {
+                var inFilterID;
+                var inGroupID;
+
+                if (angular.isObject(xGroupID)) {
+                    inGroupID = xGroupID.GroupID;
+                    inFilterID = xGroupID.FilterID;
+                } else {
+                    inGroupID = xGroupID;
+                    inFilterID = xFilterID;
+                }
                 var esCol = {
                     AA: undefined,
                     field: undefined,
@@ -1895,6 +1498,7 @@
                 esCol.columnSet = parseInt(jCol.ColumnSet);
                 esCol.dataType = jCol.DataTypeName ? jCol.DataTypeName.toLowerCase() : undefined;
                 esCol.editType = jCol.EditType;
+                esCol.width = parseInt(jCol.Width);
 
                 esCol.formatString = jCol.FormatString;
                 esCol.visible = (jCol.Visible == "true");
@@ -1957,7 +1561,7 @@
                 }
 
                 var dVal = eval(expr.replace(/#/g, '"'));
-                var esdate = new ESDateParamVal(pInfo.id);
+                var esdate = new esGlobals.ESDateParamVal(pInfo.id);
 
                 // Specific Date
                 var mD = moment(dVal, "YYYY/MM/DD");
@@ -2033,7 +1637,7 @@
                     valueTo: !isNaN(val2) ? parseInt(val2) : null,
                     oper: inArg.oper || "EQ"
                 };
-                return new ESNumericParamVal(inArg.paramID, k);
+                return new esGlobals.ESNumericParamVal(inArg.paramID, k);
             }
 
             function ESString(inArg, val, val2) {
@@ -2042,7 +1646,7 @@
                     valueTo: val2,
                     oper: inArg.oper || "EQ"
                 };
-                return new ESStringParamVal(inArg.paramID, k);
+                return new esGlobals.ESStringParamVal(inArg.paramID, k);
             }
 
             function ESDateRange(fromType, fromD, toType, toD) {
@@ -2060,7 +1664,7 @@
                 //ESNumeric
                 if (ps.indexOf("entersoft.framework.platform.esnumeric") == 0) {
                     if (!dx || dx.length == 0) {
-                        return new ESNumericParamVal(esParamInfo.id, {
+                        return new esGlobals.ESNumericParamVal(esParamInfo.id, {
                             oper: "EQ",
                             value: 0
                         });
@@ -2071,7 +1675,7 @@
                 //ESDateRange
                 if (ps.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
                     if (!dx || dx.length == 0) {
-                        return new ESDateParamVal(esParamInfo.id, esParamInfo.controlType == 6 ? null : {
+                        return new esGlobals.ESDateParamVal(esParamInfo.id, esParamInfo.controlType == 6 ? null : {
                             dRange: "ESDateRange(FiscalPeriod, 0)",
                             fromD: null,
                             toD: null
@@ -2083,7 +1687,7 @@
                 //ESString
                 if (ps.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
                     if (!dx || dx.length == 0) {
-                        return new ESStringParamVal(esParamInfo.id, {
+                        return new esGlobals.ESStringParamVal(esParamInfo.id, {
                             oper: "EQ",
                             value: null
                         });
@@ -2094,7 +1698,7 @@
 
                 //Not set
                 if (!dx || dx.length == 0) {
-                    return new ESParamVal(esParamInfo.id, null, esParamInfo.enumList);
+                    return new esGlobals.ESParamVal(esParamInfo.id, null, esParamInfo.enumList);
                 }
 
                 var processedVals = _.map(dx, function(k) {
@@ -2104,7 +1708,7 @@
                 if (processedVals.length == 1) {
                     processedVals = processedVals[0];
                 }
-                return new ESParamVal(esParamInfo.id, processedVals, esParamInfo.enumList);
+                return new esGlobals.ESParamVal(esParamInfo.id, processedVals, esParamInfo.enumList);
             }
 
             function processStrToken(esParamInfo, val) {
@@ -2238,11 +1842,20 @@
                 return espInfo;
             }
 
-            function winGridInfoToESGridInfo(inGroupID, inFilterID, gridexInfo) {
+            function winGridInfoToESGridInfo(xGroupID, xFilterID, gridexInfo) {
                 if (!gridexInfo || !gridexInfo.LayoutColumn) {
                     return null;
                 }
 
+                var inFilterID;
+                var inGroupID;
+                if (angular.isObject(xGroupID)) {
+                    inGroupID = xGroupID.GroupID;
+                    inFilterID = xGroupID.FilterID;
+                } else {
+                    inGroupID = xGroupID;
+                    inFilterID = xFilterID;
+                }
                 var fId = inFilterID.toLowerCase();
                 var filterInfo = _.filter(gridexInfo.Filter, function(x) {
                     return x.ID.toLowerCase() == fId;
@@ -2328,16 +1941,12 @@
                     return p.defaultValues;
                 });
 
-                esGridInfo.defaultValues = new ESParamValues(dfValues);
+                esGridInfo.defaultValues = new esGlobals.ESParamValues(dfValues);
                 return esGridInfo;
             }
 
             return ({
-                ESParamValues: ESParamValues,
-                ESParamVal: ESParamVal,
-                ESNumericParamVal: ESNumericParamVal,
-                ESStringParamVal: ESStringParamVal,
-                ESDateParamVal: ESDateParamVal,
+
                 ESRequeryDetailGrids: ESRequeryDetailGrids,
                 ESMasterDetailGridRelation: ESMasterDetailGridRelation,
 
@@ -2351,8 +1960,8 @@
                  * @description  This function processes and transforms an Entersoft Windows - Janus specific definition of the UI layout of an
                  * Entersoft Public Query or Entersoft Scroller to an abstract web-oriented defintion of the layout to be used by WEB UI components
                  * such as telerik kendo-ui, jQuery grids, etc.
-                 * @param {string} inGroupID The Entersoft PQ (or Scroller) GroupID the the gridexInfo object describes
-                 * @param {string} inFilterID The Entersoft PQ (or Scroller) FilterID the the gridexInfo object describes
+                 * @param {string|ESPublicQueryDef} xGroupID if string then Entersoft Public Query GroupID or a {@link es.Services.Web.esGlobals#methods_ESPublicQueryDef ESPublicQueryDef} object that defines the rest of the parameters
+                 * @param {string} xFilterID Entersoft Public Query FilterID. In case that pqGroupID is ESPublicQueryDef type then this parameter can be null or undefined
                  * @param {object} gridexInfo The definition object for an Entersoft Public Query (or Scroller) as provided by the result
                  * of the function {@link es.Services.Web.esWebApi#methods_fetchPublicQueryInfo fetchPublicQueryInfo}.
                  * @return {object} Returns an object that is the abstract (not Janus specific) representation of the gridexInfo.
@@ -3075,6 +2684,7 @@ var esgridInfo = esUIHelper.winGridInfoToESGridInfo(inGroupID, inFilterID, gride
 
                 winColToESCol: winColToESCol,
                 esColToKCol: esColToKCol,
+                esGridInfoToLocalKInfo: esGridInfoToLocalKInfo,
 
                 /**
                  * @ngdoc function
@@ -3132,28 +2742,6 @@ $scope.fetchPQInfo = function() {
 
                 getZoomDataSource: prepareStdZoom,
                 getPQDataSource: prepareWebScroller,
-
-                getesDateRangeOptions: function(dateRangeClass) {
-                    if (!dateRangeClass || !dDateRangeClass[dateRangeClass]) {
-                        return esDateRangeOptions;
-                    }
-
-                    var arr = dDateRangeClass[dateRangeClass];
-                    if (!_.isArray(arr) || arr.length == 0) {
-                        return esDateRangeOptions;
-                    }
-
-                    var x = [];
-                    var i;
-                    for (i = 0; i < arr.length; i++) {
-                        x[i] = esDateRangeOptions[arr[i]];
-                    }
-                    return x;
-                },
-
-                getesComplexParamFunctionOptions: function() {
-                    return esComplexParamFunctionOptions;
-                },
 
             });
         }

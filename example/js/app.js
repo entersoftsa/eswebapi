@@ -53,6 +53,10 @@
                 .when('/survey', {
                     templateUrl: 'survey.html',
                     controller: 'surveyCtrl'
+                })
+                .when('/maps', {
+                    templateUrl: 'maps.html',
+                    controller: 'mapsCtrl'
                 });
 
             $logProvider.addDefaultAppenders();

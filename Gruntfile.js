@@ -38,7 +38,7 @@ module.exports = function(grunt) {
             options: {
                 force: true
             },
-            build: ["dist", "example/lib/eswebapi/dist"],
+            build: ["dist", "example/lib/eswebapi/dist", "StoreExample/lib/eswebapi/dist"],
             docs: ['docs'],
             pub_docs: ['../../docs_eswebapi/eswebapi/css/',
                 '../../docs_eswebapi/eswebapi/font/',
@@ -128,6 +128,12 @@ module.exports = function(grunt) {
                         expand: true,
                         src: ['dist/**'],
                         dest: 'example/lib/eswebapi/'
+                    },
+
+                    {
+                        expand: true,
+                        src: ['dist/**'],
+                        dest: 'StoreExample/lib/eswebapi/'
                     },
                 ],
             },
@@ -225,7 +231,7 @@ module.exports = function(grunt) {
 
         shell: {
             github_sourcefiles: {
-                command: "git add --all&&git commit -m '<%= pkg.version %>'&&git tag <%= pkg.version %>&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git master --tags"
+                command: "git add --all&&git commit -m '<%= pkg.version %>'&&git tag <%= pkg.version %>&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git smework --tags"
             },
             github_pub_docs: {
                 command: "git add --all&&git commit -m '<%= pkg.version %>'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git gh-pages --tags",
@@ -339,7 +345,7 @@ module.exports = function(grunt) {
         'shell:github_sourcefiles',
 
         // send email to dev community
-        'nodemailer:internal'
+        //'nodemailer:internal'
     ]);
 
     // doc

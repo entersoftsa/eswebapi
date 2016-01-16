@@ -1,0 +1,13 @@
+<div>
+    <form name="esLogin">
+        <fieldset>
+            <legend>Credentials</legend>
+            User ID:<br>
+            <input type="text" class="form-control" placeholder="User ID" ng-model="credentials.UserID"></input><br>
+            Password<br>
+            <input type="password" ng-model="credentials.Password" class="form-control" placeholder="Password"></input><br>
+            Branch ID:<br>
+            <input type="text" class="form-control" placeholder="Branch ID" ng-model="credentials.BranchID"></input><br><br>
+            <button ng-click="doLogin()">Login</button>
+        </fieldset>
+</div>

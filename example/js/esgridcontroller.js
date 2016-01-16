@@ -124,7 +124,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
         esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
             var s = esGlobals.getUserMessage(rejection, status);
-            $scope.esnotify.error(s);
+            $scope.esnotify.error(s.messageToShow);
         });
 
         esMessaging.subscribe("AUTH_CHANGED", function(esSession, b) {
@@ -178,7 +178,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             //kendoEvent.sender.text(mapper(kendoEvent.sender.dataItem(), $scope.myDateVal));
         }
 
-        $scope.myDateVal = new esWebUIHelper.ESDateParamVal("myP", {
+        $scope.myDateVal = new esGlobals.ESDateParamVal("myP", {
             //dRange: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)', ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)
             dRange: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
             fromD: null,
@@ -272,25 +272,22 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                 });
         }
 
+        $scope.pqParams = "";
         // fetchPublicQuery sample
         $scope.dofetchPublicQuery = function() {
-            var group = "ESGOPerson";
-            var filter = "PersonList";
+            var group = $scope.pGroup;
+            var filter = $scope.pFilter;
             $scope.pqResult = "";
 
-            var pqOptions = new esGlobals.ESPQOptions(2, 5, false);
-
-            var pqParams = {
-                Name: "*"
-            };
-
-            esWebApi.fetchPublicQuery(group, filter, pqOptions, pqParams, 'POST')
+            var pqOptions = new esGlobals.ESPQOptions(-1, -1, false);
+            var pars = $scope.pqParams ? JSON.parse($scope.pqParams) : null;
+            esWebApi.fetchPublicQuery(group, filter, pqOptions, pars, 'POST')
                 .then(function(ret) {
                         $scope.pqResult = ret.data;
                         $log.info(ret);
                     },
                     function(err) {
-                        $scope.pqResult = ret;
+                        $scope.pqResult = err;
                         $log.error(err);
                     });
         }
@@ -394,13 +391,13 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
                         latitude: vPos.latitude,
                         esTempl: 'gmapwindow.html',
                         options: {
-                        	title: "Hello " + new Date(),
-                        	label: "Label "+ new Date(),
-                        	icon: "abcd.png"
+                            title: "Hello " + new Date(),
+                            label: "Label " + new Date(),
+                            icon: "abcd.png"
                         },
 
                         esObj: {
-                        	message: "Hi from stavros"
+                            message: "Hi from stavros"
                         },
                     }];
 
@@ -413,17 +410,17 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
         $scope.resetpos = function() {
             esWebApi.fetchPublicQuery("ESCMS", "View_ES00GPSLog")
-            .then(function(ret) {
-            	$scope.myDS = ret.data.Rows;
-            	esWebApi.fetchPublicQueryInfo("ESCMS", "View_ES00GPSLog")
-            	.then(function(f) {
-            		$scope.myPQInfo = esWebUIHelper.winGridInfoToESGridInfo("ESCMS", "View_ES00GPSLog", f.data);
-            	})
-            });
+                .then(function(ret) {
+                    $scope.myDS = ret.data.Rows;
+                    esWebApi.fetchPublicQueryInfo("ESCMS", "View_ES00GPSLog")
+                        .then(function(f) {
+                            $scope.myPQInfo = esWebUIHelper.winGridInfoToESGridInfo("ESCMS", "View_ES00GPSLog", f.data);
+                        })
+                });
         }
 
         $scope.myMarkerClick = function(marker, b, c) {
-        	alert("Hi Marker ");
+            alert("Hi Marker ");
         }
 
 
@@ -440,7 +437,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
             maps.visualRefresh = true;
         });
 
-        
+
 
         $scope.multifetchStdZoom = function() {
             var zoomOptions = new esGlobals.ESPQOptions(300, 5, false);
@@ -811,31 +808,30 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', '
 
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
-        $scope.pqs = [
-            /*{
-                            groupId: "ESFICustomer",
-                            filterId: "CS_CollectionPlanning",
-                            gridOptions: {},
-                            pVals: new esWebUIHelper.ESParamValues()
-                        },
-                        */
+        $scope.pqs = [{
+                groupId: "esmmstockitem",
+                filterId: "pricecheckmobile",
+                gridOptions: {},
+                pVals: new esGlobals.ESParamValues()
+            },
+
             {
                 groupId: "ESMMStockItem",
                 filterId: "StockItemPhotoList",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             }, {
                 groupId: "ESGOPerson",
                 filterId: "CRM_Personlist",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             },
 
             {
                 groupId: "ESTMSocialCRM",
                 filterId: "ESTMSMPersonList",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             },
 
 
@@ -843,21 +839,22 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 groupId: "ESFIItem",
                 filterId: "ESFIItem_def",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             },
+
 
             {
                 groupId: "ESFICustomer",
                 filterId: "ESFITradeAccountCustomer_def",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             },
 
             {
                 groupId: "ESMMStockItem",
                 filterId: "ESMMStockItem_def",
                 gridOptions: {},
-                pVals: new esWebUIHelper.ESParamValues()
+                pVals: new esGlobals.ESParamValues()
             },
 
 
@@ -871,7 +868,7 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
         $scope.webPQOptions = {};
         $scope.webPQOptions.theGroupId = "ESMMStockItem";
         $scope.webPQOptions.theFilterId = "ESMMStockItem_def";
-        $scope.webPQOptions.theVals = new esWebUIHelper.ESParamValues();
+        $scope.webPQOptions.theVals = new esGlobals.ESParamValues();
 
         $scope.webPQOptions.theGridOptions = {
             //detailTemplate: '<div><es00-documents-detail es-master-row-field="\'ISUDGID\'" /></div>',
@@ -892,13 +889,13 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
         $scope.detailOptions = {};
         $scope.detailOptions.theGroupId = "ESFIDocumentSales";
         $scope.detailOptions.theFilterId = "WebOrdersContext";
-        $scope.detailOptions.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID")]);
+        $scope.detailOptions.theVals = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ISUDGID")]);
         $scope.detailOptions.theGridOptions = {};
 
         $scope.detail2Options = {};
         $scope.detail2Options.theGroupId = "ESTMSALESACTIVITIES";
         $scope.detail2Options.theFilterId = "ContextSalesActs";
-        $scope.detail2Options.theVals = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ISUDGID")]);
+        $scope.detail2Options.theVals = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ISUDGID")]);
         $scope.detail2Options.theGridOptions = {};
 
         var mds = new esWebUIHelper.ESRequeryDetailGrids();
@@ -955,7 +952,6 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
     }
 ]);
 
-
 smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
@@ -966,7 +962,7 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
         };
 
         var pqOptions = new esGlobals.ESPQOptions(-1, -1, true);
-        var params = new esWebUIHelper.ESParamValues([new esWebUIHelper.ESParamVal("ClosingDate", 3)]);
+        var params = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ClosingDate", 3)]);
 
         $scope.masterOptions = new esGlobals.ESPublicQueryDef("", "ESTMOpportunity", "ESTMOpportunityManagement", pqOptions, params);
         $scope.cDS = esWebUIHelper.getPQDataSource("ds", $scope.masterOptions);
@@ -1030,5 +1026,32 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
 
 
         $scope.masterOptions.theGridOptions = {};
+    }
+])
+
+smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
+    function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
+
+        $scope.myMapOptions = {
+            center: {
+                longitude: 0,
+                latitude: 0
+            },
+            zoom: 2,
+        };
+        $scope.myPQDef = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+        $scope.MyShowWindow = false;
+        $scope.myType = "standard";
+        $scope.myTypeOptions = null;
+        $scope.myCtrl = {};
+
+
+        
+        $scope.myMapMarkerClick = function(a, b, c) {
+            $log.info("Click");
+            alert("I am a label clicked !!!");
+        }
+
+
     }
 ]);

@@ -10,7 +10,7 @@
  * @name es.Services.Web
  * @module es.Services.Web
  * @requires ngStorage
- * @requires ngSanitize
+ * @requires ngFileUpload
  * @kind module
  * @description
  * This module encapsulates the services, providers, factories and constants for the **Entersoft AngularJS WEB API** services that can be used
@@ -23,7 +23,7 @@
 
     /* Services */
 
-    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngSanitize', 'ngFileUpload' /*, 'es.Services.Analytics' */ ]);
+    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngFileUpload' /*, 'es.Services.Analytics' */ ]);
 
     esWebServices.
     constant('ESWEBAPI_URL', {
@@ -1490,7 +1490,7 @@ $scope.fetchCompanyParam = function() {
                              * @description Function that returns the ES Params for the requested array of parameter id's
                              * @module es.Services.Web
                              * @kind function
-                             * @param {string[]=} esParams can be
+                             * @param {string[]|string} esParams can be
                              ** an array of strings
                              ** a comma separated string of values
                              ** a string of comma separated list of es params the values of which we want to be returned.
@@ -2663,8 +2663,8 @@ $scope.fetchUserSites = function()
                              * @description Function that returns the Entersoft Janus based GridExLayout as a JSON object.
                              * @module es.Services.Web
                              * @kind function
-                             * @param {string} GroupID Entersoft Public Query GroupID
-                             * @param {string} FilterID Entersoft Public Query FilterID
+                             * @param {string|ESPublicQueryDef} pqGroupID if string then Entersoft Public Query GroupID or a {@link es.Services.Web.esGlobals#methods_ESPublicQueryDef ESPublicQueryDef} object that defines the rest of the parameters
+                             * @param {string} pqFilterID Entersoft Public Query FilterID. In case that pqGroupID is ESPublicQueryDef type then this parameter can be null or undefined
                              * @param {boolean} useCache If true, then the results of the fetchPublicQueryInfo will be cached by the framework for any
                              * subsequent calls.
                              * @return {httpPromise} Returns a promise. 
@@ -3241,8 +3241,17 @@ function($scope, esWebApi, esWebUIHelper) {
 }
 ```
                              */
-                            fetchPublicQueryInfo: function(GroupID, FilterID, useCache) {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, GroupID, "/", FilterID);
+                            fetchPublicQueryInfo: function(pqGroupID, pqFilterID, useCache) {
+                                var group = "";
+                                if (pqGroupID instanceof esGlobals.ESPublicQueryDef) {
+                                    group = (pqGroupID.GroupID || "").trim();
+                                    pqFilterID = (pqGroupID.FilterID || "").trim();
+                                } else {
+                                    group = pqGroupID ? pqGroupID.trim() : "";
+                                    pqFilterID = pqFilterID ? pqFilterID.trim() : "";
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, group, "/", pqFilterID);
 
                                 var deferred = $q.defer();
                                 if (useCache) {
@@ -3255,7 +3264,7 @@ function($scope, esWebApi, esWebUIHelper) {
                                     }
                                 }
 
-                                var tt = esGlobals.trackTimer("PQ", "INFO", GroupID.concat("/", FilterID));
+                                var tt = esGlobals.trackTimer("PQ", "INFO", group.concat("/", pqFilterID));
                                 tt.startTime();
 
                                 var ht = $http({
@@ -3648,14 +3657,20 @@ $scope.dofetchPublicQuery = function() {
                              */
                             fetchPublicQuery: function(pqGroupID, pqFilterID, pqOptions, pqParams, httpVerb) {
                                 var group;
+                                var execParams;
                                 if (pqGroupID instanceof esGlobals.ESPublicQueryDef) {
                                     group = (pqGroupID.GroupID || "").trim();
                                     pqFilterID = (pqGroupID.FilterID || "").trim();
                                     pqOptions = pqGroupID.PQOptions;
-                                    pqParams = pqGroupID.Params;
+                                    execParams = pqGroupID.Params;
                                 } else {
                                     group = pqGroupID ? pqGroupID.trim() : "";
                                     pqFilterID = pqFilterID ? pqFilterID.trim() : "";
+                                    execParams = pqParams;
+                                }
+
+                                if (execParams && execParams instanceof esGlobals.ESParamValues) {
+                                    execParams = execParams.getExecuteVals();
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY__, group, "/", pqFilterID);
@@ -3671,7 +3686,7 @@ $scope.dofetchPublicQuery = function() {
                                         "Authorization": esGlobals.getWebApiToken()
                                     },
                                     url: surl,
-                                    params: pqParams
+                                    params: execParams
                                 };
 
                                 if (pqOptions) {
@@ -3684,7 +3699,7 @@ $scope.dofetchPublicQuery = function() {
                                 //if not a GET request, switch to data instead of params
                                 if (httpConfig.method !== 'GET') {
                                     delete httpConfig.params;
-                                    httpConfig.data = pqParams;
+                                    httpConfig.data = execParams;
                                 }
 
                                 var ht = $http(httpConfig);

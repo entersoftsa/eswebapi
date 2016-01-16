@@ -12,12 +12,15 @@
 </ol>
 <h3 id="installation-instructions">Installation Instructions</h3>
 <ol>
-<li>Download Entersoft WEB API Server from GitHub: <a href="https://github.com/entersoftsa/eswebapiserver">ES WEB API Server</a>.</li>
-<li>Open IIS Manager</li>
+<li><p>Download Entersoft WEB API Server from GitHub: <a href="https://github.com/entersoftsa/eswebapiserver">ES WEB API Server</a> as shown in the image below:
+<img src="images/installation/b01.png" alt="Github ES WEB API Server"></p>
+</li>
+<li><p>Open IIS Manager</p>
+</li>
 <li>Go to the node “Default Web Site” and choose Deploy -&gt; Import Application</li>
 </ol>
 <p><strong>ATTENTION: Web Deploy Fetaure</strong></p>
-<p>If Deloy Action is not available in your IIS Intallation, then you have to install Web Deploy on the IIS. 
+<p>If Deploy Action is not available in your IIS Intallation, then you have to install Web Deploy on the IIS. 
 Instructions on how to install Web Deploy on IIS Manager can be found in 
 <a href="http://www.iis.net/learn/install/installing-publishing-technologies/installing-and-configuring-web-deploy-on-iis-80-or-later">Web Deploy</a></p>
 <h3 id=""><img src="images/installation/02.png" alt="Import Application"></h3>
@@ -146,12 +149,23 @@ found in the pool. If for some reason, an Application Server that comes from the
 <p>If for some reason or some kind of applications, a web api client needs to interact with a specific instance of the EAS that initially served its login 
 process then the client has to use the <strong>stickySession</strong> function of webapi rather than the login. After the initial call to stickysession in order get access
 to the appi server, all subsequent calls will be directed to the specific session that was selected from the pool to serve the stickySession.</p>
-<p><strong>AdminPassword</strong></p>
+<p><strong>AdminPassword</strong> This is to be used later in future releases.</p>
 <p><strong>AllowInsecureHttp</strong> if set to true, this instance of the EWAPIS will respond to calls through plain HTTP, otherwise HTTPS (secure HTTP) will be required and no calls (except one that queries the EWAPIS for its capabilities) will be accepted unless they are under https. If in a production environment the use of HTTPS is strongly recommended because sensitive information could be travelling between the client and the server. In order to deploy an HTTPS solution you will need a valid certificate to be installed on the IIS Server, issued by one of the valid and trusted security authorities (VeriSign, GoDaddy, etc.). In case that for any reason you want to bypass the HTTPS requirement, it is strongly recommended to go for alternative solutions in order to secure the communication between the client and the EWAPIS such as VPN, IP security firewalls, etc., assuming that we are referring to intranet applications – clients that are well known to the system and the access can be controlled.</p>
 <p>An instance of EWAPIS can serve one or more EAS either of the same Tax Accounting Entity or of different entities (multi-tenant mode). Each EAS should be registered in the config.json file. For this registration we encounter the following concepts / nodes:</p>
 <ul>
 <li>A list of Subscriptions.</li>
 <li>Each Subscription has <strong>SubscriptionID</strong> which must be unique and a hashed value for a password stored in the <strong>SubscriptionPassword</strong> field.</li>
+</ul>
+<p>The Subscription password is required and it should be encrypted. In order to create an encrypted password you may use the Entersoft WEB API test page. This page is available through the browser.
+Navigate to the url of the server/site that you have installed and configured your Entersoft WEB API Server installation e.g. <a href="http://localhost/esebapi">http://localhost/esebapi</a>. </p>
+<p><img src="images/installation/10.png" alt="Subscription Password"></p>
+<p>In the bottom section of this page you will find the password encryption tool. In the figure above, we have entered the password <strong>passx</strong> clicked on the encrypt button and we got the encrypted result e.g. 
+<strong>CgJHAQYVg+iChKZvXcEKHA==</strong> (for the given password passx). We copy this value and we paste it in the config.json file as the value of the property SubscriptionPasswordas shown in the image below:</p>
+<p><img src="images/installation/11.png" alt="Subscription Password in config.json"></p>
+<p><strong>ATTENTION</strong>
+<strong>Since the passx as well as its encrypted value are being used in all our public sources and examples it is strongly recommended to change the SubscriptionPassword in your live or publicly available solutions. 
+Otherwise your solution will be vulnerable to intruders.</strong></p>
+<ul>
 <li>Each Subscription has a list of Bridges that represent a specific connections to an EAS under a unique combination of DatabaseID and CompanyID as specified in the EAS.</li>
 <li>Each Bridge has the following attributes that need to be specified:</li>
 <li><strong>BridgeID</strong> a unique identifier for the specific Bridge</li>
