@@ -124,7 +124,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
         esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
             var s = esGlobals.getUserMessage(rejection, status);
-            $scope.esnotify.error(s);
+            $scope.esnotify.error(s.messageToShow);
         });
 
         esMessaging.subscribe("AUTH_CHANGED", function(esSession, b) {

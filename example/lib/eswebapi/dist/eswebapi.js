@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.6.0 - 2016-01-15
+/*! Entersoft Application Server WEB API - v1.7.0 - 2016-01-16
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6229,7 +6229,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.6.0";
+    var version = "1.7.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -7421,18 +7421,34 @@ x.setParamValues({p1: 'Hello World'});
             }
 
             function getUserMessage(err, status) {
+
+                var rep = {
+                    isLogin: false,
+                    messageToShow: ""
+                };
+
                 if (!err) {
                     switch (status) {
                         case 401:
-                            return "Please Login first";
+                            rep.isLogin = true;
+                            rep.messageToShow = "Please Login first";
+                            break;
+
                         case 403:
-                            return "You are not authorized. Please Login and try again";
+                            rep.isLogin = true;
+                            rep.messageToShow = "You are not authorized. Please Login and try again";
+                            break;
 
                         case 500:
                         default:
-                            return "General Error. Please check your network and internet access";
+                            rep.isLogin = true;
+                            rep.messageToShow = "General Error. Please check your network and internet access";
+                            break;
                     }
+                    return rep;
                 }
+
+                rep.isLogin = (err.status == 401) || (err.status == 403) || (status == 401) || (status == 403);
 
                 if (err instanceof ArrayBuffer) {
                     // In case that response is of type ArrayBuffer instead of an object
@@ -7449,7 +7465,8 @@ x.setParamValues({p1: 'Hello World'});
                     if (err.MessageID) {
                         sMsg = sMsg + " (" + err.MessageID + ")";
                     }
-                    return sMsg;
+                    rep.messageToShow = sMsg;
+                    return rep;
                 }
 
                 if (err.Messages) {
@@ -7463,9 +7480,11 @@ x.setParamValues({p1: 'Hello World'});
                         sMsg = err.Messages;
                     }
 
-                    return sMsg ? sMsg : "General Error. Please check your network and internet access";
+                    rep.messageToShow = sMsg ? sMsg : "General Error. Please check your network and internet access";
+                    return rep;
                 } else {
-                    return "General Error. Please check your network and internet access";
+                    rep.messageToShow = "General Error. Please check your network and internet access";
+                    return rep;
                 }
             }
 
@@ -7714,7 +7733,13 @@ var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
                  * for a user **Error Message** string to be presented to the user.
                  * @param {object} err The error object we got from i.e. http or promise failure. 
                  * @param {number=} status The status int code we got from an http or promise failure
-                 * @return {string} The string for the best match for user message
+                 * @return {object} A JSON object with the following type: 
+```js
+{
+    isLogin: boolean, // boolean value indicating whether the error is related to the login process
+    messageToShow: string // The string message to be shown to the user
+}
+```
                  * @example
 ```js
 smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
@@ -7724,7 +7749,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
         esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
             var s = esGlobals.getUserMessage(rejection, status);
-            $scope.esnotify.error(s);
+            $scope.esnotify.error(s.messageToShow);
         });
     }
 ]);

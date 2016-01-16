@@ -231,7 +231,7 @@ module.exports = function(grunt) {
 
         shell: {
             github_sourcefiles: {
-                command: "git add --all&&git commit -m '<%= pkg.version %>'&&git tag <%= pkg.version %>&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git master --tags"
+                command: "git add --all&&git commit -m '<%= pkg.version %>'&&git tag <%= pkg.version %>&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git smework --tags"
             },
             github_pub_docs: {
                 command: "git add --all&&git commit -m '<%= pkg.version %>'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git gh-pages --tags",
@@ -345,7 +345,7 @@ module.exports = function(grunt) {
         'shell:github_sourcefiles',
 
         // send email to dev community
-        'nodemailer:internal'
+        //'nodemailer:internal'
     ]);
 
     // doc

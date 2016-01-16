@@ -12,17 +12,17 @@
     <header>
         <div class="nav">
             <ul>
-                <li class="login"><a href="#/login">Login</a></li>
-                <li class="menu"><a href="#/priceCheck">Price Check</a></li>
-                <li class="menu"><a href="#/stockCheck">Stock Check</a></li>
-                <li class="menu"><a href="#/labels">Labels</a></li>
-                <li class="account"><a href="#/account">{{theGlobalUser}}</a></li>
+                <li class="login"><a ui-sref="login">Login</a></li>
+                <li class="menu"><a ui-sref="priceCheck">Price Check</a></li>
+                <li class="menu"><a ui-sref="stockCheck">Stock Check</a></li>
+                <li class="menu"><a ui-sref="labels">Labels</a></li>
+                <li class="account"><a ui-sref="account">{{theGlobalUser}}</a></li>
             </ul>
         </div>
     </header>
 
     <div>
-        <div ng-view>
+        <div ui-view>
         </div>
     </div>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -30,7 +30,7 @@
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
     <script src="bower_components/ngStorage/ngstorage.min.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="bower_components/stacktrace-js/dist/stacktrace.js"></script>
     <script src="bower_components/log4javascript/js/log4javascript.js"></script>
     <script src="bower_components/underscore/underscore-min.js"></script>

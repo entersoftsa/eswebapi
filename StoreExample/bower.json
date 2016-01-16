@@ -17,7 +17,6 @@
   "dependencies": {
     "angularjs": "~1.4.7",
     "angular-animate": "~1.4.7",
-    "angular-route": "~1.4.7",
     "angular-sanitize": "~1.4.7",
     "angular-bootstrap": "~0.14.1",
     "ngstorage": "~0.3.9",
@@ -30,7 +29,8 @@
     "moment": "~2.10.6",
     "ng-file-upload": "~9.0.9",
     "angular-google-maps": "~2.2.1",
-    "angular-simple-logger": "~0.1.4"
+    "angular-simple-logger": "~0.1.4",
+    "angular-ui-router": "ui-router#~0.2.15"
   },
   "resolutions": {
     "angular": "1.4.7",

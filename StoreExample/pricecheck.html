@@ -7,9 +7,16 @@
     </form>
     <hr/>
     <div ng-if="stockRecord">
-    	<div ng-repeat="(key, value) in stockRecord">
-    		<label>{{key}}</label>{{value}}
-    		<br>
-    	<div>
+        <table class="results">
+            <tr class="resultRow">
+                <td class="colName" ng-class-odd="'oddrow'" ng-class-even="'evenrow'">Barcode</td>
+                <td class="colVal" ng-class-odd="'oddrow'" ng-class-even="'evenrow'">{{ scannedValue }}</td>
+            </tr>
+            
+            <tr class="resultRow" ng-repeat="(key, value) in stockRecord | orderBy: key">
+                <td class="colName" ng-class-odd="'oddrow'" ng-class-even="'evenrow'">{{ processColumnName(key) }}</td>
+                <td class="colVal" ng-class-odd="'oddrow'" ng-class-even="'evenrow'">{{ value}}</td>
+            </tr>
+        </table>
     </div>
 </div>
