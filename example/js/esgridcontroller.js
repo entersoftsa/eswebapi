@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap', 'uiGmapgoogle-maps']);
+var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap', 'uiGmapgoogle-maps', 'ngFileUpload']);
 
 smeControllers.config(['uiGmapGoogleMapApiProvider', function(GoogleMapApi) {
     GoogleMapApi.configure({
@@ -213,8 +213,8 @@ smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'esW
     }
 ]);
 
-smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
-    function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
+smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
+    function($log, $q, $scope, Upload, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
 
         $scope.pGroup = "ESMMStockItem";
         $scope.pFilter = "ESMMStockItem_def";

@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-01-18
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-01-19
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -25,7 +25,7 @@
 
     /* Services */
 
-    var esWebServices = angular.module('es.Services.Web', ['ngStorage', 'ngFileUpload' /*, 'es.Services.Analytics' */ ]);
+    var esWebServices = angular.module('es.Services.Web', ['ngStorage' /*, 'es.Services.Analytics' */ ]);
 
     esWebServices.
     constant('ESWEBAPI_URL', {
@@ -249,8 +249,8 @@ eskbApp.config(['$logProvider',
                     return this;
                 },
 
-                $get: ['$http', '$log', '$q', '$timeout', '$rootScope', 'ESWEBAPI_URL', 'esGlobals', 'esMessaging', 'Upload', 'esCache',
-                    function($http, $log, $q, $timeout, $rootScope, ESWEBAPI_URL, esGlobals, esMessaging, Upload, esCache) {
+                $get: ['$http', '$log', '$q', '$timeout', '$rootScope', '$injector', 'ESWEBAPI_URL', 'esGlobals', 'esMessaging', 'esCache',
+                    function($http, $log, $q, $timeout, $rootScope, $injector, ESWEBAPI_URL, esGlobals, esMessaging, esCache) {
 
                         function fregisterException(inMessageObj, storeToRegister) {
                             if (!inMessageObj) {
@@ -1172,6 +1172,30 @@ $scope.fetchUserLogo = function() {
                             * @module es.Services.Web
                             * @kind function
                             * @description This function uploads and stores in the EAS an image as the current logged-in User's Logo
+                             * 
+                             * __ATTENTION__ 
+                             * 
+                             * This method requires the ngFileUpload module of AngularJS. In order to use it you must make sure that the appropriate js libraries have been loaded.
+                             * For example, in the main html file e.g. index.html of the AngularJS application you have to include the ng-file-upload/ng-file-upload-shim.min.js prior to loading the angular library
+                             * and the ng-file-upload/ng-file-upload.min.js just after the Angular library has been loaded, as shown in the example below:
+```html
+<script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
+```
+                             * Also in your application Angular controller module or application module you should also require the ngFileUpload module as 
+                             * shown in the code below:
+```js
+var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap', 'uiGmapgoogle-maps', 'ngFileUpload']);
+```
+                             * And in the AngularJS application controller function you should inject the _Upload_ service as shown below:
+```js
+smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
+function($log, $q, $scope, Upload, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
+    // your application code
+    // goes here
+}
+```
                             * @param {file} file The file that should be of type image that will be uploaded and stored in the EAS
                             * @param {function=} okfunc a function that will be called when the upload is completed
                             * @param {function=} errfunc a function that will called should an error occurs while uploading the file
@@ -1207,6 +1231,11 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
 
                                 if (!file) {
                                     throw new Error("Invalid File");
+                                }
+
+                                var Upload = $injector.get('Upload');
+                                if (!Upload) {
+                                    throw new Error("You have to include the ngFileUpload");
                                 }
 
                                 var tt = esGlobals.trackTimer("USER", "UPLOAD LOGO", file);
@@ -5123,7 +5152,31 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                              * @methodOf es.Services.Web.esWebApi
                              * @kind function
                              * @description Deletes the ES00DocumentInfo record as specified by the parameters and returns the current set of ES00Documents
-                             * that are corelated to the specified Entity object
+                             * that are corelated to the specified Entity object. 
+                             * 
+                             * __ATTENTION__ 
+                             * 
+                             * This method requires the ngFileUpload module of AngularJS. In order to use it you must make sure that the appropriate js libraries have been loaded.
+                             * For example, in the main html file e.g. index.html of the AngularJS application you have to include the ng-file-upload/ng-file-upload-shim.min.js prior to loading the angular library
+                             * and the ng-file-upload/ng-file-upload.min.js just after the Angular library has been loaded, as shown in the example below:
+```html
+    <script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
+```
+                             * Also in your application Angular controller module or application module you should also require the ngFileUpload module as 
+                             * shown in the code below:
+```js
+    var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap', 'uiGmapgoogle-maps', 'ngFileUpload']);
+```
+                             * And in the AngularJS application controller function you should inject the _Upload_ service as shown below:
+```js
+    smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
+    function($log, $q, $scope, Upload, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
+        // your application code
+        // goes here
+}
+```
                              * @param {object} doc The JSON object representation of the ES00Document to be added or updated (in case that it exists)
                              * @param {file} file The file object holding the value of the <input> element of type file
                              * @param {function=} okfunc a function that will be called when the upload is completed
@@ -5166,6 +5219,16 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                             addOrUpdateES00Document: function(doc, file, okfunc, errfunc, progressfunc) {
                                 var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "UPLOAD", file);
                                 tt.startTime();
+
+                                if (!file) {
+                                    throw new Error("Invalid File");
+                                }
+
+                                var Upload = $injector.get('Upload');
+                                if (!Upload) {
+                                    throw new Error("You have to include the ngFileUpload");
+                                }
+
                                 file.upload = Upload.upload({
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__),
                                     method: 'POST',
