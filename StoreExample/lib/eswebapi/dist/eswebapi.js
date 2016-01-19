@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-01-17
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-01-18
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
