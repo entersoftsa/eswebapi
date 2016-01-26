@@ -225,25 +225,16 @@
                 restrict: 'AE',
                 scope: {
                     esShowSubscription: "=",
-                    esCredentials "=",
+                    esShowBridge: "=",
+                    esCredentials: "=",
                     esOnSuccess: "&"
                 },
                 template: '<div ng-include src="\'src/partials/esLogin.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
                     $scope.esGlobals = esGlobals;
-
-                    //Check for ZoomDS
-                    var qs = $scope.esQuestion;
-                    if (qs && qs.PArg && qs.PType == 7) {
-                        $scope[qs.PArg + "_DS"] = esWebUIHelper.getZoomDataSource(qs.PArg);
-                    }
-
-                    $scope.openCalendar = function($event) {
-                        $scope.calendarStatus.opened = true;
-                    };
                 }
             }
-        }]);
+        }])
 
     .directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
         function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {

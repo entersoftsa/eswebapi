@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-01-23
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-01-26
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -123,7 +123,8 @@
                 host: "",
                 allowUnsecureConnection: false,
                 subscriptionId: "",
-                subscriptionPassword: ""
+                subscriptionPassword: "",
+                bridgeId: ""
             };
 
             return {
@@ -205,6 +206,7 @@ eskbApp.config(['$logProvider',
             host: "localhost/eswebapi",
             subscriptionId: subscriptionId,
             subscriptionPassword: "passx",
+            bridgeId: "",
             allowUnsecureConnection: true
         });
     }
@@ -500,9 +502,44 @@ alert(sUrl);
                                 UserID: "xxxx", //Entersoft User id 
                                 Password: "this is my password", // Entersoft User's password
                                 BranchID: "Branch", // a valid Branch that the user has access rights and will be used as default for all operations requiring a BranchID
-                                LangID: "el-GR"
+                                LangID: "el-GR",
+                                SubscriptionID: "", // a valid subscription id that is registred in the Entersoft WEB API Server config.json file. If undefined, then
+                                the esWebApiProvider settings configuration value will be used. This was specified in the config module of the AngularJS app like in the example below
+                                SubscriptionPassword: "passx", // the password for the given subscription
+                                BridgeID: "", // the ID of the specific bridge to be used 
                              }
                              ```
+                             * Example of esWebApiProvider configuration statements:
+```js
+(function(angular) {
+    var eskbApp = angular.module('smeApp', [
+        'ngRoute',
+        'ngStorage',
+        'ui.bootstrap',
+        'es.Services.Web',
+        'smeControllers'
+    ]);
+
+    eskbApp.config(['$logProvider',
+        '$routeProvider',
+        'esWebApiProvider',
+        '$exceptionHandlerProvider',
+        function($logProvider, $routeProvider, esWebApiServiceProvider, $exceptionHandlerProvider) {
+
+            esWebApiServiceProvider.setSettings({
+                "host" : "192.168.1.190/eswebapijti",
+                subscriptionId: "",
+                subscriptionPassword: "passx",
+                bridgeId: "",
+                allowUnsecureConnection: true
+            });
+
+        }
+    ]);
+
+})(window.angular);
+```
+
                              * @return {httpPromise} Returns a promise.
                              ** If success i.e. success(function(ret) {...}) the response ret is a JSON object that holds the current web session
                              * properties. In an Entersoft AngularJS SPA typical template, upon successful login i.e. openSession, the response object is stored
@@ -642,7 +679,7 @@ $scope.doLogin = function() {
 }
 ```
 */
-                            openSession: function(credentials) {
+                            openSession: function(credentials, claims) {
                                 var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
                                 tt.startTime();
 
@@ -650,9 +687,11 @@ $scope.doLogin = function() {
                                     method: 'post',
                                     url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
                                     data: {
-                                        SubscriptionID: esConfigSettings.subscriptionId,
-                                        SubscriptionPassword: esConfigSettings.subscriptionPassword,
-                                        Model: credentials
+                                        SubscriptionID: credentials.subscriptionId || esConfigSettings.subscriptionId,
+                                        SubscriptionPassword: credentials.subscriptionPassword || esConfigSettings.subscriptionPassword,
+                                        BridgeID: credentials.bridgeId || esConfigSettings.bridgeId,
+                                        Model: credentials,
+                                        Claims: claims
                                     }
                                 }).
                                 success(function(data) {
@@ -1395,8 +1434,9 @@ $scope.removeCurrentUserLogo = function() {
                                     method: 'post',
                                     url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
                                     data: {
-                                        SubscriptionID: esConfigSettings.subscriptionId,
-                                        SubscriptionPassword: esConfigSettings.subscriptionPassword,
+                                        SubscriptionID: credentials.subscriptionId || esConfigSettings.subscriptionId,
+                                        SubscriptionPassword: credentials.subscriptionPassword || esConfigSettings.subscriptionPassword,
+                                        BridgeID: credentials.bridgeId || esConfigSettings.bridgeId,
                                         Model: credentials,
                                         SessionSpec: '*'
                                     }
@@ -2491,6 +2531,8 @@ var simpleRootTable_scrollerResults = [{
                              * @kind function
                              * @param {string} ebsuser The Entersoft Business Suite UserID for whom we want to fetch the ESGOSites of the current ESCompany
                              * the user has access to.
+                             * @param {object=} credentials JSON object with subscriptionId, subscriptionPassword and bridgeId properties defined. If empty
+                             * the default configuration settings will be used
                              * @return {httpPromise} If success i.e. function(ret) { ... } ret.data is an Array of JSON objects representing the ESGOSites user has access to whitin the context of the current ESCompany.
                              * The return object has the following structure:
 ```js
@@ -2515,13 +2557,16 @@ $scope.fetchUserSites = function()
 // ret.data ===> [{"Key":"ΑΘΗ","Value":"Κεντρικά Entersoft"},{"Key":"ΘΕΣ","Value":"Υποκατάστημα Θεσσαλονίκης ES"}]
 ```
 */
-                            fetchUserSites: function(ebsuser) {
+                            fetchUserSites: function(ebsuser, credentials) {
+                                credentials = credentials || {};
+
                                 var ht = $http({
                                     method: 'post',
                                     url: urlWEBAPI + ESWEBAPI_URL.__USERSITES__,
                                     data: {
-                                        SubscriptionID: esConfigSettings.subscriptionId,
-                                        SubscriptionPassword: esConfigSettings.subscriptionPassword,
+                                        SubscriptionID: credentials.subscriptionId || esConfigSettings.subscriptionId,
+                                        SubscriptionPassword: credentials.subscriptionPassword || esConfigSettings.subscriptionPassword,
+                                        BridgeID: credentials.bridgeId || esConfigSettings.bridgeId,
                                         Model: ebsuser
                                     }
                                 });
@@ -8397,6 +8442,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             return f;
         })
 
+    
     .directive('esPositiveInteger', ['$parse', function($parse) {
         var INTEGER_REGEXP = /^\+?\d+$/;
         return {
@@ -8435,6 +8481,23 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
         };
     }])
+
+    .directive('esLogin', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esShowSubscription: "=",
+                    esShowBridge: "=",
+                    esCredentials: "=",
+                    esOnSuccess: "&"
+                },
+                template: '<div ng-include src="\'src/partials/esLogin.html\'"></div>',
+                link: function($scope, iElement, iAttrs) {
+                    $scope.esGlobals = esGlobals;
+                }
+            }
+        }])
 
     .directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
         function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
