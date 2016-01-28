@@ -28,7 +28,7 @@
     esWebServices.
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login",
-        __LOGOUT__: "api/Login/out",
+        __LOGOUT__: "api/Login/Logout",
         __USER_LOGO__: "api/Login/UserLogo/",
         __REMOVE_USER_LOGO__: "api/Login/RemoveUserLogo/",
         __PERSON_LOGO__: "api/rpc/personLogo/",

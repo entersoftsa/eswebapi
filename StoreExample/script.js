@@ -22,12 +22,11 @@
                     templateUrl: 'login.html',
                     controller: 'loginCtrl'
                 })
-
-            .state('priceCheck', {
-                url: "/priceCheck",
-                templateUrl: 'pricecheck.html',
-                controller: 'priceCheckCtrl'
-            });
+                .state('priceCheck', {
+                    url: "/priceCheck",
+                    templateUrl: 'pricecheck.html',
+                    controller: 'priceCheckCtrl'
+                });
 
             $logProvider.addDefaultAppenders();
 
@@ -51,6 +50,13 @@
         function($state, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 
             $scope.theGlobalUser = "Account";
+
+            $scope.logout = function() {
+                esWebApiService.logout()
+                .then(function() {
+                    alert("You are logged out");    
+                });
+            }
 
             esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
                 var s = esGlobals.getUserMessage(rejection, status);
@@ -79,9 +85,9 @@
                 BranchID: 'ΑΘΗ',
                 LangID: 'el-GR'
             };
-
+            
             $scope.doLogin = function() {
-                ($scope.stickyMode ? esWebApiService.stickySession($scope.credentials) : esWebApiService.openSession($scope.credentials))
+                esWebApiService.openSession($scope.credentials)
                 .then(function(rep) {
                         $state.transitionTo("priceCheck");
                     },

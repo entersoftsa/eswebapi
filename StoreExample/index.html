@@ -16,7 +16,7 @@
                 <li class="menu"><a ui-sref="priceCheck">Price Check</a></li>
                 <li class="menu"><a ui-sref="stockCheck">Stock Check</a></li>
                 <li class="menu"><a ui-sref="labels">Labels</a></li>
-                <li class="account"><a ui-sref="account">{{theGlobalUser}}</a></li>
+                <li class="menu" ng-click="logout($event)"><a ui-sref="login">Logout {{theGlobalUser}}</li>
             </ul>
         </div>
     </header>
