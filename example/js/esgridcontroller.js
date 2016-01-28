@@ -161,14 +161,14 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
         };
 
         $scope.doLogin = function() {
-            ($scope.stickyMode ? esWebApiService.stickySession($scope.credentials, claims) : esWebApiService.openSession($scope.credentials, claims))
-            .then(function(rep) {
-                    $log.info(rep);
-                    $location.path("/pq");
-                },
-                function(err) {
-                    $log.error(err);
-                });
+            esWebApiService.openSession($scope.credentials, claims)
+                .then(function(rep) {
+                        $log.info(rep);
+                        $location.path("/pq");
+                    },
+                    function(err) {
+                        $log.error(err);
+                    });
         }
 
         $scope.version = {};
@@ -1058,7 +1058,7 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
         $scope.myCtrl = {};
 
 
-        
+
         $scope.myMapMarkerClick = function(a, b, c) {
             $log.info("Click");
             alert("I am a label clicked !!!");

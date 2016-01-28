@@ -227,6 +227,7 @@
                     esShowSubscription: "=",
                     esShowBridge: "=",
                     esCredentials: "=",
+                    esShowStickySession: "=",
                     esOnSuccess: "&"
                 },
                 template: '<div ng-include src="\'src/partials/esLogin.html\'"></div>',

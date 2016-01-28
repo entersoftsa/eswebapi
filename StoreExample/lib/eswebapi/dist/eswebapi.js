@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-01-26
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-01-28
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -30,6 +30,7 @@
     esWebServices.
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login",
+        __LOGOUT__: "api/Login/out",
         __USER_LOGO__: "api/Login/UserLogo/",
         __REMOVE_USER_LOGO__: "api/Login/RemoveUserLogo/",
         __PERSON_LOGO__: "api/rpc/personLogo/",
@@ -47,7 +48,6 @@
         __ENTITYBYGIDACTION__: "api/EntityByGID/",
         __ELASTICSEARCH__: "api/esearch/",
         __SERVER_CAPABILITIES__: "api/Login/ServerCapabilities/",
-        __REGISTER_EXCEPTION__: "api/rpc/registerException/",
         __FETCH_COMPANY_PARAM__: "api/rpc/FetchCompanyParam/",
         __FETCH_COMPANY_PARAMS__: "api/rpc/FetchCompanyParams/",
         __SCROLLER_COMMAND__: "api/rpc/ScrollerCommand/",
@@ -174,19 +174,35 @@ var esWebApiSettings = {
                  * @kind function
                  * @description Function that returns the full URL to the Entersoft WEB API Server as it has been resolved 
                  * according to the configuration of the esWebApiProvider at the provider's configuration function of the AngularJS application.
-                 * For more information on how to setup the Entersoft Web Api Server please refer to {@link installation/es02wapis ES API Server}.
-                 * @param {object} settings A JSON object that contains the configuration properties for the esWebApi service to work. A typical form 
+                 * For more information on how to setup the Entersoft Web Api Server please refer to {@link installation/es02wapis ES WEB API Server}.
+                 * A typical form 
                  * of the _settings_ configuration object is as follows:
 ```js
 var esWebApiSettings = {
-            host: string, // i.e. "localhost/eswebapi" the url (with out the http or https protocol) that points to the Entersoft WEB API Server
-                          // if you specify the complete url, then the https or https part will be automatically removed. The actual protocol that 
-                          // wil be used depends on the allowUnsecureConnection property.
+            host: string, // i.e. "localhost/eswebapi" the url  .
             subscriptionId: string, // i.e. in typical installations this should be an empty string ""
             subscriptionPassword: string, // the passowrd for the selected subscriptionId. In typical instllations this would be "passx"
             allowUnsecureConnection: boolean // whether the ES Web Api Server allows for unsecure connections i.e. http or not i.e. https will be used
         }
 ```
+                 * @param {object} settings A JSON object that contains the configuration properties for the esWebApi service to work. 
+                 * @param {string} settings.host The URL (with out the http or https protocol) that points to the Entersoft WEB API Server.
+                 * if you specify the complete url, then the https or https part will be automatically removed. The actual protocol that 
+                 * will be used depends on the allowUnsecureConnection property. For example, "localhost/eswebapi" or "api.entersoft.gr".
+                 * @param {boolean} settings.allowUnsecureConnection Boolean value that indicates whether the ES WEB API Server allows for unsecure connections (true) i.e. http or not (false) i.e. https will be used
+                 * @param {string=} settings.subscriptionId The ID that identifies from the list of the registered subscriptions in the {@link installation/es02wapis#config-file config.json} will be used to open session.
+                 * If null, or empty or undefined, then if  the __subscriptionId__ is not specified at the run-time when calling the {@link es.Services.Web.esWebApi#methods_opensession openSession}
+                 * the framework will search for a Subscription with SubscriptionID = "". If such a subscription is not found in 
+                 * the {@link installation/es02wapis#config-file config.json} under the Subscriptions list, an error will be returned.
+                 * @param {string=} settings.subscriptionPassword The password that has been assigned in the {@link installation/es02wapis#config-file config.json} for the given 
+                 * SubscriptionId.
+                 * @param {string=} settings.bridgeId The ID that identifies the bridge from the list of bridges under the given Subscription that matches the SubscrptionID that
+                 * will be used in {@link es.Services.Web.esWebApi#methods_opensession openSession} and in {@link es.Services.Web.esWebApi#methods_fetchUserSites fetchUserSites}.
+                 * If null, or empty or undefined, then if the __bridgeId__ is not specified at the run-time when calling the {@link es.Services.Web.esWebApi#methods_opensession openSession}
+                 * the framework will search for a Bridge with BridgeID = "" under the list of bridges of the specific Subscription. If such a bridge is not found in 
+                 * the {@link installation/es02wapis#config-file config.json} under the Subscription's Bridges list, an error will be returned.
+                 * @param {object=} claims A JSON string/value pairs object with a set of claims that should be passed all the way from the web api client to
+                 * the Entersoft Application Server with full support of Call Context. For more information
                  * @example
                  * This sample assumes that the Entersoft WEB API Server has been installed in the local Microsoft IIS as a WEB Application under
                  * the Default Web Site as shown below:
@@ -262,12 +278,9 @@ eskbApp.config(['$logProvider',
                             var messageObj = angular.copy(inMessageObj);
 
                             try {
-                                messageObj.__SubscriptionID = esConfigSettings.subscriptionId;
-                                messageObj.__ServerUrl = urlWEBAPI;
-                                messageObj.__EDate = new Date();
                                 $.ajax({
                                     type: "POST",
-                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__REGISTER_EXCEPTION__),
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__EVENTLOG__),
                                     contentType: "application/json",
                                     headers: {
                                         "Authorization": esGlobals.getWebApiToken()
@@ -494,9 +507,31 @@ alert(sUrl);
                              * @description This is the function that enables for login and connect through the Entersoft WEB API Server to the Entersoft Application Server.
                              * The vast majority of the esWebApi service methods **REQUIRE** for an authorization token in order to be executed. This Authorization token is obtained 
                              * through a successfull call of the **__openSession__**  function and it is implicitly stored and managed by the esWebApi for its complete lifecycle.
+                             *
+                             * When credentials.StickySession evaluates to true this is a requirement to the Entersoft WEB API Server
+                             * that it requires / mandates the Entersoft WEB API Server to route all the subsequent calls to the same server side session object
+                             * i.e. stick to the initial session. That means that in case that more than one Entersoft Application Servers have been registered in the
+                             * web api server config.json file as shown in the image below
+                             * 
+                             * ![Load-Balanced WEB API Server servers](images/api/es011loadbalance.png)
+                             * 
+                             * the server that will be selected to full fill the stickySession request will be the same that will serve all the subsequent
+                             * calls for this session, i.e. all calls will be serverd by the same ESSession of the same server.
+                             * On the other hand, openSession instructs Entersoft WEB API Server to fully use load balancing and fault-tolerant logic by
+                             * randomly selecting one of the available server to fullfil any susequent call on a per call basis. 
+                             * 
                              * @module es.Services.Web
                              * @kind function
                              * @param {object} credentials Entersoft Business Suite login credentials in the form of a JSON object with the following form:
+                             * @param {string} credentials.UserID The Entersoft Application User ID
+                             * @param {string} credentials.Password The Entersoft Application User password.
+                             * @param {string} credentials.BranchID The Entersoft BranchID
+                             * @param {string} credentials.LangID The language that will be used for all UI and message elements
+                             * @param {string=} credentials.subscriptionId The id of the Subscription. It should be a valid and existing ID that uniquely identifies the
+                             * Subscription object in the config.json file of the Entersoft WEB API Server. For more information, {@link installation/es02wapis#config-file ES WEB API Server Configuration File}.
+                             * If null or undefined or empty, the esWebApiProvider settings configuration will be used as described in the For more information, {@link api/es.Services.Web.esWebApiProvider#methods_setsettings esWebApiProvider.setSettings}.
+                             * @param {string=} credentials.subscriptionPassword The password for the given Subscription
+                             * @param {string=} credentials.bridgeId The BridgeID
                              ```js
                              var credentials  = {
                                 UserID: "xxxx", //Entersoft User id 
@@ -683,16 +718,22 @@ $scope.doLogin = function() {
                                 var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
                                 tt.startTime();
 
+                                var dat = {
+                                    SubscriptionID: credentials.subscriptionId || esConfigSettings.subscriptionId,
+                                    SubscriptionPassword: credentials.subscriptionPassword || esConfigSettings.subscriptionPassword,
+                                    BridgeID: credentials.bridgeId || esConfigSettings.bridgeId,
+                                    Model: credentials,
+                                    Claims: claims || esConfigSettings.claims
+                                };
+
+                                if (!!credentials.StickySession) {
+                                    dat.SessionSpec = '*';
+                                }
+
                                 var promise = $http({
                                     method: 'post',
                                     url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
-                                    data: {
-                                        SubscriptionID: credentials.subscriptionId || esConfigSettings.subscriptionId,
-                                        SubscriptionPassword: credentials.subscriptionPassword || esConfigSettings.subscriptionPassword,
-                                        BridgeID: credentials.bridgeId || esConfigSettings.bridgeId,
-                                        Model: credentials,
-                                        Claims: claims
-                                    }
+                                    data: dat
                                 }).
                                 success(function(data) {
                                     esGlobals.sessionOpened(data, credentials);
@@ -1396,61 +1437,6 @@ $scope.removeCurrentUserLogo = function() {
                                 return processWEBAPIPromise(promise, tt);
                             },
 
-
-                            /**
-                            * @ngdoc function
-                            * @name es.Services.Web.esWebApi#stickySession
-                            * @methodOf es.Services.Web.esWebApi
-                            * @module es.Services.Web
-                            * @kind function
-                            * @description This function is similar to {@link es.Services.Web.esWebApi#methods_opensession openSession} with the difference 
-                            * that it requires / mandates the Entersoft WEB API Server to route all the subsequent calls to the same server side session object
-                            * i.e. stick to the initial session. That means that in case that more than one Entersoft Application Servers have been registered in the
-                            * web api server config.json file as shown in the image below
-                            * 
-                            * ![Load-Balanced WEB API Server servers](images/api/es011loadbalance.png)
-                            * 
-                            * the server that will be selected to full fill the stickySession request will be the same that will serve all the subsequent
-                            * calls for this session, i.e. all calls will be serverd by the same ESSession of the same server.
-                            * On the other hand, openSession instructs Entersoft WEB API Server to fully use load balancing and fault-tolerant logic by
-                            * randomly selecting one of the available server to fullfil any susequent call on a per call basis. 
-                            * @param {object} credentials Entersoft Business Suite login credentials in the form of a JSON object with the following form:
-                            ```js
-                            var credentials  = {
-                               UserID: "xxxx", //Entersoft User id 
-                               Password: "this is my password", // Entersoft User's password
-                               BranchID: "Branch", // a valid Branch that the user has access rights and will be used as default for all operations requiring a BranchID
-                               LangID: "el-GR"
-                            }
-                            ```
-                            * @return {httpPromise} Returns a promise.
-                            * For more information please see {@link es.Services.Web.esWebApi#methods_opensession openSession}
-                            */
-                            stickySession: function(credentials) {
-                                var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
-                                tt.startTime();
-
-                                var promise = $http({
-                                    method: 'post',
-                                    url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
-                                    data: {
-                                        SubscriptionID: credentials.subscriptionId || esConfigSettings.subscriptionId,
-                                        SubscriptionPassword: credentials.subscriptionPassword || esConfigSettings.subscriptionPassword,
-                                        BridgeID: credentials.bridgeId || esConfigSettings.bridgeId,
-                                        Model: credentials,
-                                        SessionSpec: '*'
-                                    }
-                                }).
-                                success(function(data) {
-                                    esGlobals.sessionOpened(data, credentials);
-                                }).
-                                error(function(data, status, headers, config) {
-                                    esGlobals.sessionClosed();
-                                });
-
-                                return processWEBAPIPromise(promise, tt);
-                            },
-
                             /**
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#logout
@@ -1471,8 +1457,22 @@ $scope.doLogout = function ()
 ```
                              */
                             logout: function() {
+                                // 
+                                var xToken = esGlobals.getWebApiToken();
+
                                 esGlobals.sessionClosed();
-                                $log.info("LOGOUT User");
+
+                                var tt = esGlobals.trackTimer("AUTH", "LOGOUT", "");
+                                tt.startTime();
+
+                                var promise = $http({
+                                    method: 'post',
+                                    headers: {
+                                        "Authorization": xToken
+                                    },
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__LOGOUT__),
+                                });
+                                return processWEBAPIPromise(promise, tt);
                             },
 
                             /**
@@ -2531,8 +2531,11 @@ var simpleRootTable_scrollerResults = [{
                              * @kind function
                              * @param {string} ebsuser The Entersoft Business Suite UserID for whom we want to fetch the ESGOSites of the current ESCompany
                              * the user has access to.
-                             * @param {object=} credentials JSON object with subscriptionId, subscriptionPassword and bridgeId properties defined. If empty
+                             * @param {object=} credentials A JSON object with subscriptionId, subscriptionPassword and bridgeId properties defined. If empty
                              * the default configuration settings will be used
+                             * @param {string} credentials.subscriptionId The id of the Subscription
+                             * @param {string} credentials.subscriptionPassword The password for the given Subscription
+                             * @param {string} credentials.bridgeId The BridgeID
                              * @return {httpPromise} If success i.e. function(ret) { ... } ret.data is an Array of JSON objects representing the ESGOSites user has access to whitin the context of the current ESCompany.
                              * The return object has the following structure:
 ```js
@@ -8490,6 +8493,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esShowSubscription: "=",
                     esShowBridge: "=",
                     esCredentials: "=",
+                    esShowStickySession: "=",
                     esOnSuccess: "&"
                 },
                 template: '<div ng-include src="\'src/partials/esLogin.html\'"></div>',

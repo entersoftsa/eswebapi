@@ -193,6 +193,13 @@ module.exports = function(grunt) {
                 src: ['src/js/*.js', 'src/content/api/*.ngdoc'],
                 title: 'API Reference'
             },
+            basicconcepts: {
+                src: [
+                    'src/content/basicconcepts/*.ngdoc'
+                ],
+                title: 'Basic Concepts'
+            },
+
             installation: {
                 src: [
                     'src/content/installation/*.ngdoc'

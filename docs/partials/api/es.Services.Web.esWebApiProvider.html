@@ -30,21 +30,37 @@ of the <em>settings</em> configuration object is as follows:</p>
 </code></pre>
 </div></td></tr></table></div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/'git' i/src/js/eswebservices.js#L214" class="view-source icon-eye-open"> </a><h3 id="methods_setsettings">setSettings(settings)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/'git' i/src/js/eswebservices.js#L230" class="view-source icon-eye-open"> </a><h3 id="methods_setsettings">setSettings(settings, claims)</h3>
 <div class="setsettings"><div class="es-services-web-eswebapiprovider-setsettings-page"><p>Function that returns the full URL to the Entersoft WEB API Server as it has been resolved
 according to the configuration of the esWebApiProvider at the provider&#39;s configuration function of the AngularJS application.
-For more information on how to setup the Entersoft Web Api Server please refer to <a href="#/installation/es02wapis">ES API Server</a>.</p>
-</div><h5 id="methods_setsettings_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>settings</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapiprovider-setsettings-page"><p>A JSON object that contains the configuration properties for the esWebApi service to work. A typical form
+For more information on how to setup the Entersoft Web Api Server please refer to <a href="#/installation/es02wapis">ES WEB API Server</a>.
+A typical form 
 of the <em>settings</em> configuration object is as follows:</p>
 <pre><code class="lang-js">var esWebApiSettings = {
-            host: string, // i.e. &quot;localhost/eswebapi&quot; the url (with out the http or https protocol) that points to the Entersoft WEB API Server
-                          // if you specify the complete url, then the https or https part will be automatically removed. The actual protocol that 
-                          // wil be used depends on the allowUnsecureConnection property.
+            host: string, // i.e. &quot;localhost/eswebapi&quot; the url  .
             subscriptionId: string, // i.e. in typical installations this should be an empty string &quot;&quot;
             subscriptionPassword: string, // the passowrd for the selected subscriptionId. In typical instllations this would be &quot;passx&quot;
             allowUnsecureConnection: boolean // whether the ES Web Api Server allows for unsecure connections i.e. http or not i.e. https will be used
         }
 </code></pre>
+</div><h5 id="methods_setsettings_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>settings</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapiprovider-setsettings-page"><p>A JSON object that contains the configuration properties for the esWebApi service to work.</p>
+</div><table><thead><tr><th>Property</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>host</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapiprovider-setsettings-page"><p>The URL (with out the http or https protocol) that points to the Entersoft WEB API Server.
+if you specify the complete url, then the https or https part will be automatically removed. The actual protocol that 
+will be used depends on the allowUnsecureConnection property. For example, &quot;localhost/eswebapi&quot; or &quot;api.entersoft.gr&quot;.</p>
+</div></td></tr><tr><td>allowUnsecureConnection</td><td><a href="" class="label type-hint type-hint-boolean">boolean</a></td><td><div class="es-services-web-eswebapiprovider-setsettings-page"><p>Boolean value that indicates whether the ES WEB API Server allows for unsecure connections (true) i.e. http or not (false) i.e. https will be used</p>
+</div></td></tr><tr><td>subscriptionId <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapiprovider-setsettings-page"><p>The ID that identifies from the list of the registered subscriptions in the <a href="#/installation/es02wapis#config-file">config.json</a> will be used to open session.
+If null, or empty or undefined, then if  the <strong>subscriptionId</strong> is not specified at the run-time when calling the <a href="#/api/es.Services.Web.esWebApi#methods_opensession">openSession</a>
+the framework will search for a Subscription with SubscriptionID = &quot;&quot;. If such a subscription is not found in 
+the <a href="#/installation/es02wapis#config-file">config.json</a> under the Subscriptions list, an error will be returned.</p>
+</div></td></tr><tr><td>subscriptionPassword <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapiprovider-setsettings-page"><p>The password that has been assigned in the <a href="#/installation/es02wapis#config-file">config.json</a> for the given
+SubscriptionId.</p>
+</div></td></tr><tr><td>bridgeId <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-eswebapiprovider-setsettings-page"><p>The ID that identifies the bridge from the list of bridges under the given Subscription that matches the SubscrptionID that
+will be used in <a href="#/api/es.Services.Web.esWebApi#methods_opensession">openSession</a> and in <a href="#/api/es.Services.Web.esWebApi#methods_fetchusersites">fetchUserSites</a>.
+If null, or empty or undefined, then if the <strong>bridgeId</strong> is not specified at the run-time when calling the <a href="#/api/es.Services.Web.esWebApi#methods_opensession">openSession</a>
+the framework will search for a Bridge with BridgeID = &quot;&quot; under the list of bridges of the specific Subscription. If such a bridge is not found in 
+the <a href="#/installation/es02wapis#config-file">config.json</a> under the Subscription&#39;s Bridges list, an error will be returned.</p>
+</div></td></tr></tbody></table></td></tr><tr><td>claims <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-eswebapiprovider-setsettings-page"><p>A JSON string/value pairs object with a set of claims that should be passed all the way from the web api client to
+the Entersoft Application Server with full support of Call Context. For more information</p>
 </div></td></tr></tbody></table><h4 id="methods_setsettings_example">Example</h4>
 <div class="example"><div class="es-services-web-eswebapiprovider-setsettings-page"><p>This sample assumes that the Entersoft WEB API Server has been installed in the local Microsoft IIS as a WEB Application under
 the Default Web Site as shown below:

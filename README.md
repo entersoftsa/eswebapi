@@ -2,6 +2,11 @@
 
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
+**Version 1.8.0
+- Full support of Entersoft Claims, as specified in [openSession](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi#methods_opensession)
+- New directive element <es-login> for Entersoft Login Form 
+- 
+
 **Version 1.7.2
 - googlemaps integration with Entersoft Public Query
 - Enhanced documentation 
