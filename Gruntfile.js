@@ -257,6 +257,12 @@ module.exports = function(grunt) {
             }
         },
 
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
+            }
+        },
+
         nodemailer: {
             options: {
                 transport: {
@@ -278,8 +284,7 @@ module.exports = function(grunt) {
                 }]
             },
 
-            internal: {
-            }
+            internal: {}
         },
 
         watch: {
@@ -309,6 +314,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-prompt');
     grunt.loadNpmTasks('grunt-version');
     grunt.loadNpmTasks('grunt-nodemailer');
+    grunt.loadNpmTasks('grunt-karma');
 
     // Build Sources Task
     grunt.registerTask('1build', [
