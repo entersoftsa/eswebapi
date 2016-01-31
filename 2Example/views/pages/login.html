@@ -1,0 +1,58 @@
+<div class="login-overlay">
+	<div class="logo">
+		Entersoft SA <br> <span class="smaller">Web API SPA Demo</span>
+	</div>
+	<div class="form-container shadow">
+		<div class="icon">
+			<i class="mdi mdi-account-circle"></i>
+			<div class="header">
+				Login
+			</div>
+		</div>
+		<div class="inputs">
+			<form style="display: flex; justify-content: center;">
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+					<md-input-container >
+	                    <input ng-model="esCredentials.UserID" type="text" placeholder="EBS User ID">
+	                </md-input-container>
+				</div>
+			</form>
+			<form style="display: flex; justify-content: center;">	
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+					<md-input-container >
+	                    <input ng-model="esCredentials.Password" type="password" placeholder="EBS User Password">
+	                </md-input-container>
+				</div>
+			</form>
+			<form style="display: flex; justify-content: center;">	
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+					<md-input-container >
+	                    <input ng-model="esCredentials.BranchID" type="text" placeholder="EBS Branch ID">
+	                </md-input-container>
+				</div>
+			</form>
+			<div class="buttons">
+				<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+	                Remember Me
+	            </md-checkbox>
+				<span class="signup">
+					<a ui-sref="signup">Sign up here</a>
+				</span>
+				<div class="link">
+					<div class="link" style="padding-bottom:0;">
+						<md-button class="md-raised primary" ng-click="authenticate()"> Login </md-button>						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="login-footer">
+		<div class="left-section">
+			&copy; Entersoft SA
+		</div>
+
+		<div class="right-section">
+			Terms and Conditions Apply
+		</div>
+	</footer>
+</div>

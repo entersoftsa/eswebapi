@@ -1,0 +1,188 @@
+<nav class="navbar topnav-navbar navbar-fixed-top" role="navigation">
+
+	<div class="navbar-header text-center">
+		<button type="button" class="navbar-toggle" ng-click="showMenu();" >
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	    </button>
+		<a class="navbar-brand" ui-sref="home">Ani Theme</a>
+	</div>
+	<div class="collapse navbar-collapse">
+		<form class="navbar-form navbar-left" role="search">
+			<span class="glyphicon glyphicon-search"></span>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="">
+			</div>			
+		</form>
+		<ul class="nav navbar-nav">
+			<li class="dropdown" dropdown on-toggle="toggled(open)">
+				<a href class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-envelope"></span><span class="badge badge-green">5</span></a>
+				<ul class="dropdown-menu animated fadeIn">
+					<li class="messages-top text-center">
+						{{ 'topnav1' | translate }}
+					</li>
+					<li class="dropdown-messages">
+						<a href="#">
+							<div class="message-sender">
+								{{ 'lucy' | translate }}
+							</div>
+							<div class="message-header">
+								{{ 'topnavheader1' | translate }}
+							</div>
+						</a>
+					</li>
+					<li class="dropdown-messages">
+						<a href="#">
+							<div class="message-sender">
+								{{ 'diptesh' | translate }}
+							</div>
+							<div class="message-header">
+								{{ 'topnavheader2' | translate }}
+							</div>
+						</a>
+					</li>
+					<li class="dropdown-messages">
+						<a href="#">
+							<div class="message-sender">
+								{{ 'weng' | translate }}
+							</div>
+							<div class="message-header">
+								{{ 'topnavheader3' | translate }}
+								
+							</div>
+						</a>
+					</li>
+					<li class="dropdown-messages">
+						<a href="#">
+							<div class="message-sender">
+								{{ 'jade' | translate }}
+							</div>
+							<div class="message-header">
+								{{ 'topnavheader4' | translate }}
+							</div>
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li class="dropdown" dropdown on-toggle="toggled(open)">
+				<a href class="dropdown-toggle" dropdown-toggle><span class="glyphicon glyphicon-bell"></span><span class="badge badge-red">13</span></a>
+				<ul class="dropdown-menu animated fadeIn">
+					<li class="notification-header text-center">
+						{{ 'threenotifications' | translate }}
+					</li>
+					<li class="dropdown-notifications">
+						<a href="#">
+							<div class="notification">
+								<i class="fa fa-thumbs-up"></i> {{ 'runuma' | translate }}
+							</div>
+						</a>
+					</li>
+					<li class="dropdown-notifications">
+						<a href="#">
+							<div class="notification">
+								<i class="fa fa-thumbs-up"></i>{{ 'harshita' | translate }}
+							</div>
+						</a>
+					</li>
+					<li class="dropdown-notifications">
+						<a href="#">
+							<div class="notification">
+								<i class="fa fa-user-plus"></i>{{ 'archana' | translate }}
+							</div>
+						</a>
+					</li>
+					<li class="dropdown-notifications">
+						<a href="#">
+							<div class="notification">
+								<i class="fa fa-user-times"></i>{{ 'animesh' | translate }}
+							</div>
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>	
+		<ul class="nav navbar-nav pull-right navbar-right">	
+			<li class="dropdown color-picker" dropdown on-toggle="toggled(open)">
+	            <a href class="dropdown-toggle notoggle" dropdown-toggle>
+	                <span><i class="fa fa-circle"></i></span>
+	            </a>
+	            <ul class="dropdown-menu pull-right animated fadeIn" role="menu">
+	                <li class="padder-h-xs">
+	                    <table class="table color-swatches-table text-center no-m-b">
+	                        <tr>
+	                            <td class="text-center colorr">
+	                                <a href="javascript:;" ng-click="changeTheme('blue')" class="theme-picker">
+	                                    <i class="fa fa-circle blue-base"></i>
+	                                </a>
+	                            </td>
+	                            <td class="text-center colorr">
+	                                <a href="javascript:;" ng-click="changeTheme('green')" class="theme-picker">
+	                                    <i class="fa fa-circle green-base"></i>
+	                                </a>
+	                            </td>
+	                            <td class="text-center colorr">
+	                                <a href="javascript:;" ng-click="changeTheme('red')" class="theme-picker">
+	                                    <i class="fa fa-circle red-base"></i>
+	                                </a>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                         	<td class="text-center colorr">
+	                                <a href="javascript:;" ng-click="changeTheme('purple')" class="theme-picker">
+	                                    <i class="fa fa-circle purple-base"></i>
+	                                </a>
+	                            </td>
+	                            <td class="text-center colorr">
+	                                <a href="javascript:;" ng-click="changeTheme('midnight-blue')" class="theme-picker">
+	                                    <i class="fa fa-circle midnight-blue-base"></i>
+	                                </a>
+	                            </td>
+	                            <td class="text-center colorr">
+	                                <a href="javascript:;" ng-click="changeTheme('lynch')" class="theme-picker">
+	                                    <i class="fa fa-circle lynch-base"></i>
+	                                </a>
+	                            </td>
+	                        </tr>
+	                    </table>
+	                </li>
+	            </ul>
+	        </li>
+	       <li>
+	       		<a href="" ng-click="rightToLeft()" >
+	                <span> LTR/RTL </span>
+	            </a>
+	        </li> 
+	        <li class="dropdown" dropdown on-toggle="toggled(open)">
+	        	<a href class="dropdown-toggle notoggle" dropdown-toggle>
+	                <span>{{ 'lang' | translate }}</span>
+	            </a>
+	        	<ul class="dropdown-menu lang pull-right animated fadeIn">
+					<li><a href="" ng-click="changeLanguage('en')">English</a></li>
+					<li><a href="" ng-click="changeLanguage('de')">Dutch</a></li>
+					<li><a href="" ng-click="changeLanguage('ur')">اردو</a></li>
+					<li><a href="" ng-click="changeLanguage('hn')">हिन्दी</a></li>
+				</ul>
+	        </li>
+			<li class="dropdown admin-dropdown" dropdown on-toggle="toggled(open)">
+				<a href class="dropdown-toggle" dropdown-toggle><img src="images/flat-avatar.png" class="topnav-img" alt=""> <span class="hidden-sm">Ani Pascal</span></a>
+				<ul class="dropdown-menu pull-right animated fadeIn">
+					<li><a ui-sref="profile">{{ 'profilee' | translate }}</a></li>
+					<li><a ui-sref="login">{{ 'logout' | translate }}</a></li>
+				</ul>
+			</li>	
+		</ul>
+		<a class="btn btn-primary btn-rounded pull-right btn-bordered visible-lg" href="http://www.strapui.com/themes/ani-angularjs-theme/" style="margin: 8px 10px 0 0;">Buy Now</a>
+
+	</div>
+	<ul class="nav navbar-nav pull-right hidd">	
+		<li class="dropdown admin-dropdown" dropdown on-toggle="toggled(open)">
+			<a href class="dropdown-toggle animated fadeIn" dropdown-toggle><img src="images/flat-avatar.png" class="topnav-img" alt=""></a>
+			<ul class="dropdown-menu pull-right">
+				<li><a ui-sref="profile">{{ 'profilee' | translate }}</a></li>
+				<li><a ui-sref="login">{{ 'logout' | translate }}</a></li>
+			</ul>
+		</li>	
+	</ul>
+</nav>
