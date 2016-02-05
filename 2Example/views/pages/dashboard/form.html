@@ -4,15 +4,13 @@
             Normal Form
         </div>
         <div class="panel-body forms">
-            <form action="#">
-                <md-input-container md-no-float>
-                    <input ng-model="user.name" type="text" placeholder="Text">
-                </md-input-container>
-                <md-input-container md-no-float>
-                    <input ng-model="user.phone" type="number" placeholder="Number">
-                </md-input-container>            
-            </form>
-            <md-button class="md-raised md-primary"> Submit</md-button>
+            <es-web-pq 
+                es-group-id="webPQOptions.theGroupId" 
+                es-grid-options="webPQOptions.theGridOptions" 
+                es-srv-paging="true" 
+                es-params-values="webPQOptions.theVals" 
+                es-filter-id="webPQOptions.theFilterId">
+            </es-web-pq>
         </div>
     </div>
     <div class="mdl-cell" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
@@ -26,7 +24,7 @@
                 </md-input-container>
                 <md-input-container>
                     <input ng-model="user.phone2" type="number" placeholder="Number">
-                </md-input-container>            
+                </md-input-container>
             </form>
             <md-button class="md-raised md-primary"> Submit </md-button>
         </div>
@@ -42,8 +40,9 @@
             <hr>
             <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
                 Checkbox (md-primary): No Ink
-            </md-checkbox> <br />
-             <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+            </md-checkbox>
+            <br />
+            <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
                 Checkbox : {{ data.cb1 }}
             </md-checkbox>
             <h5 style="margin-top:30px;">Radio Button</h5>
@@ -54,7 +53,7 @@
                 <md-radio-button value="Mango">Mango</md-radio-button>
             </md-radio-group>
             <h5 style="margin-top:30px;">Switch</h5>
-            <hr> 
+            <hr>
             <md-switch ng-model="data.switch1" aria-label="Switch 1">
                 Switch 1: {{ data.switch1 }}
             </md-switch>
@@ -66,24 +65,24 @@
         </div>
         <div class="panel-body forms">
             <h5 style="margin-bottom: 0; margin-top: 4px;">Dialogs</h5>
-                <hr>
-                <md-button class="md-primary md-raised" ng-click="showAlert($event)" flex flex-md="100">
-                    Alert Dialog
-                </md-button>
-                <md-button class="md-primary md-raised" ng-click="showConfirm($event)" flex flex-md="100">
-                    Confirm Dialog
-                </md-button>
+            <hr>
+            <md-button class="md-primary md-raised" ng-click="showAlert($event)" flex flex-md="100">
+                Alert Dialog
+            </md-button>
+            <md-button class="md-primary md-raised" ng-click="showConfirm($event)" flex flex-md="100">
+                Confirm Dialog
+            </md-button>
             <h5 style="margin-bottom: 24px;">Custom Chip</h5>
-                <hr>
-                <md-chips ng-model="roFruitNames" readonly="readonly">
-                    <md-chip-template>
-                        <strong>{{$chip}}</strong>
-                        <em>(fruit)</em>
-                    </md-chip-template>
-                </md-chips>
+            <hr>
+            <md-chips ng-model="roFruitNames" readonly="readonly">
+                <md-chip-template>
+                    <strong>{{$chip}}</strong>
+                    <em>(fruit)</em>
+                </md-chip-template>
+            </md-chips>
             <h5 style="margin-bottom: 24px;">Default Chip</h5>
-                <hr>
-                <md-chips ng-model="fruitNames" readonly="readonly"></md-chips>
+            <hr>
+            <md-chips ng-model="fruitNames" readonly="readonly"></md-chips>
         </div>
     </div>
 </div>

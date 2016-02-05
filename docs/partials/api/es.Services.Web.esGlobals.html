@@ -18,14 +18,14 @@ AngularJS SPA based on Entersoft AngularJS API.</p>
 </li>
 </ul>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/'git' i/src/js/esinit.js#L1564" class="view-source icon-eye-open"> </a><h3 id="methods_esmultizoomdef">ESMultiZoomDef(ZoomID, PQOptions, UseCache)</h3>
+<ul class="methods"><li><a href="https://github.com/entersoftsa/eswebapi/blob/'git' i/src/js/esinit.js#L1568" class="view-source icon-eye-open"> </a><h3 id="methods_esmultizoomdef">ESMultiZoomDef(ZoomID, PQOptions, UseCache)</h3>
 <div class="esmultizoomdef"><div class="es-services-web-esglobals-esmultizoomdef-page"><p>Constructs an ESPublicQueryDef object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery</p>
 </div><h5 id="methods_esmultizoomdef_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>ZoomID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-esglobals-esmultizoomdef-page"><p>The ID of the ES Zoom to be retrieved i.e. &quot;<strong>ESGOZCountry</strong>&quot;</p>
 </div></td></tr><tr><td>PQOptions</td><td><a href="" class="label type-hint type-hint-espqoptions">ESPQOptions</a></td><td><div class="es-services-web-esglobals-esmultizoomdef-page"><p>The server side paging options to be used for the Zoom retrieval. See <a href="#/api/es.Services.Web.esGlobals#methods_espqoptions">ESPQOptions</a>.</p>
 </div></td></tr><tr><td>UseCache</td><td><a href="" class="label type-hint type-hint-boolean">boolean</a></td><td><div class="es-services-web-esglobals-esmultizoomdef-page"><p>A boolean value indicating whether the contents of this specific Zoom will be retrieved and stored in the ESWebAPI client-side memory cache.</p>
 </div></td></tr></tbody></table></div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/'git' i/src/js/esinit.js#L1578" class="view-source icon-eye-open"> </a><h3 id="methods_espqoptions">ESPQOptions(Page, PageSize, WithCount)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/'git' i/src/js/esinit.js#L1582" class="view-source icon-eye-open"> </a><h3 id="methods_espqoptions">ESPQOptions(Page, PageSize, WithCount)</h3>
 <div class="espqoptions"><div class="es-services-web-esglobals-espqoptions-page"><p>Constructs an ESPQOptions object that specifies the server side paging options of a Public Query execution</p>
 </div><h5 id="methods_espqoptions_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>Page</td><td><a href="" class="label type-hint type-hint-number">number</a></td><td><div class="es-services-web-esglobals-espqoptions-page"><p>The Server Side Page Number (<strong>1-based</strong>) to be retrieved. Valid is considered any value represeting a number &gt;= 1</p>
 </div></td></tr><tr><td>PageSize</td><td><a href="" class="label type-hint type-hint-number">number</a></td><td><div class="es-services-web-esglobals-espqoptions-page"><p>The Server Side size of page (&gt; =1) to be retrieved from the server.</p>
@@ -69,7 +69,7 @@ x.setParamValues({p1: &#39;Hello World&#39;});
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/'git' i/src/js/esinit.js#L1550" class="view-source icon-eye-open"> </a><h3 id="methods_espublicquerydef">ESPublicQueryDef(CtxID, GroupID, FilterID, The, Params)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/'git' i/src/js/esinit.js#L1554" class="view-source icon-eye-open"> </a><h3 id="methods_espublicquerydef">ESPublicQueryDef(CtxID, GroupID, FilterID, The, Params)</h3>
 <div class="espublicquerydef"><div class="es-services-web-esglobals-espublicquerydef-page"><p>Constructs an ESPublicQueryDef object that will be used to specify the execution of a PublicQuery in a call to multiPublicQuery</p>
 </div><h5 id="methods_espublicquerydef_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>CtxID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-esglobals-espublicquerydef-page"><p>A unique identifier for this PQ execution call (unique in the context of the array of ESPublicQueryDef that will be used in the execution of multiPublicQuery)</p>
 </div></td></tr><tr><td>GroupID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="es-services-web-esglobals-espublicquerydef-page"><p>The GroupID of the Public Query</p>
@@ -134,7 +134,7 @@ this extension the function returns an empty string &#39;&#39;.</p>
 </div></div>
 </div>
 </li>
-<li><a href="https://github.com/entersoftsa/eswebapi/blob/'git' i/src/js/esinit.js#L1534" class="view-source icon-eye-open"> </a><h3 id="methods_getusermessage">getUserMessage(err, status)</h3>
+<li><a href="https://github.com/entersoftsa/eswebapi/blob/'git' i/src/js/esinit.js#L1538" class="view-source icon-eye-open"> </a><h3 id="methods_getusermessage">getUserMessage(err, status)</h3>
 <div class="getusermessage"><div class="es-services-web-esglobals-getusermessage-page"><p>This function is used to process the error obejct as well as the status code of any type of error in order to get the best match
 for a user <strong>Error Message</strong> string to be presented to the user.</p>
 </div><h5 id="methods_getusermessage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>err</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="es-services-web-esglobals-getusermessage-page"><p>The error object we got from i.e. http or promise failure.</p>

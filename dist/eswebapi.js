@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-01-28
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-01
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7828,6 +7828,10 @@ var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
 
                 getWebApiToken: function() {
                     return esClientSession.getWebApiToken();
+                },
+
+                isAuthenticated: function() {
+                    return !!esClientSession.connectionModel;
                 },
 
                 getClientSession: function() {

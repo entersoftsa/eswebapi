@@ -5,7 +5,7 @@
 			<span>toggle menu</span>
 		</button>
 		<div class="responsive-logo">
-			Material <br><span class="smaller">Dashboard</span>
+			Entersoft SA <br><span class="smaller">Web API SPA Demo</span>
 		</div>
 				
 		<!-- Left aligned menu below button -->
@@ -94,20 +94,14 @@
 			</md-menu>
 			<md-menu md-position-mode="target-right target" >
 				<md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)">
-					<i class="mdi mdi-dots-vertical"></i>
+					<i class="mdi mdi-account"></i>
 				</md-button>
 				<md-menu-content width="3" >					
 					<md-menu-item>							
-						<md-button >Some Action</md-button>
+						<md-button ui-sref="profile">Profile</md-button>
 					</md-menu-item>
 					<md-menu-item>							
-						<md-button ui-sref="login" style="display:flex;">Logout</md-button>
-					</md-menu-item>
-					<md-menu-item>							
-						<md-button >Disabled Action</md-button>
-					</md-menu-item>
-					<md-menu-item>							
-						<md-button >Yet Another Action</md-button>
+						<md-button ng-enabled="esGlobals.isAuthenticated()" ng-click="logout()" style="display:flex;">Logout</md-button>
 					</md-menu-item>
 				</md-menu-content>
 			</md-menu>
@@ -123,7 +117,7 @@
 		M
 	</div>
 	<div class="top-logo-extended">
-		Material <br/> <span class="smaller">dashboard</span>
+		Entersoft SA <br/> <span class="smaller">Web API SPA Demo</span>
 	</div>
 	<div class="scrollbar" id="scroll">
 		<div class="user-info">
@@ -166,7 +160,6 @@
 				</li>
 				<li ng-class="{active: $state.includes('calendar')}"><md-button ui-sref="calendar" class=""><i class="mdi mdi-calendar"></i> &nbsp;<span class="text"> {{ 'calendar' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('inbox')}"><md-button ui-sref="inbox" class=""><i class="mdi mdi-message"></i> &nbsp;<span class="text">{{ 'inbox' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('profile')}"><md-button ui-sref="profile" class=""><i class="mdi mdi-account"></i> &nbsp;<span class="text">{{ 'profilee' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('invoice')}"><md-button ui-sref="invoice" class=""><i class="mdi mdi-barcode"></i> &nbsp;<span class="text"> {{ 'invoice' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('signup')}"><md-button ui-sref="signup" class=""><i class="mdi mdi-account-multiple-plus"></i> &nbsp;<span class="text">{{ 'signup' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('login')}"><md-button ui-sref="login" class=""><i class="mdi mdi-logout"></i> &nbsp;<span class="text">{{ 'login' | translate }}</span></md-button></li>

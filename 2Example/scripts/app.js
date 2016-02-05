@@ -28,12 +28,27 @@ angular
         'materialCalendar',
         'paperCollapse',
         'pascalprecht.translate',
+
+        'kendo.directives',
+        'underscore',
+        'es.Web.UI',
+        'ui.bootstrap',
+        'uiGmapgoogle-maps',
+        'ngFileUpload',
         'es.Services.Web',
     ])
     .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
         cfpLoadingBarProvider.latencyThreshold = 5;
         cfpLoadingBarProvider.includeSpinner = false;
     }])
+
+.config(['uiGmapGoogleMapApiProvider', function(GoogleMapApi) {
+    GoogleMapApi.configure({
+        //    key: 'your api key',
+        // v: '3.20',
+        libraries: 'weather,geometry,visualization'
+    });
+}])
 
 .config(function($translateProvider) {
     $translateProvider.useStaticFilesLoader({
@@ -59,10 +74,15 @@ angular
     }
 ])
 
-.run(['$rootScope', '$location', 'esGlobals', function($rootScope, $location, esGlobals) {
-    $rootScope.$on('$routeChangeStart', function (event, next) {
-        if (esGlobals.getWebApi) {
-            //
+.run(['$rootScope', '$location', '$state', 'esGlobals', function($rootScope, $location, $state, esGlobals) {
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+        if (!esGlobals.isAuthenticated()) {
+
+            var ts = toState || {};
+            if (!ts.esUnauthenticated) {
+                event.preventDefault();
+                $state.go('login');
+            }
         }
     });
 }])
@@ -83,18 +103,21 @@ angular
             url: '/login',
             parent: 'base',
             templateUrl: 'views/pages/login.html?v=' + window.app_version,
-            controller: 'LoginCtrl'
+            controller: 'LoginCtrl',
+            esUnauthenticated: true
         })
         .state('signup', {
             url: '/signup',
             parent: 'base',
             templateUrl: 'views/pages/signup.html?v=' + window.app_version,
-            controller: 'LoginCtrl'
+            controller: 'LoginCtrl',
+            esUnauthenticated: true
         })
         .state('404', {
             url: '/404-page',
             parent: 'base',
-            templateUrl: 'views/pages/404-page.html?v=' + window.app_version
+            templateUrl: 'views/pages/404-page.html?v=' + window.app_version,
+            esUnauthenticated: true
         })
         .state('dashboard', {
             url: '/dashboard',
@@ -111,7 +134,8 @@ angular
         .state('blank', {
             url: '/blank',
             parent: 'dashboard',
-            templateUrl: 'views/pages/dashboard/blank.html?v=' + window.app_version
+            templateUrl: 'views/pages/dashboard/blank.html?v=' + window.app_version,
+            controller: 'mapsCtrl'
         })
         .state('profile', {
             url: '/profile',
@@ -158,7 +182,7 @@ angular
             url: '/calendar',
             parent: 'dashboard',
             templateUrl: 'views/pages/dashboard/calendar.html?v=' + window.app_version,
-            controller: 'calendarCtrl'
+            controller: 'surveyCtrl'
         })
         .state('invoice', {
             url: '/invoice',
@@ -175,6 +199,7 @@ angular
             url: '/docs',
             parent: 'dashboard',
             templateUrl: 'views/pages/dashboard/docs.html?v=' + window.app_version,
-            controller: 'docsCtrl'
+            controller: 'docsCtrl',
+            esUnauthenticated: true
         });
 });

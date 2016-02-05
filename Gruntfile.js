@@ -38,7 +38,7 @@ module.exports = function(grunt) {
             options: {
                 force: true
             },
-            build: ["dist", "example/lib/eswebapi/dist", "StoreExample/lib/eswebapi/dist"],
+            build: ["dist", "example/lib/eswebapi/dist", "StoreExample/lib/eswebapi/dist", "2Example/lib/eswebapi/dist"],
             docs: ['docs'],
             pub_docs: ['../../docs_eswebapi/eswebapi/css/',
                 '../../docs_eswebapi/eswebapi/font/',
@@ -134,6 +134,12 @@ module.exports = function(grunt) {
                         expand: true,
                         src: ['dist/**'],
                         dest: 'StoreExample/lib/eswebapi/'
+                    },
+
+                    {
+                        expand: true,
+                        src: ['dist/**'],
+                        dest: '2Example/lib/eswebapi/'
                     },
                 ],
             },

@@ -1496,6 +1496,10 @@ var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
                     return esClientSession.getWebApiToken();
                 },
 
+                isAuthenticated: function() {
+                    return !!esClientSession.connectionModel;
+                },
+
                 getClientSession: function() {
                     return esClientSession;
                 },

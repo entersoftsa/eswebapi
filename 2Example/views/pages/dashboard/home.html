@@ -5,6 +5,21 @@
 </div>
 <div class="layout-row" layout-sm="column" layout-xs="column">
 	<div class="mdl-cell shadow grid-margin" style="background: white;" flex="66" flex-sm="100">
+		<div class="panel-header">Opportunities Graph</div>
+		<div class="linechart" relink-event="resize">
+			<div kendo-chart k-options="chartOptions">
+            </div>
+		</div>
+	</div>
+	<div flex="33" flex-sm="100" flex-xs="100" class="mdl-cell shadow grid-margin" style="background: white; position: relative;">
+		<div class="panel-header">Opportunities List<span class="cog">
+		</div>
+		 <es-web-pq es-group-id="masterOptions.GroupID" es-grid-options="masterOptions.theGridOptions" es-srv-paging="false" es-params-values="masterOptions.Params" es-filter-id="masterOptions.FilterID">
+            </es-web-pq>
+	</div>
+</div>
+<div class="layout-row" layout-sm="column" layout-xs="column">
+	<div class="mdl-cell shadow grid-margin" style="background: white;" flex="66" flex-sm="100">
 		<div class="panel-header">Sales Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
                 <md-icon ><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
             </md-button></span>
@@ -57,40 +72,7 @@
 		</div>
 	</div>
 </div>
-<div class="layout-row" layout-sm="column" layout-xs="column">
-	<div class="mdl-cell shadow grid-margin" style="background: white;" flex="66" flex-sm="100">
-		<div class="panel-header">Live traffic</div>
-		<div class="linechart" relink-event="resize">
-			<canvas id="line2" class="chart chart-line chart-xl" data="line2.data" labels="line2.labels" click="line2.onClick" series="line2.series" colours="line2.colours" options="line2.options"></canvas>
-		</div>
-	</div>
-	<div flex="33" flex-sm="100" flex-xs="100" class="mdl-cell shadow grid-margin" style="background: white; position: relative;">
-		<div class="panel-header">to do list <span class="cog">
-			
-			<md-menu md-position-mode="target-right target" >
 
-					<md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)" style="min-width: 0;margin-top:0;">
-						<i class="mdi mdi-settings" style="font-size: 22px"></i>
-					</md-button>
-					<md-menu-content width="3" >					
-						<md-menu-item>							
-							<md-button >2 new friends</md-button>
-						</md-menu-item>
-						<md-menu-item>							
-							<md-button >4 new messages</md-button>
-						</md-menu-item>
-						<md-menu-item>							
-							<md-button >Friend request accepted</md-button>
-						</md-menu-item>
-						<md-menu-item>							
-							<md-button >No new notifs.</md-button>
-						</md-menu-item>
-					</md-menu-content>
-				</md-menu></span>
-		</div>
-		<todolist></todolist>
-	</div>
-</div>
 <div class="layout-row" layout-sm="column" layout-xs="column" id="drag2" dragula>
 	<div class="mdl-cell shadow grid-margin" style="background: white;" flex="66" flex-sm="100">
 		<div class="panel-header">Month Breakdown</div>

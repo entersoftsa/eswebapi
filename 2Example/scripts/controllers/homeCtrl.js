@@ -7,7 +7,83 @@
  * # HomeCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
+	function ($scope, $timeout, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+
+	$scope.seriesClick = function(e) {
+            if ($scope.masterOptions.Params.fLeadSourceCode.pValue(e.category)) {
+                $scope.masterOptions.theGridOptions.dataSource.read();
+            }
+        };
+
+        var pqOptions = new esGlobals.ESPQOptions(-1, -1, true);
+        var params = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ClosingDate", 3)]);
+
+        $scope.masterOptions = new esGlobals.ESPublicQueryDef("", "ESTMOpportunity", "ESTMOpportunityManagement", pqOptions, params);
+        $scope.cDS = esWebUIHelper.getPQDataSource("ds", $scope.masterOptions);
+
+        $scope.chartOptions = {
+            title: "Leads by Lead Source",
+            series: [{
+                type: 'column',
+                field: 'OppRevenue',
+                categoryField: 'fLeadSourceCode',
+                aggregate: 'sum',
+                axis: "Revenue"
+            }, {
+                type: 'line',
+                field: 'OppRevenue',
+                categoryField: 'fLeadSourceCode',
+                aggregate: 'count',
+                axis: "CountOf"
+            }],
+
+            valueAxes: [{
+                name: "Revenue",
+                title: {
+                    text: "Turnover (euros)"
+                }
+            }, {
+                name: "CountOf",
+                title: {
+                    text: "Count Of"
+                }
+            }],
+
+            categoryAxis: {
+                labels: {
+                    rotation: 90
+                },
+                axisCrossingValues: [0, 205]
+            },
+
+
+            tooltip: {
+                visible: true,
+                template: "#= category #: #= value #"
+            },
+            pannable: {
+                lock: "x"
+            },
+            zoomable: {
+                mousewheel: {
+                    lock: "x"
+                },
+                selection: {
+                    lock: "x"
+                }
+            },
+
+
+            seriesClick: $scope.seriesClick,
+            dataSource: $scope.cDS
+        };
+
+
+        $scope.masterOptions.theGridOptions = {};
+
+        /************************/
+
 	$scope.options1 = {
 	    lineWidth: 8,
 	    scaleColor: false,
