@@ -38,10 +38,10 @@ angular.module('MaterialApp')
 .controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
     function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
 
-        GoogleMapApi.then(function(maps) {
-            $log.info("Google maps ver = " + maps.version);
-            maps.visualRefresh = true;
-        });
+        // GoogleMapApi.then(function(maps) {
+        //     $log.info("Google maps ver = " + maps.version);
+        //     maps.visualRefresh = true;
+        // });
 
         $scope.myMapOptions = {
             center: {

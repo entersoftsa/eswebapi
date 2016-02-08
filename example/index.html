@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="yyy">
-                        <img width="258px" height="59px" class="item" src="{{'data:image/jpg;base64,' + blob}}" />
+                        <img ng-if="blob" width="258px" height="59px" class="item" ng-src="{{'data:image/jpg;base64,' + blob}}" />
                         <img width="258px" height="59px" class="item" src="eslogo.png" />
                     </div>
                     <div class="container" class="row">
@@ -93,7 +93,7 @@
     </div>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="bower_components/lodash/lodash.min.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>

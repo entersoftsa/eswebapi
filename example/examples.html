@@ -346,7 +346,7 @@
             <input type="text" ng-model="lUserID" placeholder="User ID or GID"/>
 
             <button ng-click="fetchUserLogo()">Get the PHOTO</button>
-            <img  class="img-circle" width="304" height="236" ng-if="userPhoto" data-ng-src="{{'data:image/jpg;base64,' + userPhoto}}"/>
+            <img ng-if="userPhoto" class="img-circle" width="304" height="236" ng-if="userPhoto" data-ng-src="{{'data:image/jpg;base64,' + userPhoto}}"/>
             <button ng-click="removeCurrentUserLogo()">Remove Current User Logo</button>
         </span>
     </div>
@@ -381,7 +381,7 @@
             <input type="text" ng-model="PersonGID" placeholder="PersonGID"/>
 
             <button ng-click="fetchPersonlogo()">Get Person Logo</button>
-            <img  class="img-circle" width="304" height="236" ng-if="personPhoto" data-ng-src="{{'data:image/jpg;base64,' + personPhoto}}"/>
+            <img  ng-if="personPhoto" class="img-circle" width="304" height="236" ng-if="personPhoto" data-ng-src="{{'data:image/jpg;base64,' + personPhoto}}"/>
             
         </span>
     </div>

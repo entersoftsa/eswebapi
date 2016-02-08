@@ -1282,9 +1282,6 @@ x.setParamValues({p1: 'Hello World'});
                     if (esClientSession.connectionModel && newToken && angular.isString(newToken)) {
                         if (newToken !== esClientSession.connectionModel.WebApiToken) {
                             esClientSession.connectionModel.WebApiToken = newToken;
-                            $log.warn("Changing wep api token for [" + reqUrl + "]");
-                        } else {
-                            $log.warn("[" + reqUrl + "] => For some strange reason I have been ordered to store a new web api token but the new one is the same to the old");
                         }
                     }
                 },

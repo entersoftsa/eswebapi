@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-01
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-05
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7616,9 +7616,6 @@ x.setParamValues({p1: 'Hello World'});
                     if (esClientSession.connectionModel && newToken && angular.isString(newToken)) {
                         if (newToken !== esClientSession.connectionModel.WebApiToken) {
                             esClientSession.connectionModel.WebApiToken = newToken;
-                            $log.warn("Changing wep api token for [" + reqUrl + "]");
-                        } else {
-                            $log.warn("[" + reqUrl + "] => For some strange reason I have been ordered to store a new web api token but the new one is the same to the old");
                         }
                     }
                 },
@@ -8661,13 +8658,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 restrict: 'AE',
                 replace: true,
                 scope: {
-                    esMarkers: "=",
-                    esRows: "=",
+                    esMarkers: "=?",
+                    esRows: "=?",
                     esPqInfo: "=",
-                    esShowWindow: "=",
-                    esTypeOptions: "=",
-                    esType: "=",
-                    esHighLight: "=",
+                    esShowWindow: "=?",
+                    esTypeOptions: "=?",
+                    esType: "=?",
+                    esHighLight: "=?",
                     esClick: "&",
                 },
                 template: '<div ng-include src="\'src/partials/esMapMarkers.html\'"></div>',
@@ -8981,7 +8978,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esDataSource: "=",
                 },
                 templateUrl: function(element, attrs) {
-                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
                     return "src/partials/esGrid.html";
                 },
                 link: function($scope, iElement, iAttrs) {
@@ -8997,7 +8993,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 var fileData = result.data;
 
                                 var docType = result.headers()["content-type"];
-                                $log.info("File " + $scope.pAsset + " ===> " + docType);
+                                
                                 var file = new Blob([fileData], {
                                     type: docType
                                 });
@@ -9092,7 +9088,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esDataSource: "=",
                 },
                 templateUrl: function(element, attrs) {
-                    $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
                     return "src/partials/esLocalGrid.html";
                 },
                 link: function($scope, iElement, iAttrs) {
@@ -9108,7 +9103,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 var fileData = result.data;
 
                                 var docType = result.headers()["content-type"];
-                                $log.info("File " + $scope.pAsset + " ===> " + docType);
+                                
                                 var file = new Blob([fileData], {
                                     type: docType
                                 });
@@ -9163,8 +9158,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             $scope.esMasterRowField = "GID";
                             $log.warn("esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
                         }
-
-                        $log.info("es00DocumentsDetail directive");
 
                         var getOptions = function() {
                             var g = "ESGOCompany";
@@ -9284,7 +9277,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         esShowTopPagination: "=",
                     },
                     templateUrl: function(element, attrs) {
-                        $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
                         return "src/partials/esWebPQ.html";
                     },
                     link: function($scope, iElement, iAttrs) {
@@ -9328,18 +9320,17 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return {
                     restrict: 'AE',
                     scope: {
-                        esParamsDef: '=',
-                        esPqInfo: '=',
-                        esParamsValues: '=',
-                        esGroupId: "=",
-                        esFilterId: "=",
+                        esParamsDef: '=?',
+                        esPqInfo: '=?',
+                        esParamsValues: '=?',
+                        esGroupId: "=?",
+                        esFilterId: "=?",
                         esRunClick: "&",
-                        esRunTitle: "=",
-                        esShowRun: "=",
-                        esLocalDataSource: "="
+                        esRunTitle: "=?",
+                        esShowRun: "=?",
+                        esLocalDataSource: "=?"
                     },
                     templateUrl: function(element, attrs) {
-                        $log.info("Parameter element = ", element, " Parameter attrs = ", attrs);
                         return "src/partials/esParams.html";
                     },
                     link: function($scope, iElement, iAttrs) {
@@ -9505,8 +9496,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     transport: {
                         read: function(options) {
 
-                            $log.info("FETCHing ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
-
                             var pqOptions = {};
                             esWebApiService.fetchStdZoom(zoomID, pqOptions, useCache)
                                 .then(function(ret) {
@@ -9519,7 +9508,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     // END tackling
 
                                     options.success(pq);
-                                    $log.info("FETCHed ZOOM data for [", zoomID, "] with options ", JSON.stringify(options));
+                                    
                                 }, function(err) {
                                     options.error(err);
                                 });
@@ -9550,8 +9539,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                         read: function(options) {
 
-                            $log.info("FETCHing PQ with PQParams ", JSON.stringify(qParams), " and gridoptions ", JSON.stringify(options));
-
                             var pqOptions = {};
                             if (options.data && options.data.page && options.data.pageSize) {
                                 pqOptions.WithCount = true;
@@ -9578,7 +9565,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     }
 
                                     options.success(pq);
-                                    $log.info("FETCHed PQ with PQParams ", JSON.stringify(executeParams), " and gridoptions ", JSON.stringify(options));
+                                    
                                 })
                                 .error(function(err) {
                                     $log.error("Error in DataSource ", err);
@@ -9588,7 +9575,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                     },
                     requestStart: function(e) {
-                        $log.info("request started ", e);
+                        
                     },
 
                     schema: {
