@@ -3,10 +3,10 @@
         <div class="opacity-overlay relative">
             <div class="profile-info absolute">
                 <div class="profile-photo">
-                    <img alt="" ng-if="theGlobalUser.profilePic" data-ng-src="{{'data:image/jpg;base64,' + theGlobalUser.profilePic}}">
+                    <img alt="" ng-if="theGlobalUser.userPicture" data-ng-src="{{'data:image/jpg;base64,' + theGlobalUser.userPicture}}">
                 </div>
                 <div class="profile-desc">
-                    {{theGlobalUser.name}} <span class="smaller">&nbsp;  @rishi</span>
+                    {{theGlobalUser.userModel.Name}} <span class="smaller">&nbsp;  {{theGlobalUser.userModel.UserID}}</span>
                     <br>
                     <span class="location"><i class="mdi mdi-map-marker"></i> Liverpool, Merseyside </span>
                     <br>
@@ -118,22 +118,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="table-left">Club</td>
-                                            <td class="table-right">Liverpool FC</td>                                    
-                                        </tr>
-                                        <tr>
-                                            <td class="table-left">Position</td>
-                                            <td class="table-right">Centre Forward</td>                                    
-                                        </tr>
-                                        <tr>
-                                            <td class="table-left">Wages</td>
-                                            <td class="table-right">250k</td>                                    
-                                        </tr>
-                                        <tr>
-                                            <td class="table-left">Market Value</td>
-                                            <td class="table-right">$32m</td>                                    
-                                        </tr>
+                                        <tr ng-repeat="us in theGlobalUser.userModel.UserSites">
+                                            <td class="table-left">{{us.Site.Code}}</td>
+                                            <td class="table-right">{{us.Site.Description}}</td>                                    
                                     </tbody>
                                 </table>
                             </div>

@@ -113,13 +113,13 @@ angular.module('MaterialApp')
                     return;
                 }
 
-                $scope.theGlobalUser.name = esSession.connectionModel.Name;
+                $scope.theGlobalUser.userModel = esSession.connectionModel;
                 esWebApiService.fetchUserLogo()
                     .then(function(ret) {
-                            $scope.theGlobalUser.profilePic = ret.data;
+                            $scope.theGlobalUser.userPicture = ret.data;
                         },
                         function(err) {
-                            $scope.theGlobalUser.profilePic = "";
+                            $scope.theGlobalUser.userPicture = "";
                         });
             });
         }

@@ -122,9 +122,9 @@
 	<div class="scrollbar" id="scroll">
 		<div class="user-info">
 			<div class="opacity">
-				<a ui-sref="profile"><img ng-if="theGlobalUser.profilePic" data-ng-src="{{'data:image/jpg;base64,' + theGlobalUser.profilePic}}" alt="" class="sidebar-profile"></a>
+				<a ui-sref="profile"><img ng-if="theGlobalUser.userPicture" data-ng-src="{{'data:image/jpg;base64,' + theGlobalUser.userPicture}}" alt="" class="sidebar-profile"></a>
 				<div class="info">
-					{{theGlobalUser.name}} <br /> <span class="smaller">Striker at Liverpool FC</span>
+					{{theGlobalUser.userModel.Name}}<br /> <span class="smaller">{{theGlobalUser.userModel.UserID}}</span>
 					<div class="pen">
 						<a href="#" class=""><i class="mdi mdi-border-color"></i></a>
 					</div>
