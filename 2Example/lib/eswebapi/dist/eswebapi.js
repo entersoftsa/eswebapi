@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-05
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-15
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9271,7 +9271,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     scope: {
                         esGroupId: "=",
                         esFilterId: "=",
-                        esGridOptions: "=",
+                        esGridOptions: "=?",
                         esParamsValues: "=",
                         esSrvPaging: "=",
                         esShowTopPagination: "=",

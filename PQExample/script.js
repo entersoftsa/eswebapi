@@ -39,12 +39,16 @@
                 LangID: 'el-GR'
             };
 
-            $scope.esPQDef = new esGlobals.ESPublicQueryDef("", "ESMMStockItem", "ESMMStockItem_def", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+            $scope.isReady = false;
+
+            var gID = window.esGroupID || "ESMMStockItem";
+            var fID = window.esFilterID || "ESMMStockItem_def";
+            $scope.esPQDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
             
             $scope.doLogin = function() {
                 esWebApiService.openSession($scope.credentials)
                 .then(function(rep) {
-                        alert("OK");
+                        $scope.isReady = true;
                     },
                     function(err) {
                         var s = esGlobals.getUserMessage(err);

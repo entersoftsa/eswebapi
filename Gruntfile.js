@@ -22,6 +22,12 @@ module.exports = function(grunt) {
                 // the files to concatenate
                 src: ['src/js/eswebservices.js', 'src/js/esanalytics.js', 'src/js/esenvironment.js', 'src/js/esinit.js', 'src/js/eslog.js', 'src/js/esWEBUI.js'],
                 dest: 'dist/<%= pkg.name %>.js'
+            },
+            third: {
+                files: {
+                    'PQExample/dist/es.all.js': ['PQExample/lib/third/js/jquery.min.js', 'PQExample/lib/third/js/bootstrap.min.js', 'PQExample/lib/third/js/lodash.min.js','PQExample/lib/third/js/angular.min.js','PQExample/lib/third/js/angular-animate.min.js','PQExample/lib/third/js/ui-bootstrap-tpls.min.js','PQExample/lib/third/js/angular-sanitize.min.js','PQExample/lib/third/js/ngstorage.min.js','PQExample/lib/third/js/stacktrace.min.js','PQExample/lib/third/js/log4javascript.js','PQExample/lib/third/js/underscore-min.js','PQExample/lib/third/js/cache.js','PQExample/lib/third/js/moment-with-locales.min.js',"PQExample/lib/telerik/js/jszip.min.js","PQExample/lib/telerik/js/cultures/kendo.culture.el-GR.min.js","PQExample/lib/telerik/js/kendo.all.min.js","PQExample/lib/eswebapi/dist/eswebapi.js","PQExample/lib/eswebapi/dist/eswebapi.templates.js"],
+                    'PQExample/dist/es.all.css': ['PQExample/lib/third/css/bootstrap.min.css', 'PQExample/lib/third/css/kendo.common-bootstrap.min.css', 'PQExample/lib/third/css/kendo.bootstrap.min.css', 'PQExample/lib/third/css/kendo.dataviz.min.css', 'PQExample/lib/third/css/kendo.dataviz.bootstrap.min.css']
+                }
             }
         },
         uglify: {
@@ -38,7 +44,7 @@ module.exports = function(grunt) {
             options: {
                 force: true
             },
-            build: ["dist", "example/lib/eswebapi/dist", "StoreExample/lib/eswebapi/dist", "2Example/lib/eswebapi/dist"],
+            build: ["dist", "example/lib/eswebapi/dist", "StoreExample/lib/eswebapi/dist", "2Example/lib/eswebapi/dist", "PQExample/lib/eswebapi/dist"],
             docs: ['docs'],
             pub_docs: ['../../docs_eswebapi/eswebapi/css/',
                 '../../docs_eswebapi/eswebapi/font/',
@@ -140,6 +146,12 @@ module.exports = function(grunt) {
                         expand: true,
                         src: ['dist/**'],
                         dest: '2Example/lib/eswebapi/'
+                    },
+
+                    {
+                        expand: true,
+                        src: ['dist/**'],
+                        dest: 'PQExample/lib/eswebapi/'
                     },
                 ],
             },
@@ -326,7 +338,7 @@ module.exports = function(grunt) {
     grunt.registerTask('1build', [
         /* compile and prepare source files */
         'clean:build',
-        'concat',
+        'concat:dist',
         'uglify',
         'filerev:scripts',
         'ngtemplates',
@@ -343,7 +355,7 @@ module.exports = function(grunt) {
     grunt.registerTask('fulldeploy', [
         /* compile and prepare source files */
         'clean:build',
-        'concat',
+        'concat:dist',
         'uglify',
         'filerev:scripts',
         'ngtemplates',

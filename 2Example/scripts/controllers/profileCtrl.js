@@ -10,7 +10,7 @@
 angular.module('MaterialApp').controller('profileCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals', '$mdToast',
     function($scope, $log, esMessaging, esWebApiService, esGlobals, $mdToast) {
 
-        esWebApiService.fetchEntity("ESGOUser", "5B6F2E05-0AB6-4F29-9015-6A4352009EAD")
+        esWebApiService.fetchEntity("ESGOUser", $scope.theGlobalUser.userModel.GID)
             .then(function(ret) {
             	$scope.esUserObject = ret.data;
 
