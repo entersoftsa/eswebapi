@@ -43,7 +43,9 @@
 
             var gID = window.esGroupID || "ESMMStockItem";
             var fID = window.esFilterID || "ESMMStockItem_def";
+
             $scope.esPQDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+            $scope.esPQDef.serverSidePaging = window.esServerSidePaging || false;
             
             $scope.doLogin = function() {
                 esWebApiService.openSession($scope.credentials)
