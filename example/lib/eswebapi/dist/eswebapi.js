@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-15
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-18
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6351,6 +6351,9 @@ var resp = {
         Patch: vParts[2]
     };
 
+    var esUISettings = {
+        mobile: undefined
+    };
 
     var esWebFramework = angular.module('es.Services.Web');
 
@@ -7613,8 +7616,13 @@ x.setParamValues({p1: 'Hello World'});
                 connectionModel: null,
 
                 setWebApiToken: function(newToken, reqUrl) {
-                    if (esClientSession.connectionModel && newToken && angular.isString(newToken)) {
-                        if (newToken !== esClientSession.connectionModel.WebApiToken) {
+                    if (newToken && angular.isString(newToken)) {
+                        if(esClientSession.connectionModel) {
+                            if (newToken !== esClientSession.connectionModel.WebApiToken) {
+                                esClientSession.connectionModel.WebApiToken = newToken;
+                            }
+                        } else {
+                            esClientSession.connectionModel = {};
                             esClientSession.connectionModel.WebApiToken = newToken;
                         }
                     }
@@ -7867,6 +7875,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 ]);
 ```             **/
                 getUserMessage: getUserMessage,
+
+                getESUISettings: function() {
+                    return esUISettings;
+                },
 
                 /**
                  * @ngdoc function
@@ -8446,7 +8458,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             return f;
         })
 
-    
+
     .directive('esPositiveInteger', ['$parse', function($parse) {
         var INTEGER_REGEXP = /^\+?\d+$/;
         return {
@@ -8502,7 +8514,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     $scope.esGlobals = esGlobals;
                 }
             }
-        }])
+        }
+    ])
 
     .directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
         function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
@@ -8592,7 +8605,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             return convertPQRowsToMapRows;
         })
 
-    .directive('esMapPq', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$timeout', 'uiGmapGoogleMapApi', 
+    .directive('esMapPq', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$timeout', 'uiGmapGoogleMapApi',
         function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize, $timeout, GoogleMapApi) {
             return {
                 restrict: 'AE',
@@ -8993,7 +9006,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 var fileData = result.data;
 
                                 var docType = result.headers()["content-type"];
-                                
+
                                 var file = new Blob([fileData], {
                                     type: docType
                                 });
@@ -9079,6 +9092,31 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     ])
 
+    .directive('esChart', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esPqDef: "=",
+                    esChartOptions: "=",
+                },
+                templateUrl: function(element, attrs) {
+                    return "src/partials/esChartPQ.html";
+                },
+                link: function($scope, iElement, iAttrs) {
+                    $scope.esChartDataSource = esWebUIHelper.getPQDataSource("ds", $scope.esPqDef);
+                    $scope.esChartOptions.dataSource = $scope.esChartDataSource;
+
+                    $scope.executePQ = function() {
+                        if ($scope.esChartDataSource){
+                            $scope.esChartDataSource.read();
+                        }
+                    }
+                }
+            };
+        }
+    ])
+
     .directive('esLocalGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
         function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
             return {
@@ -9103,7 +9141,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 var fileData = result.data;
 
                                 var docType = result.headers()["content-type"];
-                                
+
                                 var file = new Blob([fileData], {
                                     type: docType
                                 });
@@ -9508,7 +9546,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     // END tackling
 
                                     options.success(pq);
-                                    
+
                                 }, function(err) {
                                     options.error(err);
                                 });
@@ -9565,7 +9603,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     }
 
                                     options.success(pq);
-                                    
+
                                 })
                                 .error(function(err) {
                                     $log.error("Error in DataSource ", err);
@@ -9575,7 +9613,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                     },
                     requestStart: function(e) {
-                        
+
                     },
 
                     schema: {
@@ -9619,7 +9657,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     sortable: true,
                     scrollable: true,
                     selectable: "row",
-                    //mobile: true,
+                    mobile: esGlobals.getESUISettings().mobile,
                     allowCopy: true,
                     resizable: true,
                     reorderable: true,
@@ -9678,11 +9716,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     sortable: !dsOptions.serverPaging,
                     scrollable: true,
                     selectable: "row",
-                    //mobile: true,
+                    mobile: esGlobals.getESUISettings().mobile,
                     allowCopy: true,
                     resizable: true,
                     reorderable: true,
                     navigatable: true,
+                    height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
                         template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
                     },

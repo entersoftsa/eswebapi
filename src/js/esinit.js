@@ -17,6 +17,9 @@
         Patch: vParts[2]
     };
 
+    var esUISettings = {
+        mobile: undefined
+    };
 
     var esWebFramework = angular.module('es.Services.Web');
 
@@ -1279,8 +1282,13 @@ x.setParamValues({p1: 'Hello World'});
                 connectionModel: null,
 
                 setWebApiToken: function(newToken, reqUrl) {
-                    if (esClientSession.connectionModel && newToken && angular.isString(newToken)) {
-                        if (newToken !== esClientSession.connectionModel.WebApiToken) {
+                    if (newToken && angular.isString(newToken)) {
+                        if(esClientSession.connectionModel) {
+                            if (newToken !== esClientSession.connectionModel.WebApiToken) {
+                                esClientSession.connectionModel.WebApiToken = newToken;
+                            }
+                        } else {
+                            esClientSession.connectionModel = {};
                             esClientSession.connectionModel.WebApiToken = newToken;
                         }
                     }
@@ -1533,6 +1541,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 ]);
 ```             **/
                 getUserMessage: getUserMessage,
+
+                getESUISettings: function() {
+                    return esUISettings;
+                },
 
                 /**
                  * @ngdoc function

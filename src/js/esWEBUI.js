@@ -179,7 +179,7 @@
             return f;
         })
 
-    
+
     .directive('esPositiveInteger', ['$parse', function($parse) {
         var INTEGER_REGEXP = /^\+?\d+$/;
         return {
@@ -235,7 +235,8 @@
                     $scope.esGlobals = esGlobals;
                 }
             }
-        }])
+        }
+    ])
 
     .directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
         function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
@@ -325,7 +326,7 @@
             return convertPQRowsToMapRows;
         })
 
-    .directive('esMapPq', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$timeout', 'uiGmapGoogleMapApi', 
+    .directive('esMapPq', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$timeout', 'uiGmapGoogleMapApi',
         function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize, $timeout, GoogleMapApi) {
             return {
                 restrict: 'AE',
@@ -726,7 +727,7 @@
                                 var fileData = result.data;
 
                                 var docType = result.headers()["content-type"];
-                                
+
                                 var file = new Blob([fileData], {
                                     type: docType
                                 });
@@ -812,6 +813,31 @@
         }
     ])
 
+    .directive('esChart', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esPqDef: "=",
+                    esChartOptions: "=",
+                },
+                templateUrl: function(element, attrs) {
+                    return "src/partials/esChartPQ.html";
+                },
+                link: function($scope, iElement, iAttrs) {
+                    $scope.esChartDataSource = esWebUIHelper.getPQDataSource("ds", $scope.esPqDef);
+                    $scope.esChartOptions.dataSource = $scope.esChartDataSource;
+
+                    $scope.executePQ = function() {
+                        if ($scope.esChartDataSource){
+                            $scope.esChartDataSource.read();
+                        }
+                    }
+                }
+            };
+        }
+    ])
+
     .directive('esLocalGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
         function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
             return {
@@ -836,7 +862,7 @@
                                 var fileData = result.data;
 
                                 var docType = result.headers()["content-type"];
-                                
+
                                 var file = new Blob([fileData], {
                                     type: docType
                                 });
@@ -1241,7 +1267,7 @@
                                     // END tackling
 
                                     options.success(pq);
-                                    
+
                                 }, function(err) {
                                     options.error(err);
                                 });
@@ -1298,7 +1324,7 @@
                                     }
 
                                     options.success(pq);
-                                    
+
                                 })
                                 .error(function(err) {
                                     $log.error("Error in DataSource ", err);
@@ -1308,7 +1334,7 @@
 
                     },
                     requestStart: function(e) {
-                        
+
                     },
 
                     schema: {
@@ -1352,7 +1378,7 @@
                     sortable: true,
                     scrollable: true,
                     selectable: "row",
-                    //mobile: true,
+                    mobile: esGlobals.getESUISettings().mobile,
                     allowCopy: true,
                     resizable: true,
                     reorderable: true,
@@ -1411,11 +1437,12 @@
                     sortable: !dsOptions.serverPaging,
                     scrollable: true,
                     selectable: "row",
-                    //mobile: true,
+                    mobile: esGlobals.getESUISettings().mobile,
                     allowCopy: true,
                     resizable: true,
                     reorderable: true,
                     navigatable: true,
+                    height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
                         template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
                     },

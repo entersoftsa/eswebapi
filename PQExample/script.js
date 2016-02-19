@@ -7,8 +7,8 @@
 
         /* Entersoft AngularJS WEB API Provider */
         'es.Services.Web',
-        'kendo.directives', 
-        'underscore', 
+        'kendo.directives',
+        'underscore',
         'es.Web.UI',
         'ui.bootstrap'
     ]);
@@ -16,39 +16,36 @@
     esApp.config(['$logProvider', 'esWebApiProvider',
         function($logProvider, esWebApiServiceProvider) {
 
-            var subscriptionId = "";
-            esWebApiServiceProvider.setSettings({
-                "host": "192.168.1.190/eswebapijti",
-                subscriptionId: subscriptionId,
-                subscriptionPassword: "passx",
-                allowUnsecureConnection: true
-            });
+            var settings = window.esWebApiSettings;
+            esWebApiServiceProvider.setSettings(settings);
         }
     ]);
 
+    function doPrepareCtrl($scope, esMessaging, esGlobals) {
+        $scope.isReady = false;
 
+        esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
+            var s = esGlobals.getUserMessage(rejection, status);
+            alert(s.messageToShow)
+        });
 
-    /* Controllers */
+        esGlobals.getESUISettings().mobile = window.esDeviceMode;
+        esGlobals.getESUISettings().defaultGridHeight = window.esGridHeight;
+    }
 
-    esApp.controller('esPQCtrl', ['$scope', '$log', 'esWebApi', 'esUIHelper', 'esGlobals',
-        function($scope, $log, esWebApiService, esWebUIHelper, esGlobals) {
-            $scope.credentials = {
+    function doLogin($scope, esGlobals, esWebApiService) {
+        if (window.esWebApiToken) {
+            esGlobals.setWebApiToken(window.esWebApiToken);
+            $scope.isReady = true;
+
+        } else {
+            var credentials = {
                 UserID: 'admin',
                 Password: 'entersoft',
                 BranchID: 'ΑΘΗ',
                 LangID: 'el-GR'
             };
-
-            $scope.isReady = false;
-
-            var gID = window.esGroupID || "ESMMStockItem";
-            var fID = window.esFilterID || "ESMMStockItem_def";
-
-            $scope.esPQDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
-            $scope.esPQDef.serverSidePaging = window.esServerSidePaging || false;
-            
-            $scope.doLogin = function() {
-                esWebApiService.openSession($scope.credentials)
+            esWebApiService.openSession(credentials)
                 .then(function(rep) {
                         $scope.isReady = true;
                     },
@@ -58,13 +55,98 @@
                             alert(s.messageToShow)
                         }
                     });
-            }
+        }
+    }
 
-            $scope.doLogin();
+    /* Controllers */
+
+    esApp.controller('esChartCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
+        function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
+            doPrepareCtrl($scope, esMessaging, esGlobals);
+
+            var gID = window.esGroupID;
+            var fID = window.esFilterID;
+
+            gID = "ESTMOpportunity";
+            fID = "ESTMOpportunityManagement";
+
+            var pqOptions = new esGlobals.ESPQOptions(-1, -1, true);
+            var params = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ClosingDate", 3)]);
+
+            $scope.pqDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+            
+            $scope.chartOptions = {
+                title: "Leads by Lead Source",
+                series: [{
+                    type: 'column',
+                    field: 'OppRevenue',
+                    categoryField: 'fLeadSourceCode',
+                    aggregate: 'sum',
+                    axis: "Revenue"
+                }, {
+                    type: 'line',
+                    field: 'OppRevenue',
+                    categoryField: 'fLeadSourceCode',
+                    aggregate: 'count',
+                    axis: "CountOf"
+                }],
+
+                valueAxes: [{
+                    name: "Revenue",
+                    title: {
+                        text: "Turnover (euros)"
+                    }
+                }, {
+                    name: "CountOf",
+                    title: {
+                        text: "Count Of"
+                    }
+                }],
+
+                categoryAxis: {
+                    labels: {
+                        rotation: 90
+                    },
+                    axisCrossingValues: [0, 205]
+                },
+
+
+                tooltip: {
+                    visible: true,
+                    template: "#= category #: #= value #"
+                },
+                pannable: {
+                    lock: "x"
+                },
+                zoomable: {
+                    mousewheel: {
+                        lock: "x"
+                    },
+                    selection: {
+                        lock: "x"
+                    }
+                }
+            };
+
+            doLogin($scope, esGlobals, esWebApiService);
         }
     ]);
 
-    
+    esApp.controller('esGridCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
+        function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
+            doPrepareCtrl($scope, esMessaging, esGlobals);
+
+            var gID = window.esGroupID;
+            var fID = window.esFilterID;
+
+            $scope.esPQDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+            $scope.esPQDef.serverSidePaging = window.esServerSidePaging;
+
+            doLogin($scope, esGlobals, esWebApiService);
+        }
+    ]);
+
+
 
 })
 (window.angular);

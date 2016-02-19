@@ -6,6 +6,11 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('src/partials/esChartPQ.html',
+    "<div class=row><es-params-panel ng-cloak es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ()></es-params-panel></div><div kendo-chart class=row k-ng-delay=esChartOptions.dataSource k-options=esChartOptions></div>"
+  );
+
+
   $templateCache.put('src/partials/esGrid.html',
     "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions.dataSource es-srv-paging=esSrvPaging k-options=esGridOptions k-rebind=esGridOptions.reBind></div>"
   );
@@ -47,7 +52,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamEnum.html',
-    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><select class=\"form-control es-param-control\" kendo-drop-down-list name={{::esParamDef.id}} ng-required=::esParamDef.required ng-cloak k-ng-delay=esParamDef k-data-text-field=\"'text'\" k-data-value-field=\"'value'\" k-auto-bind=true k-option-label=\"{ text: 'All', value: null}\" k-data-source=::esParamDef.enumList k-value-primitive=true ng-model-options=\"{getterSetter: true}\" ng-model=esParamVal[esParamDef.id].pValue></select>"
+    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><select class=\"form-control es-param-control\" kendo-drop-down-list name={{::esParamDef.id}} ng-required=::esParamDef.required ng-cloak k-ng-delay=esParamDef k-data-text-field=\"'text'\" k-data-value-field=\"'value'\" k-auto-bind=true smek-option-label=\"{ text: 'All', value: null}\" k-data-source=::esParamDef.enumList k-value-primitive=true ng-model-options=\"{getterSetter: true}\" ng-model=esParamVal[esParamDef.id].pValue></select>"
   );
 
 

@@ -16,9 +16,8 @@
 
 <body ng-cloak>
     <div ng-cloak>
-        <div ng-controller="esPQCtrl">
-            <es-web-pq 
-                ng-if="isReady"
+        <div ng-controller="esGridCtrl">
+            <es-web-pq ng-if="isReady" 
                 es-group-id="esPQDef.GroupID" 
                 es-srv-paging="esPQDef.serverSidePaging" 
                 es-params-values="esPQDef.Params" 
@@ -26,7 +25,25 @@
             </es-web-pq>
         </div>
     </div>
-
+    <script type="text/javascript">
+    function prepareMobileCall() {
+        window.esWebApiSettings = {
+            "host": "192.168.1.190/eswebapijti",
+            subscriptionId: "",
+            bridgeId: "",
+            subscriptionPassword: "passx",
+            allowUnsecureConnection: true
+        };
+        window.esGroupID = "ESMMStockItem";
+        window.esFilterID = "ESMMStockItem_Def";
+        window.esServerSidePaging = true;
+        window.esDeviceMode = "";
+        window.esGridHeight = "";
+        window.esWebApiToken = "";
+        //window.esWebApiToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwieC1lc3UtcGFzc3dvcmQiOiJlbnRlcnNvZnQiLCJ4LWVzdS1icmFuY2gtaWQiOiLOkc6YzpciLCJ4LWVzdS1sYW5nLWlkIjoiZWwtR1IiLCJ4LWVzbGktRVNTdWJzY3JpcHRpb25QYXNzd29yZCI6InBhc3N4IiwiaXNzIjoiRW50ZXJzb2Z0IiwiYXVkIjoiaHR0cDovLzE5Mi4xNjguMS4xOTAiLCJleHAiOjE0NTU2NDEzOTcsIm5iZiI6MTQ1NTYzMDU5N30.YGq5dCgPjE-uRqXmrwYx5Edo8y2u72b4i6bDbYi3DI4";
+    };
+    prepareMobileCall();
+    </script>
     <script src="dist/es.all.js"></script>
     <!-- // <script src="lib/third/js/jquery.min.js"></script>
      <script src="lib/third/js/bootstrap.min.js"></script>
@@ -49,7 +66,6 @@
     <script src="lib/eswebapi/dist/eswebapi.js"></script>
     <script src="lib/eswebapi/dist/eswebapi.templates.js"></script>
 -->
-
     <script src="script.js" type="text/javascript"></script>
 </body>
 
