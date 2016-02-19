@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-18
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-19
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8029,8 +8029,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
          * @returns {function} printStackTrace
          **/
         function() {
+            var so;
+            try {
+                so = printStackTrace;
+            } catch(e) {
+                so = StackTrace;
+            }
             return ({
-                print: printStackTrace
+                print: so
             });
         }
     );
@@ -8122,7 +8128,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 addESWebApiAppender: function(srvUrl, subscriptionId) {
                     // var ajaxUrl = srvUrl + "api/rpc/log/";
-                    var ajaxUrl = srvUrl + "api/rpc/registerException/";
+                    var ajaxUrl = srvUrl + "api/rpc/EventLog/";
 
                     ajaxAppender = new log4javascript.AjaxAppender(ajaxUrl, false);
                     ajaxAppender.setSendAllOnUnload(true);

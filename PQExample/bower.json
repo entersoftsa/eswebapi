@@ -1,12 +1,11 @@
 {
-  "name": "eswebapisample",
-  "version": "0.0.1",
-  "authors": [
-    "sme <sme>"
-  ],
-  "description": "Sample usage of Entersoft Web API",
-  "main": "index.html",
+  "name": "esweblib",
+  "description": "",
+  "main": "",
+  "moduleType": [],
   "license": "MIT",
+  "homepage": "",
+  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
@@ -15,22 +14,22 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1.4",
-    "angularjs": "~1.4.7",
-    "angular-animate": "~1.4.7",
-    "angular-sanitize": "~1.4.7",
-    "angular-bootstrap": "~0.14.1",
-    "ngstorage": "~0.3.9",
-    "bootstrap": "~3.3.5",
-    "lodash": "^4.1.0",
-    "stacktrace-js": "~0.6.4",
-    "log4javascript": "~1.4.9",
-    "underscore": "~1.8.3",
+    "angular": "^1.5.0",
+    "jquery": "^2.2.0",
+    "angular-animate": "^1.5.0",
+    "angular-route": "^1.5.0",
+    "angular-sanitize": "^1.5.0",
+    "angular-bootstrap": "^1.1.2",
+    "ngstorage": "^0.3.10",
+    "bootstrap": "^3.3.6",
+    "stacktrace-js": "^1.0.3",
+    "log4javascript": "^1.4.9",
+    "underscore": "^1.8.3",
     "jscache": "*",
-    "moment": "~2.10.6"
-  },
-  "resolutions": {
-    "angular": "1.4.7",
-    "angular-simple-logger": "~0.1.4"
+    "moment": "^2.11.2",
+    "ng-file-upload": "^12.0.1",
+    "angular-google-maps": "^2.3.2",
+    "angular-simple-logger": "^0.1.7",
+    "lodash": "^4.5.0"
   }
 }

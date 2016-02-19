@@ -23,10 +23,37 @@ module.exports = function(grunt) {
                 src: ['src/js/eswebservices.js', 'src/js/esanalytics.js', 'src/js/esenvironment.js', 'src/js/esinit.js', 'src/js/eslog.js', 'src/js/esWEBUI.js'],
                 dest: 'dist/<%= pkg.name %>.js'
             },
-            third: {
+
+            iPad: {
                 files: {
-                    'PQExample/dist/es.all.js': ['PQExample/lib/third/js/jquery.min.js', 'PQExample/lib/third/js/bootstrap.min.js', 'PQExample/lib/third/js/lodash.min.js','PQExample/lib/third/js/angular.min.js','PQExample/lib/third/js/angular-animate.min.js','PQExample/lib/third/js/ui-bootstrap-tpls.min.js','PQExample/lib/third/js/angular-sanitize.min.js','PQExample/lib/third/js/ngstorage.min.js','PQExample/lib/third/js/stacktrace.min.js','PQExample/lib/third/js/log4javascript.js','PQExample/lib/third/js/underscore-min.js','PQExample/lib/third/js/cache.js','PQExample/lib/third/js/moment-with-locales.min.js',"PQExample/lib/telerik/js/jszip.min.js","PQExample/lib/telerik/js/cultures/kendo.culture.el-GR.min.js","PQExample/lib/telerik/js/kendo.all.min.js","PQExample/lib/eswebapi/dist/eswebapi.js","PQExample/lib/eswebapi/dist/eswebapi.templates.js"],
-                    'PQExample/dist/es.all.css': ['PQExample/lib/third/css/bootstrap.min.css', 'PQExample/lib/third/css/kendo.common-bootstrap.min.css', 'PQExample/lib/third/css/kendo.bootstrap.min.css', 'PQExample/lib/third/css/kendo.dataviz.min.css', 'PQExample/lib/third/css/kendo.dataviz.bootstrap.min.css']
+                    'PQExample/dist/es.all.js': [
+                        'PQExample/bower_components/jquery/dist/jquery.min.js', 
+                        'PQExample/bower_components/bootstrap/dist/js/bootstrap.min.js', 
+                        'PQExample/bower_components/lodash/dist/lodash.min.js',
+                        'PQExample/bower_components/angular/angular.min.js',
+                        'PQExample/bower_components/angular-animate/angular-animate.min.js',
+                        'PQExample/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+                        'PQExample/bower_components/angular-sanitize/angular-sanitize.min.js',
+                        'PQExample/bower_components/ngstorage/ngstorage.min.js',
+                        'PQExample/bower_components/stacktrace-js/dist/stacktrace.min.js',
+                        'PQExample/bower_components/log4javascript/js/log4javascript.js',
+                        'PQExample/bower_components/underscore/underscore-min.js',
+                        'PQExample/bower_components/jscache/cache.js',
+                        'PQExample/bower_components/moment/min/moment-with-locales.min.js',
+                        "PQExample/lib/telerik/js/jszip.min.js",
+                        "PQExample/lib/telerik/js/kendo.all.min.js",
+                        "PQExample/lib/telerik/js/cultures/kendo.culture.el-GR.min.js",
+                        "PQExample/lib/eswebapi/dist/eswebapi.js",
+                        "PQExample/lib/eswebapi/dist/eswebapi.templates.js"
+                    ],
+                    'PQExample/dist/es.all.css': 
+                    [
+                            'PQExample/bower_components/bootstrap/dist/css/bootstrap.min.css',
+                            'PQExample/lib/telerik/styles/kendo.common-bootstrap.min.css', 
+                            'PQExample/lib/telerik/styles/kendo.bootstrap.min.css', 
+                            'PQExample/lib/telerik/styles/kendo.dataviz.min.css', 
+                            'PQExample/lib/telerik/styles/kendo.dataviz.bootstrap.min.css'
+                    ]
                 }
             }
         },
@@ -46,6 +73,7 @@ module.exports = function(grunt) {
             },
             build: ["dist", "example/lib/eswebapi/dist", "StoreExample/lib/eswebapi/dist", "2Example/lib/eswebapi/dist", "PQExample/lib/eswebapi/dist"],
             docs: ['docs'],
+            iPad: ['PQExample/dist'],
             pub_docs: ['../../docs_eswebapi/eswebapi/css/',
                 '../../docs_eswebapi/eswebapi/font/',
                 '../../docs_eswebapi/eswebapi/grunt-scripts/',
@@ -154,6 +182,20 @@ module.exports = function(grunt) {
                         dest: 'PQExample/lib/eswebapi/'
                     },
                 ],
+            },
+            iPad: {
+                files: [{
+                    expand: true,
+                    cwd: 'PQExample/bower_components/bootstrap/fonts/',
+                    src: ['*.*'],
+                    dest: 'PQExample/fonts/'
+                },
+                {
+                    expand: true,
+                    cwd: 'PQExample/lib/bootstrap/',
+                    src: ['*.*'],
+                    dest: 'PQExample/dist/bootstrap'  
+                }]
             },
             docs_images: {
                 files: [{
@@ -378,6 +420,8 @@ module.exports = function(grunt) {
         // send email to dev community
         //'nodemailer:internal'
     ]);
+
+    grunt.registerTask('iPad', ['clean:iPad', 'concat:iPad', 'copy:iPad']);
 
     // doc
     grunt.registerTask('0doc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:docs_images']);

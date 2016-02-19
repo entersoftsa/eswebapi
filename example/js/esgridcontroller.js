@@ -1052,8 +1052,7 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
             zoom: 2,
         };
 
-        $scope.myPQDef = new esGlobals.ESPublicQueryDef("","ESTMOpportunity", "ESTMOpportunityManagement", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
-        //$scope.myPQDef = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+        $scope.myPQDef = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
         $scope.MyShowWindow = false;
         $scope.myType = "standard";
         $scope.myTypeOptions = null;

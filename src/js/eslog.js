@@ -25,8 +25,14 @@
          * @returns {function} printStackTrace
          **/
         function() {
+            var so;
+            try {
+                so = printStackTrace;
+            } catch(e) {
+                so = StackTrace;
+            }
             return ({
-                print: printStackTrace
+                print: so
             });
         }
     );
@@ -118,7 +124,7 @@
 
                 addESWebApiAppender: function(srvUrl, subscriptionId) {
                     // var ajaxUrl = srvUrl + "api/rpc/log/";
-                    var ajaxUrl = srvUrl + "api/rpc/registerException/";
+                    var ajaxUrl = srvUrl + "api/rpc/EventLog/";
 
                     ajaxAppender = new log4javascript.AjaxAppender(ajaxUrl, false);
                     ajaxAppender.setSendAllOnUnload(true);
