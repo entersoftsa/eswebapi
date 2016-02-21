@@ -33,9 +33,12 @@
         esGlobals.getESUISettings().defaultGridHeight = window.esGridHeight;
     }
 
-    function doLogin($scope, esGlobals, esWebApiService) {
+    function doLogin($scope, esGlobals, esWebApiService, runOnSuccess) {
         if (window.esWebApiToken) {
             esGlobals.setWebApiToken(window.esWebApiToken);
+            if (angular.isFunction(runOnSuccess)) {
+                runOnSuccess();
+            }
             $scope.isReady = true;
 
         } else {
@@ -47,6 +50,9 @@
             };
             esWebApiService.openSession(credentials)
                 .then(function(rep) {
+                        if (angular.isFunction(runOnSuccess)) {
+                            runOnSuccess();
+                        }
                         $scope.isReady = true;
                     },
                     function(err) {
@@ -64,86 +70,30 @@
         function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
             doPrepareCtrl($scope, esMessaging, esGlobals);
 
-            var gID = window.esGroupID;
-            var fID = window.esFilterID;
+            var runOnSuccess = function() {
+                var gID = window.esDef.GroupID;
+                var fID = window.esDef.FilterID;
+                $scope.chartOptions = window.esDef.options;
 
-            gID = "ESTMOpportunity";
-            fID = "ESTMOpportunityManagement";
-
-            var pqOptions = new esGlobals.ESPQOptions(-1, -1, true);
-            var params = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ClosingDate", 3)]);
-
-            $scope.pqDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
-            
-            $scope.chartOptions = {
-                autoBind: false,
-                title: "Leads by Lead Source",
-                series: [{
-                    type: 'column',
-                    field: 'OppRevenue',
-                    categoryField: 'fLeadSourceCode',
-                    aggregate: 'sum',
-                    axis: "Revenue"
-                }, {
-                    type: 'line',
-                    field: 'OppRevenue',
-                    categoryField: 'fLeadSourceCode',
-                    aggregate: 'count',
-                    axis: "CountOf"
-                }],
-
-                valueAxes: [{
-                    name: "Revenue",
-                    title: {
-                        text: "Turnover (euros)"
-                    }
-                }, {
-                    name: "CountOf",
-                    title: {
-                        text: "Count Of"
-                    }
-                }],
-
-                categoryAxis: {
-                    labels: {
-                        rotation: 90
-                    },
-                    axisCrossingValues: [0, 205]
-                },
-
-
-                tooltip: {
-                    visible: true,
-                    template: "#= category #: #= value #"
-                },
-                pannable: {
-                    lock: "x"
-                },
-                zoomable: {
-                    mousewheel: {
-                        lock: "x"
-                    },
-                    selection: {
-                        lock: "x"
-                    }
-                }
+                $scope.pqDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
             };
 
-            doLogin($scope, esGlobals, esWebApiService);
+            doLogin($scope, esGlobals, esWebApiService, runOnSuccess);
         }
     ]);
+
 
     esApp.controller('testCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
         function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
             doPrepareCtrl($scope, esMessaging, esGlobals);
 
-            
+
             $scope.params = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ClosingDate", 3)]);
 
             $scope.esParamDef = {
                 required: true,
                 id: "ClosingDate",
-                enumList: [{text: 'Option 1', value: 0}, {text: 'Option 2', value: 1}, {text: 'Option 3', value: 2}, {text: 'Correct !!!', value: 3}]
+                enumList: [{ text: 'Option 1', value: 0 }, { text: 'Option 2', value: 1 }, { text: 'Option 3', value: 2 }, { text: 'Correct !!!', value: 3 }]
             };
 
             $scope.cVal = 3;
@@ -156,13 +106,15 @@
         function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
             doPrepareCtrl($scope, esMessaging, esGlobals);
 
-            var gID = window.esGroupID;
-            var fID = window.esFilterID;
+            var runOnSuccess = function() {
+                var gID = window.esDef.GroupID;
+                var fID = window.esDef.FilterID;
 
-            $scope.esPQDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
-            $scope.esPQDef.serverSidePaging = window.esServerSidePaging;
+                $scope.esPQDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+                $scope.esPQDef.serverSidePaging = window.esDef.ServerSidePaging;
+            }
 
-            doLogin($scope, esGlobals, esWebApiService);
+            doLogin($scope, esGlobals, esWebApiService, runOnSuccess);
         }
     ]);
 

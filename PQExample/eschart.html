@@ -17,7 +17,7 @@
 <body ng-cloak>
     <div ng-cloak>
         <div ng-controller="esChartCtrl">
-            <es-chart 
+            <es-chart ng-if="isReady"
                 es-pq-def="pqDef" 
                 es-chart-options="chartOptions">
             </es-chart>
@@ -32,12 +32,68 @@
             subscriptionPassword: "passx",
             allowUnsecureConnection: true
         };
-        window.esGroupID = "ESMMStockItem";
-        window.esFilterID = "ESMMStockItem_Def";
-        window.esServerSidePaging = true;
         window.esDeviceMode = "";
         window.esGridHeight = "";
         window.esWebApiToken = "";
+        window.esDef = {
+            GroupID: "ESTMOpportunity",
+            FilterID: "ESTMOpportunityManagement",
+            options: {
+                    autoBind: false,
+                    title: "Leads by Lead Source",
+                    series: [{
+                        type: 'column',
+                        field: 'OppRevenue',
+                        categoryField: 'fLeadSourceCode',
+                        aggregate: 'sum',
+                        axis: "Revenue"
+                    }, {
+                        type: 'line',
+                        field: 'OppRevenue',
+                        categoryField: 'fLeadSourceCode',
+                        aggregate: 'count',
+                        axis: "CountOf"
+                    }],
+
+                    valueAxes: [{
+                        name: "Revenue",
+                        title: {
+                            text: "Turnover (euros)"
+                        }
+                    }, {
+                        name: "CountOf",
+                        title: {
+                            text: "Count Of"
+                        }
+                    }],
+
+                    categoryAxis: {
+                        labels: {
+                            rotation: 90
+                        },
+                        axisCrossingValues: [0, 205]
+                    },
+
+
+                    tooltip: {
+                        visible: true,
+                        template: "#= category #: #= value #"
+                    },
+                    pannable: {
+                        lock: "x"
+                    },
+                    zoomable: {
+                        mousewheel: {
+                            lock: "x"
+                        },
+                        selection: {
+                            lock: "x"
+                        }
+                    }
+                }
+        };
+        
+
         //window.esWebApiToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwieC1lc3UtcGFzc3dvcmQiOiJlbnRlcnNvZnQiLCJ4LWVzdS1icmFuY2gtaWQiOiLOkc6YzpciLCJ4LWVzdS1sYW5nLWlkIjoiZWwtR1IiLCJ4LWVzbGktRVNTdWJzY3JpcHRpb25QYXNzd29yZCI6InBhc3N4IiwiaXNzIjoiRW50ZXJzb2Z0IiwiYXVkIjoiaHR0cDovLzE5Mi4xNjguMS4xOTAiLCJleHAiOjE0NTU4NDQwMTQsIm5iZiI6MTQ1NTgzMzIxNH0.8SSZeSGhaG9T6JEYLLucO5PwCt5I4Xwt2aR0cMMH4MU";
     };
     prepareMobileCall();

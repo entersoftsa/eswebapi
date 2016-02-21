@@ -3,12 +3,13 @@
     </es-params-panel>
 </div>
 
-<div class="k-content">
-	<div kendo-tab-strip>
+
+<div class="row">
+	<kendo-tab-strip>
 		<!-- tab list -->
 		<ul>
-			<li class="k-state-active">Chart</li>
-			<li>Data</li>
+			<li class="k-state-active"><span class="glyphicon glyphicon-picture"></span><span class="hidden-xs">Chart</span></li>
+			<li><span class="glyphicon glyphicon-align-justify"></span><span class="hidden-xs">Data</span></li>
 		</ul>
 		<div class="eschart-wrapper">
 			<div 
@@ -16,7 +17,7 @@
 				 k-ng-delay="esChartOptions.dataSource"
 			     k-options="esChartOptions">
 			</div>
-		<div>
+		</div>
 
 		<div>
 			<es-local-grid  
@@ -24,5 +25,5 @@
 		        es-data-source="esChartDataSource">
 		    </es-local-grid>
 		</div>
-	</div>
+	</kendo-tab-strip>
 </div>
