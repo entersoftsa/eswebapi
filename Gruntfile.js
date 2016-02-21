@@ -421,7 +421,7 @@ module.exports = function(grunt) {
         //'nodemailer:internal'
     ]);
 
-    grunt.registerTask('iPad', ['clean:iPad', 'concat:iPad', 'copy:iPad']);
+    grunt.registerTask('2iPad', ['1build', 'clean:iPad', 'concat:iPad', 'copy:iPad']);
 
     // doc
     grunt.registerTask('0doc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:docs_images']);

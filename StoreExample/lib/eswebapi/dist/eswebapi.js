@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-19
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-21
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8645,6 +8645,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     $scope.esToggleData = 'Map';
 
                     $scope.executePQ = function() {
+                        $scope.esPqDef.esGridOptions.autoBind = true;
+
                         if (!$scope.esPqDef.esGridOptions.change) {
                             $scope.esPqDef.esGridOptions.change = function(e) {
                                 var selectedRows = this.select();
@@ -9098,8 +9100,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     ])
 
-    .directive('esChart', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-        function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+    .directive('esChart', ['$log','$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -9113,11 +9115,26 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     $scope.esChartDataSource = esWebUIHelper.getPQDataSource("ds", $scope.esPqDef);
                     $scope.esChartOptions.dataSource = $scope.esChartDataSource;
 
+                    if ($scope.esChartOptions && !$scope.esChartOptions.dataBound) {
+                        $scope.esChartOptions.dataBound = function(e) {
+                            if (e && e.sender) {
+                                kendo.ui.progress(e.sender.element.parent(), false);
+                            }
+                        };
+                    }
+
                     $scope.executePQ = function() {
-                        if ($scope.esChartDataSource){
+                        if ($scope.esChartDataSource) {
+                            if ($scope.esChartCtrl) {
+                                kendo.ui.progress($scope.esChartCtrl.element.parent(), true);
+                            }
                             $scope.esChartDataSource.read();
                         }
                     }
+
+                    angular.element($window).bind('resize', function() {
+                        kendo.resize(angular.element(".eschart-wrapper"));
+                    });
                 }
             };
         }
@@ -9188,7 +9205,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return {
                     restrict: 'AE',
                     scope: {
-                        esDocumentGridOptions: "=",
+                        esDocumentGridOptions: "=?",
                         esMasterRowField: "="
                     },
                     template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
@@ -9372,7 +9389,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         esRunClick: "&",
                         esRunTitle: "=?",
                         esShowRun: "=?",
-                        esLocalDataSource: "=?"
+                        esLocalDataSource: "=?",
+                        esDataSource: "=?"
                     },
                     templateUrl: function(element, attrs) {
                         return "src/partials/esParams.html";
@@ -9404,7 +9422,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                                         if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef) {
                                             if ($scope.esLocalDataSource) {
-                                                $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToLocalKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v);
+                                                $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToLocalKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, $scope.esDataSource);
                                             } else {
                                                 $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, false);
                                             }
@@ -9626,7 +9644,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         data: "Rows",
                         total: "Count",
                     }
-                }
+                };
 
                 if (qParams && qParams.SchemaColumns && qParams.SchemaColumns.length) {
                     xParam.schema.parse = function(response) {
@@ -9659,7 +9677,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         refresh: true,
                         pageSizes: [20, 50, 100]
                     },
-                    autoBind: true,
+                    autoBind: false,
                     sortable: true,
                     scrollable: true,
                     selectable: "row",
@@ -9668,6 +9686,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     resizable: true,
                     reorderable: true,
                     navigatable: true,
+                    height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
                         template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
                     },

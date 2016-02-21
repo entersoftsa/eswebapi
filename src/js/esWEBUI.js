@@ -360,6 +360,8 @@
                     $scope.esToggleData = 'Map';
 
                     $scope.executePQ = function() {
+                        $scope.esPqDef.esGridOptions.autoBind = true;
+
                         if (!$scope.esPqDef.esGridOptions.change) {
                             $scope.esPqDef.esGridOptions.change = function(e) {
                                 var selectedRows = this.select();
@@ -813,8 +815,8 @@
         }
     ])
 
-    .directive('esChart', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-        function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+    .directive('esChart', ['$log','$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -828,11 +830,26 @@
                     $scope.esChartDataSource = esWebUIHelper.getPQDataSource("ds", $scope.esPqDef);
                     $scope.esChartOptions.dataSource = $scope.esChartDataSource;
 
+                    if ($scope.esChartOptions && !$scope.esChartOptions.dataBound) {
+                        $scope.esChartOptions.dataBound = function(e) {
+                            if (e && e.sender) {
+                                kendo.ui.progress(e.sender.element.parent(), false);
+                            }
+                        };
+                    }
+
                     $scope.executePQ = function() {
-                        if ($scope.esChartDataSource){
+                        if ($scope.esChartDataSource) {
+                            if ($scope.esChartCtrl) {
+                                kendo.ui.progress($scope.esChartCtrl.element.parent(), true);
+                            }
                             $scope.esChartDataSource.read();
                         }
                     }
+
+                    angular.element($window).bind('resize', function() {
+                        kendo.resize(angular.element(".eschart-wrapper"));
+                    });
                 }
             };
         }
@@ -903,7 +920,7 @@
                 return {
                     restrict: 'AE',
                     scope: {
-                        esDocumentGridOptions: "=",
+                        esDocumentGridOptions: "=?",
                         esMasterRowField: "="
                     },
                     template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
@@ -1087,7 +1104,8 @@
                         esRunClick: "&",
                         esRunTitle: "=?",
                         esShowRun: "=?",
-                        esLocalDataSource: "=?"
+                        esLocalDataSource: "=?",
+                        esDataSource: "=?"
                     },
                     templateUrl: function(element, attrs) {
                         return "src/partials/esParams.html";
@@ -1119,7 +1137,7 @@
 
                                         if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef) {
                                             if ($scope.esLocalDataSource) {
-                                                $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToLocalKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v);
+                                                $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToLocalKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, $scope.esDataSource);
                                             } else {
                                                 $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, false);
                                             }
@@ -1341,7 +1359,7 @@
                         data: "Rows",
                         total: "Count",
                     }
-                }
+                };
 
                 if (qParams && qParams.SchemaColumns && qParams.SchemaColumns.length) {
                     xParam.schema.parse = function(response) {
@@ -1374,7 +1392,7 @@
                         refresh: true,
                         pageSizes: [20, 50, 100]
                     },
-                    autoBind: true,
+                    autoBind: false,
                     sortable: true,
                     scrollable: true,
                     selectable: "row",
@@ -1383,6 +1401,7 @@
                     resizable: true,
                     reorderable: true,
                     navigatable: true,
+                    height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
                         template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
                     },

@@ -7,7 +7,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esChartPQ.html',
-    "<div class=row><es-params-panel ng-cloak es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ()></es-params-panel></div><div kendo-chart class=row k-ng-delay=esChartOptions.dataSource k-options=esChartOptions></div>"
+    "<div class=row><es-params-panel ng-cloak es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ() es-data-source=esChartDataSource></es-params-panel></div><div class=k-content><div kendo-tab-strip><ul><li class=k-state-active>Chart</li><li>Data</li></ul><div class=eschart-wrapper><div kendo-chart=esChartCtrl k-ng-delay=esChartOptions.dataSource k-options=esChartOptions></div><div><div><es-local-grid es-grid-options=esPqDef.esGridOptions es-data-source=esChartDataSource></es-local-grid></div></div></div></div></div>"
   );
 
 
@@ -17,7 +17,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esLocalGrid.html',
-    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions k-data-source=esDataSource k-auto-bind=true k-rebind=esGridOptions.reBind k-options=esGridOptions></div>"
+    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions k-data-source=esDataSource k-rebind=esGridOptions.reBind k-options=esGridOptions></div>"
   );
 
 

@@ -76,6 +76,7 @@
             $scope.pqDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
             
             $scope.chartOptions = {
+                autoBind: false,
                 title: "Leads by Lead Source",
                 series: [{
                     type: 'column',
@@ -127,6 +128,25 @@
                     }
                 }
             };
+
+            doLogin($scope, esGlobals, esWebApiService);
+        }
+    ]);
+
+    esApp.controller('testCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
+        function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
+            doPrepareCtrl($scope, esMessaging, esGlobals);
+
+            
+            $scope.params = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ClosingDate", 3)]);
+
+            $scope.esParamDef = {
+                required: true,
+                id: "ClosingDate",
+                enumList: [{text: 'Option 1', value: 0}, {text: 'Option 2', value: 1}, {text: 'Option 3', value: 2}, {text: 'Correct !!!', value: 3}]
+            };
+
+            $scope.cVal = 3;
 
             doLogin($scope, esGlobals, esWebApiService);
         }
