@@ -40,6 +40,8 @@ module.exports = function(grunt) {
                         'PQExample/bower_components/underscore/underscore-min.js',
                         'PQExample/bower_components/jscache/cache.js',
                         'PQExample/bower_components/moment/min/moment-with-locales.min.js',
+                        'PQExample/bower_components/angular-simple-logger/dist/angular-simple-logger.min.js',
+                        'PQExample/bower_components/angular-google-maps/dist/angular-google-maps.min.js',
                         "PQExample/lib/telerik/js/jszip.min.js",
                         "PQExample/lib/telerik/js/kendo.all.min.js",
                         "PQExample/lib/telerik/js/cultures/kendo.culture.el-GR.min.js",

@@ -18,11 +18,12 @@
     <div ng-cloak>
         <div ng-controller="esChartCtrl">
             <es-chart ng-if="isReady"
-                es-pq-def="pqDef" 
-                es-chart-options="chartOptions">
+                es-pq-def="esPqDef" 
+                es-chart-options="esPqDef.options">
             </es-chart>
         </div>
     </div>
+    
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
@@ -98,6 +99,7 @@
     };
     prepareMobileCall();
     </script>
+
      <script src="dist/es.all.js"></script>
      <!--
      <script src="lib/third/js/jquery.min.js"></script>

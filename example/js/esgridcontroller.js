@@ -1054,7 +1054,7 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
 
         $scope.myPQDef = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
         $scope.MyShowWindow = false;
-        $scope.myType = "standard";
+        $scope.myType = "cluster";
         $scope.myTypeOptions = null;
         $scope.myCtrl = {};
 

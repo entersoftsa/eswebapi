@@ -18,13 +18,14 @@
     <div ng-cloak>
         <div ng-controller="esGridCtrl">
             <es-web-pq ng-if="isReady" 
-                es-group-id="esPQDef.GroupID" 
-                es-srv-paging="esPQDef.serverSidePaging" 
-                es-params-values="esPQDef.Params" 
-                es-filter-id="esPQDef.FilterID">
+                es-group-id="esPqDef.GroupID" 
+                es-srv-paging="esPqDef.serverSidePaging" 
+                es-params-values="esPqDef.Params" 
+                es-filter-id="esPqDef.FilterID">
             </es-web-pq>
         </div>
     </div>
+    
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
@@ -46,6 +47,7 @@
     };
     prepareMobileCall();
     </script>
+
     <script src="dist/es.all.js"></script>
     <!-- // <script src="lib/third/js/jquery.min.js"></script>
      <script src="lib/third/js/bootstrap.min.js"></script>

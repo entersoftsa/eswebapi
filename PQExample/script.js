@@ -10,14 +10,21 @@
         'kendo.directives',
         'underscore',
         'es.Web.UI',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'uiGmapgoogle-maps'
     ]);
 
-    esApp.config(['$logProvider', 'esWebApiProvider',
-        function($logProvider, esWebApiServiceProvider) {
+    esApp.config(['$logProvider', 'esWebApiProvider', 'uiGmapGoogleMapApiProvider',
+        function($logProvider, esWebApiServiceProvider, GoogleMapApiProvider) {
 
             var settings = window.esWebApiSettings;
             esWebApiServiceProvider.setSettings(settings);
+
+            GoogleMapApiProvider.configure({
+                //    key: 'your api key',
+                // v: '3.20',
+                libraries: 'weather,geometry,visualization'
+            });
         }
     ]);
 
@@ -65,24 +72,6 @@
     }
 
     /* Controllers */
-
-    esApp.controller('esChartCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
-        function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
-            doPrepareCtrl($scope, esMessaging, esGlobals);
-
-            var runOnSuccess = function() {
-                var gID = window.esDef.GroupID;
-                var fID = window.esDef.FilterID;
-                $scope.chartOptions = window.esDef.options;
-
-                $scope.pqDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
-            };
-
-            doLogin($scope, esGlobals, esWebApiService, runOnSuccess);
-        }
-    ]);
-
-
     esApp.controller('testCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
         function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
             doPrepareCtrl($scope, esMessaging, esGlobals);
@@ -102,6 +91,21 @@
         }
     ]);
 
+    esApp.controller('esChartCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
+        function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
+            doPrepareCtrl($scope, esMessaging, esGlobals);
+
+            var runOnSuccess = function() {
+                var gID = window.esDef.GroupID;
+                var fID = window.esDef.FilterID;
+                $scope.esPqDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+                $scope.esPqDef.options = window.esDef.options;
+            };
+
+            doLogin($scope, esGlobals, esWebApiService, runOnSuccess);
+        }
+    ]);
+
     esApp.controller('esGridCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
         function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
             doPrepareCtrl($scope, esMessaging, esGlobals);
@@ -110,14 +114,89 @@
                 var gID = window.esDef.GroupID;
                 var fID = window.esDef.FilterID;
 
-                $scope.esPQDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
-                $scope.esPQDef.serverSidePaging = window.esDef.ServerSidePaging;
-            }
+                $scope.esPqDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+                $scope.esPqDef.serverSidePaging = window.esDef.ServerSidePaging;
+            };
 
             doLogin($scope, esGlobals, esWebApiService, runOnSuccess);
         }
     ]);
 
+    esApp.controller('esMapCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', 'uiGmapGoogleMapApi',
+        function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals, GoogleMapApi) {
+            doPrepareCtrl($scope, esMessaging, esGlobals);
+
+            var runOnSuccess = function() {
+                var gID = window.esDef.GroupID;
+                var fID = window.esDef.FilterID;
+
+                $scope.esPqDef = new esGlobals.ESPublicQueryDef("", gID, fID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+                $scope.esPqDef.options = window.esDef.options;
+                $scope.esPqDef.mapType = window.esDef.mapType;
+                $scope.esPqDef.typeOptions = window.esDef.typeOptions;
+                $scope.esPqDef.mapCtrl = {};
+            };
+
+            GoogleMapApi.then(function(maps) {
+                $log.info("Google maps ver = " + maps.version);
+                maps.visualRefresh = true;
+            });
+
+            doLogin($scope, esGlobals, esWebApiService, runOnSuccess);
+        }
+    ]);
+
+    esApp.controller('esComboCtrl', ['$scope', '$log', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
+        function($scope, $log, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
+            doPrepareCtrl($scope, esMessaging, esGlobals);
+
+            var runOnSuccess = function() {
+                var esDashboardDefinitions = window.esDef;
+
+                $scope.esPqDef = _.map(esDashboardDefinitions, function(x) {
+
+                    switch (x.ESUIType.toLowerCase()) {
+                        case "esgrid":
+                            {
+                                var pqDef = new esGlobals.ESPublicQueryDef("", x.esDef.GroupID, x.esDef.FilterID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+                                pqDef.ESUIType = x.ESUIType.toLowerCase();
+                                pqDef.AA = x.AA;
+                                pqDef.serverSidePaging = x.esDef.ServerSidePaging;
+                                return pqDef;
+                            }
+
+                        case "eschart":
+                            {
+                                var pqDef = new esGlobals.ESPublicQueryDef("", x.esDef.GroupID, x.esDef.FilterID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+                                pqDef.ESUIType = x.ESUIType.toLowerCase();
+                                pqDef.AA = x.AA;
+                                pqDef.options = x.esDef.options;
+                                return pqDef;
+                            }
+
+                        case "esmap":
+                            {
+                                var pqDef = new esGlobals.ESPublicQueryDef("", x.esDef.GroupID, x.esDef.FilterID, new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+                                pqDef.ESUIType = x.ESUIType.toLowerCase();
+                                pqDef.AA = x.AA;
+                                pqDef.options = x.esDef.options;
+                                pqDef.mapType = x.esDef.mapType;
+                                pqDef.typeOptions = x.esDef.typeOptions;
+                                pqDef.mapCtrl = {};
+                                return pqDef;
+                            }
+
+                        default:
+                            {
+                                throw new Exception("Invalid ESUIType in Combo Component with ID");
+                            }
+                    }
+                });
+            };
+
+            doLogin($scope, esGlobals, esWebApiService, runOnSuccess);
+        }
+    ]);
 
 
 })
