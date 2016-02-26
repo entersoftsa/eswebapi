@@ -1228,8 +1228,6 @@ x.setParamValues({p1: 'Hello World'});
                     return rep;
                 }
 
-                rep.isLogin = (err.status == 401) || (err.status == 403) || (status == 401) || (status == 403);
-
                 if (err instanceof ArrayBuffer) {
                     // In case that response is of type ArrayBuffer instead of an object
                     try {
@@ -1239,7 +1237,18 @@ x.setParamValues({p1: 'Hello World'});
                     }
                 }
 
+                rep.isLogin = (err.status == 401) || (err.status == 403) || (status == 401) || (status == 403);
+
+                if (err.data && err.data instanceof ArrayBuffer) {
+                    try {
+                        err.data = JSON.parse(String.fromCharCode.apply(null, new Uint8Array(err.data)));
+                    } catch (x) {
+
+                    }    
+                }
+
                 var sMsg = "";
+                err = err.data || err;
                 if (err.UserMessage) {
                     sMsg = err.UserMessage;
                     if (err.MessageID) {
@@ -1263,7 +1272,7 @@ x.setParamValues({p1: 'Hello World'});
                     rep.messageToShow = sMsg ? sMsg : "General Error. Please check your network and internet access";
                     return rep;
                 } else {
-                    rep.messageToShow = "General Error. Please check your network and internet access";
+                    rep.messageToShow = err.toString();
                     return rep;
                 }
             }

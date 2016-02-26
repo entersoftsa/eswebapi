@@ -839,6 +839,7 @@
                     }
 
                     $scope.executePQ = function() {
+                        $scope.isOpen = false;
                         if ($scope.esChartDataSource) {
                             if ($scope.esChartCtrl) {
                                 kendo.ui.progress($scope.esChartCtrl.element.parent(), true);
