@@ -367,10 +367,10 @@
         <form name="surveyForm">
             <div class="form-group"  ng-class="{ 'has-error': surveyForm.Code.$invalid }">
                 <span>
-                <input class="form-control" type="text" ng-model="psCode" name="Code" ng-required="'true'">
-                <button ng-click="fetchPropertySet()">fetchPropertySet</button>
-                <textarea>{{psData}}</textarea>
-            </span>
+                    <input class="form-control" type="text" ng-model="psCode" name="Code" ng-required="'true'">
+                    <button ng-click="fetchPropertySet()">fetchPropertySet</button>
+                    <textarea>{{psData}}</textarea>
+                </span>
             </div>
         </form>
     </div>
@@ -421,5 +421,14 @@
             </ui-gmap-google-map>
         </div>
 
+    </div>
+    <hr/>
+    <div>
+        <h3> ES Scales </h3>
+        <span>
+            <input class="form-control" type="text" ng-model="scaleCode" name="Code" ng-required="'true'">
+            <button ng-click="fetchScale()">fetchScale</button>
+            <textarea>{{scaleData}}</textarea>
+        </span>
     </div>
 </div>

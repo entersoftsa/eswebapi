@@ -439,6 +439,18 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return _.groupBy(p.Lines, 'Category_Code');
             }
 
+            function componentToHex(c) {
+                var hex = c.toString(16);
+                return hex.length == 1 ? "0" + hex : hex;
+            }
+
+            function rgbToHex(c) {
+                var r = (c & 0xff0000) >> 16;
+                var g = (c & 0x00ff00) >> 8;
+                var b = (c & 0x0000ff);
+                return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+            }
+
             function ESPublicQueryDef(ctxId, groupId, filterId, pqOptions, params) {
                 this.CtxID = ctxId;
                 this.GroupID = groupId;
@@ -1244,7 +1256,7 @@ x.setParamValues({p1: 'Hello World'});
                         err.data = JSON.parse(String.fromCharCode.apply(null, new Uint8Array(err.data)));
                     } catch (x) {
 
-                    }    
+                    }
                 }
 
                 var sMsg = "";
@@ -1292,7 +1304,7 @@ x.setParamValues({p1: 'Hello World'});
 
                 setWebApiToken: function(newToken, reqUrl) {
                     if (newToken && angular.isString(newToken)) {
-                        if(esClientSession.connectionModel) {
+                        if (esClientSession.connectionModel) {
                             if (newToken !== esClientSession.connectionModel.WebApiToken) {
                                 esClientSession.connectionModel.WebApiToken = newToken;
                             }
@@ -1402,6 +1414,17 @@ x.setParamValues({p1: 'Hello World'});
                  **/
                 esConvertIDtoGID: esConvertIDtoGID,
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#rgbToHex
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Converts an integer rgb color value to the equivalent html representation in string format i.e. #RRGGBB
+                 * @param {number} rgbColor the integer value of the rgb color to be transformed to html hex color
+                 * @return {string} the string representation of the given rgb color in html format i.e. "#c20000"
+                 **/
+                rgbToHex: rgbToHex,
 
                 /**
                  * @ngdoc function

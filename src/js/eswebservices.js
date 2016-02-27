@@ -61,6 +61,7 @@
         __FETCH_ENTITY__: "api/rpc/fetchEntity/",
         __FETCH_ENTITY_BY_CODE__: "api/rpc/fetchEntityByCode/",
         __FETCH_ESPROPERTY_SET__: "api/rpc/fetchPropertySet/",
+        __FETCH_ESSCALE__: "api/rpc/fetchESScale/",
         __FETCH_WEB_EAS_ASSET__: "api/asset/",
         __FETCH_ES00DOCUMENT_BY_GID__: "api/ES00Documents/InfoByGID/",
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
@@ -4822,6 +4823,25 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESPROPERTY_SET__, psCode);
                                 var tt = esGlobals.trackTimer("FETCH", "PROPERTY_SET", psCode);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: {
+                                        "Authorization": esGlobals.getWebApiToken()
+                                    },
+                                    url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
+                            },
+
+                            fetchESScale: function(scaleCode) {
+                                if (!scaleCode) {
+                                    throw new Error("Invalid parameter");
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESSCALE__, scaleCode);
+                                var tt = esGlobals.trackTimer("FETCH", "FETCH_SCALE", scaleCode);
                                 tt.startTime();
 
                                 var ht = $http({

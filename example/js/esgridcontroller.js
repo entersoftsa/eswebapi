@@ -791,6 +791,15 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
                 });
         }
 
+        $scope.fetchScale = function() {
+            esWebApi.fetchESScale($scope.scaleCode)
+                .then(function(ret) {
+                    $scope.scaleData = ret.data;
+                }, function(err) {
+                    $scope.scaleData = JSON.stringify(err);
+                });
+        }
+
         $scope.fetchPersonlogo = function() {
             esWebApi.fetchPersonLogo($scope.PersonGID)
                 .then(function(x) {
