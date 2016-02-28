@@ -1,4 +1,3 @@
-
 <div class="row">
     <div class="col-xs-12">
         <es-params-panel ng-cloak 
@@ -21,24 +20,24 @@
         <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'cluster'">Cluster</label>
         <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'spider'">Spider</label>
     </div>
-</div>
 
-<div class="row">
-    
-        <ui-gmap-google-map ng-hide="esToggleData == 'Data'" ng-class="{ 'col-xs-12 col-sm-6': esToggleData == 'Both', 'col-xs-12' : esToggleData == 'Map'}"
-            center="esMapOptions.center"
-            zoom="esMapOptions.zoom"
-            control="esMapControl"
-            pan="true">
 
-            <es-map-markers es-rows="mapDS" es-pq-info="myPQInfo" es-high-light="esHighLight" es-type="esType" es-type-options="esTypeOptions" es-show-window="esShowWindow" es-click="esClick()">
-            </es-map-markers>
-        </ui-gmap-google-map>
     
-    
+        
+    <ui-gmap-google-map ng-hide="esToggleData == 'Data'" ng-class="{ 'col-xs-6': esToggleData == 'Both', 'col-xs-12' : esToggleData == 'Map'}"
+        center="esMapOptions.center"
+        zoom="esMapOptions.zoom"
+        control="esMapControl"
+        pan="true">
+
+        <es-map-markers es-rows="mapDS" es-pq-info="myPQInfo" es-high-light="esHighLight" es-type="esType" es-type-options="esTypeOptions" es-show-window="esShowWindow" es-click="esClick()">
+        </es-map-markers>
+    </ui-gmap-google-map>
+            
     <es-local-grid ng-hide="esToggleData == 'Map'" 
-        ng-class="{ 'col-xs-12 col-sm-6': esToggleData == 'Both', 'col-xs-12' : esToggleData == 'Data'}"
+        ng-class="{ 'col-xs-6': esToggleData == 'Both', 'col-xs-12' : esToggleData == 'Data'}"
         es-grid-options="esPqDef.esGridOptions" 
-        es-data-source="mapDS" />
-    
+        es-data-source="mapDS">
+    </es-local-grid>
+
 </div>
