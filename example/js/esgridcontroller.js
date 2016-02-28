@@ -228,6 +228,14 @@ smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'esW
 smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
     function($log, $q, $scope, Upload, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
 
+        $scope.gRows = [{
+            GTitle: "Turn Over",
+            GValue: 34.56
+        }, {
+            GTitle: "Net Income",
+            GValue: 29.98
+        }];
+
         $scope.pGroup = "ESMMStockItem";
         $scope.pFilter = "ESMMStockItem_def";
         $scope.esWebAPI = esWebApi;

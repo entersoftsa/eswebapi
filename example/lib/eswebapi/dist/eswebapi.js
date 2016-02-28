@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-27
+/*! Entersoft Application Server WEB API - v1.7.2 - 2016-02-28
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9151,7 +9151,25 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     ])
 
-    .directive('esChart', ['$log','$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+    .directive('esGauge', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esRows: "=",
+                    esScale: "=?",
+                    esGaugeOptions: "=?",
+                },
+                templateUrl: function(element, attrs) {
+                    return "src/partials/esGauge.html";
+                },
+                link: function($scope, iElement, iAttrs) {
+                }
+            };
+        }
+    ])
+
+    .directive('esChart', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
         function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
             return {
                 restrict: 'AE',

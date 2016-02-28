@@ -11,6 +11,11 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('src/partials/esGauge.html',
+    "<div ng-repeat=\"row in esRows\" class=k-content><h4>{{row.GTitle}}</h4><span kendo-lineargauge k-scale=\"{ min:0, max: 50, vertical: false}\" ng-model=row.GValue></span></div>"
+  );
+
+
   $templateCache.put('src/partials/esGrid.html',
     "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions.dataSource es-srv-paging=esSrvPaging k-options=esGridOptions k-rebind=esGridOptions.reBind></div>"
   );

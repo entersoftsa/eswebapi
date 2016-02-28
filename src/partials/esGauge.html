@@ -1,0 +1,7 @@
+<div ng-repeat="row in esRows" class="k-content">
+    <h4>{{row.GTitle}}</h4>
+    <span kendo-lineargauge
+        k-scale="{ min:0, max: 50, vertical: false}"
+        ng-model="row.GValue">
+    </span>
+</div>
