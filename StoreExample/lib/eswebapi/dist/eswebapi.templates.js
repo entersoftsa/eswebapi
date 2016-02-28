@@ -12,7 +12,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esGauge.html',
-    "<h4>{{esRow.GTitle}}</h4><span ng-if=\"esGaugeType == 'radial'\" kendo-radialgauge k-scale=esScaleOptions ng-model=esRow.GValue></span> <span ng-if=\"esGaugeType != 'radial'\" kendo-lineargauge k-scale=esScaleOptions ng-model=esRow.GValue></span>"
+    "<kendo-radialgauge ng-if=\"esGaugeType == 'radial'\" k-scale=esScaleOptions ng-model=esRow.GValue></kendo-radialgauge><kendo-lineargauge ng-if=\"esGaugeType != 'radial'\" k-scale=esScaleOptions ng-model=esRow.GValue></kendo-lineargauge>"
   );
 
 
@@ -102,7 +102,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esWebPQ.html',
-    "<div class=row ng-if=::esParamsDef.visibleDefinitions().length><es-params-panel ng-cloak es-params-values=esParamsValues es-group-id=esGroupId es-filter-id=esFilterId es-params-def=esParamsDef></es-params-panel></div><div ng-if=esShowTopPagination class=row><kendo-pager auto-bind=false page-size=20 page-sizes=\"[20, 50, 100, 'All']\" refresh=true data-source=\"esGridOptions.dataSource\"></div><div class=row ng-cloak><es-grid es-group-id=esGroupId es-filter-id=esFilterId es-grid-options=esGridOptions es-srv-paging=esSrvPaging es-execute-params=\"esParamsValues\"></div>"
+    "<es-params-panel class=row ng-if=::esParamsDef.visibleDefinitions().length ng-cloak es-params-values=esParamsValues es-group-id=esGroupId es-filter-id=esFilterId es-params-def=esParamsDef></es-params-panel><kendo-pager ng-if=esShowTopPagination class=row auto-bind=false page-size=20 page-sizes=\"[20, 50, 100, 'All']\" refresh=true data-source=esGridOptions.dataSource></kendo-pager><es-grid class=row ng-cloak es-group-id=esGroupId es-filter-id=esFilterId es-grid-options=esGridOptions es-srv-paging=esSrvPaging es-execute-params=esParamsValues></es-grid>"
   );
 
 

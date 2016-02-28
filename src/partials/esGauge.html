@@ -1,9 +1,8 @@
-<h4>{{esRow.GTitle}}</h4>
-<span ng-if="esGaugeType == 'radial'" kendo-radialgauge
+<kendo-radialgauge ng-if="esGaugeType == 'radial'" 
     k-scale="esScaleOptions"
     ng-model="esRow.GValue">
-</span>
-<span ng-if="esGaugeType != 'radial'" kendo-lineargauge
+</kendo-radialgauge>
+<kendo-lineargauge ng-if="esGaugeType != 'radial'" 
     k-scale="esScaleOptions"
     ng-model="esRow.GValue">
-</span>
+</kendo-lineargauge>
