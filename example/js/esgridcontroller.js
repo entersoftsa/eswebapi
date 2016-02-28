@@ -230,10 +230,13 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 
         $scope.gRows = [{
             GTitle: "Turn Over",
-            GValue: 34.56
+            GValue: 34.56, 
+            GScale: "AgeScale",
+            GType: 'linear'
         }, {
             GTitle: "Net Income",
-            GValue: 29.98
+            GValue: 29.98,
+            GScale: "AgeScale"
         }];
 
         $scope.pGroup = "ESMMStockItem";

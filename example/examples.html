@@ -5,8 +5,8 @@
         <textarea>{{JSON.stringify(picFile)}}</textarea>
     </div>
     <div>
-        <es-gauge 
-            es-rows="gRows">
+        <es-gauge ng-repeat="row in gRows"
+            es-row="row">
         </es-gauge>
         
     </div>

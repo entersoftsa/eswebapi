@@ -4839,6 +4839,16 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
                                 if (!scaleCode) {
                                     throw new Error("Invalid parameter");
                                 }
+                                scaleCode = scaleCode.toLowerCase();
+
+                                var deferred = $q.defer();
+                                var cItem = esCache.getItem("ESGOSCALE_" + scaleCode);
+                                if (cItem) {
+                                    $timeout(function() {
+                                        deferred.resolve(cItem);
+                                    });
+                                    return deferred.promise;
+                                }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESSCALE__, scaleCode);
                                 var tt = esGlobals.trackTimer("FETCH", "FETCH_SCALE", scaleCode);
@@ -4851,7 +4861,14 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
                                     },
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                processWEBAPIPromise(ht, tt)
+                                    .then(function(ret) {
+                                        esCache.setItem("ESGOSCALE_" + scaleCode, ret.data);
+                                        deferred.resolve(ret.data);
+                                    }, function() { 
+                                        deferred.reject(arguments); 
+                                    });
+                                return deferred.promise;
                             },
 
                             /**

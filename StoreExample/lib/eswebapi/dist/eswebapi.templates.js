@@ -12,7 +12,12 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esGauge.html',
-    "<div ng-repeat=\"row in esRows\" class=k-content><h4>{{row.GTitle}}</h4><span kendo-lineargauge k-scale=\"{ min:0, max: 50, vertical: false}\" ng-model=row.GValue></span></div>"
+    "<h4>{{esRow.GTitle}}</h4><span ng-if=\"esGaugeType == 'radial'\" kendo-radialgauge k-scale=esScaleOptions ng-model=esRow.GValue></span> <span ng-if=\"esGaugeType != 'radial'\" kendo-lineargauge k-scale=esScaleOptions ng-model=esRow.GValue></span>"
+  );
+
+
+  $templateCache.put('src/partials/esGaugePQ.html',
+    "<es-gauge es-row=esRow></es-gauge>"
   );
 
 

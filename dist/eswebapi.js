@@ -4841,6 +4841,16 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
                                 if (!scaleCode) {
                                     throw new Error("Invalid parameter");
                                 }
+                                scaleCode = scaleCode.toLowerCase();
+
+                                var deferred = $q.defer();
+                                var cItem = esCache.getItem("ESGOSCALE_" + scaleCode);
+                                if (cItem) {
+                                    $timeout(function() {
+                                        deferred.resolve(cItem);
+                                    });
+                                    return deferred.promise;
+                                }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESSCALE__, scaleCode);
                                 var tt = esGlobals.trackTimer("FETCH", "FETCH_SCALE", scaleCode);
@@ -4853,7 +4863,14 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
                                     },
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                processWEBAPIPromise(ht, tt)
+                                    .then(function(ret) {
+                                        esCache.setItem("ESGOSCALE_" + scaleCode, ret.data);
+                                        deferred.resolve(ret.data);
+                                    }, function() { 
+                                        deferred.reject(arguments); 
+                                    });
+                                return deferred.promise;
                             },
 
                             /**
@@ -9151,19 +9168,87 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     ])
 
-    .directive('esGauge', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+    .directive('esGaugePq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
         function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
             return {
                 restrict: 'AE',
                 scope: {
-                    esRows: "=",
-                    esScale: "=?",
+                    esPqDef: "="
+                },
+                templateUrl: function(element, attrs) {
+                    return "src/partials/esGaugePQ.html";
+                },
+                link: function($scope, iElement, iAttrs) {
+                    esWebApiService.fetchPublicQuery($scope.esPqDef)
+                        .then(function(ret) {
+                            if (ret.data.Rows && ret.data.Rows.length) {
+                                $scope.esRow = ret.data.Rows[0];
+                            }
+                        }, function(err) {
+
+                        });
+                }
+            };
+        }
+    ])
+
+    .directive('esGauge', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+            function prepareGauge($scope, scaleObject) {
+                var minScale = 0,
+                    maxScale = 100,
+                    ranges = [];
+
+                if (scaleObject && scaleObject.Ranges && scaleObject.Ranges.length) {
+                    minScale = _.min(scaleObject.Ranges, function(r) {
+                        return r.MinValue;
+                    }).MinValue;
+                    maxScale = _.max(scaleObject.Ranges, function(r) {
+                        return r.MaxValue;
+                    }).MaxValue;
+
+                    ranges = _.map(scaleObject.Ranges, function(r) {
+                        var x = {
+                            from: r.MinValue,
+                            to: r.MaxValue
+                        };
+
+                        if (r.ColorARGB) {
+                            x.color = esGlobals.rgbToHex(r.ColorARGB)
+                        }
+                        return x;
+                    });
+                }
+
+                $scope.esScaleOptions = { min: minScale, max: maxScale, ranges: ranges, vertical: false };
+            };
+            return {
+                restrict: 'AE',
+                scope: {
+                    esRow: "=",
                     esGaugeOptions: "=?",
                 },
                 templateUrl: function(element, attrs) {
                     return "src/partials/esGauge.html";
                 },
                 link: function($scope, iElement, iAttrs) {
+                    var scaleObject = undefined;
+                    if ($scope.esRow) {
+                        $scope.esGaugeType = ($scope.esRow.GType || 'radial').toLowerCase();
+
+                        if ($scope.esRow.GScale) {
+                            esWebApiService.fetchESScale($scope.esRow.GScale)
+                                .then(function(ret) {
+                                        scaleObject = ret;
+                                        prepareGauge($scope, scaleObject, $scope.esRow);
+                                    },
+                                    function(err) {
+
+                                    });
+                        } else {
+                            prepareGauge($scope, undefined);
+                        }
+                    }
                 }
             };
         }
