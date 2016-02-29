@@ -1534,6 +1534,7 @@ var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
                 },
 
                 isAuthenticated: function() {
+                    fgetModel();
                     return !!esClientSession.connectionModel;
                 },
 
