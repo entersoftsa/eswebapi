@@ -27,8 +27,8 @@ module.exports = function(grunt) {
             iPad: {
                 files: {
                     'PQExample/dist/es.all.js': [
-                        'PQExample/bower_components/jquery/dist/jquery.min.js', 
-                        'PQExample/bower_components/bootstrap/dist/js/bootstrap.min.js', 
+                        'PQExample/bower_components/jquery/dist/jquery.min.js',
+                        'PQExample/bower_components/bootstrap/dist/js/bootstrap.min.js',
                         'PQExample/bower_components/lodash/dist/lodash.min.js',
                         'PQExample/bower_components/angular/angular.min.js',
                         'PQExample/bower_components/angular-animate/angular-animate.min.js',
@@ -48,13 +48,12 @@ module.exports = function(grunt) {
                         "PQExample/lib/eswebapi/dist/eswebapi.js",
                         "PQExample/lib/eswebapi/dist/eswebapi.templates.js"
                     ],
-                    'PQExample/dist/es.all.css': 
-                    [
-                            'PQExample/bower_components/bootstrap/dist/css/bootstrap.min.css',
-                            'PQExample/lib/telerik/styles/kendo.common-bootstrap.min.css', 
-                            'PQExample/lib/telerik/styles/kendo.bootstrap.min.css', 
-                            'PQExample/lib/telerik/styles/kendo.dataviz.min.css', 
-                            'PQExample/lib/telerik/styles/kendo.dataviz.bootstrap.min.css'
+                    'PQExample/dist/es.all.css': [
+                        'PQExample/bower_components/bootstrap/dist/css/bootstrap.min.css',
+                        'PQExample/lib/telerik/styles/kendo.common-bootstrap.min.css',
+                        'PQExample/lib/telerik/styles/kendo.bootstrap.min.css',
+                        'PQExample/lib/telerik/styles/kendo.dataviz.min.css',
+                        'PQExample/lib/telerik/styles/kendo.dataviz.bootstrap.min.css'
                     ]
                 }
             }
@@ -166,6 +165,7 @@ module.exports = function(grunt) {
                         dest: 'example/lib/eswebapi/'
                     },
 
+
                     {
                         expand: true,
                         src: ['dist/**'],
@@ -191,12 +191,15 @@ module.exports = function(grunt) {
                     cwd: 'PQExample/bower_components/bootstrap/fonts/',
                     src: ['*.*'],
                     dest: 'PQExample/fonts/'
-                },
-                {
+                }, {
+                    expand: true,
+                    src: ['dist/eswebapi.js', 'dist/eswebapi.templates.js'],
+                    dest: '../../eswebmanager/lib/eswebapi/'
+                }, {
                     expand: true,
                     cwd: 'PQExample/lib/bootstrap/',
                     src: ['*.*'],
-                    dest: 'PQExample/dist/bootstrap'  
+                    dest: 'PQExample/dist/bootstrap'
                 }]
             },
             docs_images: {

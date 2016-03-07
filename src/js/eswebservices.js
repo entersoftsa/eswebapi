@@ -1460,6 +1460,7 @@ $scope.doLogout = function ()
                                 var xToken = esGlobals.getWebApiToken();
 
                                 esGlobals.sessionClosed();
+                                esCache.clear();
 
                                 var tt = esGlobals.trackTimer("AUTH", "LOGOUT", "");
                                 tt.startTime();
