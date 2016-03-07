@@ -19,6 +19,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
+                    <h1>Hello from a {{esGlobals.isMobile ? "Mobile" : "Desktop"}}</h1>
                     <div class="yyy">
                         <img ng-if="blob" width="258px" height="59px" class="item" ng-src="{{'data:image/jpg;base64,' + blob}}" />
                         <img width="258px" height="59px" class="item" src="eslogo.png" />
@@ -80,6 +81,9 @@
                     <li>
                         <a href="#/maps">ES Maps</a>
                     </li>
+                    <li>
+                        <a href="#/salesforce">Sales People</a>
+                    </li>
                 </ul>
                 <hr/>
             </div>
@@ -93,7 +97,7 @@
     </div>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+    <script src="bower_components/lodash/lodash.min.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>

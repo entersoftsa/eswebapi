@@ -66,7 +66,7 @@ angular
 
         var subscriptionId = "";
         esWebApiServiceProvider.setSettings({
-            "host": "192.168.1.190/eswebapijti",
+            "host": "10.211.55.7/demoapi1",
             subscriptionId: subscriptionId,
             subscriptionPassword: "passx",
             allowUnsecureConnection: true

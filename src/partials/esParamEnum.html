@@ -11,11 +11,9 @@
             k-data-text-field="'text'" 
             k-data-value-field="'value'" 
             k-auto-bind="true"
-            smek-option-label="{ text: 'All', value: null}" 
             k-data-source="::esParamDef.enumList"
             k-value-primitive="true"
-            ng-model-options="{getterSetter: true}"
-            ng-model="esParamVal[esParamDef.id].pValue">
+            k-ng-model="esParamVal[esParamDef.id].paramValue">
     </select> 
 
 

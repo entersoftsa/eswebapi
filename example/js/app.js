@@ -57,6 +57,9 @@
                 .when('/maps', {
                     templateUrl: 'maps.html',
                     controller: 'mapsCtrl'
+                })
+                .when('/salesforce', {
+                    templateUrl: 'sales.html'
                 });
 
             $logProvider.addDefaultAppenders();
@@ -65,11 +68,9 @@
 
             var subscriptionId = "";
             esWebApiServiceProvider.setSettings({
-                //host: "eswebapialp.azurewebsites.net",
-                //host: "eswebapi.entersoft.gr",
                 //host: "localhost/eswebapijti",
                 "host" : "192.168.1.190/eswebapijti",
-                //host: "10.211.55.7/esapi180",
+                //host: "10.211.55.7/esapi04032016",
                 subscriptionId: subscriptionId,
                 subscriptionPassword: "passx",
                 allowUnsecureConnection: true

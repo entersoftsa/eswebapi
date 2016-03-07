@@ -228,16 +228,18 @@ smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'esW
 smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
     function($log, $q, $scope, Upload, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
 
-        $scope.gRows = [{
-            GTitle: "Turn Over",
-            GValue: 34.56, 
-            GScale: "AgeScale",
-            GType: 'linear'
-        }, {
-            GTitle: "Net Income",
-            GValue: 29.98,
-            GScale: "AgeScale"
-        }];
+        // $scope.gRows = [{
+        //     GTitle: "Turn Over",
+        //     GValue: 34.56,
+        //     GScale: "AgeScale",
+        //     GType: 'linear'
+        // }, {
+        //     GTitle: "Net Income",
+        //     GValue: 29.98,
+        //     GScale: "AgeScale"
+        // }];
+
+        $scope.gRows = [];
 
         $scope.pGroup = "ESMMStockItem";
         $scope.pFilter = "ESMMStockItem_def";
@@ -320,6 +322,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
             esWebApi.fetchSessionInfo()
                 .then(function(ret) {
                     $scope.pSessionInfo = ret.data;
+                    alert("Hello World");
                 }, function(err) {
                     $scope.pSessionInfo = err;
                 });

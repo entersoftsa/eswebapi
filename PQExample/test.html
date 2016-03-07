@@ -25,15 +25,16 @@
                 name="{{esParamDef.id}}"
                 ng-required="esParamDef.required"
                 ng-cloak
-                k-ng-delay="esParamDef"
+                
                 k-data-text-field="'text'" 
                 k-data-value-field="'value'" 
                 k-auto-bind="true"
-                k-option-label="{ text: 'All', value: null}" 
+
                 k-data-source="esParamDef.enumList"
                 k-value-primitive="true"
-                ng-model-options="{getterSetter: true}"
-                ng-model="esParamVal[esParamDef.id].pValue"/>
+                cng-model-options="{getterSetter: true}"
+                ck-ng-delay="params[esParamDef.id].paramValue"
+                k-ng-model="params[esParamDef.id].paramValue"/>
             </select> 
 
             <hr></hr>
@@ -43,7 +44,7 @@
             ng-required="::esParamDef.required"
             k-mask="''"
             ng-model-options="{getterSetter: true}"
-            ng-model="esParamVal[esParamDef.id].pValue"/>
+            ng-model="params[esParamDef.id].pValue"/>
         </div>
     </div>
     <script type="text/javascript">
