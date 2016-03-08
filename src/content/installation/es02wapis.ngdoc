@@ -5,7 +5,7 @@
 
 The latest version of Entersoft WEB API Server (EWAPIS) can be found on GitHub at: {@link https://github.com/entersoftsa/eswebapiserver ES WEB API Server}.
 
-## Installation Requirements
+## Installation Requirements and Conditions
 1. Microsoft Windows (Windows 7, Windows 8.1, Windows 10, Windows Servers Family)
 2. Microsoft Internet Information Server (MS IIS) 64-bit version 7.5 or higher. It is recommended to use IIS 8.0 or IIS 10.0
 3. Prior to start installation please make sure that you have added all the Application Development Features of IIS as shown in the screenshot below:
@@ -243,8 +243,8 @@ i.e. every subscription can have a different Elastic Search Engine for its own p
                     },
                     "Services": [{"ServiceID": ""}],
                     "ERPServers": [{
-                            "Host": "eserp.entersoft.gr",
-                            "Port": 8500
+                            "Host": "xxx.yyy.com",
+                            "Port": 1234
                     }]
                 }
             ]

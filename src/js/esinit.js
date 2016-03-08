@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.7.2";
+    var version = "1.8.5";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -1545,6 +1545,15 @@ var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
                     return esClientSession.getWebApiToken();
                 },
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#isAuthenticated
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns true if there is valid current EBS user authenticated, otherwise false
+                 * @return {boolean} true if the current state of the esWebApiService has been succesfully authenticated, otherwise false
+                 **/
                 isAuthenticated: function() {
                     fgetModel();
                     return !!esClientSession.connectionModel;
@@ -1587,6 +1596,23 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 ```             **/
                 getUserMessage: getUserMessage,
 
+
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#getESUISettings
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Function that returns an object with properties the reflect current ui settings that the Entersoft UI framework takes
+                 * into account i.e. mobile for kendo-grids, defaultGridHeight for kendo-grids, etc.
+                 * @return {object} Returns an object
+```js
+{
+    mobile: string | undefined, /* string can take the following values: 'desktop' or 'tablet' or 'phone'
+    defaultGridHeight: string or undefined
+}
+```
+                 **/
                 getESUISettings: function() {
                     return esUISettings;
                 },

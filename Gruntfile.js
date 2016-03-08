@@ -306,12 +306,18 @@ module.exports = function(grunt) {
 
         shell: {
             github_sourcefiles: {
-                command: "git add --all&&git commit -m '<%= pkg.version %>'&&git tag <%= pkg.version %>&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git smework --tags"
+                command: "git add --all&&git commit -m '<%= pkg.version %>'&&git tag <%= pkg.version %>&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git dev1.8.0 --tags",
+                options: {
+                    execOptions: {
+                        maxBuffer: 400 * 1024
+                    }
+                }
             },
             github_pub_docs: {
                 command: "git add --all&&git commit -m '<%= pkg.version %>'&&git push https://<%= github_userid %>:<%= github_password %>@github.com/entersoftsa/eswebapi.git gh-pages --tags",
                 options: {
                     execOptions: {
+                        maxBuffer: 400 * 1024,
                         cwd: '../../docs_eswebapi/eswebapi/'
                     }
                 }
