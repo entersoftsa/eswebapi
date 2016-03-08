@@ -45,8 +45,8 @@ module.exports = function(grunt) {
                         "PQExample/lib/telerik/js/jszip.min.js",
                         "PQExample/lib/telerik/js/kendo.all.min.js",
                         "PQExample/lib/telerik/js/cultures/kendo.culture.el-GR.min.js",
-                        "PQExample/lib/eswebapi/dist/eswebapi.js",
-                        "PQExample/lib/eswebapi/dist/eswebapi.templates.js"
+                        "PQExample/lib/eswebapi/dist/eswebapi.min.js",
+                        "PQExample/lib/eswebapi/dist/eswebapi.templates.min.js"
                     ],
                     'PQExample/dist/es.all.css': [
                         'PQExample/bower_components/bootstrap/dist/css/bootstrap.min.css',
@@ -63,8 +63,10 @@ module.exports = function(grunt) {
                 banner: '<%= banner %>'
             },
             dist: {
-                src: '<%= concat.dist.dest %>',
-                dest: 'dist/<%= pkg.name %>.min.js'
+                files: {
+                    'dist/<%= pkg.name %>.min.js': '<%= concat.dist.dest %>',
+                    'dist/eswebapi.templates.min.js': 'dist/eswebapi.templates.js'
+                }
             }
         },
 
@@ -115,11 +117,12 @@ module.exports = function(grunt) {
 
         filerev: {
             options: {
+                encoding: 'utf8',
                 algorithm: 'md5',
-                length: 8
+                length: 16
             },
             scripts: {
-                src: '<%= uglify.dist.dest %>',
+                src: 'dist/*.min.js',
                 dest: 'dist'
             },
             templates: {
@@ -322,12 +325,6 @@ module.exports = function(grunt) {
             }
         },
 
-        karma: {
-            unit: {
-                configFile: 'karma.conf.js'
-            }
-        },
-
         nodemailer: {
             options: {
                 transport: {
@@ -352,16 +349,6 @@ module.exports = function(grunt) {
             internal: {}
         },
 
-        watch: {
-            gruntfile: {
-                files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile']
-            },
-            lib_test: {
-                files: '<%= jshint.lib_test.src %>',
-                tasks: ['jshint:lib_test', 'nodeunit']
-            }
-        }
     });
 
     // These plugins provide necessary tasks.
@@ -373,22 +360,20 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-ngdocs');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-prompt');
     grunt.loadNpmTasks('grunt-version');
     grunt.loadNpmTasks('grunt-nodemailer');
-    grunt.loadNpmTasks('grunt-karma');
 
     // Build Sources Task
     grunt.registerTask('1build', [
         /* compile and prepare source files */
         'clean:build',
         'concat:dist',
+        'ngtemplates',
         'uglify',
         'filerev:scripts',
-        'ngtemplates',
         'copy:sourcefiles',
 
         /* compile documentation */
@@ -403,11 +388,10 @@ module.exports = function(grunt) {
         /* compile and prepare source files */
         'clean:build',
         'concat:dist',
+        'ngtemplates',
         'uglify',
         'filerev:scripts',
-        'ngtemplates',
         'copy:sourcefiles',
-
         /* compile documentation */
         'clean:docs',
         'clean:pub_docs',

@@ -1,7 +1,7 @@
 <label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
           tooltip-placement="top"
           tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
-<select class="form-control"
+<select class="form-control es-param-control"
     kendo-combo-box
     name="{{::esParamDef.id}}"
     ng-required="::esParamDef.required"
@@ -13,6 +13,7 @@
     ng-required="::esParamDef.required"
     k-auto-bind="false"
     k-min-length="3"
-    ng-model="esParamVal[esParamDef.id].paramValue"
+    k-value-primitive="true"
+    k-ng-model="esParamVal[esParamDef.id].paramValue"
     k-data-source="esParamLookupDS">
 </select>

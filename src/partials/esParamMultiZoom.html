@@ -2,7 +2,7 @@
           tooltip-placement="top"
           tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
 <select 
-	class="form-control"
+	class="form-control es-param-control"
         kendo-multi-select 
         name="{{::esParamDef.id}}"
         ng-required="::esParamDef.required"
@@ -12,6 +12,7 @@
         k-data-value-field="::esParamDef.invSelectedMasterField"
         k-filter="'contains'"
         k-auto-bind="false"
-        ng-model="esParamVal[esParamDef.id].paramValue"
+        k-value-primitive="true"
+        k-ng-model="esParamVal[esParamDef.id].paramValue"
         k-data-source="esParamLookupDS">
 </select>

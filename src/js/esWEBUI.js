@@ -1840,7 +1840,8 @@
 
                 //Not set
                 if (!dx || dx.length == 0) {
-                    return new esGlobals.ESParamVal(esParamInfo.id, null, esParamInfo.enumList);
+                    var orgVal = esParamInfo.multiValued ? [] : null;
+                    return new esGlobals.ESParamVal(esParamInfo.id, orgVal, esParamInfo.enumList);
                 }
 
                 var processedVals = _.map(dx, function(k) {
