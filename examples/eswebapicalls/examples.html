@@ -1,0 +1,440 @@
+<div>
+    <div>
+        <h2>This is {{theGlobalUser}}</h2>
+        <p>This is the selected file</p>
+        <textarea>{{JSON.stringify(picFile)}}</textarea>
+    </div>
+    <div>
+        <es-gauge ng-repeat="row in gRows"
+            es-row="row">
+        </es-gauge>
+        
+    </div>
+    <div>
+        <form name="myForm">
+            <fieldset>
+                <legend>Upload on form submit</legend>
+                Username:
+                <input type="text" name="userName" ng-model="username" size="39" required>
+                <i ng-show="myForm.userName.$error.required">*required</i>
+                <br> Profile Picture:
+                <input type="file" ngf-select ng-model="picFile" name="file" accept="*/*" required multiple>
+                <br/>
+                <ul>
+                    <li ng-repeat="f in picFile" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                        <span class="progress" ng-show="f.progress >= 0">
+        <div style="width:{{f.progress}}%"  
+            ng-bind="f.progress + '%'"></div>
+      </span>
+                    </li>
+                </ul>
+                <i ng-show="myForm.file.$error.required">*required</i>
+                <br/>
+                <button ng-disabled="!myForm.$valid" ng-click="uploadPic(picFile)">Submit</button>
+                <img ngf-src="picFile" class="thumb">
+                <span class="progress" ng-show="picFile.progress >= 0">
+                  <div style="width:{{picFile.progress}}%" ng-bind="picFile.progress + '%'"></div>
+                  <div kendo-progress-bar="progressBar" k-min="0" k-max="100" ng-model="picFile.progress" style="width: 100%;"></div>
+              </span>
+                <span ng-show="picFile.result">Upload Successful</span>
+            </fieldset>
+            <br/>
+        </form>
+    </div>
+    <hr/>
+    <div>
+        <button ng-click="cacheInfo()">cache Information</button>
+        <span>
+            <textarea>{{cacheSize}}</textarea> 
+            <textarea>{{cacheStats}}</textarea>
+        </span>
+    </div>
+    <h3>
+         1. fetchPublicQueryInfo
+    </h3>
+    <span>
+        <input type="text" ng-model="pGroup"  placeholder="PQ GroupID">
+        <input type="text" ng-model="pFilter" placeholder="PQ FilterID">
+        <button ng-click="fetchPQInfo()">fetchPublicQueryInfo</button>
+        <div kendo-grid k-ng-delay="esGridOptions" k-auto-bind="false" k-options="esGridOptions" />
+    </span>
+    <div>
+        <span>
+            <textarea>{{esJanusGridLayout}}</textarea> 
+            <textarea>{{esWebGridInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3> 2. fetchPublicQuery</h3>
+        <input type="text" ng-model="pqParams" placeholder="Params"></input>
+        <button ng-click="dofetchPublicQuery()">fetchPublicQuery</button>
+        <<textarea>{{pqResult}}</textarea>
+    </div>
+    <hr/>
+    <div>
+        <h3> 2B. multifetchPublicQuery</h3>
+        <button ng-click="doMultifetchPublicQuery()">MultifetchPublicQuery</button>
+        <<textarea>{{pqResult}}</textarea>
+    </div>
+    <hr/>
+    <div>
+        <h3>3. logout</h3>
+        <button ng-click="doLogout()">Logout</button>
+    </div>
+    <hr/>
+    <div>
+        <h3>4. fetchCompanyParam</h3>
+        <span>
+            <input ng-model="pCompanyParam" placeholder="CompanyParamID">
+            <text>{{pCompanyParamValue}}</text>
+            <button ng-click="fetchCompanyParam()">fetchCompanyParam</button>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>5. fetchCompanyParams</h3>
+        <span>
+            <input ng-model="pCompanyParams" placeholder="null or list of company params">
+            <text>{{pCompanyParamsValue}}</text>
+            <button ng-click="fetchCompanyParams()">fetchCompanyParams</button>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>6. fetchSessionInfo</h3>
+        <span>
+            <button ng-click="fetchSessionInfo()">Test 2</button>
+            <textarea>{{pSessionInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>7. fetchOdsTableInfo</h3>
+        <span>
+            <input ng-model="odsID" placeholder="ES ODS ID to fetch">
+            <button ng-click="fetchOdsTableInfo()">fetchOdsTableInfo</button>
+            <textarea>{{pTableInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>8. fetchOdsColumnInfo</h3>
+        <span>
+            <input ng-model="odsID" placeholder="ES ODS Table-Column ID to fetch">
+            <input ng-model="odsColumnID" placeholder="ES ODS Column ID to fetch">
+            <button ng-click="fetchOdsColumnInfo()">fetchOdsColumnInfo</button>
+            <textarea>{{pColumnInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>9. fetchOdsRelationInfo</h3>
+        <span>
+            <input ng-model="odsID" placeholder="ES ODS Relation ID to fetch">
+            <button ng-click="fetchOdsRelationInfo()">fetchOdsRelationInfo</button>
+            <textarea>{{pRelationInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>10. fetchOdsMasterRelationsInfo</h3>
+        <span>
+            <input ng-model="odsID" placeholder="ES ODS Table ID to fetch">
+            <input ng-model="odsColumnID" placeholder="ES ODS Foreign Column ID to fetch">
+            <button ng-click="fetchOdsMasterRelationsInfo()">fetchOdsMasterRelationsInfo</button>
+            <textarea>{{pRelationInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>11. fetchOdsDetailRelationsInfo</h3>
+        <span>
+            <input ng-model="odsID" placeholder="ES ODS Table ID to fetch">
+            <input ng-model="odsColumnID" placeholder="ES ODS Foreign Column ID to fetch">
+            <button ng-click="fetchOdsDetailRelationsInfo()">fetchOdsDetailRelationsInfo</button>
+            <textarea>{{pRelationInfo}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>12. fetchServerCapabilities</h3>
+        <span>
+            <button ng-click="fetchServerCapabilities()">fetchServerCapabilities</button>
+            <textarea>{{pSrvCapabilities}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>13. fetchUserSites</h3>
+        <span>
+            <input ng-model="pUser" placeholder="EBS UserID">
+            <button ng-click="fetchUserSites()">fetchUserSites</button>
+            <textarea>{{pUserSites}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>14. fetchStdZoom</h3>
+        <span>
+            <input ng-model="pZoomID" placeholder="EBS Zoom ID">
+            <button ng-click="fetchStdZoom()">fetchStdZoom</button>
+            <textarea>{{pZoomResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>14B. MultifetchStdZoom</h3>
+        <span>
+            <input ng-model="pZoomID" placeholder="EBS Zoom ID">
+            <button ng-click="multifetchStdZoom()">multifetchStdZoom</button>
+            <textarea>{{pZoomResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>15. voidgeneric</h3>
+        <span>
+            <input ng-model="pMethod" placeholder="EBS Zoom ID">
+            <button ng-click="voidgeneric()">voidgeneric</button>
+            <textarea>{{pMethodResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>16. fetchScroller</h3>
+        <span>
+            <input type="text" ng-model="pGroup"  placeholder="PQ GroupID">
+            <input type="text" ng-model="pFilter" placeholder="PQ FilterID">
+            <button ng-click="fetchScroller()">fetchScroller</button>
+            <textarea>{{pScrollerResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>17. fetchSimpleScrollerRootTable</h3>
+        <span>
+            <input type="text" ng-model="pGroup"  placeholder="PQ GroupID">
+            <input type="text" ng-model="pFilter" placeholder="PQ FilterID">
+            <button ng-click="fetchSimpleScrollerRootTable()">fetchSimpleScrollerRootTable</button>
+            <textarea>{{pScrollerResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>18. IMAGE fetchEASWebAsset</h3>
+        <span>
+            <input type="text" ng-model="pAsset"  placeholder="EAS Asset to fetch">
+            <button ng-click="ImagefetchEASWebAsset({base64: true})">ImagefetchEASWebAsset</button>
+            <img ng-if="pImageResults" data-ng-src="{{'data:image/jpg;base64,' + pImageResults}}"/>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>19. Text fetchEASWebAsset</h3>
+        <span>
+            <input type="text" ng-model="pAsset"  placeholder="EAS Asset to fetch">
+            <button ng-click="TextfetchEASWebAsset({base64: false})">TextfetchEASWebAsset</button>
+            <textarea>{{pTextResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>20. PDF-WORD-ETC BIN FILES fetchEASWebAsset</h3>
+        <span>
+            <input type="text" ng-model="pAsset"  placeholder="EAS Asset to fetch">
+            <button ng-click="fetchEASWebAsset()">fetchEASWebAsset</button>
+            <textarea>{{pAssetResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>21. fetchES00DocumentByGID</h3>
+        <span>
+            <input type="text" ng-model="pES00Doc"  placeholder="ES00Document GID">
+            <button ng-click="fetchES00DocumentByGID()">fetchES00DocumentByGID</button>
+            <textarea>{{pES00DocResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>22. fetchES00DocumentByCode</h3>
+        <span>
+            <input type="text" ng-model="pES00Doc"  placeholder="ES00Document Code">
+            <button ng-click="fetchES00DocumentByCode()">fetchES00DocumentByCode</button>
+            <textarea>{{pES00DocResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>23. fetchES00DocumentsByEntityGID</h3>
+        <span>
+            <input type="text" ng-model="pES00Doc"  placeholder="ES00Document Entity GID">
+            <button ng-click="fetchES00DocumentsByEntityGID()">fetchES00DocumentsByEntityGID</button>
+            <textarea>{{pES00DocResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>24. fetchES00DocumentBLOB Data</h3>
+        <span>
+            <input type="text" ng-model="pES00Doc"  placeholder="ES00Document Entity GID">
+            <button ng-click="fetchES00DocumentBlobDataByGID()">fetchES00DocumentBlobDataByGID</button>
+            <textarea>{{pES00DocResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>25. delete es00document</h3>
+        <span>
+            <input type="text" ng-model="pEntityType"  placeholder="ES00Document Entity Type">
+            <input type="text" ng-model="pEntityTable"  placeholder="ES00Document Entity Table">
+            <input type="text" ng-model="pEntityGID"  placeholder="ES00Document Entity GID">
+            <input type="text" ng-model="pDocumentGID"  placeholder="ES00Document GID">
+            <button ng-click="deleteES00Document()">deleteES00Document</button>
+            <textarea>{{pES00DocResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>26. getMimeList</h3>
+        <span>
+            <button ng-click="getMimeList()">getMimeList</button>
+            <textarea>{{pMimeTypes}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>27. FIImportDocument</h3>
+        <span>
+            <textarea ng-model="xmldocstr"></textarea>
+            <button ng-click="fiImportDocument()">fiImportDocument</button>
+            <textarea>{{xmldocret}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>28. fetchEntity</h3>
+        <span>
+            <input type="text" ng-model="pEntityClass" placeholder="Entity Class"/>
+            <input type="text" ng-model="pEntityKey" placeholder="Entity Primary Key"/>
+            <button ng-click="fetchEntity()">fetchEntity</button>
+            <textarea>{{pEntityDS}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>28B. fetchEntityByCode</h3>
+        <span>
+            <input type="text" ng-model="pEntityClass" placeholder="Entity Class"/>
+            <input type="text" ng-model="pEntityCode" placeholder="Entity Human String Code"/>
+            <button ng-click="fetchEntityByCode()">fetchEntityByCode</button>
+            <textarea>{{pEntityDS}}</textarea>
+        </span>
+    </div>
+
+    <hr/>
+    <div>
+        <h3>29. eventLog</h3>
+        <span>
+            <input type="text" ng-model="eID" placeholder="Event ID"/>
+            <input type="text" ng-model="eDescription" placeholder="Event Description"/>
+            <input type="number" ng-model="eSeverity" placeholder="Event Severity"/>
+
+            <button ng-click="eventLog()">Log an Event</button>
+            <textarea>{{eRet}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>30. fetchUserLogo</h3>
+        <span>
+            <input type="text" ng-model="lUserID" placeholder="User ID or GID"/>
+
+            <button ng-click="fetchUserLogo()">Get the PHOTO</button>
+            <img ng-if="userPhoto" class="img-circle" width="304" height="236" ng-if="userPhoto" data-ng-src="{{'data:image/jpg;base64,' + userPhoto}}"/>
+            <button ng-click="removeCurrentUserLogo()">Remove Current User Logo</button>
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>31. uploadUserLogo</h3>
+        <span>
+            <input type="file" ngf-select ng-model="userLogoImage" name="file" accept="image/*;capture=camera" required>
+            <button ng-click="uploadUserLogo()">Upload Photo</button>
+        </span>
+        <div class="row es-survey-progress">
+            <uib-progressbar ng-show="userLogoImage.progress" animate="true" value="userLogoImage.progress" type="success"><b>{{userLogoImage.progress}}%</b></uib-progressbar>
+        </div>
+    </div>
+    <hr/>
+    <div>
+        <h3>32. fetchPropertySet</h3>
+        <form name="surveyForm">
+            <div class="form-group"  ng-class="{ 'has-error': surveyForm.Code.$invalid }">
+                <span>
+                    <input class="form-control" type="text" ng-model="psCode" name="Code" ng-required="'true'">
+                    <button ng-click="fetchPropertySet()">fetchPropertySet</button>
+                    <textarea>{{psData}}</textarea>
+                </span>
+            </div>
+        </form>
+    </div>
+    <hr/>
+    <div>
+        <h3>33. fetchPersonLogo</h3>
+        <span>
+            <input type="text" ng-model="PersonGID" placeholder="PersonGID"/>
+
+            <button ng-click="fetchPersonlogo()">Get Person Logo</button>
+            <img  ng-if="personPhoto" class="img-circle" width="304" height="236" ng-if="personPhoto" data-ng-src="{{'data:image/jpg;base64,' + personPhoto}}"/>
+            
+        </span>
+    </div>
+    <hr/>
+    <div>
+        <h3>34. esService</h3>
+        <span>
+            <input type="text" ng-model="serviceObj.netAssembly" placeholder=".NET Assembly name"/>
+            <input type="text" ng-model="serviceObj.netNamespace" placeholder=".NET Namespace"/>
+            <input type="text" ng-model="serviceObj.netClass" placeholder=".NET Class"/>
+            <input type="text" ng-model="serviceObj.netMethod" placeholder=".NET Method"/>
+            <textarea ng-model="netParam" placeholder="POCO Object in string format"/>
+            <label>Binary Result: 
+                <input type="checkbox" ng-model="serviceObj.netIsBinaryResult">
+            </label>
+
+            <button ng-click="execEbsService()">Execute EBS Service</button>
+        </span>
+        <textarea>{{ebsret}}</textarea>
+    </div>
+    <hr/>
+    <div>
+        <h3>35. esGPSLocation</h3>
+        <button ng-click="getMyPosition()">Where am I?</button>
+        <button ng-click="resetpos()">Reset me Please</button>
+        <input type="text" ng-model="clusterType" placeholder="cluster type (standard, cluster, spider)"
+        <div class="row">
+            <ui-gmap-google-map
+                center="mapOptions.center"
+                zoom="mapOptions.zoom"
+                control="map"
+                pan="true">
+
+                <es-map-markers es-rows="myDS" es-pq-info="myPQInfo" xes-markers="myMarkers" es-type="clusterType" es-show-window="true" type es-click="myMarkerClick">
+                </es-map-markers>
+
+            </ui-gmap-google-map>
+        </div>
+
+    </div>
+    <hr/>
+    <div>
+        <h3> ES Scales </h3>
+        <span>
+            <input class="form-control" type="text" ng-model="scaleCode" name="Code" ng-required="'true'">
+            <button ng-click="fetchScale()">fetchScale</button>
+            <textarea>{{scaleData}}</textarea>
+        </span>
+    </div>
+</div>

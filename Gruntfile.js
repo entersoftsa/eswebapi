@@ -18,46 +18,18 @@ module.exports = function(grunt) {
                 banner: '<%= banner %>',
                 stripBanners: false
             },
+            hybrid: {
+
+            },
+
             dist: {
                 // the files to concatenate
                 src: ['src/js/eswebservices.js', 'src/js/esanalytics.js', 'src/js/esenvironment.js', 'src/js/esinit.js', 'src/js/eslog.js', 'src/js/esWEBUI.js'],
                 dest: 'dist/<%= pkg.name %>.js'
             },
-
-            iPad: {
-                files: {
-                    'PQExample/dist/es.all.js': [
-                        'PQExample/bower_components/jquery/dist/jquery.min.js',
-                        'PQExample/bower_components/bootstrap/dist/js/bootstrap.min.js',
-                        'PQExample/bower_components/lodash/dist/lodash.min.js',
-                        'PQExample/bower_components/angular/angular.min.js',
-                        'PQExample/bower_components/angular-animate/angular-animate.min.js',
-                        'PQExample/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-                        'PQExample/bower_components/angular-sanitize/angular-sanitize.min.js',
-                        'PQExample/bower_components/ngstorage/ngstorage.min.js',
-                        'PQExample/bower_components/stacktrace-js/dist/stacktrace.min.js',
-                        'PQExample/bower_components/log4javascript/js/log4javascript.js',
-                        'PQExample/bower_components/underscore/underscore-min.js',
-                        'PQExample/bower_components/jscache/cache.js',
-                        'PQExample/bower_components/moment/min/moment-with-locales.min.js',
-                        'PQExample/bower_components/angular-simple-logger/dist/angular-simple-logger.min.js',
-                        'PQExample/bower_components/angular-google-maps/dist/angular-google-maps.min.js',
-                        "PQExample/lib/telerik/js/jszip.min.js",
-                        "PQExample/lib/telerik/js/kendo.all.min.js",
-                        "PQExample/lib/telerik/js/cultures/kendo.culture.el-GR.min.js",
-                        "PQExample/lib/eswebapi/dist/eswebapi.min.js",
-                        "PQExample/lib/eswebapi/dist/eswebapi.templates.min.js"
-                    ],
-                    'PQExample/dist/es.all.css': [
-                        'PQExample/bower_components/bootstrap/dist/css/bootstrap.min.css',
-                        'PQExample/lib/telerik/styles/kendo.common-bootstrap.min.css',
-                        'PQExample/lib/telerik/styles/kendo.bootstrap.min.css',
-                        'PQExample/lib/telerik/styles/kendo.dataviz.min.css',
-                        'PQExample/lib/telerik/styles/kendo.dataviz.bootstrap.min.css'
-                    ]
-                }
-            }
         },
+
+
         uglify: {
             options: {
                 banner: '<%= banner %>'
@@ -74,9 +46,12 @@ module.exports = function(grunt) {
             options: {
                 force: true
             },
-            build: ["dist", "example/lib/eswebapi/dist", "StoreExample/lib/eswebapi/dist", "2Example/lib/eswebapi/dist", "PQExample/lib/eswebapi/dist"],
+            build: ["dist", "examples/eswebapicalls/lib/eswebapi/dist", "examples/StoreExample/lib/eswebapi/dist", "2Example/lib/eswebapi/dist"],
+
             docs: ['docs'],
-            iPad: ['PQExample/dist'],
+
+            hybrid: ['dist/hybrid'],
+
             pub_docs: ['../../docs_eswebapi/eswebapi/css/',
                 '../../docs_eswebapi/eswebapi/font/',
                 '../../docs_eswebapi/eswebapi/grunt-scripts/',
@@ -125,15 +100,76 @@ module.exports = function(grunt) {
                 src: 'dist/*.min.js',
                 dest: 'dist'
             },
-            templates: {
-                src: 'dist/scripts/app.templates.js',
-                dest: 'dist/scripts/'
-            },
-            css: {
-                src: 'dist/styles/app.min.css',
-                dest: 'dist/styles'
+            hybrid: {
+                files: [{
+                    src: [
+                        'dist/hybrid/js/*.js',
+                        'dist/hybrid/styles/*.css',
+                    ]
+                }]
+            }
+
+        },
+
+        useminPrepare: {
+            html: ['src/hybrid/es*.html'],
+            options: {
+                dest: 'dist/hybrid',
+                blockReplacements: {
+                    ESDEBUG: function(block) {
+                        return '';
+                    }
+                },
+
+                flow: {
+                    // i'm using this config for all targets, not only 'html'
+                    steps: {
+                        // Here you define your flow for your custom block - only concat
+                        extjs: ['concat'],
+
+                        extcss: ['concat'],
+
+                        js: ['concat', 'uglify:generated'],
+
+                        css: ['concat', 'cssmin']
+                    },
+                    // also you MUST define 'post' field to something not null
+                    post: {}
+
+                }
             }
         },
+
+        usemin: {
+            assetsDir: ['dist/hybrid/js', 'dist/hybrid/styles'],
+            options: {
+                blockReplacements: {
+                    extjs: function(block) {
+                        return '<script src="' + block.dest + '"></script>';
+                    },
+                    extcss: function(block) {
+                        return '<link rel="stylesheet" href="' + block.dest + '">';
+                    }
+                }
+            },
+            html: ['dist/hybrid/es*.html']
+        },
+
+        htmlmin: {
+            hybrid: {
+                options: {
+                    removeComments: true,
+                    collapseWhitespace: true
+                },
+                files: {
+                    'dist/hybrid/eschart.html': 'dist/hybrid/eschart.html',
+                    'dist/hybrid/esgrid.html': 'dist/hybrid/esgrid.html',
+                    'dist/hybrid/escombo.html': 'dist/hybrid/escombo.html',
+                    'dist/hybrid/esmap.html': 'dist/hybrid/esmap.html',
+                }
+            }
+        },
+
 
         /**
          * compile templates into one single static file
@@ -165,14 +201,14 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         src: ['dist/**'],
-                        dest: 'example/lib/eswebapi/'
+                        dest: 'examples/eswebapicalls/lib/eswebapi/'
                     },
 
 
                     {
                         expand: true,
                         src: ['dist/**'],
-                        dest: 'StoreExample/lib/eswebapi/'
+                        dest: 'examples/StoreExample/lib/eswebapi/'
                     },
 
                     {
@@ -181,30 +217,28 @@ module.exports = function(grunt) {
                         dest: '2Example/lib/eswebapi/'
                     },
 
-                    {
-                        expand: true,
-                        src: ['dist/**'],
-                        dest: 'PQExample/lib/eswebapi/'
-                    },
                 ],
             },
-            iPad: {
+
+            hybrid: {
                 files: [{
                     expand: true,
-                    cwd: 'PQExample/bower_components/bootstrap/fonts/',
-                    src: ['*.*'],
-                    dest: 'PQExample/fonts/'
+                    cwd: 'src/hybrid',
+                    src: ['*.html'],
+                    dest: 'dist/hybrid/'
                 }, {
                     expand: true,
-                    src: ['dist/eswebapi.js', 'dist/eswebapi.templates.js'],
-                    dest: '../../eswebmanager/lib/eswebapi/'
+                    cwd: 'bower_components/bootstrap/fonts/',
+                    src: ['*.*'],
+                    dest: 'dist/hybrid/fonts/'
                 }, {
                     expand: true,
-                    cwd: 'PQExample/lib/bootstrap/',
+                    cwd: 'bower_components/kendo-ui/styles/bootstrap',
                     src: ['*.*'],
-                    dest: 'PQExample/dist/bootstrap'
+                    dest: 'dist/hybrid/styles/bootstrap'
                 }]
             },
+
             docs_images: {
                 files: [{
                     cwd: 'src/content/assets/images',
@@ -362,6 +396,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-filerev');
+    grunt.loadNpmTasks('grunt-usemin');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
@@ -371,6 +407,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-prompt');
     grunt.loadNpmTasks('grunt-version');
     grunt.loadNpmTasks('grunt-nodemailer');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
     // Build Sources Task
     grunt.registerTask('1build', [
@@ -386,7 +423,8 @@ module.exports = function(grunt) {
         'clean:docs',
         'clean:pub_docs',
         'ngdocs',
-        'copy:pub_docs'
+        'copy:pub_docs',
+        'hybrid'
     ]);
 
     // Full deploy Task
@@ -416,7 +454,9 @@ module.exports = function(grunt) {
         //'nodemailer:internal'
     ]);
 
-    grunt.registerTask('2iPad', ['1build', 'clean:iPad', 'concat:iPad', 'copy:iPad']);
+    grunt.registerTask('hybrid', ['clean:hybrid', 'copy:hybrid', 'useminPrepare', 'concat:generated', 'cssmin:generated', 'uglify:generated', 'filerev:hybrid', 'usemin', 'htmlmin:hybrid']);
+
+
 
     // doc
     grunt.registerTask('0doc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:docs_images']);

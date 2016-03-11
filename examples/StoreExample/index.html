@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="esStoreAssistantApp">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Entersoft Store Assistant Example</title>
+    <link href="styles.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body ng-controller="esMainCtrl" ng-cloak>
+    <header>
+        <div class="nav">
+            <ul>
+                <li class="login"><a ui-sref="login">Login</a></li>
+                <li class="menu"><a ui-sref="priceCheck">Price Check</a></li>
+                <li class="menu"><a ui-sref="stockCheck">Stock Check</a></li>
+                <li class="menu"><a ui-sref="labels">Labels</a></li>
+                <li class="menu" ng-click="logout($event)"><a ui-sref="login">Logout</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div>
+        <div ui-view>
+        </div>
+    </div>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/ngStorage/ngstorage.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="bower_components/stacktrace-js/dist/stacktrace.min.js"></script>
+    <script src="bower_components/log4javascript/js/log4javascript.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="bower_components/jscache/cache.js"></script>
+    <script src="bower_components/moment/min/moment-with-locales.min.js"></script>
+    <script src="lib/eswebapi/dist/eswebapi.js"></script>
+    <script src="script.js" type="text/javascript"></script>
+</body>
+
+</html>

@@ -22,26 +22,27 @@
     "tests"
   ],
   "dependencies": {
-    "angularjs": "~1.4.7",
-    "angular-animate": "~1.4.7",
-    "angular-route": "~1.4.7",
-    "angular-sanitize": "~1.4.7",
-    "angular-bootstrap": "~0.14.1",
-    "ngstorage": "~0.3.9",
-    "bootstrap": "~3.3.5",
-    "jquery": "~2.1.4",
-    "stacktrace-js": "~0.6.4",
-    "log4javascript": "~1.4.9",
-    "underscore": "~1.8.3",
+    "angular": "^1.5.0",
+    "jquery": "^2.2.1",
+    "angular-animate": "^1.5.0",
+    "angular-route": "^1.5.0",
+    "angular-sanitize": "^1.5.0",
+    "angular-bootstrap": "^1.2.4",
+    "ngstorage": "^0.3.10",
+    "bootstrap": "^3.3.6",
+    "stacktrace-js": "^1.0.4",
+    "log4javascript": "^1.4.9",
+    "underscore": "^1.8.3",
     "jscache": "*",
-    "moment": "~2.10.6",
-    "ng-file-upload": "~9.0.9"
+    "moment": "^2.12.0",
+    "ng-file-upload": "^12.0.1",
+    "angular-google-maps": "^2.3.2",
+    "angular-translate": "^2.10.0",
+    "angular-loading-bar": "^0.8.0",
+    "modernizr": "^3.3.1",
+    "kendo-ui": "https://bower.telerik.com/bower-kendo-ui.git#^2016.1.226+SP1"
   },
-  "private": false,
   "resolutions": {
-    "angular": "1.4.7"
-  },
-  "devDependencies": {
-    "angular-mocks": "~1.4.9"
+    "jquery": "1.9.1 - 2"
   }
 }
