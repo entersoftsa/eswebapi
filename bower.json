@@ -40,9 +40,9 @@
     "angular-translate": "^2.10.0",
     "angular-loading-bar": "^0.8.0",
     "modernizr": "^3.3.1",
-    "kendo-ui": "https://bower.telerik.com/bower-kendo-ui.git#^2016.1.226+SP1"
+    "kendo-ui": "https://bower.telerik.com/bower-kendo-ui.git#2016.1.226+SP1"
   },
   "resolutions": {
-    "jquery": "1.9.1 - 2"
+    "jquery": "^2.2.1"
   }
 }
