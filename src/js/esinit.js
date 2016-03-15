@@ -404,8 +404,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      * esGlobals is a factory service that provides functions, constructs and messaging events for common _global_ nature in the context of a typical
      * AngularJS SPA based on Entersoft AngularJS API.
      */
-    esWebFramework.factory('esGlobals', ['$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' /* 'es.Services.GA' */ ,
-        function($sessionStorage, $log, esMessaging, esCache, $injector) {
+    esWebFramework.factory('esGlobals', ['$translate', '$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' /* 'es.Services.GA' */ ,
+        function($translate, $sessionStorage, $log, esMessaging, esCache, $injector) {
 
             function esConvertGIDtoId(gid) {
                 if (!gid) {
@@ -1213,7 +1213,6 @@ x.setParamValues({p1: 'Hello World'});
             }
 
             function getUserMessage(err, status) {
-
                 var rep = {
                     isLogin: false,
                     messageToShow: ""
@@ -1223,18 +1222,18 @@ x.setParamValues({p1: 'Hello World'});
                     switch (status) {
                         case 401:
                             rep.isLogin = true;
-                            rep.messageToShow = "Please Login first";
+                            rep.messageToShow = $translate.instant('ERR_401');
                             break;
 
                         case 403:
                             rep.isLogin = true;
-                            rep.messageToShow = "You are not authorized. Please Login and try again";
+                            rep.messageToShow = $translate.instant('ERR_403');
                             break;
 
                         case 500:
                         default:
                             rep.isLogin = true;
-                            rep.messageToShow = "General Error. Please check your network and internet access";
+                            rep.messageToShow = $translate.instant('ERR_500');
                             break;
                     }
                     return rep;
@@ -1264,6 +1263,11 @@ x.setParamValues({p1: 'Hello World'});
                 if (err.UserMessage) {
                     sMsg = err.UserMessage;
                     if (err.MessageID) {
+                        var trans = $translate.instant(err.MessageID);
+                        if (trans != err.MessageID) {
+                            sMsg = trans;
+                        }
+                        
                         sMsg = sMsg + " (" + err.MessageID + ")";
                     }
                     rep.messageToShow = sMsg;

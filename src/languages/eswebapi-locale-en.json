@@ -1,0 +1,7 @@
+{
+    "ERR_401": "Please Login First",
+    "ERR_403": "You are not authorized. Please Login and try again",
+    "ERR_500": "General Error. Please check your network and internet access",
+    "subscription-invalid-password": "Either SubscriptionID or Subscription Password are not valid",
+    "invalid-subscription-id": "Either SubscriptionID or Subscription Password are not valid"
+}

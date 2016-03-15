@@ -46,7 +46,7 @@ module.exports = function(grunt) {
             options: {
                 force: true
             },
-            build: ["dist", "examples/eswebapicalls/lib/eswebapi/dist", "examples/StoreExample/lib/eswebapi/dist", "2Example/lib/eswebapi/dist"],
+            build: ["dist", "examples/eswebapicalls/lib/eswebapi/dist", "examples/StoreExample/lib/eswebapi/dist"],
 
             docs: ['docs'],
 
@@ -204,6 +204,12 @@ module.exports = function(grunt) {
                         dest: 'examples/eswebapicalls/lib/eswebapi/'
                     },
 
+                    {
+                        cwd: 'src/languages',
+                        expand: true,
+                        src: ['*.*'],
+                        dest: 'examples/eswebapicalls/languages/'
+                    },
 
                     {
                         expand: true,
@@ -212,9 +218,10 @@ module.exports = function(grunt) {
                     },
 
                     {
+                        cwd: 'src/languages',
                         expand: true,
-                        src: ['dist/**'],
-                        dest: '2Example/lib/eswebapi/'
+                        src: ['*.*'],
+                        dest: 'examples/StoreExample/languages/'
                     },
 
                 ],
@@ -442,6 +449,7 @@ module.exports = function(grunt) {
         'ngdocs',
         'copy:docs_images',
         'copy:pub_docs',
+        'hybrid',
 
         /* prepare for github push*/
         'prompt:github',

@@ -5,6 +5,7 @@
         'ngRoute',
         'ngStorage',
         'ui.bootstrap',
+        'pascalprecht.translate',
 
         /* Entersoft AngularJS WEB API Provider */
         'es.Services.Web',
@@ -15,7 +16,19 @@
         '$routeProvider',
         'esWebApiProvider',
         '$exceptionHandlerProvider',
-        function($logProvider, $routeProvider, esWebApiServiceProvider, $exceptionHandlerProvider) {
+        '$translateProvider',
+        function($logProvider, $routeProvider, esWebApiServiceProvider, $exceptionHandlerProvider, $translateProvider) {
+
+            $translateProvider.useStaticFilesLoader({
+                files: [{
+                    prefix: 'languages/eswebapi-locale-',
+                    suffix: '.json'
+                }]
+            });
+            $translateProvider.preferredLanguage('gr');
+            $translateProvider.fallbackLanguage('en');
+            $translateProvider.useSanitizeValueStrategy('escape');
+
 
             $routeProvider
                 .when('/', {
@@ -69,7 +82,7 @@
             var subscriptionId = "";
             esWebApiServiceProvider.setSettings({
                 //host: "localhost/eswebapijti",
-                "host" : "192.168.1.190/Entersoft.Web.Api",
+                "host": "192.168.1.190/Entersoft.Web.Api",
                 //host: "10.211.55.7/esapi04032016",
                 subscriptionId: subscriptionId,
                 subscriptionPassword: "passx",
