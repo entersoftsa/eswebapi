@@ -6776,8 +6776,218 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      * esGlobals is a factory service that provides functions, constructs and messaging events for common _global_ nature in the context of a typical
      * AngularJS SPA based on Entersoft AngularJS API.
      */
-    esWebFramework.factory('esGlobals', ['$translate', '$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' /* 'es.Services.GA' */ ,
-        function($translate, $sessionStorage, $log, esMessaging, esCache, $injector) {
+    esWebFramework.factory('esGlobals', ['$translate', '$rootScope', '$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' /* 'es.Services.GA' */ ,
+        function($translate, $rootScope, $sessionStorage, $log, esMessaging, esCache, $injector) {
+
+            var esDateRangeOptions = [];
+            var esComplexParamFunctionOptions = [];
+
+            $rootScope.$on('$translateChangeSuccess', function() {
+
+                var trans = $translate.instant([
+                    "ESCOMPLEX.EQ",
+                    "ESCOMPLEX.NE",
+                    "ESCOMPLEX.LT",
+                    "ESCOMPLEX.GT",
+                    "ESCOMPLEX.GE",
+                    "ESCOMPLEX.RANGE",
+                    "ESCOMPLEX.NULL",
+                    "ESCOMPLEX.NOTNULL",
+
+                    "ESDATE_RANGE.SDR",
+                    "ESDATE_RANGE.SD",
+                    "ESDATE_RANGE.ANY",
+                    "ESDATE_RANGE.TODAY",
+                    "ESDATE_RANGE.UTD",
+                    "ESDATE_RANGE.SFTD",
+                    "ESDATE_RANGE.YTD",
+                    "ESDATE_RANGE.UTYD",
+                    "ESDATE_RANGE.TMR",
+                    "ESDATE_RANGE.SFTR",
+                    "ESDATE_RANGE.CW",
+                    "ESDATE_RANGE.PW",
+                    "ESDATE_RANGE.NW",
+                    "ESDATE_RANGE.CM",
+                    "ESDATE_RANGE.PM",
+                    "ESDATE_RANGE.NM",
+                    "ESDATE_RANGE.SFM",
+                    "ESDATE_RANGE.UEM",
+                    "ESDATE_RANGE.SFLM",
+                    "ESDATE_RANGE.UELM",
+                    "ESDATE_RANGE.CQ",
+                    "ESDATE_RANGE.PQ",
+                    "ESDATE_RANGE.CSM",
+                    "ESDATE_RANGE.PSM",
+                    "ESDATE_RANGE.CY",
+                    "ESDATE_RANGE.PY",
+                    "ESDATE_RANGE.CFP",
+                    "ESDATE_RANGE.SSFYUTD",
+                    "ESDATE_RANGE.SFYTEFP",
+                    "ESDATE_RANGE.PFP",
+                    "ESDATE_RANGE.SLFPUTD",
+                    "ESDATE_RANGE.SFYULFP"
+                ]);
+
+                esComplexParamFunctionOptions = [{
+                    caption: "=",
+                    value: "EQ"
+                }, {
+                    caption: "<>",
+                    value: "NE"
+                }, {
+                    caption: "<",
+                    value: "LT"
+                }, {
+                    caption: "<=",
+                    value: "LE"
+                }, {
+                    caption: ">",
+                    value: "GT"
+                }, {
+                    caption: ">=",
+                    value: "GE"
+                }, {
+                    caption: "[]",
+                    value: "RANGE"
+                }, {
+                    caption: "Κενό",
+                    value: "NULL"
+                }, {
+                    caption: "Μη κενό",
+                    value: "NOTNULL"
+                }];
+
+                _.map(esComplexParamFunctionOptions, function(x) {
+                    x.caption = trans["ESCOMPLEX." + x.value];
+                });
+
+                esDateRangeOptions = [{
+                    dValue: "0",
+                    dType: 0,
+                    title: trans["ESDATE_RANGE.SDR"]
+                }, {
+                    dValue: "1",
+                    dType: 1,
+                    title: trans["ESDATE_RANGE.SD"]
+                }, {
+                    dValue: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
+                    dType: 2,
+                    title: trans["ESDATE_RANGE.ANY"]
+                }, {
+                    dValue: "ESDateRange(Day)",
+                    dType: 3,
+                    title: trans["ESDATE_RANGE.TODAY"]
+                }, {
+                    dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)',
+                    dType: 4,
+                    title: trans["ESDATE_RANGE.UTD"]
+                }, {
+                    dValue: 'ESDateRange(Day, 0, SpecificDate, #9999/01/01#)',
+                    dType: 5,
+                    title: trans["ESDATE_RANGE.SFTD"]
+                }, {
+                    dValue: "ESDateRange(Day, -1)",
+                    dType: 6,
+                    title: trans["ESDATE_RANGE.YTD"]
+                }, {
+                    dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, -1)',
+                    dType: 7,
+                    title: trans["ESDATE_RANGE.UTYD"]
+                }, {
+                    dValue: "ESDateRange(Day, 1)",
+                    dType: 8,
+                    title: trans["ESDATE_RANGE.TMR"]
+                }, {
+                    dValue: 'ESDateRange(Day, 1, SpecificDate, #9999/01/01#)',
+                    dType: 9,
+                    title: trans["ESDATE_RANGE.SFTR"]
+                }, {
+                    dValue: "ESDateRange(Week)",
+                    dType: 10,
+                    title: trans["ESDATE_RANGE.CW"]
+                }, {
+                    dValue: "ESDateRange(Week, -1)",
+                    dType: 11,
+                    title: trans["ESDATE_RANGE.PW"]
+                }, {
+                    dValue: "ESDateRange(Week, 1)",
+                    dType: 12,
+                    title: trans["ESDATE_RANGE.NW"]
+                }, {
+                    dValue: "ESDateRange(Month)",
+                    dType: 13,
+                    title: trans["ESDATE_RANGE.CM"]
+                }, {
+                    dValue: 'ESDateRange(Month, 0, SpecificDate, #9999/01/01#)',
+                    dType: 14,
+                    title: trans["ESDATE_RANGE.SFM"]
+                }, {
+                    dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, 0)',
+                    dType: 15,
+                    title: trans["ESDATE_RANGE.UEM"]
+                }, {
+                    dValue: "ESDateRange(Month, -1)",
+                    dType: 16,
+                    title: trans["ESDATE_RANGE.PM"]
+                }, {
+                    dValue: 'ESDateRange(Month, -1, SpecificDate, #9999/01/01#)',
+                    dType: 17,
+                    title: trans["ESDATE_RANGE.SFLM"]
+                }, {
+                    dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, -1)',
+                    dType: 18,
+                    title: trans["ESDATE_RANGE.UELM"]
+                }, {
+                    dValue: "ESDateRange(Quarter)",
+                    dType: 19,
+                    title: trans["ESDATE_RANGE.CQ"]
+                }, {
+                    dValue: "ESDateRange(Quarter, -1)",
+                    dType: 20,
+                    title: trans["ESDATE_RANGE.PQ"]
+                }, {
+                    dValue: "ESDateRange(SixMonth)",
+                    dType: 21,
+                    title: trans["ESDATE_RANGE.CSM"]
+                }, {
+                    dValue: "ESDateRange(SixMonth, -1)",
+                    dType: 22,
+                    title: trans["ESDATE_RANGE.PSM"]
+                }, {
+                    dValue: "ESDateRange(Year)",
+                    dType: 23,
+                    title: trans["ESDATE_RANGE.CY"]
+                }, {
+                    dValue: "ESDateRange(Year, -1)",
+                    dType: 24,
+                    title: trans["ESDATE_RANGE.PY"]
+                }, {
+                    dValue: "ESDateRange(FiscalPeriod, 0)",
+                    dType: 25,
+                    title: trans["ESDATE_RANGE.CFP"]
+                }, {
+                    dValue: "ESDateRange(FiscalYear, 0, Day, 0)",
+                    dType: 26,
+                    title: trans["ESDATE_RANGE.SSFYUTD"]
+                }, {
+                    dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, 0)",
+                    dType: 27,
+                    title: trans["ESDATE_RANGE.SFYTEFP"]
+                }, {
+                    dValue: "ESDateRange(FiscalPeriod, -1)",
+                    dType: 28,
+                    title: trans["ESDATE_RANGE.PFP"]
+                }, {
+                    dValue: "ESDateRange(FiscalPeriod, -1, Day, 0)",
+                    dType: 29,
+                    title: trans["ESDATE_RANGE.SLFPUTD"]
+                }, {
+                    dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, -1)",
+                    dType: 30,
+                    title: trans["ESDATE_RANGE.SFYULFP"]
+                }, ];
+
+            });
 
             function esConvertGIDtoId(gid) {
                 if (!gid) {
@@ -6843,165 +7053,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.WithCount = !!withCount;
             }
 
-            var esComplexParamFunctionOptions = [{
-                caption: "=",
-                value: "EQ"
-            }, {
-                caption: "<>",
-                value: "NE"
-            }, {
-                caption: "<",
-                value: "LT"
-            }, {
-                caption: "<=",
-                value: "LE"
-            }, {
-                caption: ">",
-                value: "GT"
-            }, {
-                caption: ">=",
-                value: "GE"
-            }, {
-                caption: "[]",
-                value: "RANGE"
-            }, {
-                caption: "Κενό",
-                value: "NULL"
-            }, {
-                caption: "Μη κενό",
-                value: "NOTNULL"
-            }];
 
             var dDateRangeClass = {
                 6: [0, 1, 2, 3, 6, 8, 10, 11, 12, 13, 16, 19, 20, 21, 22, 23, 24],
                 20: [0, 1, 25, 26, 27, 28, 29, 30],
             };
 
-            var esDateRangeOptions = [{
-                dValue: "0",
-                dType: 0,
-                title: "Specific Date Range"
-            }, {
-                dValue: "1",
-                dType: 1,
-                title: "Specific Date"
-            }, {
-                dValue: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
-                dType: 2,
-                title: "Anything"
-            }, {
-                dValue: "ESDateRange(Day)",
-                dType: 3,
-                title: "Today"
-            }, {
-                dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)',
-                dType: 4,
-                title: "Up Today"
-            }, {
-                dValue: 'ESDateRange(Day, 0, SpecificDate, #9999/01/01#)',
-                dType: 5,
-                title: "Starting from Today"
-            }, {
-                dValue: "ESDateRange(Day, -1)",
-                dType: 6,
-                title: "Yesterday"
-            }, {
-                dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, -1)',
-                dType: 7,
-                title: "Up To Yesterday"
-            }, {
-                dValue: "ESDateRange(Day, 1)",
-                dType: 8,
-                title: "Tomorrow"
-            }, {
-                dValue: 'ESDateRange(Day, 1, SpecificDate, #9999/01/01#)',
-                dType: 9,
-                title: "Starting from Tomorrow"
-            }, {
-                dValue: "ESDateRange(Week)",
-                dType: 10,
-                title: "Current week"
-            }, {
-                dValue: "ESDateRange(Week, -1)",
-                dType: 11,
-                title: "Previous week"
-            }, {
-                dValue: "ESDateRange(Week, 1)",
-                dType: 12,
-                title: "Next week"
-            }, {
-                dValue: "ESDateRange(Month)",
-                dType: 13,
-                title: "Current month"
-            }, {
-                dValue: 'ESDateRange(Month, 0, SpecificDate, #9999/01/01#)',
-                dType: 14,
-                title: "Since 1st of month"
-            }, {
-                dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, 0)',
-                dType: 15,
-                title: "Up to end of month"
-            }, {
-                dValue: "ESDateRange(Month, -1)",
-                dType: 16,
-                title: "Last month"
-            }, {
-                dValue: 'ESDateRange(Month, -1, SpecificDate, #9999/01/01#)',
-                dType: 17,
-                title: "Since 1st of last month"
-            }, {
-                dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, -1)',
-                dType: 18,
-                title: "Up to end of last month"
-            }, {
-                dValue: "ESDateRange(Quarter)",
-                dType: 19,
-                title: "Current quarter"
-            }, {
-                dValue: "ESDateRange(Quarter, -1)",
-                dType: 20,
-                title: "Last quarter"
-            }, {
-                dValue: "ESDateRange(SixMonth)",
-                dType: 21,
-                title: "This HY"
-            }, {
-                dValue: "ESDateRange(SixMonth, -1)",
-                dType: 22,
-                title: "Last HY"
-            }, {
-                dValue: "ESDateRange(Year)",
-                dType: 23,
-                title: "Current Year"
-            }, {
-                dValue: "ESDateRange(Year, -1)",
-                dType: 24,
-                title: "Last Year"
-            }, {
-                dValue: "ESDateRange(FiscalPeriod, 0)",
-                dType: 25,
-                title: "Current Fiscal Period"
-            }, {
-                dValue: "ESDateRange(FiscalYear, 0, Day, 0)",
-                dType: 26,
-                title: "Since start of FY up today"
-            }, {
-                dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, 0)",
-                dType: 27,
-                title: "Since start of FY up to end of Fiscal Period"
-            }, {
-                dValue: "ESDateRange(FiscalPeriod, -1)",
-                dType: 28,
-                title: "Last Fiscal Period"
-            }, {
-                dValue: "ESDateRange(FiscalPeriod, -1, Day, 0)",
-                dType: 29,
-                title: "Since start of last Fiscal Period up today"
-            }, {
-                dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, -1)",
-                dType: 30,
-                title: "Since start of FY up to last Fiscal Period"
-            }, ];
+
 
             var dateRangeResolve = function(dateVal) {
                 if (!dateVal || !dateVal.dRange) {
@@ -7639,7 +7697,7 @@ x.setParamValues({p1: 'Hello World'});
                         if (trans != err.MessageID) {
                             sMsg = trans;
                         }
-                        
+
                         sMsg = sMsg + " (" + err.MessageID + ")";
                     }
                     rep.messageToShow = sMsg;
@@ -8114,6 +8172,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     ]);
 })();
+
 
 (function() {
     'use strict';
