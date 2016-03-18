@@ -416,6 +416,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     "ESCOMPLEX.EQ",
                     "ESCOMPLEX.NE",
                     "ESCOMPLEX.LT",
+                    "ESCOMPLEX.LE",
                     "ESCOMPLEX.GT",
                     "ESCOMPLEX.GE",
                     "ESCOMPLEX.RANGE",
@@ -962,13 +963,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : zero;
                 switch (this.paramValue.oper) {
                     case "RANGE":
-                        return "ΑΠΟ " + froms + " ΕΩΣ " + tos;
-
+                    {
+                        var trans = $translate.instant(['ESCOMPLEX.FROM', 'ESCOMPLEX.TO']);
+                        return  trans['ESCOMPLEX.FROM'] + froms + trans['ESCOMPLEX.TO'] + tos;
+                    }
                     case "NULL":
-                        return "KENO";
+                        return $translate.instant('ESCOMPLEX.NULL');
 
                     case "NOTNULL":
-                        return "MH KENO";
+                        return $translate.instant('ESCOMPLEX.NOTNULL');
 
                     default:
                         return this.paramValue.oper.toString() + " " + froms;
@@ -1003,13 +1006,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : '';
                 switch (this.paramValue.oper) {
                     case "RANGE":
-                        return "ΑΠΟ " + froms + " ΕΩΣ " + tos;
-
+                    {
+                        var trans = $translate.instant(['ESCOMPLEX.FROM', 'ESCOMPLEX.TO']);
+                        return  trans['ESCOMPLEX.FROM'] + froms + trans['ESCOMPLEX.TO'] + tos;
+                    }
                     case "NULL":
-                        return "KENO";
+                        return $translate.instant('ESCOMPLEX.NULL');
 
                     case "NOTNULL":
-                        return "MH KENO";
+                        return $translate.instant('ESCOMPLEX.NOTNULL');
 
                     default:
                         return this.paramValue.oper.toString() + " " + froms;
@@ -1343,7 +1348,7 @@ x.setParamValues({p1: 'Hello World'});
                         sMsg = err.Messages;
                     }
 
-                    rep.messageToShow = sMsg ? sMsg : "General Error. Please check your network and internet access";
+                    rep.messageToShow = sMsg ? sMsg : $translate.instant('ERR_GENERAL');
                     return rep;
                 } else {
                     rep.messageToShow = err.toString();

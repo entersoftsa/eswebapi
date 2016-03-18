@@ -1,7 +1,7 @@
 <div class="col-xs-12 col-md-4 col-md-offset-4">
     <form name="esLoginFrm" class="esLogin-form" novalidate>
         <div ng-if="esShowSubscription">
-            <h2 class="esLogin-form">Subscription</h2>
+            <h2 class="esLogin-form">{{'ESUI.LOGIN_FORM.SUBSCRIPTION' | translate}}</h2>
             <div ng-class="{'has-error': esLoginFrm.subscriptionId.$invalid}">
                 <label for="subscriptionId" class="sr-only">User ID</label>
                 <input type="text" name="subscriptionId" class="form-control" placeholder="Subscription ID" ng-model="esCredentials.subscriptionId" autofocus>
@@ -12,7 +12,7 @@
             </div>
             <hr/>
         </div>
-        <h2 class="esLogin-form">Please sign in</h2>
+        <h2 class="esLogin-form">{{'ESUI.LOGIN_FORM.SIGNIN' | translate}}</h2>
         <div ng-class="{'has-error': esLoginFrm.userId.$invalid}">
             <label for="userId" class="sr-only">User ID</label>
             <input type="text" name="userId" class="form-control" placeholder="User ID" ng-model="esCredentials.UserID" required autofocus>

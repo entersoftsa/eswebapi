@@ -9,7 +9,7 @@
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize']);
+    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate']);
 
     esWEBUI.run(['esMessaging', function(esMessaging) {
 
@@ -1062,7 +1062,7 @@
                                     ret.dataSource = xDS;
                                     // Add the download column
                                     ret.columns.push({
-                                        template: "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">Download</button>"
+                                        template: "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{'ESUI.PQ.DOWNLOAD' | translate }}</button>"
                                     });
 
                                     $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
@@ -1178,8 +1178,8 @@
          *
          * 
          */
-        .directive('esParamsPanel', ['$log', 'esWebApi', 'esUIHelper', 'esGlobals',
-            function($log, esWebApiService, esWebUIHelper, esGlobals) {
+        .directive('esParamsPanel', ['$translate', '$log', 'esWebApi', 'esUIHelper', 'esGlobals',
+            function($translate, $log, esWebApiService, esWebUIHelper, esGlobals) {
                 return {
                     restrict: 'AE',
                     scope: {
@@ -1207,7 +1207,10 @@
                         }
 
                         if ($scope.esShowRun && !$scope.esRunTitle) {
-                            $scope.esRunTitle = "Apply";
+                            $translate('ESUI.PQ.PARAMS_PANEL_RUN')
+                            .then(function(trans) {
+                                $scope.esRunTitle = trans;
+                            });
                         }
 
                         if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef && !iAttrs.esParamsValues) {
@@ -1255,8 +1258,8 @@
      * of schema model for a web grid to show the results of a PQ, Entersoft PQ Parameters meta-data manipulation , etc.
      * yh
      */
-    esWEBUI.factory('esUIHelper', ['$log', '$timeout', 'esMessaging', 'esWebApi', 'esGlobals',
-        function($log, $timeout, esMessaging, esWebApiService, esGlobals) {
+    esWEBUI.factory('esUIHelper', ['$translate', '$log', '$timeout', 'esMessaging', 'esWebApi', 'esGlobals',
+        function($translate, $log, $timeout, esMessaging, esWebApiService, esGlobals) {
 
             function esColToKCol(esCol) {
                 var tCol = {
@@ -1490,7 +1493,7 @@
                     navigatable: true,
                     height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
-                        template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
+                        template: "<h3><span class='label label-info'>{{'ESUI.PQ.NO_DATA' | translate}}</span></h3>"
                     },
 
 
@@ -1534,10 +1537,14 @@
                     pageSize: 20
                 };
 
+                var norecs = $translate.instant('ESUI.PQ.NO_DATA');
                 var grdopt = {
                     pageable: {
                         refresh: true,
-                        pageSizes: [20, 50, 100, "All"]
+                        pageSizes: [20, 50, 100, "All"],
+                        messages: {
+                            empty: norecs
+                        }
                     },
                     autoBind: false,
                     sortable: !dsOptions.serverPaging,
@@ -1550,7 +1557,7 @@
                     navigatable: true,
                     height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
-                        template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
+                        template: "<h3><span class='label label-info'>" + norecs + "</span></h3>"
                     },
 
 
@@ -1559,7 +1566,7 @@
                     toolbar: [{
                             name: "run",
                             text: "Run",
-                            template: "<a class='k-button' ng-click=\"esGridRun()\">Run</a>"
+                            template: "<a class='k-button' ng-click=\"esGridRun()\">{{'ESUI.PQ.TOOLBAR_RUN' | translate}}</a>"
                         },
                         /*
                         {

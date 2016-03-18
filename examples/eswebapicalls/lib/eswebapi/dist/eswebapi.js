@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.8.5 - 2016-03-15
+/*! Entersoft Application Server WEB API - v1.8.5 - 2016-03-17
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6788,6 +6788,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     "ESCOMPLEX.EQ",
                     "ESCOMPLEX.NE",
                     "ESCOMPLEX.LT",
+                    "ESCOMPLEX.LE",
                     "ESCOMPLEX.GT",
                     "ESCOMPLEX.GE",
                     "ESCOMPLEX.RANGE",
@@ -7334,13 +7335,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : zero;
                 switch (this.paramValue.oper) {
                     case "RANGE":
-                        return "ΑΠΟ " + froms + " ΕΩΣ " + tos;
-
+                    {
+                        var trans = $translate.instant(['ESCOMPLEX.FROM', 'ESCOMPLEX.TO']);
+                        return  trans['ESCOMPLEX.FROM'] + froms + trans['ESCOMPLEX.TO'] + tos;
+                    }
                     case "NULL":
-                        return "KENO";
+                        return $translate.instant('ESCOMPLEX.NULL');
 
                     case "NOTNULL":
-                        return "MH KENO";
+                        return $translate.instant('ESCOMPLEX.NOTNULL');
 
                     default:
                         return this.paramValue.oper.toString() + " " + froms;
@@ -7375,13 +7378,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : '';
                 switch (this.paramValue.oper) {
                     case "RANGE":
-                        return "ΑΠΟ " + froms + " ΕΩΣ " + tos;
-
+                    {
+                        var trans = $translate.instant(['ESCOMPLEX.FROM', 'ESCOMPLEX.TO']);
+                        return  trans['ESCOMPLEX.FROM'] + froms + trans['ESCOMPLEX.TO'] + tos;
+                    }
                     case "NULL":
-                        return "KENO";
+                        return $translate.instant('ESCOMPLEX.NULL');
 
                     case "NOTNULL":
-                        return "MH KENO";
+                        return $translate.instant('ESCOMPLEX.NOTNULL');
 
                     default:
                         return this.paramValue.oper.toString() + " " + froms;
@@ -7715,7 +7720,7 @@ x.setParamValues({p1: 'Hello World'});
                         sMsg = err.Messages;
                     }
 
-                    rep.messageToShow = sMsg ? sMsg : "General Error. Please check your network and internet access";
+                    rep.messageToShow = sMsg ? sMsg : $translate.instant('ERR_GENERAL');
                     return rep;
                 } else {
                     rep.messageToShow = err.toString();
@@ -8465,7 +8470,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize']);
+    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate']);
 
     esWEBUI.run(['esMessaging', function(esMessaging) {
 
@@ -9518,7 +9523,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     ret.dataSource = xDS;
                                     // Add the download column
                                     ret.columns.push({
-                                        template: "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">Download</button>"
+                                        template: "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{'ESUI.PQ.DOWNLOAD' | translate }}</button>"
                                     });
 
                                     $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
@@ -9634,8 +9639,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
          *
          * 
          */
-        .directive('esParamsPanel', ['$log', 'esWebApi', 'esUIHelper', 'esGlobals',
-            function($log, esWebApiService, esWebUIHelper, esGlobals) {
+        .directive('esParamsPanel', ['$translate', '$log', 'esWebApi', 'esUIHelper', 'esGlobals',
+            function($translate, $log, esWebApiService, esWebUIHelper, esGlobals) {
                 return {
                     restrict: 'AE',
                     scope: {
@@ -9663,7 +9668,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         }
 
                         if ($scope.esShowRun && !$scope.esRunTitle) {
-                            $scope.esRunTitle = "Apply";
+                            $translate('ESUI.PQ.PARAMS_PANEL_RUN')
+                            .then(function(trans) {
+                                $scope.esRunTitle = trans;
+                            });
                         }
 
                         if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef && !iAttrs.esParamsValues) {
@@ -9711,8 +9719,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      * of schema model for a web grid to show the results of a PQ, Entersoft PQ Parameters meta-data manipulation , etc.
      * yh
      */
-    esWEBUI.factory('esUIHelper', ['$log', '$timeout', 'esMessaging', 'esWebApi', 'esGlobals',
-        function($log, $timeout, esMessaging, esWebApiService, esGlobals) {
+    esWEBUI.factory('esUIHelper', ['$translate', '$log', '$timeout', 'esMessaging', 'esWebApi', 'esGlobals',
+        function($translate, $log, $timeout, esMessaging, esWebApiService, esGlobals) {
 
             function esColToKCol(esCol) {
                 var tCol = {
@@ -9946,7 +9954,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     navigatable: true,
                     height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
-                        template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
+                        template: "<h3><span class='label label-info'>{{'ESUI.PQ.NO_DATA' | translate}}</span></h3>"
                     },
 
 
@@ -9990,10 +9998,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     pageSize: 20
                 };
 
+                var norecs = $translate.instant('ESUI.PQ.NO_DATA');
                 var grdopt = {
                     pageable: {
                         refresh: true,
-                        pageSizes: [20, 50, 100, "All"]
+                        pageSizes: [20, 50, 100, "All"],
+                        messages: {
+                            empty: norecs
+                        }
                     },
                     autoBind: false,
                     sortable: !dsOptions.serverPaging,
@@ -10006,7 +10018,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     navigatable: true,
                     height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
-                        template: '<h3><span class="label label-info">Sorry, No Records found</span></h3>'
+                        template: "<h3><span class='label label-info'>" + norecs + "</span></h3>"
                     },
 
 
@@ -10015,7 +10027,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     toolbar: [{
                             name: "run",
                             text: "Run",
-                            template: "<a class='k-button' ng-click=\"esGridRun()\">Run</a>"
+                            template: "<a class='k-button' ng-click=\"esGridRun()\">{{'ESUI.PQ.TOOLBAR_RUN' | translate}}</a>"
                         },
                         /*
                         {
