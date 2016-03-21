@@ -195,33 +195,31 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            build: {
+                files: [
+                    {
+                        cwd: 'src/languages',
+                        expand: true,
+                        src: ['*.*'],
+                        dest: 'dist/languages/'
+                    },
+                ]
+            },
+
             sourcefiles: {
                 files: [
                     // includes files within path and its sub-directories
                     {
                         expand: true,
-                        src: ['dist/**'],
+                        src: ['dist/**', 'dist/languages/'],
                         dest: 'examples/eswebapicalls/lib/eswebapi/'
                     },
 
-                    {
-                        cwd: 'src/languages',
-                        expand: true,
-                        src: ['*.*'],
-                        dest: 'examples/eswebapicalls/languages/'
-                    },
 
                     {
                         expand: true,
-                        src: ['dist/**'],
+                        src: ['dist/**', 'dist/languages/'],
                         dest: 'examples/StoreExample/lib/eswebapi/'
-                    },
-
-                    {
-                        cwd: 'src/languages',
-                        expand: true,
-                        src: ['*.*'],
-                        dest: 'examples/StoreExample/languages/'
                     },
 
                 ],
@@ -233,7 +231,15 @@ module.exports = function(grunt) {
                     cwd: 'src/hybrid',
                     src: ['*.html'],
                     dest: 'dist/hybrid/'
-                }, {
+                }, 
+                {
+                    expand: true,
+                    cwd: 'src/languages',
+                    src: ['*.*'],
+                    dest: 'dist/hybrid/languages'
+                }, 
+
+                {
                     expand: true,
                     cwd: 'bower_components/bootstrap/fonts/',
                     src: ['*.*'],
@@ -424,6 +430,7 @@ module.exports = function(grunt) {
         'ngtemplates',
         'uglify',
         'filerev:scripts',
+        'copy:build',
         'copy:sourcefiles',
 
         /* compile documentation */
