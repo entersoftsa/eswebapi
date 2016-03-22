@@ -46,7 +46,12 @@ module.exports = function(grunt) {
             options: {
                 force: true
             },
-            build: ["dist", "examples/eswebapicalls/lib/eswebapi/dist", "examples/StoreExample/lib/eswebapi/dist"],
+            build: [
+                "dist", 
+                "examples/eswebapicalls/lib/eswebapi/dist", 
+                "examples/StoreExample/lib/eswebapi/dist",
+                "../eswebmanager/lib/eswebapi"
+                ],
 
             docs: ['docs'],
 
@@ -86,10 +91,7 @@ module.exports = function(grunt) {
                 src: ['lib/**/*.js', 'test/**/*.js']
             }
         },
-        nodeunit: {
-            files: ['test/**/*_test.js']
-        },
-
+        
         filerev: {
             options: {
                 encoding: 'utf8',
@@ -215,11 +217,15 @@ module.exports = function(grunt) {
                         dest: 'examples/eswebapicalls/lib/eswebapi/'
                     },
 
-
                     {
                         expand: true,
                         src: ['dist/**', 'dist/languages/'],
                         dest: 'examples/StoreExample/lib/eswebapi/'
+                    },
+                    {
+                        expand: true,
+                        src: ['dist/**', 'dist/languages/'],
+                        dest: '../eswebmanager/lib/eswebapi/'
                     },
 
                 ],
@@ -413,7 +419,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-nodeunit');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-ngdocs');
     grunt.loadNpmTasks('grunt-shell');
@@ -449,6 +454,7 @@ module.exports = function(grunt) {
         'ngtemplates',
         'uglify',
         'filerev:scripts',
+        'copy:build',
         'copy:sourcefiles',
         /* compile documentation */
         'clean:docs',

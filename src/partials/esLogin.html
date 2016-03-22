@@ -1,7 +1,6 @@
-<div class="col-xs-12 col-md-4 col-md-offset-4">
     <form name="esLoginFrm" class="esLogin-form" novalidate>
-        <div ng-if="esShowSubscription">
-            <h2 class="esLogin-form">{{'ESUI.LOGIN_FORM.SUBSCRIPTION' | translate}}</h2>
+        <div class="col-xs-12 col-sm-6" ng-if="esShowSubscription">
+            <h4 class="esLogin-form">{{'ESUI.LOGIN_FORM.SUBSCRIPTION' | translate}}</h4>
             <div ng-class="{'has-error': esLoginFrm.subscriptionId.$invalid}">
                 <label for="subscriptionId" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_ID' | translate}}</label>
                 <input type="text" name="subscriptionId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_ID' | translate}}" ng-model="esCredentials.subscriptionId">
@@ -10,38 +9,40 @@
                 <label for="subscriptionPwd" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}</label>
                 <input type="password" name="subscriptionPwd" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}" ng-model="esCredentials.subscriptionPassword" required autofocus>
             </div>
-            <hr/>
-        </div>
-        <h2 class="esLogin-form">{{'ESUI.LOGIN_FORM.SIGNIN' | translate}}</h2>
-        <div ng-class="{'has-error': esLoginFrm.userId.$invalid}">
-            <label for="userId" class="sr-only">{{'ESUI.LOGIN_FORM.USER_ID' | translate}}</label>
-            <input type="text" name="userId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_ID' | translate}}" ng-model="esCredentials.UserID" required autofocus>
-        </div>
-        <div ng-class="{'has-error': esLoginFrm.password.$invalid}">
-            <label for="password" class="sr-only">{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}</label>
-            <input type="password" name="password" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}" ng-model="esCredentials.Password" required>
-        </div>
-        <div ng-if="esShowBridge" ng-class="{'has-error': esLoginFrm.bridgeId.$invalid}">
-            <label for="bridgeId" class="sr-only">{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}</label>
-            <input type="text" name="bridgeId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}" ng-model="esCredentials.bridgeId">
-        </div>
-        <div ng-class="{'has-error': esLoginFrm.branch.$invalid}">
-            <label for="branch" class="sr-only">{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}</label>
-            <input type="text" name="branch" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}" ng-model="esCredentials.BranchID" required>
         </div>
 
-        <div ng-class="{'has-error': esLoginFrm.lang.$invalid}">
-            <label for="lang" class="sr-only">{{'ESUI.LOGIN_FORM.LANG_ID' | translate}}</label>
-            <select id="lang"
-                kendo-drop-down-list style="width: 100%"
-                k-ng-model="esCredentials.LangID"
-                k-options="esLangOptions"
-                >
-            </select>
+        
+        <div class="col-xs-12 col-sm-6">
+            <h4 class="esLogin-form">{{'ESUI.LOGIN_FORM.SIGNIN' | translate}}</h4>
+            <div ng-class="{'has-error': esLoginFrm.userId.$invalid}">
+                <label for="userId" class="sr-only">{{'ESUI.LOGIN_FORM.USER_ID' | translate}}</label>
+                <input type="text" name="userId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_ID' | translate}}" ng-model="esCredentials.UserID" required autofocus>
+            </div>
+            <div ng-class="{'has-error': esLoginFrm.password.$invalid}">
+                <label for="password" class="sr-only">{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}</label>
+                <input type="password" name="password" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}" ng-model="esCredentials.Password" required>
+            </div>
+            <div ng-if="esShowBridge" ng-class="{'has-error': esLoginFrm.bridgeId.$invalid}">
+                <label for="bridgeId" class="sr-only">{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}</label>
+                <input type="text" name="bridgeId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}" ng-model="esCredentials.bridgeId">
+            </div>
+            <div ng-class="{'has-error': esLoginFrm.branch.$invalid}">
+                <label for="branch" class="sr-only">{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}</label>
+                <input type="text" name="branch" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}" ng-model="esCredentials.BranchID" required>
+            </div>
+            <div ng-class="{'has-error': esLoginFrm.lang.$invalid}">
+                <label for="lang" class="sr-only">{{'ESUI.LOGIN_FORM.LANG_ID' | translate}}</label>
+                <select id="lang"
+                    kendo-drop-down-list style="width: 100%"
+                    k-ng-model="esCredentials.LangID"
+                    k-options="esLangOptions"
+                    >
+                </select>
+            </div>
         </div>
+
         <div ng-if="esShowStickySession" class="form-group">
             <input type="checkbox" ng-model="esCredentials.StickySession" class="form-control" placeholder="StickyMode">
         </div>
         <button class="btn btn-lg btn-primary btn-block" ng-disabled="esLoginFrm.$invalid" ng-click="esOnSuccess()">{{'ESUI.LOGIN_FORM.SIGNIN' | translate}}</button>
     </form>
-</div>
