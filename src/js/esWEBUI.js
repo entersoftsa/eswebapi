@@ -11,16 +11,13 @@
     'use strict';
     var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate']);
 
-    esWEBUI.run(['esMessaging', function(esMessaging) {
+    esWEBUI.run(['$translate', 'esMessaging', function($translate, esMessaging) {
 
         esMessaging.subscribe("AUTH_CHANGED", function(sess, apitoken) {
-            if (!kendo) {
-                return;
-            }
-            if (sess && sess.connectionModel && sess.connectionModel.LangID) {
-                kendo.culture(sess.connectionModel.LangID);
-            } else {
-                kendo.culture("el-GR");
+            var lang = (sess && sess.connectionModel && sess.connectionModel.LangID) ? sess.connectionModel.LangID : "el-GR";
+            $translate.use(lang.split("-")[0]);
+            if (kendo) {
+                kendo.culture(lang);
             }
         });
     }]);
@@ -219,8 +216,8 @@
         };
     }])
 
-    .directive('esLogin', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
-        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+    .directive('esLogin', ['$translate', '$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+        function($translate, $log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
             return {
                 restrict: 'AE',
                 scope: {
@@ -232,7 +229,27 @@
                 },
                 template: '<div ng-include src="\'src/partials/esLogin.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
+                    var onLangChanged = function() {
+                        if ($scope.esCredentials.LangID) {
+                            var lan = $scope.esCredentials.LangID.split("-")[0];
+                            $translate.use(lan);
+                            if (kendo) {
+                                kendo.culture($scope.esCredentials.LangID);
+                            }
+                        }
+                    };
+
                     $scope.esGlobals = esGlobals;
+                    $scope.esLangOptions = {
+                        dataSource: esGlobals.esSupportedLanguages,
+                        dataTextField: "title",
+                        dataValueField: "id",
+                        change: onLangChanged,
+                        valuePrimitive: true,
+                        autoBind: true,
+                        valueTemplate: "<img ng-src={{dataItem.icon}}></img><span>{{dataItem.title}}</span>",
+                        template: "<img ng-src={{dataItem.icon}}></img><span>{{dataItem.title}}</span>"
+                    };
                 }
             }
         }
@@ -1189,7 +1206,7 @@
                         esGroupId: "=?",
                         esFilterId: "=?",
                         esRunClick: "&",
-                        esRunTitle: "=?",
+                        esRunTitle: "@?",
                         esShowRun: "=?",
                         esLocalDataSource: "=?",
                         esDataSource: "=?"
@@ -1208,9 +1225,9 @@
 
                         if ($scope.esShowRun && !$scope.esRunTitle) {
                             $translate('ESUI.PQ.PARAMS_PANEL_RUN')
-                            .then(function(trans) {
-                                $scope.esRunTitle = trans;
-                            });
+                                .then(function(trans) {
+                                    $scope.esRunTitle = trans;
+                                });
                         }
 
                         if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef && !iAttrs.esParamsValues) {

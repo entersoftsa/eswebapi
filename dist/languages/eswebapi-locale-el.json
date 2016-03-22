@@ -14,6 +14,33 @@
             "DOWNLOAD": "Λήψη",
             "PARAMS_PANEL_RUN": "Εφαρμογή",
             "NO_DATA": "Δεν βρέθηκαν εγγραφές προς εμφάνιση"
+        },
+        "ESMAPPQ": {
+            "MAP": "Χάρτης",
+            "DATA": "Δεδομένα",
+            "BOTH": "Συνδυασμός",
+            "CLUSTER_STANDARD": "Τυπικό",
+            "CLUSTER_CLUSTER": "Συγκέντρωση",
+            "CLUSTER_SPIDER": "Αράχνη",
+            "RUN_MAP": "Ενημέρωση Χάρτη"
+            },
+            ,
+        "ESSURVEY": {
+            "START": "Έναρξη ερωτηματολογίου",
+            "NEXT": "Επόμενο",
+            "PREVIOUS": "Προηγούμενο",
+            "SAVE": "Αποθήκευση και συνέχεια αργότερα"
+            },
+        "LOGIN_FORM": {
+            "SUBSCRIPTION": "Στοιχεία Συνδρομής",
+            "SUBSCRIPTION_ID": "Κωδικός Συνδρομής",
+            "SUBSCRIPTION_PASSWORD": "Κλειδί Συνδρομής",
+            "SIGNIN": "Είσοδος",
+            "USER_ID": "Χρήστης",
+            "USER_PASSWORD": "Κλειδί",
+            "COMPANY_ID": "Εταιρεία",
+            "BRANCH_ID": "Υποκ/μα",
+            "LANG_ID": "Γλώσσα"
         }
     },
 
@@ -31,7 +58,7 @@
         "NOTNULL": "Μη κενό"
     },
     "ESDATE_RANGE": {
-        "SDR": "Ημ/νιακό Διάστρημα",
+        "SDR": "Ημ/νιακό Διάστημα",
         "SD": "Ημερομηνία",
         "ANY": "Οτιδήποτε",
         "TODAY": "Σήμερα",

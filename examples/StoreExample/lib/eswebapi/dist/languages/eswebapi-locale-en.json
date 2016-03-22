@@ -15,7 +15,34 @@
             "DOWNLOAD": "Download",
             "PARAMS_PANEL_RUN": "Apply",
             "NO_DATA": "No data to display"
+        },
+        "ESMAPPQ": {
+            "MAP": "Map",
+            "DATA": "Data",
+            "BOTH": "Both",
+            "CLUSTER_STANDARD": "Standard",
+            "CLUSTER_CLUSTER": "Cluster",
+            "CLUSTER_SPIDER": "Spider",
+            "RUN_MAP": "Run Map"
+            },
+        "ESSURVEY": {
+            "START": "Start Survey",
+            "NEXT": "Next",
+            "PREVIOUS": "Previous",
+            "SAVE": "Save and Continue later"
+            },
+        "LOGIN_FORM": {
+            "SUBSCRIPTION": "Subscription Data",
+            "SUBSCRIPTION_ID": "Subscription ID",
+            "SUBSCRIPTION_PASSWORD": "Subscription Password",
+            "SIGNIN": "Login",
+            "USER_ID": "User ID",
+            "USER_PASSWORD": "User Password",
+            "COMPANY_ID": "Company ID",
+            "BRANCH_ID": "BranchID ID",
+            "LANG_ID": "Language"
         }
+
     },
 
     "ESCOMPLEX": {

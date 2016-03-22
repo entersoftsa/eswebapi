@@ -21,11 +21,11 @@
 
             $translateProvider.useStaticFilesLoader({
                 files: [{
-                    prefix: 'languages/eswebapi-locale-',
+                    prefix: 'lib/eswebapi/dist/languages/eswebapi-locale-',
                     suffix: '.json'
                 }]
             });
-            $translateProvider.preferredLanguage('gr');
+            $translateProvider.preferredLanguage('el');
             $translateProvider.fallbackLanguage('en');
             $translateProvider.useSanitizeValueStrategy('escape');
 
@@ -81,7 +81,6 @@
 
             var subscriptionId = "";
             esWebApiServiceProvider.setSettings({
-                //host: "localhost/eswebapijti",
                 "host": "192.168.1.190/Entersoft.Web.Api",
                 //host: "10.211.55.7/esapi04032016",
                 subscriptionId: subscriptionId,

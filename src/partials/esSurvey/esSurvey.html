@@ -4,7 +4,7 @@
             <div ng-bind-html="esPsDef.Campaign.TaskNotes"></div>
         </div>
         <div>
-            <button class="btn btn-primary" ng-click="advanceStep()">Start</button>
+            <button class="btn btn-primary" ng-click="advanceStep()">{{'ESUI.ESSURVEY.START' | translate}}</button>
         </div>
     </div>
     <div ng-show="esSectionIdx >= 0">
@@ -22,9 +22,9 @@
                     </div>
                 </ng-form>
                 <div>
-                    <button class="btn btn-primary" ng-click="backStep()" ng-disabled="isIntroduction()">Previous</button>
-                    <button class="btn btn-primary" ng-click="advanceStep()" ng-hide="isLast()" ng-disabled="esqsection.$invalid">Next</button>
-                    <button class="btn btn-primary" ng-click="saveAndComplete()" ng-show="isLast()" ng-disabled="esqsection.$invalid">Save and Close</button>
+                    <button class="btn btn-primary" ng-click="backStep()" ng-disabled="isIntroduction()">{{'ESUI.ESSURVEY.PREVIOUS' | translate}}</button>
+                    <button class="btn btn-primary" ng-click="advanceStep()" ng-hide="isLast()" ng-disabled="esqsection.$invalid">{{'ESUI.ESSURVEY.NEXT' | translate}}</button>
+                    <button class="btn btn-primary" ng-click="saveAndComplete()" ng-show="isLast()" ng-disabled="esqsection.$invalid">{{'ESUI.ESSURVEY.SAVE' | translate}}</button>
                 </div>
             </div>
         </form>

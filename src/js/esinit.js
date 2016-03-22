@@ -618,6 +618,29 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
             });
 
+            var _esSupportedLanguages = [{
+                    id: "el-GR",
+                    title: "Ελληνικά (GR)",
+                    icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAE3SURBVHjapJOxSgNBEEDfspsoiSaSIgat5CwsRCT2goqNnb9h4S+olSiWFjZWthYKaiUJaH7A6kRitJEjigiJXsjlzrGJuSJBueQ1y7Izw5vdHSUiDIIC4sBIe42CB3waIL10VHil6VPYXAVg+fAaYhq+/7YrbqxkDZAMGi0WJsY6B/PZFCqmWZ/N9VQW4K32RRGSCrBEpNxX/0pNG4AgCNBadwWsHd/0TMwk4jy/1zp7a2brVBb3r+SXue0zye9dyl+4riuAZQBaBJTrjU7FR7eJ8QNyO+co1W2QGo5hWmG85TiORMVxnNAgf3CByYzjev7/NyeQGDL4H9XQwLbtyAa2bYcGJ7d3TFWbkZ7w6eEeAAN4u6UKlCr9fAVPAWlgEhiNmFwHXhSg24OkIxYIAE8NOs4/AwC7uO3xQbABsAAAAABJRU5ErkJggg=="
+                }, {
+                    id: "en-US",
+                    title: "English (US)",
+                    icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAFuSURBVHjapJM/SEJRGMV/Lx9lWGoENjhkOCVBBUYRUUNZ0aBE2VbQHOLaoBA4GrRGEIoIgdLQ1GASGlTjW2oI4U06GCTRH8yQ2yKKPIdeHbj8uMN37uHjHkkIwX8kAd1AX4N6VAPeZcDi8RyV/f4Z0ul7OtF/dtjRYeD63CYBjuPjW7VQKLKw4CKXe9QwGt3sHF+SRmTAkEzeEAyuEovn8XndxON5vF43sVgOn2+K1/XdtsGuwQG+H54ADDLAxsY0qdQdK8sTJBJ5trZm27hzFdO8Xq/XQZaRAU5PswQCa5ycZNnentfwZXyxPbrVwmf5uXl3HhxciOHhfREOXwqrNahhJ1UqFQE4AZx2+56IRDLCbA6IUOhSw3Kvo+0828bEw5CrZaCqqtArVVUF4JQBSqNzmIwmRPXrd7/P2EOp+tHagaIouhMoitJMUCtPLpH5WxVqEmAB7EC/zuE3oCgBhkaRDDoN6kBN+m+dfwYAI5QcdaFOn+AAAAAASUVORK5CYII="
+                },
+
+                {
+                    id: "ro-RO",
+                    title: "Românesc (RO)",
+                    icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAFTSURBVHjapJM9TgMxEEafs5sgSEgEBUJwBAQNJ+AaVNyJI0BLRc8NEIgaQVIAEgKym0Ra/+x6KIhiO9BEWBpZn2w/fx7PKBHhP0MBHaA3n1cZFpjlwODk7PJ9efXm/CLRb6e9X4S966udHOg2jef4YDddzY4SuXa4HpkWzP0DQDcHMusaJjPDZ1GFE34IyOKQG3UDe3sLcQ4gywGMdYwnmvFEB4AUiQNf1EG0WtTGAJADVJXho6gop4bFr0ixsAvgyyYYAlylY0DF46ihnJroyqfEgXseBAP9PlWeBYDWGslzfFITPk1qE7S4Gu1sBDCGjA28jwASAwR80Kp2mJ8k0gIwusJ7Qc1frRbfFYUKIV7QNkqitZaOFzrtLKrRpcLstIMf8RgbnmBFPNOvYbL/9q5M9Gvp/yxnBQyAfWBzxV6YAi8KyOaNlK0IaACr/tvO3wMAJOGiBWzsFlIAAAAASUVORK5CYII="
+                },
+
+                {
+                    id: "bg-BG",
+                    title: "Bulgară (BG)",
+                    icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAADmSURBVHjapJM9TsQwEIW/SeIsIUCklaBBXAWuxFnoqDkOHRegQEgIpAUWlMTD2kNBoixdfl4zcvG+8dhvxMxYIgFy4KirU6TAdwZUZvY6q7vIWQKUCyYoEyBdAEgTgBDCZGfvyQCu7q45rdZsfY1hey8s/869qlXJ2+dmADSt59Fe2Go9qvtJfkjqbR9Qk7gV0eIowC7u0NYPgNubey5cTmyaUYCkKHj6US57QKuKZQ5ERgHMjFZ1uIH3Hg4KxLlxXxDjn6cDaDDj4eN9Tg5UgAo4B44nmr+AZ+mSmM9IZABUlq7z7wChM1nCssShPAAAAABJRU5ErkJggg=="
+                }
+            ];
+
             function esConvertGIDtoId(gid) {
                 if (!gid) {
                     return 'gid';
@@ -963,10 +986,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : zero;
                 switch (this.paramValue.oper) {
                     case "RANGE":
-                    {
-                        var trans = $translate.instant(['ESCOMPLEX.FROM', 'ESCOMPLEX.TO']);
-                        return  trans['ESCOMPLEX.FROM'] + froms + trans['ESCOMPLEX.TO'] + tos;
-                    }
+                        {
+                            var trans = $translate.instant(['ESCOMPLEX.FROM', 'ESCOMPLEX.TO']);
+                            return trans['ESCOMPLEX.FROM'] + froms + trans['ESCOMPLEX.TO'] + tos;
+                        }
                     case "NULL":
                         return $translate.instant('ESCOMPLEX.NULL');
 
@@ -1006,10 +1029,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : '';
                 switch (this.paramValue.oper) {
                     case "RANGE":
-                    {
-                        var trans = $translate.instant(['ESCOMPLEX.FROM', 'ESCOMPLEX.TO']);
-                        return  trans['ESCOMPLEX.FROM'] + froms + trans['ESCOMPLEX.TO'] + tos;
-                    }
+                        {
+                            var trans = $translate.instant(['ESCOMPLEX.FROM', 'ESCOMPLEX.TO']);
+                            return trans['ESCOMPLEX.FROM'] + froms + trans['ESCOMPLEX.TO'] + tos;
+                        }
                     case "NULL":
                         return $translate.instant('ESCOMPLEX.NULL');
 
@@ -1524,6 +1547,8 @@ var esAPIversion = {
                 getVersion: function() {
                     return esAngularAPIVer;
                 },
+
+                esSupportedLanguages: _esSupportedLanguages,
 
                 /**
                  * @ngdoc function

@@ -5,24 +5,21 @@
                     es-run-click="executePQ()"
                     es-show-run="'true'"
                     es-local-data-source="'true'"
-                    es-run-title="'Run Map'">
+                    es-run-title="{{'ESUI.ESMAPPQ.RUN_MAP' | translate}}">
         </es-params-panel>
     </div>
 
     <div class="btn-group col-xs-6">
-        <label class="btn btn-primary" ng-model="esToggleData" uib-btn-radio="'Map'">Map</label>
-        <label class="btn btn-primary" ng-model="esToggleData" uib-btn-radio="'Data'">Data</label>
-        <label class="btn btn-primary" ng-model="esToggleData" uib-btn-radio="'Both'">Both</label>
+        <label class="btn btn-primary" ng-model="esToggleData" uib-btn-radio="'Map'">{{'ESUI.ESMAPPQ.MAP' | translate}}</label>
+        <label class="btn btn-primary" ng-model="esToggleData" uib-btn-radio="'Data'">{{'ESUI.ESMAPPQ.DATA' | translate}}</label>
+        <label class="btn btn-primary" ng-model="esToggleData" uib-btn-radio="'Both'">{{'ESUI.ESMAPPQ.BOTH' | translate}}</label>
     </div>
 
     <div class="btn-group col-xs-6">
-        <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'standard'">Standard</label>
-        <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'cluster'">Cluster</label>
-        <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'spider'">Spider</label>
+        <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'standard'">{{'ESUI.ESMAPPQ.CLUSTER_STANDARD' | translate}}</label>
+        <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'cluster'">{{'ESUI.ESMAPPQ.CLUSTER_CLUSTER' | translate}}</label>
+        <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'spider'">{{'ESUI.ESMAPPQ.CLUSTER_SPIDER' | translate}}</label>
     </div>
-
-
-    
         
     <ui-gmap-google-map ng-hide="esToggleData == 'Data'" ng-class="{ 'col-xs-6': esToggleData == 'Both', 'col-xs-12' : esToggleData == 'Map'}"
         center="esMapOptions.center"
