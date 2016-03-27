@@ -591,7 +591,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     dType: 24,
                     title: trans["ESDATE_RANGE.PY"]
                 }, {
-                    dValue: "ESDateRange(FiscalPeriod, 0)",
+                    dValue: "ESDateRange(FiscalPeriod)",
                     dType: 25,
                     title: trans["ESDATE_RANGE.CFP"]
                 }, {

@@ -837,7 +837,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
             netIsBinaryResult: false,
             netMethod: "CountSKU"
         };
-        $scope.netParam = JSON.stringify({ fItemGID: "3FDF056B-7668-4094-94A4-01DAC6AED2BF", BaseQty: 23, Comment: "Hi 1"});
+        $scope.netParam = JSON.stringify({ fItemGID: "3FDF056B-7668-4094-94A4-01DAC6AED2BF", BaseQty: 23, Comment: "Hi 1" });
 
         $scope.execEbsService = function() {
             esWebApi.ebsService($scope.serviceObj, $scope.netParam)
@@ -854,6 +854,22 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.pqs = [{
+
+                groupId: "ESMIS",
+                filterId: "ESMIS_SalesItemsPerCustomer",
+                gridOptions: {},
+                pVals: new esGlobals.ESParamValues()
+            },
+            {
+
+                groupId: "ESMIS",
+                filterId: "ES_MIS360_SalesPerBU",
+                gridOptions: {},
+                pVals: new esGlobals.ESParamValues()
+            }
+            
+
+            /*, {
                 groupId: "esmmstockitem",
                 filterId: "pricecheckmobile",
                 gridOptions: {},
@@ -901,7 +917,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 gridOptions: {},
                 pVals: new esGlobals.ESParamValues()
             },
-
+*/
 
         ];
     }
