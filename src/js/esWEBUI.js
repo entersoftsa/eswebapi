@@ -1728,6 +1728,7 @@
                 var Year = "Year";
                 var Quarter = "Quarter";
                 var Day = "Day";
+                var FiscalPeriod = "FiscalPeriod";
 
                 function isActualDate(v) {
                     return v && v != "1753/01/01" && v != "9999/01/01";
@@ -1849,7 +1850,7 @@
                 if (ps.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
                     if (!dx || dx.length == 0) {
                         return new esGlobals.ESDateParamVal(esParamInfo.id, esParamInfo.controlType == 6 ? null : {
-                            dRange: "ESDateRange(FiscalPeriod, 0)",
+                            dRange: "ESDateRange(FiscalPeriod)",
                             fromD: null,
                             toD: null
                         });

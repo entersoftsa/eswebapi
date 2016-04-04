@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*! Entersoft Application Server WEB API - v1.8.5 - 2016-03-23
+=======
+/*! Entersoft Application Server WEB API - v1.8.5 - 2016-03-27
+>>>>>>> 8f04d22f6b8185951bdc17fe6917d6b6852c9b7f
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6963,7 +6967,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     dType: 24,
                     title: trans["ESDATE_RANGE.PY"]
                 }, {
-                    dValue: "ESDateRange(FiscalPeriod, 0)",
+                    dValue: "ESDateRange(FiscalPeriod)",
                     dType: 25,
                     title: trans["ESDATE_RANGE.CFP"]
                 }, {
@@ -10214,6 +10218,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 var Year = "Year";
                 var Quarter = "Quarter";
                 var Day = "Day";
+                var FiscalPeriod = "FiscalPeriod";
 
                 function isActualDate(v) {
                     return v && v != "1753/01/01" && v != "9999/01/01";
@@ -10335,7 +10340,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 if (ps.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
                     if (!dx || dx.length == 0) {
                         return new esGlobals.ESDateParamVal(esParamInfo.id, esParamInfo.controlType == 6 ? null : {
-                            dRange: "ESDateRange(FiscalPeriod, 0)",
+                            dRange: "ESDateRange(FiscalPeriod)",
                             fromD: null,
                             toD: null
                         });
