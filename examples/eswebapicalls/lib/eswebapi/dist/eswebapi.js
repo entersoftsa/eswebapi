@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.8.5 - 2016-03-22
+/*! Entersoft Application Server WEB API - v1.8.5 - 2016-03-23
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8501,12 +8501,26 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
         esMessaging.subscribe("AUTH_CHANGED", function(sess, apitoken) {
             var lang = (sess && sess.connectionModel && sess.connectionModel.LangID) ? sess.connectionModel.LangID : "el-GR";
-            $translate.use(lang.split("-")[0]);
-            if (kendo) {
-                kendo.culture(lang);
-            }
+            doChangeLanguage($translate, lang);
         });
     }]);
+
+    function doChangeLanguage($translate, lang) {
+        lang = lang || 'el-GR';
+
+        $translate.use(lang.split("-")[0]);
+        if (kendo) {
+            kendo.culture(lang);
+            var kendoMessagesUrl = window.ESDBG ? "bower_components/kendo-ui/js/messages/kendo.messages." : "http://cdn.kendostatic.com/" + kendo.version + "/js/messages/kendo.messages.";
+            if (lang == "el-GR") {
+                lang = "en-US";
+            }
+            $.getScript(kendoMessagesUrl + lang + ".min.js",
+                function() {
+                    
+                });
+        }
+    }
 
     function ESMasterDetailGridRelation(relationID, detailDataSource, detailParams, detailGridParamCode) {
         this.relationID = relationID;
@@ -8717,11 +8731,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 link: function($scope, iElement, iAttrs) {
                     var onLangChanged = function() {
                         if ($scope.esCredentials.LangID) {
-                            var lan = $scope.esCredentials.LangID.split("-")[0];
-                            $translate.use(lan);
-                            if (kendo) {
-                                kendo.culture($scope.esCredentials.LangID);
-                            }
+                            var lang = $scope.esCredentials.LangID;
+                            doChangeLanguage($translate, lang);
                         }
                     };
 
@@ -9996,7 +10007,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     navigatable: true,
                     height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
-                        template: "<h3><span class='label label-info'>{{'ESUI.PQ.NO_DATA' | translate}}</span></h3>"
+                        template: "<h3><span class='label label-info'>{{kendo.ui.Pager.prototype.options.messages.empty}}</span></h3>"
                     },
 
 
@@ -10040,14 +10051,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     pageSize: 20
                 };
 
-                var norecs = $translate.instant('ESUI.PQ.NO_DATA');
                 var grdopt = {
                     pageable: {
                         refresh: true,
-                        pageSizes: [20, 50, 100, "All"],
-                        messages: {
-                            empty: norecs
-                        }
+                        pageSizes: [20, 50, 100, kendo.ui.Pager.prototype.options.messages.allPages]
                     },
                     autoBind: false,
                     sortable: !dsOptions.serverPaging,
@@ -10060,7 +10067,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     navigatable: true,
                     height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
-                        template: "<h3><span class='label label-info'>" + norecs + "</span></h3>"
+                        template: "<h3><span class='label label-info'>" + kendo.ui.Pager.prototype.options.messages.empty + "</span></h3>"
                     },
 
 

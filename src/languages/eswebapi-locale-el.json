@@ -12,9 +12,12 @@
         "PQ": {
             "TOOLBAR_RUN": "Αποδοχή",
             "DOWNLOAD": "Λήψη",
-            "PARAMS_PANEL_RUN": "Εφαρμογή",
-            "NO_DATA": "Δεν βρέθηκαν εγγραφές προς εμφάνιση"
+            "PARAMS_PANEL_RUN": "Εφαρμογή"
         },
+        "ESCHARTPQ" : {
+            "CHART": "Γράφημα",
+            "DATA": "Δεδομένα"
+            },
         "ESMAPPQ": {
             "MAP": "Χάρτης",
             "DATA": "Δεδομένα",

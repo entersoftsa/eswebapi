@@ -13,9 +13,12 @@
         "PQ" : {
             "TOOLBAR_RUN": "Run",
             "DOWNLOAD": "Download",
-            "PARAMS_PANEL_RUN": "Apply",
-            "NO_DATA": "No data to display"
+            "PARAMS_PANEL_RUN": "Apply"
         },
+        "ESCHARTPQ" : {
+            "CHART": "Chart",
+            "DATA": "Data"
+            },
         "ESMAPPQ": {
             "MAP": "Map",
             "DATA": "Data",
