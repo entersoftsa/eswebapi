@@ -87,10 +87,10 @@
         "CY": "Εφέτος",
         "PY": "Πέρυσι",
         "CFP": "Τρέχουσα Οικ. Περίοδος",
-        "SSFYUTD": "Since start of FY up today",
-        "SFYTEFP": "Since start of FY to end of FP",
-        "PFP": "Last Fiscal Period",
-        "SLFPUTD": "Since start of last FP up today",
-        "SFYULFP": "Since start of FY up to last FP"
+        "SSFYUTD": "Αρχή Χρήσης έως Σήμερα",
+        "SFYTEFP": "Αρχή Χρήσης έως Τέλος Τρέχουσας Περιόδου",
+        "PFP": "Προηγούμνη Οικ. Περίοδος",
+        "SLFPUTD": "Αρχή προηγούνης Οικ. Περιόδου έως Σήμερα",
+        "SFYULFP": "Αρχή Χρήσης ώς προηγούμενη Οικ. Περίοδο"
     }
 }

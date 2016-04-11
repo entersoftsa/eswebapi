@@ -31,7 +31,7 @@
             }
             $.getScript(kendoMessagesUrl + lang + ".min.js",
                 function() {
-                    
+
                 });
         }
     }
@@ -1729,6 +1729,8 @@
                 var Quarter = "Quarter";
                 var Day = "Day";
                 var FiscalPeriod = "FiscalPeriod";
+                var FiscalYear = "FiscalYear";
+                var Bimonthly = "Bimonthly";
 
                 function isActualDate(v) {
                     return v && v != "1753/01/01" && v != "9999/01/01";
@@ -1760,9 +1762,75 @@
                     return esdate;
                 }
 
-                // all toher cases of esdaterange
-                esdate.paramValue.dRange = expr;
+                var drOptions = esGlobals.getesDateRangeOptions();
+                var elem = _.find(drOptions, function(xd) {
+                    return xd.dValue == expr;
+                });
+
+                if (!angular.isUndefined(elem)) {
+                    esdate.paramValue.dRange = expr;
+                    return esdate;
+                }
+
+                var fD = calcActualDate(dVal.fromType, dVal.fromD, true);
+                var tD = calcActualDate(dVal.toType, dVal.toD, false);
+
+                esdate.paramValue.dRange = "0";
+                esdate.paramValue.fromD = fD;
+                esdate.paramValue.toD = tD;
                 return esdate;
+            }
+
+            function calcActualDate(dateType, valOffset, bFrom) {
+                switch (dateType) {
+                    case "Year":
+                        {
+                            if (bFrom) {
+                                if (valOffset > 0) {
+                                    valOffset = valOffset - 1;
+                                }
+                                return moment().add(valOffset, 'years').startOf('year').toDate();
+                            } else {
+                                return moment().add(valOffset, 'years').endOf('year').toDate();
+                            }
+                        }
+                    case "Month":
+                        {
+                            if (bFrom) {
+                                return moment().startOf('month').add(valOffset, 'months').toDate();
+                            } else {
+                                return moment().endOf('month').add(valOffset, 'months').toDate();
+                            }
+                        }
+                    case "Week":
+                        {
+                            if (bFrom) {
+                                return moment().startOf('week').add(1, 'days').add(valOffset, 'weeks').toDate();
+                            } else {
+                                return moment().endOf('week').add(1, 'days').add(valOffset, 'weeks').toDate();
+                            }
+                        }
+                    case "Quarter":
+                        {
+                            if (bFrom) {
+                                if (valOffset > 0) {
+                                    valOffset = valOffset - 1;
+                                }
+                                return moment().startOf('quarter').add(valOffset, 'quarters').toDate();
+                            } else {
+                                return moment().endOf('quarter').add(valOffset, 'quarters').endOf('quarter').toDate();
+                            }
+                        }
+                    default:
+                        {
+                            alert("ESDateRange option NOT Supported. [" + dateType + ", " + valOffset + ", " + bFrom + "]. Using Current Month instead");
+                            if (bFrom) {
+                                return moment().startOf('month').toDate();
+                            } else {
+                                return moment().endOf('month').toDate();
+                            }
+                        }
+                }
             }
 
             function esEval(pInfo, expr) {

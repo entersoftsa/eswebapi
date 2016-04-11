@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-/*! Entersoft Application Server WEB API - v1.8.5 - 2016-03-23
-=======
-/*! Entersoft Application Server WEB API - v1.8.5 - 2016-03-27
->>>>>>> 8f04d22f6b8185951bdc17fe6917d6b6852c9b7f
+/*! Entersoft Application Server WEB API - v1.8.5 - 2016-04-08
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8521,7 +8517,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
             $.getScript(kendoMessagesUrl + lang + ".min.js",
                 function() {
-                    
+
                 });
         }
     }
@@ -10219,6 +10215,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 var Quarter = "Quarter";
                 var Day = "Day";
                 var FiscalPeriod = "FiscalPeriod";
+                var FiscalYear = "FiscalYear";
+                var Bimonthly = "Bimonthly";
 
                 function isActualDate(v) {
                     return v && v != "1753/01/01" && v != "9999/01/01";
@@ -10250,9 +10248,75 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return esdate;
                 }
 
-                // all toher cases of esdaterange
-                esdate.paramValue.dRange = expr;
+                var drOptions = esGlobals.getesDateRangeOptions();
+                var elem = _.find(drOptions, function(xd) {
+                    return xd.dValue == expr;
+                });
+
+                if (!angular.isUndefined(elem)) {
+                    esdate.paramValue.dRange = expr;
+                    return esdate;
+                }
+
+                var fD = calcActualDate(dVal.fromType, dVal.fromD, true);
+                var tD = calcActualDate(dVal.toType, dVal.toD, false);
+
+                esdate.paramValue.dRange = "0";
+                esdate.paramValue.fromD = fD;
+                esdate.paramValue.toD = tD;
                 return esdate;
+            }
+
+            function calcActualDate(dateType, valOffset, bFrom) {
+                switch (dateType) {
+                    case "Year":
+                        {
+                            if (bFrom) {
+                                if (valOffset > 0) {
+                                    valOffset = valOffset - 1;
+                                }
+                                return moment().add(valOffset, 'years').startOf('year').toDate();
+                            } else {
+                                return moment().add(valOffset, 'years').endOf('year').toDate();
+                            }
+                        }
+                    case "Month":
+                        {
+                            if (bFrom) {
+                                return moment().startOf('month').add(valOffset, 'months').toDate();
+                            } else {
+                                return moment().endOf('month').add(valOffset, 'months').toDate();
+                            }
+                        }
+                    case "Week":
+                        {
+                            if (bFrom) {
+                                return moment().startOf('week').add(1, 'days').add(valOffset, 'weeks').toDate();
+                            } else {
+                                return moment().endOf('week').add(1, 'days').add(valOffset, 'weeks').toDate();
+                            }
+                        }
+                    case "Quarter":
+                        {
+                            if (bFrom) {
+                                if (valOffset > 0) {
+                                    valOffset = valOffset - 1;
+                                }
+                                return moment().startOf('quarter').add(valOffset, 'quarters').toDate();
+                            } else {
+                                return moment().endOf('quarter').add(valOffset, 'quarters').endOf('quarter').toDate();
+                            }
+                        }
+                    default:
+                        {
+                            alert("ESDateRange option NOT Supported. [" + dateType + ", " + valOffset + ", " + bFrom + "]. Using Current Month instead");
+                            if (bFrom) {
+                                return moment().startOf('month').toDate();
+                            } else {
+                                return moment().endOf('month').toDate();
+                            }
+                        }
+                }
             }
 
             function esEval(pInfo, expr) {
