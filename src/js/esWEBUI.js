@@ -309,7 +309,7 @@
                             return [];
                         }
 
-                        return _.sortBy(_.where($scope.esPsDef.Choices, {
+                        return _.sortBy(_.filter($scope.esPsDef.Choices, {
                             ChoiceCode: $scope.esQuestion.PArg
                         }), "OrderPriority");
                     }
@@ -524,7 +524,7 @@
                             return [];
                         }
 
-                        return _.sortBy(_.where($scope.esPsDef.Lines, {
+                        return _.sortBy(_.filter($scope.esPsDef.Lines, {
                             Category_Code: sect
                         }), "SeqNum");
                     }
@@ -1624,7 +1624,7 @@
                         GroupID: esGroupId,
                         FilterID: esFilterId,
                         Params: executeParams,
-                        SchemaColumns: _.where(grdopt.columns, {
+                        SchemaColumns: _.filter(grdopt.columns, {
                             dataType: "datetime"
                         }),
                     }
@@ -2007,7 +2007,7 @@
                     }
 
                     var f = this.definitions;
-                    return _.where(f, {
+                    return _.filter(f, {
                         visible: true
                     });
                 }
@@ -2015,7 +2015,7 @@
 
             ESParamsDefinitions.prototype.visibleDefinitions = function() {
                 var f = this.definitions;
-                return f ? _.where(f, {
+                return f ? _.filter(f, {
                     visible: true
                 }) : [];
             }
@@ -2025,7 +2025,7 @@
                     return '';
                 }
 
-                var s = _.reduce(_.sortBy(_.where(this.definitions, {
+                var s = _.reduce(_.sortBy(_.filter(this.definitions, {
                     visible: true
                 }), "aa"), function(memo, p) {
                     return memo + "<h3>" + p.caption + ": </h3>" + vals[p.id].strVal() + "<br/>";
@@ -2073,7 +2073,7 @@
 
                 var gxDef = gridexInfo.DefaultValue;
                 if (gxDef && angular.isArray(gxDef)) {
-                    var dx = _.where(gxDef, {
+                    var dx = _.filter(gxDef, {
                         fParamID: espInfo.id
                     });
 
@@ -2157,7 +2157,7 @@
                 // put column sets first
                 if (esGridInfo.columnSets && esGridInfo.columnSets.length > 0) {
                     _.each(esGridInfo.columnSets, function(x) {
-                        x.columns = _.where(z3, {
+                        x.columns = _.filter(z3, {
                             columnSet: x.aa
                         });
                         z3 = _.difference(z3, x.columns);
