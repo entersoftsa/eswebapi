@@ -2,6 +2,12 @@
 
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
+**Version 1.9.0
+- Restructured examples
+- Hybrid sources for smarphone and tablet hybrid applications
+- Move from underscore to lodash
+- Significant changes in the esWebApi Services. Check the on-line documentation
+
 **Version 1.8.0
 - Full support of Entersoft Claims, as specified in [openSession](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi#methods_opensession)
 - New directive element <es-login> for Entersoft Login Form 
