@@ -9758,8 +9758,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         "class": "es-table-header-cell",
                     },
                     template: undefined,
+                    footerTemplate: undefined,
+                    aggregate: undefined,
 
                 }
+
+                tCol.aggregate = esCol.aggregate;
 
                 switch (esCol.dataType) {
                     case "int32":
@@ -9805,6 +9809,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             }
                             break;
                         }
+                }
+
+                if (tCol.aggregate) {
+                    var fmtStr = esCol.formatString ? "kendo.toString(" + tCol.aggregate + ",'" + esCol.formatString.replace("#", "\\\\#") + "')" : tCol.aggregate;
+                    tCol.footerTemplate = "<div style='text-align: right'>#:" + fmtStr + "#</div>";
                 }
                 return tCol;
             }
@@ -9874,11 +9883,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
 
-            function prepareWebScroller(dsType, espqParams, esOptions) {
+            function prepareWebScroller(dsType, espqParams, esOptions, aggregates) {
                 var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
 
 
                 var xParam = {
+                    aggregate: aggregates,
+
                     transport: {
                         requestEnd: function(e) {
                             var response = e.response;
@@ -10016,6 +10027,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     serverGrouping: false,
                     serverSorting: false,
                     serverFiltering: false,
+                    serverAggregates: false,
                     serverPaging: (angular.isUndefined(esSrvPaging) || esSrvPaging == null) ? true : !!esSrvPaging,
                     pageSize: 20
                 };
@@ -10074,6 +10086,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
                 grdopt.columnMenu = true;
 
+                var aggs = _.flatMap(grdopt.columns, function(c) {
+                    return c.columns ? _.filter(c.columns, function(k) {
+                        return !!k.aggregate; }) : (!!c.aggregate ? [c] : []); });
+
                 grdopt.dataSource = prepareWebScroller(null, function() {
                     return {
                         GroupID: esGroupId,
@@ -10083,7 +10099,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             dataType: "datetime"
                         }),
                     }
-                }, dsOptions);
+                }, dsOptions, aggs);
 
                 grdopt.change = handleChangeGridRow;
                 grdopt.dataBound = handleChangeGridRow;
@@ -10117,6 +10133,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     dataType: undefined,
                     editType: undefined,
                     columnSet: undefined,
+                    aggregate: undefined,
                 };
 
                 esCol.AA = parseInt(jCol.AA);
@@ -10128,6 +10145,21 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 esCol.editType = jCol.EditType;
                 esCol.width = parseInt(jCol.Width);
 
+                switch(jCol.AggregateFunction) {
+                    case "1":
+                        esCol.aggregate = "count";
+                        break;
+                    case "2":
+                        esCol.aggregate = "sum";
+                        break;
+                    case "4":
+                        esCol.aggregate = "min";
+                        break;
+                    case "5":
+                        esCol.aggregate = "max"; 
+                        break;
+                }
+                
                 esCol.formatString = jCol.FormatString;
                 esCol.visible = (jCol.Visible == "true");
 

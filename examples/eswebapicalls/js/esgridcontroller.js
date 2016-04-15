@@ -852,7 +852,9 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
-        $scope.pqs = [{
+        $scope.pqs = [
+/*
+            {
 
                 groupId: "ESMIS",
                 filterId: "ESMIS_SalesItemsPerCustomer",
@@ -866,9 +868,9 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 gridOptions: {},
                 pVals: new esGlobals.ESParamValues()
             }
-            
+            */
 
-            /*, {
+            {
                 groupId: "esmmstockitem",
                 filterId: "pricecheckmobile",
                 gridOptions: {},
@@ -880,7 +882,10 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 filterId: "StockItemPhotoList",
                 gridOptions: {},
                 pVals: new esGlobals.ESParamValues()
-            }, {
+            }, 
+
+
+            {
                 groupId: "ESGOPerson",
                 filterId: "CRM_Personlist",
                 gridOptions: {},
@@ -916,7 +921,6 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 gridOptions: {},
                 pVals: new esGlobals.ESParamValues()
             },
-*/
 
         ];
     }
