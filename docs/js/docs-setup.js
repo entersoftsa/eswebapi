@@ -30,7 +30,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "es.Services.Web",
       "shortDescription": "esCache is a service that provides chachinf functionality to the Entersoft AngularJS API library that can be also used from the application developer",
-      "keywords": "_key_ _undefined_ angularjs api application arguments boolean cache caching called chachinf change clear clears client compatibility current deleted developer entersoft entries entry es escache exist exists exposed function functionality functions future getitem hits holding holds identified implementation javascript js jscache key libraries library misses number object offered options pair provider publicly qualifies relies remove removeitem removewhere removing replaced resolution return returned returns service services set setitem signature single size specific statistics stats stored string supplied takes time true type typically unique val version visit web"
+      "keywords": "_key_ _undefined_ angularjs api application cache caching chachinf change clear clears client compatibility current developer entersoft entries entry es escache exist exists exposed function functionality functions future getitem hits holding identified implementation javascript js jscache key libraries library misses object offered options pair provider publicly relies remove removeitem removing replaced returned returns service services set setitem signature single specific statistics stats stored string time type typically unique val version visit web"
     },
     {
       "section": "api",
@@ -39,7 +39,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "es.Services.Web",
       "shortDescription": "esCacheProvider exposes a set of functions that can be used to configure the esCache servive prior to its use. Configuration usually takes place",
-      "keywords": "_app angularjs api cache config_ configuration configure configured current engine es escache escacheprovider exposes file function functions getmaxsize getstoragesettings hold items js_ level limitation maximum maxsize number object parameter place prior provider resolve returns service services servive set setmaxsize sets setstoragesettings size spa storage takes web"
+      "keywords": "_app angularjs api cache config_ configuration configure configured current engine es escache escacheprovider exposes file function functions getcapacity getsettings hold items js_ level limitation max_value maximum maxsize number object parameter place prior provider resolve returns service services servive set setcapacity sets setstoragesettings size spa storage takes web"
     },
     {
       "section": "api",

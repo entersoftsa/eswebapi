@@ -26,7 +26,6 @@
     "stacktrace-js": "^1.0.4",
     "log4javascript": "^1.4.9",
     "lodash": "^4.10",
-    "jscache": "*",
     "moment": "^2.12.0",
     "ng-file-upload": "^12.0.1",
     "angular-google-maps": "^2.3.2",

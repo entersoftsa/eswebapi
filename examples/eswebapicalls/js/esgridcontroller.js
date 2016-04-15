@@ -247,7 +247,6 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
         $scope.esWebAPI = esWebApi;
 
         $scope.cacheInfo = function() {
-            $scope.cacheSize = esCache.size();
             $scope.cacheStats = esCache.stats();
         };
 

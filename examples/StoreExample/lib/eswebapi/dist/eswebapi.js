@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.9.0 - 2016-04-12
+/*! Entersoft Application Server WEB API - v1.9.0 - 2016-04-15
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6419,53 +6419,54 @@ var resp = {
      */
     esWebFramework.provider('esCache', function() {
         var cache = null;
-        var settings = {};
-        settings.maxSize = -1;
-        settings.storage = null;
+        var settings = {
+            capacity: Number.MAX_VALUE,
+            storageMode: 'memory'
+        };
 
         return {
             /**
              * @ngdoc function
-             * @name es.Services.Web.esCacheProvider#setMaxSize
+             * @name es.Services.Web.esCacheProvider#setCapacity
              * @methodOf es.Services.Web.esCacheProvider
              * @module es.Services.Web
              * @kind function
              * @description This function is used to set the maximum number of items that the cache can hold.
-             * @param {number} size the maximum number of items that the cache can hold. If parameter does not resolve to a number it is set to -1 i.e. 
+             * @param {number} size the maximum number of items that the cache can hold. If parameter does not resolve to a number it is set to Number.MAX_VALUE i.e. 
              * **no limitation** in the number of cache items.
              **/
-            setMaxSize: function(size) {
+            setCapacity: function(size) {
                 if (angular.isNumber(size)) {
-                    settings.maxSize = size;
+                    settings.capacity = size;
                 } else {
-                    settings.maxSize = -1;
+                    settings.capacity = Number.MAX_VALUE;
                 }
             },
 
             /**
              * @ngdoc function
-             * @name es.Services.Web.esCacheProvider#getMaxSize
+             * @name es.Services.Web.esCacheProvider#getCapacity
              * @methodOf es.Services.Web.esCacheProvider
              * @module es.Services.Web
              * @kind function
              * @description This function returns the current maxsize for the cache.
              * @return {number} the maxSize that cache engine has been set to.
              **/
-            getMaxSize: function() {
-                return settings.maxSize;
+            getCapacity: function() {
+                return settings.capacity;
             },
 
             /**
              * @ngdoc function
-             * @name es.Services.Web.esCacheProvider#getStorageSettings
+             * @name es.Services.Web.esCacheProvider#getSettings
              * @methodOf es.Services.Web.esCacheProvider
              * @module es.Services.Web
              * @kind function
              * @description This function returns the storage object that cache engine has been configured to use, if any.
              * @return {Object} The storage object that cache engine has been configured to use, if any.
              **/
-            getStorageSettings: function() {
-                return settings.storage;
+            getSettings: function() {
+                return settings;
             },
 
             /**
@@ -6479,17 +6480,13 @@ var resp = {
              **/
             setStorageSettings: function(storage) {
                 if (settings) {
-                    settings.storage = storage;
+                    settings.storageMode = storage || 'memory';
                 }
             },
 
-            $get: function() {
-                if (typeof(Cache) === 'undefined') {
-                    throw "You must include jscache.js";
-                }
+            $get: ['$cacheFactory', function($cacheFactory) {
 
-                window.Cache = Cache;
-                cache = new Cache(settings.maxSize, false, settings.storage);
+                cache = $cacheFactory('esCache', settings);
 
                 return {
                     /**
@@ -6503,7 +6500,7 @@ var resp = {
                      * @return {Object} If the key exists in the cache, the value of that key is returned, otherwise _undefined_
                      **/
                     getItem: function(key) {
-                        return cache.getItem(key);
+                        return cache.get(key);
                     },
 
                     /**
@@ -6519,7 +6516,7 @@ var resp = {
                      * @param {Object=} options Caching options. For more information please visit [monsur jscache](https://github.com/monsur/jscache).
                      **/
                     setItem: function(key, val, options) {
-                        cache.setItem(key, val, options);
+                        cache.put(key, val);
                     },
 
                     /**
@@ -6532,37 +6529,9 @@ var resp = {
                      * @param {Object|string} key Typically _key_ is of type string but it can be an object.
                      **/
                     removeItem: function(key) {
-                        cache.removeItem(key);
+                        cache.remove(key);
                     },
 
-                    /**
-                     * @ngdoc function
-                     * @name es.Services.Web.esCache#removeWhere
-                     * @methodOf es.Services.Web.esCache
-                     * @module es.Services.Web
-                     * @kind function
-                     * @description This function is used to remove entries from the cache according to the resolution of the f supplied function
-                     * @param {function(key, val)} f a function which takes two arguments (key, val) and it should return a boolean value. This function 
-                     * will called against all cache entries and those that this function qualifies to true will be deleted from the cache.
-                     **/
-                    removeWhere: function(f) {
-                        cache.removeWhere(function(k, v) {
-                            return f(k, v);
-                        });
-                    },
-
-                    /**
-                     * @ngdoc function
-                     * @name es.Services.Web.esCache#size
-                     * @methodOf es.Services.Web.esCache
-                     * @module es.Services.Web
-                     * @kind function
-                     * @description This function returns the current number of entries that the cache holds.
-                     * @return {number} The current number of entries that the cache holds.
-                     **/
-                    size: function() {
-                        return cache.size();
-                    },
 
                     /**
                      * @ngdoc function
@@ -6573,7 +6542,7 @@ var resp = {
                      * @description This function clears the cache, by removing **ALL** its entries.
                      **/
                     clear: function() {
-                        cache.clear();
+                        cache.removeAll();
                     },
 
                     /**
@@ -6593,10 +6562,10 @@ var resp = {
 ```
                      **/
                     stats: function() {
-                        return cache.getStats();
+                        return cache.info();
                     }
                 }
-            }
+            }]
 
         }
 
