@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.9.0 - 2016-04-15
+/*! Entersoft Application Server WEB API - v1.9.0 - 2016-04-16
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9974,7 +9974,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 var grdopt = {
                     pageable: {
                         refresh: true,
-                        pageSizes: [20, 50, 100]
+                        pageSizes: [20, 50, 100, kendo.ui.Pager.prototype.options.messages.allPages]
                     },
                     autoBind: false,
                     sortable: true,
@@ -9987,7 +9987,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     navigatable: true,
                     height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
-                        template: "<h3><span class='label label-info'>{{kendo.ui.Pager.prototype.options.messages.empty}}</span></h3>"
+                        template: "<h3><span class='label label-info'>" + kendo.ui.Pager.prototype.options.messages.empty + "</span></h3>"
                     },
 
 
@@ -10009,6 +10009,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 };
 
                 grdopt.columns = esGridInfo.columns;
+
+                var aggs = _.map(grdopt.columns, function(c) {
+                    return c.columns ? _.map(c.columns, function(k) {
+                        k.footerTemplate = undefined; }) : c.footerTemplate = undefined; });
+
                 grdopt.selectedMasterField = esGridInfo.selectedMasterField;
                 grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
                 grdopt.columnMenu = true;

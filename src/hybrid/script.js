@@ -14,11 +14,22 @@
         'uiGmapgoogle-maps'
     ]);
 
-    esApp.config(['$logProvider', 'esWebApiProvider', 'uiGmapGoogleMapApiProvider',
-        function($logProvider, esWebApiServiceProvider, GoogleMapApiProvider) {
+
+    esApp.config(['$logProvider', 'esWebApiProvider', 'uiGmapGoogleMapApiProvider',  '$translateProvider', 
+        function($logProvider, esWebApiServiceProvider, GoogleMapApiProvider, $translateProvider) {
 
             var settings = window.esWebApiSettings;
             esWebApiServiceProvider.setSettings(settings);
+
+            $translateProvider.useStaticFilesLoader({
+                files: [{
+                    prefix: 'languages/eswebapi-locale-',
+                    suffix: '.json'
+                }]
+            });
+            $translateProvider.preferredLanguage('el');
+            $translateProvider.fallbackLanguage('en');
+            $translateProvider.useSanitizeValueStrategy('escape');
 
             GoogleMapApiProvider.configure({
                 //    key: 'your api key',
