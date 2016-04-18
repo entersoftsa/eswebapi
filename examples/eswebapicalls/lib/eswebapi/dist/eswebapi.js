@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.9.0 - 2016-04-16
+/*! Entersoft Application Server WEB API - v1.9.0 - 2016-04-18
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9760,7 +9760,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     template: undefined,
                     footerTemplate: undefined,
                     aggregate: undefined,
-
+                    groupFooterTemplate: undefined,
                 }
 
                 tCol.aggregate = esCol.aggregate;
@@ -9812,8 +9812,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
 
                 if (tCol.aggregate) {
+                    tCol.aggregates = [tCol.aggregate];
                     var fmtStr = esCol.formatString ? "kendo.toString(" + tCol.aggregate + ",'" + esCol.formatString.replace("#", "\\\\#") + "')" : tCol.aggregate;
                     tCol.footerTemplate = "<div style='text-align: right'>#:" + fmtStr + "#</div>";
+                    tCol.groupFooterTemplate = tCol.footerTemplate;
                 }
                 return tCol;
             }
@@ -10010,9 +10012,17 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 grdopt.columns = esGridInfo.columns;
 
-                var aggs = _.map(grdopt.columns, function(c) {
-                    return c.columns ? _.map(c.columns, function(k) {
-                        k.footerTemplate = undefined; }) : c.footerTemplate = undefined; });
+                _.map(grdopt.columns, function(c) {
+                    if (c.columns) {
+                        _.map(c.columns, function(k) {
+                            k.footerTemplate = undefined;
+                            k.groupFooterTemplate = undefined;
+                        });
+                    } else {
+                        c.footerTemplate = undefined;
+                        c.groupFooterTemplate = undefined;
+                    }
+                });
 
                 grdopt.selectedMasterField = esGridInfo.selectedMasterField;
                 grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
@@ -10093,7 +10103,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 var aggs = _.flatMap(grdopt.columns, function(c) {
                     return c.columns ? _.filter(c.columns, function(k) {
-                        return !!k.aggregate; }) : (!!c.aggregate ? [c] : []); });
+                        return !!k.aggregate;
+                    }) : (!!c.aggregate ? [c] : []);
+                });
 
                 grdopt.dataSource = prepareWebScroller(null, function() {
                     return {
@@ -10150,21 +10162,24 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 esCol.editType = jCol.EditType;
                 esCol.width = parseInt(jCol.Width);
 
-                switch(jCol.AggregateFunction) {
+                switch (jCol.AggregateFunction) {
                     case "1":
                         esCol.aggregate = "count";
                         break;
                     case "2":
                         esCol.aggregate = "sum";
                         break;
+                    case "3":
+                        esCol.aggregate = "average";
+                        break;
                     case "4":
                         esCol.aggregate = "min";
                         break;
                     case "5":
-                        esCol.aggregate = "max"; 
+                        esCol.aggregate = "max";
                         break;
                 }
-                
+
                 esCol.formatString = jCol.FormatString;
                 esCol.visible = (jCol.Visible == "true");
 
