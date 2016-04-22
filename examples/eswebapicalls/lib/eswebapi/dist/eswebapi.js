@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.9.0 - 2016-04-18
+/*! Entersoft Application Server WEB API - v1.9.0 - 2016-04-22
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -4838,6 +4838,88 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
                                 return processWEBAPIPromise(ht, tt);
                             },
 
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchESScale
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function returns a scale object as it is defined in the Entersoft Application Server ESGOZScales
+                             * @param {string} scaleCode The string code of the ESGOScale object we want to retrieve
+                             * @return {object} If success i.e. function(ret) { ...} the ret contains the JSON representation of the ESGOScaleObject
+                             * @example
+```js
+var ret = {
+                                    "GID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                    "Code": "AgeScale",
+                                    "Description": "Age scale",
+                                    "InternationalID": "ES.AgeScale",
+                                    "Inactive": false,
+                                    "ESSystem": true,
+                                    "Ranges": [{
+                                        "GID": "d9a19f99-6f34-4a7d-aab8-288f77c6ee9d",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 1,
+                                        "Code": "18-24",
+                                        "Inactive": false,
+                                        "MinValue": 0,
+                                        "MaxValue": 24,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -103
+                                    }, {
+                                        "GID": "6eed297b-f7cb-4c06-9215-0276c424e39a",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 2,
+                                        "Code": "25-34",
+                                        "Inactive": false,
+                                        "MinValue": 24,
+                                        "MaxValue": 34,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -7876885
+                                    }, {
+                                        "GID": "cdf25cd5-1cf3-4f81-8b99-9a4f6907ecc8",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 3,
+                                        "Code": "35-44",
+                                        "Inactive": false,
+                                        "MinValue": 34,
+                                        "MaxValue": 44,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -1146130
+                                    }, {
+                                        "GID": "b63498c2-b104-4adb-b316-31c7b889b2f5",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 4,
+                                        "Code": "45-54",
+                                        "Inactive": false,
+                                        "MinValue": 44,
+                                        "MaxValue": 54,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -16776961
+                                    }, {
+                                        "GID": "e39f3163-e71a-43d6-9a04-bf09b2ba129d",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 5,
+                                        "Code": "55-64",
+                                        "Inactive": false,
+                                        "MinValue": 54,
+                                        "MaxValue": 64,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -16744448
+                                    }, {
+                                        "GID": "2a871edb-1732-4f2a-863e-7dc9cacd752c",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 6,
+                                        "Code": "65+",
+                                        "Inactive": false,
+                                        "MinValue": 64,
+                                        "MaxValue": 130,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -65536
+                                    }]
+                                };
+
+```
+                             **/
                             fetchESScale: function(scaleCode) {
                                 if (!scaleCode) {
                                     throw new Error("Invalid parameter");
@@ -4868,8 +4950,8 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
                                     .then(function(ret) {
                                         esCache.setItem("ESGOSCALE_" + scaleCode, ret.data);
                                         deferred.resolve(ret.data);
-                                    }, function() { 
-                                        deferred.reject(arguments); 
+                                    }, function() {
+                                        deferred.reject(arguments);
                                     });
                                 return deferred.promise;
                             },
@@ -8822,7 +8904,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esType: "=",
                     esMapControl: "=",
                     esHighLight: "=",
-                    esClick: "&",
+                    esClick: "&?",
                 },
                 template: '<div ng-include src="\'src/partials/esMapPQ.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
@@ -8830,6 +8912,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                     if (!$scope.esMapControl) {
                         $scope.esMapControl = {};
+                    }
+
+                    if (!angular.isFunction($scope.esClick)) {
+                        $scope.esClick = esWebUIHelper.onMapClick;
                     }
 
                     GoogleMapApi.then(function(maps) {
@@ -8884,7 +8970,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esTypeOptions: "=?",
                     esType: "=?",
                     esHighLight: "=?",
-                    esClick: "&",
+                    esClick: "&?",
                 },
                 template: '<div ng-include src="\'src/partials/esMapMarkers.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
@@ -9885,12 +9971,21 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
 
-            function prepareWebScroller(dsType, espqParams, esOptions, aggregates) {
+            function prepareWebScroller(dsType, espqParams, esOptions, aggregates, groups) {
                 var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
 
 
+                if (groups && aggregates) {
+                    _.map(groups, function(g) {
+                        g.aggregates = aggregates;
+                    });
+                } else {
+                    groups = undefined;
+                }
+
                 var xParam = {
                     aggregate: aggregates,
+                    group: groups,
 
                     transport: {
                         requestEnd: function(e) {
@@ -10096,6 +10191,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     }
                 };
 
+                grdopt.groups = esGridInfo.groups;
                 grdopt.columns = esGridInfo.columns;
                 grdopt.selectedMasterField = esGridInfo.selectedMasterField;
                 grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
@@ -10116,7 +10212,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             dataType: "datetime"
                         }),
                     }
-                }, dsOptions, aggs);
+                }, dsOptions, aggs, grdopt.groups);
 
                 grdopt.change = handleChangeGridRow;
                 grdopt.dataBound = handleChangeGridRow;
@@ -10475,7 +10571,21 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return parseInt(val);
                 }
 
-                return val;
+                if (!_.startsWith(val, "##(")) {
+                    return val;
+                }
+
+                switch (val.toLowerCase()) {
+                    case "##(esbranch)":
+                        var m = esGlobals.getClientSession();
+                        if (m && m.connectionModel) {
+                            return m.connectionModel.BranchID;
+                        }
+
+                        return val;
+                    default:
+                        return val;
+                };
             }
 
             function ESParamInfo() {
@@ -10625,7 +10735,18 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     columns: undefined,
                     params: undefined,
                     defaultValues: undefined,
+                    groups: undefined,
                 };
+
+                esGridInfo.groups = _.map(_.filter(gridexInfo.LayoutGroup, function(y) {
+                    return (y.fFilterID.toLowerCase() == fId);
+                }), function(x) {
+                    return {
+                        field: x.ColName,
+                        aa: x.AA,
+                        sortOrder: x.SortOrder
+                    };
+                });
 
                 var z2 = _.map(_.filter(gridexInfo.LayoutColumn, function(y) {
                     return (y.fFilterID.toLowerCase() == fId) && (y.DataTypeName != "Guid");
@@ -11492,6 +11613,10 @@ $scope.fetchPQInfo = function() {
 
                 getZoomDataSource: prepareStdZoom,
                 getPQDataSource: prepareWebScroller,
+
+                onMapClick: function(a, b, c) {
+                    alert("A location has been clicked. Soon you will see a form here !!!");
+                }
 
             });
         }

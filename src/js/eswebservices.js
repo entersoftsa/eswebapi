@@ -4836,6 +4836,88 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
                                 return processWEBAPIPromise(ht, tt);
                             },
 
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchESScale
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function returns a scale object as it is defined in the Entersoft Application Server ESGOZScales
+                             * @param {string} scaleCode The string code of the ESGOScale object we want to retrieve
+                             * @return {object} If success i.e. function(ret) { ...} the ret contains the JSON representation of the ESGOScaleObject
+                             * @example
+```js
+var ret = {
+                                    "GID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                    "Code": "AgeScale",
+                                    "Description": "Age scale",
+                                    "InternationalID": "ES.AgeScale",
+                                    "Inactive": false,
+                                    "ESSystem": true,
+                                    "Ranges": [{
+                                        "GID": "d9a19f99-6f34-4a7d-aab8-288f77c6ee9d",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 1,
+                                        "Code": "18-24",
+                                        "Inactive": false,
+                                        "MinValue": 0,
+                                        "MaxValue": 24,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -103
+                                    }, {
+                                        "GID": "6eed297b-f7cb-4c06-9215-0276c424e39a",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 2,
+                                        "Code": "25-34",
+                                        "Inactive": false,
+                                        "MinValue": 24,
+                                        "MaxValue": 34,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -7876885
+                                    }, {
+                                        "GID": "cdf25cd5-1cf3-4f81-8b99-9a4f6907ecc8",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 3,
+                                        "Code": "35-44",
+                                        "Inactive": false,
+                                        "MinValue": 34,
+                                        "MaxValue": 44,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -1146130
+                                    }, {
+                                        "GID": "b63498c2-b104-4adb-b316-31c7b889b2f5",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 4,
+                                        "Code": "45-54",
+                                        "Inactive": false,
+                                        "MinValue": 44,
+                                        "MaxValue": 54,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -16776961
+                                    }, {
+                                        "GID": "e39f3163-e71a-43d6-9a04-bf09b2ba129d",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 5,
+                                        "Code": "55-64",
+                                        "Inactive": false,
+                                        "MinValue": 54,
+                                        "MaxValue": 64,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -16744448
+                                    }, {
+                                        "GID": "2a871edb-1732-4f2a-863e-7dc9cacd752c",
+                                        "fScaleGID": "78bd32f1-398d-4779-850c-7ae4f0bc2290",
+                                        "SeqNum": 6,
+                                        "Code": "65+",
+                                        "Inactive": false,
+                                        "MinValue": 64,
+                                        "MaxValue": 130,
+                                        "ImageIndex": 0,
+                                        "ColorARGB": -65536
+                                    }]
+                                };
+
+```
+                             **/
                             fetchESScale: function(scaleCode) {
                                 if (!scaleCode) {
                                     throw new Error("Invalid parameter");
@@ -4866,8 +4948,8 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
                                     .then(function(ret) {
                                         esCache.setItem("ESGOSCALE_" + scaleCode, ret.data);
                                         deferred.resolve(ret.data);
-                                    }, function() { 
-                                        deferred.reject(arguments); 
+                                    }, function() {
+                                        deferred.reject(arguments);
                                     });
                                 return deferred.promise;
                             },

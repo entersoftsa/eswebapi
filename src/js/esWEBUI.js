@@ -367,7 +367,7 @@
                     esType: "=",
                     esMapControl: "=",
                     esHighLight: "=",
-                    esClick: "&",
+                    esClick: "&?",
                 },
                 template: '<div ng-include src="\'src/partials/esMapPQ.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
@@ -375,6 +375,10 @@
 
                     if (!$scope.esMapControl) {
                         $scope.esMapControl = {};
+                    }
+
+                    if (!angular.isFunction($scope.esClick)) {
+                        $scope.esClick = esWebUIHelper.onMapClick;
                     }
 
                     GoogleMapApi.then(function(maps) {
@@ -429,7 +433,7 @@
                     esTypeOptions: "=?",
                     esType: "=?",
                     esHighLight: "=?",
-                    esClick: "&",
+                    esClick: "&?",
                 },
                 template: '<div ng-include src="\'src/partials/esMapMarkers.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
@@ -1430,12 +1434,21 @@
             }
 
 
-            function prepareWebScroller(dsType, espqParams, esOptions, aggregates) {
+            function prepareWebScroller(dsType, espqParams, esOptions, aggregates, groups) {
                 var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
 
 
+                if (groups && aggregates) {
+                    _.map(groups, function(g) {
+                        g.aggregates = aggregates;
+                    });
+                } else {
+                    groups = undefined;
+                }
+
                 var xParam = {
                     aggregate: aggregates,
+                    group: groups,
 
                     transport: {
                         requestEnd: function(e) {
@@ -1641,6 +1654,7 @@
                     }
                 };
 
+                grdopt.groups = esGridInfo.groups;
                 grdopt.columns = esGridInfo.columns;
                 grdopt.selectedMasterField = esGridInfo.selectedMasterField;
                 grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
@@ -1661,7 +1675,7 @@
                             dataType: "datetime"
                         }),
                     }
-                }, dsOptions, aggs);
+                }, dsOptions, aggs, grdopt.groups);
 
                 grdopt.change = handleChangeGridRow;
                 grdopt.dataBound = handleChangeGridRow;
@@ -2020,7 +2034,21 @@
                     return parseInt(val);
                 }
 
-                return val;
+                if (!_.startsWith(val, "##(")) {
+                    return val;
+                }
+
+                switch (val.toLowerCase()) {
+                    case "##(esbranch)":
+                        var m = esGlobals.getClientSession();
+                        if (m && m.connectionModel) {
+                            return m.connectionModel.BranchID;
+                        }
+
+                        return val;
+                    default:
+                        return val;
+                };
             }
 
             function ESParamInfo() {
@@ -2170,7 +2198,18 @@
                     columns: undefined,
                     params: undefined,
                     defaultValues: undefined,
+                    groups: undefined,
                 };
+
+                esGridInfo.groups = _.map(_.filter(gridexInfo.LayoutGroup, function(y) {
+                    return (y.fFilterID.toLowerCase() == fId);
+                }), function(x) {
+                    return {
+                        field: x.ColName,
+                        aa: x.AA,
+                        sortOrder: x.SortOrder
+                    };
+                });
 
                 var z2 = _.map(_.filter(gridexInfo.LayoutColumn, function(y) {
                     return (y.fFilterID.toLowerCase() == fId) && (y.DataTypeName != "Guid");
@@ -3037,6 +3076,10 @@ $scope.fetchPQInfo = function() {
 
                 getZoomDataSource: prepareStdZoom,
                 getPQDataSource: prepareWebScroller,
+
+                onMapClick: function(a, b, c) {
+                    alert("A location has been clicked. Soon you will see a form here !!!");
+                }
 
             });
         }

@@ -808,7 +808,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
         $scope.fetchScale = function() {
             esWebApi.fetchESScale($scope.scaleCode)
                 .then(function(ret) {
-                    $scope.scaleData = ret.data;
+                    $scope.scaleData = JSON.stringify(ret);
                 }, function(err) {
                     $scope.scaleData = JSON.stringify(err);
                 });
@@ -1109,6 +1109,7 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
         $scope.myType = "cluster";
         $scope.myTypeOptions = null;
         $scope.myCtrl = {};
+        $scope.esWebUIHelper = esWebUIHelper;
 
 
 
