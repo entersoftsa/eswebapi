@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.9.0";
+    var version = "1.10.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -689,7 +689,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 var d = new Date();
 
-                var dObj = _.findWhere(esDateRangeOptions, {
+                var dObj = _.find(esDateRangeOptions, {
                     dValue: dateVal.dRange
                 });
                 if (!dObj) {
@@ -930,7 +930,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 vals = angular.isArray(this.paramValue) ? this.paramValue : [this.paramValue];
 
                 var s = _.reduce(vals, function(memo, x) {
-                    var es = _.findWhere(lst, {
+                    var es = _.find(lst, {
                         value: x
                     });
                     return memo + (es ? es.text : x.toString()) + " + ";

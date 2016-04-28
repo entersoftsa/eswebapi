@@ -2,6 +2,11 @@
 
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
+**Version 1.10.0
+- Support from total aggregates and group aggregates
+- Fixes in the documentation
+- Minor bug fixing
+
 **Version 1.9.0
 - Restructured examples
 - Hybrid sources for smarphone and tablet hybrid applications

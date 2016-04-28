@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.9.0 - 2016-04-22
+/*! Entersoft Application Server WEB API - v1.10.0 - 2016-04-28
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -29,7 +29,7 @@
 
     esWebServices.
     constant('ESWEBAPI_URL', {
-        __LOGIN__: "api/Login",
+        __LOGIN__: "api/Login/Login",
         __LOGOUT__: "api/Login/Logout",
         __USER_LOGO__: "api/Login/UserLogo/",
         __REMOVE_USER_LOGO__: "api/Login/RemoveUserLogo/",
@@ -119,13 +119,15 @@
             var urlWEBAPI = "";
             var unSecureWEBAPI = "";
             var secureWEBAPI = "";
+            var additionalHeaders = {};
 
             var esConfigSettings = {
                 host: "",
                 allowUnsecureConnection: false,
                 subscriptionId: "",
                 subscriptionPassword: "",
-                bridgeId: ""
+                bridgeId: "",
+                additionalHeaders: {},
             };
 
             return {
@@ -255,6 +257,7 @@ eskbApp.config(['$logProvider',
 
                         unSecureWEBAPI = __UNSECURE_HTTP_PREFIX__ + esConfigSettings.host;;
                         secureWEBAPI = __SECURE_HTTP_PREFIX__ + esConfigSettings.host;
+                        additionalHeaders = esConfigSettings.additionalHeaders;
 
                         if (esConfigSettings.allowUnsecureConnection) {
                             urlWEBAPI = unSecureWEBAPI;
@@ -271,6 +274,16 @@ eskbApp.config(['$logProvider',
                 $get: ['$http', '$log', '$q', '$timeout', '$rootScope', '$injector', 'ESWEBAPI_URL', 'esGlobals', 'esMessaging', 'esCache',
                     function($http, $log, $q, $timeout, $rootScope, $injector, ESWEBAPI_URL, esGlobals, esMessaging, esCache) {
 
+                        function prepareHeaders(inHds) {
+
+                            var hds = inHds || {
+                                "Authorization": esGlobals.getWebApiToken()
+                            };
+
+                            angular.extend(hds, additionalHeaders);
+                            return hds;
+                        }
+
                         function fregisterException(inMessageObj, storeToRegister) {
                             if (!inMessageObj) {
                                 return;
@@ -283,9 +296,7 @@ eskbApp.config(['$logProvider',
                                     type: "POST",
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__EVENTLOG__),
                                     contentType: "application/json",
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     data: JSON.stringify({
                                         exceptionData: messageObj,
                                         exceptionStore: storeToRegister
@@ -322,9 +333,7 @@ eskbApp.config(['$logProvider',
 
                             var httpConfig = {
                                 method: 'GET',
-                                headers: {
-                                    "Authorization": esGlobals.getWebApiToken()
-                                },
+                                headers: prepareHeaders(),
                                 url: surl,
                             };
                             var ht = $http(httpConfig);
@@ -349,9 +358,7 @@ eskbApp.config(['$logProvider',
 
                             var ht = $http({
                                 method: 'post',
-                                headers: {
-                                    "Authorization": esGlobals.getWebApiToken()
-                                },
+                                headers: prepareHeaders(),
                                 url: surl,
                                 data: scrollerCommandParams
                             });
@@ -377,9 +384,7 @@ eskbApp.config(['$logProvider',
 
                             var ht = $http({
                                 method: 'get',
-                                headers: {
-                                    "Authorization": esGlobals.getWebApiToken()
-                                },
+                                headers: prepareHeaders(),
                                 url: surl
                             });
 
@@ -406,9 +411,7 @@ eskbApp.config(['$logProvider',
 
                             var ht = $http({
                                 method: 'post',
-                                headers: {
-                                    "Authorization": esGlobals.getWebApiToken()
-                                },
+                                headers: prepareHeaders(),
                                 url: surl,
                                 data: formCommandParams
                             });
@@ -426,9 +429,7 @@ eskbApp.config(['$logProvider',
 
                             var ht = $http({
                                 method: 'GET',
-                                headers: {
-                                    "Authorization": esGlobals.getWebApiToken()
-                                },
+                                headers: prepareHeaders(),
                                 url: surl,
                                 params: params
                             });
@@ -734,6 +735,7 @@ $scope.doLogin = function() {
                                 var promise = $http({
                                     method: 'post',
                                     url: urlWEBAPI + ESWEBAPI_URL.__LOGIN__,
+                                    headers: prepareHeaders({}),
                                     data: dat
                                 }).
                                 success(function(data) {
@@ -805,9 +807,7 @@ $scope.eventLog = function() {
 
                                 var promise = $http({
                                     method: 'post',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: urlWEBAPI + ESWEBAPI_URL.__EVENTLOG__,
                                     data: JSON.stringify(esLog)
                                 });
@@ -1178,9 +1178,7 @@ $scope.execEbsService = function() {
 
                                 var httpOptions = {
                                     method: 'post',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__EBS_SERVICE__, sPart),
                                     data: dData
                                 };
@@ -1238,9 +1236,7 @@ $scope.fetchUserLogo = function() {
 
                                 var promise = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__USER_LOGO__, userID || ""),
                                 });
                                 return processWEBAPIPromise(promise, tt);
@@ -1324,9 +1320,7 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
                                 file.upload = Upload.upload({
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__POST_USER_LOGO__),
                                     method: 'POST',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     file: file,
                                 });
 
@@ -1378,9 +1372,7 @@ $scope.removeCurrentUserLogo = function() {
                                 tt.startTime();
                                 var promise = $http({
                                     method: 'POST',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__REMOVE_USER_LOGO__),
                                 });
                                 return processWEBAPIPromise(promise, tt);
@@ -1430,9 +1422,7 @@ $scope.removeCurrentUserLogo = function() {
 
                                 var promise = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__PERSON_LOGO__, personGID),
                                 });
                                 return processWEBAPIPromise(promise, tt);
@@ -1469,9 +1459,7 @@ $scope.doLogout = function ()
 
                                 var promise = $http({
                                     method: 'post',
-                                    headers: {
-                                        "Authorization": xToken
-                                    },
+                                    headers: prepareHeaders(),
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__LOGOUT__),
                                 });
                                 return processWEBAPIPromise(promise, tt);
@@ -1548,9 +1536,7 @@ $scope.fetchCompanyParam = function() {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_COMPANY_PARAM__, esparam.replace(" ", ""));
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht);
@@ -1647,9 +1633,7 @@ $scope.fetchCompanyParams = function() {
 
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht);
@@ -2579,15 +2563,15 @@ $scope.fetchUserSites = function()
                             },
 
                             /**
-                                                         * @ngdoc function
-                                                         * @name es.Services.Web.esWebApi#fetchSessionInfo
-                                                         * @methodOf es.Services.Web.esWebApi
-                                                         * @description Function that returns Entersoft Application Server session information
-                                                         * @module es.Services.Web
-                                                         * @kind function
-                                                         * @return {httpPromise} Returns a promise.
-                                                         ** If sucess the **response.data.ESProperty** contains the array of the session properties objects.
-                                                         * Each session property object is fo the following form:
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchSessionInfo
+                             * @methodOf es.Services.Web.esWebApi
+                             * @description Function that returns Entersoft Application Server session information
+                             * @module es.Services.Web
+                             * @kind function
+                             * @return {httpPromise} Returns a promise.
+                             ** If sucess the **response.data.ESProperty** contains the array of the session properties objects.
+                             * Each session property object is fo the following form:
                             ```js
                             var sessprop = {
                                 ID: string, // property ID i.e. "101"
@@ -2639,9 +2623,7 @@ $scope.fetchUserSites = function()
                             fetchSessionInfo: function() {
                                 var promise = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: urlWEBAPI + ESWEBAPI_URL.__FETCH_SESSION_INFO__
                                 });
 
@@ -2655,9 +2637,7 @@ $scope.fetchUserSites = function()
 
                                 var ht = $http({
                                     method: 'post',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl,
                                     data: commandParams
                                 });
@@ -2671,9 +2651,7 @@ $scope.fetchUserSites = function()
 
                                 var ht = $http({
                                     method: 'post',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl,
                                     data: commandParams
                                 });
@@ -2688,9 +2666,7 @@ $scope.fetchUserSites = function()
 
                                 var ht = $http({
                                     method: 'post',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl,
                                     data: commandParams
                                 });
@@ -3350,9 +3326,7 @@ function($scope, esWebApi, esWebUIHelper) {
 
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl
                                 });
                                 processWEBAPIPromise(ht, tt)
@@ -3448,10 +3422,10 @@ $scope.fetchStdZoom = function()
 
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
+                                    headers: prepareHeaders({
                                         "Authorization": esGlobals.getWebApiToken(),
                                         "X-ESPQOptions": JSON.stringify(pqOptions)
-                                    },
+                                    }),
                                     url: surl
                                 });
                                 var sp = processWEBAPIPromise(ht, tt);
@@ -3526,9 +3500,7 @@ $scope.multifetchStdZoom = function() {
 
                                 var ht = $http({
                                     method: 'POST',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     data: toFetchFromSrv,
                                     url: surl
                                 });
@@ -3763,9 +3735,7 @@ $scope.dofetchPublicQuery = function() {
                                  * @type {Object}
                                  */
                                 var httpConfig = {
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl,
                                     params: execParams
                                 };
@@ -3852,9 +3822,7 @@ esWebApi.MultiPublicQuery(pqParams)
                                  * @type {Object}
                                  */
                                 var httpConfig = {
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl,
                                     method: 'POST'
                                 };
@@ -3943,9 +3911,7 @@ var options = {Accept: 'text/plain'}
 
                                 var httpConfig = {
                                     method: 'GET',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl,
                                     params: {
                                         base64: cOptions.base64
@@ -4321,9 +4287,7 @@ var x = {
 
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht, tt);
@@ -4361,9 +4325,7 @@ $scope.fetchEntityByCode = function() {
 
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht, tt);
@@ -4830,9 +4792,7 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
 
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht, tt);
@@ -4941,9 +4901,7 @@ var ret = {
 
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl
                                 });
                                 processWEBAPIPromise(ht, tt)
@@ -4978,9 +4936,7 @@ var ret = {
 
                                 var ht = $http({
                                     method: 'post',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl,
                                     data: xmldocstr
                                 });
@@ -5010,10 +4966,10 @@ var ret = {
 
                                 var httpConfig = {
                                     method: 'GET',
-                                    headers: {
+                                    headers: prepareHeaders({
                                         "Authorization": esGlobals.getWebApiToken(),
                                         "Accept": undefined
-                                    },
+                                    }),
                                     url: surl,
                                     params: {
                                         base64: false
@@ -5122,9 +5078,7 @@ $scope.fetchES00DocumentByGID = function() {
 
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht, tt);
@@ -5189,9 +5143,7 @@ $scope.fetchES00DocumentByCode = function() {
 
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht, tt);
@@ -5259,9 +5211,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 
                                 var ht = $http({
                                     method: 'get',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht, tt);
@@ -5305,9 +5255,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 
                                 var ht = $http({
                                     method: 'post',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl,
                                     data: es00Document
                                 });
@@ -5400,9 +5348,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                 file.upload = Upload.upload({
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__),
                                     method: 'POST',
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     fields: {
                                         esdoc: JSON.stringify(doc)
                                     },
@@ -5449,9 +5395,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 
                                 var ht = $http({
                                     method: eMethod,
-                                    headers: {
-                                        "Authorization": esGlobals.getWebApiToken()
-                                    },
+                                    headers: prepareHeaders(),
                                     url: surl,
                                     data: eBody
                                 }).success(function(data) {
@@ -6460,7 +6404,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.9.0";
+    var version = "1.10.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -7143,7 +7087,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 var d = new Date();
 
-                var dObj = _.findWhere(esDateRangeOptions, {
+                var dObj = _.find(esDateRangeOptions, {
                     dValue: dateVal.dRange
                 });
                 if (!dObj) {
@@ -7384,7 +7328,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 vals = angular.isArray(this.paramValue) ? this.paramValue : [this.paramValue];
 
                 var s = _.reduce(vals, function(memo, x) {
-                    var es = _.findWhere(lst, {
+                    var es = _.find(lst, {
                         value: x
                     });
                     return memo + (es ? es.text : x.toString()) + " + ";
