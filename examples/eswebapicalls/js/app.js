@@ -72,7 +72,8 @@
                     controller: 'mapsCtrl'
                 })
                 .when('/salesforce', {
-                    templateUrl: 'sales.html'
+                    templateUrl: 'sales.html',
+                    controller: 'salesCtrl'  
                 });
 
             $logProvider.addDefaultAppenders();
@@ -92,7 +93,7 @@
                 }
             });
 
-            $logProvider.addESWebApiAppender(esWebApiServiceProvider.getServerUrl(), subscriptionId);
+            //$logProvider.addESWebApiAppender(esWebApiServiceProvider.getServerUrl(), subscriptionId);
 
         }
     ]);

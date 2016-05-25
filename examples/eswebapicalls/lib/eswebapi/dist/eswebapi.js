@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.10.0 - 2016-04-28
+/*! Entersoft Application Server WEB API - v1.10.1 - 2016-05-25
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6404,7 +6404,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.10.0";
+    var version = "1.10.1";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -9426,7 +9426,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return "src/partials/esChartPQ.html";
                 },
                 link: function($scope, iElement, iAttrs) {
-                    $scope.esChartDataSource = esWebUIHelper.getPQDataSource("ds", $scope.esPqDef);
+                    $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef);
                     $scope.esChartOptions.dataSource = $scope.esChartDataSource;
 
                     if ($scope.esChartOptions && !$scope.esChartOptions.dataBound) {
@@ -9915,7 +9915,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
 
-            function prepareWebScroller(dsType, espqParams, esOptions, aggregates, groups) {
+            function prepareWebScroller(espqParams, esOptions, aggregates, groups) {
                 var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
 
 
@@ -10004,11 +10004,48 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     angular.extend(xParam, esOptions);
                 }
 
-                if (dsType && dsType === "pivot") {
-                    return new kendo.data.PivotDataSource(xParam);
-                } else {
-                    return new kendo.data.DataSource(xParam);
+                return new kendo.data.DataSource(xParam);
+            }
+
+            function preparePivotDS(espqParams, esOptions) {
+                var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
+
+                var xParam = {
+                    transport: {
+                        requestEnd: function(e) {
+                            var response = e.response;
+                            var type = e.type;
+                            console.log(type); // displays "read"
+                            console.log(response.length); // displays "77"
+                        },
+
+                        read: function(options) {
+
+                            var pqOptions = {};
+
+                            var executeParams = qParams.Params;
+                            if (executeParams instanceof esGlobals.ESParamValues) {
+                                executeParams = executeParams.getExecuteVals();
+                            }
+
+                            esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
+                                .success(function(pq) {
+                                    options.success(pq.Rows || []);
+                                })
+                                .error(function(err) {
+                                    $log.error("Error in DataSource ", err);
+                                    options.error(err);
+                                });
+                        },
+
+                    }
+                };
+
+                if (esOptions) {
+                    angular.extend(xParam, esOptions);
                 }
+
+                return new kendo.data.PivotDataSource(xParam);
             }
 
             function esGridInfoToLocalKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esDataSource) {
@@ -10147,7 +10184,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     }) : (!!c.aggregate ? [c] : []);
                 });
 
-                grdopt.dataSource = prepareWebScroller(null, function() {
+                grdopt.dataSource = prepareWebScroller(function() {
                     return {
                         GroupID: esGroupId,
                         FilterID: esFilterId,
@@ -11557,6 +11594,8 @@ $scope.fetchPQInfo = function() {
 
                 getZoomDataSource: prepareStdZoom,
                 getPQDataSource: prepareWebScroller,
+
+                getPivotDS: preparePivotDS,
 
                 onMapClick: function(a, b, c) {
                     alert("A location has been clicked. Soon you will see a form here !!!");

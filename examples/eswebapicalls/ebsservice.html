@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" ng-app="ebsServiceApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Entersoft Business Suite Service Sample</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="bower_components/kendo-ui/styles/kendo.common-bootstrap.min.css" />
+    <link rel="stylesheet" href="bower_components/kendo-ui/styles/kendo.bootstrap.min.css" />
+    <link rel="stylesheet" href="bower_components/kendo-ui/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="bower_components/kendo-ui/styles/kendo.dataviz.bootstrap.min.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body ng-controller="ebsServiceCtrl" ng-cloak>
+    <div id="example" class="container">
+        <span kendo-notification="esnotify" auto-hide-after="3000"></span>
+        <es-login es-credentials="credentials" es-on-success="doLogin()" es-show-subscription="true" es-show-bridge="true" es-show-sticky-session="true">
+        </es-login>
+    </div>
+    <hr/>
+    <div>
+        <h3>esService</h3>
+        <span>
+            <input type="text" ng-model="serviceObj.netAssembly" placeholder=".NET Assembly name"/>
+            <input type="text" ng-model="serviceObj.netNamespace" placeholder=".NET Namespace"/>
+            <input type="text" ng-model="serviceObj.netClass" placeholder=".NET Class"/>
+            <input type="text" ng-model="serviceObj.netMethod" placeholder=".NET Method"/>
+            <textarea ng-model="netParam" placeholder="POCO Object in string format"></textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
+    <label>Binary Result:
+        <input type="checkbox" ng-model="serviceObj.netIsBinaryResult">
+    </label>
+    <button ng-click="execEbsService()">Execute EBS Service</button>
+    <textarea>{{ebsret}}</textarea>
+    </div>
+    <hr/>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+    <script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/ngStorage/ngstorage.min.js"></script>
+    <script src="bower_components/stacktrace-js/dist/stacktrace.min.js"></script>
+    <script src="bower_components/log4javascript/js/log4javascript.js"></script>
+    <script src='bower_components/angular-simple-logger/dist/angular-simple-logger.min.js'></script>
+    <script src="bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
+    <script src="bower_components/moment/min/moment-with-locales.min.js"></script>
+    <script src="bower_components/angular-translate/angular-translate.min.js"></script>
+    <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="lib/eswebapi/dist/eswebapi.js"></script>
+    <script src="lib/eswebapi/dist/eswebapi.templates.js"></script>
+    <script src="bower_components/kendo-ui/js/jszip.min.js"></script>
+    <script src="bower_components/kendo-ui/js/kendo.all.min.js"></script>
+    <script src="bower_components/kendo-ui/js/cultures/kendo.culture.el-GR.min.js"></script>
+    <script src="bower_components/kendo-ui/js/cultures/kendo.culture.en-US.min.js"></script>
+    <script src="bower_components/kendo-ui/js/cultures/kendo.culture.bg-BG.min.js"></script>
+    <script src="bower_components/kendo-ui/js/cultures/kendo.culture.ro-RO.min.js"></script>
+    <script src="js/ebsServiceApp.js"></script>
+</body>
+
+</html>

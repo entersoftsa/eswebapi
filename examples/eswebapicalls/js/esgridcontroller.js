@@ -853,22 +853,22 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.pqs = [
-/*
-            {
+            /*
+                        {
 
-                groupId: "ESMIS",
-                filterId: "ESMIS_SalesItemsPerCustomer",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
-            {
+                            groupId: "ESMIS",
+                            filterId: "ESMIS_SalesItemsPerCustomer",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
+                        {
 
-                groupId: "ESMIS",
-                filterId: "ES_MIS360_SalesPerBU",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            }
-            */
+                            groupId: "ESMIS",
+                            filterId: "ES_MIS360_SalesPerBU",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        }
+                        */
 
             {
                 groupId: "esmmstockitem",
@@ -882,7 +882,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 filterId: "StockItemPhotoList",
                 gridOptions: {},
                 pVals: new esGlobals.ESParamValues()
-            }, 
+            },
 
 
             {
@@ -944,6 +944,46 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
                     return $scope.webPQOptions.theGridOptions;
                 };
             }
+        };
+    }
+]);
+
+smeControllers.controller('salesCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
+    function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+        $scope.pqDef = new esGlobals.ESPublicQueryDef("", "ESFICustomer", "TOPTurnoverCustomers", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+
+        $scope.pivotDS = null;
+        $scope.executePivot = function() {
+            if ($scope.pivotDS) {
+                $scope.pivotDS.read();
+                return;
+            }
+
+            var schemaOptions = {
+                schema: {
+                    cube: {
+                        dimensions: {
+                            Name: { caption: "Customer" },
+                            Salesperson: { caption: "Sales Rep" }
+                        },
+                        measures: {
+                            "Customers Count": { field: "GID", aggregate: "count" },
+                            "Sum Invoices": { field: "NumberOfInvoices", aggregate: "sum" },
+                            "Sum Turnover": { field: "Turnover", aggregate: "sum" }
+                        }
+                    }
+                },
+                rows: [{ name: "Salesperson", expand: true }],
+                measures: ["Customers Count", "Sum Invoices", "Sum Turnover"]
+            };
+
+            $scope.pivotDS = esWebUIHelper.getPivotDS($scope.pqDef, schemaOptions);
+            $scope.pivotOptions = {
+                columnWidth: 200,
+                height: 580,
+                filterable: true,
+                dataSource: $scope.pivotDS
+            };
         };
     }
 ]);

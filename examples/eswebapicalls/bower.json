@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "angular": "^1.5.0",
-    "jquery": "^2.2.1",
+    "jquery": "^2.2.3",
     "angular-animate": "^1.5.0",
     "angular-route": "^1.5.0",
     "angular-sanitize": "^1.5.0",
@@ -32,10 +32,10 @@
     "angular-translate": "^2.10.0",
     "angular-loading-bar": "^0.8.0",
     "modernizr": "^3.3.1",
-    "kendo-ui": "https://bower.telerik.com/bower-kendo-ui.git#2016.1.226+SP1",
+    "kendo-ui": "https://bower.telerik.com/bower-kendo-ui.git#~2016.2.504",
     "angular-translate-loader-static-files": "^2.10.0"
   },
   "resolutions": {
-    "jquery": "^2.2.1"
+    "jquery": "^2.2.3"
   }
 }
