@@ -10058,12 +10058,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     sortable: true,
                     scrollable: true,
                     selectable: "row",
-                    mobile: esGlobals.getESUISettings().mobile,
                     allowCopy: true,
                     resizable: true,
                     reorderable: true,
                     navigatable: true,
-                    height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
                         template: "<h3><span class='label label-info'>" + kendo.ui.Pager.prototype.options.messages.empty + "</span></h3>"
                     },
@@ -10085,6 +10083,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         filterable: true
                     }
                 };
+
+                if (esGlobals.getESUISettings().mobile) {
+                    grdopt.mobile = esGlobals.getESUISettings().mobile;
+                }
+
+                if (esGlobals.getESUISettings().defaultGridHeight) {
+                    grdopt.height = esGlobals.getESUISettings().defaultGridHeight;
+                }
 
                 grdopt.columns = esGridInfo.columns;
 
@@ -10132,12 +10138,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     sortable: !dsOptions.serverPaging,
                     scrollable: true,
                     selectable: "row",
-                    mobile: esGlobals.getESUISettings().mobile,
                     allowCopy: true,
                     resizable: true,
                     reorderable: true,
                     navigatable: true,
-                    height: esGlobals.getESUISettings().defaultGridHeight,
                     noRecords: {
                         template: "<h3><span class='label label-info'>" + kendo.ui.Pager.prototype.options.messages.empty + "</span></h3>"
                     },
@@ -10171,6 +10175,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         filterable: true
                     }
                 };
+
+                if (esGlobals.getESUISettings().mobile) {
+                    grdopt.mobile = esGlobals.getESUISettings().mobile;
+                }
+
+                if (esGlobals.getESUISettings().defaultGridHeight) {
+                    grdopt.height = esGlobals.getESUISettings().defaultGridHeight;
+                }
 
                 grdopt.groups = esGridInfo.groups;
                 grdopt.columns = esGridInfo.columns;
