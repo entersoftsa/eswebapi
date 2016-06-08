@@ -853,22 +853,15 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.pqs = [
-            /*
-                        {
 
-                            groupId: "ESMIS",
-                            filterId: "ESMIS_SalesItemsPerCustomer",
-                            gridOptions: {},
-                            pVals: new esGlobals.ESParamValues()
-                        },
-                        {
+           
 
-                            groupId: "ESMIS",
-                            filterId: "ES_MIS360_SalesPerBU",
-                            gridOptions: {},
-                            pVals: new esGlobals.ESParamValues()
-                        }
-                        */
+            {
+                groupId: "esmis",
+                filterId: "dbkpis",
+                gridOptions: {},
+                pVals: new esGlobals.ESParamValues()
+            },
 
             {
                 groupId: "esmmstockitem",

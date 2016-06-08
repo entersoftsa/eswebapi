@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.10.1 - 2016-05-25
+/*! Entersoft Application Server WEB API - v1.10.1 - 2016-06-08
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9843,7 +9843,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 if (tCol.aggregate) {
                     tCol.aggregates = [tCol.aggregate];
-                    var fmtStr = esCol.formatString ? "kendo.toString(" + tCol.aggregate + ",'" + esCol.formatString.replace("#", "\\\\#") + "')" : tCol.aggregate;
+                    var fmtStr = esCol.formatString ? "kendo.toString(" + tCol.aggregate + ",'" + esCol.formatString.replace(/#/g, "\\\\#") + "')" : tCol.aggregate;
                     tCol.footerTemplate = "<div style='text-align: right'>#:" + fmtStr + "#</div>";
                     tCol.groupFooterTemplate = tCol.footerTemplate;
                 }

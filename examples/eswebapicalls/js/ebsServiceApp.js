@@ -39,9 +39,9 @@
             $exceptionHandlerProvider.setLogServer("Azure");
 
             esWebApiServiceProvider.setSettings({
-                
-                "host": "esmasterapp.entersoft.gr",
-                allowUnsecureConnection: false
+                host: "192.168.1.190/Entersoft.Web.Api",
+                //"host": "esmasterapp.entersoft.gr",
+                allowUnsecureConnection: true
                 
                 
             });
