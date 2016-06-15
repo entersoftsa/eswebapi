@@ -1925,6 +1925,10 @@
                                 return moment().endOf('week').add(1, 'days').add(valOffset, 'weeks').toDate();
                             }
                         }
+                     case "Day":
+                        {
+                            return moment().add(valOffset, 'days').toDate();
+                        }
                     case "Quarter":
                         {
                             if (bFrom) {

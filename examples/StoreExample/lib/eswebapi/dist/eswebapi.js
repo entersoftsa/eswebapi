@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.10.1 - 2016-06-08
+/*! Entersoft Application Server WEB API - v1.10.1 - 2016-06-15
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -10405,6 +10405,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             } else {
                                 return moment().endOf('week').add(1, 'days').add(valOffset, 'weeks').toDate();
                             }
+                        }
+                     case "Day":
+                        {
+                            return moment().add(valOffset, 'days').toDate();
                         }
                     case "Quarter":
                         {

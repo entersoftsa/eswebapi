@@ -5,14 +5,26 @@
         /* angular modules */
         'ui.router',
         'ngStorage',
+        'pascalprecht.translate',
 
         /* Entersoft AngularJS WEB API Provider */
         'es.Services.Web',
         'esAppControllers'
     ]);
 
-    esApp.config(['$logProvider', '$stateProvider', '$urlRouterProvider', 'esWebApiProvider',
-        function($logProvider, $stateProvider, $urlRouterProvider, esWebApiServiceProvider) {
+    esApp.config(['$logProvider', '$stateProvider', '$urlRouterProvider', 'esWebApiProvider', '$translateProvider',
+        function($logProvider, $stateProvider, $urlRouterProvider, esWebApiServiceProvider, $translateProvider) {
+
+            $translateProvider.useStaticFilesLoader({
+                files: [{
+                    prefix: 'lib/eswebapi/dist/languages/eswebapi-locale-',
+                    suffix: '.json'
+                }]
+            });
+            $translateProvider.preferredLanguage('el');
+            $translateProvider.fallbackLanguage('en');
+            $translateProvider.useSanitizeValueStrategy('escape');
+
 
             $urlRouterProvider.otherwise('/login');
 
@@ -32,7 +44,7 @@
 
             var subscriptionId = "";
             esWebApiServiceProvider.setSettings({
-                "host": "192.168.1.190/eswebapijti",
+                "host": "192.168.1.190/entersoft.web.api",
                 subscriptionId: subscriptionId,
                 subscriptionPassword: "passx",
                 allowUnsecureConnection: true
