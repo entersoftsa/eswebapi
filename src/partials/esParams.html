@@ -1,5 +1,5 @@
 <uib-accordion>
-    <uib-accordion-group is-open="esPanelOpen">
+    <div uib-accordion-group class="panel-default" is-open="esPanelOpen">
         <uib-accordion-heading>
             {{::esParamsDef.title}}&nbsp;<span class="badge">{{::esParamsDef.visibleDefinitions().length}}</span> 
            	<i class="pull-right glyphicon" uib-popover-placement="left" uib-popover-append-to-body="true" uib-popover-template="'src/partials/esParamsPanelPopover.html'" popover-title="{{::esParamsDef.title}}" popover-trigger="mouseenter" ng-class="{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}"></i>
@@ -15,6 +15,6 @@
         <div ng-if="esShowRun">
             <button type="button" class="btn btn-primary" ng-click="esRunClick()">{{::esRunTitle}}</button>
         </div>
-    </uib-accordion-group>
+    </div>
 </uib-accordion>
 

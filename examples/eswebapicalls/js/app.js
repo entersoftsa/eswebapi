@@ -85,6 +85,7 @@
                 //host: "testes.azure-api.net/ebs",
                 "host": "192.168.1.190/Entersoft.Web.Api",
                 //host: "10.211.55.3/entersoftapi",
+                //"host": "esmasterapp.entersoft.gr",
                 subscriptionId: subscriptionId,
                 subscriptionPassword: "passx",
                 allowUnsecureConnection: true, 
