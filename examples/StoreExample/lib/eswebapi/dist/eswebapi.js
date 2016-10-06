@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.11.1 - 2016-10-03
+/*! Entersoft Application Server WEB API - v1.11.3 - 2016-10-05
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6404,7 +6404,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.11.1";
+    var version = "1.11.3";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -7670,6 +7670,10 @@ x.setParamValues({p1: 'Hello World'});
                     isLogin: false,
                     messageToShow: ""
                 };
+
+                if (err && !_.isString(err) && _.isArrayLike(err)) {
+                    err = err[0];
+                }
 
                 if (!err) {
                     switch (status) {
@@ -9640,8 +9644,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
          *
          * 
          */
-        .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', 'esMessaging', 'esGlobals',
-            function($log, esWebApiService, esWebUIHelper, esMessaging, esGlobals) {
+        .directive('esWebPq', ['$log', 'esWebApi', 'esUIHelper', 'esMessaging', 'esGlobals', 'esCache',
+            function($log, esWebApiService, esWebUIHelper, esMessaging, esGlobals, esCache) {
                 return {
                     restrict: 'AE',
                     scope: {
@@ -9656,6 +9660,20 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         return "src/partials/esWebPQ.html";
                     },
                     link: function($scope, iElement, iAttrs) {
+
+                        function processPQInfo(retData) {
+                            var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, retData);
+                            if ($scope.esParamsValues && ($scope.esParamsValues instanceof esGlobals.ESParamValues)) {
+                                $scope.esParamsValues.merge(v.defaultValues);
+                            } else {
+                                $scope.esParamsValues = v.defaultValues;
+                            }
+                            $scope.esParamsDef = v.params;
+
+                            var p = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
+                            $scope.esGridOptions = angular.extend(p, $scope.esGridOptions);
+                        }
+
                         if (!$scope.esGroupId || !$scope.esFilterId) {
                             throw "You must set the pair es-group-id and es-filter-id attrs";
                         }
@@ -9664,19 +9682,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             $scope.esGridOptions.dataSource.read();
                         }
 
-                        esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
-                            .then(function(ret) {
-                                var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
-                                if ($scope.esParamsValues && ($scope.esParamsValues instanceof esGlobals.ESParamValues)) {
-                                    $scope.esParamsValues.merge(v.defaultValues);
-                                } else {
-                                    $scope.esParamsValues = v.defaultValues;
-                                }
-                                $scope.esParamsDef = v.params;
-
-                                var p = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
-                                $scope.esGridOptions = angular.extend(p, $scope.esGridOptions);
-                            });
+                        var pqinfo = esCache.getItem("PQI_" + $scope.esGroupId + "/" + $scope.esFilterId);
+                        if (pqinfo) {
+                            processPQInfo(pqinfo);
+                        } else {
+                            esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
+                                .then(function(ret) {
+                                    esCache.setItem("PQI_" + $scope.esGroupId + "/" + $scope.esFilterId, ret.data);
+                                    processPQInfo(ret.data);
+                                });
+                        }
                     }
                 };
             }
@@ -9814,10 +9829,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                     case "string":
                         {
-                            if (showFormInfo && showFormInfo.showCol == esCol.field) {
-                                var linkField = showFormInfo.selectedMasterField || 'GID';
+                            if (showFormInfo && showFormInfo.showCol == esCol.field && showFormInfo.selectedMasterField) {
 
-                                tCol.template = kendo.format("<a href='#={1}||''#'>#={0}||''#</a>", esCol.field, linkField);
+                                var cond = kendo.format("#= ((data.{0}) && (data.{1})) ? ", showFormInfo.selectedMasterField, esCol.field);
+                                var urllink = "kendo.format(\"<a ui-sref=\\\"esform({pk: '{0}', objectid: '{2}'} )\\\">{1}</a>\", " + showFormInfo.selectedMasterField + ", " + esCol.field + ", " + "'esmmstockitem'" + ")";
+
+                                tCol.template = cond + urllink + kendo.format(" : (data.{0}) #", esCol.field);
+
                             } else {
                                 var ul = "";
                                 if (esCol.field.toLowerCase().indexOf("email") != -1) {
@@ -10778,7 +10796,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         showCol: clickCol.field,
                         selectedMasterField: esGridInfo.selectedMasterField
                     } : undefined;
-                    
+
                     return esColToKCol(x, showForm);
                 });
 
