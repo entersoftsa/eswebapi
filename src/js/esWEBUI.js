@@ -25,7 +25,7 @@
         $translate.use(lang.split("-")[0]);
         if (kendo) {
             kendo.culture(lang);
-            var kendoMessagesUrl = window.ESDBG ? "bower_components/kendo-ui/js/messages/kendo.messages." : "http://cdn.kendostatic.com/" + kendo.version + "/js/messages/kendo.messages.";
+            var kendoMessagesUrl = window.ESDBG ? "bower_components/kendo-ui/js/messages/kendo.messages." : "//kendo.cdn.telerik.com/" + kendo.version + "/js/messages/kendo.messages.";
             if (lang == "el-GR") {
                 lang = "en-US";
             }

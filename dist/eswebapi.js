@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.11.3 - 2016-10-05
+/*! Entersoft Application Server WEB API - v1.11.4 - 2016-10-23
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6404,7 +6404,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.11.3";
+    var version = "1.11.4";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -8510,7 +8510,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         $translate.use(lang.split("-")[0]);
         if (kendo) {
             kendo.culture(lang);
-            var kendoMessagesUrl = window.ESDBG ? "bower_components/kendo-ui/js/messages/kendo.messages." : "http://cdn.kendostatic.com/" + kendo.version + "/js/messages/kendo.messages.";
+            var kendoMessagesUrl = window.ESDBG ? "bower_components/kendo-ui/js/messages/kendo.messages." : "//kendo.cdn.telerik.com/" + kendo.version + "/js/messages/kendo.messages.";
             if (lang == "el-GR") {
                 lang = "en-US";
             }
