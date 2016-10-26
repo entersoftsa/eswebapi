@@ -12,7 +12,8 @@
         "PQ": {
             "TOOLBAR_RUN": "Αποδοχή",
             "DOWNLOAD": "Λήψη",
-            "PARAMS_PANEL_RUN": "Εφαρμογή"
+            "PARAMS_PANEL_RUN": "Εφαρμογή",
+            "INVESTIGATE": "Αναζήτηση"
         },
         "ESCHARTPQ" : {
             "CHART": "Γράφημα",

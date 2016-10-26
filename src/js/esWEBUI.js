@@ -178,10 +178,12 @@
                             return "esParamZoom";
                         }
                     } else {
+                        if (pParam.invQueryID == "ESMMStockItem\\ESMMStockItem_Def\\ESMMStockItem_Def_Q8.esq")
+                            return "esParamInv";
+
                         return "esParamText";
                     }
                 }
-
                 return "esParamText";
 
             };
@@ -738,10 +740,12 @@
             return {
                 restrict: 'AE',
                 scope: {
+                    esAutoExecute: "=?",
                     esGroupId: "=",
                     esFilterId: "=",
                     esExecuteParams: "=",
-                    esGridOptions: "=",
+                    esGridOptions: "=?",
+                    esPostGridOptions: "=?",
                     esSrvPaging: "=",
                     esDataSource: "=",
                 },
@@ -840,6 +844,9 @@
                                 var p1 = ret.data;
                                 var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
                                 $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
+                                if ($scope.esPostGridOptions) {
+                                    angular.merge($scope.esGridOptions, $scope.esPostGridOptions);
+                                }
                             });
                     }
                 }
@@ -1034,89 +1041,108 @@
      * This directive is responsible to render the html for the presentation of the ES00Documents as a detail of a kendo-grid
      */
     .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
-            function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals) {
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals) {
 
-                return {
-                    restrict: 'AE',
-                    scope: {
-                        esDocumentGridOptions: "=?",
-                        esMasterRowField: "="
-                    },
-                    template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
-                    link: function($scope, iElement, iAttrs) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esDocumentGridOptions: "=?",
+                    esMasterRowField: "="
+                },
+                template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
+                link: function($scope, iElement, iAttrs) {
 
-                        $scope.downloadBlob = function(gid) {
-                            alert(gid);
-                        };
+                    $scope.downloadBlob = function(gid) {
+                        alert(gid);
+                    };
 
-                        if (!$scope.esMasterRowField && !iAttrs.esMasterRowField) {
-                            $scope.esMasterRowField = "GID";
-                            $log.warn("esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
-                        }
-
-                        var getOptions = function() {
-                            var g = "ESGOCompany";
-                            var f = "ES00DocumentsDetails";
-                            var xParam = {
-                                serverGrouping: false,
-                                serverSorting: false,
-                                serverFiltering: false,
-                                serverPaging: false,
-                                pageSize: 20,
-                                transport: {
-                                    read: function(options) {
-
-                                        esWebApiService.fetchES00DocumentsByEntityGID($scope.$parent.dataItem[$scope.esMasterRowField])
-                                            .then(function(ret) {
-                                                options.success(ret);
-                                            }, function(err) {
-                                                options.error(err);
-                                            });
-                                    }
-
-                                },
-                                schema: {
-                                    data: "data",
-                                    total: "data.length"
-                                }
-                            };
-
-                            var xDS = new kendo.data.DataSource(xParam);
-
-                            esWebApiService.fetchPublicQueryInfo(g, f, true)
-                                .then(function(ret) {
-                                    var p1 = ret.data;
-                                    var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
-                                    ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
-                                    ret.autoBind = true;
-                                    ret.toolbar = null;
-                                    ret.groupable = false;
-                                    ret.dataSource = xDS;
-                                    // Add the download column
-                                    ret.columns.push({
-                                        template: "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{'ESUI.PQ.DOWNLOAD' | translate }}</button>"
-                                    });
-
-                                    $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
-                                });
-                        };
-
-                        getOptions();
+                    if (!$scope.esMasterRowField && !iAttrs.esMasterRowField) {
+                        $scope.esMasterRowField = "GID";
+                        $log.warn("esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
                     }
-                };
-            }
-        ])
-        /**
-         * @ngdoc directive
-         * @name es.Web.UI.directive:esParam
-         * @function
-         *
-         * @description
-         * **TBD**
-         *
-         * 
-         */
-        .directive('esParam', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
+
+                    var getOptions = function() {
+                        var g = "ESGOCompany";
+                        var f = "ES00DocumentsDetails";
+                        var xParam = {
+                            serverGrouping: false,
+                            serverSorting: false,
+                            serverFiltering: false,
+                            serverPaging: false,
+                            pageSize: 20,
+                            transport: {
+                                read: function(options) {
+
+                                    esWebApiService.fetchES00DocumentsByEntityGID($scope.$parent.dataItem[$scope.esMasterRowField])
+                                        .then(function(ret) {
+                                            options.success(ret);
+                                        }, function(err) {
+                                            options.error(err);
+                                        });
+                                }
+
+                            },
+                            schema: {
+                                data: "data",
+                                total: "data.length"
+                            }
+                        };
+
+                        var xDS = new kendo.data.DataSource(xParam);
+
+                        esWebApiService.fetchPublicQueryInfo(g, f, true)
+                            .then(function(ret) {
+                                var p1 = ret.data;
+                                var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
+                                ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
+                                ret.autoBind = true;
+                                ret.toolbar = null;
+                                ret.groupable = false;
+                                ret.dataSource = xDS;
+                                // Add the download column
+                                ret.columns.push({
+                                    template: "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{'ESUI.PQ.DOWNLOAD' | translate }}</button>"
+                                });
+
+                                $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
+                            });
+                    };
+
+                    getOptions();
+                }
+            };
+        }
+    ])
+
+    .controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'invParams', function($scope, $uibModalInstance, invParams) {
+        var $ctrl = this;
+
+        $ctrl.investigateGridOptions = {
+            autoBind: true,
+            selectable: invParams.paramDef.multiValued ? "multiple, row" : "row"
+        };
+        $ctrl.invParams = invParams || {};
+
+        $ctrl.ok = function() {
+            $uibModalInstance.close($ctrl.selected.item);
+        };
+
+        $ctrl.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
+    }])
+
+    /**
+     * @ngdoc directive
+     * @name es.Web.UI.directive:esParam
+     * @function
+     *
+     * @description
+     * **TBD**
+     *
+     * 
+     */
+    .directive('esParam', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
             function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals) {
                 return {
                     restrict: 'AE',
@@ -1131,6 +1157,35 @@
                         if (!$scope.esParamDef) {
                             throw "You must set a param";
                         }
+
+                        $scope.onInvestigate = function() {
+                            var modalInstance = $uibModal.open({
+                                animation: true,
+                                ariaLabelledBy: 'modal-title',
+                                ariaDescribedBy: 'modal-body',
+                                template: '<div ng-include src="\'src/partials/esInvestigate.html\'"></div>',
+                                controller: 'ModalInstanceCtrl',
+                                controllerAs: '$ctrl',
+                                size: 'lg',
+                                resolve: {
+                                    invParams: function() {
+                                        var newP = $scope.esParamVal[$scope.esParamDef.id].clone("Code");
+
+                                        return {
+                                            paramDef: $scope.esParamDef,
+                                            pVals: new esGlobals.ESParamValues([newP])
+                                        };
+                                    }
+                                }
+                            });
+
+                            modalInstance.result.then(function(selectedItem) {
+                                $ctrl.selected = selectedItem;
+                            }, function() {
+                                $log.info('Modal dismissed at: ' + new Date());
+                            });
+
+                        };
 
                         $scope.esGlobals = esGlobals;
                         $scope.esWebUIHelper = esWebUIHelper;
@@ -2139,6 +2194,7 @@
                 this.formatStrng = undefined;
                 this.tags = undefined;
                 this.visibility = undefined;
+                this.invQueryID = undefined;
                 this.invSelectedMasterTable = undefined;
                 this.invSelectedMasterField = undefined;
                 this.invTableMappings = undefined;
@@ -2207,6 +2263,7 @@
                 espInfo.oDSTag = winParamInfo.ODSTag;
                 espInfo.tags = winParamInfo.Tags;
                 espInfo.visibility = parseInt(winParamInfo.Visibility);
+                espInfo.invQueryID = winParamInfo.InvQueryID;
                 espInfo.invSelectedMasterTable = winParamInfo.InvSelectedMasterTable;
                 espInfo.invSelectedMasterField = winParamInfo.InvSelectedMasterField;
                 espInfo.invTableMappings = winParamInfo.InvTableMappings;

@@ -1,0 +1,18 @@
+<!--  -->
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-title">{{'ESUI.PQ.INVESTIGATE' | translate}} - {{::$ctrl.invParams.paramDef.caption}}</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <es-grid 
+		es-group-id="'ESFICustomer'" 
+		es-filter-id="'ESFITradeAccountCustomer_def'" 
+		es-srv-paging="true" 
+		es-post-grid-options="$ctrl.investigateGridOptions"
+		es-execute-params="$ctrl.invParams.pVals">
+	</es-grid>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+</div>
+

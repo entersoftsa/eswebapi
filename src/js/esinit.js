@@ -901,6 +901,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return this.paramValue;
             };
 
+            ESParamVal.prototype.clone = function(paramId) {
+                return new ESParamVal(paramId, this.pValue(), this.enumList);
+            };
+
             ESParamVal.prototype.pValue = function(v) {
                 if (!arguments || arguments.length == 0) {
                     // get
@@ -948,6 +952,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             //inherit from ESParamval SuperClass
             ESNumericParamVal.prototype = Object.create(ESParamVal.prototype);
 
+            ESNumericParamVal.prototype.clone = function(paramId) {
+                return new ESNumericParamVal(paramId, this.pValue());
+            }
+
             ESNumericParamVal.prototype.strVal = function() {
                 var zero = 0;
                 zero = zero.toString();
@@ -992,6 +1000,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
             //inherit from ESParamval SuperClass
             ESStringParamVal.prototype = Object.create(ESParamVal.prototype);
+
+            ESStringParamVal.prototype.clone = function(paramId) {
+                return new ESStringParamVal(paramId, this.pValue());
+            }
 
             ESStringParamVal.prototype.strVal = function() {
                 var froms = this.paramValue.value ? this.paramValue.value.toString() : '';
@@ -1042,6 +1054,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             ESDateParamVal.prototype = Object.create(ESParamVal.prototype);
+
+            ESDateParamVal.prototype.clone = function(paramId) {
+                return new ESDateParamVal(paramId, this.pValue());
+            }
 
             ESDateParamVal.prototype.strVal = function() {
                 return dateRangeResolve(this.paramValue);

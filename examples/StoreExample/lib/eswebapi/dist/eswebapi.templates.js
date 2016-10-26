@@ -26,6 +26,11 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('src/partials/esInvestigate.html',
+    "<div class=modal-header><h4 class=modal-title id=modal-title>{{'ESUI.PQ.INVESTIGATE' | translate}} - {{::$ctrl.invParams.paramDef.caption}}</h4></div><div class=modal-body id=modal-body><es-grid es-group-id=\"'ESFICustomer'\" es-filter-id=\"'ESFITradeAccountCustomer_def'\" es-srv-paging=true es-post-grid-options=$ctrl.investigateGridOptions es-execute-params=$ctrl.invParams.pVals></es-grid></div><div class=modal-footer><button class=\"btn btn-primary\" type=button ng-click=$ctrl.ok()>OK</button> <button class=\"btn btn-warning\" type=button ng-click=$ctrl.cancel()>Cancel</button></div>"
+  );
+
+
   $templateCache.put('src/partials/esLocalGrid.html',
     "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions k-data-source=esDataSource k-rebind=esGridOptions.reBind k-options=esGridOptions></div>"
   );
@@ -52,7 +57,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamAdvancedString.html',
-    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><div class=row><div class=\"col-xs-12 col-md-4\"><select class=\"form-control es-param-control\" kendo-drop-down-list ng-cloak k-ng-delay=esParamDef k-data-text-field=\"'caption'\" k-data-value-field=\"'value'\" k-auto-bind=true k-data-source=esGlobals.getesComplexParamFunctionOptions() k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.oper></select></div><div class=col-xs-12 ng-class=\"{'col-md-8': esParamVal[esParamDef.id].paramValue.oper != 'RANGE', 'col-md-4': esParamVal[esParamDef.id].paramValue.oper == 'RANGE'}\"><input class=\"form-control es-param-control\" kendo-masked-text-box ng-model=\"esParamVal[esParamDef.id].paramValue.value\"></div><div class=\"col-xs-12 col-md-4\" ng-hide=\"esParamVal[esParamDef.id].paramValue.oper != 'RANGE'\"><input class=\"form-control es-param-control\" kendo-masked-text-box ng-model=\"esParamVal[esParamDef.id].paramValue.valueTo\"></div></div>"
+    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><div class=row><div class=col-xs-12 ng-class=\"{'': esParamVal[esParamDef.id].paramValue.oper == 'NULL' || esParamVal[esParamDef.id].paramValue.oper == 'NOTNULL', 'col-md-4': esParamVal[esParamDef.id].paramValue.oper == 'RANGE', 'col-md-6': esParamVal[esParamDef.id].paramValue.oper != 'NULL' && esParamVal[esParamDef.id].paramValue.oper != 'NOTNULL' &&  esParamVal[esParamDef.id].paramValue.oper != 'RANGE'}\"><select class=\"form-control es-param-control\" kendo-drop-down-list ng-cloak k-ng-delay=esParamDef k-data-text-field=\"'caption'\" k-data-value-field=\"'value'\" k-auto-bind=true k-data-source=esGlobals.getesComplexParamFunctionOptions() k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue.oper></select></div><div class=col-xs-12 ng-hide=\"esParamVal[esParamDef.id].paramValue.oper == 'NOTNULL'|| esParamVal[esParamDef.id].paramValue.oper == 'NULL'\" ng-class=\"{'col-md-6': esParamVal[esParamDef.id].paramValue.oper != 'RANGE', 'col-md-4': esParamVal[esParamDef.id].paramValue.oper == 'RANGE'}\"><input class=\"form-control es-param-control\" kendo-masked-text-box ng-model=\"esParamVal[esParamDef.id].paramValue.value\"></div><div class=\"col-xs-12 col-md-4\" ng-hide=\"esParamVal[esParamDef.id].paramValue.oper != 'RANGE' || esParamVal[esParamDef.id].paramValue.oper == 'NOTNULL' || esParamVal[esParamDef.id].paramValue.oper == 'NULL'\"><input class=\"form-control es-param-control\" kendo-masked-text-box ng-model=\"esParamVal[esParamDef.id].paramValue.valueTo\"></div></div>"
   );
 
 
@@ -63,6 +68,11 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('src/partials/esParamEnum.html',
     "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><select class=\"form-control es-param-control\" kendo-drop-down-list name={{::esParamDef.id}} ng-required=::esParamDef.required ng-cloak k-ng-delay=esParamDef k-data-text-field=\"'text'\" k-data-value-field=\"'value'\" k-auto-bind=true k-data-source=::esParamDef.enumList k-value-primitive=true k-ng-delay=esParamVal[esParamDef.id].paramValue k-ng-model=esParamVal[esParamDef.id].paramValue></select>"
+  );
+
+
+  $templateCache.put('src/partials/esParamInv.html',
+    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><input class=\"form-control es-param-control\" kendo-masked-text-box name={{::esParamDef.id}} ng-required=::esParamDef.required k-mask=::esParamDef.formatString ng-model-options=\"{getterSetter: true}\" ng-model=esParamVal[esParamDef.id].pValue><kendo-button ng-click=onInvestigate() sprite-css-class=\"'k-icon k-i-refresh'\"><span class=k-sprite>Refresh</span></kendo-button>"
   );
 
 
