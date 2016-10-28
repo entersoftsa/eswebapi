@@ -9610,7 +9610,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     ])
 
-    .controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'esMessaging', 'invParams', function($scope, $uibModalInstance, esMessaging, invParams) {
+    .controller('esModalInvestigateCtrl', ['$scope', '$uibModalInstance', 'esMessaging', 'invParams', function($scope, $uibModalInstance, esMessaging, invParams) {
         $scope.investigateGridOptions = {
             autoBind: true,
             selectable: invParams.paramDef.multiValued ? "multiple, row" : "row"
@@ -9677,7 +9677,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     ariaLabelledBy: 'modal-title',
                                     ariaDescribedBy: 'modal-body',
                                     template: '<div ng-include src="\'src/partials/esInvestigate.html\'"></div>',
-                                    controller: 'ModalInstanceCtrl',
+                                    controller: 'esModalInvestigateCtrl',
                                     size: 'lg',
                                     resolve: {
                                         invParams: function() {

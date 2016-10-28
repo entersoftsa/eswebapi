@@ -27,7 +27,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esInvestigate.html',
-    "<div class=modal-header><h4 class=modal-title id=modal-title>{{'ESUI.PQ.INVESTIGATE' | translate}} - {{::invParams.paramDef.caption}}</h4></div><div class=modal-body id=modal-body><es-grid es-group-id=\"'ESFICustomer'\" es-filter-id=\"'ESFITradeAccountCustomer_def'\" es-srv-paging=true es-post-grid-options=investigateGridOptions es-execute-params=invParams.pVals></es-grid></div><div class=modal-footer><button class=\"btn btn-primary\" type=button ng-click=ok()>OK</button> <button class=\"btn btn-warning\" type=button ng-click=cancel()>Cancel</button></div>"
+    "<div class=modal-header><h4 class=modal-title id=modal-title>{{'ESUI.PQ.INVESTIGATE' | translate}} - {{::invParams.paramDef.caption}}</h4></div><div class=modal-body id=modal-body><es-grid es-group-id=::invParams.paramDef.invSelectedMasterTable es-filter-id=\"::invParams.paramDef.invSelectedMasterTable + '_search'\" es-srv-paging=true es-post-grid-options=investigateGridOptions es-execute-params=invParams.pVals></es-grid></div><div class=modal-footer><button class=\"btn btn-primary\" type=button ng-click=ok()>OK</button> <button class=\"btn btn-warning\" type=button ng-click=cancel()>Cancel</button></div>"
   );
 
 
@@ -72,7 +72,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamInv.html',
-    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><input class=\"form-control es-param-control\" kendo-masked-text-box name={{::esParamDef.id}} ng-required=::esParamDef.required k-mask=::esParamDef.formatString ng-model-options=\"{getterSetter: true}\" ng-model=esParamVal[esParamDef.id].pValue><kendo-button ng-click=onInvestigate() sprite-css-class=\"'k-icon k-i-refresh'\"><span class=k-sprite>Refresh</span></kendo-button>"
+    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><span class=\"k-textbox k-button k-space-right form-control es-param-control\"><input kendo-masked-text-box name={{::esParamDef.id}} ng-required=::esParamDef.required k-mask=::esParamDef.formatString ng-model-options=\"{getterSetter: true}\" ng-model=esParamVal[esParamDef.id].pValue><a class=\"k-icon k-filter\" ng-click=onInvestigate()></a></span>"
   );
 
 

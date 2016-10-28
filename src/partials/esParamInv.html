@@ -2,13 +2,16 @@
           tooltip-placement="top"
           tooltip-trigger="mouseenter">{{::esParamDef.caption}}
 </label> 
-<input class="form-control es-param-control" 
-		kendo-masked-text-box
-		name="{{::esParamDef.id}}"
-		ng-required="::esParamDef.required"
-		k-mask="::esParamDef.formatString"
-		ng-model-options="{getterSetter: true}"
-		ng-model="esParamVal[esParamDef.id].pValue">
-</input>
-<kendo-button ng-click="onInvestigate()" sprite-css-class="'k-icon k-i-refresh'"><span class="k-sprite">Refresh</span></kendo-button>
+
+<span class="k-textbox k-button k-space-right form-control es-param-control">
+	<input 
+			kendo-masked-text-box
+			name="{{::esParamDef.id}}"
+			ng-required="::esParamDef.required"
+			k-mask="::esParamDef.formatString"
+			ng-model-options="{getterSetter: true}"
+			ng-model="esParamVal[esParamDef.id].pValue">
+	</input>
+	<a class="k-icon k-filter" ng-click="onInvestigate()" ></a>
+</span>
 
