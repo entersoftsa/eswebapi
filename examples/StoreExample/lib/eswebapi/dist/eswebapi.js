@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.11.5 - 2016-10-26
+/*! Entersoft Application Server WEB API - v1.11.5 - 2016-10-27
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6640,7 +6640,7 @@ var resp = {
         function unsubscribe(handle) {
             var t = handle[0];
             cache[t] && angular.forEach(cache[t], function(idx) {
-                if (this == handle[1]) {
+                if (idx == handle[1]) {
                     cache[t].splice(idx, 1);
                 }
             });
@@ -9615,20 +9615,36 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     ])
 
-    .controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'invParams', function($scope, $uibModalInstance, invParams) {
-        var $ctrl = this;
-
-        $ctrl.investigateGridOptions = {
+    .controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'esMessaging', 'invParams', function($scope, $uibModalInstance, esMessaging, invParams) {
+        $scope.investigateGridOptions = {
             autoBind: true,
             selectable: invParams.paramDef.multiValued ? "multiple, row" : "row"
         };
-        $ctrl.invParams = invParams || {};
+        $scope.invParams = invParams || {};
+        $scope.selectedRows = null;
 
-        $ctrl.ok = function() {
-            $uibModalInstance.close($ctrl.selected.item);
+        var selFunc = function(evt, selectedRows) {
+            if (!selectedRows || selectedRows.length == 0) {
+                $scope.selectedRows = null;
+                return;
+            }
+
+            $scope.selectedRows = _.map(selectedRows, function(selItem) {
+                return evt.sender.dataItem(selItem)[$scope.invParams.paramDef.invSelectedMasterField];
+            });
         };
 
-        $ctrl.cancel = function() {
+        $uibModalInstance.closed.then(function() {
+            esMessaging.unsubscribe(hndl);
+        });
+
+        var hndl = esMessaging.subscribe("GRID_ROW_CHANGE", selFunc);
+
+        $scope.ok = function() {
+            $uibModalInstance.close($scope.selectedRows);
+        };
+
+        $scope.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
     }])
@@ -9666,7 +9682,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 ariaDescribedBy: 'modal-body',
                                 template: '<div ng-include src="\'src/partials/esInvestigate.html\'"></div>',
                                 controller: 'ModalInstanceCtrl',
-                                controllerAs: '$ctrl',
                                 size: 'lg',
                                 resolve: {
                                     invParams: function() {
@@ -9680,10 +9695,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 }
                             });
 
-                            modalInstance.result.then(function(selectedItem) {
-                                $ctrl.selected = selectedItem;
-                            }, function() {
-                                $log.info('Modal dismissed at: ' + new Date());
+                            modalInstance.result.then(function(selectedRows) {
+                                if (!selectedRows || selectedRows.length == 0) {
+                                    return;
+                                }
+
+                                var selField = $scope.esParamDef.invSelectedMasterField;
+                                var sVal = _.reduce(selectedRows, function(vals, item) {
+                                    return vals + item + "\\,";
+                                }, "");
+                                $scope.esParamVal[$scope.esParamDef.id].pValue(sVal);
                             });
 
                         };
@@ -9947,15 +9968,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
             function handleChangeGridRow(e) {
                 var selectedRows = this.select();
-                var isSelected = false;
                 var gid = undefined;
                 if (selectedRows && selectedRows.length == 1) {
                     //sme mas-det
                     gid = this.dataItem(selectedRows[0])["GID"];
-                    isSelected = true;
                 }
 
-                if (this.options.masterDetailRelations) {
+                if (gid && this.options.masterDetailRelations) {
                     if (!(this.options.masterDetailRelations instanceof ESRequeryDetailGrids)) {
                         throw "masterDetailRelations should be of type ESRequeryDetailGrids";
                     }
@@ -9974,7 +9993,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         }
                     });
                 }
-                esMessaging.publish("GRID_ROW_CHANGE", e, isSelected ? selectedRows[0] : null, gid);
+                esMessaging.publish("GRID_ROW_CHANGE", e, selectedRows);
             }
 
             function prepareStdZoom(zoomID, useCache) {

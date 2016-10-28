@@ -13,7 +13,7 @@
         "PQ" : {
             "TOOLBAR_RUN": "Run",
             "DOWNLOAD": "Download",
-            "PARAMS_PANEL_RUN": "Apply"
+            "PARAMS_PANEL_RUN": "Apply",
             "INVESTIGATE": "Search for"
         },
         "ESCHARTPQ" : {

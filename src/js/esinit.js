@@ -242,7 +242,7 @@
         function unsubscribe(handle) {
             var t = handle[0];
             cache[t] && angular.forEach(cache[t], function(idx) {
-                if (this == handle[1]) {
+                if (idx == handle[1]) {
                     cache[t].splice(idx, 1);
                 }
             });
