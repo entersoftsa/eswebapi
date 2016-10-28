@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.11.5 - 2016-10-27
+/*! Entersoft Application Server WEB API - v1.11.5 - 2016-10-28
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -8671,25 +8671,20 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     }
                 }
 
-                if (pParam.invSelectedMasterTable) {
-                    if (pParam.invSelectedMasterTable[4] == "Z") {
-                        if (pParam.multiValued) {
-                            return "esParamMultiZoom";
-                        } else {
-                            return "esParamZoom";
-                        }
+                if (pParam.isInvestigateZoom()) {
+                    if (pParam.multiValued) {
+                        return "esParamMultiZoom";
                     } else {
-                        if (pParam.invQueryID == "ESMMStockItem\\ESMMStockItem_Def\\ESMMStockItem_Def_Q8.esq")
-                            return "esParamInv";
-
-                        return "esParamText";
+                        return "esParamZoom";
                     }
+                } else {
+                    if (pParam.isInvestigateEntity())
+                        return "esParamInv";
+
+                    return "esParamText";
                 }
-                return "esParamText";
 
             };
-
-
             return f;
         })
 
@@ -9675,45 +9670,46 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             throw "You must set a param";
                         }
 
-                        $scope.onInvestigate = function() {
-                            var modalInstance = $uibModal.open({
-                                animation: true,
-                                ariaLabelledBy: 'modal-title',
-                                ariaDescribedBy: 'modal-body',
-                                template: '<div ng-include src="\'src/partials/esInvestigate.html\'"></div>',
-                                controller: 'ModalInstanceCtrl',
-                                size: 'lg',
-                                resolve: {
-                                    invParams: function() {
-                                        var newP = $scope.esParamVal[$scope.esParamDef.id].clone("Code");
+                        if ($scope.esParamDef.isInvestigateEntity()) {
+                            $scope.onInvestigate = function() {
+                                var modalInstance = $uibModal.open({
+                                    animation: true,
+                                    ariaLabelledBy: 'modal-title',
+                                    ariaDescribedBy: 'modal-body',
+                                    template: '<div ng-include src="\'src/partials/esInvestigate.html\'"></div>',
+                                    controller: 'ModalInstanceCtrl',
+                                    size: 'lg',
+                                    resolve: {
+                                        invParams: function() {
+                                            var newP = $scope.esParamVal[$scope.esParamDef.id].clone("Code");
 
-                                        return {
-                                            paramDef: $scope.esParamDef,
-                                            pVals: new esGlobals.ESParamValues([newP])
-                                        };
+                                            return {
+                                                paramDef: $scope.esParamDef,
+                                                pVals: new esGlobals.ESParamValues([newP])
+                                            };
+                                        }
                                     }
-                                }
-                            });
+                                });
 
-                            modalInstance.result.then(function(selectedRows) {
-                                if (!selectedRows || selectedRows.length == 0) {
-                                    return;
-                                }
+                                modalInstance.result.then(function(selectedRows) {
+                                    if (!selectedRows || selectedRows.length == 0) {
+                                        return;
+                                    }
 
-                                var selField = $scope.esParamDef.invSelectedMasterField;
-                                var sVal = _.reduce(selectedRows, function(vals, item) {
-                                    return vals + item + "\\,";
-                                }, "");
-                                $scope.esParamVal[$scope.esParamDef.id].pValue(sVal);
-                            });
+                                    var selField = $scope.esParamDef.invSelectedMasterField;
 
-                        };
+                                    var sVal = _.join(selectedRows, "\\,");
+                                    $scope.esParamVal[$scope.esParamDef.id].pValue(sVal);
+                                });
+
+                            };
+                        }
 
                         $scope.esGlobals = esGlobals;
                         $scope.esWebUIHelper = esWebUIHelper;
                         $scope.esWebApiService = esWebApiService;
 
-                        if ($scope.esParamDef.invSelectedMasterTable) {
+                        if ($scope.esParamDef.isInvestigateZoom()) {
                             $scope.esParamLookupDS = esWebUIHelper.getZoomDataSource($scope.esParamDef.invSelectedMasterTable);
                         }
 
@@ -10725,6 +10721,17 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
             ESParamInfo.prototype.strVal = function() {
                 return "Hello World esParaminfo";
+            };
+
+            ESParamInfo.prototype.isInvestigateZoom = function() {
+                return this.invSelectedMasterTable && this.invSelectedMasterTable.length > 4 && this.invSelectedMasterTable[4] == 'Z';
+            };
+
+            ESParamInfo.prototype.isInvestigateEntity = function() {
+                if (!this.invSelectedMasterTable || this.isInvestigateZoom())
+                    return false;
+
+                return true;
             };
 
             function ESParamsDefinitions(title, params) {
