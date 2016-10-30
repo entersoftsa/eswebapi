@@ -2,6 +2,11 @@
 
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
+**Version 1.12
+- Support for F3 Params in ParamsPanel
+- Support of AngularJS 1.5.8 and Kendo-UI 2016.03.914
+- Bug Fixes
+
 **Version 1.10.0
 - Support from total aggregates and group aggregates
 - Fixes in the documentation

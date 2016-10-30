@@ -442,6 +442,7 @@ module.exports = function(grunt) {
         'clean:docs',
         'clean:pub_docs',
         'ngdocs',
+        'copy:docs_images',
         'copy:pub_docs',
         'hybrid'
     ]);
