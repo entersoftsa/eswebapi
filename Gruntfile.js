@@ -312,7 +312,7 @@ module.exports = function(grunt) {
             },
             api: {
                 src: ['src/js/*.js', 'src/content/api/*.ngdoc'],
-                title: 'API Reference'
+                title: 'API '  + '<%= pkg.version %>'
             },
             basicconcepts: {
                 src: [
