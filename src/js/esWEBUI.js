@@ -750,7 +750,7 @@
                 link: function($scope, iElement, iAttrs) {
                     $scope.esGridRun = function() {
                         if ($scope.esGridCtrl) {
-                            $scope.esGridCtrl.dataSource.read();
+                            $scope.esGridCtrl.dataSource.page(1);
                         }
                     }
 

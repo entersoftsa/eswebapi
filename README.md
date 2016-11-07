@@ -2,6 +2,10 @@
 
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
+**Version 1.14
+- In Public Queries Grid i.e. kendo grids, when you press "Run" or "Αποστολή" it resets the next fetch to Page 1 of the results if any
+- The logout function of the WebApiService caused an error "no authorization token" which has been fixed
+
 **Version 1.12
 - Support for F3 Params in ParamsPanel
 - Support of AngularJS 1.5.8 and Kendo-UI 2016.03.914

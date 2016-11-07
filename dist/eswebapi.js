@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.12.0 - 2016-11-07
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-07
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6404,7 +6404,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.12.0";
+    var version = "1.13.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -9251,7 +9251,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 link: function($scope, iElement, iAttrs) {
                     $scope.esGridRun = function() {
                         if ($scope.esGridCtrl) {
-                            $scope.esGridCtrl.dataSource.read();
+                            $scope.esGridCtrl.dataSource.page(1);
                         }
                     }
 
