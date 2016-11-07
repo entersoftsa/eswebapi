@@ -1449,7 +1449,7 @@ $scope.doLogout = function ()
                              */
                             logout: function() {
                                 // 
-                                var hds = esGlobals.getWebApiToken();
+                                var hds = prepareHeaders();
 
                                 esGlobals.sessionClosed();
                                 esCache.clear();
