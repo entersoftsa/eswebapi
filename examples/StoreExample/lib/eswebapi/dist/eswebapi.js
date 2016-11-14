@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-13
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-14
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7082,6 +7082,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.getPageSizeForUI = function() {
                     return this.PageSize < 1 ? 20: this.PageSize;
                 }
+
+                this.initFromObj = function(inObj)
+                {
+                    var x = inObj || {};
+                    this.Page = x.Page || -1;
+                    this.PageSize = x.PageSize || -1;
+                    this.WithCount = !!x.WithCount;
+                    this.ServerPaging = (angular.isUndefined(x.ServerPaging) || x.ServerPaging == null) ? true : x.ServerPaging;
+                    return this;
+                }
             }
 
 
@@ -10201,7 +10211,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             function esGridInfoToKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esPQOptions) {
-                var resOptions = (esPQOptions instanceof esGlobals.ESPQOptions) ? esPQOptions : new esGlobals.ESPQOptions();
+                var resOptions = (esPQOptions instanceof esGlobals.ESPQOptions) ? esPQOptions : new esGlobals.ESPQOptions().initFromObj(esPQOptions);
                 var dsOptions = {
                     serverGrouping: false,
                     serverSorting: false,

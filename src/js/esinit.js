@@ -684,6 +684,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.getPageSizeForUI = function() {
                     return this.PageSize < 1 ? 20: this.PageSize;
                 }
+
+                this.initFromObj = function(inObj)
+                {
+                    var x = inObj || {};
+                    this.Page = x.Page || -1;
+                    this.PageSize = x.PageSize || -1;
+                    this.WithCount = !!x.WithCount;
+                    this.ServerPaging = (angular.isUndefined(x.ServerPaging) || x.ServerPaging == null) ? true : x.ServerPaging;
+                    return this;
+                }
             }
 
 

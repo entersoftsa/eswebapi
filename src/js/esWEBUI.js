@@ -1688,7 +1688,7 @@
             }
 
             function esGridInfoToKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esPQOptions) {
-                var resOptions = (esPQOptions instanceof esGlobals.ESPQOptions) ? esPQOptions : new esGlobals.ESPQOptions();
+                var resOptions = (esPQOptions instanceof esGlobals.ESPQOptions) ? esPQOptions : new esGlobals.ESPQOptions().initFromObj(esPQOptions);
                 var dsOptions = {
                     serverGrouping: false,
                     serverSorting: false,
