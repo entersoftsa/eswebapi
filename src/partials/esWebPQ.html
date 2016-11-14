@@ -6,7 +6,7 @@
 		<kendo-pager ng-if="esShowTopPagination" 
 			auto-bind="false" 
 			page-size="20" 
-			page-sizes="[20, 50, 100, 'All']" 
+			page-sizes="esGridOptions.pageable.pageSizes" 
 			refresh="true" 
 			data-source="esGridOptions.dataSource">
 		</kendo-pager>
@@ -17,7 +17,7 @@
 		es-group-id="esGroupId" 
 		es-filter-id="esFilterId" 
 		es-grid-options="esGridOptions" 
-		es-srv-paging="esSrvPaging" 
+		es-p-q-options="esPQOptions" 
 		es-execute-params="esParamsValues">
 	</es-grid>
 </div>

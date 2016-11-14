@@ -2,7 +2,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('src/partials/es00DocumentsDetail.html',
-    "<es-grid es-grid-options=esDocumentGridOptions es-srv-paging=\"false\">"
+    "<es-grid es-grid-options=\"esDocumentGridOptions\">"
   );
 
 
@@ -22,12 +22,12 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esGrid.html',
-    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions.dataSource es-srv-paging=esSrvPaging k-options=esGridOptions k-rebind=esGridOptions.reBind></div>"
+    "<div kendo-grid=esGridCtrl k-ng-delay=esGridOptions.dataSource es-p-q-options=esPQOptions k-options=esGridOptions k-rebind=esGridOptions.reBind></div>"
   );
 
 
   $templateCache.put('src/partials/esInvestigate.html',
-    "<div class=modal-header><h4 class=modal-title id=modal-title>{{'ESUI.PQ.INVESTIGATE' | translate}} - {{::invParams.paramDef.caption}}</h4></div><div class=modal-body id=modal-body><es-grid es-group-id=::invParams.paramDef.invSelectedMasterTable es-filter-id=\"::invParams.paramDef.invSelectedMasterTable + '_search'\" es-srv-paging=true es-post-grid-options=investigateGridOptions es-execute-params=invParams.pVals></es-grid></div><div class=modal-footer><button class=\"btn btn-primary\" type=button ng-click=ok()>OK</button> <button class=\"btn btn-warning\" type=button ng-click=cancel()>Cancel</button></div>"
+    "<div class=modal-header><h4 class=modal-title id=modal-title>{{'ESUI.PQ.INVESTIGATE' | translate}} - {{::invParams.paramDef.caption}}</h4></div><div class=modal-body id=modal-body><es-grid es-group-id=::invParams.paramDef.invSelectedMasterTable es-filter-id=\"::invParams.paramDef.invSelectedMasterTable + '_search'\" es-post-grid-options=investigateGridOptions es-execute-params=invParams.pVals></es-grid></div><div class=modal-footer><button class=\"btn btn-primary\" type=button ng-click=ok()>OK</button> <button class=\"btn btn-warning\" type=button ng-click=cancel()>Cancel</button></div>"
   );
 
 
@@ -112,7 +112,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esWebPQ.html',
-    "<div class=row><es-params-panel class=col-xs-12 ng-if=::esParamsDef.visibleDefinitions().length ng-cloak es-params-values=esParamsValues es-group-id=esGroupId es-filter-id=esFilterId es-params-def=esParamsDef></es-params-panel><div class=col-xs-12><kendo-pager ng-if=esShowTopPagination auto-bind=false page-size=20 page-sizes=\"[20, 50, 100, 'All']\" refresh=true data-source=esGridOptions.dataSource></kendo-pager></div><es-grid class=col-xs-12 ng-cloak es-group-id=esGroupId es-filter-id=esFilterId es-grid-options=esGridOptions es-srv-paging=esSrvPaging es-execute-params=esParamsValues></es-grid></div>"
+    "<div class=row><es-params-panel class=col-xs-12 ng-if=::esParamsDef.visibleDefinitions().length ng-cloak es-params-values=esParamsValues es-group-id=esGroupId es-filter-id=esFilterId es-params-def=esParamsDef></es-params-panel><div class=col-xs-12><kendo-pager ng-if=esShowTopPagination auto-bind=false page-size=20 page-sizes=esGridOptions.pageable.pageSizes refresh=true data-source=esGridOptions.dataSource></kendo-pager></div><es-grid class=col-xs-12 ng-cloak es-group-id=esGroupId es-filter-id=esFilterId es-grid-options=esGridOptions es-p-q-options=esPQOptions es-execute-params=esParamsValues></es-grid></div>"
   );
 
 

@@ -668,10 +668,22 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.UseCache = !!useCache;
             }
 
-            function ESPQOptions(page, pageSize, withCount) {
+            function ESPQOptions(page, pageSize, withCount, serverPaging) {
                 this.Page = page || -1;
                 this.PageSize = pageSize || -1;
                 this.WithCount = !!withCount;
+                this.ServerPaging = (angular.isUndefined(serverPaging) || serverPaging == null) ? true : serverPaging;
+
+                this.getPageSizeForServer = function() {
+                    if (this.ServerPaging) {
+                        return this.PageSize;
+                    }
+                    return -1;
+                }
+
+                this.getPageSizeForUI = function() {
+                    return this.PageSize < 1 ? 20: this.PageSize;
+                }
             }
 
 

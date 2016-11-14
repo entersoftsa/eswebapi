@@ -741,7 +741,7 @@
                     esExecuteParams: "=",
                     esGridOptions: "=?",
                     esPostGridOptions: "=?",
-                    esSrvPaging: "=",
+                    esPQOptions: "=?",
                     esDataSource: "=",
                 },
                 templateUrl: function(element, attrs) {
@@ -774,59 +774,7 @@
                     };
 
                     $scope.esGridPrint = function() {
-                        if (!$scope.esGridCtrl) {
-                            return;
-                        }
-
-                        var gridElement = $scope.esGridCtrl.element,
-                            printableContent = '',
-                            win = window.open('', '', 'width=800, height=500'),
-                            doc = win.document.open();
-
-                        var htmlStart =
-                            '<!DOCTYPE html>' +
-                            '<html>' +
-                            '<head>' +
-                            '<meta charset="utf-8" />' +
-                            '<title>Kendo UI Grid</title>' +
-                            '<link href="http://kendo.cdn.telerik.com/' + kendo.version + '/styles/kendo.common.min.css" rel="stylesheet" /> ' +
-                            '<style>' +
-                            'html { font: 11pt sans-serif; }' +
-                            '.k-grid { border-top-width: 0; }' +
-                            '.k-grid, .k-grid-content { height: auto !important; }' +
-                            '.k-grid-content { overflow: visible !important; }' +
-                            '.k-grid .k-grid-header th { border-top: 1px solid; }' +
-                            '.k-grid-toolbar, .k-grid-pager > .k-link { display: none; }' +
-                            '</style>' +
-                            '</head>' +
-                            '<body>';
-
-                        var htmlEnd =
-                            '</body>' +
-                            '</html>';
-
-                        var gridHeader = gridElement.children('.k-grid-header');
-                        if (gridHeader[0]) {
-                            var thead = gridHeader.find('thead').clone().addClass('k-grid-header');
-                            printableContent = gridElement
-                                .clone()
-                                .children('.k-grid-header').remove()
-                                .end()
-                                .children('.k-grid-content')
-                                .find('table')
-                                .first()
-                                .children('tbody').before(thead)
-                                .end()
-                                .end()
-                                .end()
-                                .end()[0].outerHTML;
-                        } else {
-                            printableContent = gridElement.clone()[0].outerHTML;
-                        }
-
-                        doc.write(htmlStart + printableContent + htmlEnd);
-                        doc.close();
-                        win.print();
+                        
                     }
 
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
@@ -838,7 +786,7 @@
                             .then(function(ret) {
                                 var p1 = ret.data;
                                 var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
-                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esSrvPaging);
+                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esPQOptions);
                                 if ($scope.esPostGridOptions) {
                                     angular.merge($scope.esGridOptions, $scope.esPostGridOptions);
                                 }
@@ -1089,7 +1037,8 @@
                             .then(function(ret) {
                                 var p1 = ret.data;
                                 var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
-                                ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, false);
+                                var pqO = new esGlobals.esPQOptions(1, -1, true, false);
+                                ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, pqO);
                                 ret.autoBind = true;
                                 ret.toolbar = null;
                                 ret.groupable = false;
@@ -1240,8 +1189,9 @@
                         esFilterId: "=",
                         esGridOptions: "=?",
                         esParamsValues: "=",
-                        esSrvPaging: "=",
+                        esPQOptions: "=?",
                         esShowTopPagination: "=",
+                        esPostProcessGridOptions: "&",
                     },
                     templateUrl: function(element, attrs) {
                         return "src/partials/esWebPQ.html";
@@ -1257,8 +1207,12 @@
                             }
                             $scope.esParamsDef = v.params;
 
-                            var p = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esSrvPaging);
-                            $scope.esGridOptions = angular.extend(p, $scope.esGridOptions);
+                            var p = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esPQOptions);
+                            var opt = angular.extend(p, $scope.esGridOptions);
+                            if ($scope.esPostProcessGridOptions && angular.isFunction($scope.esPostProcessGridOptions)) {
+                                opt = $scope.esPostProcessGridOptions(opt) || opt;
+                            }
+                            $scope.esGridOptions = opt;
                         }
 
                         if (!$scope.esGroupId || !$scope.esFilterId) {
@@ -1344,7 +1298,8 @@
                                             if ($scope.esLocalDataSource) {
                                                 $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToLocalKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, $scope.esDataSource);
                                             } else {
-                                                $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, false);
+                                                var pOpt = new esGlobals.ESPQOptions(1, -1, true, false);
+                                                $scope.esGroupId.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId.GroupID, $scope.esGroupId.FilterID, $scope.esGroupId.Params, v, pOpt);
                                             }
                                         }
 
@@ -1373,8 +1328,8 @@
      * of schema model for a web grid to show the results of a PQ, Entersoft PQ Parameters meta-data manipulation , etc.
      * yh
      */
-    esWEBUI.factory('esUIHelper', ['$translate', '$log', '$timeout', 'esMessaging', 'esWebApi', 'esGlobals',
-        function($translate, $log, $timeout, esMessaging, esWebApiService, esGlobals) {
+    esWEBUI.factory('esUIHelper', ['$state', '$translate', '$log', '$timeout', 'esMessaging', 'esWebApi', 'esGlobals',
+        function($state, $translate, $log, $timeout, esMessaging, esWebApiService, esGlobals) {
 
             function esColToKCol(esCol, showFormInfo) {
                 var tCol = {
@@ -1416,14 +1371,23 @@
 
                     case "string":
                         {
-                            if (showFormInfo && showFormInfo.showCol == esCol.field && showFormInfo.selectedMasterField) {
+                            //Check about ui-router state FIRST
+                            var bShowForm = false;
+                            if (showFormInfo && showFormInfo.showCol == esCol.field && showFormInfo.selectedMasterField && showFormInfo.selectedState && $state) {
 
-                                var cond = kendo.format("#= ((data.{0}) && (data.{1})) ? ", showFormInfo.selectedMasterField, esCol.field);
-                                var urllink = "kendo.format(\"<a ui-sref=\\\"esform({pk: '{0}', objectid: '{2}'} )\\\">{1}</a>\", " + showFormInfo.selectedMasterField + ", " + esCol.field + ", " + "'esmmstockitem'" + ")";
+                                var sts = $state.get();
+                                var sState = _.find(sts, { name: showFormInfo.selectedState });
+                                if (sState) {
 
-                                tCol.template = cond + urllink + kendo.format(" : (data.{0}) #", esCol.field);
+                                    var cond = kendo.format("#= ((data.{0}) && (data.{1})) ? ", showFormInfo.selectedMasterField, esCol.field);
+                                    var urllink = "kendo.format(\"<a ui-sref=\\\"{2}({PK: '{0}'} )\\\">{1}</a>\", " + showFormInfo.selectedMasterField + ", " + esCol.field + ", " + "'" + showFormInfo.selectedState + "'" + ")";
 
-                            } else {
+                                    tCol.template = cond + urllink + kendo.format(" : (data.{0}) #", esCol.field);
+                                    bShowForm = true;
+                                }
+                            }
+
+                            if (!bShowForm) {
                                 var ul = "";
                                 if (esCol.field.toLowerCase().indexOf("email") != -1) {
                                     ul = "mailto:";
@@ -1679,13 +1643,8 @@
                     filterable: true,
                     groupable: true,
                     toolbar: [
-                        "pdf",
                         "excel"
                     ],
-                    pdf: {
-                        allPages: true,
-                        fileName: esGroupId + "-" + esFilterId + ".pdf",
-                    },
                     excel: {
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
@@ -1728,20 +1687,23 @@
                 return grdopt;
             }
 
-            function esGridInfoToKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esSrvPaging) {
+            function esGridInfoToKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esPQOptions) {
+                var resOptions = (esPQOptions instanceof esGlobals.ESPQOptions) ? esPQOptions : new esGlobals.ESPQOptions();
                 var dsOptions = {
                     serverGrouping: false,
                     serverSorting: false,
                     serverFiltering: false,
                     serverAggregates: false,
-                    serverPaging: (angular.isUndefined(esSrvPaging) || esSrvPaging == null) ? true : !!esSrvPaging,
-                    pageSize: 20
+                    serverPaging: resOptions.ServerPaging,
+                    pageSize: resOptions.getPageSizeForUI()
                 };
 
+                var zArr = _.uniq(_.union([resOptions.getPageSizeForUI()], [20, 50, 100])).sort(function(a, b){return a - b});
+                zArr.push(kendo.ui.Pager.prototype.options.messages.allPages);
                 var grdopt = {
                     pageable: {
                         refresh: true,
-                        pageSizes: [20, 50, 100, kendo.ui.Pager.prototype.options.messages.allPages]
+                        pageSizes: zArr
                     },
                     autoBind: false,
                     sortable: !dsOptions.serverPaging,
@@ -1770,14 +1732,8 @@
                             template: "<a class='k-button' ng-click=\"esGridPrint()\">Print</a>"
                         },
                         */
-                        "pdf",
-
                         "excel"
                     ],
-                    pdf: {
-                        allPages: true,
-                        fileName: esGroupId + "-" + esFilterId + ".pdf",
-                    },
                     excel: {
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
@@ -2392,7 +2348,8 @@
                 var z3 = _.map(z1, function(x) {
                     var showForm = clickCol ? {
                         showCol: clickCol.field,
-                        selectedMasterField: esGridInfo.selectedMasterField
+                        selectedMasterField: esGridInfo.selectedMasterField,
+                        selectedState: (esGridInfo.selectedMasterTable || "").toLowerCase()
                     } : undefined;
 
                     return esColToKCol(x, showForm);
