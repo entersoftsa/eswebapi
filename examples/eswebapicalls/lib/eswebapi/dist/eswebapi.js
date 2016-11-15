@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-14
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-15
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7058,7 +7058,19 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.FilterID = filterId;
                 this.PQOptions = pqOptions;
                 this.Params = params;
+
+                this.initFromObj = function(inObj) {
+                    var x = inObj || {};
+                    this.CtxID = x.CtxID;
+                    this.GroupID = x.GroupID;
+                    this.FilterID = x.FilterID;
+                    this.PQOptions = new ESPQOptions().initFromObj(x.PQOptions);
+                    this.Params = x.Params;
+                    return this;
+                }
             }
+
+
 
             function ESMultiZoomDef(zoomId, pqOptions, useCache) {
                 this.ZoomID = zoomId;
@@ -7066,11 +7078,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.UseCache = !!useCache;
             }
 
-            function ESPQOptions(page, pageSize, withCount, serverPaging) {
+            function ESPQOptions(page, pageSize, withCount, serverPaging, autoExecute) {
                 this.Page = page || -1;
                 this.PageSize = pageSize || -1;
                 this.WithCount = !!withCount;
                 this.ServerPaging = (angular.isUndefined(serverPaging) || serverPaging == null) ? true : serverPaging;
+                this.AutoExecute = !!autoExecute;
 
                 this.getPageSizeForServer = function() {
                     if (this.ServerPaging) {
@@ -7080,16 +7093,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
 
                 this.getPageSizeForUI = function() {
-                    return this.PageSize < 1 ? 20: this.PageSize;
+                    return this.PageSize < 1 ? 20 : this.PageSize;
                 }
 
-                this.initFromObj = function(inObj)
-                {
+                this.initFromObj = function(inObj) {
                     var x = inObj || {};
                     this.Page = x.Page || -1;
                     this.PageSize = x.PageSize || -1;
                     this.WithCount = !!x.WithCount;
                     this.ServerPaging = (angular.isUndefined(x.ServerPaging) || x.ServerPaging == null) ? true : x.ServerPaging;
+                    this.AutoExecute = !!x.AutoExecute;
                     return this;
                 }
             }
@@ -9258,7 +9271,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             return {
                 restrict: 'AE',
                 scope: {
-                    esAutoExecute: "=?",
                     esGroupId: "=",
                     esFilterId: "=",
                     esExecuteParams: "=",
@@ -9560,7 +9572,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             .then(function(ret) {
                                 var p1 = ret.data;
                                 var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
-                                var pqO = new esGlobals.esPQOptions(1, -1, true, false);
+                                var pqO = new esGlobals.ESPQOptions(1, -1, true, false);
                                 ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, pqO);
                                 ret.autoBind = true;
                                 ret.toolbar = null;
@@ -10228,7 +10240,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         refresh: true,
                         pageSizes: zArr
                     },
-                    autoBind: false,
+                    autoBind: resOptions.AutoExecute,
                     sortable: !dsOptions.serverPaging,
                     scrollable: true,
                     selectable: "row",

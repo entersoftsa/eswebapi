@@ -2,6 +2,7 @@
     var eskbApp = angular.module('smeApp', [
 
         /* angular modules */
+        'ui.router',
         'ngRoute',
         'ngStorage',
         'ui.bootstrap',

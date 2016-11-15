@@ -97,7 +97,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamZoom.html',
-    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><select class=\"form-control es-param-control\" kendo-combo-box name={{::esParamDef.id}} ng-required=::esParamDef.required k-placeholder=::esParamDef.toolTip k-template=\"'<span><b>#: Code #</b> -- #: Description #</span>'\" k-data-text-field=::esParamDef.invSelectedMasterField k-data-value-field=::esParamDef.invSelectedMasterField k-filter=\"'contains'\" ng-required=::esParamDef.required k-auto-bind=false k-min-length=3 k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue k-data-source=esParamLookupDS></select>"
+    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><select class=\"form-control es-param-control\" kendo-combo-box name={{::esParamDef.id}} ng-required=::esParamDef.required k-placeholder=::esParamDef.toolTip k-template=\"'<span><b>#: Code #</b> -- #: Description #</span>'\" k-data-text-field=::esParamDef.invSelectedMasterField k-data-value-field=::esParamDef.invSelectedMasterField k-filter=\"'contains'\" k-auto-bind=false k-min-length=3 k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue k-data-source=esParamLookupDS></select>"
   );
 
 
