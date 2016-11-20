@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-15
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-18
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9423,14 +9423,21 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             return {
                 restrict: 'AE',
                 scope: {
-                    esPqDef: "=",
+                    esPqDef: "=?",
                     esChartOptions: "=",
+                    esLocalData: "=?",
                 },
                 templateUrl: function(element, attrs) {
                     return "src/partials/esChartPQ.html";
                 },
                 link: function($scope, iElement, iAttrs) {
-                    $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef);
+                    if (!$scope.esLocalData && !iAttrs.esLocalData)
+                    {
+                        $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef);
+                    } else {
+                        $scope.esChartDataSource = { data: $scope.esLocalData};
+                    }
+
                     $scope.esChartOptions.dataSource = $scope.esChartDataSource;
 
                     if ($scope.esChartOptions && !$scope.esChartOptions.dataBound) {

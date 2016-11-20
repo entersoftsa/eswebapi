@@ -660,7 +660,19 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.FilterID = filterId;
                 this.PQOptions = pqOptions;
                 this.Params = params;
+
+                this.initFromObj = function(inObj) {
+                    var x = inObj || {};
+                    this.CtxID = x.CtxID;
+                    this.GroupID = x.GroupID;
+                    this.FilterID = x.FilterID;
+                    this.PQOptions = new ESPQOptions().initFromObj(x.PQOptions);
+                    this.Params = x.Params;
+                    return this;
+                }
             }
+
+
 
             function ESMultiZoomDef(zoomId, pqOptions, useCache) {
                 this.ZoomID = zoomId;
@@ -668,11 +680,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.UseCache = !!useCache;
             }
 
-            function ESPQOptions(page, pageSize, withCount, serverPaging) {
+            function ESPQOptions(page, pageSize, withCount, serverPaging, autoExecute) {
                 this.Page = page || -1;
                 this.PageSize = pageSize || -1;
                 this.WithCount = !!withCount;
                 this.ServerPaging = (angular.isUndefined(serverPaging) || serverPaging == null) ? true : serverPaging;
+                this.AutoExecute = !!autoExecute;
 
                 this.getPageSizeForServer = function() {
                     if (this.ServerPaging) {
@@ -682,16 +695,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
 
                 this.getPageSizeForUI = function() {
-                    return this.PageSize < 1 ? 20: this.PageSize;
+                    return this.PageSize < 1 ? 20 : this.PageSize;
                 }
 
-                this.initFromObj = function(inObj)
-                {
+                this.initFromObj = function(inObj) {
                     var x = inObj || {};
                     this.Page = x.Page || -1;
                     this.PageSize = x.PageSize || -1;
                     this.WithCount = !!x.WithCount;
                     this.ServerPaging = (angular.isUndefined(x.ServerPaging) || x.ServerPaging == null) ? true : x.ServerPaging;
+                    this.AutoExecute = !!x.AutoExecute;
                     return this;
                 }
             }

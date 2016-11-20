@@ -735,7 +735,6 @@
             return {
                 restrict: 'AE',
                 scope: {
-                    esAutoExecute: "=?",
                     esGroupId: "=",
                     esFilterId: "=",
                     esExecuteParams: "=",
@@ -888,14 +887,21 @@
             return {
                 restrict: 'AE',
                 scope: {
-                    esPqDef: "=",
+                    esPqDef: "=?",
                     esChartOptions: "=",
+                    esLocalData: "=?",
                 },
                 templateUrl: function(element, attrs) {
                     return "src/partials/esChartPQ.html";
                 },
                 link: function($scope, iElement, iAttrs) {
-                    $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef);
+                    if (!$scope.esLocalData && !iAttrs.esLocalData)
+                    {
+                        $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef);
+                    } else {
+                        $scope.esChartDataSource = { data: $scope.esLocalData};
+                    }
+
                     $scope.esChartOptions.dataSource = $scope.esChartDataSource;
 
                     if ($scope.esChartOptions && !$scope.esChartOptions.dataBound) {
@@ -1037,7 +1043,7 @@
                             .then(function(ret) {
                                 var p1 = ret.data;
                                 var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
-                                var pqO = new esGlobals.esPQOptions(1, -1, true, false);
+                                var pqO = new esGlobals.ESPQOptions(1, -1, true, false);
                                 ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, pqO);
                                 ret.autoBind = true;
                                 ret.toolbar = null;
@@ -1705,7 +1711,7 @@
                         refresh: true,
                         pageSizes: zArr
                     },
-                    autoBind: false,
+                    autoBind: resOptions.AutoExecute,
                     sortable: !dsOptions.serverPaging,
                     scrollable: true,
                     selectable: "row",

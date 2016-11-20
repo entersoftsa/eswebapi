@@ -7,7 +7,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esChartPQ.html',
-    "<div class=row><es-params-panel class=col-xs-12 ng-cloak es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ() es-data-source=esChartDataSource></es-params-panel><div class=col-xs-12><kendo-tab-strip><ul><li class=k-state-active><span class=\"glyphicon glyphicon-picture\"></span><span class=hidden-xs>{{'ESUI.ESCHARTPQ.CHART' | translate}}</span></li><li><span class=\"glyphicon glyphicon-align-justify\"></span><span class=hidden-xs>{{'ESUI.ESCHARTPQ.DATA' | translate}}</span></li></ul><div class=eschart-wrapper><div kendo-chart=esChartCtrl k-ng-delay=esChartOptions.dataSource k-options=esChartOptions></div></div><div><es-local-grid es-grid-options=esPqDef.esGridOptions es-data-source=esChartDataSource></es-local-grid></div></kendo-tab-strip></div></div>"
+    "<div class=row><es-params-panel class=col-xs-12 ng-cloak ng-if=!esLocalData es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ() es-data-source=esChartDataSource></es-params-panel><div class=col-xs-12><kendo-tab-strip><ul><li class=k-state-active><span class=\"glyphicon glyphicon-picture\"></span><span class=hidden-xs>{{'ESUI.ESCHARTPQ.CHART' | translate}}</span></li><li><span class=\"glyphicon glyphicon-align-justify\"></span><span class=hidden-xs>{{'ESUI.ESCHARTPQ.DATA' | translate}}</span></li></ul><div class=eschart-wrapper><div kendo-chart=esChartCtrl k-ng-delay=esChartOptions.dataSource k-options=esChartOptions></div></div><div><es-local-grid es-grid-options=esPqDef.esGridOptions es-data-source=esChartDataSource></es-local-grid></div></kendo-tab-strip></div></div>"
   );
 
 
@@ -97,7 +97,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamZoom.html',
-    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><select class=\"form-control es-param-control\" kendo-combo-box name={{::esParamDef.id}} ng-required=::esParamDef.required k-placeholder=::esParamDef.toolTip k-template=\"'<span><b>#: Code #</b> -- #: Description #</span>'\" k-data-text-field=::esParamDef.invSelectedMasterField k-data-value-field=::esParamDef.invSelectedMasterField k-filter=\"'contains'\" ng-required=::esParamDef.required k-auto-bind=false k-min-length=3 k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue k-data-source=esParamLookupDS></select>"
+    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><select class=\"form-control es-param-control\" kendo-combo-box name={{::esParamDef.id}} ng-required=::esParamDef.required k-placeholder=::esParamDef.toolTip k-template=\"'<span><b>#: Code #</b> -- #: Description #</span>'\" k-data-text-field=::esParamDef.invSelectedMasterField k-data-value-field=::esParamDef.invSelectedMasterField k-filter=\"'contains'\" k-auto-bind=false k-min-length=3 k-value-primitive=true k-ng-model=esParamVal[esParamDef.id].paramValue k-data-source=esParamLookupDS></select>"
   );
 
 
