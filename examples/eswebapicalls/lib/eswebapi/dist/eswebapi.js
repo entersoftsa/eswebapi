@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-18
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-20
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -1462,7 +1462,10 @@ $scope.doLogout = function ()
                                     headers: hds,
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__LOGOUT__),
                                 });
-                                return processWEBAPIPromise(promise, tt);
+                                promise.catch(function(ex) {
+
+                                });
+                                return promise;
                             },
 
                             /**
