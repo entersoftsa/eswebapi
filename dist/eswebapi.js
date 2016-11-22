@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-20
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-22
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7055,12 +7055,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
             }
 
-            function ESPublicQueryDef(ctxId, groupId, filterId, pqOptions, params) {
+            function ESPublicQueryDef(ctxId, groupId, filterId, pqOptions, params, uiOptions) {
                 this.CtxID = ctxId;
                 this.GroupID = groupId;
                 this.FilterID = filterId;
                 this.PQOptions = pqOptions;
                 this.Params = params;
+                this.UIOptions = uiOptions;
 
                 this.initFromObj = function(inObj) {
                     var x = inObj || {};
@@ -7585,6 +7586,7 @@ $log.info(JSON.stringify(pA));
                                 x[prop].enumList = val[prop].enumList;
                             } else {
                                 // existing property i.e. param is not of ESParamVal type. In that case we override the value to the source one
+                                // 
                                 x[prop] = val[prop];
                             }
 
@@ -9287,8 +9289,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 },
                 link: function($scope, iElement, iAttrs) {
                     $scope.esGridRun = function() {
-                        if ($scope.esGridCtrl) {
-                            $scope.esGridCtrl.dataSource.page(1);
+                        if ($scope.esGridOptions && $scope.esGridOptions.dataSource) {
+                            $scope.esGridOptions.dataSource.page(1);
                         }
                     }
 

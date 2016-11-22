@@ -748,8 +748,8 @@
                 },
                 link: function($scope, iElement, iAttrs) {
                     $scope.esGridRun = function() {
-                        if ($scope.esGridCtrl) {
-                            $scope.esGridCtrl.dataSource.page(1);
+                        if ($scope.esGridOptions && $scope.esGridOptions.dataSource) {
+                            $scope.esGridOptions.dataSource.page(1);
                         }
                     }
 

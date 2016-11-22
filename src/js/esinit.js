@@ -654,12 +654,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
             }
 
-            function ESPublicQueryDef(ctxId, groupId, filterId, pqOptions, params) {
+            function ESPublicQueryDef(ctxId, groupId, filterId, pqOptions, params, uiOptions) {
                 this.CtxID = ctxId;
                 this.GroupID = groupId;
                 this.FilterID = filterId;
                 this.PQOptions = pqOptions;
                 this.Params = params;
+                this.UIOptions = uiOptions;
 
                 this.initFromObj = function(inObj) {
                     var x = inObj || {};
@@ -1184,6 +1185,7 @@ $log.info(JSON.stringify(pA));
                                 x[prop].enumList = val[prop].enumList;
                             } else {
                                 // existing property i.e. param is not of ESParamVal type. In that case we override the value to the source one
+                                // 
                                 x[prop] = val[prop];
                             }
 
