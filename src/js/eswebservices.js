@@ -1460,10 +1460,9 @@ $scope.doLogout = function ()
                                     headers: hds,
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__LOGOUT__),
                                 });
-                                promise.catch(function(ex) {
+                                return promise.catch(function(ex) {
 
                                 });
-                                return promise;
                             },
 
                             /**

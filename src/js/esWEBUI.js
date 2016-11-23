@@ -749,7 +749,14 @@
                 link: function($scope, iElement, iAttrs) {
                     $scope.esGridRun = function() {
                         if ($scope.esGridOptions && $scope.esGridOptions.dataSource) {
-                            $scope.esGridOptions.dataSource.page(1);
+                            if ($scope.esPQOptions && !$scope.esPQOptions.ServerPaging) {
+                                // Refresh all the data from server (no server paging)
+                                // and then go to page 1
+                                $scope.esGridOptions.dataSource.read();
+                                $scope.esGridOptions.dataSource.page(1);
+                            } else {
+                                $scope.esGridOptions.dataSource.page(1);
+                            }
                         }
                     }
 
@@ -773,7 +780,7 @@
                     };
 
                     $scope.esGridPrint = function() {
-                        
+
                     }
 
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
@@ -895,11 +902,10 @@
                     return "src/partials/esChartPQ.html";
                 },
                 link: function($scope, iElement, iAttrs) {
-                    if (!$scope.esLocalData && !iAttrs.esLocalData)
-                    {
+                    if (!$scope.esLocalData && !iAttrs.esLocalData) {
                         $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef);
                     } else {
-                        $scope.esChartDataSource = { data: $scope.esLocalData};
+                        $scope.esChartDataSource = { data: $scope.esLocalData };
                     }
 
                     $scope.esChartOptions.dataSource = $scope.esChartDataSource;
@@ -1216,7 +1222,7 @@
                             var p = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esPQOptions);
                             var opt = angular.extend(p, $scope.esGridOptions);
                             if ($scope.esPostProcessGridOptions && angular.isFunction($scope.esPostProcessGridOptions)) {
-                                opt = $scope.esPostProcessGridOptions(opt) || opt;
+                                opt = $scope.esPostProcessGridOptions({ arg1: opt }) || opt;
                             }
                             $scope.esGridOptions = opt;
                         }
@@ -1704,7 +1710,8 @@
                     pageSize: resOptions.getPageSizeForUI()
                 };
 
-                var zArr = _.uniq(_.union([resOptions.getPageSizeForUI()], [20, 50, 100])).sort(function(a, b){return a - b});
+                var zArr = _.uniq(_.union([resOptions.getPageSizeForUI()], [20, 50, 100])).sort(function(a, b) {
+                    return a - b });
                 zArr.push(kendo.ui.Pager.prototype.options.messages.allPages);
                 var grdopt = {
                     pageable: {
