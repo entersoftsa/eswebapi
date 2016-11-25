@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-23
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-25
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9535,14 +9535,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      * **TBD**
      * This directive is responsible to render the html for the presentation of the ES00Documents as a detail of a kendo-grid
      */
-    .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
-        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals) {
+    .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache',
+        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, esCache) {
 
             return {
                 restrict: 'AE',
                 scope: {
                     esDocumentGridOptions: "=?",
-                    esMasterRowField: "="
+                    esMasterRowField: "=?",
+                    esIsudgid: "=?"
                 },
                 template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
@@ -9551,9 +9552,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         alert(gid);
                     };
 
-                    if (!$scope.esMasterRowField && !iAttrs.esMasterRowField) {
+                    $scope.$watch('esIsudgid', function(newVal, oldVal)
+                    {
+                        if ($scope.esDocumentGridOptions && $scope.esDocumentGridOptions.dataSource) {
+                            $scope.esDocumentGridOptions.dataSource.read();
+                        }
+                    });
+
+                    if (!$scope.esIsudgid && !iAttrs.esIsudgid && !$scope.esMasterRowField && !iAttrs.esMasterRowField) {
                         $scope.esMasterRowField = "GID";
-                        $log.warn("esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
+                        $log.warn("esIsudgid is not specified and esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
                     }
 
                     var getOptions = function() {
@@ -9567,13 +9575,19 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             pageSize: 20,
                             transport: {
                                 read: function(options) {
-
-                                    esWebApiService.fetchES00DocumentsByEntityGID($scope.$parent.dataItem[$scope.esMasterRowField])
+                                    try {
+                                        var searchVal = $scope.esIsudgid ? $scope.esIsudgid : $scope.$parent.dataItem[$scope.esMasterRowField];
+                                        esWebApiService.fetchES00DocumentsByEntityGID(searchVal)
                                         .then(function(ret) {
                                             options.success(ret);
                                         }, function(err) {
                                             options.error(err);
                                         });
+                                    }
+                                    catch(x)
+                                    {
+                                        options.success({data: []});
+                                    }
                                 }
 
                             },
@@ -9585,24 +9599,35 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                         var xDS = new kendo.data.DataSource(xParam);
 
-                        esWebApiService.fetchPublicQueryInfo(g, f, true)
-                            .then(function(ret) {
-                                var p1 = ret.data;
-                                var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
-                                var pqO = new esGlobals.ESPQOptions(1, -1, true, false);
-                                ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, pqO);
-                                ret.autoBind = true;
-                                ret.toolbar = null;
-                                ret.groupable = false;
-                                ret.dataSource = xDS;
-                                // Add the download column
-                                ret.columns.push({
-                                    template: "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{'ESUI.PQ.DOWNLOAD' | translate }}</button>"
+                        var pqinfo = esCache.getItem("PQI_" + g + "/" + f);
+                        if (pqinfo) {
+                            processPQInfo(pqinfo, xDS, g, f);
+                        } else {
+                            esWebApiService.fetchPublicQueryInfo(g, f)
+                                .then(function(ret) {
+                                    esCache.setItem("PQI_" + g + "/" + f, ret.data);
+                                    processPQInfo(ret.data, xDS, g, f);
                                 });
-
-                                $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
-                            });
+                        }
                     };
+
+                    function processPQInfo(ret, xDS, g, f) {
+                        var p1 = ret;
+                        var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
+                        var pqO = new esGlobals.ESPQOptions(1, -1, true, false);
+                        ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, pqO);
+                        ret.autoBind = true;
+                        ret.toolbar = null;
+                        ret.groupable = false;
+                        ret.dataSource = xDS;
+                        // Add the download column
+                        var codeColumn = _.find(p2.columns, { field: "Code" });
+                        if (codeColumn) {
+                            codeColumn.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.xxxGID)\">{{dataItem.Code}}</button>"
+                        }
+
+                        $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
+                    }
 
                     getOptions();
                 }
@@ -10251,7 +10276,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 };
 
                 var zArr = _.uniq(_.union([resOptions.getPageSizeForUI()], [20, 50, 100])).sort(function(a, b) {
-                    return a - b });
+                    return a - b
+                });
                 zArr.push(kendo.ui.Pager.prototype.options.messages.allPages);
                 var grdopt = {
                     pageable: {
