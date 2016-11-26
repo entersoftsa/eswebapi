@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-25
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-26
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9623,7 +9623,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         // Add the download column
                         var codeColumn = _.find(p2.columns, { field: "Code" });
                         if (codeColumn) {
-                            codeColumn.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.xxxGID)\">{{dataItem.Code}}</button>"
+                            codeColumn.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"
                         }
 
                         $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);

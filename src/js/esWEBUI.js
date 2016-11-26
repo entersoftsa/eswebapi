@@ -1083,7 +1083,7 @@
                         // Add the download column
                         var codeColumn = _.find(p2.columns, { field: "Code" });
                         if (codeColumn) {
-                            codeColumn.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.xxxGID)\">{{dataItem.Code}}</button>"
+                            codeColumn.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"
                         }
 
                         $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
