@@ -258,6 +258,11 @@
                         valueTemplate: "<img ng-src={{dataItem.icon}}></img><span>{{dataItem.title}}</span>",
                         template: "<img ng-src={{dataItem.icon}}></img><span>{{dataItem.title}}</span>"
                     };
+
+                    if ($scope.esCredentials.LangID) {
+                        var lang = $scope.esCredentials.LangID;
+                        doChangeLanguage($translate, lang);
+                    }
                 }
             }
         }
@@ -1012,8 +1017,7 @@
                         alert(gid);
                     };
 
-                    $scope.$watch('esIsudgid', function(newVal, oldVal)
-                    {
+                    $scope.$watch('esIsudgid', function(newVal, oldVal) {
                         if ($scope.esDocumentGridOptions && $scope.esDocumentGridOptions.dataSource) {
                             $scope.esDocumentGridOptions.dataSource.read();
                         }
@@ -1038,15 +1042,13 @@
                                     try {
                                         var searchVal = $scope.esIsudgid ? $scope.esIsudgid : $scope.$parent.dataItem[$scope.esMasterRowField];
                                         esWebApiService.fetchES00DocumentsByEntityGID(searchVal)
-                                        .then(function(ret) {
-                                            options.success(ret);
-                                        }, function(err) {
-                                            options.error(err);
-                                        });
-                                    }
-                                    catch(x)
-                                    {
-                                        options.success({data: []});
+                                            .then(function(ret) {
+                                                options.success(ret);
+                                            }, function(err) {
+                                                options.error(err);
+                                            });
+                                    } catch (x) {
+                                        options.success({ data: [] });
                                     }
                                 }
 

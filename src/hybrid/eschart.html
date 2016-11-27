@@ -19,12 +19,21 @@
 
 </head>
 
-<body ng-cloak>
+<body ng-cloak ng-app="esWebPqApp">
     <div ng-cloak>
-        <div ng-controller="esChartCtrl">
+        <div ng-controller="esComponentCtrl">
+            <div ng-if="!isReady">
+                <es-login 
+                    es-credentials="esCredentials" 
+                    es-on-success="authenticate()" 
+                    es-show-subscription="true" 
+                    es-show-bridge="true"
+                    es-show-sticky-session="0">
+                </es-login>
+            </div>
             <es-chart ng-if="isReady"
                 es-pq-def="esPqDef" 
-                es-chart-options="esPqDef.options">
+                es-chart-options="esPqDef.UIOptions">
             </es-chart>
         </div>
     </div>
@@ -33,11 +42,7 @@
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
-            host: "10.211.55.3/entersoftapi",
-            subscriptionId: "",
-            bridgeId: "",
-            subscriptionPassword: "passx",
-            allowUnsecureConnection: true
+            host: "eswebapi.entersoft.gr"
         };
         window.esDeviceMode = "";
         window.esGridHeight = "";
@@ -45,7 +50,7 @@
         window.esDef = {
             GroupID: "ESTMOpportunity",
             FilterID: "ESTMOpportunityManagement",
-            options: {
+            UIOptions: {
                     autoBind: false,
                     title: "Leads by Lead Source",
                     series: [{
@@ -112,6 +117,7 @@
     <script src="../../bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="../../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="../../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="../../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="../../bower_components/ngstorage/ngstorage.min.js"></script>
     <script src="../../bower_components/stacktrace-js/dist/stacktrace.min.js"></script>
     <script src="../../bower_components/log4javascript/js/log4javascript.js"></script>

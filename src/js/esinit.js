@@ -610,6 +610,24 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
             ];
 
+            function suggestESLanguageID(locale) {
+                if (!locale) {
+                    return "en-US";
+                }
+
+                var lang = locale.split('-')[0];
+                if (!lang) {
+                    return "es-US";
+                }
+                lang = lang.toLowerCase();
+
+                var x = _.find(_esSupportedLanguages, function(y) {
+                    return lang == (y.id.split('-')[0].toLowerCase());
+                });
+
+                return x ? x.id : "en-US";
+            }
+
             function esConvertGIDtoId(gid) {
                 if (!gid) {
                     return 'gid';
@@ -669,6 +687,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     this.FilterID = x.FilterID;
                     this.PQOptions = new ESPQOptions().initFromObj(x.PQOptions);
                     this.Params = x.Params;
+                    this.UIOptions = x.UIOptions;
+                    for (var prop in inObj) {
+                        if (!this.hasOwnProperty(prop)) {
+                            // property xxx i.e. param xxx does not exist at all. So we must add it during the merge
+                            this[prop] = inObj[prop];
+                        }
+                    }
                     return this;
                 }
             }
@@ -1575,6 +1600,9 @@ var esAPIversion = {
                 },
 
                 esSupportedLanguages: _esSupportedLanguages,
+
+                suggestESLanguageID : suggestESLanguageID,
+
 
                 /**
                  * @ngdoc function

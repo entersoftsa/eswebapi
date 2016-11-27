@@ -18,12 +18,22 @@
     <!-- endbuild -->    
 </head>
 
-<body ng-cloak>
+<body ng-cloak ng-app="esWebPqApp">
     <div ng-cloak>
-        <div ng-controller="esGridCtrl">
+        <div ng-controller="esComponentCtrl">
+            <div ng-if="!isReady">
+                <es-login 
+                    es-credentials="esCredentials" 
+                    es-on-success="authenticate()" 
+                    es-show-subscription="true" 
+                    es-show-bridge="true"
+                    es-show-sticky-session="0">
+                </es-login>
+            </div>
             <es-web-pq ng-if="isReady" 
                 es-group-id="esPqDef.GroupID" 
-                es-srv-paging="esPqDef.serverSidePaging" 
+                es-p-q-options="esPqDef.PQOptions"
+                es-grid-options="esPqDef.UIOptions"
                 es-params-values="esPqDef.Params" 
                 es-filter-id="esPqDef.FilterID">
             </es-web-pq>
@@ -34,11 +44,7 @@
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
-            host: "10.211.55.3/entersoftapi",
-            subscriptionId: "",
-            bridgeId: "",
-            subscriptionPassword: "passx",
-            allowUnsecureConnection: true
+            host: "eswebapi.entersoft.gr"
         };
         window.esDeviceMode = "";
         window.esGridHeight = "";
@@ -46,7 +52,11 @@
         window.esDef = {
             GroupID: "ESMMStockItem",
             FilterID: "ESMMStockItem_Def",
-            ServerSidePaging: true
+            PQOptions: {
+                AutoExecute: true,
+                ServerPaging: true,
+                PageSize: 40
+            }
         };
     };
     prepareMobileCall();
@@ -61,6 +71,7 @@
     <script src="../../bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="../../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="../../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="../../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="../../bower_components/ngstorage/ngstorage.min.js"></script>
     <script src="../../bower_components/stacktrace-js/dist/stacktrace.min.js"></script>
     <script src="../../bower_components/log4javascript/js/log4javascript.js"></script>

@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-26
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-27
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -7010,6 +7010,24 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
             ];
 
+            function suggestESLanguageID(locale) {
+                if (!locale) {
+                    return "en-US";
+                }
+
+                var lang = locale.split('-')[0];
+                if (!lang) {
+                    return "es-US";
+                }
+                lang = lang.toLowerCase();
+
+                var x = _.find(_esSupportedLanguages, function(y) {
+                    return lang == (y.id.split('-')[0].toLowerCase());
+                });
+
+                return x ? x.id : "en-US";
+            }
+
             function esConvertGIDtoId(gid) {
                 if (!gid) {
                     return 'gid';
@@ -7069,6 +7087,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     this.FilterID = x.FilterID;
                     this.PQOptions = new ESPQOptions().initFromObj(x.PQOptions);
                     this.Params = x.Params;
+                    this.UIOptions = x.UIOptions;
+                    for (var prop in inObj) {
+                        if (!this.hasOwnProperty(prop)) {
+                            // property xxx i.e. param xxx does not exist at all. So we must add it during the merge
+                            this[prop] = inObj[prop];
+                        }
+                    }
                     return this;
                 }
             }
@@ -7976,6 +8001,9 @@ var esAPIversion = {
 
                 esSupportedLanguages: _esSupportedLanguages,
 
+                suggestESLanguageID : suggestESLanguageID,
+
+
                 /**
                  * @ngdoc function
                  * @name es.Services.Web.esGlobals#getMimeTypeForExt
@@ -8256,7 +8284,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     ]);
 })();
-
 
 (function() {
     'use strict';
@@ -8798,6 +8825,11 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         valueTemplate: "<img ng-src={{dataItem.icon}}></img><span>{{dataItem.title}}</span>",
                         template: "<img ng-src={{dataItem.icon}}></img><span>{{dataItem.title}}</span>"
                     };
+
+                    if ($scope.esCredentials.LangID) {
+                        var lang = $scope.esCredentials.LangID;
+                        doChangeLanguage($translate, lang);
+                    }
                 }
             }
         }
@@ -9552,8 +9584,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         alert(gid);
                     };
 
-                    $scope.$watch('esIsudgid', function(newVal, oldVal)
-                    {
+                    $scope.$watch('esIsudgid', function(newVal, oldVal) {
                         if ($scope.esDocumentGridOptions && $scope.esDocumentGridOptions.dataSource) {
                             $scope.esDocumentGridOptions.dataSource.read();
                         }
@@ -9578,15 +9609,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     try {
                                         var searchVal = $scope.esIsudgid ? $scope.esIsudgid : $scope.$parent.dataItem[$scope.esMasterRowField];
                                         esWebApiService.fetchES00DocumentsByEntityGID(searchVal)
-                                        .then(function(ret) {
-                                            options.success(ret);
-                                        }, function(err) {
-                                            options.error(err);
-                                        });
-                                    }
-                                    catch(x)
-                                    {
-                                        options.success({data: []});
+                                            .then(function(ret) {
+                                                options.success(ret);
+                                            }, function(err) {
+                                                options.error(err);
+                                            });
+                                    } catch (x) {
+                                        options.success({ data: [] });
                                     }
                                 }
 
