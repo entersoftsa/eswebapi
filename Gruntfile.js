@@ -260,7 +260,7 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'bower_components/kendo-ui/styles/bootstrap',
                     src: ['*.*'],
-                    dest: 'dist/hybrid/styles/bootstrap'
+                    dest: 'dist/hybrid/styles/Bootstrap'
                 }]
             },
 

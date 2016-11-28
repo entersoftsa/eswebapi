@@ -19,7 +19,9 @@
     esApp.config(['$logProvider', 'esWebApiProvider', 'uiGmapGoogleMapApiProvider', '$translateProvider',
         function($logProvider, esWebApiServiceProvider, GoogleMapApiProvider, $translateProvider) {
 
-            var settings = window.esWebApiSettings;
+            var settings = window.esWebApiSettings || {
+                host: "eswebapi.entersoft.gr"
+            };
             esWebApiServiceProvider.setSettings(settings);
 
             $translateProvider.useStaticFilesLoader({
