@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-27
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-11-28
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9557,7 +9557,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      * @requires $log
      * @restrict AE
      * @param {object=} esDocumentGridOptions A subset or full set of esGridOptions for the kendo-grid that will show the ES00Documents. 
-     * The ES00Documents kendo-grid will be initialized by the merge of the PublicQueryInfo gridoptions as retrieved for the GroupID = "ESGOCompany" and
+     * The ES00Documents kendo-grid will be initialized by the merge of the PublicQueryInfo gridoptions as retrieved for the GroupID = "ES00Documents" and
      * FilterID = "ES00DocumentsDetails" public query. 
      * @param {string=} esMasterRowField The field of the master grid row that the ES00DocumentGrid will be a detail of. The value of this field in the master row will form
      * the parameter for fetchES00DocumentsByGID service to retrieve the ES00DocumentRows.
@@ -9596,7 +9596,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     }
 
                     var getOptions = function() {
-                        var g = "ESGOCompany";
+                        var g = "ES00Documents";
                         var f = "ES00DocumentsDetails";
                         var xParam = {
                             serverGrouping: false,
