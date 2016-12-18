@@ -22,7 +22,7 @@
 <body ng-cloak>
     <div ng-cloak>
         <div ng-controller="esComponentCtrl">
-            <div ng-if="!isReady">
+            <div ng-if="showLogin">
                 <es-login 
                     es-credentials="esCredentials" 
                     es-on-success="authenticate()" 

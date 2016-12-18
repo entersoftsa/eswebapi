@@ -2106,6 +2106,38 @@
                 }
             }
 
+            function createEsParamVal(obj)
+            {
+                if (!obj || !obj.id) {
+                    return null;
+                }
+
+                var dx = obj.value || [];
+                dx = angular.isArray(dx) ? dx : [dx];
+                var pinfo = new ESParamInfo();
+                angular.merge(pinfo, obj);
+                dx = _.map(dx, function(k) {
+                    return { Value: k };
+                });
+                return getEsParamVal(pinfo, dx);
+            }
+
+            function createESParams(obj)
+            {
+                if (!obj || !angular.isArray(obj)) {
+                    return new new esGlobals.ESParamValues();
+                }
+
+                var p = [];
+                _.map(obj, function(x) {
+                    var par = createEsParamVal(x);
+                    if (par) {
+                        p.push(par);
+                    }
+                });
+                return new esGlobals.ESParamValues(p);
+            }
+
             function getEsParamVal(esParamInfo, dx) {
                 var ps = esParamInfo.parameterType.toLowerCase();
 
@@ -2197,9 +2229,9 @@
                 this.caption = undefined;
                 this.toolTip = undefined;
                 this.controlType = undefined;
-                this.parameterType = undefined;
+                this.parameterType = "";
                 this.precision = undefined;
-                this.multiValued = undefined;
+                this.multiValued = false;
                 this.visible = undefined;
                 this.required = undefined;
                 this.oDSTag = undefined;
@@ -3242,6 +3274,10 @@ $scope.fetchPQInfo = function() {
                 getPQDataSource: prepareWebScroller,
 
                 getPivotDS: preparePivotDS,
+
+                createEsParamVal: createEsParamVal,
+
+                createESParams: createESParams,
 
                 onMapClick: function(a, b, c) {
                     alert("A location has been clicked. Soon you will see a form here !!!");

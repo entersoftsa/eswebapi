@@ -15,6 +15,10 @@ smeControllers.config(['uiGmapGoogleMapApiProvider', function(GoogleMapApi) {
 smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
     function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 
+        $(window).unload(function() {
+            alert("clean Up session");
+        });
+
         /* boot strap configuration */
         $scope.configure = function(e) {
             $("#configurator-wrap").toggleClass("hidden-xs");
@@ -165,7 +169,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
             esWebApiService.openSession($scope.credentials, claims)
                 .then(function(rep) {
                         $log.info(rep);
-                        $location.path("/pq");
+                        $location.path("/properties");
                     },
                     function(err) {
                         $log.error(err);
@@ -204,25 +208,31 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
     }
 ]);
 
-smeControllers.controller('propertiesCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
-    function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+smeControllers.controller('propertiesCtrl', ['$location', '$window', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
+    function($location, $window, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+
+        $scope.logout = function() {
+            esWebApiService.logout()
+            .then(function()
+            {
+                alert("I am out !!!");
+            });
+        }
+
+        var dVal = esWebUIHelper.createESParams([{id: 'UserID', value: '123'}, {id: 'bg', value: '456'}]);
 
         $scope.getVersionInfo = function() {
             $scope.version = {};
 
             $scope.version.esAngularVersion = esGlobals.getVersion();
 
-            esWebApiService.fetchServerCapabilities().then(function(data) {
-                $scope.version.esWebAPIVersion = data.WebApiVersion;
+            esWebApiService.fetchSessionInfo()
+                .success(function(data) {
+                    $scope.version.esEBSVersion = data;
+                });
 
-                esWebApiService.fetchSessionInfo()
-                    .success(function(data) {
-                        $scope.version.esEBSVersion = data;
-                    });
-            });
         };
 
-        $scope.getVersionInfo();
     }
 ]);
 
@@ -854,7 +864,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.pqs = [
 
-           
+
 
             {
                 groupId: "esmis",

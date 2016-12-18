@@ -6,6 +6,7 @@
          ESWebApi Version is {{version.esWebAPIVersion}}
     </h3>
     <button ng-click="getVersionInfo()">Requery</button>
+    <button ng-click="logout()">Logout</button>
     <hr>
     <div>
         <kendo-grid xk-ng-delay="version.esEBSVersion" k-data-source="version.esEBSVersion.ESProperty" height="400" k-scrollable="true" />

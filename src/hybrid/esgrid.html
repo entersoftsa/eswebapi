@@ -21,7 +21,7 @@
 <body ng-cloak>
     <div ng-cloak>
         <div ng-controller="esComponentCtrl">
-            <div ng-if="!isReady">
+            <div ng-if="showLogin">
                 <es-login 
                     es-credentials="esCredentials" 
                     es-on-success="authenticate()" 
@@ -44,7 +44,14 @@
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
-            host: "eswebapi.entersoft.gr"
+            host: "eswebapi.entersoft.gr",
+            subscriptionId: "t12",
+            subscriptionPassword: "t12",
+            UserID: "t12",
+            Password: "t12",
+            LangID: "en-GB",
+            bridgeId: "001",
+            BranchID: "ΑΘΗ"
         };
         window.esDeviceMode = "";
         window.esGridHeight = "";
@@ -52,6 +59,7 @@
         window.esDef = {
             GroupID: "ESMMStockItem",
             FilterID: "ESMMStockItem_Def",
+            Params: [{id: 'Description', value: 'crm*'}],
             PQOptions: {
                 AutoExecute: true,
                 ServerPaging: true,
