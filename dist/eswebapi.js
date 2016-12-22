@@ -500,7 +500,7 @@ alert(sUrl);
                              **/
                             getServerUrl: function() {
                                 return urlWEBAPI;
-                            },
+                            }, 
 
                             /**
                              * @ngdoc function
