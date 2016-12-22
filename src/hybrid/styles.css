@@ -3,6 +3,10 @@
     display: none;
 }
 
+.esgrid {
+    width: 95%;
+}
+
 .item {
     flex: 0 0 auto;
     margin: 20px;

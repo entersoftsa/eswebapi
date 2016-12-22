@@ -51,7 +51,11 @@
         });
 
         esGlobals.getESUISettings().mobile = window.esDeviceMode;
-        esGlobals.getESUISettings().defaultGridHeight = window.esGridHeight;
+        esGlobals.getESUISettings().defaultGridHeight = window.esGridHeight ? (window.esGridHeight.toString() + "px") : "";
+
+        if (esGlobals.getESUISettings().mobile && window.esGridHeight && window.esGridHeight > 80) {
+            esGlobals.getESUISettings().defaultGridHeight = (window.esGridHeight - 80).toString() + "px";
+        }
     }
 
     function doLogin($scope, esGlobals, esWebApiService, runOnSuccess) {

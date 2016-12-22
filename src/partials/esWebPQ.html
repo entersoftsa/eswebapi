@@ -1,5 +1,5 @@
 <div class="row">
-	<es-params-panel class="col-xs-12" ng-if="::esParamsDef.visibleDefinitions().length" ng-cloak es-params-values="esParamsValues" es-group-id="esGroupId" es-filter-id="esFilterId" es-params-def="esParamsDef">
+	<es-params-panel class="col-xs-12" ng-if="::esParamsDef.visibleDefinitions().length" ng-cloak es-params-values="esParamsValues" es-group-id="esGroupId" es-filter-id="esFilterId" es-force-title="::esForceTitle" es-params-def="esParamsDef">
 	</es-params-panel>
 
 	<div class="col-xs-12">
@@ -12,7 +12,7 @@
 		</kendo-pager>
 	</div>
 
-	<es-grid class="col-xs-12" 
+	<es-grid class="esgrid col-xs-12" 
 		ng-cloak 
 		es-group-id="esGroupId" 
 		es-filter-id="esFilterId" 

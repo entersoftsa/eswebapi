@@ -545,7 +545,6 @@
 
                     $scope.advanceStep = function() {
                         if ($scope.isLast()) {
-                            alert("You are done !!!");
                             return;
                         }
                         $scope.esSectionIdx += 1;
@@ -1014,7 +1013,6 @@
                 link: function($scope, iElement, iAttrs) {
 
                     $scope.downloadBlob = function(gid) {
-                        alert(gid);
                     };
 
                     $scope.$watch('esIsudgid', function(newVal, oldVal) {
@@ -1227,6 +1225,7 @@
                         esGroupId: "=",
                         esFilterId: "=",
                         esGridOptions: "=?",
+                        esForceTitle: "=?",
                         esParamsValues: "=",
                         esPQOptions: "=?",
                         esShowTopPagination: "=",
@@ -1297,6 +1296,7 @@
                         esGroupId: "=?",
                         esFilterId: "=?",
                         esRunClick: "&",
+                        esForceTitle: "=?",
                         esRunTitle: "@?",
                         esShowRun: "=?",
                         esLocalDataSource: "=?",

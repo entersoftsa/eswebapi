@@ -1,7 +1,7 @@
 <uib-accordion>
     <div uib-accordion-group class="panel-default" is-open="esPanelOpen">
         <uib-accordion-heading>
-            {{::esParamsDef.title}}&nbsp;<span class="badge">{{::esParamsDef.visibleDefinitions().length}}</span> 
+            {{::(esForceTitle ? esForceTitle : esParamsDef.title)}}&nbsp;<span class="badge">{{::esParamsDef.visibleDefinitions().length}}</span> 
            	<i class="pull-right glyphicon" uib-popover-placement="left" uib-popover-append-to-body="true" uib-popover-template="'src/partials/esParamsPanelPopover.html'" popover-title="{{::esParamsDef.title}}" popover-trigger="mouseenter" ng-class="{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}"></i>
         </uib-accordion-heading>
 

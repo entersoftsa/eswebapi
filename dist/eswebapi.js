@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-12-17
+/*! Entersoft Application Server WEB API - v1.13.0 - 2016-12-22
 * Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9112,7 +9112,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                     $scope.advanceStep = function() {
                         if ($scope.isLast()) {
-                            alert("You are done !!!");
                             return;
                         }
                         $scope.esSectionIdx += 1;
@@ -9581,7 +9580,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 link: function($scope, iElement, iAttrs) {
 
                     $scope.downloadBlob = function(gid) {
-                        alert(gid);
                     };
 
                     $scope.$watch('esIsudgid', function(newVal, oldVal) {
@@ -9794,6 +9792,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         esGroupId: "=",
                         esFilterId: "=",
                         esGridOptions: "=?",
+                        esForceTitle: "=?",
                         esParamsValues: "=",
                         esPQOptions: "=?",
                         esShowTopPagination: "=",
@@ -9864,6 +9863,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         esGroupId: "=?",
                         esFilterId: "=?",
                         esRunClick: "&",
+                        esForceTitle: "=?",
                         esRunTitle: "@?",
                         esShowRun: "=?",
                         esLocalDataSource: "=?",
