@@ -362,6 +362,7 @@
                 restrict: 'AE',
                 replace: true,
                 scope: {
+                    esPanelOpen: "=?",
                     esMapOptions: "=",
                     esPqDef: "=",
                     esShowWindow: "=",
@@ -898,6 +899,7 @@
             return {
                 restrict: 'AE',
                 scope: {
+                    esPanelOpen: "=?",
                     esPqDef: "=?",
                     esChartOptions: "=",
                     esLocalData: "=?",
@@ -1227,6 +1229,7 @@
                         esGridOptions: "=?",
                         esForceTitle: "=?",
                         esParamsValues: "=",
+                        esPanelOpen: "=?",
                         esPQOptions: "=?",
                         esShowTopPagination: "=",
                         esPostProcessGridOptions: "&",
@@ -1290,6 +1293,7 @@
                 return {
                     restrict: 'AE',
                     scope: {
+                        esPanelOpen: '=?',
                         esParamsDef: '=?',
                         esPqInfo: '=?',
                         esParamsValues: '=?',

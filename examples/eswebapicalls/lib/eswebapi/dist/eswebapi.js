@@ -1,5 +1,5 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2016-12-22
-* Copyright (c) 2016 Entersoft SA; Licensed Apache-2.0 */
+/*! Entersoft Application Server WEB API - v1.13.0 - 2017-01-04
+* Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
  * http://www.entersoft.eu
@@ -7072,13 +7072,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
             }
 
-            function ESPublicQueryDef(ctxId, groupId, filterId, pqOptions, params, uiOptions) {
+            function ESPublicQueryDef(ctxId, groupId, filterId, pqOptions, params, uiOptions, esPanelOpen) {
                 this.CtxID = ctxId;
                 this.GroupID = groupId;
                 this.FilterID = filterId;
                 this.PQOptions = pqOptions;
                 this.Params = params;
                 this.UIOptions = uiOptions;
+                this.esPanelOpen = esPanelOpen;
 
                 this.initFromObj = function(inObj) {
                     var x = inObj || {};
@@ -7087,6 +7088,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     this.FilterID = x.FilterID;
                     this.PQOptions = new ESPQOptions().initFromObj(x.PQOptions);
                     this.Params = x.Params;
+                    this.esPanelOpen = x.esPanelOpen;
                     this.UIOptions = x.UIOptions;
                     for (var prop in inObj) {
                         if (!this.hasOwnProperty(prop)) {
@@ -8929,6 +8931,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 restrict: 'AE',
                 replace: true,
                 scope: {
+                    esPanelOpen: "=?",
                     esMapOptions: "=",
                     esPqDef: "=",
                     esShowWindow: "=",
@@ -9465,6 +9468,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             return {
                 restrict: 'AE',
                 scope: {
+                    esPanelOpen: "=?",
                     esPqDef: "=?",
                     esChartOptions: "=",
                     esLocalData: "=?",
@@ -9794,6 +9798,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         esGridOptions: "=?",
                         esForceTitle: "=?",
                         esParamsValues: "=",
+                        esPanelOpen: "=?",
                         esPQOptions: "=?",
                         esShowTopPagination: "=",
                         esPostProcessGridOptions: "&",
@@ -9857,6 +9862,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return {
                     restrict: 'AE',
                     scope: {
+                        esPanelOpen: '=?',
                         esParamsDef: '=?',
                         esPqInfo: '=?',
                         esParamsValues: '=?',
