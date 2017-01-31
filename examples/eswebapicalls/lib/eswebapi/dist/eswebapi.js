@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2017-01-17
+/*! Entersoft Application Server WEB API - v1.13.0 - 2017-01-31
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -351,7 +351,7 @@ eskbApp.config(['$logProvider',
                             if (!scrollerCommandParams || !scrollerCommandParams.ScrollerID || !scrollerCommandParams.CommandID) {
                                 throw new Error("ScrollerID and CommandID properties must be defined");
                             }
-                            var surl = ESWEBAPI_URL.__SCROLLER_COMMAND__;
+                            var surl = urlWEBAPI.concat(ESWEBAPI_URL.__SCROLLER_COMMAND__);
 
                             var tt = esGlobals.trackTimer("SCR", "COMMAND", scrollerCommandParams.ScrollerID.concat("/", scrollerCommandParams.CommandID));
                             tt.startTime();
