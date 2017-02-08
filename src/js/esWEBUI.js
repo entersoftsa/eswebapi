@@ -1014,8 +1014,7 @@
                 template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
 
-                    $scope.downloadBlob = function(gid) {
-                    };
+                    $scope.downloadBlob = function(gid) {};
 
                     $scope.$watch('esIsudgid', function(newVal, oldVal) {
                         if ($scope.esDocumentGridOptions && $scope.esDocumentGridOptions.dataSource) {
@@ -1664,6 +1663,24 @@
                 return new kendo.data.PivotDataSource(xParam);
             }
 
+            function esExportToExcel(e) {
+                var sheet = e.workbook.sheets[0];
+                for (var i = 0; i < sheet.rows.length; i++) {
+                    var rT = sheet.rows[i].type;
+                    if (rT == "group-footer" || rT == "footer") {
+                        for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
+                            var cCell = sheet.rows[i].cells[ci];
+                            var vVal = cCell.value;
+                            if (vVal && angular.isString(vVal) && vVal.startsWith("<div style='text-align: right'>") && vVal.endsWith("</div>")) {
+                                cCell.value = vVal.replace("<div style='text-align: right'>", "").replace("</div>", "");
+                                cCell.hAlign = "right";
+                                cCell.bold = true;
+                            }
+                        }
+                    }
+                }
+            }
+
             function esGridInfoToLocalKInfo(esGroupId, esFilterId, executeParams, esGridInfo, esDataSource) {
                 var grdopt = {
                     pageable: {
@@ -1692,7 +1709,8 @@
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
                         filterable: true
-                    }
+                    },
+                    excelExport: esExportToExcel
                 };
 
                 if (esGlobals.getESUISettings().mobile) {
@@ -1783,7 +1801,8 @@
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
                         filterable: true
-                    }
+                    },
+                    excelExport: esExportToExcel
                 };
 
                 if (esGlobals.getESUISettings().mobile) {
@@ -2110,8 +2129,7 @@
                 }
             }
 
-            function createEsParamVal(obj)
-            {
+            function createEsParamVal(obj) {
                 if (!obj || !obj.id) {
                     return null;
                 }
@@ -2126,8 +2144,7 @@
                 return getEsParamVal(pinfo, dx);
             }
 
-            function createESParams(obj)
-            {
+            function createESParams(obj) {
                 if (!obj || !angular.isArray(obj)) {
                     return new new esGlobals.ESParamValues();
                 }

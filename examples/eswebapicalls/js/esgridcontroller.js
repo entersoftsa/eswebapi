@@ -15,9 +15,6 @@ smeControllers.config(['uiGmapGoogleMapApiProvider', function(GoogleMapApi) {
 smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
     function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 
-        $(window).unload(function() {
-            alert("clean Up session");
-        });
 
         /* boot strap configuration */
         $scope.configure = function(e) {

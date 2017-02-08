@@ -72,7 +72,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esParamInv.html',
-    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><span class=\"k-textbox k-button k-space-right form-control es-param-control\"><input kendo-masked-text-box name={{::esParamDef.id}} ng-required=::esParamDef.required k-mask=::esParamDef.formatString ng-model-options=\"{getterSetter: true}\" ng-model=esParamVal[esParamDef.id].pValue><a class=\"k-icon k-filter\" ng-click=onInvestigate()></a></span>"
+    "<label class=\"control-label es-param-label\" uib-tooltip={{::esParamDef.toolTip}} tooltip-placement=top tooltip-trigger=mouseenter>{{::esParamDef.caption}}</label><span class=\"k-textbox k-button k-space-right form-control es-param-control\"><input kendo-masked-text-box name={{::esParamDef.id}} ng-required=::esParamDef.required k-mask=::esParamDef.formatString ng-model-options=\"{getterSetter: true}\" ng-model=esParamVal[esParamDef.id].pValue><a class=\"k-icon k-i-search\" ng-click=onInvestigate()></a></span>"
   );
 
 
