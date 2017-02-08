@@ -1426,6 +1426,10 @@
 
                                     tCol.template = cond + urllink + kendo.format(" : (data.{0}) #", esCol.field);
                                     bShowForm = true;
+                                } else {
+                                    if (showFormInfo.selectedState && showFormInfo.selectedState.toLowerCase() == "es00documents") {
+                                        tCol.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"                                        
+                                    }
                                 }
                             }
 

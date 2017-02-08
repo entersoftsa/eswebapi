@@ -861,8 +861,13 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.pqs = [
 
-
-
+            {
+                groupId: "es00documents",
+                filterId: "es00documents_def",
+                gridOptions: {},
+                pVals: new esGlobals.ESParamValues()
+            },
+/*
             {
                 groupId: "esmis",
                 filterId: "dbkpis",
@@ -921,7 +926,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 gridOptions: {},
                 pVals: new esGlobals.ESParamValues()
             },
-
+*/
         ];
     }
 ]);
