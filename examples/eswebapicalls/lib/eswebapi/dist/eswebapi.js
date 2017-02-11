@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2017-02-08
+/*! Entersoft Application Server WEB API - v1.13.0 - 2017-02-11
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9345,7 +9345,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     type: docType
                                 });
                                 //saveAs(file, "test.pdf");
-                                var fU = URL.createObjectURL(file);
+                                var wUrl = window.URL || window.webkitURL;
+                                var fU = wUrl.createObjectURL(file);
                                 window.open(fU);
                             })
                             .catch(function(err) {

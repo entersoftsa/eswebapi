@@ -776,7 +776,8 @@
                                     type: docType
                                 });
                                 //saveAs(file, "test.pdf");
-                                var fU = URL.createObjectURL(file);
+                                var wUrl = window.URL || window.webkitURL;
+                                var fU = wUrl.createObjectURL(file);
                                 window.open(fU);
                             })
                             .catch(function(err) {
