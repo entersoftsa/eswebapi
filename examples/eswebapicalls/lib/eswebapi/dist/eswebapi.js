@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2017-02-11
+/*! Entersoft Application Server WEB API - v1.13.0 - 2017-02-12
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9344,10 +9344,21 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 var file = new Blob([fileData], {
                                     type: docType
                                 });
-                                //saveAs(file, "test.pdf");
-                                var wUrl = window.URL || window.webkitURL;
-                                var fU = wUrl.createObjectURL(file);
-                                window.open(fU);
+                                var bRun = false;
+
+                                if (bRun) {
+                                    window.URL = window.URL || window.webkitURL;
+                                    var fU = window.URL.createObjectURL(file);
+                                    window.open(fU);
+
+                                } else {
+                                    var reader = new FileReader();
+                                    reader.onload = function(xe) {
+                                        window.open(reader.result);
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+
                             })
                             .catch(function(err) {
                                 $log.error("2nd error = " + JSON.stringify(err));
@@ -9998,7 +10009,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     bShowForm = true;
                                 } else {
                                     if (showFormInfo.selectedState && showFormInfo.selectedState.toLowerCase() == "es00documents") {
-                                        tCol.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"                                        
+                                        tCol.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"
                                     }
                                 }
                             }
