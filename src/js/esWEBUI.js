@@ -768,17 +768,44 @@
                     $scope.downloadBlob = function(gid) {
                         esWebApiService.fetchES00DocumentBlobDataByGID(gid)
                             .then(function(result) {
-                                var fileData = result.data;
-
                                 var docType = result.headers()["content-type"];
 
-                                var file = new Blob([fileData], {
+                                var file = new Blob([result.data], {
                                     type: docType
                                 });
-                                //saveAs(file, "test.pdf");
-                                var wUrl = window.URL || window.webkitURL;
-                                var fU = wUrl.createObjectURL(file);
-                                window.open(fU);
+
+
+                                if (navigator.vendor && navigator.vendor.startsWith("Apple")) {
+
+
+                                    var reader = new FileReader();
+                                    reader.onload = function(e) {
+                                        window.location.href = reader.result;
+                                    };
+                                    reader.readAsDataURL(file);
+
+                                    /*
+                                    function download(filename, text) {
+                                        var element = document.createElement('xax');
+                                        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+                                        element.setAttribute('download', filename);
+
+                                        element.style.display = 'none';
+                                        document.body.appendChild(element);
+
+                                        element.click();
+
+                                        document.body.removeChild(element);
+                                    }
+                                    */
+
+
+                                } else {
+                                    window.URL = window.URL || window.webkitURL;
+                                    var fU = window.URL.createObjectURL(file);
+                                    window.open(fU);
+                                }
+
                             })
                             .catch(function(err) {
                                 $log.error("2nd error = " + JSON.stringify(err));
@@ -1429,7 +1456,7 @@
                                     bShowForm = true;
                                 } else {
                                     if (showFormInfo.selectedState && showFormInfo.selectedState.toLowerCase() == "es00documents") {
-                                        tCol.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"                                        
+                                        tCol.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"
                                     }
                                 }
                             }
@@ -1675,9 +1702,8 @@
                     if (rT == "group-footer" || rT == "footer") {
                         for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
                             var cCell = sheet.rows[i].cells[ci];
-                            var vVal = cCell.value;
-                            if (vVal && angular.isString(vVal) && vVal.startsWith("<div style='text-align: right'>") && vVal.endsWith("</div>")) {
-                                cCell.value = vVal.replace("<div style='text-align: right'>", "").replace("</div>", "");
+                            if (cCell.value) {
+                                cCell.value = $(cCell.value).text();
                                 cCell.hAlign = "right";
                                 cCell.bold = true;
                             }
