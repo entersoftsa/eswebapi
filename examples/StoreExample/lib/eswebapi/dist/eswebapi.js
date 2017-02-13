@@ -9343,10 +9343,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     type: docType
                                 });
 
-
-                                if (navigator.vendor && navigator.vendor.startsWith("Apple")) {
-
-
+                                if (navigator.msSaveOrOpenBlob) {
+                                    navigator.msSaveOrOpenBlob(file);
+                                } else if (navigator.vendor && navigator.vendor.startsWith("Apple")) {
                                     var reader = new FileReader();
                                     reader.onload = function(e) {
                                         window.location.href = reader.result;
