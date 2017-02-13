@@ -9983,6 +9983,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     headerAttributes: {
                         "class": "es-table-header-cell",
                     },
+                    menu: !!esCol.title,
                     template: undefined,
                     footerTemplate: undefined,
                     aggregate: undefined,
