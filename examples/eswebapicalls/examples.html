@@ -241,6 +241,7 @@
     <div>
         <h3>20. PDF-WORD-ETC BIN FILES fetchEASWebAsset</h3>
         <span>
+            <a ng-href="{{prepareAssetURL()}}" download>Get the file</a>
             <input type="text" ng-model="pAsset"  placeholder="EAS Asset to fetch">
             <button ng-click="fetchEASWebAsset()">fetchEASWebAsset</button>
             <textarea>{{pAssetResults}}</textarea>

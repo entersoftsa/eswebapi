@@ -4951,6 +4951,13 @@ var ret = {
                                 return surl;
                             },
 
+                            createURLForEASAssetDownload: function(assetUrlPath)
+                            {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_WEB_EAS_ASSET__, assetUrlPath);
+                                surl += "?base64=false&webapitoken=" +  esGlobals.getWebApiToken();
+                                return surl;
+                            },
+
                             /** 
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#fetchES00DocumentBlobDataByGID

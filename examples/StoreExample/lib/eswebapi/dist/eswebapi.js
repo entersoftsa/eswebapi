@@ -4953,6 +4953,13 @@ var ret = {
                                 return surl;
                             },
 
+                            createURLForEASAssetDownload: function(assetUrlPath)
+                            {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_WEB_EAS_ASSET__, assetUrlPath);
+                                surl += "?base64=false&webapitoken=" +  esGlobals.getWebApiToken();
+                                return surl;
+                            },
+
                             /** 
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#fetchES00DocumentBlobDataByGID
@@ -9340,55 +9347,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         }
                     }
 
-                    $scope.downloadBlob = function(gid) {
-                        esWebApiService.fetchES00DocumentBlobDataByGID(gid)
-                            .then(function(result) {
-                                var docType = result.headers()["content-type"];
-
-                                var file = new Blob([result.data], {
-                                    type: docType
-                                });
-
-                                if (navigator.msSaveOrOpenBlob) {
-                                    navigator.msSaveOrOpenBlob(file);
-                                } else if (navigator.vendor && navigator.vendor.startsWith("Apple")) {
-                                    var reader = new FileReader();
-                                    reader.onload = function(e) {
-                                        window.location.href = reader.result;
-                                    };
-                                    reader.readAsDataURL(file);
-
-                                    /*
-                                    function download(filename, text) {
-                                        var element = document.createElement('xax');
-                                        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-                                        element.setAttribute('download', filename);
-
-                                        element.style.display = 'none';
-                                        document.body.appendChild(element);
-
-                                        element.click();
-
-                                        document.body.removeChild(element);
-                                    }
-                                    */
-
-
-                                } else {
-                                    window.URL = window.URL || window.webkitURL;
-                                    var fU = window.URL.createObjectURL(file);
-                                    window.open(fU);
-                                }
-
-                            })
-                            .catch(function(err) {
-                                $log.error("2nd error = " + JSON.stringify(err));
-                            });
-                    };
-
                     $scope.esGridPrint = function() {
-
-                    }
+                    };
 
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
                         if (!$scope.esGroupId || !$scope.esFilterId) {
@@ -9560,25 +9520,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         if ($scope.esGridCtrl) {
                             $scope.esGridCtrl.dataSource.read();
                         }
-                    }
-
-                    $scope.downloadBlob = function(gid) {
-                        esWebApiService.fetchES00DocumentBlobDataByGID(gid)
-                            .then(function(result) {
-                                var fileData = result.data;
-
-                                var docType = result.headers()["content-type"];
-
-                                var file = new Blob([fileData], {
-                                    type: docType
-                                });
-                                //saveAs(file, "test.pdf");
-                                var fU = URL.createObjectURL(file);
-                                window.open(fU);
-                            })
-                            .catch(function(err) {
-                                $log.error("2nd error = " + JSON.stringify(err));
-                            });
                     };
                 }
             };
@@ -9615,8 +9556,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 },
                 template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
                 link: function($scope, iElement, iAttrs) {
-
-                    $scope.downloadBlob = function(gid) {};
 
                     $scope.$watch('esIsudgid', function(newVal, oldVal) {
                         if ($scope.esDocumentGridOptions && $scope.esDocumentGridOptions.dataSource) {
@@ -9686,7 +9625,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         // Add the download column
                         var codeColumn = _.find(p2.columns, { field: "Code" });
                         if (codeColumn) {
-                            codeColumn.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"
+                            var sLink = esWebApiService.createURLForBlobDataDownload("{{dataItem.GID}}");
+                            codeColumn.template = "<a ng-href='" + sLink + "' download>{{dataItem.Code}}</a>";
                         }
 
                         $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
@@ -10031,7 +9971,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     bShowForm = true;
                                 } else {
                                     if (showFormInfo.selectedState && showFormInfo.selectedState.toLowerCase() == "es00documents") {
-                                        //tCol.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"
                                         var sLink = esWebApiService.createURLForBlobDataDownload("{{dataItem.GID}}");
                                         tCol.template = "<a ng-href='" + sLink + "' download>{{dataItem.Code}}</a>";
                                     }

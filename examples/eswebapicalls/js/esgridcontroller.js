@@ -631,6 +631,10 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
                     });
         }
 
+        $scope.prepareAssetURL = function() {
+            return esWebApi.createURLForEASAssetDownload($scope.pAsset);
+        }
+
         $scope.TextfetchEASWebAsset = function(options) {
             esWebApi.fetchEASWebAsset($scope.pAsset, options)
                 .then(function(ret) {
