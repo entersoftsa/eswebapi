@@ -4944,6 +4944,13 @@ var ret = {
 
                             },
 
+                            createURLForBlobDataDownload: function(es00documentGID)
+                            {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__, es00documentGID);
+                                surl += "?webapitoken=" +  esGlobals.getWebApiToken();
+                                return surl;
+                            },
+
                             /** 
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#fetchES00DocumentBlobDataByGID
@@ -4971,9 +4978,6 @@ var ret = {
                                         "Accept": undefined
                                     }),
                                     url: surl,
-                                    params: {
-                                        base64: false
-                                    },
                                     responseType: 'arraybuffer',
                                 };
                                 var ht = $http(httpConfig);

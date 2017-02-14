@@ -1456,7 +1456,9 @@
                                     bShowForm = true;
                                 } else {
                                     if (showFormInfo.selectedState && showFormInfo.selectedState.toLowerCase() == "es00documents") {
-                                        tCol.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"
+                                        //tCol.template = "<button class=\"btn btn-primary\" ng-click=\"downloadBlob(dataItem.GID)\">{{dataItem.Code}}</button>"
+                                        var sLink = esWebApiService.createURLForBlobDataDownload("{{dataItem.GID}}");
+                                        tCol.template = "<a ng-href='" + sLink + "' download>{{dataItem.Code}}</a>";
                                     }
                                 }
                             }

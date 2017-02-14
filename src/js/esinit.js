@@ -199,6 +199,7 @@
 
     });
 
+
     /**
      * @ngdoc service
      * @name es.Services.Web.esMessaging
@@ -1603,7 +1604,7 @@ var esAPIversion = {
 
                 esSupportedLanguages: _esSupportedLanguages,
 
-                suggestESLanguageID : suggestESLanguageID,
+                suggestESLanguageID: suggestESLanguageID,
 
 
                 /**
