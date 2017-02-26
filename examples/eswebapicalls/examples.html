@@ -249,6 +249,16 @@
     </div>
     <hr/>
     <div>
+        <h3>20B. ES00BLOB</h3>
+        <span>
+            <a ng-href="{{prepareBLOBURL()}}" download>Get the BLOB</a>
+            <input type="text" ng-model="pAsset"  placeholder="EAS Asset to fetch">
+            <button ng-click="fetchBlob()">fetchBlob</button>
+            <textarea>{{pAssetResults}}</textarea>
+        </span>
+    </div>
+    <hr/>
+    <div>
         <h3>21. fetchES00DocumentByGID</h3>
         <span>
             <input type="text" ng-model="pES00Doc"  placeholder="ES00Document GID">

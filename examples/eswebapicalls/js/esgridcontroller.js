@@ -283,7 +283,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
                 "OriginalFN": "xxx.pdf"
             };
 
-            esWebApi.addES00Document(doc, myFile, okf, errf, progressf);
+            esWebApi.addOrUpdateES00Document(doc, myFile, okf, errf, progressf);
         }
 
         //fetchPublicQueryInfo sample
@@ -621,6 +621,8 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
                     });
         }
 
+
+
         $scope.ImagefetchEASWebAsset = function(options) {
             esWebApi.fetchEASWebAsset($scope.pAsset, options)
                 .then(function(ret) {
@@ -631,8 +633,30 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
                     });
         }
 
+        $scope.fetchBlob = function() {
+            esWebApi.downloadES00BlobByGID($scope.pAsset, "png")
+                .then(function(ret) {
+                        var sType = ret.headers()["content-type"];
+                        $log.info("File " + $scope.pAsset + " ===> " + sType);
+                        var file = new Blob([ret.data], {
+                            type: sType
+                        });
+                        //saveAs(file, "test.pdf");
+                        var fU = URL.createObjectURL(file);
+                        window.open(fU);
+                    },
+                    function(err) {
+                        alert(err);
+                    });
+        }
+
+        $scope.prepareBLOBURL = function() {
+            return esWebApi.downloadES00BlobURLByGID($scope.pAsset, "png");
+        }
+
         $scope.prepareAssetURL = function() {
-            return esWebApi.createURLForEASAssetDownload($scope.pAsset);
+            //return esWebApi.createURLForEASAssetDownload($scope.pAsset);
+            return esWebApi.downloadAssetURL($scope.pAsset);
         }
 
         $scope.TextfetchEASWebAsset = function(options) {
@@ -866,8 +890,15 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
         $scope.pqs = [
 
             {
-                groupId: "es00documents",
-                filterId: "es00documents_def",
+                groupId: "ESMMStockItem",
+                filterId: "ESMMStockItem_def",
+                gridOptions: {},
+                pVals: new esGlobals.ESParamValues()
+            },
+
+            {
+                groupId: "ESFICustomer",
+                filterId: "ESFITradeAccountCustomer_def",
                 gridOptions: {},
                 pVals: new esGlobals.ESParamValues()
             },

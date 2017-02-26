@@ -1043,7 +1043,7 @@
                         // Add the download column
                         var codeColumn = _.find(p2.columns, { field: "Code" });
                         if (codeColumn) {
-                            var sLink = esWebApiService.createURLForBlobDataDownload("{{dataItem.GID}}");
+                            var sLink = esWebApiService.downloadURLForBlobDataDownload("{{dataItem.GID}}");
                             codeColumn.template = "<a ng-href='" + sLink + "' download>{{dataItem.Code}}</a>";
                         }
 
@@ -1389,7 +1389,7 @@
                                     bShowForm = true;
                                 } else {
                                     if (showFormInfo.selectedState && showFormInfo.selectedState.toLowerCase() == "es00documents") {
-                                        var sLink = esWebApiService.createURLForBlobDataDownload("{{dataItem.GID}}");
+                                        var sLink = esWebApiService.downloadURLForBlobDataDownload("{{dataItem.GID}}");
                                         tCol.template = "<a ng-href='" + sLink + "' download>{{dataItem.Code}}</a>";
                                     }
                                 }
@@ -1926,6 +1926,9 @@
                     return v && v != "1753/01/01" && v != "9999/01/01";
                 }
 
+                if (expr == "ESDateRange(Day,0)") {
+                    expr = "ESDateRange(Day)";
+                }
                 var dVal = eval(expr.replace(/#/g, '"'));
                 var esdate = new esGlobals.ESDateParamVal(pInfo.id);
 

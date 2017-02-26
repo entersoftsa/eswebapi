@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2017-02-14
+/*! Entersoft Application Server WEB API - v1.13.0 - 2017-02-23
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -64,11 +64,14 @@
         __FETCH_ENTITY_BY_CODE__: "api/rpc/fetchEntityByCode/",
         __FETCH_ESPROPERTY_SET__: "api/rpc/fetchPropertySet/",
         __FETCH_ESSCALE__: "api/rpc/fetchESScale/",
-        __FETCH_WEB_EAS_ASSET__: "api/asset/",
+        __FETCH_WEB_EAS_ASSET__: "api/asset/fetchWebAsset/",
+        __DOWNLOAD_WEB_EAS_ASSET__: "api/asset/downloadAsset/",
         __FETCH_ES00DOCUMENT_BY_GID__: "api/ES00Documents/InfoByGID/",
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
         __FETCH_ES00DOCUMENT_BY_ENTITYGID__: "api/ES00Documents/InfoByEntityGid/",
         __FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__: "api/ES00Documents/BlobDataByGID/",
+        __DOWNLOAD_ES00DOCUMENT_BLOBDATA_BY_GID__: "api/ES00Documents/DownloadBlobDataByGID/",
+        __DOWNLOAD_ES00BLOB_BY_GID__: "api/ES00Documents/GetES00Blob/",
         __FETCH_ES00DOCUMENT_MIME_TYPES__: "api/ES00Documents/ESMimeTypes/",
         __DELETE_ES00DOCUMENT__: "api/ES00Documents/DeleteES00Document/",
         __ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/AddOrUpdateES00DocumentBlobData/",
@@ -4953,9 +4956,65 @@ var ret = {
                                 return surl;
                             },
 
+                            downloadURLForBlobDataDownload: function(es00documentGID)
+                            {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00DOCUMENT_BLOBDATA_BY_GID__, es00documentGID);
+                                surl += "?webapitoken=" +  esGlobals.getWebApiToken();
+                                return surl;
+                            },
+
+                            downloadES00BlobURLByGID: function(es00documentGID, fExt)
+                            {
+                                if (!es00documentGID) {
+                                    throw new Error("Invalid parameter es00documentGID");
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_GID__, es00documentGID);
+                                surl += "?webapitoken=" +  esGlobals.getWebApiToken();
+                                if (fExt) {
+                                    surl += "&extType=" + fExt;
+                                }
+                                
+                                return surl;
+                            },
+
+                            downloadES00BlobByGID: function(es00documentGID, fExt)
+                            {
+                                if (!es00documentGID) {
+                                    throw new Error("Invalid parameter es00documentGID");
+                                }
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_GID__, es00documentGID);
+
+                                if (fExt) {
+                                    surl += "?extType=" + fExt;
+                                }
+
+                                var tt = esGlobals.trackTimer("ES00BLOB_BLOBDATA", "FETCH", es00documentGID);
+                                tt.startTime();
+
+                                var httpConfig = {
+                                    method: 'GET',
+                                    headers: prepareHeaders({
+                                        "Authorization": esGlobals.getWebApiToken(),
+                                        "Accept": undefined
+                                    }),
+                                    url: surl,
+                                    responseType: 'arraybuffer',
+                                };
+                                var ht = $http(httpConfig);
+                                return processWEBAPIPromise(ht, tt);
+                            },
+
                             createURLForEASAssetDownload: function(assetUrlPath)
                             {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_WEB_EAS_ASSET__, assetUrlPath);
+                                surl += "?base64=false&webapitoken=" +  esGlobals.getWebApiToken();
+                                return surl;
+                            },
+
+                            downloadAssetURL: function(assetUrlPath)
+                            {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_WEB_EAS_ASSET__, assetUrlPath);
                                 surl += "?base64=false&webapitoken=" +  esGlobals.getWebApiToken();
                                 return surl;
                             },
@@ -9625,7 +9684,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         // Add the download column
                         var codeColumn = _.find(p2.columns, { field: "Code" });
                         if (codeColumn) {
-                            var sLink = esWebApiService.createURLForBlobDataDownload("{{dataItem.GID}}");
+                            var sLink = esWebApiService.downloadURLForBlobDataDownload("{{dataItem.GID}}");
                             codeColumn.template = "<a ng-href='" + sLink + "' download>{{dataItem.Code}}</a>";
                         }
 
@@ -9971,7 +10030,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                     bShowForm = true;
                                 } else {
                                     if (showFormInfo.selectedState && showFormInfo.selectedState.toLowerCase() == "es00documents") {
-                                        var sLink = esWebApiService.createURLForBlobDataDownload("{{dataItem.GID}}");
+                                        var sLink = esWebApiService.downloadURLForBlobDataDownload("{{dataItem.GID}}");
                                         tCol.template = "<a ng-href='" + sLink + "' download>{{dataItem.Code}}</a>";
                                     }
                                 }
@@ -10508,6 +10567,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return v && v != "1753/01/01" && v != "9999/01/01";
                 }
 
+                if (expr == "ESDateRange(Day,0)") {
+                    expr = "ESDateRange(Day)";
+                }
                 var dVal = eval(expr.replace(/#/g, '"'));
                 var esdate = new esGlobals.ESDateParamVal(pInfo.id);
 
