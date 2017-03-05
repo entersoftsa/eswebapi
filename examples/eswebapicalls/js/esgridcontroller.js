@@ -655,7 +655,6 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
         }
 
         $scope.prepareAssetURL = function() {
-            //return esWebApi.createURLForEASAssetDownload($scope.pAsset);
             return esWebApi.downloadAssetURL($scope.pAsset);
         }
 
