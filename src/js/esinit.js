@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.13.0";
+    var version = "1.16.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -1551,6 +1551,15 @@ x.setParamValues({p1: 'Hello World'});
                  **/
                 esConvertGIDtoId: esConvertGIDtoId,
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#esDetectMobileBrowsers
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Detects without any server side call or external script whether the browse is a browser o a mobile device
+                 * @return {boolean} Returns true if the browser is from a mobile device, otherwise false
+                 **/
                 esDetectMobileBrowsers: function() {
                     return isMobile;
                 },
@@ -1602,8 +1611,35 @@ var esAPIversion = {
                     return esAngularAPIVer;
                 },
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#esSupportedLanguages
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description A function that returns a list of JSON objects representing the supported languages
+                 * @return {[object]} A list of JSON objects each one of which represents a supported language. The object is of the form:
+                 * 
+                 ```js {
+                    id: "el-GR",
+                    title: "Ελληνικά (GR)",
+                    icon: "data:image/png;base64,......"
+                }}
+                ```
+                **/
                 esSupportedLanguages: _esSupportedLanguages,
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#suggestESLanguageID
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description A function that returns a list of JSON objects representing the supported languages
+                 * @param {string} locale The locale for which the supported language id will be returned. In case of null, empty or undefined the en-US locale will be returned,
+                 * as in any other case that a language cannot be resolved by the supplied locale parameter.
+                 * @return {string} The language id that matches the given locale parameter. In case of no match for any reason en-US is returned.
+                 **/
                 suggestESLanguageID: suggestESLanguageID,
 
 

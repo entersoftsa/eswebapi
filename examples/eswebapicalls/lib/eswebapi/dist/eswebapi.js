@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.13.0 - 2017-02-23
+/*! Entersoft Application Server WEB API - v1.16.0 - 2017-03-06
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -837,7 +837,7 @@ $scope.eventLog = function() {
                             * the namespace will be _esbotestapiservice/Generic_
                             * @param {string} serviceObj.netClass The .NET class that holds the service method i.e. __ESWebApiCustomService__
                             * @param {string} serviceObj.netMethod The .NET method of the class that will be executed i.e. Identity2
-                            * @param {boolean=} serviceObj.netIsBinaryResult Indicates whether the expected result is a byt array i.e. binary. By default this parameter is false. 
+                            * @param {boolean=} serviceObj.netIsBinaryResult Indicates whether the expected result is a byte array i.e. binary. By default this parameter is false. 
                             * When calling a service that returns a byte array the set this parameter to true and the ret.data response will contain an Angular arrayBuffer.
                             * @param {object|string|number|date|*} paramObject the object that will be passed as parameter to the method call. It should be compatible and
                             * consistent to what the service method expects in the .NET space. In case that .NET method expects a POCO class or struct as the type of the 
@@ -4949,13 +4949,17 @@ var ret = {
 
                             },
 
-                            createURLForBlobDataDownload: function(es00documentGID)
-                            {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__, es00documentGID);
-                                surl += "?webapitoken=" +  esGlobals.getWebApiToken();
-                                return surl;
-                            },
-
+                            
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#downloadURLForBlobDataDownload
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description Creates a URL that direct downalods the specified ES00DocumentGID. The URL contains the query parameter for the GID of the ES00Document to be downloaded as well as the web api token.
+                             * The download process is performed in chunks of 8KB buffer size, it is resumable and it also supports ranges.
+                             * @param {string} es00documentGID The GID of the ES00Document to be downloaded. Should the ES00Document does not exist or the contents of the blob or binded file are empty 404 is returned.
+                             * @return {string} A complete URL for the ES00Document to be downloaded, ready to be used in an ng-href or similar html element.
+                             */
                             downloadURLForBlobDataDownload: function(es00documentGID)
                             {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00DOCUMENT_BLOBDATA_BY_GID__, es00documentGID);
@@ -4963,13 +4967,24 @@ var ret = {
                                 return surl;
                             },
 
-                            downloadES00BlobURLByGID: function(es00documentGID, fExt)
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#downloadES00BlobURLByGID
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description Creates a URL that direct downalods the specified ES00Blob. The URL contains the query parameter for the GID of the ES00Blob to be downloaded as well as the web api token.
+                             * The download process is performed in chunks of 8KB buffer size, it is resumable and it also supports ranges.
+                             * @param {string} es00BlobGID The GID of the ES00Blob to be downloaded. Should the ES00Blob does not exist or the contents of the blob is empty 404 is returned.
+                             * @param {string=} fExt Optional, the file extension of the related ES00Blob i.e. ".xlsx"
+                             * @return {string} A complete URL for the ES00Blob to be downloaded, ready to be used in an ng-href or similar html element.
+                             */
+                            downloadES00BlobURLByGID: function(es00BlobGID, fExt)
                             {
-                                if (!es00documentGID) {
+                                if (!es00BlobGID) {
                                     throw new Error("Invalid parameter es00documentGID");
                                 }
 
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_GID__, es00documentGID);
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_GID__, es00BlobGID);
                                 surl += "?webapitoken=" +  esGlobals.getWebApiToken();
                                 if (fExt) {
                                     surl += "&extType=" + fExt;
@@ -4978,18 +4993,32 @@ var ret = {
                                 return surl;
                             },
 
-                            downloadES00BlobByGID: function(es00documentGID, fExt)
+
+                             /** 
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#downloadES00BlobByGID
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description This function returns the arraybuffer for the document stored in **ES00Document** as **BLOBDATA** for a given by GID ES00Document record.
+                             * 
+                             * **REQUIRES ESWebAPIServer >= 1.9.7 and Entersoft Application Server >= 4.4.0.4**
+                             * 
+                             * @param {string} es00BlobGID The GID of the ES00Blob to be downloaded. Should the ES00Blob does not exist or the contents of the blob is empty 404 is returned.
+                             * @param {string=} fExt Optional, the file extension of the related ES00Blob i.e. ".xlsx"
+                             * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains the **arraybuffer** of the contents of the ES00Blob identified by the parameters es00BlobGID
+                             **/
+                            downloadES00BlobByGID: function(es00BlobGID, fExt)
                             {
-                                if (!es00documentGID) {
+                                if (!es00BlobGID) {
                                     throw new Error("Invalid parameter es00documentGID");
                                 }
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_GID__, es00documentGID);
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_GID__, es00BlobGID);
 
                                 if (fExt) {
                                     surl += "?extType=" + fExt;
                                 }
 
-                                var tt = esGlobals.trackTimer("ES00BLOB_BLOBDATA", "FETCH", es00documentGID);
+                                var tt = esGlobals.trackTimer("ES00BLOB_BLOBDATA", "FETCH", es00BlobGID);
                                 tt.startTime();
 
                                 var httpConfig = {
@@ -5005,13 +5034,16 @@ var ret = {
                                 return processWEBAPIPromise(ht, tt);
                             },
 
-                            createURLForEASAssetDownload: function(assetUrlPath)
-                            {
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_WEB_EAS_ASSET__, assetUrlPath);
-                                surl += "?base64=false&webapitoken=" +  esGlobals.getWebApiToken();
-                                return surl;
-                            },
-
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#downloadAssetURL
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description Creates a URL that directly downalods the specified assetUrlPath.
+                             * The download process is performed in chunks of 8KB buffer size, it is resumable and it also supports ranges.
+                             * @param {string} assetUrlPath The string path of the asset to be downloaded. 
+                             * @return {string} A complete URL for the asset to be downloaded.
+                             */
                             downloadAssetURL: function(assetUrlPath)
                             {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_WEB_EAS_ASSET__, assetUrlPath);
@@ -6476,7 +6508,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.13.0";
+    var version = "1.16.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -8021,6 +8053,15 @@ x.setParamValues({p1: 'Hello World'});
                  **/
                 esConvertGIDtoId: esConvertGIDtoId,
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#esDetectMobileBrowsers
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description Detects without any server side call or external script whether the browse is a browser o a mobile device
+                 * @return {boolean} Returns true if the browser is from a mobile device, otherwise false
+                 **/
                 esDetectMobileBrowsers: function() {
                     return isMobile;
                 },
@@ -8072,8 +8113,35 @@ var esAPIversion = {
                     return esAngularAPIVer;
                 },
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#esSupportedLanguages
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description A function that returns a list of JSON objects representing the supported languages
+                 * @return {[object]} A list of JSON objects each one of which represents a supported language. The object is of the form:
+                 * 
+                 ```js {
+                    id: "el-GR",
+                    title: "Ελληνικά (GR)",
+                    icon: "data:image/png;base64,......"
+                }}
+                ```
+                **/
                 esSupportedLanguages: _esSupportedLanguages,
 
+                /**
+                 * @ngdoc function
+                 * @name es.Services.Web.esGlobals#suggestESLanguageID
+                 * @methodOf es.Services.Web.esGlobals
+                 * @module es.Services.Web
+                 * @kind function
+                 * @description A function that returns a list of JSON objects representing the supported languages
+                 * @param {string} locale The locale for which the supported language id will be returned. In case of null, empty or undefined the en-US locale will be returned,
+                 * as in any other case that a language cannot be resolved by the supplied locale parameter.
+                 * @return {string} The language id that matches the given locale parameter. In case of no match for any reason en-US is returned.
+                 **/
                 suggestESLanguageID: suggestESLanguageID,
 
 

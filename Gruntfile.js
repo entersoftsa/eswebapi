@@ -495,6 +495,6 @@ module.exports = function(grunt) {
     grunt.registerTask('0doc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:docs_images']);
 
     // publish doc
-    grunt.registerTask('publishdoc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:docs_images', 'copy:pub_docs', 'prompt:github', 'shell:pub_docs']);
+    grunt.registerTask('publishdoc', ['clean:docs', 'clean:pub_docs', 'ngdocs', 'copy:docs_images', 'copy:pub_docs', 'prompt:github', 'shell:github_pub_docs']);
 
 };
