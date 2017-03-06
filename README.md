@@ -3,14 +3,14 @@
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
 **Version 1.16
-- esWebService: New function [downloadAssetURL](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi#methods_downloadAssetURL) to get a download URL for an EAS Asset.
-- esWebService: New function [downloadES00BlobURLByGID](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi#methods_downloadES00BlobURLByGID) to get the byte array buffer of the contents of the ES00Blob identified by the GID.
-- esWebService: New function [downloadURLForBlobDataDownload](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi#methods_downloadURLForBlobDataDownload) to get the url in order to download the contents of the ES00Blob as being a file.
+- esWebService: New function [downloadAssetURL](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi#methods_downloadasseturl) to get a download URL for an EAS Asset.
+- esWebService: New function [downloadES00BlobURLByGID](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi#methods_downloades00bloburlbygid) to get the byte array buffer of the contents of the ES00Blob identified by the GID.
+- esWebService: New function [downloadURLForBlobDataDownload](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi#methods_downloadurlforblobdatadownload) to get the url in order to download the contents of the ES00Blob as being a file.
 - eswebService: Bug fuxing in execScrollerCommand (the web api url wan not formed properly).
 - eswebService: Bug fuxing in fetchES00DocumentBlobDataByGID whan base64 was set to false.
-- esGlobals: New function [esSupportedLanguages](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esGlobals#methods_esSupportedLanguages)
-- esGlobals: New function [suggestESLanguageID](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esGlobals#methods_suggestESLanguageID)
-- esGlobals: New function [esDetectMobileBrowsers](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esGlobals#methods_esDetectMobileBrowsers)
+- esGlobals: New function [esSupportedLanguages](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esGlobals#methods_essupportedlanguages)
+- esGlobals: New function [suggestESLanguageID](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esGlobals#methods_suggesteslanguageid)
+- esGlobals: New function [esDetectMobileBrowsers](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esGlobals#methods_esdetectmobilebrowsers)
 - directive esLogin: Bug fix on language selection
 - directive esGrid: The attributes esSrvPaging and esAutoExecute have been removed and replaced by a richer and more functional attribute esPQOptions that incorporates both removed attributes as field members.
 - directive esMapPq: New attribute esPanelOpen of type boolean. The Params Panel will be expanded i.e. opened or not depending on the resolved value of the attribute.
