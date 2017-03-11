@@ -84,13 +84,13 @@
             $scope.isReady = false;
             $scope.showLogin = false;
             $scope.ownLogin = true;
-
+/*
             $(window).unload(function() {
                 if ($scope.ownLogin) {
                     esWebApiService.logout();
                 }
             });
-
+*/
             if ($window.esWebApiSettings)
             {
                 $scope.esCredentials.subscriptionId = $window.esWebApiSettings.subscriptionId || "";

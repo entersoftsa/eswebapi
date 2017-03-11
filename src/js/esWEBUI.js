@@ -1909,127 +1909,6 @@
                 return esCol;
             }
 
-            //here 
-            function dateEval(pInfo, expr) {
-                var SpecificDate = "SpecificDate";
-                var Month = "Month";
-                var SixMonth = "SixMonth";
-                var Week = "Week";
-                var Year = "Year";
-                var Quarter = "Quarter";
-                var Day = "Day";
-                var FiscalPeriod = "FiscalPeriod";
-                var FiscalYear = "FiscalYear";
-                var Bimonthly = "Bimonthly";
-
-                function isActualDate(v) {
-                    return v && v != "1753/01/01" && v != "9999/01/01";
-                }
-
-                if (expr == "ESDateRange(Day,0)") {
-                    expr = "ESDateRange(Day)";
-                }
-                var dVal = eval(expr.replace(/#/g, '"'));
-                var esdate = new esGlobals.ESDateParamVal(pInfo.id);
-
-                // Specific Date
-                var mD = moment(dVal, "YYYY/MM/DD");
-                if (!dVal.fromType && !dVal.toType && !dVal.fromD && !dVal.toD && mD.isValid()) {
-                    esdate.paramValue.dRange = "1";
-                    esdate.paramValue.fromD = mD.toDate();
-                    return esdate;
-                }
-
-                //From Specific Date To Specific Date
-                if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD) && dVal.toType == SpecificDate && isActualDate(dVal.toD)) {
-                    esdate.paramValue.dRange = "0";
-                    esdate.paramValue.fromD = new Date(dVal.fromD);
-                    esdate.paramValue.toD = new Date(dVal.toD);
-                    return esdate;
-                }
-
-                //From Specific Date To Specific Date
-                if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD)) {
-                    esdate.paramValue.dRange = "1";
-                    esdate.paramValue.fromD = new Date(dVal.fromD);
-                    return esdate;
-                }
-
-                var drOptions = esGlobals.getesDateRangeOptions();
-                var elem = _.find(drOptions, function(xd) {
-                    return xd.dValue == expr;
-                });
-
-                if (!angular.isUndefined(elem)) {
-                    esdate.paramValue.dRange = expr;
-                    return esdate;
-                }
-
-                var fD = calcActualDate(dVal.fromType, dVal.fromD, true);
-                var tD = calcActualDate(dVal.toType, dVal.toD, false);
-
-                esdate.paramValue.dRange = "0";
-                esdate.paramValue.fromD = fD;
-                esdate.paramValue.toD = tD;
-                return esdate;
-            }
-
-            function calcActualDate(dateType, valOffset, bFrom) {
-                switch (dateType) {
-                    case "Year":
-                        {
-                            if (bFrom) {
-                                if (valOffset > 0) {
-                                    valOffset = valOffset - 1;
-                                }
-                                return moment().add(valOffset, 'years').startOf('year').toDate();
-                            } else {
-                                return moment().add(valOffset, 'years').endOf('year').toDate();
-                            }
-                        }
-                    case "Month":
-                        {
-                            if (bFrom) {
-                                return moment().startOf('month').add(valOffset, 'months').toDate();
-                            } else {
-                                return moment().endOf('month').add(valOffset, 'months').toDate();
-                            }
-                        }
-                    case "Week":
-                        {
-                            if (bFrom) {
-                                return moment().startOf('week').add(1, 'days').add(valOffset, 'weeks').toDate();
-                            } else {
-                                return moment().endOf('week').add(1, 'days').add(valOffset, 'weeks').toDate();
-                            }
-                        }
-                    case "Day":
-                        {
-                            return moment().add(valOffset, 'days').toDate();
-                        }
-                    case "Quarter":
-                        {
-                            if (bFrom) {
-                                if (valOffset > 0) {
-                                    valOffset = valOffset - 1;
-                                }
-                                return moment().startOf('quarter').add(valOffset, 'quarters').toDate();
-                            } else {
-                                return moment().endOf('quarter').add(valOffset, 'quarters').endOf('quarter').toDate();
-                            }
-                        }
-                    default:
-                        {
-                            alert("ESDateRange option NOT Supported. [" + dateType + ", " + valOffset + ", " + bFrom + "]. Using Current Month instead");
-                            if (bFrom) {
-                                return moment().startOf('month').toDate();
-                            } else {
-                                return moment().endOf('month').toDate();
-                            }
-                        }
-                }
-            }
-
             function esEval(pInfo, expr) {
                 var EQ = {
                     oper: "EQ",
@@ -2088,15 +1967,6 @@
                 return new esGlobals.ESStringParamVal(inArg.paramID, k);
             }
 
-            function ESDateRange(fromType, fromD, toType, toD) {
-                return {
-                    "fromType": fromType,
-                    "fromD": fromD,
-                    "toType": toType,
-                    "toD": toD
-                }
-            }
-
             function createEsParamVal(obj) {
                 if (!obj || !obj.id) {
                     return null;
@@ -2150,7 +2020,7 @@
                             toD: null
                         });
                     }
-                    return dateEval(esParamInfo, dx[0].Value);
+                    return new esGlobals.ESDateParamVal(esParamInfo.id, dx[0].Value);
                 }
 
                 //ESString

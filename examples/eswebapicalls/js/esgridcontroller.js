@@ -889,6 +889,15 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
         $scope.pqs = [
 
             {
+                groupId: "ES00Documents",
+                filterId: "ES00Documents_def",
+                gridOptions: {},
+                //pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", { dRange: 'ESDateRange(Year, -1)'})])
+                pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", 'ESDateRange(SpecificDate, #2016/12/11#, SpecificDate, #2016/12/31#)')])
+            },
+
+/*
+            {
                 groupId: "ESMMStockItem",
                 filterId: "ESMMStockItem_def",
                 gridOptions: {},
@@ -901,6 +910,8 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 gridOptions: {},
                 pVals: new esGlobals.ESParamValues()
             },
+
+*/
 /*
             {
                 groupId: "esmis",

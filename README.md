@@ -2,6 +2,9 @@
 
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
+**Version 1.16.1
+- esGlobals.ESDateParamVal constructor accpets [ESDateParamVal](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esGlobals#methods_esdateparamval) a string of type "ESDateRange(xxx)" as helper in order to construct a DateRange parameter value
+
 **Version 1.16
 - esWebService: New function [downloadAssetURL](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi#methods_downloadasseturl) to get a download URL for an EAS Asset.
 - esWebService: New function [downloadES00BlobURLByGID](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi#methods_downloades00bloburlbygid) to get the byte array buffer of the contents of the ES00Blob identified by the GID.

@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.16.0";
+    var version = "1.16.1";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -611,6 +611,24 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
             ];
 
+            function fGetesDateRangeOptions(dateRangeClass) {
+                    if (!dateRangeClass || !dDateRangeClass[dateRangeClass]) {
+                        return esDateRangeOptions;
+                    }
+
+                    var arr = dDateRangeClass[dateRangeClass];
+                    if (!_.isArray(arr) || arr.length == 0) {
+                        return esDateRangeOptions;
+                    }
+
+                    var x = [];
+                    var i;
+                    for (i = 0; i < arr.length; i++) {
+                        x[i] = esDateRangeOptions[arr[i]];
+                    }
+                    return x;
+                }
+
             function suggestESLanguageID(locale) {
                 if (!locale) {
                     return "en-US";
@@ -1103,6 +1121,155 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
             }
 
+            function ESDateRange(fromType, fromD, toType, toD) {
+                return {
+                    "fromType": fromType,
+                    "fromD": fromD,
+                    "toType": toType,
+                    "toD": toD
+                }
+            }
+
+            function dateEval(pInfo, expr) {
+                var SpecificDate = "SpecificDate";
+                var Month = "Month";
+                var SixMonth = "SixMonth";
+                var Week = "Week";
+                var Year = "Year";
+                var Quarter = "Quarter";
+                var Day = "Day";
+                var FiscalPeriod = "FiscalPeriod";
+                var FiscalYear = "FiscalYear";
+                var Bimonthly = "Bimonthly";
+
+                function isActualDate(v) {
+                    return v && v != "1753/01/01" && v != "9999/01/01";
+                }
+
+                if (expr == "ESDateRange(Day,0)") {
+                    expr = "ESDateRange(Day)";
+                }
+                var dVal = eval(expr.replace(/#/g, '"'));
+                var esdate = new ESDateParamVal(pInfo.id);
+
+                // Specific Date
+                var mD = moment(dVal, "YYYY/MM/DD");
+                if (!dVal.fromType && !dVal.toType && !dVal.fromD && !dVal.toD && mD.isValid()) {
+                    esdate.paramValue.dRange = "1";
+                    esdate.paramValue.fromD = mD.toDate();
+                    return esdate;
+                }
+
+                //From Specific Date To Specific Date
+                if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD) && dVal.toType == SpecificDate && isActualDate(dVal.toD)) {
+                    esdate.paramValue.dRange = "0";
+                    esdate.paramValue.fromD = new Date(dVal.fromD);
+                    esdate.paramValue.toD = new Date(dVal.toD);
+                    return esdate;
+                }
+
+                //From Specific Date To Specific Date
+                if (dVal.fromType == SpecificDate && isActualDate(dVal.fromD)) {
+                    esdate.paramValue.dRange = "1";
+                    esdate.paramValue.fromD = new Date(dVal.fromD);
+                    return esdate;
+                }
+
+                var drOptions = fGetesDateRangeOptions();
+                var elem = _.find(drOptions, function(xd) {
+                    return xd.dValue == expr;
+                });
+
+                if (!angular.isUndefined(elem)) {
+                    esdate.paramValue.dRange = expr;
+                    return esdate;
+                }
+
+                var fD = calcActualDate(dVal.fromType, dVal.fromD, true);
+                var tD = calcActualDate(dVal.toType, dVal.toD, false);
+
+                esdate.paramValue.dRange = "0";
+                esdate.paramValue.fromD = fD;
+                esdate.paramValue.toD = tD;
+                return esdate;
+            }
+
+            function calcActualDate(dateType, valOffset, bFrom) {
+                switch (dateType) {
+                    case "Year":
+                        {
+                            if (bFrom) {
+                                if (valOffset > 0) {
+                                    valOffset = valOffset - 1;
+                                }
+                                return moment().add(valOffset, 'years').startOf('year').toDate();
+                            } else {
+                                return moment().add(valOffset, 'years').endOf('year').toDate();
+                            }
+                        }
+                    case "Month":
+                        {
+                            if (bFrom) {
+                                return moment().startOf('month').add(valOffset, 'months').toDate();
+                            } else {
+                                return moment().endOf('month').add(valOffset, 'months').toDate();
+                            }
+                        }
+                    case "Week":
+                        {
+                            if (bFrom) {
+                                return moment().startOf('week').add(1, 'days').add(valOffset, 'weeks').toDate();
+                            } else {
+                                return moment().endOf('week').add(1, 'days').add(valOffset, 'weeks').toDate();
+                            }
+                        }
+                    case "Day":
+                        {
+                            return moment().add(valOffset, 'days').toDate();
+                        }
+                    case "Quarter":
+                        {
+                            if (bFrom) {
+                                if (valOffset > 0) {
+                                    valOffset = valOffset - 1;
+                                }
+                                return moment().startOf('quarter').add(valOffset, 'quarters').toDate();
+                            } else {
+                                return moment().endOf('quarter').add(valOffset, 'quarters').endOf('quarter').toDate();
+                            }
+                        }
+                    default:
+                        {
+                            alert("ESDateRange option NOT Supported. [" + dateType + ", " + valOffset + ", " + bFrom + "]. Using Current Month instead");
+                            if (bFrom) {
+                                return moment().startOf('month').toDate();
+                            } else {
+                                return moment().endOf('month').toDate();
+                            }
+                        }
+                }
+            }
+
+             /**
+             * @ngdoc constructor
+             * @name es.Services.Web.esGlobals#ESDateParamVal
+             * @methodOf es.Services.Web.esGlobals
+             * @module es.Services.Web
+             * @kind constructor
+             * @constructor
+             * @description Constructs an ESParamValues object to be used in es-params-panel directive or public query execution
+             * @param {string} paramId the string identifier for the parameter as it is defined in the PublicQuery, Automation, etc.
+             * @param {object=} paramVal The value to be assigned to the parameter during the construction. If paramVal is of type string then a string of type "ESDateRange(Day, 0)" or similar 
+             * is expected. The string format for the daterange value follows the Entersoft DateRange string value property.
+             * If paramVal is empty, null, or undefined then the Date parameter is assigned the value 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)' which translates
+             * to everything.
+             * @return {ESDateParamVal} Returns a new instance of the ESDateParamVal class.
+             * @example
+```js
+var d1 = new esGlobals.ESDateParamVal("ESDCreated", 'ESDateRange(SpecificDate, #2016/12/11#, SpecificDate, #2016/12/31#)'); // Specific date range from 11th of Dec 2106 to 31 Dec 2016
+var d2 = new esGlobals.ESDateParamVal("ESDCreated", "ESDateRange(Year, -1)"); // Last Year
+```
+            */
             function ESDateParamVal(paramId, paramVal) {
                 //call super constructor
                 //param id will be given at a later assignment
@@ -1113,6 +1280,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         fromD: null,
                         toD: null
                     };
+                } else {
+                    if (angular.isString(paramVal)) {
+                        paramVal = dateEval({id: paramId}, paramVal).pValue();
+                    }
                 }
                 ESParamVal.call(this, paramId, paramVal);
             }
@@ -1852,23 +2023,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 ESStringParamVal: ESStringParamVal,
                 ESDateParamVal: ESDateParamVal,
 
-                getesDateRangeOptions: function(dateRangeClass) {
-                    if (!dateRangeClass || !dDateRangeClass[dateRangeClass]) {
-                        return esDateRangeOptions;
-                    }
-
-                    var arr = dDateRangeClass[dateRangeClass];
-                    if (!_.isArray(arr) || arr.length == 0) {
-                        return esDateRangeOptions;
-                    }
-
-                    var x = [];
-                    var i;
-                    for (i = 0; i < arr.length; i++) {
-                        x[i] = esDateRangeOptions[arr[i]];
-                    }
-                    return x;
-                },
+                getesDateRangeOptions: fGetesDateRangeOptions,
 
                 getesComplexParamFunctionOptions: function() {
                     return esComplexParamFunctionOptions;
