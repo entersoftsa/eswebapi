@@ -45,7 +45,15 @@
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
-            host: "eswebapi.entersoft.gr"
+            host: "192.168.1.190/entersoft.web.api",
+            allowUnsecureConnection: true,
+            subscriptionId: "",
+            subscriptionPassword: "passx",
+            UserID: "admin",
+            Password: "entersoft",
+            LangID: "en-GB",
+            bridgeId: "",
+            BranchID: "001"
         };
         window.esDeviceMode = "";
         window.esGridHeight = "";

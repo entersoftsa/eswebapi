@@ -3,6 +3,12 @@
     display: none;
 }
 
+.k-grid td{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
 .esgrid {
     width: 95%;
 }

@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.16.1 - 2017-03-11
+/*! Entersoft Application Server WEB API - v1.16.1 - 2017-03-15
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -64,8 +64,8 @@
         __FETCH_ENTITY_BY_CODE__: "api/rpc/fetchEntityByCode/",
         __FETCH_ESPROPERTY_SET__: "api/rpc/fetchPropertySet/",
         __FETCH_ESSCALE__: "api/rpc/fetchESScale/",
-        __FETCH_WEB_EAS_ASSET__: "api/asset/fetchWebAsset/",
-        __DOWNLOAD_WEB_EAS_ASSET__: "api/asset/downloadAsset/",
+        __FETCH_WEB_EAS_ASSET__: "api/asset/",
+        __DOWNLOAD_WEB_EAS_ASSET__: "api/asset2/downloadAsset/",
         __FETCH_ES00DOCUMENT_BY_GID__: "api/ES00Documents/InfoByGID/",
         __FETCH_ES00DOCUMENT_BY_CODE__: "api/ES00Documents/InfoByCode/",
         __FETCH_ES00DOCUMENT_BY_ENTITYGID__: "api/ES00Documents/InfoByEntityGid/",
@@ -4962,6 +4962,10 @@ var ret = {
                              */
                             downloadURLForBlobDataDownload: function(es00documentGID)
                             {
+                                if (!es00documentGID) {
+                                    return "";
+                                }
+                                
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00DOCUMENT_BLOBDATA_BY_GID__, es00documentGID);
                                 surl += "?webapitoken=" +  esGlobals.getWebApiToken();
                                 return surl;
@@ -4981,7 +4985,7 @@ var ret = {
                             downloadES00BlobURLByGID: function(es00BlobGID, fExt)
                             {
                                 if (!es00BlobGID) {
-                                    throw new Error("Invalid parameter es00documentGID");
+                                    return "";
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_GID__, es00BlobGID);
