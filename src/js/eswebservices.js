@@ -5385,7 +5385,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__EXPORT_PROXY_SAVEFILE__);
                                 surl += "?webapitoken=" +  esGlobals.getWebApiToken();
                                 if (proxyType) {
-                                    surl += "?proxyType=" + proxyType;
+                                    surl += "&proxyType=" + proxyType;
                                 }
                                 return surl;
                             },
