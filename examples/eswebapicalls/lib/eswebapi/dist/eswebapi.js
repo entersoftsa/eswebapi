@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.16.1 - 2017-03-15
+/*! Entersoft Application Server WEB API - v1.17.1 - 2017-03-16
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -75,6 +75,8 @@
         __FETCH_ES00DOCUMENT_MIME_TYPES__: "api/ES00Documents/ESMimeTypes/",
         __DELETE_ES00DOCUMENT__: "api/ES00Documents/DeleteES00Document/",
         __ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/AddOrUpdateES00DocumentBlobData/",
+        __EXPORT_PROXY_SAVEFILE__: "api/export/savefile/",
+
     });
 
     esWebServices.value("__WEBAPI_RT__", {
@@ -5372,6 +5374,26 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 
                             /**
                              * @ngdoc function
+                             * @name es.Services.Web.esWebApi#proxyExportSaveFile
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description Function that returns the full URL that acts as a POST proxy for downloading files, in cases where the 
+                             * client generated file cannot be savedAs by the local browser (i.e. Safari on iOS, etc).
+                             * @param {string=} proxyType The proxyType instructs the WEB API Server what sort of processing should to the POST payload. 
+                             * if empty or "telerik" the POST payload for body should conform to Telerik's documentation for proxyUrl
+                             * @return {string} Returns the full URL to the Entersoft Web API server that will execute the actual POST request. 
+                             */
+                            proxyExportSaveFile: function(proxyType) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__EXPORT_PROXY_SAVEFILE__);
+                                surl += "?webapitoken=" +  esGlobals.getWebApiToken();
+                                if (proxyType) {
+                                    surl += "?proxyType=" + proxyType;
+                                }
+                                return surl;
+                            },
+
+                            /**
+                             * @ngdoc function
                              * @name es.Services.Web.esWebApi#addOrUpdateES00Document
                              * @methodOf es.Services.Web.esWebApi
                              * @kind function
@@ -6512,7 +6534,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.16.1";
+    var version = "1.17.1";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -10541,6 +10563,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     excel: {
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
+                        proxyURL: esWebApiService.proxyExportSaveFile("telerik"),
                         filterable: true
                     },
                     excelExport: esExportToExcel
@@ -10632,6 +10655,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     ],
                     excel: {
                         allPages: true,
+                        proxyURL: esWebApiService.proxyExportSaveFile("telerik"),
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
                         filterable: true
                     },

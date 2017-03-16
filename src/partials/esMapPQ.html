@@ -10,13 +10,13 @@
         </es-params-panel>
     </div>
 
-    <div class="btn-group col-xs-6">
+    <div ng-show="esMapOptions.showOptions" class="btn-group col-xs-6">
         <label class="btn btn-primary" ng-model="esToggleData" uib-btn-radio="'Map'">{{'ESUI.ESMAPPQ.MAP' | translate}}</label>
         <label class="btn btn-primary" ng-model="esToggleData" uib-btn-radio="'Data'">{{'ESUI.ESMAPPQ.DATA' | translate}}</label>
         <label class="btn btn-primary" ng-model="esToggleData" uib-btn-radio="'Both'">{{'ESUI.ESMAPPQ.BOTH' | translate}}</label>
     </div>
 
-    <div class="btn-group col-xs-6">
+    <div ng-show="esMapOptions.showOptions" class="btn-group col-xs-6">
         <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'standard'">{{'ESUI.ESMAPPQ.CLUSTER_STANDARD' | translate}}</label>
         <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'cluster'">{{'ESUI.ESMAPPQ.CLUSTER_CLUSTER' | translate}}</label>
         <label class="btn btn-primary" ng-model="esType" uib-btn-radio="'spider'">{{'ESUI.ESMAPPQ.CLUSTER_SPIDER' | translate}}</label>

@@ -73,6 +73,8 @@
         __FETCH_ES00DOCUMENT_MIME_TYPES__: "api/ES00Documents/ESMimeTypes/",
         __DELETE_ES00DOCUMENT__: "api/ES00Documents/DeleteES00Document/",
         __ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/AddOrUpdateES00DocumentBlobData/",
+        __EXPORT_PROXY_SAVEFILE__: "api/export/savefile/",
+
     });
 
     esWebServices.value("__WEBAPI_RT__", {
@@ -5366,6 +5368,26 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     data: es00Document
                                 });
                                 return processWEBAPIPromise(ht, tt);
+                            },
+
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#proxyExportSaveFile
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description Function that returns the full URL that acts as a POST proxy for downloading files, in cases where the 
+                             * client generated file cannot be savedAs by the local browser (i.e. Safari on iOS, etc).
+                             * @param {string=} proxyType The proxyType instructs the WEB API Server what sort of processing should to the POST payload. 
+                             * if empty or "telerik" the POST payload for body should conform to Telerik's documentation for proxyUrl
+                             * @return {string} Returns the full URL to the Entersoft Web API server that will execute the actual POST request. 
+                             */
+                            proxyExportSaveFile: function(proxyType) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__EXPORT_PROXY_SAVEFILE__);
+                                surl += "?webapitoken=" +  esGlobals.getWebApiToken();
+                                if (proxyType) {
+                                    surl += "?proxyType=" + proxyType;
+                                }
+                                return surl;
                             },
 
                             /**

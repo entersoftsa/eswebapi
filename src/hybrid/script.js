@@ -99,7 +99,7 @@
                 $scope.esCredentials.Password = $window.esWebApiSettings.Password || "";
                 $scope.esCredentials.bridgeId = $window.esWebApiSettings.bridgeId || "";
                 $scope.esCredentials.BranchID = $window.esWebApiSettings.BranchID || "";
-                $scope.esCredentials.LangID = "";
+                $scope.esCredentials.LangID = $window.esWebApiSettings.LangID || "";
             }
             doPrepareCtrl($scope, esMessaging, esGlobals);
 

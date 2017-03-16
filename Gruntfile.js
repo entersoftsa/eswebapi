@@ -246,6 +246,12 @@ module.exports = function(grunt) {
                 }, 
                 {
                     expand: true,
+                    cwd: 'src/hybrid',
+                    src: ['*.txt'],
+                    dest: 'dist/hybrid/'
+                }, 
+                {
+                    expand: true,
                     cwd: 'src/languages',
                     src: ['*.*'],
                     dest: 'dist/hybrid/languages'
@@ -391,7 +397,7 @@ module.exports = function(grunt) {
         version: {
             // options: {}, 
             defaults: {
-                src: ['package.json', 'src/js/*.js']
+                src: ['package.json', 'src/js/*.js', 'src/hybrid/esver.txt']
             }
         },
 

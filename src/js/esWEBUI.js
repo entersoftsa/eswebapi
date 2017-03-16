@@ -1673,6 +1673,7 @@
                     excel: {
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
+                        proxyURL: esWebApiService.proxyExportSaveFile("telerik"),
                         filterable: true
                     },
                     excelExport: esExportToExcel
@@ -1764,6 +1765,7 @@
                     ],
                     excel: {
                         allPages: true,
+                        proxyURL: esWebApiService.proxyExportSaveFile("telerik"),
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
                         filterable: true
                     },
