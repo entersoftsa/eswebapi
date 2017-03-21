@@ -304,6 +304,16 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
                 });
         }
 
+        $scope.fetchDeviceInfo = function() {
+            esWebApi.fetchDeviceInfo($scope.deviceCode)
+                .then(function(ret) {
+                    // This is the gridlayout as defined in the EBS Public Query based on .NET Janus GridEx Layout
+                    $scope.deviceInfo = ret.data;
+                }, function(err, status) {
+                    alert(err.UserMessage || err.MessageID || "Generic Error");
+                });   
+        }
+
         $scope.pqParams = "";
         // fetchPublicQuery sample
         $scope.dofetchPublicQuery = function() {

@@ -74,6 +74,7 @@
         __DELETE_ES00DOCUMENT__: "api/ES00Documents/DeleteES00Document/",
         __ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/AddOrUpdateES00DocumentBlobData/",
         __EXPORT_PROXY_SAVEFILE__: "api/export/savefile/",
+        __FETCH_ES00DEVICE__: "api/device/fetchDevice/",
 
     });
 
@@ -5496,6 +5497,33 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 
                                 return file.upload;
 
+                            },
+
+                            /**
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#fetchDeviceInfo
+                             * @methodOf es.Services.Web.esWebApi
+                             * @kind function
+                             * @description Retrieves information for the ES00Device identified by the parameter deviceCode.
+                             * @param {string} deviceCode The Code (Device code, which typically is the DeviceID as supplied by the mobile device application. This is NOT Device GID).
+                             * @return {object} The datase in JSON representation for the given device. If the user that send this request is not an EBS administrator then data is returned only if the device identified
+                             * by the deviceCode belongs to the user issueing this request. Otheriwise, the result will be empty.
+                             */
+                            fetchDeviceInfo: function(deviceCode) {
+                                if (!deviceCode) {
+                                    throw new Error("Invalid deviceCode");
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DEVICE__, deviceCode);
+                                var tt = esGlobals.trackTimer("ES00DEVICE", "FETCH", deviceCode);
+                                tt.startTime();
+
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: prepareHeaders(),
+                                    url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
                             },
 
                             /** 
