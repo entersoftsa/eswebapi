@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.17.4 - 2017-03-21
+/*! Entersoft Application Server WEB API - v1.17.5 - 2017-03-31
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -507,6 +507,10 @@ alert(sUrl);
                             getServerUrl: function() {
                                 return urlWEBAPI;
                             }, 
+
+                            getServerSettings: function() {
+                                return esConfigSettings;
+                            },
 
                             /**
                              * @ngdoc function
@@ -6562,7 +6566,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.17.4";
+    var version = "1.17.5";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -9151,6 +9155,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 restrict: 'AE',
                 scope: {
                     esShowSubscription: "=",
+                    esShowOnPremises: "=",
                     esShowBridge: "=",
                     esCredentials: "=",
                     esShowStickySession: "=",

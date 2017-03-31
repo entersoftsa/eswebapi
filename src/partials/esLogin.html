@@ -9,6 +9,19 @@
                 <label for="subscriptionPwd" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}</label>
                 <input type="password" autocomplete="off" name="subscriptionPwd" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}" ng-model="esCredentials.subscriptionPassword" required autofocus>
             </div>
+
+            <div class="row" ng-if="esShowOnPremises">
+                <div class="col-xs-12 col-sm-3">
+                    <label for="serverUrl">On Premises
+                        <input type="checkbox" name="onPremises" ng-model="esCredentials.onPremises" class="form-control" placeholder="StickyMode">
+                    </label>
+                </div>
+                <div ng-if="esCredentials.onPremises" class="col-xs-12 col-sm-9" ng-class="{'has-error': esLoginFrm.serverUrl.$invalid}">
+                    <label for="serverUrl" >{{'ESUI.LOGIN_FORM.SERVERURL' | translate}}</label>
+                    <input type="text" autocomplete="off" name="serverUrl" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SERVERURL' | translate}}" ng-model="esCredentials.host">
+                </div>
+            </div>
+
         </div>
 
 

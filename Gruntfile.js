@@ -27,6 +27,12 @@ module.exports = function(grunt) {
                 src: ['src/js/eswebservices.js', 'src/js/esanalytics.js', 'src/js/esenvironment.js', 'src/js/esinit.js', 'src/js/eslog.js', 'src/js/esWEBUI.js'],
                 dest: 'dist/<%= pkg.name %>.js'
             },
+
+            uilessdist: {
+                // the files to concatenate
+                src: ['src/js/eswebservices.js', 'src/js/esenvironment.js', 'src/js/esinit.js', 'src/js/eslog.js'],
+                dest: 'dist/<%= pkg.name %>-uiless.js'
+            },
         },
 
 
@@ -37,6 +43,7 @@ module.exports = function(grunt) {
             dist: {
                 files: {
                     'dist/<%= pkg.name %>.min.js': '<%= concat.dist.dest %>',
+                    'dist/<%= pkg.name %>-uiless.min.js': '<%= concat.uilessdist.dest %>',
                     'dist/eswebapi.templates.min.js': 'dist/eswebapi.templates.js'
                 }
             }
@@ -449,6 +456,7 @@ module.exports = function(grunt) {
         /* compile and prepare source files */
         'clean:build',
         'concat:dist',
+        'concat:uilessdist',
         'ngtemplates',
         'uglify',
         'filerev:scripts',
@@ -469,6 +477,7 @@ module.exports = function(grunt) {
         /* compile and prepare source files */
         'clean:build',
         'concat:dist',
+        'concat:uilessdist',
         'ngtemplates',
         'uglify',
         'filerev:scripts',

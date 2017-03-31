@@ -323,7 +323,8 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 
             var pqOptions = new esGlobals.ESPQOptions(-1, -1, false);
             var pars = $scope.pqParams ? JSON.parse($scope.pqParams) : null;
-            esWebApi.fetchPublicQuery(group, filter, pqOptions, pars, 'POST')
+            var xP = new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", 'ESDateRange(SpecificDate, #2017/03/03#, SpecificDate, #2017/03/03#)')])
+            esWebApi.fetchPublicQuery(group, filter, pqOptions, xP, 'POST')
                 .then(function(ret) {
                         $scope.pqResult = ret.data;
                         $log.info(ret);

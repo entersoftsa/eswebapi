@@ -506,6 +506,10 @@ alert(sUrl);
                                 return urlWEBAPI;
                             }, 
 
+                            getServerSettings: function() {
+                                return esConfigSettings;
+                            },
+
                             /**
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#openSession

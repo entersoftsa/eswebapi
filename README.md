@@ -2,7 +2,8 @@
 
 Please refer to [Entersoft AngularJS Complete Guide](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esWebApi)
 
-**Version 1.16.1
+
+**Version 1.17.4
 - esGlobals.ESDateParamVal constructor accpets [ESDateParamVal](http://developer.entersoft.gr/eswebapi/#/api/es.Services.Web.esGlobals#methods_esdateparamval) a string of type "ESDateRange(xxx)" as helper in order to construct a DateRange parameter value
 
 **Version 1.16

@@ -233,6 +233,7 @@
                 restrict: 'AE',
                 scope: {
                     esShowSubscription: "=",
+                    esShowOnPremises: "=",
                     esShowBridge: "=",
                     esCredentials: "=",
                     esShowStickySession: "=",
