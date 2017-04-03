@@ -28,6 +28,49 @@ module.exports = function(grunt) {
                 dest: 'dist/<%= pkg.name %>.js'
             },
 
+            distalljs: {
+                src: ["bower_components/jquery/dist/jquery.min.js",
+                    "bower_components/bootstrap/dist/js/bootstrap.min.js",
+                    "bower_components/lodash/dist/lodash.min.js",
+                    "bower_components/angular/angular.min.js",
+                    "bower_components/ng-file-upload/ng-file-upload.min.js",
+                    "bower_components/angular-animate/angular-animate.min.js",
+                    "bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js",
+                    "bower_components/angular-sanitize/angular-sanitize.min.js",
+                    "bower_components/angular-ui-router/release/angular-ui-router.min.js",
+                    "bower_components/ngstorage/ngstorage.min.js",
+                    "bower_components/stacktrace-js/dist/stacktrace.min.js",
+                    "bower_components/log4javascript/js/log4javascript.js",
+                    "bower_components/moment/min/moment-with-locales.min.js",
+                    "bower_components/angular-translate/angular-translate.min.js",
+                    "bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js",
+                    "bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js",
+                    "bower_components/angular-simple-logger/dist/angular-simple-logger.min.js",
+                    "bower_components/angular-google-maps/dist/angular-google-maps.min.js",
+                    "bower_components/kendo-ui/js/jszip.min.js",
+                    "bower_components/kendo-ui/js/kendo.all.min.js",
+                    "bower_components/kendo-ui/js/cultures/kendo.culture.el-GR.min.js",
+                    "bower_components/kendo-ui/js/cultures/kendo.culture.en-US.min.js",
+                    "bower_components/kendo-ui/js/cultures/kendo.culture.bg-BG.min.js",
+                    "bower_components/kendo-ui/js/cultures/kendo.culture.ro-RO.min.js",
+                    "dist/eswebapi.min.js",
+                    "dist/eswebapi.templates.min.js"
+                ],
+
+                dest: 'dist/<%= pkg.name %>.all.min.js'
+            },
+
+            distallcss: {
+                src: ["bower_components/bootstrap/dist/css/bootstrap.min.css",
+                    "bower_components/kendo-ui/styles/kendo.common-bootstrap.min.css",
+                    "bower_components/kendo-ui/styles/kendo.bootstrap.min.css",
+                    "bower_components/kendo-ui/styles/kendo.dataviz.min.css",
+                    "bower_components/kendo-ui/styles/kendo.dataviz.bootstrap.min.css"
+                ],
+
+                dest: 'dist/<%= pkg.name %>.all.css'
+            },
+
             uilessdist: {
                 // the files to concatenate
                 src: ['src/js/eswebservices.js', 'src/js/esenvironment.js', 'src/js/esinit.js', 'src/js/eslog.js'],
@@ -54,12 +97,12 @@ module.exports = function(grunt) {
                 force: true
             },
             build: [
-                "dist", 
-                "examples/eswebapicalls/lib/eswebapi/dist", 
+                "dist",
+                "examples/eswebapicalls/lib/eswebapi/dist",
                 "examples/StoreExample/lib/eswebapi/dist",
                 "../eswebmanager/lib/eswebapi",
                 "../esrfaloreal/lib/eswebapi"
-                ],
+            ],
 
             docs: ['docs'],
 
@@ -99,7 +142,7 @@ module.exports = function(grunt) {
                 src: ['lib/**/*.js', 'test/**/*.js']
             }
         },
-        
+
         filerev: {
             options: {
                 encoding: 'utf8',
@@ -206,14 +249,12 @@ module.exports = function(grunt) {
 
         copy: {
             build: {
-                files: [
-                    {
-                        cwd: 'src/languages',
-                        expand: true,
-                        src: ['*.*'],
-                        dest: 'dist/languages/'
-                    },
-                ]
+                files: [{
+                    cwd: 'src/languages',
+                    expand: true,
+                    src: ['*.*'],
+                    dest: 'dist/languages/'
+                }, ]
             },
 
             sourcefiles: {
@@ -229,8 +270,7 @@ module.exports = function(grunt) {
                         expand: true,
                         src: ['dist/**', 'dist/languages/'],
                         dest: 'examples/StoreExample/lib/eswebapi/'
-                    },
-                    {
+                    }, {
                         expand: true,
                         src: ['dist/**', 'dist/languages/'],
                         dest: '../eswebmanager/lib/eswebapi/'
@@ -238,7 +278,8 @@ module.exports = function(grunt) {
 
                     {
                         expand: true,
-                        src: ['dist/**', 'dist/languages/'],
+                        cwd: "dist",
+                        src: ['*', '**'],
                         dest: '../esrfaloreal/lib/eswebapi/'
                     },
                 ],
@@ -246,39 +287,56 @@ module.exports = function(grunt) {
 
             hybrid: {
                 files: [{
-                    expand: true,
-                    cwd: 'src/hybrid',
-                    src: ['*.html'],
-                    dest: 'dist/hybrid/'
-                }, 
-                {
-                    expand: true,
-                    cwd: 'src/hybrid',
-                    src: ['*.txt'],
-                    dest: 'dist/hybrid/'
-                }, 
-                {
-                    expand: true,
-                    cwd: 'src/languages',
-                    src: ['*.*'],
-                    dest: 'dist/hybrid/languages'
-                }, 
+                        expand: true,
+                        cwd: 'src/hybrid',
+                        src: ['*.html'],
+                        dest: 'dist/hybrid/'
+                    }, {
+                        expand: true,
+                        cwd: 'src/hybrid',
+                        src: ['*.txt'],
+                        dest: 'dist/hybrid/'
+                    }, {
+                        expand: true,
+                        cwd: 'src/languages',
+                        src: ['*.*'],
+                        dest: 'dist/hybrid/languages'
+                    },
 
+                    {
+                        expand: true,
+                        cwd: 'bower_components/bootstrap/fonts/',
+                        src: ['*.*'],
+                        dest: 'dist/hybrid/fonts/'
+                    }, {
+                        expand: true,
+                        cwd: 'bower_components/kendo-ui/styles/bootstrap',
+                        src: ['*.*'],
+                        dest: 'dist/hybrid/styles/Bootstrap'
+                    }, {
+                        expand: true,
+                        cwd: 'bower_components/kendo-ui/styles/fonts/glyphs/',
+                        src: ['*.*'],
+                        dest: 'dist/hybrid/styles/fonts/glyphs/'
+                    }
+                ]
+            },
+
+            verlibs: {
+                files: [{
+                    src: 'dist/eswebapi.all.min.js',
+                    dest: 'dist/eswebapi.' + '<%= pkg.version %>' + '.all.min.js'
+                }, {
+                    src: 'dist/eswebapi.all.css',
+                    dest: 'dist/eswebapi.' + '<%= pkg.version %>' + '.all.css'
+                },
                 {
-                    expand: true,
-                    cwd: 'bower_components/bootstrap/fonts/',
-                    src: ['*.*'],
-                    dest: 'dist/hybrid/fonts/'
-                }, {
-                    expand: true,
-                    cwd: 'bower_components/kendo-ui/styles/bootstrap',
-                    src: ['*.*'],
-                    dest: 'dist/hybrid/styles/Bootstrap'
-                }, {
-                    expand: true,
-                    cwd: 'bower_components/kendo-ui/styles/fonts/glyphs/',
-                    src: ['*.*'],
-                    dest: 'dist/hybrid/styles/fonts/glyphs/'
+                    src: 'dist/eswebapi-uiless.min.js',
+                    dest: 'dist/eswebapi-uiless.' + '<%= pkg.version %>' + '.min.js'
+                },
+                {
+                    src: 'dist/eswebapi.min.js',
+                    dest: 'dist/eswebapi.' + '<%= pkg.version %>' + '.min.js'
                 }]
             },
 
@@ -336,7 +394,7 @@ module.exports = function(grunt) {
             },
             api: {
                 src: ['src/js/*.js', 'src/content/api/*.ngdoc'],
-                title: 'API '  + '<%= pkg.version %>'
+                title: 'API ' + '<%= pkg.version %>'
             },
             basicconcepts: {
                 src: [
@@ -461,7 +519,9 @@ module.exports = function(grunt) {
         'uglify',
         'filerev:scripts',
         'copy:build',
-        'copy:sourcefiles',
+        'concat:distalljs',
+        'concat:distallcss',
+        'copy:verlibs',
 
         /* compile documentation */
         'clean:docs',
@@ -469,7 +529,9 @@ module.exports = function(grunt) {
         'ngdocs',
         'copy:docs_images',
         'copy:pub_docs',
-        'hybrid'
+        'hybrid',
+        'copy:sourcefiles',
+
     ]);
 
     // Full deploy Task
@@ -482,7 +544,10 @@ module.exports = function(grunt) {
         'uglify',
         'filerev:scripts',
         'copy:build',
-        'copy:sourcefiles',
+        'concat:distalljs',
+        'concat:distallcss',
+        'copy:verlibs',
+
         /* compile documentation */
         'clean:docs',
         'clean:pub_docs',
@@ -490,6 +555,8 @@ module.exports = function(grunt) {
         'copy:docs_images',
         'copy:pub_docs',
         'hybrid',
+        'copy:sourcefiles',
+
 
         /* prepare for github push*/
         'prompt:github',
