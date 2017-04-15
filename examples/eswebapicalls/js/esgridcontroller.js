@@ -210,13 +210,12 @@ smeControllers.controller('propertiesCtrl', ['$location', '$window', '$scope', '
 
         $scope.logout = function() {
             esWebApiService.logout()
-            .then(function()
-            {
-                alert("I am out !!!");
-            });
+                .then(function() {
+                    alert("I am out !!!");
+                });
         }
 
-        var dVal = esWebUIHelper.createESParams([{id: 'UserID', value: '123'}, {id: 'bg', value: '456'}]);
+        var dVal = esWebUIHelper.createESParams([{ id: 'UserID', value: '123' }, { id: 'bg', value: '456' }]);
 
         $scope.getVersionInfo = function() {
             $scope.version = {};
@@ -311,7 +310,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
                     $scope.deviceInfo = ret.data;
                 }, function(err, status) {
                     alert(err.UserMessage || err.MessageID || "Generic Error");
-                });   
+                });
         }
 
         $scope.pqParams = "";
@@ -897,6 +896,34 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+
+        $scope.selRows = [];
+        $scope.handleGridOptions = function(arg1) {
+            if (!arg1) {
+                return arg1;
+            }
+
+            arg1.esToolbars = [{
+                template: '<a class="k-button" ng-click="doClick(true)">Confirm</a>',
+                fnName: 'doClick',
+                fnDef: function(a) {
+                    var s = $scope;
+                    alert("es command" + a + " - " + $scope.selRows.length);
+                }
+            }]
+
+            arg1.selectable = "multiple, row";
+            return arg1;
+        };
+
+        var xindx = esMessaging.subscribe("GRID_ROW_CHANGE", function(e, selRows) {
+            $scope.selRows = selRows;
+        });
+
+        $scope.$on('$destroy', function() {
+            esMessaging.unsubscribe(xindx);
+        });
+
         $scope.pqs = [
 
             {
@@ -907,82 +934,82 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", 'ESDateRange(SpecificDate, #2017/03/03#, SpecificDate, #2017/03/03#)')])
             },
 
-/*
-            {
-                groupId: "ESMMStockItem",
-                filterId: "ESMMStockItem_def",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
+            /*
+                        {
+                            groupId: "ESMMStockItem",
+                            filterId: "ESMMStockItem_def",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
 
-            {
-                groupId: "ESFICustomer",
-                filterId: "ESFITradeAccountCustomer_def",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
+                        {
+                            groupId: "ESFICustomer",
+                            filterId: "ESFITradeAccountCustomer_def",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
 
-*/
-/*
-            {
-                groupId: "esmis",
-                filterId: "dbkpis",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
+            */
+            /*
+                        {
+                            groupId: "esmis",
+                            filterId: "dbkpis",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
 
-            {
-                groupId: "esmmstockitem",
-                filterId: "pricecheckmobile",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
+                        {
+                            groupId: "esmmstockitem",
+                            filterId: "pricecheckmobile",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
 
-            {
-                groupId: "ESMMStockItem",
-                filterId: "StockItemPhotoList",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
-
-
-            {
-                groupId: "ESGOPerson",
-                filterId: "CRM_Personlist",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
-
-            {
-                groupId: "ESTMSocialCRM",
-                filterId: "ESTMSMPersonList",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
+                        {
+                            groupId: "ESMMStockItem",
+                            filterId: "StockItemPhotoList",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
 
 
-            {
-                groupId: "ESFIItem",
-                filterId: "ESFIItem_def",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
+                        {
+                            groupId: "ESGOPerson",
+                            filterId: "CRM_Personlist",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
+
+                        {
+                            groupId: "ESTMSocialCRM",
+                            filterId: "ESTMSMPersonList",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
 
 
-            {
-                groupId: "ESFICustomer",
-                filterId: "ESFITradeAccountCustomer_def",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
+                        {
+                            groupId: "ESFIItem",
+                            filterId: "ESFIItem_def",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
 
-            {
-                groupId: "ESMMStockItem",
-                filterId: "ESMMStockItem_def",
-                gridOptions: {},
-                pVals: new esGlobals.ESParamValues()
-            },
-*/
+
+                        {
+                            groupId: "ESFICustomer",
+                            filterId: "ESFITradeAccountCustomer_def",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
+
+                        {
+                            groupId: "ESMMStockItem",
+                            filterId: "ESMMStockItem_def",
+                            gridOptions: {},
+                            pVals: new esGlobals.ESParamValues()
+                        },
+            */
         ];
     }
 ]);

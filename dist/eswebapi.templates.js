@@ -22,7 +22,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esGrid.html',
-    "<div kendo-grid k-ng-delay=esGridOptions.dataSource es-p-q-options=esPQOptions k-options=esGridOptions k-rebind=esGridOptions.reBind></div>"
+    "<div kendo-grid k-scope-field=myGrid k-ng-delay=esGridOptions.dataSource es-p-q-options=esPQOptions k-options=esGridOptions k-rebind=esGridOptions.reBind></div>"
   );
 
 

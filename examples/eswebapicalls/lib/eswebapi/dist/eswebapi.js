@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.17.6 - 2017-04-03
+/*! Entersoft Application Server WEB API - v1.17.6 - 2017-04-14
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9688,6 +9688,17 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         }
                     }
 
+                    $scope.$watch('esGridOptions', function(newV, oldV) {
+                        if (newV && newV.esToolbars && angular.isArray(newV.esToolbars)) {
+                            var existingtbs = newV.toolbar || [];
+                            
+                            _.forEach(newV.esToolbars, function(newtb) {
+                                
+                                $scope[newtb.fnName] = newtb.fnDef;
+                            });
+                        }
+                    });
+
                     $scope.esGridPrint = function() {
                     };
 
@@ -10135,6 +10146,17 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             if ($scope.esPostProcessGridOptions && angular.isFunction($scope.esPostProcessGridOptions)) {
                                 opt = $scope.esPostProcessGridOptions({ arg1: opt }) || opt;
                             }
+
+                            if (opt && opt.esToolbars && angular.isArray(opt.esToolbars)) {
+                                var existingtbs = opt.toolbar || [];
+                                
+                                _.forEach(opt.esToolbars, function(newtb) {
+                                    existingtbs.push( {
+                                        template: newtb.template
+                                    });
+                                });
+                            }                            
+
                             $scope.esGridOptions = opt;
                         }
 
