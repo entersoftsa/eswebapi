@@ -771,8 +771,9 @@
                             var existingtbs = newV.toolbar || [];
                             
                             _.forEach(newV.esToolbars, function(newtb) {
-                                
-                                $scope[newtb.fnName] = newtb.fnDef;
+                                if (newtb.fnName && newtb.fnDef && angular.isFunction(newtb.fnDef)) {
+                                    $scope[newtb.fnName] = newtb.fnDef;
+                                }
                             });
                         }
                     });

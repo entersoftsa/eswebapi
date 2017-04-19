@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.17.6 - 2017-04-14
+/*! Entersoft Application Server WEB API - v1.17.6 - 2017-04-15
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9693,8 +9693,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             var existingtbs = newV.toolbar || [];
                             
                             _.forEach(newV.esToolbars, function(newtb) {
-                                
-                                $scope[newtb.fnName] = newtb.fnDef;
+                                if (newtb.fnName && newtb.fnDef && angular.isFunction(newtb.fnDef)) {
+                                    $scope[newtb.fnName] = newtb.fnDef;
+                                }
                             });
                         }
                     });
