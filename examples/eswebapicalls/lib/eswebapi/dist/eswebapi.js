@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.17.6 - 2017-04-15
+/*! Entersoft Application Server WEB API - v1.18.0 - 2017-04-28
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6566,7 +6566,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.17.6";
+    var version = "1.18.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -9691,7 +9691,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     $scope.$watch('esGridOptions', function(newV, oldV) {
                         if (newV && newV.esToolbars && angular.isArray(newV.esToolbars)) {
                             var existingtbs = newV.toolbar || [];
-                            
+
                             _.forEach(newV.esToolbars, function(newtb) {
                                 if (newtb.fnName && newtb.fnDef && angular.isFunction(newtb.fnDef)) {
                                     $scope[newtb.fnName] = newtb.fnDef;
@@ -9700,8 +9700,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         }
                     });
 
-                    $scope.esGridPrint = function() {
-                    };
+                    $scope.esGridPrint = function() {};
 
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
                         if (!$scope.esGroupId || !$scope.esFilterId) {
@@ -10144,19 +10143,21 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                             var p = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esPQOptions);
                             var opt = angular.extend(p, $scope.esGridOptions);
+
                             if ($scope.esPostProcessGridOptions && angular.isFunction($scope.esPostProcessGridOptions)) {
                                 opt = $scope.esPostProcessGridOptions({ arg1: opt }) || opt;
                             }
 
+                            
                             if (opt && opt.esToolbars && angular.isArray(opt.esToolbars)) {
                                 var existingtbs = opt.toolbar || [];
-                                
+
                                 _.forEach(opt.esToolbars, function(newtb) {
-                                    existingtbs.push( {
+                                    existingtbs.push({
                                         template: newtb.template
                                     });
                                 });
-                            }                            
+                            }
 
                             $scope.esGridOptions = opt;
                         }

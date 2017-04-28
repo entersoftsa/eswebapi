@@ -769,7 +769,7 @@
                     $scope.$watch('esGridOptions', function(newV, oldV) {
                         if (newV && newV.esToolbars && angular.isArray(newV.esToolbars)) {
                             var existingtbs = newV.toolbar || [];
-                            
+
                             _.forEach(newV.esToolbars, function(newtb) {
                                 if (newtb.fnName && newtb.fnDef && angular.isFunction(newtb.fnDef)) {
                                     $scope[newtb.fnName] = newtb.fnDef;
@@ -778,8 +778,7 @@
                         }
                     });
 
-                    $scope.esGridPrint = function() {
-                    };
+                    $scope.esGridPrint = function() {};
 
                     if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
                         if (!$scope.esGroupId || !$scope.esFilterId) {
@@ -1222,19 +1221,21 @@
 
                             var p = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esParamsValues, v, $scope.esPQOptions);
                             var opt = angular.extend(p, $scope.esGridOptions);
+
                             if ($scope.esPostProcessGridOptions && angular.isFunction($scope.esPostProcessGridOptions)) {
                                 opt = $scope.esPostProcessGridOptions({ arg1: opt }) || opt;
                             }
 
+                            
                             if (opt && opt.esToolbars && angular.isArray(opt.esToolbars)) {
                                 var existingtbs = opt.toolbar || [];
-                                
+
                                 _.forEach(opt.esToolbars, function(newtb) {
-                                    existingtbs.push( {
+                                    existingtbs.push({
                                         template: newtb.template
                                     });
                                 });
-                            }                            
+                            }
 
                             $scope.esGridOptions = opt;
                         }

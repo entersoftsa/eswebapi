@@ -1018,8 +1018,8 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
         $scope.webPQOptions = {};
-        $scope.webPQOptions.theGroupId = "ESMMStockItem";
-        $scope.webPQOptions.theFilterId = "ESMMStockItem_def";
+        $scope.webPQOptions.theGroupId = "ESFIDocumentSales";
+        $scope.webPQOptions.theFilterId = "SalesAnalysisPerCustomer";
         $scope.webPQOptions.theVals = new esGlobals.ESParamValues();
 
         $scope.tboOptions = new esGlobals.ESPQOptions(-1, -1, true, true);
@@ -1155,13 +1155,7 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
             }
         };
 
-        var pqOptions = new esGlobals.ESPQOptions(-1, -1, true);
-        var params = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ClosingDate", 3)]);
-
-        $scope.masterOptions = new esGlobals.ESPublicQueryDef("", "ESTMOpportunity", "ESTMOpportunityManagement", pqOptions, params);
-        $scope.cDS = esWebUIHelper.getPQDataSource("ds", $scope.masterOptions);
-
-        $scope.chartOptions = {
+        var chartOptions = {
             title: "Leads by Lead Source",
             series: [{
                 type: 'column',
@@ -1212,14 +1206,13 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
                     lock: "x"
                 }
             },
-
-
             seriesClick: $scope.seriesClick,
-            dataSource: $scope.cDS
         };
 
-
-        $scope.masterOptions.theGridOptions = {};
+        var pqOptions = new esGlobals.ESPQOptions(-1, -1, true);
+        var params = new esGlobals.ESParamValues();
+        $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESFIDocumentSales", "SalesAnalysisPerCustomer", pqOptions, params, chartOptions, true);
+        
     }
 ])
 
