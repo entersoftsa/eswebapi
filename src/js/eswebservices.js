@@ -28,6 +28,7 @@
     esWebServices.
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login/Login",
+        __TOKEN__: "api/Login/validateToken",
         __LOGOUT__: "api/Login/Logout",
         __USER_LOGO__: "api/Login/UserLogo/",
         __REMOVE_USER_LOGO__: "api/Login/RemoveUserLogo/",
@@ -754,6 +755,31 @@ $scope.doLogin = function() {
                                 });
 
                                 return processWEBAPIPromise(promise, tt);
+                            },
+
+                            validateToken: function(token) {
+                                if (!token) {
+                                    throw new Error("Paramter token cannot be empty");
+                                }
+
+                                var tt = esGlobals.trackTimer("AUTH", "TOKEN", token);
+                                tt.startTime();
+
+                                var promise = $http({
+                                    method: 'post',
+                                    url: urlWEBAPI + ESWEBAPI_URL.__TOKEN__,
+                                    headers: prepareHeaders({}),
+                                    data: { webapitoken: !token.startsWith("Bearer ") ? "Bearer " + token : token}
+                                }).
+                                success(function(data) {
+                                    esGlobals.sessionOpened(data);
+                                }).
+                                error(function(data, status, headers, config) {
+                                    esGlobals.sessionClosed();
+                                });
+
+                                return processWEBAPIPromise(promise, tt);
+
                             },
 
                             /**

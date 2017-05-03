@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.18.0 - 2017-04-28
+/*! Entersoft Application Server WEB API - v1.19.2 - 2017-05-03
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -30,6 +30,7 @@
     esWebServices.
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login/Login",
+        __TOKEN__: "api/Login/validateToken",
         __LOGOUT__: "api/Login/Logout",
         __USER_LOGO__: "api/Login/UserLogo/",
         __REMOVE_USER_LOGO__: "api/Login/RemoveUserLogo/",
@@ -756,6 +757,31 @@ $scope.doLogin = function() {
                                 });
 
                                 return processWEBAPIPromise(promise, tt);
+                            },
+
+                            validateToken: function(token) {
+                                if (!token) {
+                                    throw new Error("Paramter token cannot be empty");
+                                }
+
+                                var tt = esGlobals.trackTimer("AUTH", "TOKEN", token);
+                                tt.startTime();
+
+                                var promise = $http({
+                                    method: 'post',
+                                    url: urlWEBAPI + ESWEBAPI_URL.__TOKEN__,
+                                    headers: prepareHeaders({}),
+                                    data: { webapitoken: !token.startsWith("Bearer ") ? "Bearer " + token : token}
+                                }).
+                                success(function(data) {
+                                    esGlobals.sessionOpened(data);
+                                }).
+                                error(function(data, status, headers, config) {
+                                    esGlobals.sessionClosed();
+                                });
+
+                                return processWEBAPIPromise(promise, tt);
+
                             },
 
                             /**
@@ -6232,7 +6258,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.18.0";
+    var version = "1.19.2";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -7004,7 +7030,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return '';
                 }
 
-                var loc = "el-GR";
+                var loc = window.esLoginLanguage;
                 var t = esClientSession;
                 if (t && t.connectionModel && t.connectionModel.LangID) {
                     loc = t.connectionModel.LangID;
@@ -8277,10 +8303,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                         }
 
-                        data.Model.LangID = data.Model.LangID || credentials.LangID;
-                        data.Model.LangID = data.Model.LangID || "el-GR";
-
-                        data.Model.BranchID = data.Model.BranchID || credentials.BranchID || "-";
+                        data.Model.LangID = data.Model.LangID || (credentials || {}).LangID || window.esLoginLanguage;
+                        data.Model.BranchID = data.Model.BranchID || (credentials || {}).BranchID || "-";
 
                         esClientSession.setModel(data.Model);
 

@@ -131,7 +131,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         esMessaging.subscribe("AUTH_CHANGED", function(esSession, b) {
             if (!b) {
                 $scope.theGlobalUser = "Nobody";
-                alert("You are nobody");
                 return;
             }
 
@@ -254,6 +253,16 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 
         $scope.cacheInfo = function() {
             $scope.cacheStats = esCache.stats();
+        };
+
+        $scope.validateToken = function() {
+            esWebApi.validateToken(esGlobals.getWebApiToken())
+            .then(function(ret) {
+                $log.info(ret.data);
+            }, function(err)
+            {
+                $log.error(err);
+            });
         };
 
         $scope.uploadPic = function(myFile) {
@@ -661,11 +670,11 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
         }
 
         $scope.prepareBLOBURL = function() {
-            return esWebApi.downloadES00BlobURLByGID($scope.pAsset, "png");
+            return $scope.pAsset ? esWebApi.downloadES00BlobURLByGID($scope.pAsset, "png") : "";
         }
 
         $scope.prepareAssetURL = function() {
-            return esWebApi.downloadAssetURL($scope.pAsset);
+            return $scope.pAsset ? esWebApi.downloadAssetURL($scope.pAsset) : "";
         }
 
         $scope.TextfetchEASWebAsset = function(options) {

@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.18.0";
+    var version = "1.19.2";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -778,7 +778,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return '';
                 }
 
-                var loc = "el-GR";
+                var loc = window.esLoginLanguage;
                 var t = esClientSession;
                 if (t && t.connectionModel && t.connectionModel.LangID) {
                     loc = t.connectionModel.LangID;
@@ -2051,10 +2051,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                         }
 
-                        data.Model.LangID = data.Model.LangID || credentials.LangID;
-                        data.Model.LangID = data.Model.LangID || "el-GR";
-
-                        data.Model.BranchID = data.Model.BranchID || credentials.BranchID || "-";
+                        data.Model.LangID = data.Model.LangID || (credentials || {}).LangID || window.esLoginLanguage;
+                        data.Model.BranchID = data.Model.BranchID || (credentials || {}).BranchID || "-";
 
                         esClientSession.setModel(data.Model);
 

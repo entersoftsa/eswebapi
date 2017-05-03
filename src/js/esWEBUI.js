@@ -13,14 +13,16 @@
 
     esWEBUI.run(['$translate', 'esMessaging', function($translate, esMessaging) {
 
+        window.esLoginLanguage = navigator.language || navigator.userLanguage || 'en-US';
+
         esMessaging.subscribe("AUTH_CHANGED", function(sess, apitoken) {
-            var lang = (sess && sess.connectionModel && sess.connectionModel.LangID) ? sess.connectionModel.LangID : "el-GR";
+            var lang = (sess && sess.connectionModel && sess.connectionModel.LangID) ? sess.connectionModel.LangID : window.esLoginLanguage;
             doChangeLanguage($translate, lang);
         });
     }]);
 
     function doChangeLanguage($translate, lang) {
-        lang = lang || 'el-GR';
+        lang = lang || window.esLoginLanguage;
 
         $translate.use(lang.split("-")[0]);
         if (kendo) {
@@ -246,6 +248,7 @@
                             var lang = $scope.esCredentials.LangID;
                             doChangeLanguage($translate, lang);
                         }
+                        window.esLoginLanguage = $scope.esCredentials.LangID || navigator.language || navigator.userLanguage || 'en-US';
                     };
 
                     $scope.esGlobals = esGlobals;
