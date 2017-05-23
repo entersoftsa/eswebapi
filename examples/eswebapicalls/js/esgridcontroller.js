@@ -935,12 +935,22 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
 
         $scope.pqs = [
 
+/*
             {
                 groupId: "ES00Documents",
                 filterId: "ES00Documents_def",
                 gridOptions: {},
                 //pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", { dRange: 'ESDateRange(Year, -1)'})])
                 pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", 'ESDateRange(SpecificDate, #2017/03/03#, SpecificDate, #2017/03/03#)')])
+            },
+*/
+
+            {
+                groupId: "ESWebManager",
+                filterId: "SalesPipelineCompetitionAnalysis",
+                gridOptions: {},
+                //pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", { dRange: 'ESDateRange(Year, -1)'})])
+                pVals: new esGlobals.ESParamValues()
             },
 
             /*

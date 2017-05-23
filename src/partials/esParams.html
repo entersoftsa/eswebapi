@@ -1,13 +1,22 @@
 <uib-accordion>
     <div uib-accordion-group class="panel-default" is-open="esPanelOpen">
         <uib-accordion-heading>
-            {{::(esForceTitle ? esForceTitle : esParamsDef.title)}}&nbsp;<span class="badge">{{::esParamsDef.visibleDefinitions().length}}</span> 
+            {{::(esForceTitle ? esForceTitle : esParamsDef.title)}}&nbsp; 
            	<i class="pull-right glyphicon" ng-class="{'glyphicon-zoom-out': esPanelOpen, 'glyphicon-zoom-in': !esPanelOpen}"></i>
         </uib-accordion-heading>
 
         <form novalidate class="form" name="esParamsPanelForm">
             <div class="row">
-                <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in esParamsDef.visibleDefinitions() | orderBy:'aa'">
+                <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.simpleDefinitions() | orderBy:'aa'">
+                    <es-param class="es-param" es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
+                </div>
+
+                <div ng-if="::esParamsDef.hasAdvancedParams()" class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <label class="control-label es-param-label">...</label>
+                    <button type="button" class="btn btn-primary form-control es-param-control" ng-click="esToggleMore()">{{ esMore ? 'Less' : 'More'}}</button>
+                </div>
+
+                <div ng-if="esMore" class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in esParamsDef.advancedDefinitions() | orderBy:'aa'">
                     <es-param class="es-param" es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
                 </div>
             </div>

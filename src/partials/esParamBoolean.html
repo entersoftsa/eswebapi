@@ -1,0 +1,9 @@
+<label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
+          tooltip-placement="top"
+          tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label> 
+
+<input type="checkbox" id="{{::esParamDef.id}}" 
+		class="form-control es-param-control" 
+		ng-model-options="{getterSetter: true}"
+		ng-model="esParamVal[esParamDef.id].pValue"/>
+

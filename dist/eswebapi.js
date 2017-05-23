@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.19.2 - 2017-05-03
+/*! Entersoft Application Server WEB API - v1.20.0 - 2017-05-23
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6592,7 +6592,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.19.2";
+    var version = "1.20.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -7611,6 +7611,26 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return s.substring(0, s.lastIndexOf(" + "));
             };
 
+            function ESBoolParamVal(paramId, paramVal) {
+                //call super constructor
+                ESParamVal.call(this, paramId, paramVal);
+            }
+
+            //inherit from ESParamval SuperClass
+            ESBoolParamVal.prototype = Object.create(ESParamVal.prototype);
+
+            ESBoolParamVal.prototype.clone = function(paramId) {
+                return new ESBoolParamVal(paramId, this.pValue());
+            }
+
+            ESBoolParamVal.prototype.strVal = function() {
+                return this.pValue() ? "1" : "0";
+            }
+
+            ESBoolParamVal.prototype.getExecuteVal = function() {
+                return this.pValue() ? 1 : 0;
+            }
+
 
             function ESNumericParamVal(paramId, paramVal) {
                 //call super constructor
@@ -8608,6 +8628,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 ESNumericParamVal: ESNumericParamVal,
                 ESStringParamVal: ESStringParamVal,
                 ESDateParamVal: ESDateParamVal,
+                ESBoolParamVal: ESBoolParamVal,
 
                 getesDateRangeOptions: fGetesDateRangeOptions,
 
@@ -9076,6 +9097,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
 
                 var pt = pParam.parameterType.toLowerCase();
+
+                if (pt.indexOf("system.int32, mscorlib") == 0 && pParam.controlType == 7) {
+                    return "esParamBoolean";
+                }
 
                 //ESDateRange
                 if (pt.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
@@ -10175,7 +10200,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 opt = $scope.esPostProcessGridOptions({ arg1: opt }) || opt;
                             }
 
-                            
+
                             if (opt && opt.esToolbars && angular.isArray(opt.esToolbars)) {
                                 var existingtbs = opt.toolbar || [];
 
@@ -10243,6 +10268,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         return "src/partials/esParams.html";
                     },
                     link: function($scope, iElement, iAttrs) {
+                        $scope.esMore = false;
+
+                        $scope.esToggleMore = function() {
+                            $scope.esMore = !$scope.esMore;
+                        }
+
                         if (!iAttrs.esParamsDef && !iAttrs.esPqInfo) {
                             if (!($scope.esGroupId instanceof esGlobals.ESPublicQueryDef)) {
                                 if (!$scope.esGroupId || !$scope.esFilterId) {
@@ -10987,6 +11018,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return esEval(esParamInfo, dx[0].Value);
                 }
 
+                // boolean
+                if (ps.indexOf("system.int32, mscorlib") == 0 && esParamInfo.controlType == 7) {
+                    var bVal = 0;
+                    if (dx && dx.length > 0) {
+                        bVal = parseInt(dx[0].Value);
+                    }
+                    return new esGlobals.ESBoolParamVal(esParamInfo.id, !!bVal);
+                }
+
                 //ESDateRange
                 if (ps.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
                     if (!dx || dx.length == 0) {
@@ -11038,7 +11078,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
 
                 if (esParamInfo.enumList && esParamInfo.enumList.length > 1) {
-                    return parseInt(val);
+                    return val;
                 }
 
                 if (!_.startsWith(val, "##(")) {
@@ -11086,6 +11126,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return "Hello World esParaminfo";
             };
 
+            ESParamInfo.prototype.isAdvanced = function() {
+                return this.visible && this.visibility == 1;
+            };
+
             ESParamInfo.prototype.isInvestigateZoom = function() {
                 return this.invSelectedMasterTable && this.invSelectedMasterTable.length > 4 && this.invSelectedMasterTable[4] == 'Z';
             };
@@ -11100,23 +11144,41 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             function ESParamsDefinitions(title, params) {
                 this.title = title;
                 this.definitions = params;
-                this.visibleDefinitions = function() {
-                    if (!this.definitions) {
-                        return [];
-                    }
-
-                    var f = this.definitions;
-                    return _.filter(f, {
-                        visible: true
-                    });
-                }
             }
 
-            ESParamsDefinitions.prototype.visibleDefinitions = function() {
+            ESParamsDefinitions.prototype.visibleDefinitions = function(includeAdvanced) {
                 var f = this.definitions;
-                return f ? _.filter(f, {
-                    visible: true
-                }) : [];
+                if (!f) {
+                    return [];
+                }
+
+                return _.filter(f, function(g) {
+                    if (!g.visible) {
+                        return false;
+                    }
+
+                    if (!includeAdvanced) {
+                        return !g.isAdvanced();
+                    }
+                    return true;
+                });
+            }
+
+            ESParamsDefinitions.prototype.simpleDefinitions = function() {
+                var f = this.definitions;
+                return f ? _.filter(f, function(g) {
+                    return g.visible && g.visibility != 1 }) : [];
+            }
+
+            ESParamsDefinitions.prototype.advancedDefinitions = function() {
+                var f = this.definitions;
+                return f ? _.filter(f, function(g) {
+                    return g.isAdvanced() }) : [];
+            }
+
+            ESParamsDefinitions.prototype.hasAdvancedParams = function() {
+                var f = this.definitions;
+                return this.advancedDefinitions().length >= 1;
             }
 
             ESParamsDefinitions.prototype.strVal = function(vals) {
@@ -11164,7 +11226,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }), function(e) {
                     return {
                         text: espInfo.oDSTag ? e.Caption.substring(e.Caption.indexOf(".") + 1) : e.Caption,
-                        value: !isNaN(e.ID) ? parseInt(e.ID) : null
+                        value: e.ID
                     };
                 }), "value");
 

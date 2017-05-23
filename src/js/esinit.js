@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.19.2";
+    var version = "1.20.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -1025,6 +1025,26 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return s.substring(0, s.lastIndexOf(" + "));
             };
 
+            function ESBoolParamVal(paramId, paramVal) {
+                //call super constructor
+                ESParamVal.call(this, paramId, paramVal);
+            }
+
+            //inherit from ESParamval SuperClass
+            ESBoolParamVal.prototype = Object.create(ESParamVal.prototype);
+
+            ESBoolParamVal.prototype.clone = function(paramId) {
+                return new ESBoolParamVal(paramId, this.pValue());
+            }
+
+            ESBoolParamVal.prototype.strVal = function() {
+                return this.pValue() ? "1" : "0";
+            }
+
+            ESBoolParamVal.prototype.getExecuteVal = function() {
+                return this.pValue() ? 1 : 0;
+            }
+
 
             function ESNumericParamVal(paramId, paramVal) {
                 //call super constructor
@@ -2022,6 +2042,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 ESNumericParamVal: ESNumericParamVal,
                 ESStringParamVal: ESStringParamVal,
                 ESDateParamVal: ESDateParamVal,
+                ESBoolParamVal: ESBoolParamVal,
 
                 getesDateRangeOptions: fGetesDateRangeOptions,
 
