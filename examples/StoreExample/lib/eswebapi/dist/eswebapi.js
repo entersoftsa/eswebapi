@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.20.1 - 2017-05-23
+/*! Entersoft Application Server WEB API - v1.20.1 - 2017-05-24
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -11211,7 +11211,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 espInfo.precision = parseInt(winParamInfo.Precision);
                 espInfo.multiValued = winParamInfo.MultiValued == "true";
                 espInfo.visible = winParamInfo.Visible == "true";
-                espInfo.required = winParamInfo.Required == "true";
+                espInfo.required = true/* winParamInfo.Required == "true" */;
                 espInfo.oDSTag = winParamInfo.ODSTag;
                 espInfo.tags = winParamInfo.Tags;
                 espInfo.visibility = parseInt(winParamInfo.Visibility);
