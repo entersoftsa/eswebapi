@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.20.1 - 2017-05-24
+/*! Entersoft Application Server WEB API - v1.20.2 - 2017-05-24
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6592,7 +6592,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.20.1";
+    var version = "1.20.2";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -10757,15 +10757,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     toolbar: [{
                             name: "run",
                             text: "Run",
-                            template: "<a class='k-button' ng-click=\"esGridRun()\">{{'ESUI.PQ.TOOLBAR_RUN' | translate}}</a>"
+                            template: "<a role='button' class='k-button k-button-icontext' ng-click=\"esGridRun()\"><span class='k-icon k-i-reload'/>{{'ESUI.PQ.TOOLBAR_RUN' | translate}}</a>"
                         },
-                        /*
-                        {
-                            name: "print",
-                            text: "Print",
-                            template: "<a class='k-button' ng-click=\"esGridPrint()\">Print</a>"
-                        },
-                        */
+
                         "excel"
                     ],
                     excel: {
@@ -11211,7 +11205,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 espInfo.precision = parseInt(winParamInfo.Precision);
                 espInfo.multiValued = winParamInfo.MultiValued == "true";
                 espInfo.visible = winParamInfo.Visible == "true";
-                espInfo.required = true/* winParamInfo.Required == "true" */;
+                espInfo.required = winParamInfo.Required == "true";
                 espInfo.oDSTag = winParamInfo.ODSTag;
                 espInfo.tags = winParamInfo.Tags;
                 espInfo.visibility = parseInt(winParamInfo.Visibility);

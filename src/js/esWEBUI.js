@@ -1790,15 +1790,9 @@
                     toolbar: [{
                             name: "run",
                             text: "Run",
-                            template: "<a class='k-button' ng-click=\"esGridRun()\">{{'ESUI.PQ.TOOLBAR_RUN' | translate}}</a>"
+                            template: "<a role='button' class='k-button k-button-icontext' ng-click=\"esGridRun()\"><span class='k-icon k-i-reload'/>{{'ESUI.PQ.TOOLBAR_RUN' | translate}}</a>"
                         },
-                        /*
-                        {
-                            name: "print",
-                            text: "Print",
-                            template: "<a class='k-button' ng-click=\"esGridPrint()\">Print</a>"
-                        },
-                        */
+
                         "excel"
                     ],
                     excel: {

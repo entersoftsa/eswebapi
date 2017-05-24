@@ -10,16 +10,20 @@
     "ERR_SUBSCRIPTION": "Either SubscriptionID or Subscription Password are not valid",
 
     "ESUI": {
-        "PQ" : {
+        "PARAMS_PANEL": {
+            "More": "More",
+            "Less": "Less"
+        },
+        "PQ": {
             "TOOLBAR_RUN": "Run",
             "DOWNLOAD": "Download",
             "PARAMS_PANEL_RUN": "Apply",
             "INVESTIGATE": "Search for"
         },
-        "ESCHARTPQ" : {
+        "ESCHARTPQ": {
             "CHART": "Chart",
             "DATA": "Data"
-            },
+        },
         "ESMAPPQ": {
             "MAP": "Map",
             "DATA": "Data",
@@ -28,13 +32,13 @@
             "CLUSTER_CLUSTER": "Cluster",
             "CLUSTER_SPIDER": "Spider",
             "RUN_MAP": "Run Map"
-            },
+        },
         "ESSURVEY": {
             "START": "Start Survey",
             "NEXT": "Next",
             "PREVIOUS": "Previous",
             "SAVE": "Save and Continue later"
-            },
+        },
         "LOGIN_FORM": {
             "SUBSCRIPTION": "Subscription Data",
             "SUBSCRIPTION_ID": "Subscription ID",
