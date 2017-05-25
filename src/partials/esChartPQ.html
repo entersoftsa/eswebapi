@@ -10,28 +10,13 @@
     	es-data-source="esChartDataSource" >
     </es-params-panel>
 
-
     <div class="col-xs-12">
-		<kendo-tab-strip>
-			<!-- tab list -->
-			<ul>
-				<li class="k-state-active"><span class="glyphicon glyphicon-picture"></span><span class="hidden-xs"></span></li>
-				<li><span class="glyphicon glyphicon-align-justify"></span><span class="hidden-xs"></span></li>
-			</ul>
-			<div class="eschart-wrapper">
-				<div 
-					 kendo-chart="esChartCtrl"
-					 k-ng-delay="esChartOptions.dataSource"
-				     k-options="esChartOptions">
-				</div>
+		<div class="eschart-wrapper">
+			<div 
+				 kendo-chart="esChartCtrl"
+				 k-ng-delay="esChartOptions.dataSource"
+			     k-options="esChartOptions">
 			</div>
-
-			<div>
-				<es-local-grid  
-			        es-grid-options="esPqDef.esGridOptions" 
-			        es-data-source="esChartDataSource">
-			    </es-local-grid>
-			</div>
-		</kendo-tab-strip>
+		</div>
 	</div>
 </div>
