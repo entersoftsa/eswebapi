@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.20.3 - 2017-05-25
+/*! Entersoft Application Server WEB API - v1.20.5 - 2017-06-16
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6258,7 +6258,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.20.3";
+    var version = "1.20.5";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -7229,6 +7229,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.paramCode = paramId;
                 this.paramValue = paramVal;
                 this.enumList = enumList;
+                this.mandatory = false;
+            }
+
+            ESParamVal.prototype.required = function(bVal) {
+                if (!arguments || arguments.length == 0) {
+                    return this.mandatory;
+                }
+
+                this.mandatory = !!bVal;
+                return this;
             }
 
             ESParamVal.prototype.getExecuteVal = function() {
@@ -7236,7 +7246,9 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             };
 
             ESParamVal.prototype.clone = function(paramId) {
-                return new ESParamVal(paramId, this.pValue(), this.enumList);
+                var p = new ESParamVal(paramId, this.pValue(), this.enumList);
+                p.required(this.required());
+                return p;
             };
 
             ESParamVal.prototype.pValue = function(v) {
@@ -7664,6 +7676,21 @@ $log.info(JSON.stringify(pA));
                     }
                 }
                 return this;
+            }
+
+            ESParamValues.prototype.isValidState = function() {
+                var x = this;
+                for (var prop in x) {
+                    if (x.hasOwnProperty(prop)) {
+                        var p = x[prop];
+                        if ((p instanceof ESParamVal) && p.required()) {
+                            if (!((p.paramValue && p.getExecuteVal()) || (angular.isNumber(p.paramValue) && p.paramValue == 0))) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
             }
 
             /**

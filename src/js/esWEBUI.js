@@ -1464,7 +1464,7 @@
 
                 if (tCol.aggregate) {
                     tCol.aggregates = [tCol.aggregate];
-                    var fmtStr = esCol.formatString ? "kendo.toString(" + tCol.aggregate + ",'" + esCol.formatString.replace(/#/g, "\\\\#") + "')" : tCol.aggregate;
+                    var fmtStr = esCol.formatString ? "kendo.toString(" + tCol.aggregate + ",'" + esCol.formatString.replace(/#/g, "\\\\#") + "') || ''" : tCol.aggregate;
                     tCol.footerTemplate = "<div style='text-align: right'>#:" + fmtStr + "#</div>";
                     tCol.groupFooterTemplate = tCol.footerTemplate;
                 }
@@ -1569,6 +1569,12 @@
 
                             var executeParams = qParams.Params;
                             if (executeParams instanceof esGlobals.ESParamValues) {
+                                if (!executeParams.isValidState())
+                                {
+                                    var err = new Error("Required parameters have not been given value");
+                                    options.error(err);
+                                    return;
+                                }
                                 executeParams = executeParams.getExecuteVals();
                             }
 
@@ -1741,7 +1747,7 @@
 
                 grdopt.selectedMasterField = esGridInfo.selectedMasterField;
                 grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
-                grdopt.columnMenu = true;
+                grdopt.columnMenu = false;
 
                 if (esDataSource) {
                     grdopt.dataSource = esDataSource;
@@ -1816,7 +1822,7 @@
                 grdopt.columns = esGridInfo.columns;
                 grdopt.selectedMasterField = esGridInfo.selectedMasterField;
                 grdopt.selectedMasterTable = esGridInfo.selectedMasterTable;
-                grdopt.columnMenu = true;
+                grdopt.columnMenu = false;
 
                 var aggs = _.flatMap(grdopt.columns, function(c) {
                     return c.columns ? _.filter(c.columns, function(k) {
@@ -2017,17 +2023,31 @@
             }
 
             function createESParams(obj) {
-                if (!obj || !angular.isArray(obj)) {
+                if (!obj) {
                     return new new esGlobals.ESParamValues();
                 }
 
                 var p = [];
-                _.map(obj, function(x) {
-                    var par = createEsParamVal(x);
-                    if (par) {
-                        p.push(par);
+                if (angular.isArray(obj)) {
+                    _.map(obj, function(x) {
+                        var par = createEsParamVal(x);
+                        if (par) {
+                            p.push(par);
+                        }
+                    });
+                } else {
+                    for (var key in obj) {
+                        var val = obj[key];
+                        var par1 = createEsParamVal({
+                            id: key,
+                            value: val
+                        });
+                        if (par1) {
+                            p.push(par1);
+                        }
                     }
-                });
+                }
+
                 return new esGlobals.ESParamValues(p);
             }
 
@@ -2040,9 +2060,9 @@
                         return new esGlobals.ESNumericParamVal(esParamInfo.id, {
                             oper: "EQ",
                             value: 0
-                        });
+                        }).required(esParamInfo.required);
                     }
-                    return esEval(esParamInfo, dx[0].Value);
+                    return esEval(esParamInfo, dx[0].Value).required(esParamInfo.required);
                 }
 
                 // boolean
@@ -2051,7 +2071,7 @@
                     if (dx && dx.length > 0) {
                         bVal = parseInt(dx[0].Value);
                     }
-                    return new esGlobals.ESBoolParamVal(esParamInfo.id, !!bVal);
+                    return new esGlobals.ESBoolParamVal(esParamInfo.id, !!bVal).required(esParamInfo.required);
                 }
 
                 //ESDateRange
@@ -2061,9 +2081,9 @@
                             dRange: "ESDateRange(FiscalPeriod)",
                             fromD: null,
                             toD: null
-                        });
+                        }).required(esParamInfo.required);
                     }
-                    return new esGlobals.ESDateParamVal(esParamInfo.id, dx[0].Value);
+                    return new esGlobals.ESDateParamVal(esParamInfo.id, dx[0].Value).required(esParamInfo.required);
                 }
 
                 //ESString
@@ -2072,16 +2092,16 @@
                         return new esGlobals.ESStringParamVal(esParamInfo.id, {
                             oper: "EQ",
                             value: null
-                        });
+                        }).required(esParamInfo.required);
                     }
 
-                    return esEval(esParamInfo, dx[0].Value);
+                    return esEval(esParamInfo, dx[0].Value).required(esParamInfo.required);
                 }
 
                 //Not set
                 if (!dx || dx.length == 0) {
                     var orgVal = esParamInfo.multiValued ? [] : null;
-                    return new esGlobals.ESParamVal(esParamInfo.id, orgVal, esParamInfo.enumList);
+                    return new esGlobals.ESParamVal(esParamInfo.id, orgVal, esParamInfo.enumList).required(esParamInfo.required);
                 }
 
                 var processedVals = _.map(dx, function(k) {
@@ -2091,7 +2111,7 @@
                 if (processedVals.length == 1) {
                     processedVals = processedVals[0];
                 }
-                return new esGlobals.ESParamVal(esParamInfo.id, processedVals, esParamInfo.enumList);
+                return new esGlobals.ESParamVal(esParamInfo.id, processedVals, esParamInfo.enumList).required(esParamInfo.required);
             }
 
             function processStrToken(esParamInfo, val) {
@@ -2194,13 +2214,15 @@
             ESParamsDefinitions.prototype.simpleDefinitions = function() {
                 var f = this.definitions;
                 return f ? _.filter(f, function(g) {
-                    return g.visible && g.visibility != 1 }) : [];
+                    return g.visible && g.visibility != 1
+                }) : [];
             }
 
             ESParamsDefinitions.prototype.advancedDefinitions = function() {
                 var f = this.definitions;
                 return f ? _.filter(f, function(g) {
-                    return g.isAdvanced() }) : [];
+                    return g.isAdvanced()
+                }) : [];
             }
 
             ESParamsDefinitions.prototype.hasAdvancedParams = function() {
@@ -2248,14 +2270,14 @@
                 espInfo.invTableMappings = winParamInfo.InvTableMappings;
 
                 espInfo.enumOptionAll = winParamInfo.EnumOptionAll;
-                var enmList = _.sortBy(_.map(_.filter(gridexInfo.EnumItem, function(x) {
+                var enmList = _.map(_.filter(gridexInfo.EnumItem, function(x) {
                     return x.fParamID == espInfo.id && (typeof x.ID != 'undefined');
                 }), function(e) {
                     return {
                         text: espInfo.oDSTag ? e.Caption.substring(e.Caption.indexOf(".") + 1) : e.Caption,
                         value: e.ID
                     };
-                }), "value");
+                });
 
                 espInfo.enumList = (enmList.length) ? enmList : undefined;
 

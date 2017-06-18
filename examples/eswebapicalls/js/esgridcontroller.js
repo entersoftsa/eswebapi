@@ -1044,8 +1044,8 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
         $scope.tboOptions = new esGlobals.ESPQOptions(-1, -1, true, true);
 
         $scope.webPQOptions.theGridOptions = {
-            detailTemplate: '<div><es00-documents-detail es-master-row-field="\'ISUDGID\'" /></div>',
-            //detailTemplate: '<div><es00-documents-detail es-master-row-field="getMasterOptions().selectedMasterField" /></div>',
+            //detailTemplate: '<div><es00-documents-detail es-master-row-field="\'ISUDGID\'" /></div>',
+            detailTemplate: '<div><es00-documents-detail es-master-row-field="getMasterOptions().selectedMasterField" /></div>',
             detailInit: function(e) {
                 $log.info("hi");
                 var detScope = e.detailRow.scope();

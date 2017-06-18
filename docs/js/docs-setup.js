@@ -1,6 +1,6 @@
 NG_DOCS={
   "sections": {
-    "api": "API 1.20.3",
+    "api": "API 1.20.5",
     "basicconcepts": "Basic Concepts",
     "installation": "Installation"
   },
