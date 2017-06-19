@@ -229,6 +229,10 @@
                             var errorMessage, stackTrace, itm;
 
                             try {
+                                var esMessaging = $injector.get('esMessaging');
+                                esMessaging.publish("ES_HTTP_CORE_ERR", exception);
+
+                                
                                 errorMessage = exception.toString();
                                 stackTrace = stacktraceService.print({
                                     e: exception

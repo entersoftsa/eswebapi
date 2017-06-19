@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.20.5 - 2017-06-16
+/*! Entersoft Application Server WEB API - v1.20.6 - 2017-06-18
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -6496,94 +6496,6 @@ var resp = {
 
     })();
 
-(function(angular) {
-    'use strict';
-
-   
-    angular.module('es.services.Web.Environment', [])
-        .provider('Environment', [function () {
-            
-            var domainConfig = {dev: [], prod: [], staging: []};
-            var _stage = 'dev';
-            var _assetsPath = '/KB/app/images';
-            var _templatesPath = '/KB/app/templates';
-
-            
-            function _getDomain() {
-                var matches = document.location.href.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
-                return (matches && matches[1]);
-            }
-
-            return {
-                
-                setStage: function (env) {
-                    _stage = env;
-                },
-
-                
-                getStage: function () {
-                    return _stage;
-                },
-
-                
-                setAssetsPath: function (path) {
-                    _assetsPath = path;
-                },
-                setTemplatesPath: function (path) {
-                    _templatesPath = path;
-                },
-
-                
-                addDevelopmentDomains: function (domains) {
-                    domainConfig.dev = domains;
-                    return this;
-                },
-                addProductionDomains: function (domains) {
-                    domainConfig.prod = domains;
-                    return this;
-                },
-                addStagingDomains: function (domains) {
-                    domainConfig.staging = domains;
-                    return this;
-                },
-
-                setStageFromDomain: function() {
-                    var domain;
-                    for (var stage in domainConfig) {
-                        domain = _getDomain();
-                        if (domainConfig[stage].indexOf(domain) >= 0) {
-                            _stage = stage;
-                            break;
-                        }
-                    }
-                },
-
-                $get: function () {
-                    return {
-                        stage: _stage,
-                        assetsPath: _assetsPath,
-                        templatesPath: _templatesPath,
-                        isDev: function () {
-                            return (_stage === 'dev');
-                        },
-                        isProduction: function () {
-                            return (_stage === 'prod');
-                        },
-                        isStaging: function () {
-                            return (_stage === 'staging');
-                        },
-                        getAssetsPath: function () {
-                            return _assetsPath
-                        },
-                        getTemplatesPath: function () {
-                            return _templatesPath
-                        }
-                    };
-                }
-            };
-        }]);
-
-})(window.angular);
 (function() {
     'use strict';
 
@@ -6592,7 +6504,7 @@ var resp = {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.20.5";
+    var version = "1.20.6";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -8942,6 +8854,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             var errorMessage, stackTrace, itm;
 
                             try {
+                                var esMessaging = $injector.get('esMessaging');
+                                esMessaging.publish("ES_HTTP_CORE_ERR", exception);
+
+                                
                                 errorMessage = exception.toString();
                                 stackTrace = stacktraceService.print({
                                     e: exception
@@ -10552,6 +10468,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             console.log(response.length); // displays "77"
                         },
 
+                        error: function(e) {
+                            console.log(e);
+                        },
+
                         read: function(options) {
 
                             var pqOptions = {};
@@ -10565,9 +10485,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             if (executeParams instanceof esGlobals.ESParamValues) {
                                 if (!executeParams.isValidState())
                                 {
-                                    var err = new Error("Required parameters have not been given value");
+                                    var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
                                     options.error(err);
-                                    return;
+                                    throw err;
+                                    
                                 }
                                 executeParams = executeParams.getExecuteVals();
                             }
@@ -10644,6 +10565,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                             var executeParams = qParams.Params;
                             if (executeParams instanceof esGlobals.ESParamValues) {
+                                if (!executeParams.isValidState())
+                                {
+                                    var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
+                                    options.error(err);
+                                    throw err;
+                                    
+                                }
                                 executeParams = executeParams.getExecuteVals();
                             }
 

@@ -18,7 +18,8 @@
             "TOOLBAR_RUN": "Run",
             "DOWNLOAD": "Download",
             "PARAMS_PANEL_RUN": "Apply",
-            "INVESTIGATE": "Search for"
+            "INVESTIGATE": "Search for",
+            "PARAMS_MISSING": "One or more required parameters are not given value"
         },
         "ESCHARTPQ": {
             "CHART": "Chart",

@@ -1558,6 +1558,10 @@
                             console.log(response.length); // displays "77"
                         },
 
+                        error: function(e) {
+                            console.log(e);
+                        },
+
                         read: function(options) {
 
                             var pqOptions = {};
@@ -1571,9 +1575,10 @@
                             if (executeParams instanceof esGlobals.ESParamValues) {
                                 if (!executeParams.isValidState())
                                 {
-                                    var err = new Error("Required parameters have not been given value");
+                                    var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
                                     options.error(err);
-                                    return;
+                                    throw err;
+                                    
                                 }
                                 executeParams = executeParams.getExecuteVals();
                             }
@@ -1650,6 +1655,13 @@
 
                             var executeParams = qParams.Params;
                             if (executeParams instanceof esGlobals.ESParamValues) {
+                                if (!executeParams.isValidState())
+                                {
+                                    var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
+                                    options.error(err);
+                                    throw err;
+                                    
+                                }
                                 executeParams = executeParams.getExecuteVals();
                             }
 

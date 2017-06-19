@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 
             dist: {
                 // the files to concatenate
-                src: ['src/js/eswebservices.js', 'src/js/esanalytics.js', 'src/js/esenvironment.js', 'src/js/esinit.js', 'src/js/eslog.js', 'src/js/esWEBUI.js'],
+                src: ['src/js/eswebservices.js', 'src/js/esanalytics.js', 'src/js/esinit.js', 'src/js/eslog.js', 'src/js/esWEBUI.js'],
                 dest: 'dist/<%= pkg.name %>.js'
             },
 
@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 
             uilessdist: {
                 // the files to concatenate
-                src: ['src/js/eswebservices.js', 'src/js/esenvironment.js', 'src/js/esinit.js', 'src/js/eslog.js'],
+                src: ['src/js/eswebservices.js', 'src/js/esinit.js', 'src/js/eslog.js'],
                 dest: 'dist/<%= pkg.name %>-uiless.js'
             },
         },

@@ -13,7 +13,8 @@
             "TOOLBAR_RUN": "Αποδοχή",
             "DOWNLOAD": "Λήψη",
             "PARAMS_PANEL_RUN": "Εφαρμογή",
-            "INVESTIGATE": "Αναζήτηση"
+            "INVESTIGATE": "Αναζήτηση",
+            "PARAMS_MISSING": "Μία ή περισσότερες παράμετροι δεν έχουν τιμή"
         },
         "ESCHARTPQ" : {
             "CHART": "Γράφημα",
