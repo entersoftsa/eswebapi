@@ -1230,7 +1230,10 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
 
         var pqOptions = new esGlobals.ESPQOptions(-1, -1, true);
         var params = new esGlobals.ESParamValues();
-        $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESWebManager", "SalesItemHierarchyAnalysis", pqOptions, params, chartOptions, true);
+        var treeOptions = {
+            autoBind: false
+        };
+        $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESWebManager", "SalesItemHierarchyAnalysis", pqOptions, params, treeOptions, true);
         
     }
 ])

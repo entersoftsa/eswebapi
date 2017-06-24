@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.20.7 - 2017-06-23
+/*! Entersoft Application Server WEB API - v1.20.7 - 2017-06-24
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9858,23 +9858,22 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 scope: {
                     esPanelOpen: "=?",
                     esPqDef: "=?",
+                    esChartOptions: "=?",
                 },
                 templateUrl: function(element, attrs) {
                     return "src/partials/esTreeMapPQ.html";
                 },
                 link: function($scope, iElement, iAttrs) {
                     $scope.esChartDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef);
-                    var tOptions = {
-                        valueField: "value",
-                        textField: "name"
-                    };
-                    tOptions.dataSource = $scope.esChartDataSource;
+                    var tOptions = $scope.esChartOptions || {};
+
+                    tOptions.valueField = "value";
+                    tOptions.textField = "name";
                     tOptions.dataBound = function(e) {
                         if (e && e.sender) {
                             kendo.ui.progress(e.sender.element.parent(), false);
                         }
                     };
-                    $scope.esChartOptions = tOptions;
 
                     $scope.executePQ = function() {
                         $scope.isOpen = false;
@@ -9889,6 +9888,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     angular.element($window).bind('resize', function() {
                         kendo.resize(angular.element(".eschart-wrapper"));
                     });
+
+                    tOptions.dataSource = $scope.esChartDataSource;
                 }
             };
         }
@@ -10487,26 +10488,59 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             function processPQ(data) {
+
+                function getItems(arr, maxLevel, curLevel) {
+                    var i1 = [];
+                    
+                    var propName = "a" + curLevel.toString();
+                    _.forOwn(_.groupBy(arr, function(x) {return x[propName]; }), function(value, key) {
+                        if (key == "undefined") {
+                            return i1;
+                        }
+
+                        var t = {};
+                        t.name = key;
+                        t.value = _.sumBy(value, function(o) { return o.Figure;});
+                        if (curLevel < maxLevel) {
+                            t.items = getItems(value, maxLevel, curLevel + 1);
+                        }
+                        
+                        i1.push(t);
+                    });
+                    return i1;
+                };
+
+                function getMaxLevel(data) {
+                    var i;
+                    var dLen = data.length;
+                    for (i = 10; i >= 1; i--){
+                        var propName = "a" + i.toString();
+                        var ret = _.groupBy(data, function(x) { return x[propName];});
+                        var noName = ret["undefined"];
+                        if (!(angular.isArray(noName) && noName.length == dLen)) {
+                            return i;
+                        }
+                    }
+                    return 0;
+                }
+
                 var ret = {
                     name: "All",
                     value: 0
                 };
 
                 if (!data || !angular.isArray(data) || !data.length) {
-                    return ret;
+                    return [ret];
+                }
+
+                var maxLevel = getMaxLevel(data);
+                if (maxLevel == 0) {
+                    return [ret];
                 }
 
                 ret.value = _.sumBy(data, function(o) { return o.Figure;}) || 0;
-
-                var i1 = [];
-                _.forOwn(_.groupBy(data, function(x) {return x.a1; }), function(value, key) {
-                    var t = {};
-                    t.name = key;
-                    t.value = _.sumBy(value, function(o) { return o.Figure;});
-                    i1.push(t);
-                });
                 
-                ret.items = i1;
+                ret.items = getItems(data, maxLevel, 1);
                 return [ret];
             }
 

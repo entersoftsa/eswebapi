@@ -36,6 +36,8 @@
                     </es-web-pq>
                     <es-chart ng-if="dbItem.ESUIType == 'eschart'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.options">
                     </es-chart>
+                    <es-tree-map ng-if="dbItem.ESUIType == 'estreemap'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.options">
+                    </es-tree-map>
 
                     <es-map-pq ng-if="dbItem.ESUIType == 'esmap'" 
                                 es-map-options="dbItem.options" 
