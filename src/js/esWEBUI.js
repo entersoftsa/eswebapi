@@ -941,6 +941,49 @@
         }
     ])
 
+    .directive('esTreeMap', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esPanelOpen: "=?",
+                    esPqDef: "=?",
+                },
+                templateUrl: function(element, attrs) {
+                    return "src/partials/esTreeMapPQ.html";
+                },
+                link: function($scope, iElement, iAttrs) {
+                    $scope.esChartDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef);
+                    var tOptions = {
+                        valueField: "value",
+                        textField: "name"
+                    };
+                    tOptions.dataSource = $scope.esChartDataSource;
+                    tOptions.dataBound = function(e) {
+                        if (e && e.sender) {
+                            kendo.ui.progress(e.sender.element.parent(), false);
+                        }
+                    };
+                    $scope.esChartOptions = tOptions;
+
+                    $scope.executePQ = function() {
+                        $scope.isOpen = false;
+                        if ($scope.esChartDataSource) {
+                            if ($scope.esChartCtrl) {
+                                kendo.ui.progress($scope.esChartCtrl.element.parent(), true);
+                            }
+                            $scope.esChartDataSource.read();
+                        }
+                    }
+
+                    angular.element($window).bind('resize', function() {
+                        kendo.resize(angular.element(".eschart-wrapper"));
+                    });
+                }
+            };
+        }
+    ])
+
     .directive('esLocalGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
         function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
             return {
@@ -1533,6 +1576,74 @@
                 return new kendo.data.DataSource(xParam);
             }
 
+            function processPQ(data) {
+                var ret = {
+                    name: "All",
+                    value: 0
+                };
+
+                if (!data || !angular.isArray(data) || !data.length) {
+                    return ret;
+                }
+
+                ret.value = _.sumBy(data, function(o) { return o.Figure;}) || 0;
+
+                var i1 = [];
+                _.forOwn(_.groupBy(data, function(x) {return x.a1; }), function(value, key) {
+                    var t = {};
+                    t.name = key;
+                    t.value = _.sumBy(value, function(o) { return o.Figure;});
+                    i1.push(t);
+                });
+                
+                ret.items = i1;
+                return [ret];
+            }
+
+            function getTreeMapDS(espqParams) {
+                var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
+
+                var xParam = {
+                    transport: {
+                        read: function(options) {
+
+                            var pqOptions = {};
+                            pqOptions.WithCount = false;
+                            pqOptions.Page = -1;
+                            pqOptions.PageSize = -1;
+
+                            var executeParams = qParams.Params;
+                            if (executeParams instanceof esGlobals.ESParamValues) {
+                                if (!executeParams.isValidState()) {
+                                    var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
+                                    options.error(err);
+                                    throw err;
+
+                                }
+                                executeParams = executeParams.getExecuteVals();
+                            }
+
+                            esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
+                                .success(function(pq) {
+                                    pq.Rows = pq.Rows || [];
+                                    var data = processPQ(pq.Rows)
+                                    options.success(data);
+                                })
+                                .error(function(err) {
+                                    options.error(err);
+                                });
+                        },
+
+                    },
+                    schema: {
+                        model: {
+                            children: "items"
+                        }
+                    }
+                };
+
+                return new kendo.data.HierarchicalDataSource(xParam);
+            }
 
             function prepareWebScroller(espqParams, esOptions, aggregates, groups) {
                 var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
@@ -1573,12 +1684,11 @@
 
                             var executeParams = qParams.Params;
                             if (executeParams instanceof esGlobals.ESParamValues) {
-                                if (!executeParams.isValidState())
-                                {
+                                if (!executeParams.isValidState()) {
                                     var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
                                     options.error(err);
                                     throw err;
-                                    
+
                                 }
                                 executeParams = executeParams.getExecuteVals();
                             }
@@ -1655,12 +1765,11 @@
 
                             var executeParams = qParams.Params;
                             if (executeParams instanceof esGlobals.ESParamValues) {
-                                if (!executeParams.isValidState())
-                                {
+                                if (!executeParams.isValidState()) {
                                     var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
                                     options.error(err);
                                     throw err;
-                                    
+
                                 }
                                 executeParams = executeParams.getExecuteVals();
                             }
@@ -3230,6 +3339,7 @@ $scope.fetchPQInfo = function() {
 
                 getZoomDataSource: prepareStdZoom,
                 getPQDataSource: prepareWebScroller,
+                getTreeMapDS: getTreeMapDS,
 
                 getPivotDS: preparePivotDS,
 

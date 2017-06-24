@@ -116,6 +116,11 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('src/partials/esTreeMapPQ.html',
+    "<div class=row><es-params-panel class=col-xs-12 ng-cloak es-panel-open=esPanelOpen ng-if=!esLocalData es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ() es-data-source=esChartDataSource></es-params-panel><div class=col-xs-12><div class=eschart-wrapper><div kendo-treemap=esTreeMapCtrl k-options=esChartOptions></div></div></div></div>"
+  );
+
+
   $templateCache.put('src/partials/esWebPQ.html',
     "<div class=row><es-params-panel class=col-xs-12 ng-cloak es-params-values=esParamsValues es-group-id=esGroupId es-filter-id=esFilterId es-force-title=::esForceTitle es-panel-open=::esPanelOpen es-params-def=esParamsDef></es-params-panel><div class=col-xs-12><kendo-pager ng-if=esShowTopPagination auto-bind=false page-size=20 page-sizes=esGridOptions.pageable.pageSizes refresh=true data-source=esGridOptions.dataSource></kendo-pager></div><es-grid class=\"esgrid col-xs-12\" ng-cloak es-group-id=esGroupId es-filter-id=esFilterId es-grid-options=esGridOptions es-p-q-options=esPQOptions es-execute-params=esParamsValues></es-grid></div>"
   );

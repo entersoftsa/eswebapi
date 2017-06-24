@@ -1037,8 +1037,8 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
         $scope.webPQOptions = {};
-        $scope.webPQOptions.theGroupId = "ESFIDocumentSales";
-        $scope.webPQOptions.theFilterId = "SalesAnalysisPerCustomer";
+        $scope.webPQOptions.theGroupId = "ESWebManager";
+        $scope.webPQOptions.theFilterId = "SalesComparisonbyMonth";
         $scope.webPQOptions.theVals = new esGlobals.ESParamValues();
 
         $scope.tboOptions = new esGlobals.ESPQOptions(-1, -1, true, true);
@@ -1230,7 +1230,7 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
 
         var pqOptions = new esGlobals.ESPQOptions(-1, -1, true);
         var params = new esGlobals.ESParamValues();
-        $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESFIDocumentSales", "SalesAnalysisPerCustomer", pqOptions, params, chartOptions, true);
+        $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESWebManager", "SalesItemHierarchyAnalysis", pqOptions, params, chartOptions, true);
         
     }
 ])
