@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.20.8 - 2017-06-26
+/*! Entersoft Application Server WEB API - v1.20.8 - 2017-06-29
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -9818,7 +9818,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 },
                 link: function($scope, iElement, iAttrs) {
                     if (!$scope.esLocalData && !iAttrs.esLocalData) {
-                        $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef);
+                        var groups = ($scope.esChartOptions) ? $scope.esChartOptions.group : null;
+                        $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups);
                     } else {
                         $scope.esChartDataSource = { data: $scope.esLocalData };
                     }
@@ -10597,8 +10598,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     _.map(groups, function(g) {
                         g.aggregates = aggregates;
                     });
-                } else {
-                    groups = undefined;
                 }
 
                 var xParam = {

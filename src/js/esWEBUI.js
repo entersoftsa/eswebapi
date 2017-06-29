@@ -908,7 +908,8 @@
                 },
                 link: function($scope, iElement, iAttrs) {
                     if (!$scope.esLocalData && !iAttrs.esLocalData) {
-                        $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef);
+                        var groups = ($scope.esChartOptions) ? $scope.esChartOptions.group : null;
+                        $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups);
                     } else {
                         $scope.esChartDataSource = { data: $scope.esLocalData };
                     }
@@ -1687,8 +1688,6 @@
                     _.map(groups, function(g) {
                         g.aggregates = aggregates;
                     });
-                } else {
-                    groups = undefined;
                 }
 
                 var xParam = {
