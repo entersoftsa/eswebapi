@@ -2178,7 +2178,7 @@
 
             function createESParams(obj) {
                 if (!obj) {
-                    return new new esGlobals.ESParamValues();
+                    return new esGlobals.ESParamValues();
                 }
 
                 var p = [];

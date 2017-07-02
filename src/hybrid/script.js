@@ -128,15 +128,15 @@
                 var xDef;
                 if (!angular.isArray(window.esDef)) {
                     xDef = new esGlobals.ESPublicQueryDef().initFromObj(window.esDef);
-                    if (window.esDef && window.esDef.Params && angular.isArray(window.esDef.Params)) {
-                        xDef.Params = new esWebUIHelper.createESParams(window.esDef.Params);
+                    if (window.esDef) {
+                        xDef.Params = esWebUIHelper.createESParams(window.esDef.Params);
                     }
                 } else {
                     xDef = _.map(window.esDef, function(x) {
                         var pqDef = new esGlobals.ESPublicQueryDef().initFromObj(x.esDef);
                         pqDef.ESUIType = x.ESUIType.toLowerCase();
-                        if (x.esDef && x.esDef.Params && angular.isArray(x.esDef.Params)) {
-                            pqDef.Params = new esWebUIHelper.createESParams(x.esDef.Params);
+                        if (x.esDef) {
+                            pqDef.Params = esWebUIHelper.createESParams(x.esDef.Params);
                         }
                         pqDef.AA = x.AA;
                         return pqDef;
