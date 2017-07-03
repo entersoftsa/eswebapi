@@ -1,0 +1,22 @@
+<div class="row">
+    <es-params-panel class="col-xs-12"
+    	ng-cloak 
+        es-panel-open="esPanelOpen"
+        ng-if="!esLocalData"
+        es-group-id="esPqDef" 
+        es-local-data-source="'true'" 
+        es-show-run="'true'" 
+        es-run-click="::executePQ()" 
+    	es-data-source="esMapDataSource" >
+    </es-params-panel>
+
+    <div class="col-xs-12">
+		<div class="esmap-wrapper">
+			<div 
+				 kendo-map="esMapCtrl"
+                 k-ng-delay="esMapOptions.dataSource"
+			     k-options="esMapOptions">
+			</div>
+		</div>
+	</div>
+</div>

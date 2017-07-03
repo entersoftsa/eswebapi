@@ -337,24 +337,12 @@
             return rows;
         }
 
-        var ts = _.map(rows, function(r) {
-            var s = {
-                id: r.GID,
-                longitude: r.Longitude || r.longitude,
-                latitude: r.Latitude || r.latitude,
-                esTempl: r.esTempl,
-                esOptions: {
-                    title: r.esTitle,
-                    label: r.esLabel,
-                    icon: r.esIcon
-                },
-                esObj: r
-            };
-            return s;
+        var ts = _.forEach(rows, function(r) {
+            r.latlng = [r.Latitude, r.Longitude];
         });
 
         return _.filter(ts, function(x) {
-            return x.longitude != 0 && x.latitude != 0;
+            return x.Longitude && x.Latitude;
         });
     };
 
@@ -955,7 +943,7 @@
                     return "src/partials/esTreeMapPQ.html";
                 },
                 link: function($scope, iElement, iAttrs) {
-                    $scope.esChartDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef);
+                    $scope.esChartDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, false);
                     var tOptions = $scope.esChartOptions || {};
 
                     tOptions.valueField = "value";
@@ -969,8 +957,8 @@
                     $scope.executePQ = function() {
                         $scope.isOpen = false;
                         if ($scope.esChartDataSource) {
-                            if ($scope.esChartCtrl) {
-                                kendo.ui.progress($scope.esChartCtrl.element.parent(), true);
+                            if ($scope.esTreeMapCtrl) {
+                                kendo.ui.progress($scope.esTreeMapCtrl.element.parent(), true);
                             }
                             $scope.esChartDataSource.read();
                         }
@@ -981,6 +969,62 @@
                     });
 
                     tOptions.dataSource = $scope.esChartDataSource;
+                }
+            };
+        }
+    ])
+
+    .directive('esMap2', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+            return {
+                restrict: 'AE',
+                scope: {
+                    esPanelOpen: "=?",
+                    esPqDef: "=?",
+                    esMapOptions: "=?",
+                },
+                templateUrl: function(element, attrs) {
+                    return "src/partials/esMap2PQ.html";
+                },
+                link: function($scope, iElement, iAttrs) {
+                    var onChange = function(e) {
+                        var x;
+                        x = 10;
+                    };
+
+                    $scope.esMapDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, true, onChange);
+                    if (!$scope.esMapOptions) {
+                        $scope.esMapOptions = {};
+                    }
+                    var tOptions = $scope.esMapOptions;
+
+                    if (!tOptions.layers) {
+                        tOptions.layers = [{
+                            type: "tile",
+                            urlTemplate: "http://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
+                            subdomains: ["a", "b", "c"],
+                            attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>." +
+                                "Tiles courtesy of <a href='http://www.openstreemap.org/'>Entersoft SA</a>"
+                        }, {
+                            type: "marker",
+                            dataSource: $scope.esMapDataSource,
+                            locationField: "latlng",
+                            titleField: "esLabel",
+                            autoBind: false
+                        }];
+                    }
+
+                    $scope.executePQ = function() {
+                        $scope.isOpen = false;
+                        if ($scope.esMapDataSource) {
+                            $scope.esMapDataSource.read();
+                        }
+                    }
+
+                    angular.element($window).bind('resize', function() {
+                        kendo.resize(angular.element(".esmap-wrapper"));
+                    });
+
                 }
             };
         }
@@ -1582,20 +1626,24 @@
 
                 function getItems(arr, maxLevel, curLevel) {
                     var i1 = [];
-                    
+
                     var propName = "a" + curLevel.toString();
-                    _.forOwn(_.groupBy(arr, function(x) {return x[propName]; }), function(value, key) {
+                    _.forOwn(_.groupBy(arr, function(x) {
+                        return x[propName];
+                    }), function(value, key) {
                         if (key == "undefined") {
                             return i1;
                         }
 
                         var t = {};
                         t.name = key;
-                        t.value = _.sumBy(value, function(o) { return o.Figure;});
+                        t.value = _.sumBy(value, function(o) {
+                            return o.Figure;
+                        });
                         if (curLevel < maxLevel) {
                             t.items = getItems(value, maxLevel, curLevel + 1);
                         }
-                        
+
                         i1.push(t);
                     });
                     return i1;
@@ -1604,9 +1652,11 @@
                 function getMaxLevel(data) {
                     var i;
                     var dLen = data.length;
-                    for (i = 10; i >= 1; i--){
+                    for (i = 10; i >= 1; i--) {
                         var propName = "a" + i.toString();
-                        var ret = _.groupBy(data, function(x) { return x[propName];});
+                        var ret = _.groupBy(data, function(x) {
+                            return x[propName];
+                        });
                         var noName = ret["undefined"];
                         if (!(angular.isArray(noName) && noName.length == dLen)) {
                             return i;
@@ -1629,13 +1679,17 @@
                     return [ret];
                 }
 
-                ret.value = _.sumBy(data, function(o) { return o.Figure;}) || 0;
-                
+                ret.value = _.sumBy(data, function(o) {
+                    return o.Figure;
+                }) || 0;
+
                 ret.items = getItems(data, maxLevel, 1);
                 return [ret];
             }
 
-            function getTreeMapDS(espqParams) {
+            function getTreeMapDS(espqParams, forMap, onChange) {
+
+                var transformFunction = forMap ? convertPQRowsToMapRows : processPQ;
                 var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
 
                 var xParam = {
@@ -1661,7 +1715,7 @@
                             esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
                                 .success(function(pq) {
                                     pq.Rows = pq.Rows || [];
-                                    var data = processPQ(pq.Rows)
+                                    var data = transformFunction(pq.Rows);
                                     options.success(data);
                                 })
                                 .error(function(err) {
@@ -1677,7 +1731,11 @@
                     }
                 };
 
-                return new kendo.data.HierarchicalDataSource(xParam);
+                if (onChange && angular.isFunction(onChange)) {
+                    xParam.change = onChange;
+                }
+
+                return forMap ? new kendo.data.DataSource(xParam) : new kendo.data.HierarchicalDataSource(xParam);
             }
 
             function prepareWebScroller(espqParams, esOptions, aggregates, groups) {
