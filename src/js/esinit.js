@@ -698,7 +698,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.PQOptions = pqOptions;
                 this.Params = params;
                 this.UIOptions = uiOptions;
-                this.esPanelOpen = esPanelOpen;
+                this.esPanelOpen = angular.isUndefined(esPanelOpen) ? true :  !!esPanelOpen;
 
                 this.initFromObj = function(inObj) {
                     var x = inObj || {};
@@ -707,7 +707,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     this.FilterID = x.FilterID;
                     this.PQOptions = new ESPQOptions().initFromObj(x.PQOptions);
                     this.Params = x.Params;
-                    this.esPanelOpen = x.esPanelOpen;
+                    this.esPanelOpen = angular.isUndefined(x.esPanelOpen) ? true :  !!x.esPanelOpen;
                     this.UIOptions = x.UIOptions;
                     for (var prop in inObj) {
                         if (!this.hasOwnProperty(prop)) {

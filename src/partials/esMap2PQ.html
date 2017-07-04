@@ -14,7 +14,11 @@
 		<div class="esmap-wrapper">
 			<div 
 				 kendo-map="esMapCtrl"
+                 uib-tooltip="{{bubbleMessage}}"
+                 tooltip-is-open="tooltipIsOpen"
+                 tooltip-trigger="'none'"
                  k-ng-delay="esMapOptions.dataSource"
+                 es-options="esOptions"
 			     k-options="esMapOptions">
 			</div>
 		</div>

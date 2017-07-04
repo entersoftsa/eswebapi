@@ -42,7 +42,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esMap2PQ.html',
-    "<div class=row><es-params-panel class=col-xs-12 ng-cloak es-panel-open=esPanelOpen ng-if=!esLocalData es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ() es-data-source=esMapDataSource></es-params-panel><div class=col-xs-12><div class=esmap-wrapper><div kendo-map=esMapCtrl k-ng-delay=esMapOptions.dataSource k-options=esMapOptions></div></div></div></div>"
+    "<div class=row><es-params-panel class=col-xs-12 ng-cloak es-panel-open=esPanelOpen ng-if=!esLocalData es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ() es-data-source=esMapDataSource></es-params-panel><div class=col-xs-12><div class=esmap-wrapper><div kendo-map=esMapCtrl uib-tooltip={{bubbleMessage}} tooltip-is-open=tooltipIsOpen tooltip-trigger=\"'none'\" k-ng-delay=esMapOptions.dataSource es-options=esOptions k-options=esMapOptions></div></div></div></div>"
   );
 
 
@@ -122,7 +122,7 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('src/partials/esTreeMapPQ.html',
-    "<div class=row><es-params-panel class=col-xs-12 ng-cloak es-panel-open=esPanelOpen ng-if=!esLocalData es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ() es-data-source=esChartDataSource></es-params-panel><div class=col-xs-12><div class=eschart-wrapper><div kendo-treemap=esTreeMapCtrl k-ng-delay=esChartOptions.dataSource k-options=esChartOptions></div></div></div></div>"
+    "<div class=row><es-params-panel class=col-xs-12 ng-cloak es-panel-open=esPqDef.esPanelOpen ng-if=!esLocalData es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ() es-data-source=esChartDataSource></es-params-panel><div class=col-xs-12><div class=eschart-wrapper><div kendo-treemap=esTreeMapCtrl k-ng-delay=esChartOptions.dataSource k-options=esChartOptions></div></div></div></div>"
   );
 
 

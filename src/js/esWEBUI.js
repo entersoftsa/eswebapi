@@ -955,7 +955,7 @@
                     };
 
                     $scope.executePQ = function() {
-                        $scope.isOpen = false;
+                        $scope.esPqDef.esPanelOpen = false;
                         if ($scope.esChartDataSource) {
                             if ($scope.esTreeMapCtrl) {
                                 kendo.ui.progress($scope.esTreeMapCtrl.element.parent(), true);
@@ -981,38 +981,91 @@
                 scope: {
                     esPanelOpen: "=?",
                     esPqDef: "=?",
-                    esMapOptions: "=?",
+                    esOptions: "=?",
                 },
                 templateUrl: function(element, attrs) {
                     return "src/partials/esMap2PQ.html";
                 },
                 link: function($scope, iElement, iAttrs) {
                     var onChange = function(e) {
-                        var x;
-                        x = 10;
+                        var map = $scope.esMapCtrl;
+                        if (!map) {
+                            return;
+                        }
+
+                        if (!e.items || !e.items.length) {
+                            map.center([32.546813173515126, -4.218749999999986]);
+                            map.zoom(2);
+                        }
+
+                        var extent;
+                        for (var i = 0; i < e.items.length; i++) {
+                            var loc = [e.items[i].Latitude, e.items[i].Longitude];
+
+                            if (!extent) {
+                                extent = new kendo.dataviz.map.Extent(loc, loc);
+                            } else {
+                                extent.include(loc);
+                            }
+                        }
+
+                        map.extent(extent);
                     };
 
+                    $scope.bubbleMessage = "";
+                    $scope.tooltipIsOpen = false;
+
                     $scope.esMapDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, true, onChange);
-                    if (!$scope.esMapOptions) {
-                        $scope.esMapOptions = {};
-                    }
+                    $scope.esMapOptions = {};
                     var tOptions = $scope.esMapOptions;
 
-                    if (!tOptions.layers) {
-                        tOptions.layers = [{
-                            type: "tile",
-                            urlTemplate: "http://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
-                            subdomains: ["a", "b", "c"],
-                            attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>." +
-                                "Tiles courtesy of <a href='http://www.openstreemap.org/'>Entersoft SA</a>"
-                        }, {
-                            type: "marker",
-                            dataSource: $scope.esMapDataSource,
-                            locationField: "latlng",
-                            titleField: "esLabel",
-                            autoBind: false
-                        }];
+                    var esOptions = $scope.esOptions || {};
+
+                    tOptions.layers = [{
+                        type: "tile",
+                        urlTemplate: "http://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
+                        subdomains: ["a", "b", "c"],
+                        attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>." +
+                            "Tiles courtesy of <a href='http://www.openstreemap.org/'>Entersoft SA</a>"
+                    }];
+
+                    var dataLayer = {
+                        type: (esOptions.type && angular.isString(esOptions.type)) ? esOptions.type : "marker",
+                        dataSource: $scope.esMapDataSource,
+                        locationField: "latlng",
+                        titleField: (esOptions.titleField && angular.isString(esOptions.titleField)) ? esOptions.titleField : "esLabel",
+                        autoBind: angular.isUndefined(esOptions.autoBind) ? false : !!esOptions.autoBind,
+                        valueField: (esOptions.valueField && angular.isString(esOptions.valueField)) ? esOptions.valueField : "Figure",
+                    };
+
+                    if (dataLayer.type == "bubble") {
+                        tOptions.shapeMouseEnter = function(e) {
+                            var oe = e.originalEvent;
+                            var x = oe.pageX || oe.clientX;
+                            var y = oe.pageY || oe.clientY;
+
+                            var name = e.shape.dataItem[dataLayer.titleField] + " - " + e.shape.dataItem[dataLayer.valueField].toString();
+                            $scope.bubbleMessage = name;
+                            $scope.tooltipIsOpen = true;
+                            $scope.$apply();
+                        };
+                        tOptions.shapeMouseLeave = function(e) {
+                            $scope.bubbleMessage = "";  
+                            $scope.tooltipIsOpen = false;
+                            $scope.$apply();
+                        };
+
+                        dataLayer.style = {
+                            fill: {
+                                color: (esOptions.color && angular.isString(esOptions.color)) ? esOptions.color : "#00F"
+                            },
+                            stroke: {
+                                width: 1
+                            }
+                        };
                     }
+
+                    tOptions.layers.push(dataLayer);
 
                     $scope.executePQ = function() {
                         $scope.isOpen = false;

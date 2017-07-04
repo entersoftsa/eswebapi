@@ -1234,7 +1234,7 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
             autoBind: false
         };
         $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESWebManager", "SalesItemHierarchyAnalysis", pqOptions, params, treeOptions, true);
-        
+        $scope.esPqDef.esPanelOpen = false;
     }
 ])
 
@@ -1242,14 +1242,14 @@ smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUI
     function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
 
         $scope.myMapOptions = {
-            center: {
-                longitude: 0,
-                latitude: 0
-            },
-            zoom: 2,
+            type: "bubble",
+            color: "#0F0",
+            valueField: "esLabel"
         };
 
         $scope.myPQDef = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+        $scope.myPQDef.esPanelOpen = false;
+
         $scope.MyShowWindow = false;
         $scope.myType = "cluster";
         $scope.myTypeOptions = null;
