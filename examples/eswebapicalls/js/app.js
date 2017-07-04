@@ -11,16 +11,8 @@
         /* Entersoft AngularJS WEB API Provider */
         'es.Services.Web',
         'smeControllers',
-        'uiGmapgoogle-maps',
 
     ]);
-
-    eskbApp.config(['uiGmapGoogleMapApiProvider', function(GoogleMapApi) {
-            GoogleMapApi.configure({
-                key: "AIzaSyC50sZxDKxgkv5EBEjz0BUpOLxn8ENiuqA",
-                libraries: 'weather,geometry,visualization'
-            });
-        }]);
 
     eskbApp.config(['$logProvider',
         '$routeProvider',

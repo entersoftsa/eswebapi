@@ -2,15 +2,8 @@
 
 /* Controllers */
 
-var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap', 'uiGmapgoogle-maps', 'ngFileUpload']);
+var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap', 'ngFileUpload']);
 
-smeControllers.config(['uiGmapGoogleMapApiProvider', function(GoogleMapApi) {
-    GoogleMapApi.configure({
-        //    key: 'your api key',
-        // v: '3.20',
-        libraries: 'weather,geometry,visualization'
-    });
-}]);
 
 smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
     function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
@@ -231,8 +224,8 @@ smeControllers.controller('propertiesCtrl', ['$location', '$window', '$scope', '
     }
 ]);
 
-smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
-    function($log, $q, $scope, Upload, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
+smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 
+    function($log, $q, $scope, Upload, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv) {
 
         // $scope.gRows = [{
         //     GTitle: "Turn Over",
@@ -436,25 +429,6 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
                         latitude: x.coords.latitude,
                         longitude: x.coords.longitude
                     };
-
-                    $scope.myMarkers = [{
-                        id: "abcd-00",
-                        longitude: vPos.longitude,
-                        latitude: vPos.latitude,
-                        esTempl: 'gmapwindow.html',
-                        options: {
-                            title: "Hello " + new Date(),
-                            label: "Label " + new Date(),
-                            icon: "abcd.png"
-                        },
-
-                        esObj: {
-                            message: "Hi from stavros"
-                        },
-                    }];
-
-                    $scope.mapOptions.center = vPos;
-
                 }, function(err) {
                     alert(err.message + " - " + err.code);
                 });
@@ -474,22 +448,6 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
         $scope.myMarkerClick = function(marker, b, c) {
             alert("Hi Marker ");
         }
-
-
-        GoogleMapApi.then(function(maps) {
-            $log.info("Google maps ver = " + maps.version);
-            $scope.mapOptions = {
-                center: {
-                    latitude: 35.784,
-                    longitude: -78.670
-                },
-                zoom: 15,
-                mapTypeId: maps.MapTypeId.ROADMAP
-            };
-            maps.visualRefresh = true;
-        });
-
-
 
         $scope.multifetchStdZoom = function() {
             var zoomOptions = new esGlobals.ESPQOptions(300, 5, false);
@@ -1238,31 +1196,18 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
     }
 ])
 
-smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 'uiGmapGoogleMapApi',
-    function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv, GoogleMapApi) {
+smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 
+    function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv) {
 
         $scope.myMapOptions = {
-            type: "bubble",
+            type: "marker",
             color: "#0F0",
-            valueField: "esLabel"
+            valueField: "esLabel",
+            autoBind: true
         };
 
         $scope.myPQDef = new esGlobals.ESPublicQueryDef("", "ESCMS", "View_ES00GPSLog", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
         $scope.myPQDef.esPanelOpen = false;
-
-        $scope.MyShowWindow = false;
-        $scope.myType = "cluster";
-        $scope.myTypeOptions = null;
-        $scope.myCtrl = {};
-        $scope.esWebUIHelper = esWebUIHelper;
-
-
-
-        $scope.myMapMarkerClick = function(a, b, c) {
-            $log.info("Click");
-            alert("I am a label clicked !!!");
-        }
-
 
     }
 ]);

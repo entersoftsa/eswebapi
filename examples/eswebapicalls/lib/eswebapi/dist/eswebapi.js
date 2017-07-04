@@ -9262,143 +9262,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             return convertPQRowsToMapRows;
         })
 
-    .directive('esMapPq', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$timeout', 'uiGmapGoogleMapApi',
-        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize, $timeout, GoogleMapApi) {
-            return {
-                restrict: 'AE',
-                replace: true,
-                scope: {
-                    esPanelOpen: "=?",
-                    esMapOptions: "=",
-                    esPqDef: "=",
-                    esShowWindow: "=",
-                    esTypeOptions: "=",
-                    esType: "=",
-                    esMapControl: "=",
-                    esHighLight: "=",
-                    esClick: "&?",
-                },
-                template: '<div ng-include src="\'src/partials/esMapPQ.html\'"></div>',
-                link: function($scope, iElement, iAttrs) {
-                    $scope.mapDS = new kendo.data.ObservableArray([]);
-
-                    if (!$scope.esMapControl) {
-                        $scope.esMapControl = {};
-                    }
-
-                    if (!angular.isFunction($scope.esClick)) {
-                        $scope.esClick = esWebUIHelper.onMapClick;
-                    }
-
-                    GoogleMapApi.then(function(maps) {
-                        $log.info("Google maps ver = " + maps.version);
-                    });
-
-                    if (!$scope.esType) {
-                        $scope.esType = 'standard';
-                    }
-
-                    $scope.esToggleData = 'Map';
-
-                    $scope.executePQ = function() {
-                        $scope.esPqDef.esGridOptions.autoBind = true;
-
-                        if (!$scope.esPqDef.esGridOptions.change) {
-                            $scope.esPqDef.esGridOptions.change = function(e) {
-                                var selectedRows = this.select();
-                                if (selectedRows && selectedRows.length == 1) {
-                                    var gid = this.dataItem(selectedRows[0])["GID"];
-                                    if (gid) {
-                                        $timeout(function() {
-                                            $scope.esHighLight = gid;
-                                        });
-                                    }
-                                }
-
-                            }
-                            $scope.esPqDef.esGridOptions.reBind += 1;
-                        }
-
-                        esWebApiService.fetchPublicQuery($scope.esPqDef)
-                            .then(function(ret) {
-                                $scope.mapDS = new kendo.data.ObservableArray(ret.data.Rows);
-                            });
-                    }
-                }
-            };
-        }
-    ])
-
-    .directive('esMapMarkers', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$timeout',
-        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize, $timeout) {
-            return {
-                restrict: 'AE',
-                replace: true,
-                scope: {
-                    esMarkers: "=?",
-                    esRows: "=?",
-                    esPqInfo: "=",
-                    esShowWindow: "=?",
-                    esTypeOptions: "=?",
-                    esType: "=?",
-                    esHighLight: "=?",
-                    esClick: "&?",
-                },
-                template: '<div ng-include src="\'src/partials/esMapMarkers.html\'"></div>',
-                link: function($scope, iElement, iAttrs) {
-
-                    $scope.$watch("esHighLight", function(newData) {
-                        var ms = $scope.esMarkers;
-                        if (!ms) {
-                            return;
-                        }
-
-                        _.map(ms, function(m) {
-                            m.esOptions.animation = 0;
-                        });
-                        if (!newData) {
-                            return;
-                        }
-
-                        var it = _.find(ms, function(m) {
-                            return m.id == newData;
-                        });
-                        if (it) {
-                            it.esOptions.animation = 1;
-                        }
-                    });
-
-                    if (iAttrs.esMarkers && iAttrs.esRows) {
-                        throw new Error("Only one of the esMarkers or esRows must be specified, not both");
-                    }
-
-                    if (!$scope.esType) {
-                        $scope.esType = 'standard';
-                    }
-
-                    if (!$scope.esTypeOptions) {
-                        $scope.esTypeOptions = {
-                            title: "cluster",
-                            gridSize: 60,
-                            ignoreHidden: true,
-                            minimumClusterSize: 2
-                        }
-                    }
-
-                    $scope.esInfoWindowOptions = {
-                        disableAutoPan: true
-                    };
-
-                    if (iAttrs.esRows) {
-                        $scope.$watch("esRows", function(newData) {
-                            $scope.esMarkers = convertPQRowsToMapRows(newData, $scope.esClick);
-                        });
-                    }
-                }
-            };
-        }
-    ])
-
     .directive('esSurvey', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
         function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
             return {
@@ -9884,7 +9747,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
         }
     ])
 
-    .directive('esMap2', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+    .directive('esMapPq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
         function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
             return {
                 restrict: 'AE',
@@ -9894,7 +9757,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     esOptions: "=?",
                 },
                 templateUrl: function(element, attrs) {
-                    return "src/partials/esMap2PQ.html";
+                    return "src/partials/esMapPQ.html";
                 },
                 link: function($scope, iElement, iAttrs) {
                     var onChange = function(e) {

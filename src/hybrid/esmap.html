@@ -31,12 +31,9 @@
                 </es-login>
             </div>
             <es-map-pq ng-if="isReady" 
-                es-map-options="esPqDef.UIOptions" 
+                es-options="esPqDef.UIOptions" 
                 es-pq-def="esPqDef" 
-                es-panel-open="esPqDef.esPanelOpen"
-                es-type="esPqDef.mapType" 
-                es-type-options="esPqDef.typeOptions" 
-                es-map-control="esPqDef.mapCtrl">
+                es-panel-open="esPqDef.esPanelOpen">
             </es-map-pq>
         </div>
     </div>
@@ -98,7 +95,6 @@
     <script src="../../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
     <script src="../../bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js"></script>
     <script src="../../bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
-    <script src="../../bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
     <script src="../../bower_components/kendo-ui/js/jszip.min.js"></script>
     <script src="../../bower_components/kendo-ui/js/kendo.all.min.js"></script>
     <script src="../../bower_components/kendo-ui/js/cultures/kendo.culture.el-GR.min.js"></script>

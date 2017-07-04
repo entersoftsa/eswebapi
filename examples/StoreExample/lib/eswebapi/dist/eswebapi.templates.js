@@ -41,18 +41,8 @@ angular.module('es.Web.UI').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('src/partials/esMap2PQ.html',
-    "<div class=row><es-params-panel class=col-xs-12 ng-cloak es-panel-open=esPanelOpen ng-if=!esLocalData es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ() es-data-source=esMapDataSource></es-params-panel><div class=col-xs-12><div class=esmap-wrapper><div kendo-map=esMapCtrl uib-tooltip={{bubbleMessage}} tooltip-is-open=tooltipIsOpen tooltip-trigger=\"'none'\" k-ng-delay=esMapOptions.dataSource es-options=esOptions k-options=esMapOptions></div></div></div></div>"
-  );
-
-
-  $templateCache.put('src/partials/esMapMarkers.html',
-    "<ui-gmap-markers models=esMarkers coords=\"'self'\" click=esClick() options=\"'esOptions'\" fit=\"'true'\" dorebuildall=true type=esType typeoptions=esTypeOptions modelsbyref=true><ui-gmap-windows ng-if=esShowWindow show=\"'showWindow'\" dorebuildall=true templateurl=\"'esTempl'\" options=\"'esInfoWindowOptions'\" templateparameter=\"'esObj'\" ng-cloak></ui-gmap-windows></ui-gmap-markers>"
-  );
-
-
   $templateCache.put('src/partials/esMapPQ.html',
-    "<div class=row><div class=col-xs-12><es-params-panel ng-cloak es-panel-open=esPanelOpen es-group-id=esPqDef es-run-click=executePQ() es-show-run=\"'true'\" es-local-data-source=\"'true'\" es-run-title=\"{{'ESUI.ESMAPPQ.RUN_MAP' | translate}}\"></es-params-panel></div><div ng-show=esMapOptions.showOptions class=\"btn-group col-xs-6\"><label class=\"btn btn-primary\" ng-model=esType uib-btn-radio=\"'standard'\">{{'ESUI.ESMAPPQ.CLUSTER_STANDARD' | translate}}</label><label class=\"btn btn-primary\" ng-model=esType uib-btn-radio=\"'cluster'\">{{'ESUI.ESMAPPQ.CLUSTER_CLUSTER' | translate}}</label><label class=\"btn btn-primary\" ng-model=esType uib-btn-radio=\"'spider'\">{{'ESUI.ESMAPPQ.CLUSTER_SPIDER' | translate}}</label></div><ui-gmap-google-map class=col-xs-12 center=esMapOptions.center zoom=esMapOptions.zoom control=esMapControl pan=true><es-map-markers es-rows=mapDS es-pq-info=myPQInfo es-high-light=esHighLight es-type=esType es-type-options=esTypeOptions es-show-window=esShowWindow es-click=esClick()></es-map-markers></ui-gmap-google-map></div>"
+    "<div class=row><es-params-panel class=col-xs-12 ng-cloak es-panel-open=esPanelOpen ng-if=!esLocalData es-group-id=esPqDef es-local-data-source=\"'true'\" es-show-run=\"'true'\" es-run-click=::executePQ() es-data-source=esMapDataSource></es-params-panel><div class=col-xs-12><div class=esmap-wrapper><div kendo-map=esMapCtrl uib-tooltip={{bubbleMessage}} tooltip-is-open=tooltipIsOpen tooltip-trigger=\"'none'\" k-ng-delay=esMapOptions.dataSource es-options=esOptions k-options=esMapOptions></div></div></div></div>"
   );
 
 

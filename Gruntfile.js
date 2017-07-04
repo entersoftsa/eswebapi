@@ -46,7 +46,6 @@ module.exports = function(grunt) {
                     "bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js",
                     "bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js",
                     "bower_components/angular-simple-logger/dist/angular-simple-logger.min.js",
-                    "bower_components/angular-google-maps/dist/angular-google-maps.min.js",
                     "bower_components/kendo-ui/js/jszip.min.js",
                     "bower_components/kendo-ui/js/kendo.all.min.js",
                     "bower_components/kendo-ui/js/cultures/kendo.culture.el-GR.min.js",

@@ -12,12 +12,11 @@
         'underscore',
         'es.Web.UI',
         'ui.bootstrap',
-        'uiGmapgoogle-maps'
     ]);
 
 
-    esApp.config(['$logProvider', 'esWebApiProvider', 'uiGmapGoogleMapApiProvider', '$translateProvider',
-        function($logProvider, esWebApiServiceProvider, GoogleMapApiProvider, $translateProvider) {
+    esApp.config(['$logProvider', 'esWebApiProvider', '$translateProvider',
+        function($logProvider, esWebApiServiceProvider,  $translateProvider) {
 
             var settings = window.esWebApiSettings || {
                 host: "eswebapi.entersoft.gr"
@@ -33,11 +32,6 @@
             $translateProvider.preferredLanguage('el');
             $translateProvider.fallbackLanguage('en');
             $translateProvider.useSanitizeValueStrategy('escape');
-
-            GoogleMapApiProvider.configure({
-                key: "AIzaSyDCds_w5v7aruDExi6j-mAldpyBi3IwQFk",
-                libraries: 'weather,geometry,visualization'
-            });
         }
     ]);
 
@@ -78,8 +72,8 @@
         $scope.showLogin = true;
     }
 
-    esApp.controller('esComponentCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', 'uiGmapGoogleMapApi',
-        function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, GoogleMapApi) {
+    esApp.controller('esComponentCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', 
+        function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
             $scope.esCredentials = {};
             $scope.isReady = false;
             $scope.showLogin = false;
