@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.20.10 - 2017-07-04
+/*! Entersoft Application Server WEB API - v1.20.10 - 2017-08-01
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -73,6 +73,7 @@
         __FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__: "api/ES00Documents/BlobDataByGID/",
         __DOWNLOAD_ES00DOCUMENT_BLOBDATA_BY_GID__: "api/ES00Documents/DownloadBlobDataByGID/",
         __DOWNLOAD_ES00BLOB_BY_GID__: "api/ES00Documents/GetES00Blob/",
+        __DOWNLOAD_ES00BLOB_BY_OBJECT__: "api/ES00Documents/GetES00BlobFromObject/",
         __FETCH_ES00DOCUMENT_MIME_TYPES__: "api/ES00Documents/ESMimeTypes/",
         __DELETE_ES00DOCUMENT__: "api/ES00Documents/DeleteES00Document/",
         __ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/AddOrUpdateES00DocumentBlobData/",
@@ -5023,6 +5024,23 @@ var ret = {
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_GID__, es00BlobGID);
                                 surl += "?webapitoken=" +  esGlobals.getWebApiToken();
+                                if (fExt) {
+                                    surl += "&extType=" + fExt;
+                                }
+                                
+                                return surl;
+                            },
+
+                            downloadES00BlobURLByObject: function(objectid, keyid, typeid, fExt)
+                            {
+                                if (!objectid || !keyid || typeid == null || typeid == undefined) {
+                                    return "";
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_OBJECT__, objectid);
+                                surl += "?keyid=" + keyid;
+                                surl += "&typeid=" + typeid;
+                                surl += "&webapitoken=" +  esGlobals.getWebApiToken();
                                 if (fExt) {
                                     surl += "&extType=" + fExt;
                                 }
