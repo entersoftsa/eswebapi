@@ -7,7 +7,7 @@
 
         <form novalidate class="form" name="esParamsPanelForm">
             <div class="row">
-                <div class="form-group col-md-6 col-xs-6 col-lg-3" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.simpleDefinitions() | orderBy:'aa'">
+                <div class="form-group col-md-6 col-xs-6 col-lg-3 smaller" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.simpleDefinitions() | orderBy:'aa'">
                     <es-param class="es-param" es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
                 </div>
 
@@ -15,7 +15,9 @@
                     <label class="control-label es-param-label more">...</label>
                     <button type="button" class="btn btn-info form-control es-param-control" ng-click="esToggleMore()">{{ esMore ? ('ESUI.PARAMS_PANEL.Less' | translate) : ('ESUI.PARAMS_PANEL.More' | translate)}}</button>
                 </div>
+            </div>
 
+         <div class="row">      
                 <div ng-if="esMore" class="form-group col-md-3 col-sm-6 col-xs-12" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in esParamsDef.advancedDefinitions() | orderBy:'aa'">
                     <es-param class="es-param" es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
                 </div>
@@ -24,9 +26,9 @@
                     <label class="control-label es-param-label ">...</label>
                     <button type="button" class="btn btn-info form-control es-param-control" ng-click="esToggleMore()">{{ esMore ? ('ESUI.PARAMS_PANEL.Less' | translate) : ('ESUI.PARAMS_PANEL.More' | translate)}}</button>
                 </div>
-
             </div>
         </form>
+
         <div class="row">
             <div ng-if="esShowRun" class="col-md-12 col-sm-12 padding-15t">
                 <button type="button" class="btn btn-primary" ng-click="esRunClick()">{{::esRunTitle}}</button>
