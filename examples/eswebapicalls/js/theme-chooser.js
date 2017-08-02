@@ -193,13 +193,13 @@
 
         getCurrentThemeLink: function () {
             return $("head link").filter(function () {
-                return (/kendo\./gi).test(this.href) && !(/common|rtl|dataviz|mobile/gi).test(this.href);
+                return (/kendo\./gi).test(this.href) && !(/common|rtl|metro|mobile/gi).test(this.href);
             });
         },
 
         getCurrentMobileThemeLink: function () {
             return $("head link").filter(function () {
-                return (/kendo\.[^\.\/]+?\.mobile/gi).test(this.href) && !(/common|rtl|dataviz/gi).test(this.href);
+                return (/kendo\.[^\.\/]+?\.mobile/gi).test(this.href) && !(/common|rtl|metro/gi).test(this.href);
             });
         },
 
