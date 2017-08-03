@@ -55,6 +55,7 @@
             <textarea>{{tokeninfo}}</textarea>
         </span>
     </div>
+    <img class="img-circle" width="400" height="400" ng-src="{{userLogoUrl}}"/>
     <h3>
          1. fetchPublicQueryInfo
     </h3>
@@ -376,7 +377,7 @@
             <input type="text" ng-model="lUserID" placeholder="User ID or GID"/>
 
             <button ng-click="fetchUserLogo()">Get the PHOTO</button>
-            <img ng-if="userPhoto" class="img-circle" width="304" height="236" ng-if="userPhoto" data-ng-src="{{'data:image/jpg;base64,' + userPhoto}}"/>
+            <img ng-if="userPhoto" class="img-circle"c data-ng-src="{{'data:image/jpg;base64,' + userPhoto}}"/>
             <button ng-click="removeCurrentUserLogo()">Remove Current User Logo</button>
         </span>
     </div>

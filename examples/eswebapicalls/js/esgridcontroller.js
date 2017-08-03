@@ -240,6 +240,8 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 
         $scope.gRows = [];
 
+        $scope.userLogoUrl = esWebApi.downloadES00BlobURLByObject("ESGOUser", "8AB22473-DBEB-4AD0-BB90-D69C13C1A538", 0);
+
         $scope.pGroup = "ESMMStockItem";
         $scope.pFilter = "ESMMStockItem_def";
         $scope.esWebAPI = esWebApi;
