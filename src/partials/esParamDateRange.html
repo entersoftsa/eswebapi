@@ -12,9 +12,6 @@
         </select>
     </div>
 
-   <div class="col-md-4 col-sm-6 col-lg-4 date-margin nopadding-r" ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
-        <input class="form-control es-param-control  margin-t" kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD"/>
-    </div>
 
 
     <div class="col-md-4 col-sm-6 col-lg-4 nopadding-r" ng-hide="esParamVal[esParamDef.id].paramValue.dRange > '1'">
@@ -23,4 +20,7 @@
 
  
 
+   <div class="col-md-4 col-sm-6 col-lg-4 date-margin nopadding-r" ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
+        <input class="form-control es-param-control  margin-t" kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD"/>
+    </div>
 
