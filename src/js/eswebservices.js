@@ -5029,7 +5029,7 @@ var ret = {
                                 return surl;
                             },
 
-                            downloadES00BlobURLByObject: function(objectid, keyid, typeid, fExt)
+                            downloadES00BlobURLByObject: function(objectid, keyid, typeid, fExt, ts)
                             {
                                 if (!objectid || !keyid || typeid == null || typeid == undefined) {
                                     return "";
@@ -5041,6 +5041,10 @@ var ret = {
                                 surl += "&webapitoken=" +  esGlobals.getWebApiToken();
                                 if (fExt) {
                                     surl += "&extType=" + fExt;
+                                }
+
+                                if (ts) {
+                                    surl += "&ts=" + Number(new Date());
                                 }
                                 
                                 return surl;

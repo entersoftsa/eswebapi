@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v1.21.0 - 2017-08-11
+/*! Entersoft Application Server WEB API - v1.21.0 - 2017-08-28
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -5031,7 +5031,7 @@ var ret = {
                                 return surl;
                             },
 
-                            downloadES00BlobURLByObject: function(objectid, keyid, typeid, fExt)
+                            downloadES00BlobURLByObject: function(objectid, keyid, typeid, fExt, ts)
                             {
                                 if (!objectid || !keyid || typeid == null || typeid == undefined) {
                                     return "";
@@ -5043,6 +5043,10 @@ var ret = {
                                 surl += "&webapitoken=" +  esGlobals.getWebApiToken();
                                 if (fExt) {
                                     surl += "&extType=" + fExt;
+                                }
+
+                                if (ts) {
+                                    surl += "&ts=" + Number(new Date());
                                 }
                                 
                                 return surl;
