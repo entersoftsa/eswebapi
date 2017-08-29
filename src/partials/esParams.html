@@ -7,7 +7,7 @@
 
         <form novalidate class="form" name="esParamsPanelForm">
             <div class="row">
-                <div class="form-group col-md-6 col-xs-12 col-lg-5 smaller" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.simpleDefinitions() | orderBy:'aa'">
+                <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-5 smaller" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.simpleDefinitions() | orderBy:'aa'">
                     <es-param class="es-param" es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
                 </div>
 
