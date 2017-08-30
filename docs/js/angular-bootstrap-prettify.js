@@ -191,8 +191,8 @@ directive.ngEvalJavascript = ['getEmbeddedTemplate', function(getEmbeddedTemplat
 }];
 
 
-directive.ngEmbedApp = ['$templateCache', '$browser', '$rootScope', '$location', '$sniffer', '$exceptionHandler',
-                function($templateCache,   $browser,  docsRootScope, $location,   $sniffer,   $exceptionHandler) {
+directive.ngEmbedApp = ['$templateCache', '$browser', '$rootScope', '$location', '$sniffer', '$animate', '$exceptionHandler',
+                function($templateCache,   $browser,  docsRootScope, $location,   $sniffer,   $animate,   $exceptionHandler) {
   return {
     terminal: true,
     link: function(scope, element, attrs) {
@@ -205,6 +205,7 @@ directive.ngEmbedApp = ['$templateCache', '$browser', '$rootScope', '$location',
         $provide.value('$anchorScroll', angular.noop);
         $provide.value('$browser', $browser);
         $provide.value('$sniffer', $sniffer);
+        $provide.value('$animate', $animate);
         $provide.provider('$location', function() {
           this.$get = ['$rootScope', function($rootScope) {
             docsRootScope.$on('$locationChangeSuccess', function(event, oldUrl, newUrl) {
@@ -253,12 +254,8 @@ directive.ngEmbedApp = ['$templateCache', '$browser', '$rootScope', '$location',
       });
 
       element.bind('$destroy', function() {
-        if (deregisterEmbedRootScope) {
-          deregisterEmbedRootScope();
-        }
-        if (embedRootScope) {
-          embedRootScope.$destroy();
-        }
+        deregisterEmbedRootScope();
+        embedRootScope.$destroy();
       });
 
       element.data('$injector', null);
