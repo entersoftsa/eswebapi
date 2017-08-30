@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*! Entersoft Application Server WEB API - v1.22.0 - 2017-08-28
+=======
+/*! Entersoft Application Server WEB API - v1.21.0 - 2017-08-29
+>>>>>>> 617771e39402544015bc71846b28518bf323bce2
 * Copyright (c) 2017 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
