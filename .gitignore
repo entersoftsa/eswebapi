@@ -2,7 +2,7 @@ node_modules
 bower_components
 *.sublime-grunt.cache
 .tmp
-/dist/
-/docs/
-/examples/eswebapicalls/lib/
-/examples/StoreExample/lib/
+dist
+docs
+examples/eswebapicalls/lib/
+examples/StoreExample/lib/
