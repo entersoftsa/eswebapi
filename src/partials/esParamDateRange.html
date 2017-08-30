@@ -1,5 +1,5 @@
 
-    <div class="col-md-6 col-lg-4 col-sm-12">
+    <div class="col-md-12 col-lg-4 col-sm-12 nomargin-r">
         <label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
       tooltip-placement="top"
       tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
@@ -12,15 +12,12 @@
         </select>
     </div>
 
- <div class="col-md-12 col-sm-6">
-    <span class="col-md-4 col-sm-6 col-lg-4 nopadding-r" ng-hide="esParamVal[esParamDef.id].paramValue.dRange > '1'">
+ <div class="col-md-6 col-sm-6 col-lg-8">
+    <span class="col-md-6 col-sm-6 col-lg-4 date-margin nopadding-r" ng-hide="esParamVal[esParamDef.id].paramValue.dRange > '1'">
         <input class="form-control es-param-control margin-t" kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.fromD"/>
     </span>
 
- 
-
-   <span class="col-md-4 col-sm-6 col-lg-4 date-margin nopadding-r" ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
+   <span class="col-md-6 col-sm-6 col-lg-4 date-margin" ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
         <input class="form-control es-param-control  margin-t" kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD"/>
     </span>
-
 </div>
