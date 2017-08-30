@@ -2,3 +2,6 @@ node_modules
 bower_components
 *.sublime-grunt.cache
 .tmp
+/dist/
+/examples/eswebapicalls/lib/
+/examples/StoreExample/lib/
