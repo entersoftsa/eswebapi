@@ -8,7 +8,7 @@
 
         <form novalidate class="form" name="esParamsPanelForm">
             <div class="row">
-                <div class="form-group col-md-6 col-xs-12 col-lg-6 smaller" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.simpleDefinitions() | orderBy:'aa'">
+                <div class="form-group col-md-6 col-xs-12 col-lg-4 " ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.simpleDefinitions() | orderBy:'aa'">
                     <es-param class="es-param" es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
                 </div>
 
@@ -19,7 +19,7 @@
             </div>
 
          <div class="row">      
-                <div ng-if="esMore" class="form-group col-md-3 col-sm-6 col-xs-12 col-lg-6 smaller" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in esParamsDef.advancedDefinitions() | orderBy:'aa'">
+                <div ng-if="esMore" class="form-group col-md-3 col-sm-6 col-xs-12 col-lg-4 smaller" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in esParamsDef.advancedDefinitions() | orderBy:'aa'">
                     <es-param class="es-param" es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
                 </div>
 
