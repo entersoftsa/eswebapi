@@ -796,17 +796,28 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
         }
 
         $scope.removeCurrentUserLogo = function() {
-            esWebApi.removeCurrentUserLogo();
+        	var blobInfo = {
+        		ObjectID: "ESGOPerson",
+        		KeyID: "11ea77d7-f5dc-4a8d-b629-845c8ff207ac"
+        	};
+
+        	esWebApi.removeEntityBlob(blobInfo);
+
+            //esWebApi.removeCurrentUserLogo();
         }
 
         $scope.uploadUserLogo = function() {
+        	var blobInfo = {
+        		ObjectID: "ESGOPerson",
+        		KeyID: "11ea77d7-f5dc-4a8d-b629-845c8ff207ac"
+        	};
             var progressf = function(evt) {
                 $scope.userLogoImage.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             };
             var errf = function(x) {
                 alert(x);
             }
-            esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
+            esWebApi.uploadEntityBlob(blobInfo, $scope.userLogoImage, undefined, errf, progressf);
         }
 
         $scope.fetchPropertySet = function() {

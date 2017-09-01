@@ -1,5 +1,5 @@
 <label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
-          tooltip-placement="top"
+          tooltip-placement="bottom"
           tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
 <div class="row">
     <div class="col-xs-12" ng-class="{'': esParamVal[esParamDef.id].paramValue.oper == 'NULL' || esParamVal[esParamDef.id].paramValue.oper == 'NOTNULL', 'col-md-4': esParamVal[esParamDef.id].paramValue.oper == 'RANGE', 'col-md-6': esParamVal[esParamDef.id].paramValue.oper != 'NULL' && esParamVal[esParamDef.id].paramValue.oper != 'NOTNULL' &&  esParamVal[esParamDef.id].paramValue.oper != 'RANGE'}">

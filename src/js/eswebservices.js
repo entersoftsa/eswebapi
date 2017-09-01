@@ -32,8 +32,10 @@
         __LOGOUT__: "api/Login/Logout",
         __USER_LOGO__: "api/Login/UserLogo/",
         __REMOVE_USER_LOGO__: "api/Login/RemoveUserLogo/",
+        __REMOVE_ENTITY_BLOB__: "api/Login/RemoveEntityBlob/",
         __PERSON_LOGO__: "api/rpc/personLogo/",
         __POST_USER_LOGO__: "api/Login/UpdateUserLogo/",
+        __POST_ENTITY_BLOB__: "api/Login/UpdateEntityBlob/",
         __EVENTLOG__: "api/rpc/EventLog/",
         __PUBLICQUERY__: "api/rpc/PublicQuery/",
         __MULTI_PULIC_QUERY__: "api/rpc/MultiPublicQuery/",
@@ -1279,6 +1281,65 @@ $scope.fetchUserLogo = function() {
 
                             /**
                             * @ngdoc function
+                            * @name es.Services.Web.esWebApi#uploadEntityBlob
+                            * @methodOf es.Services.Web.esWebApi
+                            * @module es.Services.Web
+                            * @kind function
+                            * @description This function uploads and stores in the EAS an image as the current logged-in User's Logo
+                             * 
+                             * __ATTENTION__ 
+                             * 
+                             * This method requires the ngFileUpload module of AngularJS. In order to use it you must make sure that the appropriate js libraries have been loaded.
+                             * For example, in the main html file e.g. index.html of the AngularJS application you have to include the ng-file-upload/ng-file-upload-shim.min.js prior to loading the angular library
+                             * and the ng-file-upload/ng-file-upload.min.js just after the Angular library has been loaded, as shown in the example below:
+
+                            */
+                            uploadEntityBlob: function(blobInfo, file, okfunc, errfunc, progressfunc) {
+                                if (!blobInfo || !blobInfo.ObjectID || !blobInfo.KeyID) {
+                                    throw new Error("blobInfo argument is null or one or more of the required properties [ObjectID, KeyID] are missing");
+                                }
+
+                                if (!file) {
+                                    throw new Error("Invalid File");
+                                }
+
+                                var Upload = $injector.get('Upload');
+                                if (!Upload) {
+                                    throw new Error("You have to include the ngFileUpload");
+                                }
+
+                                var tt = esGlobals.trackTimer("USER", "UPLOAD ENTITY BLOB", blobInfo.ObjectID + " - " + blobInfo.KeyID + " - " + file);
+                                blobInfo.TypeID = blobInfo.TypeID || 0;
+
+                                tt.startTime();
+                                file.upload = Upload.upload({
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__POST_ENTITY_BLOB__),
+                                    method: 'POST',
+                                    headers: prepareHeaders(),
+                                    fields: {
+                                        esblobinfo: JSON.stringify(blobInfo)
+                                    },
+                                    file: file,
+                                });
+
+
+                                file.upload.then(function(response) {
+                                    $timeout(function() {
+                                        file.result = response.data;
+                                        tt.endTime().send();
+                                        if (angular.isFunction(okfunc)) {
+                                            okfunc(file);
+                                        }
+                                    });
+                                }, errfunc);
+
+                                file.upload.progress(progressfunc);
+
+                                return file.upload;
+                            },
+
+                            /**
+                            * @ngdoc function
                             * @name es.Services.Web.esWebApi#uploadUserLogo
                             * @methodOf es.Services.Web.esWebApi
                             * @module es.Services.Web
@@ -1375,6 +1436,34 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
                                 return file.upload;
                             },
 
+
+                            /**
+                            * @ngdoc function
+                            * @name es.Services.Web.esWebApi#removeEntityBlob
+                            * @methodOf es.Services.Web.esWebApi
+                            * @module es.Services.Web
+                            * @kind function
+                            * @description This function deletes, if exists, the entry in the ES00Blob that exact matches the ObjectID, KeyID and TypeID of the ES00BlobInfo parameter 
+                            * @return {httpPromise} Returns an httpPromise that once resolved, it has a status code OK if everything went OK, or BadRequest if an error occurred.
+                            */
+                            removeEntityBlob: function(blobInfo) {
+                                if (!blobInfo || !blobInfo.ObjectID || !blobInfo.KeyID) {
+                                    throw new Error("blobInfo argument is null or one or more of the required properties [ObjectID, KeyID] are missing");
+                                }
+                                var tt = esGlobals.trackTimer("USER", "REMOVE ENTITY BLOB", blobInfo.ObjectID + " - " + blobInfo.KeyID);
+                                blobInfo.TypeID = blobInfo.TypeID || 0;
+
+                                tt.startTime();
+                                var promise = $http({
+                                    method: 'POST',
+                                    headers: prepareHeaders(),
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__REMOVE_ENTITY_BLOB__),
+                                    data: blobInfo
+                                });
+                                return processWEBAPIPromise(promise, tt);
+                            },
+
+
                             /**
                             * @ngdoc function
                             * @name es.Services.Web.esWebApi#removeCurrentUserLogo
@@ -1403,7 +1492,7 @@ $scope.removeCurrentUserLogo = function() {
 ```
                             */
                             removeCurrentUserLogo: function() {
-                                var tt = esGlobals.trackTimer("USER", "REMOCE LOGO", "");
+                                var tt = esGlobals.trackTimer("USER", "REMOVE USER LOGO", "");
                                 tt.startTime();
                                 var promise = $http({
                                     method: 'POST',
