@@ -2,13 +2,11 @@
 <div class="box">
     <div class="col-md-12 col-lg-12 col-xs-12 date-Padding margin-date-r">
         <label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
-      tooltip-placement="top"
+      tooltip-placement="bottom"
       tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
         <select 
         class="form-control es-param-control" 
         kendo-drop-down-list 
-        uib-tooltip="Hello World"
-        uib-tooltip-trigger="mouseenter"
         k-data-text-field="'title'" k-auto-bind="true" k-data-value-field="'dValue'" k-data-source="::esGlobals.getesDateRangeOptions({dateRangeClass: esParamDef.controlType})" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.dRange">
         </select>
     </div>
