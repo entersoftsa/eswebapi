@@ -1,6 +1,6 @@
 
 
-    <div class="col-md-12 col-lg-12 col-sm-12 nomargin-r">
+    <div class="col-md-12 col-lg-12 col-xs-12 date-Padding margin-date-r">
         <label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
       tooltip-placement="bottom"
       tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
@@ -10,13 +10,15 @@
         k-data-text-field="'title'" k-auto-bind="true" k-data-value-field="'dValue'" k-data-source="::esGlobals.getesDateRangeOptions({dateRangeClass: esParamDef.controlType})" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.dRange">
         </select>
     </div>
-
-   <div class="col-md-6 col-sm-6 col-lg-12" ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
+<div class="container-date">
+   <div class="col-md-12 col-xs-12 col-lg-6 date-Padding margin-date-r wrap" ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
         <input class="form-control es-param-control  margin-t" kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD"/>
     </div>
     
-    <div class="col-md-6 col-sm-6 col-lg-12" ng-hide="esParamVal[esParamDef.id].paramValue.dRange > '1'">
+    <div class="col-md-12 col-xs-12 col-lg-6 date-Padding to" ng-hide="esParamVal[esParamDef.id].paramValue.dRange > '1'">
         <input class="form-control es-param-control margin-t" kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.fromD"/>
     </div>
+</div>
+
 
 
