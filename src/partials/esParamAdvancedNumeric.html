@@ -1,7 +1,9 @@
 <label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
           tooltip-placement="bottom"
           tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
-<div class="row noPadding">
+
+<div uib-accordion-group class="panel-default date-title" is-open="drStatus.dateOpen" heading="{{esParamVal[esParamDef.id].strVal(true)}}">
+
     <div class="col-xs-12 col-md-4">
         <select class="form-control es-param-control" kendo-drop-down-list ng-cloak k-ng-delay="esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="esGlobals.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.oper">
         </select>
