@@ -854,11 +854,11 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
         // }
 
         $scope.serviceObj = {
-            netAssembly: "CSHondosRFStock",
-            netNamespace: "Entersoft/Custom/Hondos",
-            netClass: "CSHondosRFStock",
+            netAssembly: "eswebapiadmin",
+            netNamespace: "Entersoft/WebApps/ESWebApiAdmin",
+            netClass: "ESApiAdmin",
             netIsBinaryResult: false,
-            netMethod: "CountSKU"
+            netMethod: "GetSessionsInfo"
         };
         $scope.netParam = JSON.stringify({ fItemGID: "3FDF056B-7668-4094-94A4-01DAC6AED2BF", BaseQty: 23, Comment: "Hi 1" });
 

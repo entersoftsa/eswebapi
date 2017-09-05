@@ -2,8 +2,6 @@
 	          tooltip-placement="bottom"
 	          tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label> 
 
-	<input type="checkbox" class="inline" id="{{::esParamDef.id}}" 
-			class="form-control es-param-control" 
-			ng-model-options="{getterSetter: true}"
-			ng-model="esParamVal[esParamDef.id].pValue"/>
-
+<button type="button" class="btn btn-default form-control es-param-control" ng-model-options="{getterSetter: true}" ng-model="esParamVal[esParamDef.id].pValue" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+        {{esParamVal[esParamDef.id].pValue() ? "Yes" : "No"}}
+    </button>
