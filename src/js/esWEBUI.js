@@ -1140,6 +1140,19 @@
                             throw "You must set a param";
                         }
 
+                        $scope.drStatus = {
+                            dateOpen: false
+                        };
+
+                        $scope.onClose = function(e) {
+                            if (e && e.sender) {
+                                var v = e.sender.value();
+                                if (v != "0" && v != "1") {
+                                    $scope.drStatus.dateOpen = false;
+                                }
+                            }
+                        }
+
                         if ($scope.esParamDef.isInvestigateEntity()) {
                             $scope.onInvestigate = function() {
                                 var modalInstance = $uibModal.open({

@@ -764,9 +764,15 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
 
 
-            var dateRangeResolve = function(dateVal) {
+            var dateRangeResolve = function(dateVal, verbose) {
+                var empty = _.find(esDateRangeOptions, {
+                    dType: 2
+                });
+
+                var emptyS = empty ? empty.title : "Any Date";
+
                 if (!dateVal || !dateVal.dRange) {
-                    return '';
+                    return emptyS;
                 }
 
                 var d = new Date();
@@ -775,7 +781,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     dValue: dateVal.dRange
                 });
                 if (!dObj) {
-                    return '';
+                    return emptyS;
                 }
 
                 var loc = window.esLoginLanguage;
@@ -788,7 +794,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     case 0:
                         {
                             if (!angular.isDate(dateVal.fromD) && !angular.isDate(dateVal.toD)) {
-                                return "";
+                                return emptyS;
                             }
 
                             var s = "";
@@ -807,37 +813,37 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     case 1:
                         {
                             if (!angular.isDate(dateVal.fromD)) {
-                                return "";
+                                return emptyS;
                             }
                             return dateVal.fromD.toLocaleDateString(loc);
                         }
                     case 2:
-                        return "";
+                        return dObj.title;
                     case 3:
-                        return d.toLocaleDateString(loc);
+                        return d.toLocaleDateString(loc) + " (" + dObj.title + ")";
                     case 4:
-                        return "-> " + d.toLocaleDateString(loc);
+                        return "-> " + d.toLocaleDateString(loc) + " (" + dObj.title + ")";
                     case 5:
-                        return d.toLocaleDateString(loc) + " ->";
+                        return d.toLocaleDateString(loc) + " ->" + " (" + dObj.title + ")";
                     case 6:
                         {
                             d.setDate(d.getDate() - 1);
-                            return d.toLocaleDateString(loc);
+                            return d.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 7:
                         {
                             d.setDate(d.getDate() - 1);
-                            return d.toLocaleDateString(loc) + " ->";
+                            return d.toLocaleDateString(loc) + " ->" + " (" + dObj.title + ")";
                         }
                     case 8:
                         {
                             d.setDate(d.getDate() + 1);
-                            return d.toLocaleDateString(loc);
+                            return d.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 9:
                         {
                             d.setDate(d.getDate() + 1);
-                            return d.toLocaleDateString(loc) + " ->";
+                            return d.toLocaleDateString(loc) + " ->" + " (" + dObj.title + ")";
                         }
                     case 10:
                         {
@@ -849,7 +855,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             f.setDate(d.getDate() - sDiff);
                             t.setDate(f.getDate() + 6);
 
-                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
+                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 11:
                         {
@@ -863,7 +869,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             f.setDate(d.getDate() - sDiff);
                             t.setDate(f.getDate() + 6);
 
-                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
+                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 12:
                         {
@@ -877,40 +883,40 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             f.setDate(d.getDate() - sDiff);
                             t.setDate(f.getDate() + 6);
 
-                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
+                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 13:
                         {
                             d.setDate(1);
 
                             var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-                            return d.toLocaleDateString(loc) + " - " + f.toLocaleDateString(loc);
+                            return d.toLocaleDateString(loc) + " - " + f.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 14:
                         {
                             d.setDate(1);
-                            return d.toLocaleDateString(loc) + " ->";
+                            return d.toLocaleDateString(loc) + " ->" + " (" + dObj.title + ")";
                         }
                     case 15:
                         {
                             var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-                            return "-> " + f.toLocaleDateString(loc);
+                            return "-> " + f.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 16:
                         {
                             var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
                             var t = new Date(d.getFullYear(), d.getMonth(), 0);
-                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc);
+                            return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 17:
                         {
                             var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-                            return f.toLocaleDateString(loc) + " ->";
+                            return f.toLocaleDateString(loc) + " ->" + " (" + dObj.title + ")";
                         }
                     case 18:
                         {
                             var f = new Date(d.getFullYear(), d.getMonth(), 0);
-                            return "-> " + f.toLocaleDateString(loc);
+                            return "-> " + f.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 19:
                         {
@@ -919,7 +925,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                             var f = new Date(d.getFullYear(), m - r, 1);
                             var t = new Date(d.getFullYear(), m + (3 - r), 0);
-                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 20:
                         {
@@ -928,13 +934,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                             var t = new Date(d.getFullYear(), m - r, 0);
                             var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
-                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 21:
                         {
                             var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
                             var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
-                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 22:
                         {
@@ -949,7 +955,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 t = new Date(y - 1, 11, 31);
                             }
 
-                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
 
                     case 23:
@@ -957,7 +963,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             var y = d.getFullYear();
                             var f = new Date(y, 0, 1);
                             var t = new Date(y, 11, 31);
-                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
 
                     case 24:
@@ -965,7 +971,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                             var y = d.getFullYear() - 1;
                             var f = new Date(y, 0, 1);
                             var t = new Date(y, 11, 31);
-                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc);
+                            return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     default:
                         return dObj.title;
@@ -1326,8 +1332,8 @@ var d2 = new esGlobals.ESDateParamVal("ESDCreated", "ESDateRange(Year, -1)"); //
                 return new ESDateParamVal(paramId, this.pValue());
             }
 
-            ESDateParamVal.prototype.strVal = function() {
-                return dateRangeResolve(this.paramValue);
+            ESDateParamVal.prototype.strVal = function(verbose) {
+                return dateRangeResolve(this.paramValue, verbose);
             }
 
             ESDateParamVal.prototype.getExecuteVal = function() {

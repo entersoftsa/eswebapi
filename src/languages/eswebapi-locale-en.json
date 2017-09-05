@@ -10,6 +10,10 @@
     "ERR_SUBSCRIPTION": "Either SubscriptionID or Subscription Password are not valid",
 
     "ESUI": {
+        "BOOLEAN": {
+            "YES": "Yes",
+            "NO": "No"
+        },
         "PARAMS_PANEL": {
             "More": "More",
             "Less": "Less"

@@ -3,11 +3,11 @@
       tooltip-trigger="mouseenter">{{::esParamDef.caption}}
 </label>
 
-<div uib-accordion-group class="panel-default date-title" heading="{{esParamVal[esParamDef.id].strVal(true)}}">
+<div uib-accordion-group class="panel-default date-title" is-open="drStatus.dateOpen" heading="{{esParamVal[esParamDef.id].strVal(true)}}">
       <select 
         class="form-control col-xs-6 es-param-control" 
-        kendo-drop-down-list 
-        k-data-text-field="'title'" k-auto-bind="true" k-data-value-field="'dValue'" k-data-source="::esGlobals.getesDateRangeOptions({dateRangeClass: esParamDef.controlType})" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.dRange">
+        kendo-drop-down-list="drDate"
+        k-data-text-field="'title'" k-auto-bind="true" k-data-value-field="'dValue'" k-on-close="onClose(kendoEvent)" k-data-source="::esGlobals.getesDateRangeOptions({dateRangeClass: esParamDef.controlType})" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.dRange">
         </select>
 
 
