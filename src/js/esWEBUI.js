@@ -1144,11 +1144,17 @@
                             dateOpen: false
                         };
 
-                        $scope.onClose = function(e) {
+                        $scope.onClose = function(e, isComplex) {
                             if (e && e.sender) {
                                 var v = e.sender.value();
-                                if (v != "0" && v != "1") {
-                                    $scope.drStatus.dateOpen = false;
+                                if (!isComplex) {
+                                    if (v != "0" && v != "1") {
+                                        $scope.drStatus.dateOpen = false;
+                                    }
+                                } else {
+                                    if (v == "NULL" || v == "NOTNULL") {
+                                        $scope.drStatus.dateOpen = false;
+                                    }
                                 }
                             }
                         }
