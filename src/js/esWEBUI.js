@@ -131,8 +131,13 @@
 
                 var pt = pParam.parameterType.toLowerCase();
 
-                if (pt.indexOf("system.int32, mscorlib") == 0 && pParam.controlType == 7) {
-                    return "esParamBoolean";
+                if (pt.indexOf("system.int32, mscorlib") == 0) {
+                    switch (pParam.controlType) {
+                        case 7:
+                            return "esParamBoolean";
+                        default:
+                            return "esParamNumeric";
+                    }
                 }
 
                 //ESDateRange
@@ -2137,9 +2142,16 @@
             }
 
             function ESNumeric(inArg, val, val2) {
+                if (val && angular.isString(val)) {
+                    val = val.replace (".", "").replace(",", ".");
+                }
+
+                if (val2 && angular.isString(val2)) {
+                    val2 = val.replace (".", "").replace(",", ".");
+                }
                 var k = {
-                    value: !isNaN(val) ? parseInt(val) : null,
-                    valueTo: !isNaN(val2) ? parseInt(val2) : null,
+                    value: !isNaN(val) ? new Number(val).valueOf() : null,
+                    valueTo: !isNaN(val2) ? new Number(val2).valueOf() : null,
                     oper: inArg.oper || "EQ"
                 };
                 return new esGlobals.ESNumericParamVal(inArg.paramID, k);
