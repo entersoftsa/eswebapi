@@ -38,6 +38,127 @@
         }
     }
 
+    function ESParamInfo() {
+        this.id = undefined;
+        this.aa = undefined;
+        this.caption = undefined;
+        this.toolTip = undefined;
+        this.controlType = undefined;
+        this.parameterType = "";
+        this.precision = undefined;
+        this.multiValued = false;
+        this.visible = undefined;
+        this.required = undefined;
+        this.oDSTag = undefined;
+        this.formatStrng = undefined;
+        this.tags = undefined;
+        this.visibility = undefined;
+        this.invQueryID = undefined;
+        this.invSelectedMasterTable = undefined;
+        this.invSelectedMasterField = undefined;
+        this.invTableMappings = undefined;
+        this.defaultValues = undefined;
+        this.enumOptionAll = undefined;
+        this.enumList = undefined;
+    }
+
+    ESParamInfo.prototype.paramTemplate = function() {
+        var pParam = this;
+
+        if (!pParam || !pParam.parameterType) {
+            return "";
+        }
+
+        var pt = pParam.parameterType.toLowerCase();
+
+        if (pt.indexOf("system.int32, mscorlib") == 0) {
+            switch (pParam.controlType) {
+                case 7:
+                    return "esParamBoolean";
+                default:
+                    {
+                        if (!pParam.enumList || !pParam.enumList.length) {
+                            return "esParamNumeric";
+                        }
+                    }
+            }
+        }
+
+        //ESDateRange
+        if (pt.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
+            return "esParamDateRange";
+        }
+
+        //ESNumeric
+        if (pt.indexOf("entersoft.framework.platform.esnumeric") == 0) {
+            return "esParamAdvancedNumeric";
+        }
+
+        //ESString
+        if (pt.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
+            return "esParamAdvancedString";
+        }
+
+        // Numeric (Integer or Decimal)
+        if (pt.indexOf("system.string, mscorlib") == 0) {
+            switch (pParam.controlType) {
+                case 1:
+                    {
+                        return "esParamNumeric";
+                    }
+                    break;
+                case 2:
+                    {
+                        return "esParamNumeric";
+                    }
+                    break;
+            }
+        }
+
+
+        //case Enum 
+        if (pParam.enumList && (pParam.enumList.length > 1)) {
+            if (pParam.multiValued || pParam.enumOptionAll) {
+                return "esParamMultiEnum";
+            } else {
+                return "esParamEnum";
+            }
+        }
+
+        if (pParam.isInvestigateZoom()) {
+            if (pParam.multiValued) {
+                return "esParamMultiZoom";
+            } else {
+                return "esParamZoom";
+            }
+        } else {
+            if (pParam.isInvestigateEntity())
+                return "esParamInv";
+
+            return "esParamText";
+        }
+
+    };
+
+    ESParamInfo.prototype.strVal = function() {
+        return "Hello World esParaminfo";
+    };
+
+    ESParamInfo.prototype.isAdvanced = function() {
+        return this.visible && this.visibility == 1;
+    };
+
+    ESParamInfo.prototype.isInvestigateZoom = function() {
+        return this.invSelectedMasterTable && this.invSelectedMasterTable.length > 4 && this.invSelectedMasterTable[4] == 'Z';
+    };
+
+    ESParamInfo.prototype.isInvestigateEntity = function() {
+        if (!this.invSelectedMasterTable || this.isInvestigateZoom())
+            return false;
+
+        return true;
+    };
+
     function ESMasterDetailGridRelation(relationID, detailDataSource, detailParams, detailGridParamCode) {
         this.relationID = relationID;
         this.detailDataSource = detailDataSource;
@@ -125,213 +246,149 @@
     esWEBUI
         .filter('esParamTypeMapper', function() {
             var f = function(pParam) {
-                if (!pParam) {
+                if (!pParam || !(pParam instanceof ESParamInfo)) {
                     return "";
                 }
-
-                var pt = pParam.parameterType.toLowerCase();
-
-                if (pt.indexOf("system.int32, mscorlib") == 0) {
-                    switch (pParam.controlType) {
-                        case 7:
-                            return "esParamBoolean";
-                        default:
-                            return "esParamNumeric";
-                    }
-                }
-
-                //ESDateRange
-                if (pt.indexOf("entersoft.framework.platform.esdaterange, queryprocess") == 0) {
-                    return "esParamDateRange";
-                }
-
-                //ESNumeric
-                if (pt.indexOf("entersoft.framework.platform.esnumeric") == 0) {
-                    return "esParamAdvancedNumeric";
-                }
-
-                //ESString
-                if (pt.indexOf("entersoft.framework.platform.esstring, queryprocess") == 0) {
-                    return "esParamAdvancedString";
-                }
-
-                // Numeric (Integer or Decimal)
-                if (pt.indexOf("system.string, mscorlib") == 0) {
-                    switch (pParam.controlType) {
-                        case 1:
-                            {
-                                return "esParamNumeric";
-                            }
-                            break;
-                        case 2:
-                            {
-                                return "esParamNumeric";
-                            }
-                            break;
-                    }
-                }
-
-
-                //case Enum 
-                if (pParam.enumList && (pParam.enumList.length > 1)) {
-                    if (pParam.multiValued || pParam.enumOptionAll) {
-                        return "esParamMultiEnum";
-                    } else {
-                        return "esParamEnum";
-                    }
-                }
-
-                if (pParam.isInvestigateZoom()) {
-                    if (pParam.multiValued) {
-                        return "esParamMultiZoom";
-                    } else {
-                        return "esParamZoom";
-                    }
-                } else {
-                    if (pParam.isInvestigateEntity())
-                        return "esParamInv";
-
-                    return "esParamText";
-                }
+                return pParam.paramTemplate();
 
             };
             return f;
         })
 
 
-    .directive('esPositiveInteger', ['$parse', function($parse) {
-        var INTEGER_REGEXP = /^\+?\d+$/;
-        return {
-            require: 'ngModel',
-            restrict: 'A',
-            link: function(scope, iElement, iAttrs, ctrl) {
-
-                var AllowZero = false;
-
-
-                if (angular.isDefined(iAttrs.esPositiveInteger)) {
-                    try {
-                        AllowZero = $parse(iAttrs.esPositiveInteger)(scope);
-                    } catch (ex) {
-
-                    }
-                }
-
-                ctrl.$validators.esPositiveInteger = function(modelValue, viewValue) {
-
-                    if (ctrl.$isEmpty(modelValue) || AllowZero ? (modelValue < 0) : (modelValue <= 0)) {
-                        // consider empty models to be valid
-                        return false;
-                    }
-
-
-                    if (INTEGER_REGEXP.test(viewValue)) {
-                        // it is valid
-                        return true;
-                    }
-
-                    // it is invalid
-                    return false;
-                };
-
-            }
-        };
-    }])
-
-    .directive('esLogin', ['$translate', '$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
-        function($translate, $log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+        .directive('esPositiveInteger', ['$parse', function($parse) {
+            var INTEGER_REGEXP = /^\+?\d+$/;
             return {
-                restrict: 'AE',
-                scope: {
-                    esShowSubscription: "=",
-                    esShowOnPremises: "=",
-                    esShowBridge: "=",
-                    esCredentials: "=",
-                    esShowStickySession: "=",
-                    esOnSuccess: "&"
-                },
-                template: '<div ng-include src="\'src/partials/esLogin.html\'"></div>',
-                link: function($scope, iElement, iAttrs) {
-                    var onLangChanged = function() {
+                require: 'ngModel',
+                restrict: 'A',
+                link: function(scope, iElement, iAttrs, ctrl) {
+
+                    var AllowZero = false;
+
+
+                    if (angular.isDefined(iAttrs.esPositiveInteger)) {
+                        try {
+                            AllowZero = $parse(iAttrs.esPositiveInteger)(scope);
+                        } catch (ex) {
+
+                        }
+                    }
+
+                    ctrl.$validators.esPositiveInteger = function(modelValue, viewValue) {
+
+                        if (ctrl.$isEmpty(modelValue) || AllowZero ? (modelValue < 0) : (modelValue <= 0)) {
+                            // consider empty models to be valid
+                            return false;
+                        }
+
+
+                        if (INTEGER_REGEXP.test(viewValue)) {
+                            // it is valid
+                            return true;
+                        }
+
+                        // it is invalid
+                        return false;
+                    };
+
+                }
+            };
+        }])
+
+        .directive('esLogin', ['$translate', '$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+            function($translate, $log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esShowSubscription: "=",
+                        esShowOnPremises: "=",
+                        esShowBridge: "=",
+                        esCredentials: "=",
+                        esShowStickySession: "=",
+                        esOnSuccess: "&"
+                    },
+                    template: '<div ng-include src="\'src/partials/esLogin.html\'"></div>',
+                    link: function($scope, iElement, iAttrs) {
+                        var onLangChanged = function() {
+                            if ($scope.esCredentials.LangID) {
+                                var lang = $scope.esCredentials.LangID;
+                                doChangeLanguage($translate, lang);
+                            }
+                            window.esLoginLanguage = $scope.esCredentials.LangID || navigator.language || navigator.userLanguage || 'en-US';
+                        };
+
+                        $scope.esGlobals = esGlobals;
+                        $scope.esLangOptions = {
+                            dataSource: esGlobals.esSupportedLanguages,
+                            dataTextField: "title",
+                            dataValueField: "id",
+                            change: onLangChanged,
+                            valuePrimitive: true,
+                            autoBind: true,
+                            valueTemplate: "<img ng-src={{dataItem.icon}}></img><span>{{dataItem.title}}</span>",
+                            template: "<img ng-src={{dataItem.icon}}></img><span>{{dataItem.title}}</span>"
+                        };
+
                         if ($scope.esCredentials.LangID) {
                             var lang = $scope.esCredentials.LangID;
                             doChangeLanguage($translate, lang);
                         }
-                        window.esLoginLanguage = $scope.esCredentials.LangID || navigator.language || navigator.userLanguage || 'en-US';
-                    };
-
-                    $scope.esGlobals = esGlobals;
-                    $scope.esLangOptions = {
-                        dataSource: esGlobals.esSupportedLanguages,
-                        dataTextField: "title",
-                        dataValueField: "id",
-                        change: onLangChanged,
-                        valuePrimitive: true,
-                        autoBind: true,
-                        valueTemplate: "<img ng-src={{dataItem.icon}}></img><span>{{dataItem.title}}</span>",
-                        template: "<img ng-src={{dataItem.icon}}></img><span>{{dataItem.title}}</span>"
-                    };
-
-                    if ($scope.esCredentials.LangID) {
-                        var lang = $scope.esCredentials.LangID;
-                        doChangeLanguage($translate, lang);
                     }
                 }
             }
-        }
-    ])
+        ])
 
-    .directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
-        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esQuestion: "=",
-                    esPsDef: "=",
-                    esPsVal: "="
-                },
-                template: '<div ng-include src="\'src/partials/esSurvey/esPropertyQuestion_\'+esQuestion.PType+\'.html\'"></div>',
-                link: function($scope, iElement, iAttrs) {
-                    $scope.esGlobals = esGlobals;
+        .directive('esPropertyQuestion', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+            function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esQuestion: "=",
+                        esPsDef: "=",
+                        esPsVal: "="
+                    },
+                    template: '<div ng-include src="\'src/partials/esSurvey/esPropertyQuestion_\'+esQuestion.PType+\'.html\'"></div>',
+                    link: function($scope, iElement, iAttrs) {
+                        $scope.esGlobals = esGlobals;
 
-                    //Check for ZoomDS
-                    var qs = $scope.esQuestion;
-                    if (qs && qs.PArg && qs.PType == 7) {
-                        $scope[qs.PArg + "_DS"] = esWebUIHelper.getZoomDataSource(qs.PArg);
-                    }
-
-                    $scope.openCalendar = function($event) {
-                        $scope.calendarStatus.opened = true;
-                    };
-
-                    $scope.calendarStatus = {
-                        opened: false
-                    };
-
-                    $scope.calendarFormat = 'dd-MMMM-yyyy';
-
-                    $scope.getScale = function(upTo) {
-                        if (!upTo || isNaN(upTo)) {
-                            return [];
+                        //Check for ZoomDS
+                        var qs = $scope.esQuestion;
+                        if (qs && qs.PArg && qs.PType == 7) {
+                            $scope[qs.PArg + "_DS"] = esWebUIHelper.getZoomDataSource(qs.PArg);
                         }
 
-                        return _.range(1, Math.abs(parseInt(upTo)) + 1);
-                    }
+                        $scope.openCalendar = function($event) {
+                            $scope.calendarStatus.opened = true;
+                        };
 
+                        $scope.calendarStatus = {
+                            opened: false
+                        };
 
-                    $scope.getChoicesOfQuestion = function() {
-                        if (!$scope.esQuestion || !$scope.esQuestion.PArg || !$scope.esPsDef || !$scope.esPsDef.Choices) {
-                            return [];
+                        $scope.calendarFormat = 'dd-MMMM-yyyy';
+
+                        $scope.getScale = function(upTo) {
+                            if (!upTo || isNaN(upTo)) {
+                                return [];
+                            }
+
+                            return _.range(1, Math.abs(parseInt(upTo)) + 1);
                         }
 
-                        return _.sortBy(_.filter($scope.esPsDef.Choices, {
-                            ChoiceCode: $scope.esQuestion.PArg
-                        }), "OrderPriority");
+
+                        $scope.getChoicesOfQuestion = function() {
+                            if (!$scope.esQuestion || !$scope.esQuestion.PArg || !$scope.esPsDef || !$scope.esPsDef.Choices) {
+                                return [];
+                            }
+
+                            return _.sortBy(_.filter($scope.esPsDef.Choices, {
+                                ChoiceCode: $scope.esQuestion.PArg
+                            }), "OrderPriority");
+                        }
                     }
-                }
-            };
-        }
-    ]);
+                };
+            }
+        ]);
 
     function convertPQRowsToMapRows(rows, click) {
         if (!rows) {
@@ -357,779 +414,779 @@
             return convertPQRowsToMapRows;
         })
 
-    .directive('esSurvey', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
-        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esSectionIdx: "=",
-                    esPsDef: "=",
-                    esPsVal: "="
-                },
-                template: '<div ng-include src="\'src/partials/esSurvey/esSurvey.html\'"></div>',
-                link: function($scope, iElement, iAttrs) {
-                    $scope.esGlobals = esGlobals;
+        .directive('esSurvey', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+            function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esSectionIdx: "=",
+                        esPsDef: "=",
+                        esPsVal: "="
+                    },
+                    template: '<div ng-include src="\'src/partials/esSurvey/esSurvey.html\'"></div>',
+                    link: function($scope, iElement, iAttrs) {
+                        $scope.esGlobals = esGlobals;
 
-                    $scope.isIntroduction = function() {
-                        return ($scope.esSectionIdx < 0);
+                        $scope.isIntroduction = function() {
+                            return ($scope.esSectionIdx < 0);
+                        }
+
+                        $scope.isLast = function() {
+                            if (!$scope.esPsDef || !$scope.esPsDef.Sections) {
+                                return true;
+                            }
+                            return ($scope.esSectionIdx == $scope.esPsDef.Sections.length - 1);
+                        }
+
+                        $scope.saveAndComplete = function() {
+
+                        }
+
+                        $scope.getQuestionsofSection = function() {
+                            if (!$scope.esPsDef || !$scope.esPsDef.Sections || $scope.esSectionIdx < 0 || $scope.esSectionId >= $scope.esPsDef.Sections.length) {
+                                return [];
+                            }
+
+                            var sect = $scope.esPsDef.Sections[$scope.esSectionIdx].Code;
+                            if (!sect) {
+                                return [];
+                            }
+
+                            return _.sortBy(_.filter($scope.esPsDef.Lines, {
+                                Category_Code: sect
+                            }), "SeqNum");
+                        }
+
+                        $scope.progress = function() {
+                            if ($scope.esSectionIdx < 0 || !$scope.esPsDef || !$scope.esPsDef.Sections || !$scope.esPsDef.Sections.length) {
+                                return 0;
+                            }
+
+                            return Math.round((($scope.esSectionIdx + 1) / $scope.esPsDef.Sections.length) * 100);
+                        }
+
+                        $scope.advanceStep = function() {
+                            if ($scope.isLast()) {
+                                return;
+                            }
+                            $scope.esSectionIdx += 1;
+                        }
+
+                        $scope.backStep = function() {
+                            if ($scope.isIntroduction()) {
+                                return;
+                            }
+                            $scope.esSectionIdx -= 1;
+                        }
                     }
+                };
+            }
+        ])
 
-                    $scope.isLast = function() {
-                        if (!$scope.esPsDef || !$scope.esPsDef.Sections) {
+        .directive('esChecklistModel', ['$parse', '$compile', function($parse, $compile) {
+            // contains
+            function contains(arr, item, comparator) {
+                if (angular.isArray(arr)) {
+                    for (var i = arr.length; i--;) {
+                        if (comparator(arr[i], item)) {
                             return true;
                         }
-                        return ($scope.esSectionIdx == $scope.esPsDef.Sections.length - 1);
-                    }
-
-                    $scope.saveAndComplete = function() {
-
-                    }
-
-                    $scope.getQuestionsofSection = function() {
-                        if (!$scope.esPsDef || !$scope.esPsDef.Sections || $scope.esSectionIdx < 0 || $scope.esSectionId >= $scope.esPsDef.Sections.length) {
-                            return [];
-                        }
-
-                        var sect = $scope.esPsDef.Sections[$scope.esSectionIdx].Code;
-                        if (!sect) {
-                            return [];
-                        }
-
-                        return _.sortBy(_.filter($scope.esPsDef.Lines, {
-                            Category_Code: sect
-                        }), "SeqNum");
-                    }
-
-                    $scope.progress = function() {
-                        if ($scope.esSectionIdx < 0 || !$scope.esPsDef || !$scope.esPsDef.Sections || !$scope.esPsDef.Sections.length) {
-                            return 0;
-                        }
-
-                        return Math.round((($scope.esSectionIdx + 1) / $scope.esPsDef.Sections.length) * 100);
-                    }
-
-                    $scope.advanceStep = function() {
-                        if ($scope.isLast()) {
-                            return;
-                        }
-                        $scope.esSectionIdx += 1;
-                    }
-
-                    $scope.backStep = function() {
-                        if ($scope.isIntroduction()) {
-                            return;
-                        }
-                        $scope.esSectionIdx -= 1;
                     }
                 }
-            };
-        }
-    ])
+                return false;
+            }
 
-    .directive('esChecklistModel', ['$parse', '$compile', function($parse, $compile) {
-        // contains
-        function contains(arr, item, comparator) {
-            if (angular.isArray(arr)) {
-                for (var i = arr.length; i--;) {
-                    if (comparator(arr[i], item)) {
-                        return true;
+            // add
+            function add(arr, item, comparator) {
+                arr = angular.isArray(arr) ? arr : [];
+                if (!contains(arr, item, comparator)) {
+                    arr.push(item);
+                }
+                return arr;
+            }
+
+            // remove
+            function remove(arr, item, comparator) {
+                if (angular.isArray(arr)) {
+                    for (var i = arr.length; i--;) {
+                        if (comparator(arr[i], item)) {
+                            arr.splice(i, 1);
+                            break;
+                        }
                     }
                 }
+                return arr;
             }
-            return false;
-        }
 
-        // add
-        function add(arr, item, comparator) {
-            arr = angular.isArray(arr) ? arr : [];
-            if (!contains(arr, item, comparator)) {
-                arr.push(item);
-            }
-            return arr;
-        }
+            // http://stackoverflow.com/a/19228302/1458162
+            function postLinkFn(scope, elem, attrs) {
+                // exclude recursion, but still keep the model
+                var esChecklistModel = attrs.esChecklistModel;
+                attrs.$set("esChecklistModel", null);
+                // compile with `ng-model` pointing to `checked`
+                $compile(elem)(scope);
+                attrs.$set("esChecklistModel", esChecklistModel);
 
-        // remove
-        function remove(arr, item, comparator) {
-            if (angular.isArray(arr)) {
-                for (var i = arr.length; i--;) {
-                    if (comparator(arr[i], item)) {
-                        arr.splice(i, 1);
-                        break;
-                    }
-                }
-            }
-            return arr;
-        }
+                // getter for original model
+                var esChecklistModelGetter = $parse(esChecklistModel);
+                var checklistChange = $parse(attrs.checklistChange);
+                var checklistBeforeChange = $parse(attrs.checklistBeforeChange);
+                var ngModelGetter = $parse(attrs.ngModel);
 
-        // http://stackoverflow.com/a/19228302/1458162
-        function postLinkFn(scope, elem, attrs) {
-            // exclude recursion, but still keep the model
-            var esChecklistModel = attrs.esChecklistModel;
-            attrs.$set("esChecklistModel", null);
-            // compile with `ng-model` pointing to `checked`
-            $compile(elem)(scope);
-            attrs.$set("esChecklistModel", esChecklistModel);
+                /*
+                            ctrl.$validators.esCount = function(modelValue, viewValue) {
+                                return true;
+                            };
+                */
+                var comparator = angular.equals;
 
-            // getter for original model
-            var esChecklistModelGetter = $parse(esChecklistModel);
-            var checklistChange = $parse(attrs.checklistChange);
-            var checklistBeforeChange = $parse(attrs.checklistBeforeChange);
-            var ngModelGetter = $parse(attrs.ngModel);
-
-            /*
-                        ctrl.$validators.esCount = function(modelValue, viewValue) {
-                            return true;
+                if (attrs.hasOwnProperty('checklistComparator')) {
+                    if (attrs.checklistComparator[0] == '.') {
+                        var comparatorExpression = attrs.checklistComparator.substring(1);
+                        comparator = function(a, b) {
+                            return a[comparatorExpression] === b[comparatorExpression];
                         };
-            */
-            var comparator = angular.equals;
 
-            if (attrs.hasOwnProperty('checklistComparator')) {
-                if (attrs.checklistComparator[0] == '.') {
-                    var comparatorExpression = attrs.checklistComparator.substring(1);
-                    comparator = function(a, b) {
-                        return a[comparatorExpression] === b[comparatorExpression];
-                    };
-
-                } else {
-                    comparator = $parse(attrs.checklistComparator)(scope.$parent);
-                }
-            }
-
-            // watch UI checked change
-            scope.$watch(attrs.ngModel, function(newValue, oldValue) {
-                if (newValue === oldValue) {
-                    return;
+                    } else {
+                        comparator = $parse(attrs.checklistComparator)(scope.$parent);
+                    }
                 }
 
-                if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
-                    ngModelGetter.assign(scope, contains(esChecklistModelGetter(scope.$parent), getChecklistValue(), comparator));
-                    return;
+                // watch UI checked change
+                scope.$watch(attrs.ngModel, function(newValue, oldValue) {
+                    if (newValue === oldValue) {
+                        return;
+                    }
+
+                    if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
+                        ngModelGetter.assign(scope, contains(esChecklistModelGetter(scope.$parent), getChecklistValue(), comparator));
+                        return;
+                    }
+
+                    setValueInesChecklistModel(getChecklistValue(), newValue);
+
+                    if (checklistChange) {
+                        checklistChange(scope);
+                    }
+                });
+
+                // watches for value change of esChecklistValue (Credit to @blingerson)
+                scope.$watch(getChecklistValue, function(newValue, oldValue) {
+                    if (newValue != oldValue && angular.isDefined(oldValue) && scope[attrs.ngModel] === true) {
+                        var current = esChecklistModelGetter(scope.$parent);
+                        esChecklistModelGetter.assign(scope.$parent, remove(current, oldValue, comparator));
+                        esChecklistModelGetter.assign(scope.$parent, add(current, newValue, comparator));
+                    }
+                });
+
+                function getChecklistValue() {
+                    return attrs.esChecklistValue ? $parse(attrs.esChecklistValue)(scope.$parent) : attrs.value;
                 }
 
-                setValueInesChecklistModel(getChecklistValue(), newValue);
-
-                if (checklistChange) {
-                    checklistChange(scope);
-                }
-            });
-
-            // watches for value change of esChecklistValue (Credit to @blingerson)
-            scope.$watch(getChecklistValue, function(newValue, oldValue) {
-                if (newValue != oldValue && angular.isDefined(oldValue) && scope[attrs.ngModel] === true) {
+                function setValueInesChecklistModel(value, checked) {
                     var current = esChecklistModelGetter(scope.$parent);
-                    esChecklistModelGetter.assign(scope.$parent, remove(current, oldValue, comparator));
-                    esChecklistModelGetter.assign(scope.$parent, add(current, newValue, comparator));
-                }
-            });
-
-            function getChecklistValue() {
-                return attrs.esChecklistValue ? $parse(attrs.esChecklistValue)(scope.$parent) : attrs.value;
-            }
-
-            function setValueInesChecklistModel(value, checked) {
-                var current = esChecklistModelGetter(scope.$parent);
-                if (angular.isFunction(esChecklistModelGetter.assign)) {
-                    if (checked === true) {
-                        esChecklistModelGetter.assign(scope.$parent, add(current, value, comparator));
-                    } else {
-                        esChecklistModelGetter.assign(scope.$parent, remove(current, value, comparator));
-                    }
-                }
-
-            }
-
-            // declare one function to be used for both $watch functions
-            function setChecked(newArr, oldArr) {
-                if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
-                    setValueInesChecklistModel(getChecklistValue(), ngModelGetter(scope));
-                    return;
-                }
-                ngModelGetter.assign(scope, contains(newArr, getChecklistValue(), comparator));
-            }
-
-            // watch original model change
-            // use the faster $watchCollection method if it's available
-            if (angular.isFunction(scope.$parent.$watchCollection)) {
-                scope.$parent.$watchCollection(esChecklistModel, setChecked);
-            } else {
-                scope.$parent.$watch(esChecklistModel, setChecked, true);
-            }
-        }
-
-        return {
-            restrict: 'A',
-            priority: 1000,
-            terminal: true,
-            scope: true,
-            compile: function(tElement, tAttrs) {
-
-                if (!tAttrs.esChecklistValue && !tAttrs.value) {
-                    throw 'You should provide `value` or `checklist-value`.';
-                }
-
-                // by default ngModel is 'checked', so we set it if not specified
-                if (!tAttrs.ngModel) {
-                    // local scope var storing individual checkbox model
-                    tAttrs.$set("ngModel", "checked");
-                }
-
-                return postLinkFn;
-            }
-        };
-    }])
-
-    /**
-     * @ngdoc directive
-     * @name es.Web.UI.directive:esGrid
-     * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
-     * @requires es.Web.UI.esUIHelper
-     * @requires $log
-     * @restrict AE
-     * @param {template} esGroupId The Entersoft Public Query Group ID
-     * @param {template} esFilterId The Entersoft Public Query Filter ID
-     * @param {esGridInfoOptions=} esGridOptions should grid options are already available you can explicitly assign
-     * @param {object=} esExecuteParams Params object that will be used when executing the public query
-     *
-     * @description
-     *
-     * **TBD**
-     * This directive is responsible to render the html for the presentation of the results / data of an Entersoft Public Query.
-     * The esGrid generates a Telerik kendo-grid web ui element {@link http://docs.telerik.com/KENDO-UI/api/javascript/ui/grid kendo-grid}.
-     * 
-     * In order to instantiate an esGrid with an Angular application, you have to provide the parameters esGroupId and esFilterId are required.
-     * These two parameters along with esExecuteParams will be supplied to the {@link es.Web.UI.esUIHelper#methods_esGridInfoToKInfo esToKendoTransform function}
-     */
-    .directive('esGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-        function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esGroupId: "=",
-                    esFilterId: "=",
-                    esExecuteParams: "=",
-                    esGridOptions: "=?",
-                    esPostGridOptions: "=?",
-                    esPQOptions: "=?",
-                    esDataSource: "=",
-                },
-                templateUrl: function(element, attrs) {
-                    return "src/partials/esGrid.html";
-                },
-                link: function($scope, iElement, iAttrs) {
-                    $scope.esGridRun = function() {
-                        if ($scope.esGridOptions && $scope.esGridOptions.dataSource) {
-                            if ($scope.esPQOptions && !$scope.esPQOptions.ServerPaging) {
-                                // Refresh all the data from server (no server paging)
-                                // and then go to page 1
-                                $scope.esGridOptions.dataSource.read();
-                                $scope.esGridOptions.dataSource.page(1);
-                            } else {
-                                $scope.esGridOptions.dataSource.page(1);
-                            }
-                        }
-                    }
-
-                    $scope.$watch('esGridOptions', function(newV, oldV) {
-                        if (newV && newV.esToolbars && angular.isArray(newV.esToolbars)) {
-                            var existingtbs = newV.toolbar || [];
-
-                            _.forEach(newV.esToolbars, function(newtb) {
-                                if (newtb.fnName && newtb.fnDef && angular.isFunction(newtb.fnDef)) {
-                                    $scope[newtb.fnName] = newtb.fnDef;
-                                }
-                            });
-                        }
-                    });
-
-                    $scope.esGridPrint = function() {};
-
-                    if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
-                        if (!$scope.esGroupId || !$scope.esFilterId) {
-                            throw "esGridOptions NOT defined. In order to dynamically get the options you must set GroupID and FilterID for esgrid to work";
-                        }
-                        // Now esGridOption explicitly assigned so ask the server 
-                        esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
-                            .then(function(ret) {
-                                var p1 = ret.data;
-                                var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
-                                $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esPQOptions);
-                                if ($scope.esPostGridOptions) {
-                                    angular.merge($scope.esGridOptions, $scope.esPostGridOptions);
-                                }
-                            });
-                    }
-                }
-            };
-        }
-    ])
-
-    .directive('esGaugePq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esPqDef: "="
-                },
-                templateUrl: function(element, attrs) {
-                    return "src/partials/esGaugePQ.html";
-                },
-                link: function($scope, iElement, iAttrs) {
-                    esWebApiService.fetchPublicQuery($scope.esPqDef)
-                        .then(function(ret) {
-                            if (ret.data.Rows && ret.data.Rows.length) {
-                                $scope.esRow = ret.data.Rows[0];
-                            }
-                        }, function(err) {
-
-                        });
-                }
-            };
-        }
-    ])
-
-    .directive('esGauge', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
-            function prepareGauge($scope, scaleObject) {
-                var minScale = 0,
-                    maxScale = 100,
-                    ranges = [];
-
-                if (scaleObject && scaleObject.Ranges && scaleObject.Ranges.length) {
-                    minScale = _.min(scaleObject.Ranges, function(r) {
-                        return r.MinValue;
-                    }).MinValue;
-                    maxScale = _.max(scaleObject.Ranges, function(r) {
-                        return r.MaxValue;
-                    }).MaxValue;
-
-                    ranges = _.map(scaleObject.Ranges, function(r) {
-                        var x = {
-                            from: r.MinValue,
-                            to: r.MaxValue
-                        };
-
-                        if (r.ColorARGB) {
-                            x.color = esGlobals.rgbToHex(r.ColorARGB)
-                        }
-                        return x;
-                    });
-                }
-
-                $scope.esScaleOptions = { min: minScale, max: maxScale, ranges: ranges, vertical: false };
-            };
-            return {
-                restrict: 'AE',
-                scope: {
-                    esRow: "=",
-                    esGaugeOptions: "=?",
-                },
-                templateUrl: function(element, attrs) {
-                    return "src/partials/esGauge.html";
-                },
-                link: function($scope, iElement, iAttrs) {
-                    var scaleObject = undefined;
-                    if ($scope.esRow) {
-                        $scope.esGaugeType = ($scope.esRow.GType || 'radial').toLowerCase();
-
-                        if ($scope.esRow.GScale) {
-                            esWebApiService.fetchESScale($scope.esRow.GScale)
-                                .then(function(ret) {
-                                        scaleObject = ret;
-                                        prepareGauge($scope, scaleObject, $scope.esRow);
-                                    },
-                                    function(err) {
-
-                                    });
+                    if (angular.isFunction(esChecklistModelGetter.assign)) {
+                        if (checked === true) {
+                            esChecklistModelGetter.assign(scope.$parent, add(current, value, comparator));
                         } else {
-                            prepareGauge($scope, undefined);
+                            esChecklistModelGetter.assign(scope.$parent, remove(current, value, comparator));
                         }
                     }
-                }
-            };
-        }
-    ])
 
-    .directive('esChart', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                }
+
+                // declare one function to be used for both $watch functions
+                function setChecked(newArr, oldArr) {
+                    if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
+                        setValueInesChecklistModel(getChecklistValue(), ngModelGetter(scope));
+                        return;
+                    }
+                    ngModelGetter.assign(scope, contains(newArr, getChecklistValue(), comparator));
+                }
+
+                // watch original model change
+                // use the faster $watchCollection method if it's available
+                if (angular.isFunction(scope.$parent.$watchCollection)) {
+                    scope.$parent.$watchCollection(esChecklistModel, setChecked);
+                } else {
+                    scope.$parent.$watch(esChecklistModel, setChecked, true);
+                }
+            }
+
             return {
-                restrict: 'AE',
-                scope: {
-                    esPanelOpen: "=?",
-                    esPqDef: "=?",
-                    esChartOptions: "=",
-                    esLocalData: "=?",
-                },
-                templateUrl: function(element, attrs) {
-                    return "src/partials/esChartPQ.html";
-                },
-                link: function($scope, iElement, iAttrs) {
-                    if (!$scope.esLocalData && !iAttrs.esLocalData) {
-                        var groups = ($scope.esChartOptions) ? $scope.esChartOptions.group : null;
-                        $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups);
-                    } else {
-                        $scope.esChartDataSource = { data: $scope.esLocalData };
+                restrict: 'A',
+                priority: 1000,
+                terminal: true,
+                scope: true,
+                compile: function(tElement, tAttrs) {
+
+                    if (!tAttrs.esChecklistValue && !tAttrs.value) {
+                        throw 'You should provide `value` or `checklist-value`.';
                     }
 
-                    $scope.esChartOptions.dataSource = $scope.esChartDataSource;
+                    // by default ngModel is 'checked', so we set it if not specified
+                    if (!tAttrs.ngModel) {
+                        // local scope var storing individual checkbox model
+                        tAttrs.$set("ngModel", "checked");
+                    }
 
-                    if ($scope.esChartOptions && !$scope.esChartOptions.dataBound) {
-                        $scope.esChartOptions.dataBound = function(e) {
+                    return postLinkFn;
+                }
+            };
+        }])
+
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:esGrid
+         * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
+         * @requires es.Web.UI.esUIHelper
+         * @requires $log
+         * @restrict AE
+         * @param {template} esGroupId The Entersoft Public Query Group ID
+         * @param {template} esFilterId The Entersoft Public Query Filter ID
+         * @param {esGridInfoOptions=} esGridOptions should grid options are already available you can explicitly assign
+         * @param {object=} esExecuteParams Params object that will be used when executing the public query
+         *
+         * @description
+         *
+         * **TBD**
+         * This directive is responsible to render the html for the presentation of the results / data of an Entersoft Public Query.
+         * The esGrid generates a Telerik kendo-grid web ui element {@link http://docs.telerik.com/KENDO-UI/api/javascript/ui/grid kendo-grid}.
+         * 
+         * In order to instantiate an esGrid with an Angular application, you have to provide the parameters esGroupId and esFilterId are required.
+         * These two parameters along with esExecuteParams will be supplied to the {@link es.Web.UI.esUIHelper#methods_esGridInfoToKInfo esToKendoTransform function}
+         */
+        .directive('esGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esGroupId: "=",
+                        esFilterId: "=",
+                        esExecuteParams: "=",
+                        esGridOptions: "=?",
+                        esPostGridOptions: "=?",
+                        esPQOptions: "=?",
+                        esDataSource: "=",
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esGrid.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        $scope.esGridRun = function() {
+                            if ($scope.esGridOptions && $scope.esGridOptions.dataSource) {
+                                if ($scope.esPQOptions && !$scope.esPQOptions.ServerPaging) {
+                                    // Refresh all the data from server (no server paging)
+                                    // and then go to page 1
+                                    $scope.esGridOptions.dataSource.read();
+                                    $scope.esGridOptions.dataSource.page(1);
+                                } else {
+                                    $scope.esGridOptions.dataSource.page(1);
+                                }
+                            }
+                        }
+
+                        $scope.$watch('esGridOptions', function(newV, oldV) {
+                            if (newV && newV.esToolbars && angular.isArray(newV.esToolbars)) {
+                                var existingtbs = newV.toolbar || [];
+
+                                _.forEach(newV.esToolbars, function(newtb) {
+                                    if (newtb.fnName && newtb.fnDef && angular.isFunction(newtb.fnDef)) {
+                                        $scope[newtb.fnName] = newtb.fnDef;
+                                    }
+                                });
+                            }
+                        });
+
+                        $scope.esGridPrint = function() {};
+
+                        if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
+                            if (!$scope.esGroupId || !$scope.esFilterId) {
+                                throw "esGridOptions NOT defined. In order to dynamically get the options you must set GroupID and FilterID for esgrid to work";
+                            }
+                            // Now esGridOption explicitly assigned so ask the server 
+                            esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId)
+                                .then(function(ret) {
+                                    var p1 = ret.data;
+                                    var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
+                                    $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esPQOptions);
+                                    if ($scope.esPostGridOptions) {
+                                        angular.merge($scope.esGridOptions, $scope.esPostGridOptions);
+                                    }
+                                });
+                        }
+                    }
+                };
+            }
+        ])
+
+        .directive('esGaugePq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esPqDef: "="
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esGaugePQ.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        esWebApiService.fetchPublicQuery($scope.esPqDef)
+                            .then(function(ret) {
+                                if (ret.data.Rows && ret.data.Rows.length) {
+                                    $scope.esRow = ret.data.Rows[0];
+                                }
+                            }, function(err) {
+
+                            });
+                    }
+                };
+            }
+        ])
+
+        .directive('esGauge', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                function prepareGauge($scope, scaleObject) {
+                    var minScale = 0,
+                        maxScale = 100,
+                        ranges = [];
+
+                    if (scaleObject && scaleObject.Ranges && scaleObject.Ranges.length) {
+                        minScale = _.min(scaleObject.Ranges, function(r) {
+                            return r.MinValue;
+                        }).MinValue;
+                        maxScale = _.max(scaleObject.Ranges, function(r) {
+                            return r.MaxValue;
+                        }).MaxValue;
+
+                        ranges = _.map(scaleObject.Ranges, function(r) {
+                            var x = {
+                                from: r.MinValue,
+                                to: r.MaxValue
+                            };
+
+                            if (r.ColorARGB) {
+                                x.color = esGlobals.rgbToHex(r.ColorARGB)
+                            }
+                            return x;
+                        });
+                    }
+
+                    $scope.esScaleOptions = { min: minScale, max: maxScale, ranges: ranges, vertical: false };
+                };
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esRow: "=",
+                        esGaugeOptions: "=?",
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esGauge.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        var scaleObject = undefined;
+                        if ($scope.esRow) {
+                            $scope.esGaugeType = ($scope.esRow.GType || 'radial').toLowerCase();
+
+                            if ($scope.esRow.GScale) {
+                                esWebApiService.fetchESScale($scope.esRow.GScale)
+                                    .then(function(ret) {
+                                            scaleObject = ret;
+                                            prepareGauge($scope, scaleObject, $scope.esRow);
+                                        },
+                                        function(err) {
+
+                                        });
+                            } else {
+                                prepareGauge($scope, undefined);
+                            }
+                        }
+                    }
+                };
+            }
+        ])
+
+        .directive('esChart', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esPanelOpen: "=?",
+                        esPqDef: "=?",
+                        esChartOptions: "=",
+                        esLocalData: "=?",
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esChartPQ.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        if (!$scope.esLocalData && !iAttrs.esLocalData) {
+                            var groups = ($scope.esChartOptions) ? $scope.esChartOptions.group : null;
+                            $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups);
+                        } else {
+                            $scope.esChartDataSource = { data: $scope.esLocalData };
+                        }
+
+                        $scope.esChartOptions.dataSource = $scope.esChartDataSource;
+
+                        if ($scope.esChartOptions && !$scope.esChartOptions.dataBound) {
+                            $scope.esChartOptions.dataBound = function(e) {
+                                if (e && e.sender) {
+                                    kendo.ui.progress(e.sender.element.parent(), false);
+                                }
+                            };
+                        }
+
+                        $scope.executePQ = function() {
+                            $scope.isOpen = false;
+                            if ($scope.esChartDataSource) {
+                                if ($scope.esChartCtrl) {
+                                    kendo.ui.progress($scope.esChartCtrl.element.parent(), true);
+                                }
+                                $scope.esChartDataSource.read();
+                            }
+                        }
+
+                        angular.element($window).bind('resize', function() {
+                            kendo.resize(angular.element(".eschart-wrapper"));
+                        });
+                    }
+                };
+            }
+        ])
+
+        .directive('esTreeMap', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esPanelOpen: "=?",
+                        esPqDef: "=?",
+                        esChartOptions: "=?",
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esTreeMapPQ.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        $scope.esChartDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, false);
+                        var tOptions = $scope.esChartOptions || {};
+
+                        tOptions.valueField = "value";
+                        tOptions.textField = "name";
+                        tOptions.dataBound = function(e) {
                             if (e && e.sender) {
                                 kendo.ui.progress(e.sender.element.parent(), false);
                             }
                         };
-                    }
 
-                    $scope.executePQ = function() {
-                        $scope.isOpen = false;
-                        if ($scope.esChartDataSource) {
-                            if ($scope.esChartCtrl) {
-                                kendo.ui.progress($scope.esChartCtrl.element.parent(), true);
-                            }
-                            $scope.esChartDataSource.read();
-                        }
-                    }
-
-                    angular.element($window).bind('resize', function() {
-                        kendo.resize(angular.element(".eschart-wrapper"));
-                    });
-                }
-            };
-        }
-    ])
-
-    .directive('esTreeMap', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esPanelOpen: "=?",
-                    esPqDef: "=?",
-                    esChartOptions: "=?",
-                },
-                templateUrl: function(element, attrs) {
-                    return "src/partials/esTreeMapPQ.html";
-                },
-                link: function($scope, iElement, iAttrs) {
-                    $scope.esChartDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, false);
-                    var tOptions = $scope.esChartOptions || {};
-
-                    tOptions.valueField = "value";
-                    tOptions.textField = "name";
-                    tOptions.dataBound = function(e) {
-                        if (e && e.sender) {
-                            kendo.ui.progress(e.sender.element.parent(), false);
-                        }
-                    };
-
-                    $scope.executePQ = function() {
-                        $scope.esPqDef.esPanelOpen = false;
-                        if ($scope.esChartDataSource) {
-                            if ($scope.esTreeMapCtrl) {
-                                kendo.ui.progress($scope.esTreeMapCtrl.element.parent(), true);
-                            }
-                            $scope.esChartDataSource.read();
-                        }
-                    }
-
-                    angular.element($window).bind('resize', function() {
-                        kendo.resize(angular.element(".eschart-wrapper"));
-                    });
-
-                    tOptions.dataSource = $scope.esChartDataSource;
-                }
-            };
-        }
-    ])
-
-    .directive('esMapPq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-        function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esPanelOpen: "=?",
-                    esPqDef: "=?",
-                    esOptions: "=?",
-                },
-                templateUrl: function(element, attrs) {
-                    return "src/partials/esMapPQ.html";
-                },
-                link: function($scope, iElement, iAttrs) {
-                    var onChange = function(e) {
-                        var map = $scope.esMapCtrl;
-                        if (!map) {
-                            return;
-                        }
-
-                        if (!e.items || !e.items.length) {
-                            map.center([32.546813173515126, -4.218749999999986]);
-                            map.zoom(2);
-                        }
-
-                        var extent;
-                        for (var i = 0; i < e.items.length; i++) {
-                            var loc = [e.items[i].Latitude, e.items[i].Longitude];
-
-                            if (!extent) {
-                                extent = new kendo.dataviz.map.Extent(loc, loc);
-                            } else {
-                                extent.include(loc);
-                            }
-                        }
-
-                        map.extent(extent);
-                    };
-
-                    $scope.bubbleMessage = "";
-                    $scope.tooltipIsOpen = false;
-
-                    $scope.esMapDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, true, onChange);
-                    $scope.esMapOptions = {};
-                    var tOptions = $scope.esMapOptions;
-
-                    var esOptions = $scope.esOptions || {};
-
-                    tOptions.layers = [{
-                        type: "tile",
-                        urlTemplate: "http://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
-                        subdomains: ["a", "b", "c"],
-                        attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>." +
-                            "Tiles courtesy of <a href='http://www.openstreemap.org/'>Entersoft SA</a>"
-                    }];
-
-                    var dataLayer = {
-                        type: (esOptions.type && angular.isString(esOptions.type)) ? esOptions.type : "marker",
-                        dataSource: $scope.esMapDataSource,
-                        locationField: "latlng",
-                        titleField: (esOptions.titleField && angular.isString(esOptions.titleField)) ? esOptions.titleField : "esLabel",
-                        autoBind: angular.isUndefined(esOptions.autoBind) ? false : !!esOptions.autoBind,
-                        valueField: (esOptions.valueField && angular.isString(esOptions.valueField)) ? esOptions.valueField : "Figure",
-                    };
-
-                    if (dataLayer.type == "bubble") {
-                        tOptions.shapeMouseEnter = function(e) {
-                            var oe = e.originalEvent;
-                            var x = oe.pageX || oe.clientX;
-                            var y = oe.pageY || oe.clientY;
-
-                            var name = e.shape.dataItem[dataLayer.titleField] + " - " + e.shape.dataItem[dataLayer.valueField].toString();
-                            $scope.bubbleMessage = name;
-                            $scope.tooltipIsOpen = true;
-                            $scope.$apply();
-                        };
-                        tOptions.shapeMouseLeave = function(e) {
-                            $scope.bubbleMessage = "";  
-                            $scope.tooltipIsOpen = false;
-                            $scope.$apply();
-                        };
-
-                        dataLayer.style = {
-                            fill: {
-                                color: (esOptions.color && angular.isString(esOptions.color)) ? esOptions.color : "#00F"
-                            },
-                            stroke: {
-                                width: 1
-                            }
-                        };
-                    }
-
-                    tOptions.layers.push(dataLayer);
-
-                    $scope.executePQ = function() {
-                        $scope.isOpen = false;
-                        if ($scope.esMapDataSource) {
-                            $scope.esMapDataSource.read();
-                        }
-                    }
-
-                    angular.element($window).bind('resize', function() {
-                        kendo.resize(angular.element(".esmap-wrapper"));
-                    });
-
-                }
-            };
-        }
-    ])
-
-    .directive('esLocalGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-        function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
-            return {
-                restrict: 'AE',
-                scope: {
-                    esGridOptions: "=",
-                    esDataSource: "=",
-                },
-                templateUrl: function(element, attrs) {
-                    return "src/partials/esLocalGrid.html";
-                },
-                link: function($scope, iElement, iAttrs) {
-                    $scope.esGridRun = function() {
-                        if ($scope.esGridCtrl) {
-                            $scope.esGridCtrl.dataSource.read();
-                        }
-                    };
-                }
-            };
-        }
-    ])
-
-    /**
-     * @ngdoc directive
-     * @name es.Web.UI.directive:es00DocumentsDetail
-     * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
-     * @requires es.Web.UI.esUIHelper
-     * @requires $log
-     * @restrict AE
-     * @param {object=} esDocumentGridOptions A subset or full set of esGridOptions for the kendo-grid that will show the ES00Documents. 
-     * The ES00Documents kendo-grid will be initialized by the merge of the PublicQueryInfo gridoptions as retrieved for the GroupID = "ES00Documents" and
-     * FilterID = "ES00DocumentsDetails" public query. 
-     * @param {string=} esMasterRowField The field of the master grid row that the ES00DocumentGrid will be a detail of. The value of this field in the master row will form
-     * the parameter for fetchES00DocumentsByGID service to retrieve the ES00DocumentRows.
-     *
-     * @description
-     *
-     * **TBD**
-     * This directive is responsible to render the html for the presentation of the ES00Documents as a detail of a kendo-grid
-     */
-    .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache',
-        function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, esCache) {
-
-            return {
-                restrict: 'AE',
-                scope: {
-                    esDocumentGridOptions: "=?",
-                    esMasterRowField: "=?",
-                    esIsudgid: "=?"
-                },
-                template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
-                link: function($scope, iElement, iAttrs) {
-
-                    $scope.$watch('esIsudgid', function(newVal, oldVal) {
-                        if ($scope.esDocumentGridOptions && $scope.esDocumentGridOptions.dataSource) {
-                            $scope.esDocumentGridOptions.dataSource.read();
-                        }
-                    });
-
-                    if (!$scope.esIsudgid && !iAttrs.esIsudgid && !$scope.esMasterRowField && !iAttrs.esMasterRowField) {
-                        $scope.esMasterRowField = "GID";
-                        $log.warn("esIsudgid is not specified and esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
-                    }
-
-                    var getOptions = function() {
-                        var g = "ES00Documents";
-                        var f = "ES00DocumentsDetails";
-                        var xParam = {
-                            serverGrouping: false,
-                            serverSorting: false,
-                            serverFiltering: false,
-                            serverPaging: false,
-                            pageSize: 20,
-                            transport: {
-                                read: function(options) {
-                                    try {
-                                        var searchVal = $scope.esIsudgid ? $scope.esIsudgid : $scope.$parent.dataItem[$scope.esMasterRowField];
-                                        esWebApiService.fetchES00DocumentsByEntityGID(searchVal)
-                                            .then(function(ret) {
-                                                options.success(ret);
-                                            }, function(err) {
-                                                options.error(err);
-                                            });
-                                    } catch (x) {
-                                        options.success({ data: [] });
-                                    }
+                        $scope.executePQ = function() {
+                            $scope.esPqDef.esPanelOpen = false;
+                            if ($scope.esChartDataSource) {
+                                if ($scope.esTreeMapCtrl) {
+                                    kendo.ui.progress($scope.esTreeMapCtrl.element.parent(), true);
                                 }
+                                $scope.esChartDataSource.read();
+                            }
+                        }
 
-                            },
-                            schema: {
-                                data: "data",
-                                total: "data.length"
+                        angular.element($window).bind('resize', function() {
+                            kendo.resize(angular.element(".eschart-wrapper"));
+                        });
+
+                        tOptions.dataSource = $scope.esChartDataSource;
+                    }
+                };
+            }
+        ])
+
+        .directive('esMapPq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esPanelOpen: "=?",
+                        esPqDef: "=?",
+                        esOptions: "=?",
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esMapPQ.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        var onChange = function(e) {
+                            var map = $scope.esMapCtrl;
+                            if (!map) {
+                                return;
+                            }
+
+                            if (!e.items || !e.items.length) {
+                                map.center([32.546813173515126, -4.218749999999986]);
+                                map.zoom(2);
+                            }
+
+                            var extent;
+                            for (var i = 0; i < e.items.length; i++) {
+                                var loc = [e.items[i].Latitude, e.items[i].Longitude];
+
+                                if (!extent) {
+                                    extent = new kendo.dataviz.map.Extent(loc, loc);
+                                } else {
+                                    extent.include(loc);
+                                }
+                            }
+
+                            map.extent(extent);
+                        };
+
+                        $scope.bubbleMessage = "";
+                        $scope.tooltipIsOpen = false;
+
+                        $scope.esMapDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, true, onChange);
+                        $scope.esMapOptions = {};
+                        var tOptions = $scope.esMapOptions;
+
+                        var esOptions = $scope.esOptions || {};
+
+                        tOptions.layers = [{
+                            type: "tile",
+                            urlTemplate: "http://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
+                            subdomains: ["a", "b", "c"],
+                            attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>." +
+                                "Tiles courtesy of <a href='http://www.openstreemap.org/'>Entersoft SA</a>"
+                        }];
+
+                        var dataLayer = {
+                            type: (esOptions.type && angular.isString(esOptions.type)) ? esOptions.type : "marker",
+                            dataSource: $scope.esMapDataSource,
+                            locationField: "latlng",
+                            titleField: (esOptions.titleField && angular.isString(esOptions.titleField)) ? esOptions.titleField : "esLabel",
+                            autoBind: angular.isUndefined(esOptions.autoBind) ? false : !!esOptions.autoBind,
+                            valueField: (esOptions.valueField && angular.isString(esOptions.valueField)) ? esOptions.valueField : "Figure",
+                        };
+
+                        if (dataLayer.type == "bubble") {
+                            tOptions.shapeMouseEnter = function(e) {
+                                var oe = e.originalEvent;
+                                var x = oe.pageX || oe.clientX;
+                                var y = oe.pageY || oe.clientY;
+
+                                var name = e.shape.dataItem[dataLayer.titleField] + " - " + e.shape.dataItem[dataLayer.valueField].toString();
+                                $scope.bubbleMessage = name;
+                                $scope.tooltipIsOpen = true;
+                                $scope.$apply();
+                            };
+                            tOptions.shapeMouseLeave = function(e) {
+                                $scope.bubbleMessage = "";
+                                $scope.tooltipIsOpen = false;
+                                $scope.$apply();
+                            };
+
+                            dataLayer.style = {
+                                fill: {
+                                    color: (esOptions.color && angular.isString(esOptions.color)) ? esOptions.color : "#00F"
+                                },
+                                stroke: {
+                                    width: 1
+                                }
+                            };
+                        }
+
+                        tOptions.layers.push(dataLayer);
+
+                        $scope.executePQ = function() {
+                            $scope.isOpen = false;
+                            if ($scope.esMapDataSource) {
+                                $scope.esMapDataSource.read();
+                            }
+                        }
+
+                        angular.element($window).bind('resize', function() {
+                            kendo.resize(angular.element(".esmap-wrapper"));
+                        });
+
+                    }
+                };
+            }
+        ])
+
+        .directive('esLocalGrid', ['$log', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esGridOptions: "=",
+                        esDataSource: "=",
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esLocalGrid.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        $scope.esGridRun = function() {
+                            if ($scope.esGridCtrl) {
+                                $scope.esGridCtrl.dataSource.read();
+                            }
+                        };
+                    }
+                };
+            }
+        ])
+
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:es00DocumentsDetail
+         * @requires es.Services.Web.esWebApi Entersoft AngularJS WEB API for Entersoft Application Server
+         * @requires es.Web.UI.esUIHelper
+         * @requires $log
+         * @restrict AE
+         * @param {object=} esDocumentGridOptions A subset or full set of esGridOptions for the kendo-grid that will show the ES00Documents. 
+         * The ES00Documents kendo-grid will be initialized by the merge of the PublicQueryInfo gridoptions as retrieved for the GroupID = "ES00Documents" and
+         * FilterID = "ES00DocumentsDetails" public query. 
+         * @param {string=} esMasterRowField The field of the master grid row that the ES00DocumentGrid will be a detail of. The value of this field in the master row will form
+         * the parameter for fetchES00DocumentsByGID service to retrieve the ES00DocumentRows.
+         *
+         * @description
+         *
+         * **TBD**
+         * This directive is responsible to render the html for the presentation of the ES00Documents as a detail of a kendo-grid
+         */
+        .directive('es00DocumentsDetail', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache',
+            function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, esCache) {
+
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esDocumentGridOptions: "=?",
+                        esMasterRowField: "=?",
+                        esIsudgid: "=?"
+                    },
+                    template: '<div ng-include src="\'src/partials/es00DocumentsDetail.html\'"></div>',
+                    link: function($scope, iElement, iAttrs) {
+
+                        $scope.$watch('esIsudgid', function(newVal, oldVal) {
+                            if ($scope.esDocumentGridOptions && $scope.esDocumentGridOptions.dataSource) {
+                                $scope.esDocumentGridOptions.dataSource.read();
+                            }
+                        });
+
+                        if (!$scope.esIsudgid && !iAttrs.esIsudgid && !$scope.esMasterRowField && !iAttrs.esMasterRowField) {
+                            $scope.esMasterRowField = "GID";
+                            $log.warn("esIsudgid is not specified and esMasterRowField for es00DocumentsDetail directive NOT specified. Assuming GID");
+                        }
+
+                        var getOptions = function() {
+                            var g = "ES00Documents";
+                            var f = "ES00DocumentsDetails";
+                            var xParam = {
+                                serverGrouping: false,
+                                serverSorting: false,
+                                serverFiltering: false,
+                                serverPaging: false,
+                                pageSize: 20,
+                                transport: {
+                                    read: function(options) {
+                                        try {
+                                            var searchVal = $scope.esIsudgid ? $scope.esIsudgid : $scope.$parent.dataItem[$scope.esMasterRowField];
+                                            esWebApiService.fetchES00DocumentsByEntityGID(searchVal)
+                                                .then(function(ret) {
+                                                    options.success(ret);
+                                                }, function(err) {
+                                                    options.error(err);
+                                                });
+                                        } catch (x) {
+                                            options.success({ data: [] });
+                                        }
+                                    }
+
+                                },
+                                schema: {
+                                    data: "data",
+                                    total: "data.length"
+                                }
+                            };
+
+                            var xDS = new kendo.data.DataSource(xParam);
+
+                            var pqinfo = esCache.getItem("PQI_" + g + "/" + f);
+                            if (pqinfo) {
+                                processPQInfo(pqinfo, xDS, g, f);
+                            } else {
+                                esWebApiService.fetchPublicQueryInfo(g, f)
+                                    .then(function(ret) {
+                                        esCache.setItem("PQI_" + g + "/" + f, ret.data);
+                                        processPQInfo(ret.data, xDS, g, f);
+                                    });
                             }
                         };
 
-                        var xDS = new kendo.data.DataSource(xParam);
+                        function processPQInfo(ret, xDS, g, f) {
+                            var p1 = ret;
+                            var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
+                            var pqO = new esGlobals.ESPQOptions(1, -1, true, false);
+                            ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, pqO);
+                            ret.autoBind = true;
+                            ret.toolbar = null;
+                            ret.groupable = false;
+                            ret.dataSource = xDS;
+                            // Add the download column
+                            var codeColumn = _.find(p2.columns, { field: "Code" });
+                            if (codeColumn) {
+                                var sLink = esWebApiService.downloadURLForBlobDataDownload("{{dataItem.GID}}");
+                                codeColumn.template = "<a ng-href='" + sLink + "' download>{{dataItem.Code}}</a>";
+                            }
 
-                        var pqinfo = esCache.getItem("PQI_" + g + "/" + f);
-                        if (pqinfo) {
-                            processPQInfo(pqinfo, xDS, g, f);
-                        } else {
-                            esWebApiService.fetchPublicQueryInfo(g, f)
-                                .then(function(ret) {
-                                    esCache.setItem("PQI_" + g + "/" + f, ret.data);
-                                    processPQInfo(ret.data, xDS, g, f);
-                                });
-                        }
-                    };
-
-                    function processPQInfo(ret, xDS, g, f) {
-                        var p1 = ret;
-                        var p2 = esWebUIHelper.winGridInfoToESGridInfo(g, f, p1);
-                        var pqO = new esGlobals.ESPQOptions(1, -1, true, false);
-                        ret = esWebUIHelper.esGridInfoToKInfo(g, f, {}, p2, pqO);
-                        ret.autoBind = true;
-                        ret.toolbar = null;
-                        ret.groupable = false;
-                        ret.dataSource = xDS;
-                        // Add the download column
-                        var codeColumn = _.find(p2.columns, { field: "Code" });
-                        if (codeColumn) {
-                            var sLink = esWebApiService.downloadURLForBlobDataDownload("{{dataItem.GID}}");
-                            codeColumn.template = "<a ng-href='" + sLink + "' download>{{dataItem.Code}}</a>";
+                            $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
                         }
 
-                        $scope.esDocumentGridOptions = angular.extend(ret, $scope.esDocumentGridOptions);
+                        getOptions();
                     }
-
-                    getOptions();
-                }
-            };
-        }
-    ])
-
-    .controller('esModalInvestigateCtrl', ['$scope', '$uibModalInstance', 'esMessaging', 'invParams', function($scope, $uibModalInstance, esMessaging, invParams) {
-        $scope.investigateGridOptions = {
-            autoBind: true,
-            selectable: invParams.paramDef.multiValued ? "multiple, row" : "row"
-        };
-        $scope.invParams = invParams || {};
-        $scope.selectedRows = null;
-
-        var selFunc = function(evt, selectedRows) {
-            if (!selectedRows || selectedRows.length == 0) {
-                $scope.selectedRows = null;
-                return;
+                };
             }
+        ])
 
-            $scope.selectedRows = _.map(selectedRows, function(selItem) {
-                return evt.sender.dataItem(selItem)[$scope.invParams.paramDef.invSelectedMasterField];
+        .controller('esModalInvestigateCtrl', ['$scope', '$uibModalInstance', 'esMessaging', 'invParams', function($scope, $uibModalInstance, esMessaging, invParams) {
+            $scope.investigateGridOptions = {
+                autoBind: true,
+                selectable: invParams.paramDef.multiValued ? "multiple, row" : "row"
+            };
+            $scope.invParams = invParams || {};
+            $scope.selectedRows = null;
+
+            var selFunc = function(evt, selectedRows) {
+                if (!selectedRows || selectedRows.length == 0) {
+                    $scope.selectedRows = null;
+                    return;
+                }
+
+                $scope.selectedRows = _.map(selectedRows, function(selItem) {
+                    return evt.sender.dataItem(selItem)[$scope.invParams.paramDef.invSelectedMasterField];
+                });
+            };
+
+            $uibModalInstance.closed.then(function() {
+                esMessaging.unsubscribe(hndl);
             });
-        };
 
-        $uibModalInstance.closed.then(function() {
-            esMessaging.unsubscribe(hndl);
-        });
+            var hndl = esMessaging.subscribe("GRID_ROW_CHANGE", selFunc);
 
-        var hndl = esMessaging.subscribe("GRID_ROW_CHANGE", selFunc);
+            $scope.ok = function() {
+                $uibModalInstance.close($scope.selectedRows);
+            };
 
-        $scope.ok = function() {
-            $uibModalInstance.close($scope.selectedRows);
-        };
+            $scope.cancel = function() {
+                $uibModalInstance.dismiss('cancel');
+            };
+        }])
 
-        $scope.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
-        };
-    }])
-
-    /**
-     * @ngdoc directive
-     * @name es.Web.UI.directive:esParam
-     * @function
-     *
-     * @description
-     * **TBD**
-     *
-     * 
-     */
-    .directive('esParam', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
+        /**
+         * @ngdoc directive
+         * @name es.Web.UI.directive:esParam
+         * @function
+         *
+         * @description
+         * **TBD**
+         *
+         * 
+         */
+        .directive('esParam', ['$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals',
             function($log, $uibModal, esWebApiService, esWebUIHelper, esGlobals) {
                 return {
                     restrict: 'AE',
@@ -2143,11 +2200,11 @@
 
             function ESNumeric(inArg, val, val2) {
                 if (val && angular.isString(val)) {
-                    val = val.replace (".", "").replace(",", ".");
+                    val = val.replace(".", "").replace(",", ".");
                 }
 
                 if (val2 && angular.isString(val2)) {
-                    val2 = val.replace (".", "").replace(",", ".");
+                    val2 = val.replace(".", "").replace(",", ".");
                 }
                 var k = {
                     value: !isNaN(val) ? new Number(val).valueOf() : null,
@@ -2304,48 +2361,7 @@
                 };
             }
 
-            function ESParamInfo() {
-                this.id = undefined;
-                this.aa = undefined;
-                this.caption = undefined;
-                this.toolTip = undefined;
-                this.controlType = undefined;
-                this.parameterType = "";
-                this.precision = undefined;
-                this.multiValued = false;
-                this.visible = undefined;
-                this.required = undefined;
-                this.oDSTag = undefined;
-                this.formatStrng = undefined;
-                this.tags = undefined;
-                this.visibility = undefined;
-                this.invQueryID = undefined;
-                this.invSelectedMasterTable = undefined;
-                this.invSelectedMasterField = undefined;
-                this.invTableMappings = undefined;
-                this.defaultValues = undefined;
-                this.enumOptionAll = undefined;
-                this.enumList = undefined;
-            }
 
-            ESParamInfo.prototype.strVal = function() {
-                return "Hello World esParaminfo";
-            };
-
-            ESParamInfo.prototype.isAdvanced = function() {
-                return this.visible && this.visibility == 1;
-            };
-
-            ESParamInfo.prototype.isInvestigateZoom = function() {
-                return this.invSelectedMasterTable && this.invSelectedMasterTable.length > 4 && this.invSelectedMasterTable[4] == 'Z';
-            };
-
-            ESParamInfo.prototype.isInvestigateEntity = function() {
-                if (!this.invSelectedMasterTable || this.isInvestigateZoom())
-                    return false;
-
-                return true;
-            };
 
             function ESParamsDefinitions(title, params) {
                 this.title = title;
