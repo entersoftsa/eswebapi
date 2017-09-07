@@ -1108,8 +1108,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             ESNumericParamVal.prototype.getExecuteVal = function() {
-                var froms = (this.paramValue.value = this.paramValue.value || 0).toLocaleString(getLocale());
-                var tos = (this.paramValue.valueTo = this.paramValue.valueTo || 0).toLocaleString(getLocale());
+                var froms = (this.paramValue.value = this.paramValue.value || 0).toLocaleString("el-GR");
+                var tos = (this.paramValue.valueTo = this.paramValue.valueTo || 0).toLocaleString("el-GR");
 
                 switch (this.paramValue.oper) {
                     case "RANGE":
