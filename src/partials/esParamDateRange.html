@@ -3,7 +3,7 @@
       tooltip-trigger="mouseenter">{{::esParamDef.caption}}
 </label>
 
-<div uib-accordion-group class="panel-default date-title" is-open="drStatus.dateOpen" heading="{{esParamVal[esParamDef.id].strVal(true)}}">
+<div uib-accordion-group class="panel-default date-title" is-open="drStatus.dateOpen" heading="{{esParamVal[esParamDef.id].strVal(true)}}" >
       <select 
         class="form-control col-xs-6 es-param-control" 
         kendo-drop-down-list="drDate"
