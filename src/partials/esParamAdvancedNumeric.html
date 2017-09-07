@@ -9,9 +9,9 @@
         </select>
     </div>
     <div class="col-xs-12" ng-hide="esParamVal[esParamDef.id].paramValue.oper == 'NULL' || esParamVal[esParamDef.id].paramValue.oper == 'NOTNULL'" ng-class="{'col-md-8': esParamVal[esParamDef.id].paramValue.oper != 'RANGE', 'col-md-4': esParamVal[esParamDef.id].paramValue.oper == 'RANGE'}">
-        <input type="number" class="es-param-control" kendo-numeric-text-box align="right" k-ng-model="esParamVal[esParamDef.id].paramValue.value" k-spinners="false" k-decimals="esParamDef.precision" k-format="'n'+'{{::esParamDef.precision}}'" />
+        <input type="number" class="form-control es-param-control" kendo-numeric-text-box align="right" k-ng-model="esParamVal[esParamDef.id].paramValue.value" k-spinners="false" k-decimals="esParamDef.precision" k-format="'n'+'{{::esParamDef.precision}}'" />
     </div>
     <div class="col-xs-12 col-md-4" ng-hide="esParamVal[esParamDef.id].paramValue.oper != 'RANGE'">
-        <input class="es-param-control" kendo-numeric-text-box align="right" k-ng-model="esParamVal[esParamDef.id].paramValue.valueTo" k-spinners="false" k-decimals="esParamDef.precision" k-format="'n'+'{{::esParamDef.precision}}'" />
+        <input class="form-control es-param-control" kendo-numeric-text-box align="right" k-ng-model="esParamVal[esParamDef.id].paramValue.valueTo" k-spinners="false" k-decimals="esParamDef.precision" k-format="'n'+'{{::esParamDef.precision}}'" />
     </div>
 </div>
