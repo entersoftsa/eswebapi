@@ -16,9 +16,7 @@
                     <label class="control-label es-param-label more">...</label>
                     <button type="button" class="btn btn-info form-control es-param-control" ng-click="esToggleMore()">{{ esMore ? ('ESUI.PARAMS_PANEL.Less' | translate) : ('ESUI.PARAMS_PANEL.More' | translate)}}</button>
                 </div>
-            </div>
-
-         <div class="row">      
+           
                 <div ng-if="esMore" class="form-group col-md-6 col-xs-12 col-lg-3" ng-class="{'has-error': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in esParamsDef.advancedDefinitions() | orderBy:'aa'">
                     <es-param class="es-param" es-type="param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
                 </div>
