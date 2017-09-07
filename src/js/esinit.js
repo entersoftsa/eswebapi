@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.24.0";
+    var version = "1.24.1";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -379,10 +379,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
             var esDateRangeOptions = [];
             var esComplexParamFunctionOptions = [];
+            var esYesNoTrans = [];
+            var esOperTrans = [];
 
             $rootScope.$on('$translateChangeSuccess', function() {
 
-                var trans = $translate.instant([
+                esYesNoTrans = $translate.instant([
+                    "ESUI.BOOLEAN.YES",
+                    "ESUI.BOOLEAN.NO"]);
+
+                esOperTrans = $translate.instant([
                     "ESCOMPLEX.EQ",
                     "ESCOMPLEX.NE",
                     "ESCOMPLEX.LT",
@@ -392,6 +398,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     "ESCOMPLEX.RANGE",
                     "ESCOMPLEX.NULL",
                     "ESCOMPLEX.NOTNULL",
+                    "ESCOMPLEX.FROM",
+                    "ESCOMPLEX.TO",
 
                     "ESDATE_RANGE.SDR",
                     "ESDATE_RANGE.SD",
@@ -457,133 +465,133 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }];
 
                 _.map(esComplexParamFunctionOptions, function(x) {
-                    x.caption = trans["ESCOMPLEX." + x.value];
+                    x.caption = esOperTrans["ESCOMPLEX." + x.value];
                 });
 
                 esDateRangeOptions = [{
                     dValue: "0",
                     dType: 0,
-                    title: trans["ESDATE_RANGE.SDR"]
+                    title: esOperTrans["ESDATE_RANGE.SDR"]
                 }, {
                     dValue: "1",
                     dType: 1,
-                    title: trans["ESDATE_RANGE.SD"]
+                    title: esOperTrans["ESDATE_RANGE.SD"]
                 }, {
                     dValue: 'ESDateRange(SpecificDate, #9999/01/01#, SpecificDate, #1753/01/01#)',
                     dType: 2,
-                    title: trans["ESDATE_RANGE.ANY"]
+                    title: esOperTrans["ESDATE_RANGE.ANY"]
                 }, {
                     dValue: "ESDateRange(Day)",
                     dType: 3,
-                    title: trans["ESDATE_RANGE.TODAY"]
+                    title: esOperTrans["ESDATE_RANGE.TODAY"]
                 }, {
                     dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, 0)',
                     dType: 4,
-                    title: trans["ESDATE_RANGE.UTD"]
+                    title: esOperTrans["ESDATE_RANGE.UTD"]
                 }, {
                     dValue: 'ESDateRange(Day, 0, SpecificDate, #9999/01/01#)',
                     dType: 5,
-                    title: trans["ESDATE_RANGE.SFTD"]
+                    title: esOperTrans["ESDATE_RANGE.SFTD"]
                 }, {
                     dValue: "ESDateRange(Day, -1)",
                     dType: 6,
-                    title: trans["ESDATE_RANGE.YTD"]
+                    title: esOperTrans["ESDATE_RANGE.YTD"]
                 }, {
                     dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Day, -1)',
                     dType: 7,
-                    title: trans["ESDATE_RANGE.UTYD"]
+                    title: esOperTrans["ESDATE_RANGE.UTYD"]
                 }, {
                     dValue: "ESDateRange(Day, 1)",
                     dType: 8,
-                    title: trans["ESDATE_RANGE.TMR"]
+                    title: esOperTrans["ESDATE_RANGE.TMR"]
                 }, {
                     dValue: 'ESDateRange(Day, 1, SpecificDate, #9999/01/01#)',
                     dType: 9,
-                    title: trans["ESDATE_RANGE.SFTR"]
+                    title: esOperTrans["ESDATE_RANGE.SFTR"]
                 }, {
                     dValue: "ESDateRange(Week)",
                     dType: 10,
-                    title: trans["ESDATE_RANGE.CW"]
+                    title: esOperTrans["ESDATE_RANGE.CW"]
                 }, {
                     dValue: "ESDateRange(Week, -1)",
                     dType: 11,
-                    title: trans["ESDATE_RANGE.PW"]
+                    title: esOperTrans["ESDATE_RANGE.PW"]
                 }, {
                     dValue: "ESDateRange(Week, 1)",
                     dType: 12,
-                    title: trans["ESDATE_RANGE.NW"]
+                    title: esOperTrans["ESDATE_RANGE.NW"]
                 }, {
                     dValue: "ESDateRange(Month)",
                     dType: 13,
-                    title: trans["ESDATE_RANGE.CM"]
+                    title: esOperTrans["ESDATE_RANGE.CM"]
                 }, {
                     dValue: 'ESDateRange(Month, 0, SpecificDate, #9999/01/01#)',
                     dType: 14,
-                    title: trans["ESDATE_RANGE.SFM"]
+                    title: esOperTrans["ESDATE_RANGE.SFM"]
                 }, {
                     dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, 0)',
                     dType: 15,
-                    title: trans["ESDATE_RANGE.UEM"]
+                    title: esOperTrans["ESDATE_RANGE.UEM"]
                 }, {
                     dValue: "ESDateRange(Month, -1)",
                     dType: 16,
-                    title: trans["ESDATE_RANGE.PM"]
+                    title: esOperTrans["ESDATE_RANGE.PM"]
                 }, {
                     dValue: 'ESDateRange(Month, -1, SpecificDate, #9999/01/01#)',
                     dType: 17,
-                    title: trans["ESDATE_RANGE.SFLM"]
+                    title: esOperTrans["ESDATE_RANGE.SFLM"]
                 }, {
                     dValue: 'ESDateRange(SpecificDate, #1753/01/01#, Month, -1)',
                     dType: 18,
-                    title: trans["ESDATE_RANGE.UELM"]
+                    title: esOperTrans["ESDATE_RANGE.UELM"]
                 }, {
                     dValue: "ESDateRange(Quarter)",
                     dType: 19,
-                    title: trans["ESDATE_RANGE.CQ"]
+                    title: esOperTrans["ESDATE_RANGE.CQ"]
                 }, {
                     dValue: "ESDateRange(Quarter, -1)",
                     dType: 20,
-                    title: trans["ESDATE_RANGE.PQ"]
+                    title: esOperTrans["ESDATE_RANGE.PQ"]
                 }, {
                     dValue: "ESDateRange(SixMonth)",
                     dType: 21,
-                    title: trans["ESDATE_RANGE.CSM"]
+                    title: esOperTrans["ESDATE_RANGE.CSM"]
                 }, {
                     dValue: "ESDateRange(SixMonth, -1)",
                     dType: 22,
-                    title: trans["ESDATE_RANGE.PSM"]
+                    title: esOperTrans["ESDATE_RANGE.PSM"]
                 }, {
                     dValue: "ESDateRange(Year)",
                     dType: 23,
-                    title: trans["ESDATE_RANGE.CY"]
+                    title: esOperTrans["ESDATE_RANGE.CY"]
                 }, {
                     dValue: "ESDateRange(Year, -1)",
                     dType: 24,
-                    title: trans["ESDATE_RANGE.PY"]
+                    title: esOperTrans["ESDATE_RANGE.PY"]
                 }, {
                     dValue: "ESDateRange(FiscalPeriod)",
                     dType: 25,
-                    title: trans["ESDATE_RANGE.CFP"]
+                    title: esOperTrans["ESDATE_RANGE.CFP"]
                 }, {
                     dValue: "ESDateRange(FiscalYear, 0, Day, 0)",
                     dType: 26,
-                    title: trans["ESDATE_RANGE.SSFYUTD"]
+                    title: esOperTrans["ESDATE_RANGE.SSFYUTD"]
                 }, {
                     dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, 0)",
                     dType: 27,
-                    title: trans["ESDATE_RANGE.SFYTEFP"]
+                    title: esOperTrans["ESDATE_RANGE.SFYTEFP"]
                 }, {
                     dValue: "ESDateRange(FiscalPeriod, -1)",
                     dType: 28,
-                    title: trans["ESDATE_RANGE.PFP"]
+                    title: esOperTrans["ESDATE_RANGE.PFP"]
                 }, {
                     dValue: "ESDateRange(FiscalPeriod, -1, Day, 0)",
                     dType: 29,
-                    title: trans["ESDATE_RANGE.SLFPUTD"]
+                    title: esOperTrans["ESDATE_RANGE.SLFPUTD"]
                 }, {
                     dValue: "ESDateRange(FiscalYear, 0, FiscalPeriod, -1)",
                     dType: 30,
-                    title: trans["ESDATE_RANGE.SFYULFP"]
+                    title: esOperTrans["ESDATE_RANGE.SFYULFP"]
                 }, ];
 
             });
@@ -762,7 +770,14 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 20: [0, 1, 25, 26, 27, 28, 29, 30],
             };
 
-
+            var getLocale = function() {
+                var loc = window.esLoginLanguage;
+                var t = esClientSession;
+                if (t && t.connectionModel && t.connectionModel.LangID) {
+                    loc = t.connectionModel.LangID;
+                }
+                return loc;
+            }
 
             var dateRangeResolve = function(dateVal, verbose) {
                 var empty = _.find(esDateRangeOptions, {
@@ -784,11 +799,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     return emptyS;
                 }
 
-                var loc = window.esLoginLanguage;
-                var t = esClientSession;
-                if (t && t.connectionModel && t.connectionModel.LangID) {
-                    loc = t.connectionModel.LangID;
-                }
+                var loc = getLocale();
 
                 switch (dObj.dType) {
                     case 0:
@@ -1056,7 +1067,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             ESBoolParamVal.prototype.strVal = function() {
-                return this.pValue() ? "1" : "0";
+                return esYesNoTrans[this.pValue() ? "ESUI.BOOLEAN.YES" : "ESUI.BOOLEAN.NO"];
             }
 
             ESBoolParamVal.prototype.getExecuteVal = function() {
@@ -1077,39 +1088,37 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             }
 
             ESNumericParamVal.prototype.strVal = function() {
-                var zero = 0;
-                zero = zero.toString();
-                var froms = this.paramValue.value ? this.paramValue.value.toString() : zero;
-                var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toString() : zero;
+                var zero = "0";
+                var froms = this.paramValue.value ? this.paramValue.value.toLocaleString(getLocale()) : zero;
+                var tos = this.paramValue.valueTo ? this.paramValue.valueTo.toLocaleString(getLocale()) : zero;
                 switch (this.paramValue.oper) {
                     case "RANGE":
                         {
-                            var trans = $translate.instant(['ESCOMPLEX.FROM', 'ESCOMPLEX.TO']);
-                            return trans['ESCOMPLEX.FROM'] + froms + trans['ESCOMPLEX.TO'] + tos;
+                            return esOperTrans['ESCOMPLEX.FROM'] + froms + esOperTrans['ESCOMPLEX.TO'] + tos;
                         }
                     case "NULL":
-                        return $translate.instant('ESCOMPLEX.NULL');
+                        return esOperTrans['ESCOMPLEX.NULL'];
 
                     case "NOTNULL":
-                        return $translate.instant('ESCOMPLEX.NOTNULL');
+                        return esOperTrans['ESCOMPLEX.NOTNULL'];
 
                     default:
-                        return this.paramValue.oper.toString() + " " + froms;
+                        return esOperTrans["ESCOMPLEX." + this.paramValue.oper.toString()] + " " + froms;
                 }
             }
 
             ESNumericParamVal.prototype.getExecuteVal = function() {
-                this.paramValue.value = this.paramValue.value || 0;
-                this.paramValue.valueTo = this.paramValue.valueTo || 0;
+                var froms = (this.paramValue.value = this.paramValue.value || 0).toLocaleString(getLocale());
+                var tos = (this.paramValue.valueTo = this.paramValue.valueTo || 0).toLocaleString(getLocale());
 
                 switch (this.paramValue.oper) {
                     case "RANGE":
-                        return "ESNumeric(" + this.paramValue.oper + ", '" + this.paramValue.value + "', '" + this.paramValue.valueTo + "')";
+                        return "ESNumeric(" + this.paramValue.oper + ", '" + froms + "', '" + tos + "')";
                     case "NULL":
                     case "NOTNULL":
                         return "ESNumeric(" + this.paramValue.oper + ", '0')";
                     default:
-                        return "ESNumeric(" + this.paramValue.oper + ", '" + this.paramValue.value + "')";
+                        return "ESNumeric(" + this.paramValue.oper + ", '" + froms + "')";
                 }
             }
 
@@ -1131,17 +1140,16 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 switch (this.paramValue.oper) {
                     case "RANGE":
                         {
-                            var trans = $translate.instant(['ESCOMPLEX.FROM', 'ESCOMPLEX.TO']);
-                            return trans['ESCOMPLEX.FROM'] + froms + trans['ESCOMPLEX.TO'] + tos;
+                            return esOperTrans['ESCOMPLEX.FROM'] + froms + esOperTrans['ESCOMPLEX.TO'] + tos;
                         }
                     case "NULL":
-                        return $translate.instant('ESCOMPLEX.NULL');
+                        return esOperTrans['ESCOMPLEX.NULL'];
 
                     case "NOTNULL":
-                        return $translate.instant('ESCOMPLEX.NOTNULL');
+                        return esOperTrans['ESCOMPLEX.NOTNULL'];
 
                     default:
-                        return this.paramValue.oper.toString() + " " + froms;
+                        return esOperTrans["ESCOMPLEX." + this.paramValue.oper.toString()] + " " + froms;
                 }
             }
 

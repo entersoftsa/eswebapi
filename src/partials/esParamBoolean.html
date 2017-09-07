@@ -3,5 +3,5 @@
 	          tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label> 
 
 <button type="button" class="btn btn-default form-control es-param-control check" ng-model-options="{getterSetter: true}" ng-model="esParamVal[esParamDef.id].pValue" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-        {{(esParamVal[esParamDef.id].pValue() ? 'ESUI.BOOLEAN.YES' : 'ESUI.BOOLEAN.NO') | translate}}
-    </button>
+        {{esParamVal[esParamDef.id].strVal()}}
+</button>
