@@ -19,9 +19,8 @@
             "Less": "Less"
         },
         "PQ": {
-            "TOOLBAR_RUN": "Run",
             "DOWNLOAD": "Download",
-            "PARAMS_PANEL_RUN": "Apply",
+            "PARAMS_PANEL_RUN": "Run",
             "INVESTIGATE": "Search for",
             "PARAMS_MISSING": "One or more required parameters are not given value"
         },

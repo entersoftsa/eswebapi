@@ -18,9 +18,8 @@
             "Less": "Λιγότερα"
         },
         "PQ": {
-            "TOOLBAR_RUN": "Αποδοχή",
             "DOWNLOAD": "Λήψη",
-            "PARAMS_PANEL_RUN": "Εφαρμογή",
+            "PARAMS_PANEL_RUN": "Αποδοχή",
             "INVESTIGATE": "Αναζήτηση",
             "PARAMS_MISSING": "Μία ή περισσότερες παράμετροι δεν έχουν τιμή"
         },

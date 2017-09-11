@@ -28,10 +28,11 @@
         if (kendo) {
             kendo.culture(lang);
             var kendoMessagesUrl = window.ESDBG ? "bower_components/kendo-ui/js/messages/kendo.messages." : "//kendo.cdn.telerik.com/" + kendo.version + "/js/messages/kendo.messages.";
+            kendoMessagesUrl = kendoMessagesUrl + lang + ".min.js";
             if (lang == "el-GR") {
-                lang = "en-US";
+                kendoMessagesUrl = window.ESDBG ? "lib/eswebapi/dist/languages/eskendogr.js" : "languages/eskendogr.js";
             }
-            $.getScript(kendoMessagesUrl + lang + ".min.js",
+            $.getScript(kendoMessagesUrl,
                 function() {
 
                 });
@@ -2005,10 +2006,13 @@
                     toolbar: [{
                             name: "run",
                             text: "Run",
-                            template: "<a role='button' class='k-button k-button-icontext' ng-click=\"esGridRun()\"><span class='k-icon k-i-reload'/>{{'ESUI.PQ.TOOLBAR_RUN' | translate}}</a>"
+                            template: "<a role='button' class='k-button k-button-icontext' ng-click=\"esGridRun()\"><span class='k-icon k-i-reload'/>{{'ESUI.PQ.PARAMS_PANEL_RUN' | translate}}</a>"
                         },
 
-                        "excel"
+                        {
+                            name: "excel",
+                            text: "Excel"
+                        }
                     ],
                     excel: {
                         allPages: true,
