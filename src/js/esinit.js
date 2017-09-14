@@ -1635,15 +1635,15 @@ x.setParamValues({p1: 'Hello World'});
                 if (err.UserMessage) {
                     sMsg = err.UserMessage;
                     if (err.MessageID) {
-                        var trans = $translate.instant(err.MessageID);
-                        if (trans != err.MessageID) {
+                        var tTok = "ERR_" + err.MessageID;
+                        var trans = $translate.instant(tTok);
+                        if (trans != tTok) {
                             sMsg = trans;
                         }
 
                         sMsg = sMsg + " (" + err.MessageID + ")";
                     }
                     rep.messageToShow = sMsg;
-                    return rep;
                 }
 
                 if (err.Messages) {
@@ -1657,10 +1657,19 @@ x.setParamValues({p1: 'Hello World'});
                         sMsg = err.Messages;
                     }
 
-                    rep.messageToShow = sMsg ? sMsg : $translate.instant('ERR_GENERAL');
+                    rep.messageToShow = rep.messageToShow ? rep.messageToShow + "\r\n" : rep.messageToShow;
+
+                    if (sMsg) {
+                        rep.messageToShow += sMsg;
+                    } else {
+                        if (!rep.messageToShow) {
+                            rep.messageToShow = $translate.instant('ERR_GENERAL');
+                        }
+                    }
+
                     return rep;
                 } else {
-                    rep.messageToShow = err.toString();
+                    rep.messageToShow = rep.messageToShow || err.toString();
                     return rep;
                 }
             }
