@@ -12,7 +12,7 @@
                     <es-param class="es-param" es-type="::param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
                 </div>
 
-                <div ng-if="esParamsDef.hasAdvancedParams() && !esMore" class="form-group col-md-6">                 
+                <div ng-if="esParamsDef.hasAdvancedParams() && !esMore" class="form-group col-md-6 col-xs-12 col-lg-3">                 
                     <button type="button" class="btn btn-info form-control more-cont es-param-control" ng-click="esToggleMore()">+</button>
                 </div>
            
@@ -20,7 +20,7 @@
                     <es-param class="es-param" es-type="::param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
                 </div>
 
-                <div ng-if="esMore" class="form-group col-md-4">
+                <div ng-if="esMore" class="form-group col-md-6 col-xs-12 col-lg-3">
                     <button type="button" class="btn btn-info form-control more-cont es-param-control" ng-click="esToggleMore()">-</button>
                 </div>
             </div>
