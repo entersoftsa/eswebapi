@@ -9,26 +9,37 @@
     "invalid-subscription-id": "@:ERR_SUBSCRIPTION",
     "ERR_SUBSCRIPTION": "Either SubscriptionID or Subscription Password are not valid",
 
-    "ESUI": {
-        "BOOLEAN": {
+    "ESUI":
+    {
+        "GENERIC":
+        {
+            "OK": "OK",
+            "CANCEL": "CANCEL"
+        },
+        "BOOLEAN":
+        {
             "YES": "Yes",
             "NO": "No"
         },
-        "PARAMS_PANEL": {
+        "PARAMS_PANEL":
+        {
             "More": "More",
             "Less": "Less"
         },
-        "PQ": {
+        "PQ":
+        {
             "DOWNLOAD": "Download",
             "PARAMS_PANEL_RUN": "Run",
             "INVESTIGATE": "Search for",
             "PARAMS_MISSING": "One or more required parameters are not given value"
         },
-        "ESCHARTPQ": {
+        "ESCHARTPQ":
+        {
             "CHART": "Chart",
             "DATA": "Data"
         },
-        "ESMAPPQ": {
+        "ESMAPPQ":
+        {
             "MAP": "Map",
             "DATA": "Data",
             "BOTH": "Both",
@@ -37,13 +48,15 @@
             "CLUSTER_SPIDER": "Spider",
             "RUN_MAP": "Run Map"
         },
-        "ESSURVEY": {
+        "ESSURVEY":
+        {
             "START": "Start Survey",
             "NEXT": "Next",
             "PREVIOUS": "Previous",
             "SAVE": "Save and Continue later"
         },
-        "LOGIN_FORM": {
+        "LOGIN_FORM":
+        {
             "SUBSCRIPTION": "Subscription Data",
             "SUBSCRIPTION_ID": "Subscription ID",
             "SUBSCRIPTION_PASSWORD": "Subscription Password",
@@ -58,7 +71,8 @@
 
     },
 
-    "ESCOMPLEX": {
+    "ESCOMPLEX":
+    {
         "FROM": "From ",
         "TO": " To ",
         "EQ": "Equal",
@@ -71,7 +85,8 @@
         "NULL": "Empty",
         "NOTNULL": "Not Empty"
     },
-    "ESDATE_RANGE": {
+    "ESDATE_RANGE":
+    {
         "SDR": "Specific Date Range",
         "SD": "Specific Date",
         "ANY": "Anything",

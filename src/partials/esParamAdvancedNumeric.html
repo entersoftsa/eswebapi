@@ -2,16 +2,5 @@
           tooltip-placement="bottom"
           tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
 
-<div uib-accordion-group class="panel-default date-title" is-open="drStatus.dateOpen" heading="{{esParamVal[esParamDef.id].strVal(true)}}">
-
-    <div class="col-xs-12 col-md-4">
-        <select class="form-control es-param-control" kendo-drop-down-list k-on-close="onClose(kendoEvent, 1)" ng-cloak k-ng-delay="esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="esGlobals.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.oper">
-        </select>
-    </div>
-    <div class="col-xs-12" ng-hide="esParamVal[esParamDef.id].paramValue.oper == 'NULL' || esParamVal[esParamDef.id].paramValue.oper == 'NOTNULL'" ng-class="{'col-md-8': esParamVal[esParamDef.id].paramValue.oper != 'RANGE', 'col-md-4': esParamVal[esParamDef.id].paramValue.oper == 'RANGE'}">
-        <input type="number" class="form-control es-param-control" kendo-numeric-text-box align="right" k-ng-model="esParamVal[esParamDef.id].paramValue.value" k-spinners="false" />
-    </div>
-    <div class="col-xs-12 col-md-4" ng-hide="esParamVal[esParamDef.id].paramValue.oper != 'RANGE'">
-        <input class="form-control es-param-control" kendo-numeric-text-box align="right" k-ng-model="esParamVal[esParamDef.id].paramValue.valueTo" k-spinners="false" k-decimals="esParamDef.precision" k-format="'n'+'{{::esParamDef.precision}}'" />
-    </div>
-</div>
+<button type="button" class="btn btn-default form-control es-param-control" ng-click="askForMore('nm')">{{esParamVal[esParamDef.id].strVal(true)}}
+</button>

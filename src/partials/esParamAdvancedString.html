@@ -3,17 +3,6 @@
       tooltip-trigger="mouseenter">{{::esParamDef.caption}}
 </label>
 
-<div uib-accordion-group class="panel-default date-title" is-open="drStatus.dateOpen" heading="{{esParamVal[esParamDef.id].strVal(true)}}">
-    
-    <div class="col-xs-12" ng-class="{'': esParamVal[esParamDef.id].paramValue.oper == 'NULL' || esParamVal[esParamDef.id].paramValue.oper == 'NOTNULL', 'col-md-4': esParamVal[esParamDef.id].paramValue.oper == 'RANGE', 'col-md-6': esParamVal[esParamDef.id].paramValue.oper != 'NULL' && esParamVal[esParamDef.id].paramValue.oper != 'NOTNULL' &&  esParamVal[esParamDef.id].paramValue.oper != 'RANGE'}">
-        <select class="form-control es-param-control" kendo-drop-down-list k-on-close="onClose(kendoEvent, 1)" ng-cloak k-ng-delay="esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="esGlobals.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.oper">
-        </select>
-    </div>
-    <div class="col-xs-12"  ng-if="esParamVal[esParamDef.id].paramValue.oper != 'NOTNULL' && esParamVal[esParamDef.id].paramValue.oper != 'NULL'" ng-class="{'col-md-6': esParamVal[esParamDef.id].paramValue.oper != 'RANGE', 'col-md-4': esParamVal[esParamDef.id].paramValue.oper == 'RANGE'}">
-        <input class="form-control es-param-control" kendo-masked-text-box ng-required="esParamVal[esParamDef.id].paramValue.oper != 'RANGE' && esParamDef.required" name="{{::esParamDef.id}}" ng-model="esParamVal[esParamDef.id].paramValue.value" />
-    </div>
-    <div class="col-xs-12 col-md-4" ng-if="esParamVal[esParamDef.id].paramValue.oper == 'RANGE'">
-        <input class="form-control es-param-control" kendo-masked-text-box ng-model="esParamVal[esParamDef.id].paramValue.valueTo" />
-    </div>
-</div>
+<button type="button" class="btn btn-default form-control es-param-control" ng-click="askForMore('st')">{{esParamVal[esParamDef.id].strVal(true)}}
+</button>
 

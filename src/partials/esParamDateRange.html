@@ -3,21 +3,6 @@
       tooltip-trigger="mouseenter">{{::esParamDef.caption}}
 </label>
 
-<div uib-accordion-group class="panel-default date-title" is-open="drStatus.dateOpen" heading="{{esParamVal[esParamDef.id].strVal(true)}}" >
-      <select 
-        class="form-control col-xs-6 es-param-control" 
-        kendo-drop-down-list="drDate"
-        k-data-text-field="'title'" k-auto-bind="true" k-data-value-field="'dValue'" k-on-close="onClose(kendoEvent)" k-data-source="::esGlobals.getesDateRangeOptions({dateRangeClass: esParamDef.controlType})" k-value-primitive="true" k-ng-model="esParamVal[esParamDef.id].paramValue.dRange">
-        </select>
 
-
-        <div ng-class="{'col-xs-6': esParamVal[esParamDef.id].paramValue.dRange == '0', 'col-xs-12': esParamVal[esParamDef.id].paramValue.dRange == '1'}" ng-hide="esParamVal[esParamDef.id].paramValue.dRange > '1'">
-            <input class="form-control es-param-control margin-t" kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.fromD"/>
-        </div>
-
-       <div class="col-xs-6" ng-hide="esParamVal[esParamDef.id].paramValue.dRange != '0'">
-            <input class="form-control es-param-control  margin-t" kendo-date-picker k-ng-model="esParamVal[esParamDef.id].paramValue.toD"/>
-       </div>
-
-</div>
-    
+  <button type="button" class="btn btn-default form-control es-param-control" ng-click="askForMore('dr')">{{esParamVal[esParamDef.id].strVal(true)}}
+  </button>

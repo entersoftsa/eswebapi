@@ -1,0 +1,24 @@
+<!--  -->
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-title">{{::$ctrl.editedParam.esParamDef.caption}}</h4>
+</div>
+<div class="modal-body" id="modal-body">
+	<form novalidate class="form" name="d1">
+		<div class="row">
+		    <div class="col-xs-12">
+		        <select class="form-control es-param-control" kendo-drop-down-list ng-cloak k-ng-delay="$ctrl.editedParam.esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="$ctrl.editedParam.esGlobals.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper">
+		        </select>
+			</div>
+		    <div class="col-xs-12" ng-hide="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper == 'NULL' || $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper == 'NOTNULL'" ng-class="{'col-xs-12': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'RANGE', 'col-xs-6': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper == 'RANGE'}">
+		        <input type="number" class="form-control es-param-control" kendo-numeric-text-box align="right" k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.value" k-spinners="false" />
+		    </div>
+		    <div class="col-xs-6" ng-hide="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'RANGE'">
+		        <input class="form-control es-param-control" kendo-numeric-text-box align="right" k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.valueTo" k-spinners="false" k-decimals="$ctrl.editedParam.esParamDef.precision" k-format="'n'+'{{::$ctrl.editedParam.esParamDef.precision}}'" />
+		    </div>
+		</div>
+	</form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{'ESUI.GENERIC.OK' | translate}}</button>
+</div>
+

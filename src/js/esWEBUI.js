@@ -1189,6 +1189,17 @@
             };
         }])
 
+        .controller('esAdvancedParamCtrl', ['$uibModalInstance', 'inAdvancedParam',
+            function($uibModalInstance, inAdvancedParam) {
+                var $ctrl = this;
+                $ctrl.editedParam = inAdvancedParam;
+
+                $ctrl.ok = function() {
+                    $uibModalInstance.close($ctrl.editedParam);
+                };
+            }
+        ])
+
         /**
          * @ngdoc directive
          * @name es.Web.UI.directive:esParam
@@ -1218,6 +1229,37 @@
                         $scope.drStatus = {
                             dateOpen: false
                         };
+
+                        $scope.askForMore = function(modalType) {
+                            if (!modalType) {
+
+                            }
+
+                            var tmpl = "esAdvancedModal" + modalType.toUpperCase() + ".html";
+
+                            var modalInstance = $uibModal.open({
+                                animation: true,
+                                ariaLabelledBy: 'modal-title',
+                                ariaDescribedBy: 'modal-body',
+                                template: '<div ng-include src="\'src/partials/' + tmpl + '\'"></div>',
+                                controller: 'esAdvancedParamCtrl',
+                                controllerAs: '$ctrl',
+                                size: 'sm',
+                                appendTo: null,
+                                resolve: {
+                                    inAdvancedParam: function() {
+                                        return {
+                                            esParamDef: $scope.esParamDef,
+                                            esParamVal: $scope.esParamVal,
+                                            esGlobals: esGlobals
+                                        };
+                                    }
+                                }
+                            });
+
+                            modalInstance.result.then(function(selectedItem) {}, function() {});
+                        };
+
 
                         $scope.onClose = function(e, isComplex) {
                             if (e && e.sender) {
