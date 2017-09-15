@@ -10,10 +10,10 @@
 		        </select>
 			</div>
 		    <div class="col-xs-12" ng-hide="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper == 'NULL' || $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper == 'NOTNULL'" ng-class="{'col-xs-12': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'RANGE', 'col-xs-6': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper == 'RANGE'}">
-		        <input type="number" class="form-control es-param-control" kendo-numeric-text-box align="right" k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.value" k-spinners="false" />
+		        <input type="number" class="form-control es-param-control margin-t" kendo-numeric-text-box align="right" k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.value" k-spinners="false" />
 		    </div>
 		    <div class="col-xs-6" ng-hide="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'RANGE'">
-		        <input class="form-control es-param-control" kendo-numeric-text-box align="right" k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.valueTo" k-spinners="false" k-decimals="$ctrl.editedParam.esParamDef.precision" k-format="'n'+'{{::$ctrl.editedParam.esParamDef.precision}}'" />
+		        <input class="form-control es-param-control margin-t" kendo-numeric-text-box align="right" k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.valueTo" k-spinners="false" k-decimals="$ctrl.editedParam.esParamDef.precision" k-format="'n'+'{{::$ctrl.editedParam.esParamDef.precision}}'" />
 		    </div>
 		</div>
 	</form>
