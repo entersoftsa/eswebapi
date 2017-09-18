@@ -10,10 +10,10 @@
 			        </select>
 			    </div>
 			    <div class="col-xs-12"  ng-if="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'NOTNULL' && $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'NULL'" ng-class="{'col-xs-12': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'RANGE', 'col-xs-6': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper == 'RANGE'}">
-			        <input class="form-control es-param-control" kendo-masked-text-box ng-required="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'RANGE' && $ctrl.editedParam.esParamDef.required" name="{{::$ctrl.editedParam.esParamDef.id}}" ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.value" />
+			        <input class="form-control es-param-control margin-t" kendo-masked-text-box ng-required="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'RANGE' && $ctrl.editedParam.esParamDef.required" name="{{::$ctrl.editedParam.esParamDef.id}}" ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.value" />
 			    </div>
 			    <div class="col-xs-6" ng-if="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper == 'RANGE'">
-			        <input class="form-control es-param-control" kendo-masked-text-box ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.valueTo" />
+			        <input class="form-control es-param-control margin-t" kendo-masked-text-box ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.valueTo" />
 			    </div>
 			</div>
 	</form>
