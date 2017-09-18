@@ -5103,7 +5103,7 @@ var ret = {
                              * @param {string=} fExt Optional, the file extension of the related ES00Blob i.e. ".xlsx"
                              * @return {string} A complete URL for the ES00Blob to be downloaded, ready to be used in an ng-href or similar html element.
                              */
-                            downloadES00BlobURLByGID: function(es00BlobGID, fExt)
+                            downloadES00BlobURLByGID: function(es00BlobGID, fExt, bPromise)
                             {
                                 if (!es00BlobGID) {
                                     return "";
@@ -5115,10 +5115,22 @@ var ret = {
                                     surl += "&extType=" + fExt;
                                 }
                                 
-                                return surl;
+                                if (!bPromise) {
+                                    return surl;
+                                }
+
+                                var tt = esGlobals.trackTimer("ES00BLOB", "JSON_OBJECT");
+                                tt.startTime();
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: prepareHeaders(),
+                                    url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
                             },
 
-                            downloadES00BlobURLByObject: function(objectid, keyid, typeid, fExt, ts)
+
+                            downloadES00BlobURLByObject: function(objectid, keyid, typeid, fExt, ts, bPromise)
                             {
                                 if (!objectid || !keyid || typeid == null || typeid == undefined) {
                                     return "";
@@ -5136,7 +5148,18 @@ var ret = {
                                     surl += "&ts=" + Number(new Date());
                                 }
                                 
-                                return surl;
+                                if (!bPromise) {
+                                    return surl;
+                                }
+
+                                var tt = esGlobals.trackTimer("ES00BLOB", "JSON_OBJECT");
+                                tt.startTime();
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: prepareHeaders(),
+                                    url: surl
+                                });
+                                return processWEBAPIPromise(ht, tt);
                             },
 
 
