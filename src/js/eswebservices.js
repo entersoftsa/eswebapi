@@ -79,6 +79,8 @@
         __ADD_OR_UPDATE_ES00DOCUMENT_BLOBDATA__: "api/ES00Documents/AddOrUpdateES00DocumentBlobData/",
         __EXPORT_PROXY_SAVEFILE__: "api/export/savefile/",
         __FETCH_ES00DEVICE__: "api/device/fetchDevice/",
+        __GET_BODY_FROM_ES00BLOB__: "api/ES00Documents/GetBodyFromES00Blob/",
+        __POST_BODY_TO_ES00BLOB__: "api/ES00Documents/PostBodyToES00Blob/",
 
     });
 
@@ -445,7 +447,7 @@ eskbApp.config(['$logProvider',
                             return processWEBAPIPromise(ht, tt);
                         }
 
-                        function processWEBAPIPromise(promise, tt) {
+                        function processWEBAPIPromise(promise, tt, doNotHandleError) {
                             if (!promise) {
                                 throw new Error("processWEBAPIToken can have parameter promise null or undefined");
                             }
@@ -479,7 +481,10 @@ eskbApp.config(['$logProvider',
                                     console.log("Generic Http error");
                                 }
 
-                                esMessaging.publish("ES_HTTP_CORE_ERR", a, b);
+                                if (!doNotHandleError) {
+                                    esMessaging.publish("ES_HTTP_CORE_ERR", a, b);
+                                }
+
                             });
                             return promise;
                         }
@@ -5126,7 +5131,7 @@ var ret = {
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht, tt, true);
                             },
 
 
@@ -5159,10 +5164,48 @@ var ret = {
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
+                                return processWEBAPIPromise(ht, tt, true);
+                            },
+
+                            getBodyFromES00Blob: function(objectid, keyid, typeid)
+                            {
+                                if (!objectid || !keyid || typeid == null || typeid == undefined) {
+                                    throw new Error("invalid parameters");
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__GET_BODY_FROM_ES00BLOB__, objectid);
+                                surl += "?keyid=" + keyid;
+                                surl += "&typeid=" + typeid;
+                                
+                               
+                                var tt = esGlobals.trackTimer("ES00BLOB", "GET JSON_OBJECT");
+                                tt.startTime();
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: prepareHeaders(),
+                                    url: surl
+                                });
                                 return processWEBAPIPromise(ht, tt);
                             },
 
+                            postBodyToES00Blob: function(blobInfo)
+                            {
+                                if (!blobInfo || !blobInfo.ObjectID || !blobInfo.KeyID || blobInfo.TypeID == null || blobInfo.TypeID == undefined) {
+                                    throw new Error("invalid parameters");
+                                }
 
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__POST_BODY_TO_ES00BLOB__);
+                               
+                                var tt = esGlobals.trackTimer("ES00BLOB", "POST JSON_OBJECT");
+                                tt.startTime();
+                                var ht = $http({
+                                    method: 'post',
+                                    headers: prepareHeaders(),
+                                    url: surl,
+                                    data: blobInfo
+                                });
+                                return processWEBAPIPromise(ht, tt);
+                            },
                              /** 
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#downloadES00BlobByGID

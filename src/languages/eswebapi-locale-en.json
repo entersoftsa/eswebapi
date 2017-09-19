@@ -3,6 +3,7 @@
     "ERR_403": "You are not authorized. Please Login and try again",
     "ERR_500": "@:UNKOWN_ERROR",
     "ERR_GENERAL": "@:UNKOWN_ERROR",
+    "ERR_invalid-webapi-token": "Your session has expired. You need to relogin",
     "UNKOWN_ERROR": "General Error. Please check your network and internet access",
 
     "subscription-invalid-password": "@:ERR_SUBSCRIPTION",

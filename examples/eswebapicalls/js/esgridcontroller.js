@@ -361,12 +361,38 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 
         //fetchODSColumnInfo example
         $scope.fetchOdsColumnInfo = function() {
+        	/*
             esWebApi.fetchOdsColumnInfo($scope.odsID, $scope.odsColumnID)
                 .then(function(ret) {
                     $scope.pColumnInfo = ret.data;
                 }, function(err) {
                     $scope.pColumnInfo = err;
                 });
+               */
+
+            var blobInfo = {
+            	"ObjectID" : "ESGOUser",
+            	"KeyID": "8AB22473-DBEB-4AD0-BB90-D69C13C1A538",
+            	"TypeID": 901,
+            	"TextBody": JSON.stringify({
+            		elems: ["a", "bgth", "γεια σου κόσμε"]
+            	})
+            };
+
+            esWebApi.postBodyToES00Blob(blobInfo)
+            .then(function (ret) {
+
+            	esWebApi.getBodyFromES00Blob("ESGOUser", "8AB22473-DBEB-4AD0-BB90-D69C13C1A538", 902)
+            	.then(function(bb) {
+            		$scope.pColumnInfo = bb.data.TextBody;
+            	}, function(bb) {
+                $scope.pColumnInfo = bb;
+
+            	})
+
+            }, function(err) {
+                $scope.pColumnInfo = err;
+            })
         }
 
         //fetchOdsRelationInfo example
@@ -921,7 +947,7 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
                 filterId: "SalesPipelineCompetitionAnalysis",
                 gridOptions: {},
                 //pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", { dRange: 'ESDateRange(Year, -1)'})])
-                pVals: new esGlobals.ESParamValues()
+                pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("Period", { dRange: 'ESDateRange(Year, -1)'})])
             },
 
             /*
