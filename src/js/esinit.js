@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "1.24.6";
+    var version = "1.24.7";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -386,7 +386,8 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 esYesNoTrans = $translate.instant([
                     "ESUI.BOOLEAN.YES",
-                    "ESUI.BOOLEAN.NO"]);
+                    "ESUI.BOOLEAN.NO"
+                ]);
 
                 esOperTrans = $translate.instant([
                     "ESCOMPLEX.EQ",
@@ -620,22 +621,22 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
             ];
 
             function fGetesDateRangeOptions(dateRangeClass) {
-                    if (!dateRangeClass || !dDateRangeClass[dateRangeClass]) {
-                        return esDateRangeOptions;
-                    }
-
-                    var arr = dDateRangeClass[dateRangeClass];
-                    if (!_.isArray(arr) || arr.length == 0) {
-                        return esDateRangeOptions;
-                    }
-
-                    var x = [];
-                    var i;
-                    for (i = 0; i < arr.length; i++) {
-                        x[i] = esDateRangeOptions[arr[i]];
-                    }
-                    return x;
+                if (!dateRangeClass || !dDateRangeClass[dateRangeClass]) {
+                    return esDateRangeOptions;
                 }
+
+                var arr = dDateRangeClass[dateRangeClass];
+                if (!_.isArray(arr) || arr.length == 0) {
+                    return esDateRangeOptions;
+                }
+
+                var x = [];
+                var i;
+                for (i = 0; i < arr.length; i++) {
+                    x[i] = esDateRangeOptions[arr[i]];
+                }
+                return x;
+            }
 
             function suggestESLanguageID(locale) {
                 if (!locale) {
@@ -706,7 +707,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.PQOptions = pqOptions;
                 this.Params = params;
                 this.UIOptions = uiOptions;
-                this.esPanelOpen = angular.isUndefined(esPanelOpen) ? false :  !!esPanelOpen;
+                this.esPanelOpen = angular.isUndefined(esPanelOpen) ? false : !!esPanelOpen;
 
                 this.initFromObj = function(inObj) {
                     var x = inObj || {};
@@ -715,7 +716,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     this.FilterID = x.FilterID;
                     this.PQOptions = new ESPQOptions().initFromObj(x.PQOptions);
                     this.Params = x.Params;
-                    this.esPanelOpen = angular.isUndefined(x.esPanelOpen) ? false :  !!x.esPanelOpen;
+                    this.esPanelOpen = angular.isUndefined(x.esPanelOpen) ? false : !!x.esPanelOpen;
                     this.UIOptions = x.UIOptions;
                     for (var prop in inObj) {
                         if (!this.hasOwnProperty(prop)) {
@@ -997,6 +998,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.mandatory = false;
             }
 
+            ESParamVal.prototype.getParameterInfo = function() {
+                return {
+                    parameterType: "esGenericParam"
+                };
+            }
+
             ESParamVal.prototype.required = function(bVal) {
                 if (!arguments || arguments.length == 0) {
                     return this.mandatory;
@@ -1066,6 +1073,13 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 return new ESBoolParamVal(paramId, this.pValue());
             }
 
+            ESBoolParamVal.prototype.getParameterInfo = function() {
+                return {
+                    parameterType: "system.int32, mscorlib",
+                    controlType: 7
+                };
+            }
+
             ESBoolParamVal.prototype.strVal = function() {
                 return esYesNoTrans[this.pValue() ? "ESUI.BOOLEAN.YES" : "ESUI.BOOLEAN.NO"];
             }
@@ -1085,6 +1099,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
             ESNumericParamVal.prototype.clone = function(paramId) {
                 return new ESNumericParamVal(paramId, this.pValue());
+            }
+
+            ESNumericParamVal.prototype.getParameterInfo = function() {
+                return {
+                    parameterType: "entersoft.framework.platform.esnumeric"
+                };
             }
 
             ESNumericParamVal.prototype.strVal = function() {
@@ -1132,6 +1152,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
             ESStringParamVal.prototype.clone = function(paramId) {
                 return new ESStringParamVal(paramId, this.pValue());
+            }
+
+            ESStringParamVal.prototype.getParameterInfo = function() {
+                return {
+                    parameterType: "entersoft.framework.platform.esstring, queryprocess"
+                };
             }
 
             ESStringParamVal.prototype.strVal = function() {
@@ -1296,7 +1322,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
             }
 
-             /**
+            /**
              * @ngdoc constructor
              * @name es.Services.Web.esGlobals#ESDateParamVal
              * @methodOf es.Services.Web.esGlobals
@@ -1328,7 +1354,7 @@ var d2 = new esGlobals.ESDateParamVal("ESDCreated", "ESDateRange(Year, -1)"); //
                     };
                 } else {
                     if (angular.isString(paramVal)) {
-                        paramVal = dateEval({id: paramId}, paramVal).pValue();
+                        paramVal = dateEval({ id: paramId }, paramVal).pValue();
                     }
                 }
                 ESParamVal.call(this, paramId, paramVal);
@@ -1338,6 +1364,12 @@ var d2 = new esGlobals.ESDateParamVal("ESDCreated", "ESDateRange(Year, -1)"); //
 
             ESDateParamVal.prototype.clone = function(paramId) {
                 return new ESDateParamVal(paramId, this.pValue());
+            }
+
+            ESDateParamVal.prototype.getParameterInfo = function() {
+                return {
+                    parameterType: "entersoft.framework.platform.esdaterange, queryprocess"
+                };
             }
 
             ESDateParamVal.prototype.strVal = function(verbose) {
@@ -1500,6 +1532,33 @@ x.setParamValues({p1: 'Hello World'});
 
                         if (p.paramValue || (angular.isNumber(p.paramValue) && p.paramValue == 0)) {
                             ret[p.paramCode] = p.getExecuteVal();
+                        }
+                    }
+                }
+                return ret;
+            }
+
+            ESParamValues.prototype.getSerialized = function() {
+                var x = this;
+                var ret = [];
+                for (var prop in x) {
+                    if (x.hasOwnProperty(prop)) {
+                        var p = x[prop];
+
+                        if (p.paramValue || (angular.isNumber(p.paramValue) && p.paramValue == 0)) {
+                            var info = p.getParameterInfo();
+                            if (!info || !info.parameterType) {
+                                throw new Error("Parameter cannot be serialized " + "[" + p.paramCode + "]");
+                            }
+
+                            ret.push({
+                                id: p.paramCode,
+                                value: p.getExecuteVal(),
+                                parameterType: info.parameterType,
+                                controlType: info.controlType,
+                                enumList: p.enumList,
+                                required: p.mandatory
+                            });
                         }
                     }
                 }

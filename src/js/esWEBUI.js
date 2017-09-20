@@ -2310,6 +2310,12 @@
                         }
                     });
                 } else {
+                    if (obj instanceof esGlobals.ESParamValues) {
+                        var dN = new esGlobals.ESParamValues();
+                        dN.merge(obj);
+                        return dN;
+                    }
+
                     for (var key in obj) {
                         var val = obj[key];
                         var par1 = createEsParamVal({
