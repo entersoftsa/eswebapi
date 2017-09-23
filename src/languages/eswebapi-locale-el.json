@@ -4,6 +4,8 @@
     "ERR_500": "@:UNKOWN_ERROR",
     "ERR_GENERAL": "@:UNKOWN_ERROR",
     "ERR_invalid-webapi-token": "Η σύνδεσή σας έληξε. Θα πρέπει να εισέλθετε εκ νέου στην εφαρμογή",
+    "ERR_expired-webapi-token": "Η σύνδεσή σας έληξε. Θα πρέπει να εισέλθετε εκ νέου στην εφαρμογή",
+    "ERR_login-invalid-password": "Είτε ο κωδικός του χρήστη είτε το κλειδί δεν είναι σωστά",
     "UNKOWN_ERROR": "Υπήρξε πρόβλημα. Παρακαλώ ελέξτε την διαθεσιμότητα του internet και δοκιμάστε ξανά",
     "subscription-invalid-password": "@:ERR_SUBSCRIPTION",
     "invalid-subscription-id": "@:ERR_SUBSCRIPTION",

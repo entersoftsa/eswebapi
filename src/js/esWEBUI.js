@@ -225,6 +225,31 @@
         }
     }
 
+    function esAskForField($uibModal, inData) {
+        if (!inData) {
+            return;
+        }
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            template: '<div ng-include src="\'src/partials/esAskForField.html\'"></div>',
+            controller: 'esAskForFieldCtrl',
+            controllerAs: '$ctrl',
+            size: 'sm',
+            appendTo: null,
+            resolve: {
+                inDef: function() {
+                    return inData;
+                }
+            }
+        });
+
+        return modalInstance.result;
+    }
+
+
     /**
      * @ngdoc filter
      * @name es.Web.UI.filter:esTrustHtml
@@ -236,15 +261,14 @@
      *
      * @requires $sce
      */
-    esWEBUI.filter('esTrustHtml', ['$sce',
-        function($sce) {
-            return function(text) {
-                return $sce.trustAsHtml(text);
-            };
-        }
-    ]);
-
     esWEBUI
+        .filter('esTrustHtml', ['$sce',
+            function($sce) {
+                return function(text) {
+                    return $sce.trustAsHtml(text);
+                };
+            }
+        ])
         .filter('esParamTypeMapper', function() {
             var f = function(pParam) {
                 if (!pParam || !(pParam instanceof ESParamInfo)) {
@@ -726,7 +750,8 @@
                                     if ($scope.esPostGridOptions) {
                                         angular.merge($scope.esGridOptions, $scope.esPostGridOptions);
                                     }
-                                });
+                                })
+                                .catch(angular.noop);
                         }
                     }
                 };
@@ -749,9 +774,8 @@
                                 if (ret.data.Rows && ret.data.Rows.length) {
                                     $scope.esRow = ret.data.Rows[0];
                                 }
-                            }, function(err) {
-
-                            });
+                            })
+                            .catch(angular.noop);
                     }
                 };
             }
@@ -804,12 +828,10 @@
                             if ($scope.esRow.GScale) {
                                 esWebApiService.fetchESScale($scope.esRow.GScale)
                                     .then(function(ret) {
-                                            scaleObject = ret;
-                                            prepareGauge($scope, scaleObject, $scope.esRow);
-                                        },
-                                        function(err) {
-
-                                        });
+                                        scaleObject = ret;
+                                        prepareGauge($scope, scaleObject, $scope.esRow);
+                                    })
+                                    .catch(angular.noop);
                             } else {
                                 prepareGauge($scope, undefined);
                             }
@@ -1101,7 +1123,8 @@
                                             esWebApiService.fetchES00DocumentsByEntityGID(searchVal)
                                                 .then(function(ret) {
                                                     options.success(ret);
-                                                }, function(err) {
+                                                })
+                                                .catch(function(err) {
                                                     options.error(err);
                                                 });
                                         } catch (x) {
@@ -1126,7 +1149,8 @@
                                     .then(function(ret) {
                                         esCache.setItem("PQI_" + g + "/" + f, ret.data);
                                         processPQInfo(ret.data, xDS, g, f);
-                                    });
+                                    })
+                                    .catch(angular.noop);
                             }
                         };
 
@@ -1174,9 +1198,11 @@
                 });
             };
 
-            $uibModalInstance.closed.then(function() {
-                esMessaging.unsubscribe(hndl);
-            });
+            $uibModalInstance.closed
+                .then(function() {
+                    esMessaging.unsubscribe(hndl);
+                })
+                .catch(angular.noop);
 
             var hndl = esMessaging.subscribe("GRID_ROW_CHANGE", selFunc);
 
@@ -1196,6 +1222,21 @@
 
                 $ctrl.ok = function() {
                     $uibModalInstance.close($ctrl.editedParam);
+                };
+            }
+        ])
+
+        .controller('esAskForFieldCtrl', ['$uibModalInstance', 'inDef',
+            function($uibModalInstance, inDef) {
+                var $ctrl = this;
+                $ctrl.inDef = inDef;
+
+                $ctrl.ok = function() {
+                    $uibModalInstance.close(true);
+                };
+
+                $ctrl.cancel = function() {
+                    $uibModalInstance.dismiss('cancel');
                 };
             }
         ])
@@ -1257,7 +1298,9 @@
                                 }
                             });
 
-                            modalInstance.result.then(function(selectedItem) {}, function() {});
+                            modalInstance.result
+                                .then(function(selectedItem) {})
+                                .catch(angular.noop);
                         };
 
 
@@ -1297,17 +1340,18 @@
                                     }
                                 });
 
-                                modalInstance.result.then(function(selectedRows) {
-                                    if (!selectedRows || selectedRows.length == 0) {
-                                        return;
-                                    }
+                                modalInstance.result
+                                    .then(function(selectedRows) {
+                                        if (!selectedRows || selectedRows.length == 0) {
+                                            return;
+                                        }
 
-                                    var selField = $scope.esParamDef.invSelectedMasterField;
+                                        var selField = $scope.esParamDef.invSelectedMasterField;
 
-                                    var sVal = _.join(selectedRows, "\\,");
-                                    $scope.esParamVal[$scope.esParamDef.id].pValue(sVal);
-                                });
-
+                                        var sVal = _.join(selectedRows, "\\,");
+                                        $scope.esParamVal[$scope.esParamDef.id].pValue(sVal);
+                                    })
+                                    .catch(angular.noop);
                             };
                         }
 
@@ -1404,7 +1448,8 @@
                                 .then(function(ret) {
                                     esCache.setItem("PQI_" + $scope.esGroupId + "/" + $scope.esFilterId, ret.data);
                                     processPQInfo(ret.data);
-                                });
+                                })
+                                .catch(angular.noop);
                         }
                     }
                 };
@@ -1460,7 +1505,8 @@
                             $translate('ESUI.PQ.PARAMS_PANEL_RUN')
                                 .then(function(trans) {
                                     $scope.esRunTitle = trans;
-                                });
+                                })
+                                .catch(angular.noop);
                         }
 
                         if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef && !iAttrs.esParamsValues) {
@@ -1490,7 +1536,8 @@
                                             $scope.esParamsValues = v.defaultValues;
                                         }
                                         $scope.esParamsDef = v.params;
-                                    });
+                                    })
+                                    .catch(angular.noop);
                             } else {
                                 $scope.esParamDef = esPqInfo.params;
                             }
@@ -1662,7 +1709,8 @@
 
                                 }, function(err) {
                                     options.error(err);
-                                });
+                                })
+                                .catch(angular.noop);
                         }
 
                     },
@@ -1765,12 +1813,14 @@
                             }
 
                             esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
-                                .success(function(pq) {
+                                .then(function(pq) {
+                                    pq = pq.data;
+
                                     pq.Rows = pq.Rows || [];
                                     var data = transformFunction(pq.Rows);
                                     options.success(data);
                                 })
-                                .error(function(err) {
+                                .catch(function(err) {
                                     options.error(err);
                                 });
                         },
@@ -1838,8 +1888,8 @@
 
 
                             esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
-                                .success(function(pq) {
-
+                                .then(function(pq) {
+                                    pq = pq.data;
                                     if (!angular.isDefined(pq.Rows)) {
                                         pq.Rows = [];
                                         pq.Count = 0;
@@ -1852,7 +1902,7 @@
                                     options.success(pq);
 
                                 })
-                                .error(function(err) {
+                                .catch(function(err) {
                                     $log.error("Error in DataSource ", err);
                                     options.error(err);
                                 });
@@ -1918,10 +1968,11 @@
                             }
 
                             esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
-                                .success(function(pq) {
+                                .then(function(pq) {
+                                    pq = pq.data;
                                     options.success(pq.Rows || []);
                                 })
-                                .error(function(err) {
+                                .catch(function(err) {
                                     $log.error("Error in DataSource ", err);
                                     options.error(err);
                                 });
@@ -3464,6 +3515,8 @@ $scope.fetchPQInfo = function() {
                 createEsParamVal: createEsParamVal,
 
                 createESParams: createESParams,
+
+                esAskForField: esAskForField,
 
                 onMapClick: function(a, b, c) {
                     alert("A location has been clicked. Soon you will see a form here !!!");

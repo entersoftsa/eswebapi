@@ -1698,9 +1698,9 @@ x.setParamValues({p1: 'Hello World'});
                         var trans = $translate.instant(tTok);
                         if (trans != tTok) {
                             sMsg = trans;
+                        } else {
+                            sMsg = sMsg + " (" + err.MessageID + ")";
                         }
-
-                        sMsg = sMsg + " (" + err.MessageID + ")";
                     }
                     rep.messageToShow = sMsg;
                 }

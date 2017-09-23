@@ -452,7 +452,7 @@ eskbApp.config(['$logProvider',
                                 throw new Error("processWEBAPIToken can have parameter promise null or undefined");
                             }
 
-                            var webapitoken = function(a, b) {
+                            var webapitokenOK = function(a) {
                                 var hds;
                                 if (a) {
                                     hds = a.headers();
@@ -460,21 +460,29 @@ eskbApp.config(['$logProvider',
                                         esGlobals.setWebApiToken(hds["x-es-refresh-token"], a.config.url || "-");
                                     }
                                 }
+                                return a;
                             };
 
-                            promise.then(webapitoken, webapitoken);
+                            var webapitokenErr = function(a) {
+                                webapitokenOK(a);
+                                throw a;
+                            };
+
+                            promise = promise.then(webapitokenOK).catch(webapitokenErr);
 
                             if (tt) {
-                                promise.then(function() {
+                                promise = promise.then(function(a) {
                                     tt.endTime().send();
+                                    return a;
                                 });
                             }
 
-                            promise.error(function(a, b) {
+                            promise = promise.catch(function(xerr) {
                                 if (tt) {
                                     tt.endTime().send();
                                 }
 
+                                var a = xerr.data || xerr;
                                 if (a) {
                                     $log.error(a);
                                 } else {
@@ -482,8 +490,9 @@ eskbApp.config(['$logProvider',
                                 }
 
                                 if (!doNotHandleError) {
-                                    esMessaging.publish("ES_HTTP_CORE_ERR", a, b);
+                                    esMessaging.publish("ES_HTTP_CORE_ERR", a, xerr.status);
                                 }
+                                throw xerr;
 
                             });
                             return promise;
@@ -513,7 +522,7 @@ alert(sUrl);
                              **/
                             getServerUrl: function() {
                                 return urlWEBAPI;
-                            }, 
+                            },
 
                             getServerSettings: function() {
                                 return esConfigSettings;
@@ -755,11 +764,13 @@ $scope.doLogin = function() {
                                     headers: prepareHeaders({}),
                                     data: dat
                                 }).
-                                success(function(data) {
-                                    esGlobals.sessionOpened(data, credentials);
+                                then(function(data) {
+                                    esGlobals.sessionOpened(data.data, credentials);
+                                    return data;
                                 }).
-                                error(function(data, status, headers, config) {
+                                catch(function(ex) {
                                     esGlobals.sessionClosed();
+                                    throw ex;
                                 });
 
                                 return processWEBAPIPromise(promise, tt);
@@ -777,17 +788,18 @@ $scope.doLogin = function() {
                                     method: 'post',
                                     url: urlWEBAPI + ESWEBAPI_URL.__TOKEN__,
                                     headers: prepareHeaders({}),
-                                    data: { webapitoken: !token.startsWith("Bearer ") ? "Bearer " + token : token}
+                                    data: { webapitoken: !token.startsWith("Bearer ") ? "Bearer " + token : token }
                                 }).
-                                success(function(data) {
-                                    esGlobals.sessionOpened(data);
+                                then(function(data) {
+                                    esGlobals.sessionOpened(data.data);
+                                    return data;
                                 }).
-                                error(function(data, status, headers, config) {
+                                catch(function(ex) {
                                     esGlobals.sessionClosed();
+                                    throw ex;
                                 });
 
                                 return processWEBAPIPromise(promise, tt);
-
                             },
 
                             /**
@@ -1443,14 +1455,14 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
 
 
                             /**
-                            * @ngdoc function
-                            * @name es.Services.Web.esWebApi#removeEntityBlob
-                            * @methodOf es.Services.Web.esWebApi
-                            * @module es.Services.Web
-                            * @kind function
-                            * @description This function deletes, if exists, the entry in the ES00Blob that exact matches the ObjectID, KeyID and TypeID of the ES00BlobInfo parameter 
-                            * @return {httpPromise} Returns an httpPromise that once resolved, it has a status code OK if everything went OK, or BadRequest if an error occurred.
-                            */
+                             * @ngdoc function
+                             * @name es.Services.Web.esWebApi#removeEntityBlob
+                             * @methodOf es.Services.Web.esWebApi
+                             * @module es.Services.Web
+                             * @kind function
+                             * @description This function deletes, if exists, the entry in the ES00Blob that exact matches the ObjectID, KeyID and TypeID of the ES00BlobInfo parameter 
+                             * @return {httpPromise} Returns an httpPromise that once resolved, it has a status code OK if everything went OK, or BadRequest if an error occurred.
+                             */
                             removeEntityBlob: function(blobInfo) {
                                 if (!blobInfo || !blobInfo.ObjectID || !blobInfo.KeyID) {
                                     throw new Error("blobInfo argument is null or one or more of the required properties [ObjectID, KeyID] are missing");
@@ -2380,16 +2392,14 @@ $scope.fetchServerCapabilities = function()
                                 var defered = $q.defer();
 
                                 $http.get(unSecureWEBAPI + ESWEBAPI_URL.__SERVER_CAPABILITIES__)
-                                    .success(function(data) {
-                                        defered.resolve(data);
-                                    })
-                                    .error(function() {
+                                    .then(function(data) {
+                                        defered.resolve(data.data);
+                                    }, function() {
                                         $http.get(secureWEBAPI + ESWEBAPI_URL.__SERVER_CAPABILITIES__)
-                                            .success(function(data) {
-                                                defered.resolve(data);
-                                            })
-                                            .error(function(dat, stat, header, config) {
-                                                defered.reject([dat, stat, header, config]);
+                                            .then(function(data) {
+                                                defered.resolve(data.data);
+                                            }, function(err) {
+                                                defered.reject([err.data, err.status, err.headers, err.config]);
                                             });
                                     });
 
@@ -5075,7 +5085,7 @@ var ret = {
 
                             },
 
-                            
+
                             /**
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#downloadURLForBlobDataDownload
@@ -5086,14 +5096,13 @@ var ret = {
                              * @param {string} es00documentGID The GID of the ES00Document to be downloaded. Should the ES00Document does not exist or the contents of the blob or binded file are empty 404 is returned.
                              * @return {string} A complete URL for the ES00Document to be downloaded, ready to be used in an ng-href or similar html element.
                              */
-                            downloadURLForBlobDataDownload: function(es00documentGID)
-                            {
+                            downloadURLForBlobDataDownload: function(es00documentGID) {
                                 if (!es00documentGID) {
                                     return "";
                                 }
-                                
+
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00DOCUMENT_BLOBDATA_BY_GID__, es00documentGID);
-                                surl += "?webapitoken=" +  esGlobals.getWebApiToken();
+                                surl += "?webapitoken=" + esGlobals.getWebApiToken();
                                 return surl;
                             },
 
@@ -5108,18 +5117,17 @@ var ret = {
                              * @param {string=} fExt Optional, the file extension of the related ES00Blob i.e. ".xlsx"
                              * @return {string} A complete URL for the ES00Blob to be downloaded, ready to be used in an ng-href or similar html element.
                              */
-                            downloadES00BlobURLByGID: function(es00BlobGID, fExt, bPromise)
-                            {
+                            downloadES00BlobURLByGID: function(es00BlobGID, fExt, bPromise) {
                                 if (!es00BlobGID) {
                                     return "";
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_GID__, es00BlobGID);
-                                surl += "?webapitoken=" +  esGlobals.getWebApiToken();
+                                surl += "?webapitoken=" + esGlobals.getWebApiToken();
                                 if (fExt) {
                                     surl += "&extType=" + fExt;
                                 }
-                                
+
                                 if (!bPromise) {
                                     return surl;
                                 }
@@ -5135,8 +5143,7 @@ var ret = {
                             },
 
 
-                            downloadES00BlobURLByObject: function(objectid, keyid, typeid, fExt, ts, bPromise)
-                            {
+                            downloadES00BlobURLByObject: function(objectid, keyid, typeid, fExt, ts, bPromise) {
                                 if (!objectid || !keyid || typeid == null || typeid == undefined) {
                                     return "";
                                 }
@@ -5144,7 +5151,7 @@ var ret = {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_ES00BLOB_BY_OBJECT__, objectid);
                                 surl += "?keyid=" + keyid;
                                 surl += "&typeid=" + typeid;
-                                surl += "&webapitoken=" +  esGlobals.getWebApiToken();
+                                surl += "&webapitoken=" + esGlobals.getWebApiToken();
                                 if (fExt) {
                                     surl += "&extType=" + fExt;
                                 }
@@ -5152,7 +5159,7 @@ var ret = {
                                 if (ts) {
                                     surl += "&ts=" + Number(new Date());
                                 }
-                                
+
                                 if (!bPromise) {
                                     return surl;
                                 }
@@ -5167,8 +5174,7 @@ var ret = {
                                 return processWEBAPIPromise(ht, tt, true);
                             },
 
-                            getBodyFromES00Blob: function(objectid, keyid, typeid)
-                            {
+                            getBodyFromES00Blob: function(objectid, keyid, typeid) {
                                 if (!objectid || !keyid || typeid == null || typeid == undefined) {
                                     throw new Error("invalid parameters");
                                 }
@@ -5176,8 +5182,8 @@ var ret = {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__GET_BODY_FROM_ES00BLOB__, objectid);
                                 surl += "?keyid=" + keyid;
                                 surl += "&typeid=" + typeid;
-                                
-                               
+
+
                                 var tt = esGlobals.trackTimer("ES00BLOB", "GET JSON_OBJECT");
                                 tt.startTime();
                                 var ht = $http({
@@ -5188,14 +5194,13 @@ var ret = {
                                 return processWEBAPIPromise(ht, tt);
                             },
 
-                            postBodyToES00Blob: function(blobInfo)
-                            {
+                            postBodyToES00Blob: function(blobInfo) {
                                 if (!blobInfo || !blobInfo.ObjectID || !blobInfo.KeyID || blobInfo.TypeID == null || blobInfo.TypeID == undefined) {
                                     throw new Error("invalid parameters");
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__POST_BODY_TO_ES00BLOB__);
-                               
+
                                 var tt = esGlobals.trackTimer("ES00BLOB", "POST JSON_OBJECT");
                                 tt.startTime();
                                 var ht = $http({
@@ -5206,7 +5211,7 @@ var ret = {
                                 });
                                 return processWEBAPIPromise(ht, tt);
                             },
-                             /** 
+                            /** 
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#downloadES00BlobByGID
                              * @methodOf es.Services.Web.esWebApi
@@ -5219,8 +5224,7 @@ var ret = {
                              * @param {string=} fExt Optional, the file extension of the related ES00Blob i.e. ".xlsx"
                              * @return {httpPromise} If success i.e. function(ret) { ...} the ret.data contains the **arraybuffer** of the contents of the ES00Blob identified by the parameters es00BlobGID
                              **/
-                            downloadES00BlobByGID: function(es00BlobGID, fExt)
-                            {
+                            downloadES00BlobByGID: function(es00BlobGID, fExt) {
                                 if (!es00BlobGID) {
                                     throw new Error("Invalid parameter es00documentGID");
                                 }
@@ -5256,10 +5260,9 @@ var ret = {
                              * @param {string} assetUrlPath The string path of the asset to be downloaded. 
                              * @return {string} A complete URL for the asset to be downloaded.
                              */
-                            downloadAssetURL: function(assetUrlPath)
-                            {
+                            downloadAssetURL: function(assetUrlPath) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DOWNLOAD_WEB_EAS_ASSET__, assetUrlPath);
-                                surl += "?base64=false&webapitoken=" +  esGlobals.getWebApiToken();
+                                surl += "?base64=false&webapitoken=" + esGlobals.getWebApiToken();
                                 return surl;
                             },
 
@@ -5591,7 +5594,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                              */
                             proxyExportSaveFile: function(proxyType) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__EXPORT_PROXY_SAVEFILE__);
-                                surl += "?webapitoken=" +  esGlobals.getWebApiToken();
+                                surl += "?webapitoken=" + esGlobals.getWebApiToken();
                                 if (proxyType) {
                                     surl += "&proxyType=" + proxyType;
                                 }
@@ -5761,7 +5764,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     headers: prepareHeaders(),
                                     url: surl,
                                     data: eBody
-                                }).success(function(data) {
+                                }).then(function(data) {
                                     // if google analytics are enabled register the exception as well
                                     tt.endTime().send();
                                     var esGA = esGlobals.getGA();
@@ -5772,7 +5775,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                             label: eUrl
                                         });
                                     }
-                                }).error(function(err) {
+                                }).catch(function(err) {
                                     try {
                                         tt.endTime().send();
                                         fregisterException(err);
