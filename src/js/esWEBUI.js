@@ -934,6 +934,48 @@
             }
         ])
 
+        .directive('esPivotPq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esPanelOpen: "=?",
+                        esPqDef: "=?",
+                        esPivotOptions: "=?",
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esPivotPQ.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        var tOptions = $scope.esPivotOptions || {};
+                        tOptions.dataBound = function(e) {
+                            if (e && e.sender) {
+                                kendo.ui.progress(e.sender.element.parent(), false);
+                            }
+                        };
+
+                        $scope.executePQ = function() {
+                            $scope.esPqDef.esPanelOpen = false;
+                            if ($scope.esPivotDataSource) {
+                                if ($scope.pivotgrid) {
+                                    kendo.ui.progress($scope.esTreeMapCtrl.element.parent(), true);
+                                }
+                                $scope.esPivotDataSource.read();
+                            }
+                        }
+
+                        angular.element($window).bind('resize', function() {
+                            kendo.resize(angular.element(".espivot-wrapper"));
+                        });
+
+                        tOptions.dataSource = esWebUIHelper.getPivotDS($scope.esPqDef, tOptions);
+                        $scope.esPivotDataSource = tOptions.dataSource;
+                        
+                    }
+                };
+            }
+        ])
+
         .directive('esMapPq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
             function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
                 return {

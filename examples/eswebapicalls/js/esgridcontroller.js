@@ -224,7 +224,7 @@ smeControllers.controller('propertiesCtrl', ['$location', '$window', '$scope', '
     }
 ]);
 
-smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 
+smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv',
     function($log, $q, $scope, Upload, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv) {
 
         // $scope.gRows = [{
@@ -252,12 +252,11 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 
         $scope.validateToken = function() {
             esWebApi.validateToken(esGlobals.getWebApiToken())
-            .then(function(ret) {
-                $log.info(ret.data);
-            }, function(err)
-            {
-                $log.error(err);
-            });
+                .then(function(ret) {
+                    $log.info(ret.data);
+                }, function(err) {
+                    $log.error(err);
+                });
         };
 
         $scope.uploadPic = function(myFile) {
@@ -361,7 +360,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 
         //fetchODSColumnInfo example
         $scope.fetchOdsColumnInfo = function() {
-        	/*
+            /*
             esWebApi.fetchOdsColumnInfo($scope.odsID, $scope.odsColumnID)
                 .then(function(ret) {
                     $scope.pColumnInfo = ret.data;
@@ -371,28 +370,28 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
                */
 
             var blobInfo = {
-            	"ObjectID" : "ESGOUser",
-            	"KeyID": "8AB22473-DBEB-4AD0-BB90-D69C13C1A538",
-            	"TypeID": 901,
-            	"TextBody": JSON.stringify({
-            		elems: ["a", "bgth", "γεια σου κόσμε"]
-            	})
+                "ObjectID": "ESGOUser",
+                "KeyID": "8AB22473-DBEB-4AD0-BB90-D69C13C1A538",
+                "TypeID": 901,
+                "TextBody": JSON.stringify({
+                    elems: ["a", "bgth", "γεια σου κόσμε"]
+                })
             };
 
             esWebApi.postBodyToES00Blob(blobInfo)
-            .then(function (ret) {
+                .then(function(ret) {
 
-            	esWebApi.getBodyFromES00Blob("ESGOUser", "8AB22473-DBEB-4AD0-BB90-D69C13C1A538", 902)
-            	.then(function(bb) {
-            		$scope.pColumnInfo = bb.data.TextBody;
-            	}, function(bb) {
-                $scope.pColumnInfo = bb;
+                    esWebApi.getBodyFromES00Blob("ESGOUser", "8AB22473-DBEB-4AD0-BB90-D69C13C1A538", 902)
+                        .then(function(bb) {
+                            $scope.pColumnInfo = bb.data.TextBody;
+                        }, function(bb) {
+                            $scope.pColumnInfo = bb;
 
-            	})
+                        })
 
-            }, function(err) {
-                $scope.pColumnInfo = err;
-            })
+                }, function(err) {
+                    $scope.pColumnInfo = err;
+                })
         }
 
         //fetchOdsRelationInfo example
@@ -822,21 +821,21 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
         }
 
         $scope.removeCurrentUserLogo = function() {
-        	var blobInfo = {
-        		ObjectID: "ESGOPerson",
-        		KeyID: "11ea77d7-f5dc-4a8d-b629-845c8ff207ac"
-        	};
+            var blobInfo = {
+                ObjectID: "ESGOPerson",
+                KeyID: "11ea77d7-f5dc-4a8d-b629-845c8ff207ac"
+            };
 
-        	esWebApi.removeEntityBlob(blobInfo);
+            esWebApi.removeEntityBlob(blobInfo);
 
             //esWebApi.removeCurrentUserLogo();
         }
 
         $scope.uploadUserLogo = function() {
-        	var blobInfo = {
-        		ObjectID: "ESGOPerson",
-        		KeyID: "11ea77d7-f5dc-4a8d-b629-845c8ff207ac"
-        	};
+            var blobInfo = {
+                ObjectID: "ESGOPerson",
+                KeyID: "11ea77d7-f5dc-4a8d-b629-845c8ff207ac"
+            };
             var progressf = function(evt) {
                 $scope.userLogoImage.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             };
@@ -932,22 +931,22 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
 
         $scope.pqs = [
 
-/*
-            {
-                groupId: "ES00Documents",
-                filterId: "ES00Documents_def",
-                gridOptions: {},
-                //pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", { dRange: 'ESDateRange(Year, -1)'})])
-                pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", 'ESDateRange(SpecificDate, #2017/03/03#, SpecificDate, #2017/03/03#)')])
-            },
-*/
+            /*
+                        {
+                            groupId: "ES00Documents",
+                            filterId: "ES00Documents_def",
+                            gridOptions: {},
+                            //pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", { dRange: 'ESDateRange(Year, -1)'})])
+                            pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", 'ESDateRange(SpecificDate, #2017/03/03#, SpecificDate, #2017/03/03#)')])
+                        },
+            */
 
             {
-                groupId: "ESWebManager",
-                filterId: "SalesPipelineCompetitionAnalysis",
+                groupId: "ESMIS",
+                filterId: "ESMIS_CustomerOpenBalances",
                 gridOptions: {},
                 //pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", { dRange: 'ESDateRange(Year, -1)'})])
-                pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("Period", { dRange: 'ESDateRange(Year, -1)'})])
+                pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("Period", { dRange: 'ESDateRange(Year, -1)' })])
             },
 
             /*
@@ -1056,41 +1055,42 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
 
 smeControllers.controller('salesCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
-        $scope.pqDef = new esGlobals.ESPublicQueryDef("", "ESFICustomer", "TOPTurnoverCustomers", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
-
+        $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESMIS", "ESMIS_CustomerOpenBalances", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
         $scope.pivotDS = null;
+
         $scope.executePivot = function() {
             if ($scope.pivotDS) {
                 $scope.pivotDS.read();
                 return;
             }
+        }
 
-            var schemaOptions = {
-                schema: {
-                    cube: {
-                        dimensions: {
-                            Name: { caption: "Customer" },
-                            Salesperson: { caption: "Sales Rep" }
-                        },
-                        measures: {
-                            "Customers Count": { field: "GID", aggregate: "count" },
-                            "Sum Invoices": { field: "NumberOfInvoices", aggregate: "sum" },
-                            "Sum Turnover": { field: "Turnover", aggregate: "sum" }
-                        }
+        var schemaOptions = {
+            schema: {
+                cube: {
+                    dimensions: {
+                        fDistrictCode: { caption: "Area" },
+                        Salesman: { caption: "Sales Rep" }
+                    },
+                    measures: {
+                        "Balance": { field: "Balance", aggregate: "sum" },
+                        "Balance Avg": { field: "Balance", aggregate: "average" }
                     }
-                },
-                rows: [{ name: "Salesperson", expand: true }],
-                measures: ["Customers Count", "Sum Invoices", "Sum Turnover"]
-            };
-
-            $scope.pivotDS = esWebUIHelper.getPivotDS($scope.pqDef, schemaOptions);
-            $scope.pivotOptions = {
-                columnWidth: 200,
-                height: 580,
-                filterable: true,
-                dataSource: $scope.pivotDS
-            };
+                }
+            },
+            rows: [{ name: "Salesman", expand: true }],
+            measures: ["Balance"]
         };
+        $scope.pivotDS = esWebUIHelper.getPivotDS($scope.esPqDef, schemaOptions);
+        $scope.pivotOptions = {
+            columnWidth: 200,
+            height: 580,
+            filterable: true,
+            sortable: true,
+            autoBind: false,
+            dataSource: $scope.pivotDS
+        };
+
     }
 ]);
 
@@ -1235,7 +1235,7 @@ smeControllers.controller('opportunitiesCtrl', ['$location', '$scope', '$log', '
     }
 ])
 
-smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv', 
+smeControllers.controller('mapsCtrl', ['$log', '$q', '$scope', 'esWebApi', 'esUIHelper', 'esGlobals', 'esCache', 'esGeoLocationSrv',
     function($log, $q, $scope, esWebApi, esWebUIHelper, esGlobals, esCache, esGeoLocationSrv) {
 
         $scope.myMapOptions = {

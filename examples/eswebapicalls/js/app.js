@@ -3,7 +3,6 @@
 
         /* angular modules */
         'ui.router',
-        'ngRoute',
         'ngStorage',
         'ui.bootstrap',
         'pascalprecht.translate',
@@ -15,11 +14,12 @@
     ]);
 
     eskbApp.config(['$logProvider',
-        '$routeProvider',
+        '$stateProvider',
+         '$urlRouterProvider',
         'esWebApiProvider',
         '$exceptionHandlerProvider',
         '$translateProvider',
-        function($logProvider, $routeProvider, esWebApiServiceProvider, $exceptionHandlerProvider, $translateProvider) {
+        function($logProvider, $stateProvider, $urlRouterProvider, esWebApiServiceProvider, $exceptionHandlerProvider, $translateProvider) {
 
             $translateProvider.useStaticFilesLoader({
                 files: [{
@@ -32,50 +32,60 @@
             $translateProvider.useSanitizeValueStrategy('escape');
 
 
-            $routeProvider
-                .when('/', {
+            $urlRouterProvider.when('/', '/login');
+            $urlRouterProvider.when('', '/login');
+            $urlRouterProvider.otherwise('/login');
+
+            $stateProvider
+                .state('login', {
                     templateUrl: 'login.html',
-                    controller: 'loginCtrl'
+                    controller: 'loginCtrl',
+                    url: '/login'
                 })
-                .when('/login', {
-                    templateUrl: 'login.html',
-                    controller: 'loginCtrl'
-                })
-                .when('/properties', {
+                .state('properties', {
                     templateUrl: 'properties.html',
-                    controller: 'propertiesCtrl'
+                    controller: 'propertiesCtrl',
+                    url: '/properties'
                 })
-                .when('/pq', {
+                .state('pq', {
                     templateUrl: 'pq.html',
-                    controller: 'pqCtrl'
+                    controller: 'pqCtrl',
+                    url: '/pq'
                 })
-                .when('/webpq', {
+                .state('webpq', {
                     templateUrl: 'webpq.html',
-                    controller: 'webpqCtrl'
+                    controller: 'webpqCtrl',
+                    url: '/webpq'
                 })
-                .when('/masdetpq', {
+                .state('masdetpq', {
                     templateUrl: 'masdetpq.html',
-                    controller: 'masdetpqCtrl'
+                    controller: 'masdetpqCtrl',
+                    url: '/masdetpq'
                 })
-                .when('/opportunities', {
+                .state('opportunities', {
                     templateUrl: 'opportunities.html',
-                    controller: 'opportunitiesCtrl'
+                    controller: 'opportunitiesCtrl',
+                    url: '/opps'
                 })
-                .when('/examples', {
+                .state('examples', {
                     templateUrl: 'examples.html',
-                    controller: 'examplesCtrl'
+                    controller: 'examplesCtrl',
+                    url: '/examples'
                 })
-                .when('/survey', {
+                .state('survey', {
                     templateUrl: 'survey.html',
-                    controller: 'surveyCtrl'
+                    controller: 'surveyCtrl',
+                    url: '/survey'
                 })
-                .when('/maps', {
+                .state('maps', {
                     templateUrl: 'maps.html',
-                    controller: 'mapsCtrl'
+                    controller: 'mapsCtrl',
+                    url: '/maps'
                 })
-                .when('/salesforce', {
+                .state('salesforce', {
                     templateUrl: 'sales.html',
-                    controller: 'salesCtrl'  
+                    controller: 'salesCtrl'  ,
+                    url: '/salesf'
                 });
 
             $logProvider.addDefaultAppenders();
