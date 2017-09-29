@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap', 'ngFileUpload']);
+var smeControllers = angular.module('smeControllers', ['kendo.directives', 'underscore', 'es.Web.UI', 'ui.bootstrap', 'ngFileUpload', 'dx']);
 
 
 smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessaging', 'esWebApi', 'esGlobals',
@@ -942,8 +942,8 @@ smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 
             */
 
             {
-                groupId: "ESMIS",
-                filterId: "ESMIS_CustomerOpenBalances",
+                groupId: "ESWebManager",
+                filterId: "ItemEntryFact",
                 gridOptions: {},
                 //pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("ESDCreated", { dRange: 'ESDateRange(Year, -1)'})])
                 pVals: new esGlobals.ESParamValues([new esGlobals.ESDateParamVal("Period", { dRange: 'ESDateRange(Year, -1)' })])
@@ -1053,44 +1053,95 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
     }
 ]);
 
-smeControllers.controller('salesCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
-    function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
-        $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESMIS", "ESMIS_CustomerOpenBalances", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
-        $scope.pivotDS = null;
+smeControllers.controller('salesCtrl', ['$q', '$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
+    function($q, $location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+        $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESWebManager", "ItemEntryFact", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+        $scope.esPqDef.UIOptions = {
+        	showChart: true
+        };
 
-        $scope.executePivot = function() {
-            if ($scope.pivotDS) {
-                $scope.pivotDS.read();
-                return;
-            }
-        }
+        $scope.esPqDef.UIOptions.cubeDef = {
+            fields: [{
+                    width: 120,
+                    dataField: "fItemFamilyCode",
+                    area: "row"
+                },
 
-        var schemaOptions = {
-            schema: {
-                cube: {
-                    dimensions: {
-                        fDistrictCode: { caption: "Area" },
-                        Salesman: { caption: "Sales Rep" }
+                {
+                    width: 120,
+                    dataField: "fItemGroupCode",
+                    area: "row"
+                }, {
+                    width: 120,
+                    dataField: "fItemCategoryCode",
+                    area: "row"
+                }, {
+                    width: 120,
+                    dataField: "fActivityCode",
+                    area: "row"
+                },
+
+                {
+                    width: 120,
+                    dataField: "fBusinessUnitCode",
+                    area: "row"
+                },
+
+
+                {
+                    dataField: "fItemSubcategoryCode",
+                    area: "column"
+                },
+
+                {
+                    dataField: "CustomerName",
+                    area: "column"
+                },
+
+                {
+                    dataField: "ESFIItemPeriodics_TurnOver",
+                    dataType: "number",
+                    summaryType: "sum",
+                    format: {
+                    	type: "currency",
+                    	precision: 2,
+                    	currency: "EUR"
                     },
-                    measures: {
-                        "Balance": { field: "Balance", aggregate: "sum" },
-                        "Balance Avg": { field: "Balance", aggregate: "average" }
-                    }
+                    area: "data"
+                },
+                {
+                    dataField: "ESFIItemPeriodics_SalesQty",
+                    dataType: "number",
+                    summaryType: "sum",
+                    area: "data"
                 }
-            },
-            rows: [{ name: "Salesman", expand: true }],
-            measures: ["Balance"]
-        };
-        $scope.pivotDS = esWebUIHelper.getPivotDS($scope.esPqDef, schemaOptions);
-        $scope.pivotOptions = {
-            columnWidth: 200,
-            height: 580,
-            filterable: true,
-            sortable: true,
-            autoBind: false,
-            dataSource: $scope.pivotDS
+            ]
         };
 
+       
+
+        $scope.esPqDef.UIOptions.pivotOptions = {
+            allowSortingBySummary: true,
+            allowSorting: true,
+            allowFiltering: true,
+            allowExpandAll: true,
+            xheight: 440,
+            showBorders: true,
+            fieldChooser: {
+                enabled: true
+            },
+            "export": {
+                enabled: true
+            },
+            fieldPanel: {
+                showDataFields: true,
+                showRowFields: true,
+                showColumnFields: true,
+                showFilterFields: true,
+                allowFieldDragging: true,
+                visible: true
+            }
+        };
     }
 ]);
 

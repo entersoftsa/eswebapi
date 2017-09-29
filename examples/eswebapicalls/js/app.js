@@ -13,9 +13,11 @@
 
     ]);
 
+
+    
     eskbApp.config(['$logProvider',
         '$stateProvider',
-         '$urlRouterProvider',
+        '$urlRouterProvider',
         'esWebApiProvider',
         '$exceptionHandlerProvider',
         '$translateProvider',
@@ -84,7 +86,7 @@
                 })
                 .state('salesforce', {
                     templateUrl: 'sales.html',
-                    controller: 'salesCtrl'  ,
+                    controller: 'salesCtrl',
                     url: '/salesf'
                 });
 
@@ -101,7 +103,7 @@
                 //"host": "esmasterapp.entersoft.gr",
                 subscriptionId: subscriptionId,
                 subscriptionPassword: "passx",
-                allowUnsecureConnection: true, 
+                allowUnsecureConnection: true,
                 additionalHeaders: {
                     "Ocp-Apim-Subscription-Key": "8"
                 }

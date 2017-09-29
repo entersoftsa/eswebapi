@@ -1,11 +1,4 @@
 <div ng-cloak>
-	<es-params-panel ng-cloak 
-                    es-group-id="esPqDef" 
-                    es-run-click="executePivot()"
-                    es-show-run="'true'"
-                    es-local-data-source="'true'"
-                    es-run-title="{{'ESUI.ESMAPPQ.RUN_MAP' | translate}}">
-        </es-params-panel>
-    <div kendo-pivot-configurator k-height="580" k-data-source="pivotDS" id="configurator"></div>
-    <div kendo-pivot-grid k-options="pivotOptions" id="pivotgrid"></div>
+    <es-pivot-pq es-pq-def="esPqDef" es-cube-def="cubeDef" es-pivot-options="pivOptions">
+    </es-pivot-pq>   
 </div>
