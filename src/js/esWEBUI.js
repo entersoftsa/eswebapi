@@ -9,22 +9,51 @@
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate']);
+    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate', 'dx']);
 
-    esWEBUI.run(['$translate', 'esMessaging', function($translate, esMessaging) {
+    esWEBUI.run(['$translate', 'esMessaging', '$q', '$http', function($translate, esMessaging, $q, $http) {
 
         window.esLoginLanguage = navigator.language || navigator.userLanguage || 'en-US';
 
         esMessaging.subscribe("AUTH_CHANGED", function(sess, apitoken) {
             var lang = (sess && sess.connectionModel && sess.connectionModel.LangID) ? sess.connectionModel.LangID : window.esLoginLanguage;
-            doChangeLanguage($translate, lang);
+            doChangeLanguage($translate, lang, $q, $http);
         });
     }]);
 
-    function doChangeLanguage($translate, lang) {
+    function doChangeLanguage($translate, lang, $q, $http) {
         lang = lang || window.esLoginLanguage;
 
-        $translate.use(lang.split("-")[0]);
+        var aPart = lang.split("-")[0];
+        $translate.use(aPart);
+
+        if (Globalize) {
+
+            $q.all([
+                $http.get("languages/" + aPart + "-ca-gregorian.json"),
+                $http.get("languages/" + aPart + "-numbers.json"),
+                $http.get("languages/" + aPart + "-currencies.json"),
+
+                $http.get("languages/likelySubtags.json"),
+                $http.get("languages/timeData.json"),
+                $http.get("languages/weekData.json"),
+                $http.get("languages/currencyData.json"),
+                $http.get("languages/numberingSystems.json")
+            ]).then(function(ret) {
+                    _.forEach(ret, function(x) {
+                        Globalize.load(x.data);
+                    });
+                } //loads data held in each array item to Globalize
+            ).then(function() {
+                Globalize.locale(aPart);
+            }).catch(function(xerr) {
+                throw xerr;
+            });
+
+
+
+        }
+
         if (kendo) {
             kendo.culture(lang);
             var kendoMessagesUrl = window.ESDBG ? "bower_components/kendo-ui/js/messages/kendo.messages." : "//kendo.cdn.telerik.com/" + kendo.version + "/js/messages/kendo.messages.";
@@ -332,8 +361,8 @@
             };
         }])
 
-        .directive('esLogin', ['$translate', '$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
-            function($translate, $log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+        .directive('esLogin', ['$q', '$http', '$translate', '$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
+            function($q, $http, $translate, $log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
                 return {
                     restrict: 'AE',
                     scope: {
@@ -349,7 +378,7 @@
                         var onLangChanged = function() {
                             if ($scope.esCredentials.LangID) {
                                 var lang = $scope.esCredentials.LangID;
-                                doChangeLanguage($translate, lang);
+                                doChangeLanguage($translate, lang, $q, $http);
                             }
                             window.esLoginLanguage = $scope.esCredentials.LangID || navigator.language || navigator.userLanguage || 'en-US';
                         };
@@ -368,7 +397,7 @@
 
                         if ($scope.esCredentials.LangID) {
                             var lang = $scope.esCredentials.LangID;
-                            doChangeLanguage($translate, lang);
+                            doChangeLanguage($translate, lang, $q, $http);
                         }
                     }
                 }
@@ -934,43 +963,107 @@
             }
         ])
 
-        .directive('esPivotPq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-            function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+        .directive('esPivotPq', ['$log', '$window', '$q', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, $window, $q, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
                 return {
                     restrict: 'AE',
                     scope: {
-                        esPanelOpen: "=?",
-                        esPqDef: "=?",
-                        esPivotOptions: "=?",
+                        esPqDef: "=",
+                        esCubeDef: "=",
+
+                        esPanelOpen: "=?"
                     },
                     templateUrl: function(element, attrs) {
                         return "src/partials/esPivotPQ.html";
                     },
-                    link: function($scope, iElement, iAttrs) {
-                        var tOptions = $scope.esPivotOptions || {};
-                        tOptions.dataBound = function(e) {
-                            if (e && e.sender) {
-                                kendo.ui.progress(e.sender.element.parent(), false);
-                            }
-                        };
-
-                        $scope.executePQ = function() {
-                            $scope.esPqDef.esPanelOpen = false;
-                            if ($scope.esPivotDataSource) {
-                                if ($scope.pivotgrid) {
-                                    kendo.ui.progress($scope.esTreeMapCtrl.element.parent(), true);
+                    link: {
+                        pre: function($scope, iElement, iAttrs) {
+                            var defOptions = {
+                                allowSortingBySummary: true,
+                                allowSorting: true,
+                                allowFiltering: true,
+                                allowExpandAll: true,
+                                showBorders: true,
+                                fieldChooser: {
+                                    enabled: true
+                                },
+                                export: {
+                                    enabled: true
+                                },
+                                fieldPanel: {
+                                    showDataFields: true,
+                                    showRowFields: true,
+                                    showColumnFields: true,
+                                    showFilterFields: true,
+                                    allowFieldDragging: true,
+                                    visible: true
                                 }
-                                $scope.esPivotDataSource.read();
+                            };
+
+                            $scope.tOptions = $scope.esPqDef.UIOptions.pivotOptions || defOptions;
+
+                            $scope.tOptions.onCellClick = function(e) {
+                                if (e.area == "data") {
+                                    var pivotGridDataSource = e.component.getDataSource(),
+                                        rowPathLength = e.cell.rowPath.length,
+                                        rowPathName = e.cell.rowPath[rowPathLength - 1],
+                                        popupTitle = (rowPathName ? rowPathName : "Total") + " Drill Down Data";
+
+                                    $scope.drillDownDataSource = pivotGridDataSource.createDrillDownDataSource(e.cell);
+                                    $scope.salesPopupTitle = popupTitle;
+                                    $scope.salesPopupVisible = true;
+                                }
+                            };
+
+                            esWebApiService.fetchPublicQueryInfo($scope.esPqDef)
+                                .then(function(ret) {
+                                    var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esPqDef.GroupID, $scope.esPqDef.FilterID, ret.data);
+
+                                    if ($scope.tOptions.export) {
+                                        $scope.tOptions.export.fileName = v.caption;
+                                    }
+
+                                    $scope.dataGridOptions = {
+                                        bindingOptions: {
+                                            dataSource: {
+                                                dataPath: 'drillDownDataSource',
+                                                deep: false
+                                            }
+                                        },
+                                        columns: _.map(_.filter(v.columns, function(x) {
+                                            return !x.hidden;
+                                        }), function(o) {
+                                            return {
+                                                dataField: o.field,
+                                                caption: o.title
+                                            };
+                                        })
+                                    };
+
+                                    $scope.popupOptions = {
+                                        bindingOptions: {
+                                            title: "salesPopupTitle",
+                                            visible: "salesPopupVisible"
+                                        }
+                                    };
+
+
+                                    $scope.tOptions.dataSource = esWebUIHelper.getPivotDS($q, $scope.esPqDef, $scope.esPqDef.UIOptions.cubeDef, v);
+                                    $scope.esPivotDataSource = $scope.tOptions.dataSource;
+                                    $scope.pivotOptions = $scope.tOptions;
+                                })
+                                .catch(function(err) {
+
+                                });
+
+
+                            $scope.executePQ = function() {
+                                $scope.esPqDef.esPanelOpen = false;
+                                if ($scope.esPivotDataSource) {
+                                    $scope.esPivotDataSource.reload();
+                                }
                             }
                         }
-
-                        angular.element($window).bind('resize', function() {
-                            kendo.resize(angular.element(".espivot-wrapper"));
-                        });
-
-                        tOptions.dataSource = esWebUIHelper.getPivotDS($scope.esPqDef, tOptions);
-                        $scope.esPivotDataSource = tOptions.dataSource;
-                        
                     }
                 };
             }
@@ -1982,52 +2075,40 @@
                 return new kendo.data.DataSource(xParam);
             }
 
-            function preparePivotDS(espqParams, esOptions) {
-                var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
+            function getPivotDS($q, espqdef, escubedef, pqinfo) {
+                var t = escubedef || {};
 
-                var xParam = {
-                    transport: {
-                        requestEnd: function(e) {
-                            var response = e.response;
-                            var type = e.type;
-                            console.log(type); // displays "read"
-                            console.log(response.length); // displays "77"
-                        },
-
-                        read: function(options) {
-
-                            var pqOptions = {};
-
-                            var executeParams = qParams.Params;
-                            if (executeParams instanceof esGlobals.ESParamValues) {
-                                if (!executeParams.isValidState()) {
-                                    var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
-                                    options.error(err);
-                                    throw err;
-
-                                }
-                                executeParams = executeParams.getExecuteVals();
-                            }
-
-                            esWebApiService.fetchPublicQuery(qParams.GroupID, qParams.FilterID, pqOptions, executeParams)
-                                .then(function(pq) {
-                                    pq = pq.data;
-                                    options.success(pq.Rows || []);
-                                })
-                                .catch(function(err) {
-                                    $log.error("Error in DataSource ", err);
-                                    options.error(err);
-                                });
-                        },
-
+                _.forEach(t.fields, function(x) {
+                    if (x.caption || !x.dataField) {
+                        return;
                     }
+
+                    var id = x.dataField.toLowerCase();
+                    var col = _.find(pqinfo.columns, function(y) {
+                        return id == y.field.toLowerCase();
+                    });
+
+                    if (col) {
+                        x.caption = col.title;
+                    }
+
+                });
+                t.load = function(loadOptions) {
+                    var defered = $q.defer();
+
+                    esWebApiService.fetchPublicQuery(espqdef)
+                        .then(function(pq) {
+                            pq = pq.data;
+                            defered.resolve(pq.Rows || []);
+                        })
+                        .catch(function(err) {
+                            $log.error("Error in DataSource ", err);
+                            defered.reject(err);
+                        });
+                    return defered.promise;
                 };
 
-                if (esOptions) {
-                    angular.extend(xParam, esOptions);
-                }
-
-                return new kendo.data.PivotDataSource(xParam);
+                return new DevExpress.data.PivotGridDataSource(t);
             }
 
             function esExportToExcel(e) {
@@ -3552,7 +3633,7 @@ $scope.fetchPQInfo = function() {
                 getPQDataSource: prepareWebScroller,
                 getTreeMapDS: getTreeMapDS,
 
-                getPivotDS: preparePivotDS,
+                getPivotDS: getPivotDS,
 
                 createEsParamVal: createEsParamVal,
 

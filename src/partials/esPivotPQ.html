@@ -1,18 +1,16 @@
 <div class="row">
-    <es-params-panel 
-    	ng-cloak 
-    	es-panel-open="esPqDef.esPanelOpen"
-    	es-group-id="esPqDef" 
-        es-force-title="esPqDef.Title"
-    	es-show-run="'true'" 
-    	es-run-click="::executePQ()" 
-    	es-data-source="esPivotDataSource" >
+    <es-params-panel ng-cloak es-panel-open="esPqDef.esPanelOpen" es-group-id="esPqDef" es-force-title="esPqDef.Title" es-show-run="'true'" es-run-click="::executePQ()" es-data-source="esPivotDataSource">
     </es-params-panel>
-
     <div class="col-xs-12">
-		<div class="espivot-wrapper">
-            <div kendo-pivot-configurator k-ng-delay="esPivotOptions" k-height="580" k-data-source="esPivotOptions.dataSource" id="configurator" class="hidden-on-narrow"></div>
-            <div kendo-pivot-grid k-ng-delay="esPivotOptions" k-options="esPivotOptions" id="pivotgrid" class="hidden-on-narrow"></div>
-		</div>
-	</div>
+        <div class="espivot-wrapper">
+
+            <div id="esPivotGrid" dx-pivot-grid="pivotOptions"></div>
+
+            <div dx-popup="popupOptions">
+                <div data-options="dxTemplate: { name: 'content' }">
+                    <div dx-data-grid="dataGridOptions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
