@@ -1062,27 +1062,21 @@ smeControllers.controller('salesCtrl', ['$q', '$location', '$scope', '$log', 'es
 
         $scope.esPqDef.UIOptions.cubeDef = {
             fields: [{
-                    width: 120,
                     dataField: "fItemFamilyCode",
                     area: "row"
                 },
-
                 {
-                    width: 120,
                     dataField: "fItemGroupCode",
                     area: "row"
                 }, {
-                    width: 120,
                     dataField: "fItemCategoryCode",
                     area: "row"
                 }, {
-                    width: 120,
                     dataField: "fActivityCode",
                     area: "row"
                 },
 
                 {
-                    width: 120,
                     dataField: "fBusinessUnitCode",
                     area: "row"
                 },
@@ -1094,25 +1088,17 @@ smeControllers.controller('salesCtrl', ['$q', '$location', '$scope', '$log', 'es
                 },
 
                 {
-                    dataField: "CustomerName",
-                    area: "column"
-                },
-
-                {
                     dataField: "ESFIItemPeriodics_TurnOver",
                     dataType: "number",
                     summaryType: "sum",
                     format: {
-                    	type: "currency",
-                    	precision: 2,
-                    	currency: "EUR"
+                    	type: "decimal",
+                    	precision: 2
                     },
                     area: "data"
                 },
                 {
                     dataField: "ESFIItemPeriodics_SalesQty",
-                    dataType: "number",
-                    summaryType: "sum",
                     area: "data"
                 }
             ]

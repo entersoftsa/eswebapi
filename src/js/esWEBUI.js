@@ -1024,6 +1024,17 @@
                                     }
 
                                     $scope.dataGridOptions = {
+                                        columnAutoWidth: true,
+                                        rowAlternationEnabled: true,
+                                        filterRow: {
+                                            visible: true,
+                                            applyFilter: "auto"
+                                        },
+                                        paging: {
+                                            enabled: true,
+                                            pageSize: 20,
+                                            pageIndex: 1
+                                        },
                                         bindingOptions: {
                                             dataSource: {
                                                 dataPath: 'drillDownDataSource',
@@ -1035,12 +1046,17 @@
                                         }), function(o) {
                                             return {
                                                 dataField: o.field,
-                                                caption: o.title
+                                                caption: o.title,
+                                                width: o.width,
+                                                allowSorting: true,
+                                                allowFiltering: true
                                             };
                                         })
                                     };
 
                                     $scope.popupOptions = {
+                                        showCloseButton: true,
+
                                         bindingOptions: {
                                             title: "salesPopupTitle",
                                             visible: "salesPopupVisible"
@@ -2076,23 +2092,80 @@
             }
 
             function getPivotDS($q, espqdef, escubedef, pqinfo) {
-                var t = escubedef || {};
 
-                _.forEach(t.fields, function(x) {
-                    if (x.caption || !x.dataField) {
+                function getPivotType(colType) {
+                    switch (colType) {
+                        case "string":
+                            return "string";
+                        case "decimal":
+                            return "number";
+                        case "datetime":
+                        case "date":
+                            return "date";
+                        default:
+                            return "string";
+                    }
+                }
+
+                function calcCountDistinct(options) {
+                    if (options.summaryProcess == 'start') {
+                        // Initializing "totalValue" here
+                        options.totalValue = 0;
                         return;
                     }
+                    if (options.summaryProcess == 'calculate') {
+                        options.totalValue += 1;
+                        /*
+                        var ix = _.findIndex(options.totalValue, options.value);
+                        if (ix == -1) {
+                            options.totalValue.push(options.value);
+                        }
+                        */
+                        return;
+                    }
+                    if (options.summaryProcess == 'finalize') {
+                        // Assigning the final value to "totalValue" here
+                        return
+                    }
+                }
 
-                    var id = x.dataField.toLowerCase();
-                    var col = _.find(pqinfo.columns, function(y) {
-                        return id == y.field.toLowerCase();
+                
+                var t = escubedef || {};
+
+                //First check which fields are in the PQ but no at the cubedef
+                _.forEach(pqinfo.columns, function(x) {
+                    var id = x.field.toLowerCase();
+                    var idx = _.findIndex(t.fields, function(o) {
+                        return o.dataField.toLowerCase() == id;
                     });
+                    if (idx == -1) {
+                        t.fields.push({ dataField: x.field });
+                    }
+                });
 
-                    if (col) {
-                        x.caption = col.title;
+                _.forEach(t.fields, function(x) {
+                        if (!x.dataField) {
+                            return;
+                        }
+
+                        var id = x.dataField.toLowerCase();
+                        var col = _.find(pqinfo.columns, function(y) {
+                            return id == y.field.toLowerCase();
+                        });
+
+                        if (!col) {
+                            return;
+                        }
+
+                        x.caption = x.caption || col.title;
+                        x.width = x.width || col.width;
+                        x.dataType = x.dataType || getPivotType(col.dataType);
+                        x.summaryType = x.summaryType || col.aggregate || (x.dataType == "number" ? "sum" : "count");
+
                     }
 
-                });
+
+                );
                 t.load = function(loadOptions) {
                     var defered = $q.defer();
 
