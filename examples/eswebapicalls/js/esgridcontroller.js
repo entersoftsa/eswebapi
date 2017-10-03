@@ -1086,15 +1086,8 @@ smeControllers.controller('salesCtrl', ['$q', '$location', '$scope', '$log', 'es
                     dataField: "fItemSubcategoryCode",
                     area: "column"
                 },
-
                 {
                     dataField: "ESFIItemPeriodics_TurnOver",
-                    dataType: "number",
-                    summaryType: "sum",
-                    format: {
-                    	type: "decimal",
-                    	precision: 2
-                    },
                     area: "data"
                 },
                 {

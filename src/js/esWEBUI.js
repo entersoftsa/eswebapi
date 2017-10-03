@@ -969,8 +969,6 @@
                     restrict: 'AE',
                     scope: {
                         esPqDef: "=",
-                        esCubeDef: "=",
-
                         esPanelOpen: "=?"
                     },
                     templateUrl: function(element, attrs) {
@@ -978,6 +976,8 @@
                     },
                     link: {
                         pre: function($scope, iElement, iAttrs) {
+                            var gridInstance;
+
                             var defOptions = {
                                 allowSortingBySummary: true,
                                 allowSorting: true,
@@ -990,6 +990,11 @@
                                 export: {
                                     enabled: true
                                 },
+                                
+                                onInitialized: function(e) {
+                                    alert("initialized");
+                                    gridInstance = e.component;
+                                },
                                 fieldPanel: {
                                     showDataFields: true,
                                     showRowFields: true,
@@ -1000,9 +1005,20 @@
                                 }
                             };
 
-                            $scope.tOptions = $scope.esPqDef.UIOptions.pivotOptions || defOptions;
+                            if (!$scope.esPqDef || !$scope.esPqDef.UIOptions || !$scope.esPqDef.UIOptions.cubeDef) {
+                                throw "espivotpq directive is either missing esPqDef or esPqDef.UIOptions or esPqDef.UIOptions.cubeDef";
+                            }
 
-                            $scope.tOptions.onCellClick = function(e) {
+                            var tOptions = {};
+
+                            if ($scope.esPqDef.UIOptions.pivotOptions) {
+                                angular.copy($scope.esPqDef.UIOptions.pivotOptions, tOptions);
+                            } else {
+                                tOptions = defOptions;
+                            }
+
+
+                            tOptions.onCellClick = function(e) {
                                 if (e.area == "data") {
                                     var pivotGridDataSource = e.component.getDataSource(),
                                         rowPathLength = e.cell.rowPath.length,
@@ -1019,8 +1035,8 @@
                                 .then(function(ret) {
                                     var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esPqDef.GroupID, $scope.esPqDef.FilterID, ret.data);
 
-                                    if ($scope.tOptions.export) {
-                                        $scope.tOptions.export.fileName = v.caption;
+                                    if (tOptions.export) {
+                                        tOptions.export.fileName = v.caption;
                                     }
 
                                     $scope.dataGridOptions = {
@@ -1030,6 +1046,7 @@
                                             visible: true,
                                             applyFilter: "auto"
                                         },
+                                        height: "100%",
                                         paging: {
                                             enabled: true,
                                             pageSize: 20,
@@ -1063,19 +1080,26 @@
                                         }
                                     };
 
-
-                                    $scope.tOptions.dataSource = esWebUIHelper.getPivotDS($q, $scope.esPqDef, $scope.esPqDef.UIOptions.cubeDef, v);
-                                    $scope.esPivotDataSource = $scope.tOptions.dataSource;
-                                    $scope.pivotOptions = $scope.tOptions;
+                                    tOptions.dataSource = esWebUIHelper.getPivotDS($q, $scope.esPqDef, $scope.esPqDef.UIOptions.cubeDef, v);
+                                    $scope.esPivotDataSource = tOptions.dataSource;
+                                    if (!$scope.esPqDef.PQOptions || $scope.esPqDef.PQOptions.AutoExecute) {
+                                        $scope.pivotOptions = tOptions;
+                                    } else {
+                                        $scope.tmp = tOptions;
+                                    }
                                 })
                                 .catch(function(err) {
-
+                                    $log.error(err);
+                                    throw err;
                                 });
 
 
                             $scope.executePQ = function() {
                                 $scope.esPqDef.esPanelOpen = false;
-                                if ($scope.esPivotDataSource) {
+                                if (!$scope.pivotOptions) {
+                                    $scope.pivotOptions = $scope.tmp;
+                                    $scope.tmp = null;
+                                } else {
                                     $scope.esPivotDataSource.reload();
                                 }
                             }
@@ -2107,29 +2131,37 @@
                     }
                 }
 
-                function calcCountDistinct(options) {
-                    if (options.summaryProcess == 'start') {
-                        // Initializing "totalValue" here
-                        options.totalValue = 0;
-                        return;
-                    }
-                    if (options.summaryProcess == 'calculate') {
-                        options.totalValue += 1;
-                        /*
-                        var ix = _.findIndex(options.totalValue, options.value);
-                        if (ix == -1) {
-                            options.totalValue.push(options.value);
-                        }
-                        */
-                        return;
-                    }
-                    if (options.summaryProcess == 'finalize') {
-                        // Assigning the final value to "totalValue" here
-                        return
+                function getFormatType(col) {
+                    var colType = col.dataType;
+
+                    switch (colType) {
+                        case "decimal":
+                            {
+                                var fmt = col.format;
+                                var prec = 0;
+                                if (fmt) {
+                                    var idx = fmt.indexOf(".");
+                                    if (idx != -1) {
+                                        var s = fmt.slice(idx);
+                                        var cnt = s.split("0").length - 1;
+                                        prec = (cnt < 0) ? 0 : cnt;
+                                    }
+                                }
+                                return {
+                                    type: "fixedPoint",
+                                    precision: prec
+                                };
+                            }
+                        case "datetime":
+                            return "shortDateShortTime";
+                        case "date":
+                            return "shortDate";
+                        default:
+                            return null;
                     }
                 }
 
-                
+
                 var t = escubedef || {};
 
                 //First check which fields are in the PQ but no at the cubedef
@@ -2161,7 +2193,7 @@
                         x.width = x.width || col.width;
                         x.dataType = x.dataType || getPivotType(col.dataType);
                         x.summaryType = x.summaryType || col.aggregate || (x.dataType == "number" ? "sum" : "count");
-
+                        x.format = x.format || getFormatType(col);
                     }
 
 

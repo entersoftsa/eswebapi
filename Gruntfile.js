@@ -33,6 +33,16 @@ module.exports = function(grunt) {
                     "bower_components/bootstrap/dist/js/bootstrap.min.js",
                     "bower_components/lodash/dist/lodash.min.js",
                     "bower_components/angular/angular.min.js",
+                    "bower_components/devextreme-web/js/cldr.min.js",
+                    "bower_components/devextreme-web/js/cldr/event.min.js",
+                    "bower_components/devextreme-web/js/cldr/supplemental.min.js",
+
+                    "bower_components/devextreme-web/js/globalize.min.js",
+                    "bower_components/devextreme-web/js/globalize/message.min.js",
+                    "bower_components/devextreme-web/js/globalize/number.min.js",
+                    "bower_components/devextreme-web/js/globalize/currency.min.js",
+                    "bower_components/devextreme-web/js/globalize/date.min.js",
+
                     "bower_components/ng-file-upload/ng-file-upload.min.js",
                     "bower_components/angular-animate/angular-animate.min.js",
                     "bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js",
@@ -46,7 +56,10 @@ module.exports = function(grunt) {
                     "bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js",
                     "bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js",
                     "bower_components/angular-simple-logger/dist/angular-simple-logger.min.js",
-                    "bower_components/kendo-ui/js/jszip.min.js",
+                    "bower_components/jszip/dist/jszip.min.js",
+
+                    "bower_components/devextreme-web/js/dx.all.js",
+
                     "bower_components/kendo-ui/js/kendo.all.min.js",
                     "bower_components/kendo-ui/js/cultures/kendo.culture.el-GR.min.js",
                     "bower_components/kendo-ui/js/cultures/kendo.culture.en-US.min.js",
@@ -64,7 +77,9 @@ module.exports = function(grunt) {
                     "bower_components/kendo-ui/styles/kendo.common-bootstrap.min.css",
                     "bower_components/kendo-ui/styles/kendo.bootstrap.min.css",
                     "bower_components/kendo-ui/styles/kendo.dataviz.min.css",
-                    "bower_components/kendo-ui/styles/kendo.dataviz.bootstrap.min.css"
+                    "bower_components/kendo-ui/styles/kendo.dataviz.bootstrap.min.css",
+                    "bower_components/devextreme-web/css/dx.common.css",
+                    "bower_components/devextreme-web/css/dx.light.css",
                 ],
 
                 dest: 'dist/<%= pkg.name %>.all.css'
@@ -87,6 +102,12 @@ module.exports = function(grunt) {
                     'dist/<%= pkg.name %>.min.js': '<%= concat.dist.dest %>',
                     'dist/<%= pkg.name %>-uiless.min.js': '<%= concat.uilessdist.dest %>',
                     'dist/eswebapi.templates.min.js': 'dist/eswebapi.templates.js'
+                }
+            },
+
+            hybrid: {
+                files: {
+                    'dist/hybrid/js/app.min.js': 'src/hybrid/script.js',
                 }
             }
         },
@@ -151,14 +172,6 @@ module.exports = function(grunt) {
             scripts: {
                 src: 'dist/*.min.js',
                 dest: 'dist'
-            },
-            hybrid: {
-                files: [{
-                    src: [
-                        'dist/hybrid/js/*.js',
-                        'dist/hybrid/styles/*.css',
-                    ]
-                }]
             }
 
         },
@@ -169,38 +182,19 @@ module.exports = function(grunt) {
                 dest: 'dist/hybrid',
                 blockReplacements: {
                     ESDEBUG: function(block) {
-                        return '';
-                    }
-                },
-
-                flow: {
-                    // i'm using this config for all targets, not only 'html'
-                    steps: {
-                        // Here you define your flow for your custom block - only concat
-                        extjs: ['concat'],
-
-                        extcss: ['concat'],
-
-                        js: ['concat', 'uglify:generated'],
-
-                        css: ['concat', 'cssmin']
+                        return 'Hello ';
                     },
-                    // also you MUST define 'post' field to something not null
-                    post: {}
 
                 }
             }
         },
 
         usemin: {
-            assetsDir: ['dist/hybrid/js', 'dist/hybrid/styles'],
+            assetsDir: ['dist/hybrid/'],
             options: {
                 blockReplacements: {
-                    extjs: function(block) {
-                        return '<script src="' + block.dest + '"></script>';
-                    },
-                    extcss: function(block) {
-                        return '<link rel="stylesheet" href="' + block.dest + '">';
+                    ESDEBUG: function(block) {
+                        return 'Hello ';
                     }
                 }
             },
@@ -305,6 +299,13 @@ module.exports = function(grunt) {
 
                     {
                         expand: true,
+                        cwd: 'dist',
+                        src: 'eswebapi.all.min.js',
+                        dest: 'dist/hybrid/js'
+                    },
+
+                    {
+                        expand: true,
                         cwd: 'bower_components/bootstrap/fonts/',
                         src: ['*.*'],
                         dest: 'dist/hybrid/fonts/'
@@ -324,20 +325,21 @@ module.exports = function(grunt) {
 
             verlibs: {
                 files: [{
-                    src: 'dist/eswebapi.all.min.js',
-                    dest: 'dist/eswebapi.' + '<%= pkg.version %>' + '.all.min.js'
-                }, {
-                    src: 'dist/eswebapi.all.css',
-                    dest: 'dist/eswebapi.' + '<%= pkg.version %>' + '.all.css'
-                },
-                {
-                    src: 'dist/eswebapi-uiless.min.js',
-                    dest: 'dist/eswebapi-uiless.' + '<%= pkg.version %>' + '.min.js'
-                },
-                {
-                    src: 'dist/eswebapi.min.js',
-                    dest: 'dist/eswebapi.' + '<%= pkg.version %>' + '.min.js'
-                }]
+                        src: 'dist/eswebapi.all.min.js',
+                        dest: 'dist/eswebapi.' + '<%= pkg.version %>' + '.all.min.js'
+                    }, {
+                        src: 'dist/eswebapi.all.css',
+                        dest: 'dist/eswebapi.' + '<%= pkg.version %>' + '.all.css'
+                    },
+                    {
+                        src: 'dist/eswebapi-uiless.min.js',
+                        dest: 'dist/eswebapi-uiless.' + '<%= pkg.version %>' + '.min.js'
+                    },
+                    {
+                        src: 'dist/eswebapi.min.js',
+                        dest: 'dist/eswebapi.' + '<%= pkg.version %>' + '.min.js'
+                    }
+                ]
             },
 
             docs_images: {
@@ -436,6 +438,26 @@ module.exports = function(grunt) {
                         }
                     }]
                 }
+            }
+        },
+
+        cssmin: {
+            target: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/hybrid',
+                    src: ['*.css'],
+                    dest: 'dist/hybrid/styles',
+                    ext: '.min.css'
+                },
+                {
+                    expand: true,
+                    cwd: 'dist',
+                    src: 'eswebapi.all.css',
+                    dest: 'dist/hybrid/styles',
+                    ext: '.min.css'
+                }
+                ]
             }
         },
 
@@ -569,7 +591,7 @@ module.exports = function(grunt) {
         //'nodemailer:internal'
     ]);
 
-    grunt.registerTask('hybrid', ['clean:hybrid', 'copy:hybrid', 'useminPrepare', 'concat:generated', 'cssmin:generated', 'uglify:generated', 'filerev:hybrid', 'usemin', 'htmlmin:hybrid']);
+    grunt.registerTask('hybrid', ['clean:hybrid', 'copy:hybrid', 'useminPrepare', 'usemin', 'uglify:hybrid', 'htmlmin:hybrid', 'cssmin']);
 
 
 

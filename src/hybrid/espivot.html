@@ -8,8 +8,8 @@
 
     <link rel="stylesheet" href="styles/eswebapi.min.css" />
     <link rel="stylesheet" href="styles/styles.min.css" />
+   
 
-    
 </head>
 
 <body ng-cloak>
@@ -24,11 +24,10 @@
                     es-show-sticky-session="0">
                 </es-login>
             </div>
-            <es-tree-map ng-if="isReady"
+            <es-pivot-pq ng-if="isReady"
                 es-pq-def="esPqDef" 
-                es-panel-open="esPqDef.esPanelOpen"
-                es-chart-options="esPqDef.UIOptions">
-            </es-chart>
+                es-panel-open="esPqDef.esPanelOpen">
+            </es-pivot-pq>
         </div>
     </div>
     
@@ -113,7 +112,6 @@
     <script src="js/eswebapi.all.min.js"></script>
     <script src="js/app.min.js"></script>
 
-    
 </body>
 
 </html>
