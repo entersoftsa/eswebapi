@@ -68,6 +68,37 @@
         }
     }
 
+    function getPivotColFormatType(col) {
+        var colType = col.dataType;
+
+        switch (colType) {
+            case "decimal":
+                {
+                    var fmt = col.format;
+                    var prec = 0;
+                    if (fmt) {
+                        var idx = fmt.indexOf(".");
+                        if (idx != -1) {
+                            var s = fmt.slice(idx);
+                            var cnt = s.split("0").length - 1;
+                            prec = (cnt < 0) ? 0 : cnt;
+                        }
+                    }
+                    return {
+                        type: "fixedPoint",
+                        precision: prec
+                    };
+                }
+            case "datetime":
+                return "shortDateShortTime";
+            case "date":
+                return "shortDate";
+            default:
+                return null;
+        }
+    }
+
+
     function ESParamInfo() {
         this.id = undefined;
         this.aa = undefined;
@@ -990,7 +1021,7 @@
                                 export: {
                                     enabled: true
                                 },
-                                
+
                                 onInitialized: function(e) {
                                     alert("initialized");
                                     gridInstance = e.component;
@@ -1020,10 +1051,8 @@
 
                             tOptions.onCellClick = function(e) {
                                 if (e.area == "data") {
-                                    var pivotGridDataSource = e.component.getDataSource(),
-                                        rowPathLength = e.cell.rowPath.length,
-                                        rowPathName = e.cell.rowPath[rowPathLength - 1],
-                                        popupTitle = (rowPathName ? rowPathName : "Total") + " Drill Down Data";
+                                    var pivotGridDataSource = e.component.getDataSource();
+                                    var popupTitle = e.cell.rowPath.join("/") + " - " + e.cell.columnPath.join("/") + " : " + e.dataFields[e.cell.dataIndex].caption
 
                                     $scope.drillDownDataSource = pivotGridDataSource.createDrillDownDataSource(e.cell);
                                     $scope.salesPopupTitle = popupTitle;
@@ -1066,7 +1095,8 @@
                                                 caption: o.title,
                                                 width: o.width,
                                                 allowSorting: true,
-                                                allowFiltering: true
+                                                allowFiltering: true,
+                                                format: getPivotColFormatType(o)
                                             };
                                         })
                                     };
@@ -1803,13 +1833,13 @@
                                 } else if (esCol.field.toLowerCase().indexOf("tele") != -1 || esCol.field.toLowerCase().indexOf("mobile") != -1) {
                                     ul = "tel:";
                                 } else if (esCol.field.toLowerCase().indexOf("website") != -1) {
-                                    tCol.template = kendo.format("<a href='#={0}||''#'>#={0}||''#</a>", esCol.field);
-                                } else if (esCol.field.toLowerCase().indexOf("esimage")) {
-                                    tCol.template = "<img src='#=" + esCol.field + "#'/>";
+                                    tCol.template = kendo.format("<a target='_blank' href='#={0}||''#'>#={0}||''#</a>", esCol.field);
+                                } else if (esCol.field.toLowerCase().indexOf("eswebimage") != -1) {
+                                    tCol.template = kendo.format("<a target='_blank' href='#={0}#.jpeg'><img src='#={0}#.jpeg' height='{1}' width='{1}'></a>", esCol.field, esCol.width);
                                 }
 
                                 if (ul) {
-                                    tCol.template = kendo.format("<a href='{1}#={0}||''#'>#={0}||''#</a>", esCol.field, ul);
+                                    tCol.template = kendo.format("<a target='_blank' href='{1}#={0}||''#'>#={0}||''#</a>", esCol.field, ul);
                                 }
                             }
                             break;
@@ -2119,6 +2149,7 @@
                 return new kendo.data.DataSource(xParam);
             }
 
+
             function getPivotDS($q, espqdef, escubedef, pqinfo) {
 
                 function getPivotType(colType) {
@@ -2132,36 +2163,6 @@
                             return "date";
                         default:
                             return "string";
-                    }
-                }
-
-                function getFormatType(col) {
-                    var colType = col.dataType;
-
-                    switch (colType) {
-                        case "decimal":
-                            {
-                                var fmt = col.format;
-                                var prec = 0;
-                                if (fmt) {
-                                    var idx = fmt.indexOf(".");
-                                    if (idx != -1) {
-                                        var s = fmt.slice(idx);
-                                        var cnt = s.split("0").length - 1;
-                                        prec = (cnt < 0) ? 0 : cnt;
-                                    }
-                                }
-                                return {
-                                    type: "fixedPoint",
-                                    precision: prec
-                                };
-                            }
-                        case "datetime":
-                            return "shortDateShortTime";
-                        case "date":
-                            return "shortDate";
-                        default:
-                            return null;
                     }
                 }
 
@@ -2197,7 +2198,7 @@
                         x.width = x.width || col.width;
                         x.dataType = x.dataType || getPivotType(col.dataType);
                         x.summaryType = x.summaryType || col.aggregate || (x.dataType == "number" ? "sum" : "count");
-                        x.format = x.format || getFormatType(col);
+                        x.format = x.format || getPivotColFormatType(col);
                     }
 
 
