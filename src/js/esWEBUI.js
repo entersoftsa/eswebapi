@@ -1802,6 +1802,10 @@
                                     ul = "mailto:";
                                 } else if (esCol.field.toLowerCase().indexOf("tele") != -1 || esCol.field.toLowerCase().indexOf("mobile") != -1) {
                                     ul = "tel:";
+                                } else if (esCol.field.toLowerCase().indexOf("website") != -1) {
+                                    tCol.template = kendo.format("<a href='#={0}||''#'>#={0}||''#</a>", esCol.field);
+                                } else if (esCol.field.toLowerCase().indexOf("esimage")) {
+                                    tCol.template = "<img src='#=" + esCol.field + "#'/>";
                                 }
 
                                 if (ul) {
