@@ -183,9 +183,16 @@ module.exports = function(grunt) {
                 blockReplacements: {
                     ESDEBUG: function(block) {
                         return 'Hello ';
-                    },
+                    }
+                },
 
-                }
+                flow: {
+                    steps: {
+                        css: ['concat', 'cssmin']
+                    }
+                },
+
+                post: {}
             }
         },
 
@@ -213,6 +220,7 @@ module.exports = function(grunt) {
                     'dist/hybrid/esgrid.html': 'dist/hybrid/esgrid.html',
                     'dist/hybrid/escombo.html': 'dist/hybrid/escombo.html',
                     'dist/hybrid/esmap.html': 'dist/hybrid/esmap.html',
+                    'dist/hybrid/espivot.html': 'dist/hybrid/espivot.html'
                 }
             }
         },
@@ -284,11 +292,6 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: 'src/hybrid',
                         src: ['*.html'],
-                        dest: 'dist/hybrid/'
-                    }, {
-                        expand: true,
-                        cwd: 'src/hybrid',
-                        src: ['*.txt'],
                         dest: 'dist/hybrid/'
                     }, {
                         expand: true,
@@ -443,20 +446,14 @@ module.exports = function(grunt) {
 
         cssmin: {
             target: {
-                files: [{
-                    expand: true,
-                    cwd: 'src/hybrid',
-                    src: ['*.css'],
-                    dest: 'dist/hybrid/styles',
-                    ext: '.min.css'
-                },
-                {
-                    expand: true,
-                    cwd: 'dist',
-                    src: 'eswebapi.all.css',
-                    dest: 'dist/hybrid/styles',
-                    ext: '.min.css'
-                }
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'dist',
+                        src: 'eswebapi.all.css',
+                        dest: 'dist/hybrid/styles',
+                        ext: '.min.css'
+                    }
                 ]
             }
         },
@@ -591,7 +588,7 @@ module.exports = function(grunt) {
         //'nodemailer:internal'
     ]);
 
-    grunt.registerTask('hybrid', ['clean:hybrid', 'copy:hybrid', 'useminPrepare', 'usemin', 'uglify:hybrid', 'htmlmin:hybrid', 'cssmin']);
+    grunt.registerTask('hybrid', ['clean:hybrid', 'copy:hybrid', 'useminPrepare', 'usemin', 'concat:generated', 'cssmin:generated', 'uglify:hybrid', 'htmlmin:hybrid', 'cssmin']);
 
 
 

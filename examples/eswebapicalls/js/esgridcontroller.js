@@ -1104,7 +1104,7 @@ smeControllers.controller('salesCtrl', ['$q', '$location', '$scope', '$log', 'es
             allowSorting: true,
             allowFiltering: true,
             allowExpandAll: true,
-            xheight: 440,
+
             showBorders: true,
             fieldChooser: {
                 enabled: true
