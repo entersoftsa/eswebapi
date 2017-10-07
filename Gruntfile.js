@@ -54,8 +54,10 @@ module.exports = function(grunt) {
                     "bower_components/moment/min/moment-with-locales.min.js",
                     "bower_components/angular-translate/angular-translate.min.js",
                     "bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js",
+                    "bower_components/angular-material/angular-material.min.js",
                     "bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js",
-                    "bower_components/angular-simple-logger/dist/angular-simple-logger.min.js",
+                    "bower_components/angular-loading-bar/build/loading-bar.min.js",
+
                     "bower_components/jszip/dist/jszip.min.js",
 
                     "bower_components/devextreme-web/js/dx.all.js",
@@ -78,6 +80,9 @@ module.exports = function(grunt) {
                     "bower_components/kendo-ui/styles/kendo.bootstrap.min.css",
                     "bower_components/kendo-ui/styles/kendo.dataviz.min.css",
                     "bower_components/kendo-ui/styles/kendo.dataviz.bootstrap.min.css",
+                    "bower_components/angular-material/angular-material.css",
+                    "bower_components/mdi/css/materialdesignicons.min.css",
+                    "bower_components/angular-loading-bar/build/loading-bar.min.css",
                     "bower_components/devextreme-web/css/dx.common.css",
                     "bower_components/devextreme-web/css/dx.light.css",
                 ],
@@ -312,7 +317,15 @@ module.exports = function(grunt) {
                         cwd: 'bower_components/bootstrap/fonts/',
                         src: ['*.*'],
                         dest: 'dist/hybrid/fonts/'
-                    }, {
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/mdi/fonts/',
+                        src: ['*.*'],
+                        dest: 'dist/hybrid/fonts/'
+                    },
+
+                    {
                         expand: true,
                         cwd: 'bower_components/kendo-ui/styles/bootstrap',
                         src: ['*.*'],
@@ -446,15 +459,13 @@ module.exports = function(grunt) {
 
         cssmin: {
             target: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'dist',
-                        src: 'eswebapi.all.css',
-                        dest: 'dist/hybrid/styles',
-                        ext: '.min.css'
-                    }
-                ]
+                files: [{
+                    expand: true,
+                    cwd: 'dist',
+                    src: 'eswebapi.all.css',
+                    dest: 'dist/hybrid/styles',
+                    ext: '.min.css'
+                }]
             }
         },
 
