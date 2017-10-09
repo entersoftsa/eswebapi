@@ -4,6 +4,10 @@
     <div class="col-xs-12">
         <div class="espivot-wrapper">
 
+            <div ng-if="esPqDef.UIOptions.enableChart" ng-hide="!esPqDef.UIOptions.enableChart || esPqDef.UIOptions.hideChart">
+                <div id="esPivotChart" dx-chart="chartOptions"></div>
+            </div>
+
             <div id="esPivotGrid" dx-pivot-grid="pivotOptions"></div>
 
             <div dx-popup="popupOptions">

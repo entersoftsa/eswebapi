@@ -1057,7 +1057,7 @@ smeControllers.controller('salesCtrl', ['$q', '$location', '$scope', '$log', 'es
     function($q, $location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESWebManager", "ItemEntryFact", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
         $scope.esPqDef.UIOptions = {
-        	showChart: true
+        	enableChart: true
         };
 
         $scope.esPqDef.UIOptions.cubeDef = {

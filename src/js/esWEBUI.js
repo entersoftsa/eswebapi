@@ -1007,8 +1007,11 @@
                     },
                     link: {
                         pre: function($scope, iElement, iAttrs) {
-                            var gridInstance;
+                            var bBound = false;
 
+                            if (!$scope.esPqDef || !$scope.esPqDef.UIOptions || !$scope.esPqDef.UIOptions.cubeDef) {
+                                throw "espivotpq directive is either missing esPqDef or esPqDef.UIOptions or esPqDef.UIOptions.cubeDef";
+                            }
                             var defOptions = {
                                 allowSortingBySummary: true,
                                 allowSorting: true,
@@ -1022,10 +1025,6 @@
                                     enabled: true
                                 },
 
-                                onInitialized: function(e) {
-                                    alert("initialized");
-                                    gridInstance = e.component;
-                                },
                                 fieldPanel: {
                                     showDataFields: true,
                                     showRowFields: true,
@@ -1036,9 +1035,43 @@
                                 }
                             };
 
-                            if (!$scope.esPqDef || !$scope.esPqDef.UIOptions || !$scope.esPqDef.UIOptions.cubeDef) {
-                                throw "espivotpq directive is either missing esPqDef or esPqDef.UIOptions or esPqDef.UIOptions.cubeDef";
-                            }
+
+                            $scope.chartOptions = {
+                                commonSeriesSettings: {
+                                    type: "bar"
+                                },
+                                tooltip: {
+                                    enabled: true,
+                                    customizeTooltip: function(args) {
+                                        var valueText = (args.seriesName.indexOf("Total") != -1) ?
+                                            Globalize.formatCurrency(args.originalValue,
+                                                "USD", { maximumFractionDigits: 0 }) :
+                                            args.originalValue;
+
+                                        return {
+                                            html: args.seriesName + "<div class='currency'>" +
+                                                valueText + "</div>"
+                                        };
+                                    }
+                                },
+                                onInitialized: function(e) {
+                                    $scope.pivotChart = e.component;
+
+                                    if (!bBound && $scope.gridInstance) {
+                                        $scope.gridInstance.bindChart($scope.pivotChart, {
+                                            dataFieldsDisplayMode: "splitPanes",
+                                            alternateDataFields: false
+                                        });
+                                        bBound = true;
+                                    }
+                                },
+                                size: {
+                                    height: 320
+                                },
+                                adaptiveLayout: {
+                                    width: 450
+                                }
+                            };
 
                             var tOptions = {};
 
@@ -1048,6 +1081,27 @@
                                 tOptions = defOptions;
                             }
 
+                            tOptions.onContextMenuPreparing = function(e) {
+                                e.items.splice(0, 0, {
+                                    beginGroup: true,
+                                    text: "RowHeader Layout",
+                                    onItemClick: function(c) {
+                                        var l = $scope.gridInstance.option("rowHeaderLayout");
+                                        l = l == "standard" ? "tree" : "standard";
+                                        $scope.gridInstance.option("rowHeaderLayout", l);
+                                    }
+                                });
+
+                                if ($scope.esPqDef.UIOptions.enableChart) {
+                                    e.items.push({
+                                        beginGroup: true,
+                                        text: $scope.esPqDef.UIOptions.hideChart ? "Show Chart" : "Hide Chart",
+                                        onItemClick: function(c) {
+                                            $scope.esPqDef.UIOptions.hideChart = !$scope.esPqDef.UIOptions.hideChart;
+                                        }
+                                    });
+                                }
+                            }
 
                             tOptions.onCellClick = function(e) {
                                 if (e.area == "data") {
@@ -1059,6 +1113,21 @@
                                     $scope.salesPopupVisible = true;
                                 }
                             };
+
+                            tOptions.onInitialized = function(e) {
+
+                                $scope.gridInstance = e.component;
+
+                                if ($scope.pivotChart && !bBound) {
+                                    $scope.gridInstance.bindChart($scope.pivotChart, {
+                                        dataFieldsDisplayMode: "splitPanes",
+                                        alternateDataFields: false
+                                    });
+                                    bBound = true;
+                                }
+                            };
+
+                            $scope.pivotOptions = tOptions;
 
                             esWebApiService.fetchPublicQueryInfo($scope.esPqDef)
                                 .then(function(ret) {
@@ -1110,12 +1179,11 @@
                                         }
                                     };
 
-                                    tOptions.dataSource = esWebUIHelper.getPivotDS($q, $scope.esPqDef, $scope.esPqDef.UIOptions.cubeDef, v);
-                                    $scope.esPivotDataSource = tOptions.dataSource;
-                                    if (!$scope.esPqDef.PQOptions || $scope.esPqDef.PQOptions.AutoExecute) {
-                                        $scope.pivotOptions = tOptions;
-                                    } else {
-                                        $scope.tmp = tOptions;
+
+
+                                    $scope.esPivotDataSource = esWebUIHelper.getPivotDS($q, $scope.esPqDef, $scope.esPqDef.UIOptions.cubeDef, v);
+                                    if (!$scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
+                                        $scope.gridInstance.option("dataSource", $scope.esPivotDataSource);
                                     }
                                 })
                                 .catch(function(err) {
@@ -1126,16 +1194,17 @@
 
                             $scope.executePQ = function() {
                                 $scope.esPqDef.esPanelOpen = false;
-                                if (!$scope.pivotOptions) {
-                                    $scope.pivotOptions = $scope.tmp;
-                                    $scope.tmp = null;
+                                if (!$scope.gridInstance.option("dataSource")) {
+                                    $scope.gridInstance.option("dataSource", $scope.esPivotDataSource);
                                 } else {
                                     $scope.esPivotDataSource.reload();
                                 }
-                            }
+
+                            };
                         }
                     }
-                };
+                }
+
             }
         ])
 
@@ -2213,7 +2282,7 @@
                         })
                         .catch(function(err) {
                             $log.error("Error in DataSource ", err);
-                            defered.reject(err);
+                            defered.resolve([]);
                         });
                     return defered.promise;
                 };
