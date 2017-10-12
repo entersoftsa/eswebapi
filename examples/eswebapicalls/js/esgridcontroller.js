@@ -546,7 +546,7 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 
         //fetchCompanyParam 
         $scope.fetchCompanyParam = function() {
-            esWebApi.fetchCompanyParam($scope.pCompanyParam)
+            esWebApi.getParameterValue($scope.pCompanyParam)
                 .then(function(ret) {
                     $scope.pCompanyParamValue = ret.data;
                 }, function(err) {
@@ -1088,7 +1088,11 @@ smeControllers.controller('salesCtrl', ['$q', '$location', '$scope', '$log', 'es
                 },
                 {
                     dataField: "ESFIItemPeriodics_TurnOver",
-                    area: "data"
+                    area: "data",
+                    format: {
+                    	type: "currency",
+                    	precision: 2
+                    }
                 },
                 {
                     dataField: "ESFIItemPeriodics_SalesQty",

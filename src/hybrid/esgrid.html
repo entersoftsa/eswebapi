@@ -23,14 +23,22 @@
                     es-show-sticky-session="0">
                 </es-login>
             </div>
-            <es-web-pq ng-if="isReady" 
-                es-panel-open="esPqDef.esPanelOpen"
-                es-group-id="esPqDef.GroupID" 
-                es-p-q-options="esPqDef.PQOptions"
-                es-grid-options="esPqDef.UIOptions"
-                es-params-values="esPqDef.Params" 
-                es-filter-id="esPqDef.FilterID">
-            </es-web-pq>
+
+            <div class="mdl-cell shadow" flex="100" flex-sm="100" flex-xs="100" style="background: white;">
+                <div class="panel-body forms">
+                    <div ng-if="::!isFavouritesMode" class="actions-r">
+                        <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(esPqDef, true)" title="{{'FAV.ADD' | translate}}"><i class="mdi md-32 mdi-heart"></i></a></button>
+                    </div>
+                    <es-web-pq ng-if="isReady" 
+                        es-panel-open="esPqDef.esPanelOpen"
+                        es-group-id="esPqDef.GroupID" 
+                        es-p-q-options="esPqDef.PQOptions"
+                        es-grid-options="esPqDef.UIOptions"
+                        es-params-values="esPqDef.Params" 
+                        es-filter-id="esPqDef.FilterID">
+                    </es-web-pq>
+                </div>
+            </div>
         </div>
     </div>
     

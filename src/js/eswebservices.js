@@ -50,6 +50,7 @@
         __ELASTICSEARCH__: "api/esearch/",
         __SERVER_CAPABILITIES__: "api/Login/ServerCapabilities/",
         __FETCH_COMPANY_PARAM__: "api/rpc/FetchCompanyParam/",
+        __GET_PARAMETER_VALUE__: "api/rpc/ParameterValue/",
         __FETCH_COMPANY_PARAMS__: "api/rpc/FetchCompanyParams/",
         __SCROLLER_COMMAND__: "api/rpc/ScrollerCommand/",
         __FORM_COMMAND__: "api/rpc/FormCommand/",
@@ -1673,7 +1674,7 @@ $scope.fetchCompanyParam = function() {
 */
                             fetchCompanyParam: function(esparam) {
                                 if (!esparam) {
-                                    return undefined;
+                                    throw new Error("Invalid Paramter ID");
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_COMPANY_PARAM__, esparam.replace(" ", ""));
@@ -1683,6 +1684,19 @@ $scope.fetchCompanyParam = function() {
                                     url: surl
                                 });
                                 return processWEBAPIPromise(ht);
+                            },
+
+                            getParameterValue: function(paramId) {
+                                if (!paramId) {
+                                    throw new Error("Invalid Paramter ID");
+                                }
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__GET_PARAMETER_VALUE__, paramId.replace(" ", ""));
+                                var ht = $http({
+                                    method: 'get',
+                                    headers: prepareHeaders(),
+                                    url: surl
+                                });
+                                return processWEBAPIPromise(ht, null, true);
                             },
 
                             /**

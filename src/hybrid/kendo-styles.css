@@ -760,7 +760,7 @@ a.md-button.md-default-theme:not([disabled]):hover, a.md-button:not([disabled]):
 
 
 }
-// ........................main container layout ends here
+
 .k-grid-header:first-child, .k-grid-toolbar:first-child, .k-grid>.k-grouping-header, .k-scheduler>.k-scheduler-toolbar:first-child {
         border-radius: 3px 3px 0 0;
         text-align: right;
@@ -784,6 +784,10 @@ a.k-button.k-button-icontext.k-grid-excel {
 }
 .form-control {
         border-radius: 0px!important;
+}
+.k-grid td{
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .k-autocomplete.k-state-default, .k-dropdown-wrap.k-state-default,  .k-numeric-wrap.k-state-default, .k-picker-wrap.k-state-default {
         border-color: #ccc;
@@ -1350,7 +1354,7 @@ form {
 .k-listview>.k-state-focused.k-state-selected, .k-state-selected td.k-state-focused, td.k-state-selected {
         box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
-// login page........
+
 .login-overlay .form-container .inputs>input, .login-overlay .form-control {
         height: 26px;
         border-radius: 0px;
@@ -1380,7 +1384,7 @@ form {
 .login-overlay .form-container .icon {
         padding-top: 0px;
 }
-// profile new  
+
 .mdl-card ul {
         list-style: none;
 }
@@ -1611,15 +1615,17 @@ i.dx-icon.dx-icon-columnchooser {
 /*.dx-pivotgrid .dx-pivotgrid-area td{background-color: #f5f5f5;}    */
 
 
-// .dx-pivotgrid.dx-row-lines tr:nth-child(odd) {background: #ebebeb}
+/* .dx-pivotgrid.dx-row-lines tr:nth-child(odd) {background: #ebebeb} */
 
 
 .dx-pivotgrid .dx-pivotgrid-fields-area-head .dx-empty-area-text{font-size: 16px;}
 
-// .dx-pivotgrid .dx-pivotgrid-area td:nth-child(even) {
-//     color: #333;
-//     background: #ebebeb;
-// }
+/* 
+.dx-pivotgrid .dx-pivotgrid-area td:nth-child(even) {
+     color: #333;
+     background: #ebebeb;
+}
+*/
 
 td.dx-area-row-cell{
     background-color: #ddd;
@@ -1963,8 +1969,6 @@ h2.name {
 }
 
 
-
-// webapi.............
 .more-cont {
         padding-top: 15px!important;
 }
@@ -2075,9 +2079,13 @@ color: #fff;
         .form-group {
                 padding-top: 0px;
         }
-        // .col-xs-12.ng-scope.col-md-6 {
-        //         height: auto!important;
-        // }
+
+        /*
+        .col-xs-12.ng-scope.col-md-6 {
+                 height: auto!important;
+        }
+        */
+       
         .container-img img {
                 height: 257px;
                 min-width: 257px;
@@ -2163,14 +2171,15 @@ span.k-icon.k-i-reload {
 }
 
 
-// .k-widget.k-multiselect.k-header {
-//         height: 31px;
-// }
+/* .k-widget.k-multiselect.k-header {
+         height: 31px;
+}
 
-// .k-widget.k-multiselect.{
-//     height: 27px!important;
-//     padding: 0px;
-// }
+.k-widget.k-multiselect.{
+    height: 27px!important;
+    padding: 0px;
+}
+*/
 
 
 .k-multiselect-wrap , .k-multiselect-wrap.k-floatwrap{
@@ -2218,9 +2227,12 @@ border-radius: 0px;}
 .date-title .panel-heading {
         padding: 15px 0;
 }
-// .col-xs-12.ng-scope.col-md-6 {
-//         height: 88px;
-// }
+
+/* .col-xs-12.ng-scope.col-md-6 {
+         height: 88px;
+}
+*/
+
 .form-group{margin-bottom: 15px;}
 
 .panel-default.date-title>.panel-heading+.panel-collapse>.panel-body {

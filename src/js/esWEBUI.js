@@ -7,64 +7,96 @@
  * This module encapsulates a set of directives, filters, services and methods for UI
  */
 
+
 (function() {
     'use strict';
     var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate', 'dx']);
 
-    esWEBUI.run(['$translate', 'esMessaging', '$q', '$http', function($translate, esMessaging, $q, $http) {
+    esWEBUI.run(['$translate', 'esMessaging', '$q', '$http', '$injector', function($translate, esMessaging, $q, $http, $injector) {
 
         window.esLoginLanguage = navigator.language || navigator.userLanguage || 'en-US';
 
         esMessaging.subscribe("AUTH_CHANGED", function(sess, apitoken) {
             var lang = (sess && sess.connectionModel && sess.connectionModel.LangID) ? sess.connectionModel.LangID : window.esLoginLanguage;
-            doChangeLanguage($translate, lang, $q, $http);
+
+            doChangeLanguage($translate, lang, $q, $http, $injector);
+
+            if (sess && sess.connectionModel && apitoken) {
+                var api = $injector.get('esWebApi');
+                var esCache = $injector.get('esCache');
+                if (DevExpress && api && esCache) {
+                    var x = esCache.getItem("ES_BASE_CURR");
+                    if (x) {
+                        DevExpress.config({ defaultCurrency: x });
+                        return;
+                    }
+
+                    api.getParameterValue("ESFICALYEARBASECURRENCY")
+                        .then(function(ret) {
+                            esCache.setItem("ES_BASE_CURR", ret.data);
+                            DevExpress.config({ defaultCurrency: ret.data });
+                        })
+                        .catch(function(err) {
+
+                        });
+
+                }
+            }
         });
     }]);
 
-    function doChangeLanguage($translate, lang, $q, $http) {
+    function doChangeLanguage($translate, lang, $q, $http, $injector) {
         lang = lang || window.esLoginLanguage;
 
+        var esCache = $injector.get('esCache');
         var aPart = lang.split("-")[0];
+
         $translate.use(aPart);
 
         if (Globalize) {
+            if (!esCache.getItem("Globalize_" + lang)) {
+                $q.all([
+                    $http.get("languages/" + aPart + "-ca-gregorian.json"),
+                    $http.get("languages/" + aPart + "-numbers.json"),
+                    $http.get("languages/" + aPart + "-currencies.json"),
 
-            $q.all([
-                $http.get("languages/" + aPart + "-ca-gregorian.json"),
-                $http.get("languages/" + aPart + "-numbers.json"),
-                $http.get("languages/" + aPart + "-currencies.json"),
+                    $http.get("languages/likelySubtags.json"),
+                    $http.get("languages/timeData.json"),
+                    $http.get("languages/weekData.json"),
+                    $http.get("languages/currencyData.json"),
+                    $http.get("languages/numberingSystems.json")
+                ]).then(function(ret) {
+                        _.forEach(ret, function(x) {
+                            Globalize.load(x.data);
+                        });
+                    } //loads data held in each array item to Globalize
+                ).then(function() {
+                    Globalize.locale(lang);
+                    if (esCache) {
+                        esCache.setItem("Globalize_" + lang, true);
+                    }
 
-                $http.get("languages/likelySubtags.json"),
-                $http.get("languages/timeData.json"),
-                $http.get("languages/weekData.json"),
-                $http.get("languages/currencyData.json"),
-                $http.get("languages/numberingSystems.json")
-            ]).then(function(ret) {
-                    _.forEach(ret, function(x) {
-                        Globalize.load(x.data);
-                    });
-                } //loads data held in each array item to Globalize
-            ).then(function() {
-                Globalize.locale(aPart);
-            }).catch(function(xerr) {
-                throw xerr;
-            });
-
-
-
-        }
-
-        if (kendo) {
-            kendo.culture(lang);
-            var kendoMessagesUrl = window.ESDBG ? "bower_components/kendo-ui/js/messages/kendo.messages." : "//kendo.cdn.telerik.com/" + kendo.version + "/js/messages/kendo.messages.";
-            kendoMessagesUrl = kendoMessagesUrl + lang + ".min.js";
-            if (lang == "el-GR") {
-                kendoMessagesUrl = window.ESDBG ? "lib/eswebapi/dist/languages/eskendogr.js" : "languages/eskendogr.js";
-            }
-            $.getScript(kendoMessagesUrl,
-                function() {
-
+                }).catch(function(xerr) {
+                    throw xerr;
                 });
+            } else {
+                Globalize.locale(lang);
+            }
+
+            if (kendo) {
+                kendo.culture(lang);
+                if (!esCache.getItem("kendo_" + lang)) {
+                    var kendoMessagesUrl = window.ESDBG ? "bower_components/kendo-ui/js/messages/kendo.messages." : "//kendo.cdn.telerik.com/" + kendo.version + "/js/messages/kendo.messages.";
+                    kendoMessagesUrl = kendoMessagesUrl + lang + ".min.js";
+                    if (lang == "el-GR") {
+                        kendoMessagesUrl = window.ESDBG ? "lib/eswebapi/dist/languages/eskendogr.js" : "languages/eskendogr.js";
+                    }
+                    $.getScript(kendoMessagesUrl,
+                        function() {
+                            esCache.setItem("kendo_" + lang, true);
+                        });
+                }
+            }
         }
     }
 
@@ -85,7 +117,7 @@
                         }
                     }
                     return {
-                        type: "fixedPoint",
+                        type: "decimal",
                         precision: prec
                     };
                 }
@@ -392,8 +424,8 @@
             };
         }])
 
-        .directive('esLogin', ['$q', '$http', '$translate', '$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize',
-            function($q, $http, $translate, $log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize) {
+        .directive('esLogin', ['$q', '$http', '$translate', '$log', '$uibModal', 'esWebApi', 'esUIHelper', 'esGlobals', '$sanitize', '$injector',
+            function($q, $http, $translate, $log, $uibModal, esWebApiService, esWebUIHelper, esGlobals, $sanitize, $injector) {
                 return {
                     restrict: 'AE',
                     scope: {
@@ -409,7 +441,7 @@
                         var onLangChanged = function() {
                             if ($scope.esCredentials.LangID) {
                                 var lang = $scope.esCredentials.LangID;
-                                doChangeLanguage($translate, lang, $q, $http);
+                                doChangeLanguage($translate, lang, $q, $http, $injector);
                             }
                             window.esLoginLanguage = $scope.esCredentials.LangID || navigator.language || navigator.userLanguage || 'en-US';
                         };
@@ -428,7 +460,7 @@
 
                         if ($scope.esCredentials.LangID) {
                             var lang = $scope.esCredentials.LangID;
-                            doChangeLanguage($translate, lang, $q, $http);
+                            doChangeLanguage($translate, lang, $q, $http, $injector);
                         }
                     }
                 }
@@ -1008,6 +1040,7 @@
                     link: {
                         pre: function($scope, iElement, iAttrs) {
                             var bBound = false;
+                            var setts = esGlobals.getESUISettings();
 
                             if (!$scope.esPqDef || !$scope.esPqDef.UIOptions || !$scope.esPqDef.UIOptions.cubeDef) {
                                 throw "espivotpq directive is either missing esPqDef or esPqDef.UIOptions or esPqDef.UIOptions.cubeDef";
@@ -1043,10 +1076,7 @@
                                 tooltip: {
                                     enabled: true,
                                     customizeTooltip: function(args) {
-                                        var valueText = (args.seriesName.indexOf("Total") != -1) ?
-                                            Globalize.formatCurrency(args.originalValue,
-                                                "USD", { maximumFractionDigits: 0 }) :
-                                            args.originalValue;
+                                        var valueText = Globalize.formatCurrency(args.originalValue, "EUR");;
 
                                         return {
                                             html: args.seriesName + "<div class='currency'>" +
@@ -1064,12 +1094,6 @@
                                         });
                                         bBound = true;
                                     }
-                                },
-                                size: {
-                                    height: 320
-                                },
-                                adaptiveLayout: {
-                                    width: 450
                                 }
                             };
 
@@ -1082,13 +1106,33 @@
                             }
 
                             tOptions.onContextMenuPreparing = function(e) {
+                                var l = $scope.gridInstance.option("rowHeaderLayout");
+                                var nl = (l == "standard") ? "tree" : "standard"
                                 e.items.splice(0, 0, {
                                     beginGroup: true,
-                                    text: "RowHeader Layout",
+                                    text: "RowHeader Layout " + nl,
                                     onItemClick: function(c) {
-                                        var l = $scope.gridInstance.option("rowHeaderLayout");
-                                        l = l == "standard" ? "tree" : "standard";
-                                        $scope.gridInstance.option("rowHeaderLayout", l);
+                                        $scope.gridInstance.option("rowHeaderLayout", nl);
+                                    }
+                                });
+
+                                var l1 = $scope.gridInstance.option("showTotalsPrior");
+                                var nl1 = (l1 == "both") ? "none" : "both";
+                                e.items.splice(1, 0, {
+                                    beginGroup: true,
+                                    text: "Show Totals " + nl1,
+                                    onItemClick: function(c) {
+                                        $scope.gridInstance.option("showTotalsPrior", nl1);
+                                    }
+                                });
+
+                                var l2 = $scope.gridInstance.option("dataFieldArea");
+                                var nl2 = (l2 == "row") ? "column" : "row";
+                                e.items.splice(2, 0, {
+                                    beginGroup: true,
+                                    text: "Data Field headers in " + nl2,
+                                    onItemClick: function(c) {
+                                        $scope.gridInstance.option("dataFieldArea", nl2);
                                     }
                                 });
 
@@ -1127,6 +1171,15 @@
                                 }
                             };
 
+                            var plt = DevExpress.devices.current();
+
+
+                            if (plt.tablet || plt.phone) {
+                                // force narrow settings for mobile
+                                tOptions.rowHeaderLayout = "tree";
+                            }
+                            DevExpress.viz.currentTheme(plt, 'light');
+
                             $scope.pivotOptions = tOptions;
 
                             esWebApiService.fetchPublicQueryInfo($scope.esPqDef)
@@ -1135,6 +1188,7 @@
 
                                     if (tOptions.export) {
                                         tOptions.export.fileName = v.caption;
+                                        tOptions.export.proxyURL = esWebApiService.proxyExportSaveFile("telerik");
                                     }
 
                                     $scope.dataGridOptions = {

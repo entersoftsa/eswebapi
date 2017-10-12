@@ -42,7 +42,8 @@
     "modernizr": "^3.5.0",
     "jszip": "^3.1.4",
     "angular-material": "^1.1.5",
-    "mdi": "^2.0.46"
+    "mdi": "^2.0.46",
+    "perfect-scrollbar": "^0.8.1"
   },
   "resolutions": {
     "angular-translate": "^2.13.1"

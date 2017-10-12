@@ -15,33 +15,35 @@
 </head>
 
 <body ng-cloak class="extended">
-    <div ng-controller="esComponentCtrl">
-        <div ng-if="showLogin">
-            <es-login es-credentials="esCredentials" es-on-success="authenticate()" es-show-subscription="true" es-show-bridge="true" es-show-sticky-session="0">
-            </es-login>
-        </div>
-        <div ng-repeat="section in esPqDef" ng-init="outerIndex = $index" class="layout-row" layout-sm="column" layout-xs="column">
-            <div ng-repeat="dbItem in section" class="mdl-cell shadow" flex="{{100 / (section.length || 2)}}" flex-sm="100" flex-xs="100" style="background: white;">
-                <div id="anchor{{dbItem.CtxID}}" class="panel-body forms">
-                    <div ng-if="::!isFavouritesMode" class="actions-r">
-                        <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, true)" title="{{'FAV.ADD' | translate}}"><i class="mdi md-32 mdi-heart"></i></a></button>
+    <div ng-controller="esComponentCtrl" class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <div class="page-content remodal-bg animsition">
+            <div ng-if="showLogin">
+                <es-login es-credentials="esCredentials" es-on-success="authenticate()" es-show-subscription="true" es-show-bridge="true" es-show-sticky-session="0">
+                </es-login>
+            </div>
+            <div ng-repeat="section in esPqDef" ng-init="outerIndex = $index" class="layout-row" layout-sm="column" layout-xs="column">
+                <div ng-repeat="dbItem in section" class="mdl-cell shadow" flex="{{100 / (section.length || 2)}}" flex-sm="100" flex-xs="100" style="background: white;">
+                    <div id="anchor{{dbItem.CtxID}}" class="panel-body forms">
+                        <div ng-if="::!isFavouritesMode" class="actions-r">
+                            <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, true)" title="{{'FAV.ADD' | translate}}"><i class="mdi md-32 mdi-heart"></i></a></button>
+                        </div>
+                        <div ng-if="::isFavouritesMode" class="actions-r">
+                            <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, false)" title="{{'FAV.DEL' | translate}}"><i class="mdi md-32 red mdi-heart-off"></i></a></button>
+                            <button role="button" class="btn btn-transparent margin-r" ng-class="{'disabled': !canMoveUpOrDown(dbItem, true)}"><a ng-click="moveUpOrDown(dbItem, true)" title="{{'FAV.UP' | translate}}"><i class="mdi md-32 mdi-arrow-up-bold-circle"></i></a></button>
+                            <button role="button" class="btn btn-transparent" ng-class="{'disabled': !canMoveUpOrDown(dbItem, false)}"><a ng-click="moveUpOrDown(dbItem, false)" title="{{'FAV.DOWN' | translate}}"><i class="mdi md-32 mdi-arrow-down-bold-circle"></i></a></button>
+                        </div>
+                        <es-web-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esgrid'" es-group-id="dbItem.GroupID" es-p-q-options="dbItem.PQOptions" es-panel-open="dbItem.esPanelOpen" es-params-values="dbItem.Params" es-force-title="dbItem.Title" es-filter-id="dbItem.FilterID" es-grid-options="dbItem.UIOptions">
+                        </es-web-pq>
+                        <es-chart ng-if="dbItem.ESUIType.toLowerCase() == 'eschart'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
+                        </es-chart>
+                        <es-tree-map ng-if="dbItem.ESUIType.toLowerCase() == 'estreemap'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
+                        </es-tree-map>
+                        <es-pivot-pq ng-if="dbItem.ESUIType.toLowerCase() == 'espivot'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
+                        </es-pivot-pq>
+                        <es-map-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esmap'" es-options="dbItem.UIOptions" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
+                        </es-map-pq>
+                        <span id="anchor3"></span>
                     </div>
-                    <div ng-if="::isFavouritesMode" class="actions-r">
-                        <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, false)" title="{{'FAV.DEL' | translate}}"><i class="mdi md-32 red mdi-heart-off"></i></a></button>
-                        <button role="button" class="btn btn-transparent margin-r" ng-class="{'disabled': !canMoveUpOrDown(dbItem, true)}"><a ng-click="moveUpOrDown(dbItem, true)" title="{{'FAV.UP' | translate}}"><i class="mdi md-32 mdi-arrow-up-bold-circle"></i></a></button>
-                        <button role="button" class="btn btn-transparent" ng-class="{'disabled': !canMoveUpOrDown(dbItem, false)}"><a ng-click="moveUpOrDown(dbItem, false)" title="{{'FAV.DOWN' | translate}}"><i class="mdi md-32 mdi-arrow-down-bold-circle"></i></a></button>
-                    </div>
-                    <es-web-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esgrid'" es-group-id="dbItem.GroupID" es-p-q-options="dbItem.PQOptions" es-panel-open="dbItem.esPanelOpen" es-params-values="dbItem.Params" es-force-title="dbItem.Title" es-filter-id="dbItem.FilterID" es-grid-options="dbItem.UIOptions">
-                    </es-web-pq>
-                    <es-chart ng-if="dbItem.ESUIType.toLowerCase() == 'eschart'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
-                    </es-chart>
-                    <es-tree-map ng-if="dbItem.ESUIType.toLowerCase() == 'estreemap'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
-                    </es-tree-map>
-                    <es-pivot-pq ng-if="dbItem.ESUIType.toLowerCase() == 'espivot'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
-                    </es-pivot-pq>
-                    <es-map-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esmap'" es-options="dbItem.UIOptions" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
-                    </es-map-pq>
-                    <span id="anchor3"></span>
                 </div>
             </div>
         </div>
@@ -64,153 +66,81 @@
         window.esGridHeight = "";
         window.esWebApiToken = "";
         window.esDef = {
-            "AA": 30000,
-            "ID": "PQ_30000",
-            "GroupID": "SALES",
+            "AA": 1000,
+            "ID": "PQ_1000",
+            "GroupID": "BUSENT",
             "Title": {
-                "en": "Leads",
-                "el": "Leads",
-                "ro": "Leads",
-                "bg": "Евентуални сделки"
+                "en": "Trade accounts",
+                "el": "Συναλλασσόμενοι",
+                "ro": "Conturi comerciale",
+                "bg": "Контрагенти"
             },
-            "Description": "Leads",
+            "Description": "Συναλλασσόμενοι",
             "ESUIType": "esCombo",
-            "esDef": [
-                [{
-                        "AA": 30100,
-                        "ID": "PQ_30100",
-                        "ESUIType": "esChart",
-                        "esDef": {
-                            "GroupID": "ESWebManager",
-                            "FilterID": "SalesLeadStatusAnalysis",
-                            "UIOptions": {
-                                "theme": "silver",
-                                "series": [{
-                                    "type": "pie",
-                                    "startAngle": 150,
-                                    "field": "CountLeads",
-                                    "categoryField": "Status",
-                                    "axis": "CountLeads"
-                                }],
-                                "tooltip": {
-                                    "visible": true,
-                                    "template": "#= category #: #= value #"
-                                },
-                                "pannable": {
-                                    "lock": "x"
-                                },
-                                "zoomable": {
-                                    "mousewheel": {
-                                        "lock": "x"
-                                    },
-                                    "selection": {
-                                        "lock": "x"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "AA": 30101,
-                        "ID": "PQ_30101",
-                        "ESUIType": "esChart",
-                        "esDef": {
-                            "GroupID": "ESWebManager",
-                            "FilterID": "SalesLeadRateAnalysis",
-                            "UIOptions": {
-                                "autoBind": true,
-                                "theme": "silver",
-                                "series": [{
-                                    "type": "pie",
-                                    "startAngle": 150,
-                                    "field": "CountLeads",
-                                    "categoryField": "Quality",
-                                    "axis": "CountLeads"
-                                }],
-                                "tooltip": {
-                                    "visible": true,
-                                    "template": "#= category #: #= value #"
-                                },
-                                "pannable": {
-                                    "lock": "x"
-                                },
-                                "zoomable": {
-                                    "mousewheel": {
-                                        "lock": "x"
-                                    },
-                                    "selection": {
-                                        "lock": "x"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                ],
-                [{
-                    "AA": 30102,
-                    "ID": "PQ_30102",
-                    "Title": "Leads ανά κατάσταση & ποιότητα",
-                    "Description": "Leads ανά κατάσταση & ποιότητα",
-                    "ESUIType": "esChart",
+            "esDef": [{
+                    "AA": 1010,
+                    "ID": "PQ_1010",
+                    "Title": "Πελάτες",
+                    "Description": "Πελάτες",
+                    "ESUIType": "esGrid",
                     "esDef": {
                         "GroupID": "ESWebManager",
-                        "FilterID": "LeadsByStatusQuality",
-                        "Params": [{
-                            "id": "JoinResource",
-                            "value": ""
-                        }],
-                        "UIOptions": {
-                            "autoBind": true,
-                            "legend": {
-                                "visible": true,
-                                "position": "top",
-                                "labels": {
-                                    "template": "#= series.name #"
-                                }
-                            },
-                            "group": [{
-                                "field": "Quality"
-                            }],
-                            "seriesDefaults": {
-                                "type": "bar",
-                                "stack": {
-                                    "type": "100%"
-                                }
-                            },
-                            "series": [{
-                                "field": "CountLeads",
-                                "categoryField": "Status",
-                                "axis": "CountLeads",
-                                "title": "Status",
-                                "color": "#f3ac32"
-                            }],
-                            "valueAxis": {
-                                "visible": true,
-                                "name": "CountLeads",
-                                "title": {
-                                    "text": {
-                                        "en": "Number of leads",
-                                        "el": "Πλήθος leads",
-                                        "ro": "Numar de leaduri",
-                                        "bg": "Брой Потенциални клиенти"
-                                    }
-                                }
-                            },
-                            "categoryAxis": {
-                                "categories": "Status",
-                                "labels": {
-                                    "rotation": 0,
-                                    "font": "8px"
-                                }
-                            },
-                            "tooltip": {
-                                "visible": true,
-                                "template": " #= category #, #= series.name #<br/> #=  value #",
-                                "text-align": "left"
-                            }
+                        "FilterID": "BusEntitiesCustomers",
+                        "PQOptions": {
+                            "ServerPaging": true,
+                            "PageSize": 20,
+                            "AutoExecute": false
                         }
                     }
-                }]
+                },
+                {
+                    "AA": 1011,
+                    "ID": "PQ_1011",
+                    "Title": "Πρόσωπα",
+                    "Description": "Πρόσωπα",
+                    "ESUIType": "esGrid",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "BusEntitiesPerson",
+                        "PQOptions": {
+                            "ServerPaging": true,
+                            "PageSize": 20,
+                            "AutoExecute": false
+                        }
+                    }
+                },
+                {
+                    "AA": 1012,
+                    "ID": "PQ_1012",
+                    "Title": "Επιχειρηματικές Επαφές",
+                    "Description": "Επιχειρηματικές Επαφές",
+                    "ESUIType": "esGrid",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "BusEntitiesContacts",
+                        "PQOptions": {
+                            "ServerPaging": true,
+                            "PageSize": 20,
+                            "AutoExecute": false
+                        }
+                    }
+                },
+                {
+                    "AA": 1013,
+                    "ID": "PQ_1013",
+                    "Title": "Επιχειρηματικές διευθύνσεις",
+                    "Description": "Επιχειρηματικές διευθύνσεις",
+                    "ESUIType": "esGrid",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "BusEntitiesBusinessAddresses",
+                        "PQOptions": {
+                            "ServerPaging": true,
+                            "PageSize": 20,
+                            "AutoExecute": false
+                        }
+                    }
+                }
             ]
         };
     };

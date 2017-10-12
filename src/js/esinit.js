@@ -1567,13 +1567,13 @@ x.setParamValues({p1: 'Hello World'});
                 return ret;
             }
 
-            function fgetGA() {
+            function fgetGA(injectorName) {
                 if (!$injector) {
                     return undefined;
                 }
 
                 try {
-                    return $injector.get('es.Services.GA');
+                    return $injector.get(!injectorName ? 'es.Services.GA' : injectorName);
                 } catch (x) {
                     return undefined;
                 }

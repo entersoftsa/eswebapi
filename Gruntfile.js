@@ -29,10 +29,12 @@ module.exports = function(grunt) {
             },
 
             distalljs: {
-                src: ["bower_components/jquery/dist/jquery.min.js",
-                    "bower_components/bootstrap/dist/js/bootstrap.min.js",
+                src: [
                     "bower_components/lodash/dist/lodash.min.js",
+                    "bower_components/jquery/dist/jquery.min.js",
+                    "bower_components/bootstrap/dist/js/bootstrap.min.js",
                     "bower_components/angular/angular.min.js",
+
                     "bower_components/devextreme-web/js/cldr.min.js",
                     "bower_components/devextreme-web/js/cldr/event.min.js",
                     "bower_components/devextreme-web/js/cldr/supplemental.min.js",
@@ -57,6 +59,8 @@ module.exports = function(grunt) {
                     "bower_components/angular-material/angular-material.min.js",
                     "bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js",
                     "bower_components/angular-loading-bar/build/loading-bar.min.js",
+                    "bower_components/perfect-scrollbar/js/perfect-scrollbar.min.js",
+                    "bower_components/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js",
 
                     "bower_components/jszip/dist/jszip.min.js",
 
@@ -83,6 +87,7 @@ module.exports = function(grunt) {
                     "bower_components/angular-material/angular-material.css",
                     "bower_components/mdi/css/materialdesignicons.min.css",
                     "bower_components/angular-loading-bar/build/loading-bar.min.css",
+                    "bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css",
                     "bower_components/devextreme-web/css/dx.common.css",
                     "bower_components/devextreme-web/css/dx.light.css",
                 ],
