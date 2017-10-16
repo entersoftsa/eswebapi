@@ -1,0 +1,39 @@
+{
+
+    "MENU": {
+        "SALES": {
+            "TITLE": "Sales Rep",
+            "SCORE": "My Performance",
+            "INFORMATION": "Information"
+        },
+
+        "SKU": {
+            "TITLE": "Inventory",
+            "AVAILABILITY": "Availability",
+            "PRICE": "Price Checker",
+            "INFORMATION": "Information"
+        },
+
+        "CUSTOMER": {
+            "TITLE": "Customer",
+            "INFORMATION": "Information",
+            "NEW": "New Loyalty Application"
+        },
+
+        "DOCS": {
+            "TITLE": "Documents",
+            "ORDERS": "Pending Orders",
+            "RETURNS": "Returns"
+        },
+
+        "SIGNOUT": "Sign out",
+        "SEARCH": "Search"
+    },
+
+    "CUSTOMER": {
+        "SEARCH_LOYALTY": "Loyalty Code",
+        "SEARCH_NAME": "Name",
+        "SEARCH_EMAIL": "eMail",
+        "SEARCH_PHONE": "Phone"
+    }
+}

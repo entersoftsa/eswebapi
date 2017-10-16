@@ -86,11 +86,8 @@
             if (kendo) {
                 kendo.culture(lang);
                 if (!esCache.getItem("kendo_" + lang)) {
-                    var kendoMessagesUrl = window.ESDBG ? "bower_components/kendo-ui/js/messages/kendo.messages." : "//kendo.cdn.telerik.com/" + kendo.version + "/js/messages/kendo.messages.";
-                    kendoMessagesUrl = kendoMessagesUrl + lang + ".min.js";
-                    if (lang == "el-GR") {
-                        kendoMessagesUrl = window.ESDBG ? "lib/eswebapi/dist/languages/eskendogr.js" : "languages/eskendogr.js";
-                    }
+                    var kendoMessagesUrl = "languages/kendo.messages." + lang + ".min.js";
+
                     $.getScript(kendoMessagesUrl,
                         function() {
                             esCache.setItem("kendo_" + lang, true);
@@ -797,6 +794,8 @@
                         esPostGridOptions: "=?",
                         esPQOptions: "=?",
                         esDataSource: "=",
+                        esPostProcessGridOptions: "&",
+
                     },
                     templateUrl: function(element, attrs) {
                         return "src/partials/esGrid.html";
@@ -829,7 +828,7 @@
 
                         $scope.esGridPrint = function() {};
 
-                        if (!$scope.esGridOptions && !iAttrs.esGridOptions) {
+                        if (!$scope.esGridOptions) {
                             if (!$scope.esGroupId || !$scope.esFilterId) {
                                 throw "esGridOptions NOT defined. In order to dynamically get the options you must set GroupID and FilterID for esgrid to work";
                             }
@@ -839,11 +838,20 @@
                                     var p1 = ret.data;
                                     var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
                                     $scope.esGridOptions = esWebUIHelper.esGridInfoToKInfo($scope.esGroupId, $scope.esFilterId, $scope.esExecuteParams, p2, $scope.esPQOptions);
+                                    $scope.esDataSource = $scope.esGridOptions.dataSource;
+
                                     if ($scope.esPostGridOptions) {
                                         angular.merge($scope.esGridOptions, $scope.esPostGridOptions);
                                     }
+
+                                    if ($scope.esPostProcessGridOptions && angular.isFunction($scope.esPostProcessGridOptions)) {
+                                        $scope.esGridOptions = $scope.esPostProcessGridOptions({ arg1: $scope.esGridOptions }) || $scope.esGridOptions;
+                                    }
+
                                 })
                                 .catch(angular.noop);
+                        } else {
+                            $scope.esDataSource = $scope.esGridOptions.dataSource;
                         }
                     }
                 };

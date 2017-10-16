@@ -1,0 +1,70 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#es-navbar"
+			 aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+      		</button>
+			<a class="navbar-brand" href="#">
+				<img alt="Entersoft SA" src="https://www.entersoft.gr/esaddin/eslogo32.png">
+			</a>
+
+		</div>
+		<div class="collapse navbar-collapse" id="es-navbar">
+			<ul class="nav navbar-nav">
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{'MENU.SALES.TITLE' | translate}}<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a ui-sref="salesScore">{{'MENU.SALES.SCORE' | translate}}</a></li>
+						<li><a ui-sref="salesInfo">{{'MENU.SALES.INFORMATION' | translate}}</a></li>
+					</ul>
+            	</li>
+
+            	<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{'MENU.SKU.TITLE' | translate}}<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a ui-sref="skuAvailability">{{'MENU.SKU.AVAILABILITY' | translate}}</a></li>
+						<li><a ui-sref="skuPrice">{{'MENU.SKU.PRICE' | translate}}</a></li>
+						<li><a ui-sref="skuInfo">{{'MENU.SKU.INFORMATION' | translate}}</a></li>
+					</ul>
+            	</li>
+
+            	<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{'MENU.CUSTOMER.TITLE' | translate}}<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a ui-sref="customer_search">{{'MENU.CUSTOMER.INFORMATION' | translate}}</a></li>
+						<li><a ui-sref="customerNew">{{'MENU.CUSTOMER.NEW' | translate}}</a></li>
+					</ul>
+            	</li>
+
+            	<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{'MENU.DOCS.TITLE' | translate}}<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a ui-sref="docsOrders">{{'MENU.DOCS.ORDERS' | translate}}</a></li>
+						<li><a ui-sref="docsReturns">{{'MENU.DOCS.RETURNS' | translate}}</a></li>
+					</ul>
+            	</li>
+
+			</ul>
+
+			<div class="navbar-text navbar-right">
+				<img aria-hidden="true" ng-src="{{theSession.UserLogoUrl}}" style="display: inline; width: 32px; height: 32px;"></img>
+			</div>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{theSession.UserName}}<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a ng-click="signOut()">{{'MENU.SIGNOUT' | translate}}</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<div class="container">
+	<div ui-view />
+</div>

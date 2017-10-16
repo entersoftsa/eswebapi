@@ -1,0 +1,126 @@
+{
+    "ERR_401": "Please Login First",
+    "ERR_403": "You are not authorized. Please Login and try again",
+    "ERR_500": "@:UNKOWN_ERROR",
+    "ERR_GENERAL": "@:UNKOWN_ERROR",
+    "ERR_invalid-webapi-token": "Your session has expired. You need to relogin",
+    "ERR_expired-webapi-token": "Your session has expired. You need to relogin",
+    "ERR_login-invalid-password": "Either UserID or User Password are incorrect",
+    "UNKOWN_ERROR": "General Error. Please check your network and internet access",
+
+    "subscription-invalid-password": "@:ERR_SUBSCRIPTION",
+    "invalid-subscription-id": "@:ERR_SUBSCRIPTION",
+    "ERR_SUBSCRIPTION": "Either SubscriptionID or Subscription Password are not valid",
+
+    "ESUI":
+    {
+        "GENERIC":
+        {
+            "OK": "OK",
+            "CANCEL": "CANCEL"
+        },
+        "BOOLEAN":
+        {
+            "YES": "Yes",
+            "NO": "No"
+        },
+        "PARAMS_PANEL":
+        {
+            "More": "More",
+            "Less": "Less"
+        },
+        "PQ":
+        {
+            "DOWNLOAD": "Download",
+            "PARAMS_PANEL_RUN": "Run",
+            "INVESTIGATE": "Search for",
+            "PARAMS_MISSING": "One or more required parameters are not given value"
+        },
+        "ESCHARTPQ":
+        {
+            "CHART": "Chart",
+            "DATA": "Data"
+        },
+        "ESMAPPQ":
+        {
+            "MAP": "Map",
+            "DATA": "Data",
+            "BOTH": "Both",
+            "CLUSTER_STANDARD": "Standard",
+            "CLUSTER_CLUSTER": "Cluster",
+            "CLUSTER_SPIDER": "Spider",
+            "RUN_MAP": "Run Map"
+        },
+        "ESSURVEY":
+        {
+            "START": "Start Survey",
+            "NEXT": "Next",
+            "PREVIOUS": "Previous",
+            "SAVE": "Save and Continue later"
+        },
+        "LOGIN_FORM":
+        {
+            "SUBSCRIPTION": "Subscription Data",
+            "SUBSCRIPTION_ID": "Subscription ID",
+            "SUBSCRIPTION_PASSWORD": "Subscription Password",
+            "SIGNIN": "Login",
+            "USER_ID": "User ID",
+            "USER_PASSWORD": "User Password",
+            "COMPANY_ID": "Company ID",
+            "BRANCH_ID": "BranchID ID",
+            "LANG_ID": "Language",
+            "SERVERURL": "ES Web Api/App Server Host"
+        }
+
+    },
+
+    "ESCOMPLEX":
+    {
+        "FROM": "From ",
+        "TO": " To ",
+        "EQ": "Equal",
+        "NE": "Not Equal",
+        "LT": "Less than",
+        "LE": "Less than or Equal",
+        "GT": "Greater than",
+        "GE": "Greater or Equal",
+        "RANGE": "From-To",
+        "NULL": "Empty",
+        "NOTNULL": "Not Empty"
+    },
+    "ESDATE_RANGE":
+    {
+        "SDR": "Specific Date Range",
+        "SD": "Specific Date",
+        "ANY": "Anything",
+        "TODAY": "Today",
+        "UTD": "Up Today",
+        "SFTD": "Starting from Today",
+        "YTD": "Yesterday",
+        "UTYD": "Up To Yesterday",
+        "TMR": "Tomorrow",
+        "SFTR": "Starting from Tomorrow",
+        "CW": "This Week",
+        "PW": "Last Week",
+        "NW": "Next Week",
+        "CM": "This Month",
+        "PM": "Last Month",
+        "NM": "Next Month",
+        "SFM": "Since 1st of month",
+        "UEM": "Up to end of month",
+        "SFLM": "Since 1st of last month",
+        "UELM": "Up to of last month",
+        "CQ": "This Quarter",
+        "PQ": "Last Quarter",
+        "CSM": "This semester",
+        "PSM": "Last semester",
+        "CY": "This Year",
+        "PY": "Last Year",
+        "CFP": "This Fiscal Period",
+        "SSFYUTD": "Since start of FY up today",
+        "SFYTEFP": "Since start of FY to end of FP",
+        "PFP": "Last Fiscal Period",
+        "SLFPUTD": "Since start of last FP up today",
+        "SFYULFP": "Since start of FY up to last FP"
+    }
+}

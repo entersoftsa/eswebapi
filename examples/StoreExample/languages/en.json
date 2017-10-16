@@ -1,0 +1,33 @@
+{
+
+    "MENU": {
+        "TASKS": "Tasks",
+        "RECIPIENTS": "Recipients",
+        "ABOUT": "About",
+        "SIGNOUT": "Sign Out",
+        "CLOSE": "Close",
+        "FIELD": "Field",
+        "VALUE": "Value", 
+        "FOUNDINENTERSOFT": "found in Entersoft CRM",
+        "WORKING": "Retrieving information from Entersoft CRM...",
+        "SYSTEMINFO": "System Information",
+        "SUBSYSTEM": "Sub System",
+        "VERSION": "Version",
+        "AUTHENTICATING": "Authenticating Access to Entersoft CRM...",
+        "GOTO": "Go To Task",
+        "FOUND": "found in",
+        "ATTACHMENTS": "Attachment(s)",
+        "GOTOP": "Go Top",
+        "GEO": "Location",
+        "ATTACHFOUND": "file(s) found."
+    },
+
+    "PERSON": {
+    	"POSITION": "Position",
+    	"PERSONAL": "Personal",
+    	"CONTACT": "Contact(s)",
+    	"MOBILE": "Mobile",
+    	"PHONE": "Phone",
+    	"COMPANY": "Company"
+    }
+}

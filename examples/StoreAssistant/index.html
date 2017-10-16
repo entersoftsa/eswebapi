@@ -1,0 +1,42 @@
+<!--
+  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
+  See LICENSE in the project root for license information.
+-->
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+        <!-- build:extcss styles/extstyles.css -->
+        <link rel="stylesheet" href='../../dist/hybrid/styles/eswebapi.min.css'>
+        <link rel="stylesheet" href='styles/appstyles.css'>
+        <!-- endbuild -->
+    </head>
+
+    <body ng-app="esStoreAssistant">
+        <div ng-controller="MenuCtrl">
+            <span kendo-notification="esnotify" auto-hide-after="3000"></span>
+            <div ui-view></div>
+        </div>
+
+        
+        <!-- build:extjs js/extlibs.js -->
+        <script src="../../dist/hybrid/js/eswebapi.all.min.js"></script>
+        <!-- endbuild -->
+
+
+        <!-- build:js js/app.js -->
+        <script src="scripts/app.js" type="text/javascript"></script>
+        <script src="scripts/app.templates.js"></script>
+        <script src="scripts/logincontroller.js" type="text/javascript"></script>
+        <script src="scripts/menucontroller.js" type="text/javascript"></script>
+        <script src="scripts/customer_searchcontroller.js" type="text/javascript"></script>
+        
+    <!-- endbuild -->
+    </body>
+
+</html>
