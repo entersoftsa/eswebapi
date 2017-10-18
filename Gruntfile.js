@@ -332,6 +332,13 @@ module.exports = function(grunt) {
 
                     {
                         expand: true,
+                        cwd: 'bower_components/devextreme-web/css/icons',
+                        src: ['*.*'],
+                        dest: 'dist/hybrid/styles/icons/'
+                    },
+
+                    {
+                        expand: true,
                         cwd: 'bower_components/kendo-ui/styles/bootstrap',
                         src: ['*.*'],
                         dest: 'dist/hybrid/styles/Bootstrap'

@@ -248,6 +248,8 @@ button.btn.btn-success.left.md-button {
         text-align: center;
         position: inherit;
         padding: 0px;
+        background: #fff;
+        margin-bottom: 20px;
 }
 #esContainer .panel-body .row {
         height: 14.28%;
