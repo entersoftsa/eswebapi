@@ -19,13 +19,40 @@
             };
             vm.searchDS = {};
 
-            vm.esParamVal = new esGlobals.ESParamValues([new esGlobals.ESParamVal("Loyalty_Code", ''),
-                new esGlobals.ESParamVal("Customer_Name", ''),
-                new esGlobals.ESParamVal("Customer_eMail", ''),
-                new esGlobals.ESParamVal("Customer_Phone", '')]);
+            var fields = new esWebUIHelper.ESParamsDefinitions();
+            fields.createDefinitions("Search for a customer", [{
+                    id: "Loyalty",
+                    aa: 1,
+                    caption: "Loyalty Number",
+                    visible: true,
+                },
+                {
+                    id: "eMail",
+                    aa: 3,
+                    caption: "eMail",
+                    visible: true,
+                },
+                {
+                    id: "Name",
+                    aa: 2,
+                    caption: "Name",
+                    visible: true,
+                },
+
+                {
+                    id: "Phone",
+                    aa: 4,
+                    caption: "Phone",
+                    visible: true,
+                    inputType: "tel"
+                }
+            ]);
+
+            vm.customerFields = fields;
+            vm.customerValues = fields.getParamsValues();
 
             var pqOptions = new esGlobals.ESPQOptions(1, 10, true, true, false);
-            vm.pqDef = new esGlobals.ESPublicQueryDef("1", "ESWebManager", "BusEntitiesCustomers", pqOptions, vm.esParamVal);
+            vm.pqDef = new esGlobals.ESPublicQueryDef("1", "ESWebManager", "BusEntitiesCustomers", pqOptions, vm.customerValues);
 
             vm.handleGridOptions = function(arg1) {
                 if (!arg1) {
@@ -52,7 +79,7 @@
             }
                         
             vm.searchCustomer = function() {
-                if (vm.searchDS) {
+                if (vm.searchDS && angular.isFunction(vm.searchDS.read)) {
                     vm.searchDS.read();
                     vm.status.listisOpen = true;
                     vm.status.searchisOpen = false;

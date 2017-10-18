@@ -1,29 +1,7 @@
 <uib-accordion close-others="true">
-    <div uib-accordion-group class="panel-primary" heading="1. Search for a customer ..." is-open="vm.status.searchisOpen">
-     
-        <form>
-            <div class="form-group">
-                <label for="loyalty_code">{{'CUSTOMER.SEARCH_LOYALTY' | translate}}</label>
-                <input id="loyalty_code" class="form-control input-lg" type="text" ng-model-options="{getterSetter: true}" ng-model="vm.esParamVal['Loyalty_Code'].pValue" placeholder="{{'CUSTOMER.SEARCH_LOYALTY' | translate}}">
-            </div>
-
-            <div class="form-group">
-                <label for="customer_name">{{'CUSTOMER.SEARCH_NAME' | translate}}</label>
-                <input id="customer_name" class="form-control input-lg" type="text" ng-model-options="{getterSetter: true}" ng-model="vm.esParamVal['Customer_Name'].pValue" placeholder="{{'CUSTOMER.SEARCH_NAME' | translate}}">
-            </div>
-
-            <div class="form-group">
-                <label for="customer_email">{{'CUSTOMER.SEARCH_EMAIL' | translate}}</label>
-                <input id="customer_email" class="form-control input-lg" type="text" ng-model-options="{getterSetter: true}" ng-model="vm.esParamVal['Customer_eMail'].pValue" placeholder="{{'CUSTOMER.SEARCH_EMAIL' | translate}}">
-            </div>
-
-            <div class="form-group">
-                <label for="customer_phone">{{'CUSTOMER.SEARCH_PHONE' | translate}}</label>
-                <input id="customer_phone" class="form-control input-lg" type="text" ng-model-options="{getterSetter: true}" ng-model="vm.esParamVal['Customer_Phone'].pValue" placeholder="{{'CUSTOMER.SEARCH_PHONE' | translate}}">
-            </div>
-
-            <button type="submit" ng-click="vm.searchCustomer()" class="btn btn-primary">{{'MENU.SEARCH' | translate}}</button>
-        </form>
+    <div uib-accordion-group class="panel-primary" heading="1. Search ..." is-open="vm.status.searchisOpen">
+        <es-params-panel es-params-def="vm.customerFields" es-run-title="Search" es-params-values="vm.customerValues" es-panel-open="vm.status.searchisOpen" es-run-click="vm.searchCustomer()" es-show-run="true">
+        </es-params-pamel>
     </div>
 
     <div uib-accordion-group class="panel-danger" heading="2. Locate a customer ..." is-open="vm.status.listisOpen">

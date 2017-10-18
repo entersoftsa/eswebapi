@@ -1,0 +1,27 @@
+<div ng-controller="esComboPQCtrl">
+    <div ng-repeat="section in esPqDef" class="row">
+        <div ng-repeat="dbItem in section" class="col-xs-12">
+            <div id="anchor{{dbItem.CtxID}}" class="panel-body forms">
+                <div ng-if="::(esInApp && !isFavouritesMode)" class="actions-r">
+                    <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, true)" title="{{'FAV.ADD' | translate}}"><i class="mdi md-32 mdi-heart"></i></a></button>
+                </div>
+                <div ng-if="::(esInApp && isFavouritesMode)" class="actions-r">
+                    <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, false)" title="{{'FAV.DEL' | translate}}"><i class="mdi md-32 red mdi-heart-off"></i></a></button>
+                    <button role="button" class="btn btn-transparent margin-r" ng-class="{'disabled': !canMoveUpOrDown(dbItem, true)}"><a ng-click="moveUpOrDown(dbItem, true)" title="{{'FAV.UP' | translate}}"><i class="mdi md-32 mdi-arrow-up-bold-circle"></i></a></button>
+                    <button role="button" class="btn btn-transparent" ng-class="{'disabled': !canMoveUpOrDown(dbItem, false)}"><a ng-click="moveUpOrDown(dbItem, false)" title="{{'FAV.DOWN' | translate}}"><i class="mdi md-32 mdi-arrow-down-bold-circle"></i></a></button>
+                </div>
+                <es-web-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esgrid'" es-group-id="dbItem.GroupID" es-p-q-options="dbItem.PQOptions" es-panel-open="dbItem.esPanelOpen" es-params-values="dbItem.Params" es-force-title="dbItem.Title" es-filter-id="dbItem.FilterID" es-grid-options="dbItem.UIOptions">
+                </es-web-pq>
+                <es-chart ng-if="dbItem.ESUIType.toLowerCase() == 'eschart'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
+                </es-chart>
+                <es-tree-map ng-if="dbItem.ESUIType.toLowerCase() == 'estreemap'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
+                </es-tree-map>
+                <es-pivot-pq ng-if="dbItem.ESUIType.toLowerCase() == 'espivot'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
+                </es-pivot-pq>
+                <es-map-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esmap'" es-options="dbItem.UIOptions" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
+                </es-map-pq>
+                <span id="anchor3"></span>
+            </div>
+        </div>
+    </div>
+</div>

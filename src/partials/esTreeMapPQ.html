@@ -1,15 +1,17 @@
 <div class="row">
-    <es-params-panel 
-    	ng-cloak 
-    	es-panel-open="esPqDef.esPanelOpen"
-    	ng-if="!esLocalData"
-    	es-group-id="esPqDef" 
-    	es-local-data-source="'true'" 
-        es-force-title="esPqDef.Title"
-    	es-show-run="'true'" 
-    	es-run-click="::executePQ()" 
-    	es-data-source="esChartDataSource" >
-    </es-params-panel>
+    <div class="col-xs-12">
+        <es-params-panel 
+        	ng-cloak 
+        	es-panel-open="esPqDef.esPanelOpen"
+        	ng-if="!esLocalData"
+        	es-group-id="esPqDef" 
+        	es-local-data-source="'true'" 
+            es-force-title="esPqDef.Title"
+        	es-show-run="'true'" 
+        	es-run-click="::executePQ()" 
+        	es-data-source="esChartDataSource" >
+        </es-params-panel>
+    </div>
 
     <div class="col-xs-12">
 		<div class="eschart-wrapper">

@@ -113,6 +113,30 @@
                 controllerAs: 'vm',
                 esUnauthenticated: false
             })
+            .state('customer_new', {
+                url: '/customer_new',
+                parent: "appmenu",
+                templateUrl: 'views/customer_new.html',
+                controller: 'customer_newCtrl',
+                controllerAs: 'vm',
+                esUnauthenticated: false
+            })
+            .state('storeSales', {
+                url: '/storeSales',
+                parent: "appmenu",
+                templateUrl: 'views/storesales.html',
+                controller: 'storeSalesCtrl',
+                controllerAs: 'vm',
+                esUnauthenticated: false
+            })
+            .state('skuAvailability', {
+                url: '/skuAvailability',
+                parent: "appmenu",
+                templateUrl: 'views/sku_availability.html',
+                controller: 'sku_AvailabilityCtrl',
+                controllerAs: 'vm',
+                esUnauthenticated: false
+            })
             .state('sales', {
                 url: '/sales',
                 parent: "appmenu",

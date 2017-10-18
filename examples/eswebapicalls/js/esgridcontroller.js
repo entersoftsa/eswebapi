@@ -902,6 +902,85 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
 smeControllers.controller('pqCtrl', ['$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
+    	$scope.myPqDef = {
+            "AA": 1000,
+            "ID": "PQ_1000",
+            "GroupID": "BUSENT",
+            "Title": {
+                "en": "Trade accounts",
+                "el": "Συναλλασσόμενοι",
+                "ro": "Conturi comerciale",
+                "bg": "Контрагенти"
+            },
+            "Description": "Συναλλασσόμενοι",
+            "ESUIType": "esCombo",
+            "esDef": [[{
+                    "AA": 1010,
+                    "ID": "PQ_1010",
+                    "Title": "Πελάτες",
+                    "Description": "Πελάτες",
+                    "ESUIType": "esGrid",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "BusEntitiesCustomers",
+                        "PQOptions": {
+                            "ServerPaging": true,
+                            "PageSize": 20,
+                            "AutoExecute": false
+                        }
+                    }
+                }],
+                [{
+                    "AA": 1011,
+                    "ID": "PQ_1011",
+                    "Title": "Πρόσωπα",
+                    "Description": "Πρόσωπα",
+                    "ESUIType": "esGrid",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "BusEntitiesPerson",
+                        "PQOptions": {
+                            "ServerPaging": true,
+                            "PageSize": 20,
+                            "AutoExecute": false
+                        }
+                    }
+                }],
+                [{
+                    "AA": 1012,
+                    "ID": "PQ_1012",
+                    "Title": "Επιχειρηματικές Επαφές",
+                    "Description": "Επιχειρηματικές Επαφές",
+                    "ESUIType": "esGrid",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "BusEntitiesContacts",
+                        "PQOptions": {
+                            "ServerPaging": true,
+                            "PageSize": 20,
+                            "AutoExecute": false
+                        }
+                    }
+                }],
+                [{
+                    "AA": 1013,
+                    "ID": "PQ_1013",
+                    "Title": "Επιχειρηματικές διευθύνσεις",
+                    "Description": "Επιχειρηματικές διευθύνσεις",
+                    "ESUIType": "esGrid",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "BusEntitiesBusinessAddresses",
+                        "PQOptions": {
+                            "ServerPaging": true,
+                            "PageSize": 20,
+                            "AutoExecute": false
+                        }
+                    }
+                }]
+            ]
+        };
+
         $scope.selRows = [];
         $scope.handleGridOptions = function(arg1) {
             if (!arg1) {

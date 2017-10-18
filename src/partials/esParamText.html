@@ -2,6 +2,7 @@
           tooltip-placement="bottom"
           tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label> 
 	<input class="form-control es-param-control" 
+			type="{{::esParamDef.inputType}}"
 			kendo-masked-text-box
 			name="{{::esParamDef.id}}"
 			ng-required="::esParamDef.required"
