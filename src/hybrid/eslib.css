@@ -279,7 +279,7 @@ button.btn.btn-success.left.md-button {
     margin-top: 4px;
     padding-left: 0px;
 }
-.panel-title {
+.esContainer .panel-title {
         font-size: 16px;
         color: inherit;
         color: #5a85a9;
@@ -586,7 +586,7 @@ a.k-button-bare:hover, a.k-button:hover, .k-button.k-state-active:hover, .k-butt
     margin: 1px 0 1px 1px;
 }
 
-.panel h4 {
+.esContainer .panel h4 {
     color: #3c99b6;
     text-align: left;
     line-height: 25px;
@@ -964,11 +964,10 @@ form.esLogin-form.ng-pristine.ng-valid.ng-scope.ng-valid-required {
         .k-grid td {
                 padding: 0.5em .6em;
         }
-        .panel h4 {
+        .esContainer .panel h4 {
                 margin: 0px;
                 padding-top: 12px;
                 min-height: 45px;
-
         }
 
         .name {
@@ -981,7 +980,7 @@ form.esLogin-form.ng-pristine.ng-valid.ng-scope.ng-valid-required {
                 padding: 10px!important;
                 padding-top: 75px;
         }
-        .panel-title {
+        .esContainer .panel-title {
                 margin-top: -21px;
                 font-size: 16px;
                 color: inherit;
@@ -1055,7 +1054,7 @@ form.esLogin-form.ng-pristine.ng-valid.ng-scope.ng-valid-required {
                 padding-right: 0px!important;
                 padding-left: 0px!important;
         }
-        .panel-title a>span {
+        .esContainer .panel-title a>span {
                 font-size: 14px;
                 overflow: hidden;
                 text-overflow: ellipsis;             
