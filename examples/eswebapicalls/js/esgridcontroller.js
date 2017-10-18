@@ -749,6 +749,10 @@ smeControllers.controller('examplesCtrl', ['$log', '$q', '$scope', 'Upload', 'es
                 });
         }
 
+        $scope.getBlobUrl = function() {
+        	return esWebApi.downloadURLForBlobDataDownload($scope.pES00Doc);
+        }
+
         $scope.deleteES00Document = function() {
             var doc = {
                 GID: $scope.pDocumentGID,
