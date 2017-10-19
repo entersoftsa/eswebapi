@@ -1193,6 +1193,34 @@
                             }
 
                             tOptions.onContextMenuPreparing = function(e) {
+                                var sourceField = e.field;
+                                var dataSource = e.component.getDataSource();
+                                if (sourceField) {
+                                    if (sourceField.dataType === "number") {
+                                        var setSummaryType = function(args) {
+                                                dataSource.field(sourceField.index, {
+                                                    summaryType: args.itemData.value
+                                                });
+                                                dataSource.load();
+                                            },
+                                            menuItems = [];
+
+                                        e.items.splice(0, 0, { text: "Summary Type", beginGroup: true, items: menuItems });
+
+                                        _.forEach(["Sum", "Avg", "Min", "Max"], function(summaryType) {
+                                            var summaryTypeValue = summaryType.toLowerCase();
+                                            menuItems.push({
+                                                text: summaryType,
+                                                value: summaryType.toLowerCase(),
+                                                onItemClick: setSummaryType,
+                                                selected: e.field.summaryType === summaryTypeValue
+                                            });
+                                        });
+                                    }
+                                    return;
+                                }
+
+
                                 var l = $scope.gridInstance.option("rowHeaderLayout");
                                 var nl = (l == "standard") ? "tree" : "standard"
                                 e.items.splice(0, 0, {
@@ -2409,8 +2437,7 @@
                         x.summaryType = x.summaryType || col.aggregate || (x.dataType == "number" ? "sum" : "count");
                         x.format = x.format || getPivotColFormatType(col);
 
-                        if (angular.isDefined(x.groupInterval) && x.dataType == "date")
-                        {
+                        if (angular.isDefined(x.groupInterval) && x.dataType == "date") {
                             delete x.caption;
                             delete x.summaryType;
                             delete x.format;
