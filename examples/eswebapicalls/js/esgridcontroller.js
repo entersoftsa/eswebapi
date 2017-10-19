@@ -1120,6 +1120,8 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
         $scope.webPQOptions.theFilterId = "SalesComparisonbyMonth";
         $scope.webPQOptions.theVals = new esGlobals.ESParamValues();
 
+        $scope.pqDef = new esGlobals.ESPublicQueryDef("xxx", "ESWebManager", "SalesComparisonbyMonth", new esGlobals.ESPQOptions(-1, -1, true, true), new esGlobals.ESParamValues());
+
         $scope.tboOptions = new esGlobals.ESPQOptions(-1, -1, true, true);
 
         $scope.webPQOptions.theGridOptions = {

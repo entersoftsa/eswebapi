@@ -29,7 +29,7 @@
         function($logProvider, esWebApiServiceProvider, $translateProvider) {
             $translateProvider.useStaticFilesLoader({
                 files: [{
-                    prefix: 'https://entersoftsaportal.blob.core.windows.net/eswebapilib/1.25.14/languages/eswebapi-locale-',
+                    prefix: 'languages/eswebapi-locale-',
                     suffix: '.json'
                 },  {
                     prefix: 'applanguages/',
