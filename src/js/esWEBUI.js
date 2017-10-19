@@ -115,8 +115,9 @@
                             prec = (cnt < 0) ? 0 : cnt;
                         }
                     }
+
                     return {
-                        type: "decimal",
+                        type: prec ? "fixedPoint" : "decimal",
                         precision: prec
                     };
                 }
@@ -1302,7 +1303,6 @@
                                             return {
                                                 dataField: o.field,
                                                 caption: o.title,
-                                                width: o.width,
                                                 allowSorting: true,
                                                 allowFiltering: true,
                                                 format: getPivotColFormatType(o)
@@ -2404,7 +2404,7 @@
                         }
 
                         x.caption = x.caption || col.title;
-                        x.width = x.width || col.width;
+                        //x.width = x.width || col.width;
                         x.dataType = x.dataType || getPivotType(col.dataType);
                         x.summaryType = x.summaryType || col.aggregate || (x.dataType == "number" ? "sum" : "count");
                         x.format = x.format || getPivotColFormatType(col);
