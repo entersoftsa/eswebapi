@@ -1138,6 +1138,7 @@
                                 allowFiltering: true,
                                 allowExpandAll: true,
                                 showBorders: true,
+                                rowHeaderLayout: "tree",
                                 fieldChooser: {
                                     enabled: true
                                 },
@@ -1184,12 +1185,10 @@
                                 }
                             };
 
-                            var tOptions = {};
+                            var tOptions = defOptions;
 
                             if ($scope.esPqDef.UIOptions.pivotOptions) {
-                                angular.copy($scope.esPqDef.UIOptions.pivotOptions, tOptions);
-                            } else {
-                                tOptions = defOptions;
+                                angular.merge($scope.esPqDef.UIOptions.pivotOptions, tOptions);
                             }
 
                             tOptions.onContextMenuPreparing = function(e) {
@@ -2409,6 +2408,13 @@
                         x.dataType = x.dataType || getPivotType(col.dataType);
                         x.summaryType = x.summaryType || col.aggregate || (x.dataType == "number" ? "sum" : "count");
                         x.format = x.format || getPivotColFormatType(col);
+
+                        if (angular.isDefined(x.groupInterval) && x.dataType == "date")
+                        {
+                            delete x.caption;
+                            delete x.summaryType;
+                            delete x.format;
+                        }
                     }
 
 
