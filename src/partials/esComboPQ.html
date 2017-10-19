@@ -1,7 +1,7 @@
 <div ng-controller="esComboPQCtrl">
     <div ng-repeat="section in esPqDef" class="row">
         <div ng-repeat="dbItem in section" class="col-xs-12">
-            <div id="anchor{{dbItem.CtxID}}" class="panel-body forms">
+            <div id="anchor{{dbItem.CtxID}}" class="esContainer panel-body forms">
                 <div ng-if="::(esInApp && !isFavouritesMode)" class="actions-r">
                     <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, true)" title="{{'FAV.ADD' | translate}}"><i class="mdi md-32 mdi-heart"></i></a></button>
                 </div>
