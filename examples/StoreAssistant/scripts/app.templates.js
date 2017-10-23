@@ -17,7 +17,7 @@ angular.module('esStoreAssistant').run(['$templateCache', function($templateCach
 
 
   $templateCache.put('views/customer_search.html',
-    "<div class=container><uib-accordion close-others=true><div uib-accordion-group class=panel-danger heading=\"1. Locate a customer ...\" is-open=vm.status.listisOpen><es-web-pq es-group-id=vm.pqDef.GroupID es-force-title=\"'Search'\" es-panel-open=vm.pqDef.esPanelOpen es-filter-id=vm.pqDef.FilterID es-params-values=vm.pqDef.Params es-p-q-options=vm.pqDef.PQOptions es-post-process-grid-options=vm.handleGridOptions(arg1)></div><div uib-accordion-group class=panel-success heading=\"2. Customer\" is-open=vm.status.formisOpen><h5>{{vm.CustomerCode}}</h5></div></uib-accordion></div>"
+    "<div class=container><uib-accordion close-others=true><div uib-accordion-group class=panel-danger heading=\"1. Locate a customer ...\" is-open=vm.status.listisOpen><es-web-pq class=esContainer es-group-id=vm.pqDef.GroupID es-force-title=\"'Search'\" es-panel-open=vm.pqDef.esPanelOpen es-filter-id=vm.pqDef.FilterID es-params-values=vm.pqDef.Params es-p-q-options=vm.pqDef.PQOptions es-post-process-grid-options=vm.handleGridOptions(arg1)></div><div uib-accordion-group class=panel-success heading=\"2. Customer\" is-open=vm.status.formisOpen><h5>{{vm.CustomerCode}}</h5></div></uib-accordion></div>"
   );
 
 
