@@ -9,17 +9,19 @@
     var appE = angular.module('esStoreAssistant');
 
 
-    appE.controller('MenuCtrl', ['$state', '$rootScope', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
-        function($state, $rootScope, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
+    appE.controller('MenuCtrl', ['$state', '$rootScope', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals', '$localStorage',
+        function($state, $rootScope, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals, $localStorage) {
             init();
 
             $scope.signOut = function() {
 
                 esWebApiService.logout()
                     .then(function() {
+                        $localStorage.esStoreAssistantCredentials = null;
                         $state.go('login');
                     })
                     .catch(function(err) {
+                        $localStorage.esStoreAssistantCredentials = null;
                         $state.go('login');
                     });
             }
