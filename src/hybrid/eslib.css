@@ -347,6 +347,14 @@ button.btn.btn-success.left.md-button {
 }
 
 /*--------------------------------date panel*/
+.modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #46b8da;
+    background: #5bc0de;
+    color: #fff;
+}
+
+.modal-content{border-radius: 0px;}
 
 .modal-style {
     color: #0996c3;
