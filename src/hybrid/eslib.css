@@ -347,12 +347,20 @@ button.btn.btn-success.left.md-button {
 }
 
 /*--------------------------------date panel*/
+
+.margin-t {
+    margin-top: 13px;
+}
 .modal-header {
     padding: 15px;
     border-bottom: 1px solid #46b8da;
     background: #5bc0de;
     color: #fff;
 }
+span.k-icon.k-i-calendar {
+    color: #5bc0de;
+}
+
 
 .modal-content{border-radius: 0px;}
 
@@ -557,10 +565,7 @@ a.k-pager-refresh.k-link {
         margin: 0px!important;
         padding: 15px 0 10px 0!important;
 }
-.k-autocomplete .k-input, .k-dropdown-wrap .k-input, .k-numeric-wrap .k-input, .k-picker-wrap .k-input, .k-selectbox .k-input, .k-textbox>input {
-        text-indent: .3em;
-        height: 32px;
-}
+
 label.inline {
         float: left;
         margin-right: 20px;
