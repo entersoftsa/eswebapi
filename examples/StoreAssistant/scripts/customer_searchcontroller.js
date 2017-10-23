@@ -14,15 +14,12 @@
 
             vm.status = {
                 listisOpen: true,
-                formisOpen: false,
-                xxx: true
+                formisOpen: false
             };
-                        
-            vm.myHide = function() {
-                vm.status.xxx = !vm.status.xxx;
-            }
+            
+
             var pqOptions = new esGlobals.ESPQOptions(1, 10, true, true, false);
-            vm.pqDef = new esGlobals.ESPublicQueryDef("1", "ESWebManager", "BusEntitiesCustomers", pqOptions, new esGlobals.ESParamValues());
+            vm.pqDef = new esGlobals.ESPublicQueryDef("1", "ESWebManager", "BusEntitiesCustomers", pqOptions, new esGlobals.ESParamValues(), null, true);
 
             vm.handleGridOptions = function(arg1) {
                 if (!arg1) {
@@ -38,11 +35,11 @@
                     var selectedRows = e.sender.select();
                     if (selectedRows && selectedRows.length == 1) {
                         $timeout(function() {
+                            vm.pqDef.esPanelOpen.status = true;
                             vm.CustomerCode = e.sender.dataItem(selectedRows[0])["Code"];
-                            // vm.status.formisOpen = true;
-                            // vm.status.listisOpen = false;
-                            vm.status.xxx = false;
-
+                            vm.status.formisOpen = true;
+                            vm.status.listisOpen = false;
+                            
                         });
                         
                     }

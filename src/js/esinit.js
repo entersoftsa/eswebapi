@@ -23,7 +23,7 @@
 
     var esWebFramework = angular.module('es.Services.Web');
 
-    
+
     /**
      * @ngdoc service
      * @name es.Services.Web.esCacheProvider
@@ -708,7 +708,21 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 this.Params = params;
                 this.UIOptions = uiOptions;
                 this.Title = undefined;
-                this.esPanelOpen = angular.isUndefined(esPanelOpen) ? false : !!esPanelOpen;
+
+                if (angular.isUndefined(esPanelOpen)) {
+                    this.esPanelOpen = {
+                        status: false
+                    };
+                } else {
+                    if (angular.isObject(esPanelOpen)) {
+                        this.esPanelOpen = esPanelOpen;
+                    } else {
+                        this.esPanelOpen = {
+                            status: !!esPanelOpen
+                        };
+                    }
+                }
+
 
                 this.initFromObj = function(inObj) {
                     var x = inObj || {};
@@ -718,7 +732,19 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                     this.PQOptions = new ESPQOptions().initFromObj(x.PQOptions);
                     this.Params = x.Params;
                     this.Title = x.Title;
-                    this.esPanelOpen = angular.isUndefined(x.esPanelOpen) ? false : !!x.esPanelOpen;
+                    if (angular.isUndefined(x.esPanelOpen)) {
+                        this.esPanelOpen = {
+                            status: false
+                        };
+                    } else {
+                        if (angular.isObject(x.esPanelOpen)) {
+                            this.esPanelOpen = x.esPanelOpen;
+                        } else {
+                            this.esPanelOpen = {
+                                status: !!x.esPanelOpen
+                            };
+                        }
+                    }
                     this.UIOptions = x.UIOptions;
                     for (var prop in inObj) {
                         if (!this.hasOwnProperty(prop)) {

@@ -1053,7 +1053,7 @@
                         }
 
                         $scope.executePQ = function() {
-                            $scope.isOpen = false;
+                            $scope.esPanelOpen.status = false;
                             if ($scope.esChartDataSource) {
                                 if ($scope.esChartCtrl) {
                                     kendo.ui.progress($scope.esChartCtrl.element.parent(), true);
@@ -1095,7 +1095,7 @@
                         };
 
                         $scope.executePQ = function() {
-                            $scope.esPqDef.esPanelOpen = false;
+                            $scope.esPqDef.esPanelOpen.status = false;
                             if ($scope.esChartDataSource) {
                                 if ($scope.esTreeMapCtrl) {
                                     kendo.ui.progress($scope.esTreeMapCtrl.element.parent(), true);
@@ -1361,7 +1361,7 @@
 
 
                             $scope.executePQ = function() {
-                                $scope.esPqDef.esPanelOpen = false;
+                                $scope.esPqDef.esPanelOpen.status = false;
                                 if (!$scope.gridInstance.option("dataSource")) {
                                     $scope.gridInstance.option("dataSource", $scope.esPivotDataSource);
                                 } else {
@@ -1470,7 +1470,7 @@
                         tOptions.layers.push(dataLayer);
 
                         $scope.executePQ = function() {
-                            $scope.isOpen = false;
+                            $scope.esPanelOpen.status = false;
                             if ($scope.esMapDataSource) {
                                 $scope.esMapDataSource.read();
                             }
@@ -1933,6 +1933,10 @@
 
                         $scope.esToggleMore = function() {
                             $scope.esMore = !$scope.esMore;
+                        }
+
+                        if (!$scope.esPanelOpen) {
+                            $scope.esPanelOpen = { status: false};
                         }
 
                         if (!iAttrs.esParamsDef && !iAttrs.esPqInfo) {
