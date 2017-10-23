@@ -322,7 +322,23 @@ button.btn.btn-success.left.md-button {
     padding-top: 10px;
 }
 
+.esContainer .esLogin-form input{
+    height: 26px;
+    border-radius: 0px;
+    margin-bottom: 10px;
+    height: 40px;
+    line-height: 40px;
+}
 
+
+.esContainer form.esLogin-form {
+    box-shadow: 1px 1px 7px 0 rgba(145,145,145,.5);
+    padding: 52px;
+    margin-top: -24px;
+    border: 1px solid #fff;
+    background: #fafafa;
+    border-radius: 35px;
+}
 
 .esContainer .btn-block, .esContainer .btn-lg {
        width: 30%;
@@ -993,9 +1009,19 @@ td.dx-pivotgrid-expanded{
         }
 }
 @media screen and (max-width: 839px) {
-    #esContainer {
 
-    width: 96%;}
+
+    .esContainer form.esLogin-form {
+        box-shadow: 1px 1px 7px 0 rgba(145,145,145,.5);
+        padding: 15px;
+        margin-top: -24px;
+        border: 1px solid #fff;
+        background: #fafafa;
+        border-radius: 15px;
+        }
+
+         #esContainer {
+        width: 96%;}
 
         .content-holder {
                 margin-top: 70px;
