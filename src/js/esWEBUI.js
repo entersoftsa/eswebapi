@@ -46,10 +46,15 @@
     }]);
 
 
+     $(document).on('click.nav','.navbar-collapse.in',function(e) {
+        if( $(e.target).is('a') ) {
+            $(this).removeClass('in').addClass('collapse');
+        }
+    });
 
+     
     function doChangeLanguage($translate, lang, $q, $http, $injector) {
         lang = lang || window.esLoginLanguage;
-
         var esCache = $injector.get('esCache');
         var aPart = lang.split("-")[0];
 
