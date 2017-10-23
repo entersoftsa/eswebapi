@@ -3,6 +3,7 @@ bower_components
 *.sublime-grunt.cache
 .tmp
 /dist/
+/examples/StoreAssistant/dist/
 /docs/
 /examples/eswebapicalls/lib/
 /examples/StoreExample/lib/

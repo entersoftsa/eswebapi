@@ -323,6 +323,13 @@ button.btn.btn-success.left.md-button {
 }
 
 
+
+.esContainer .btn-block, .esContainer .btn-lg {
+       width: 30%;
+    margin: 20px auto;
+    border-radius: 0px;
+}
+
 /*--------------------------------date panel*/
 
 .modal-style {

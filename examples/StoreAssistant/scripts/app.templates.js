@@ -12,7 +12,7 @@ angular.module('esStoreAssistant').run(['$templateCache', function($templateCach
 
 
   $templateCache.put('views/customer_new.html',
-    "<div class=container><es-params-panel es-params-def=vm.customerFields es-params-values=vm.customerValues es-panel-open=true es-run-click=vm.addCustomer() es-run-title=Add es-show-run=true></es-params-panel></div>"
+    "<div class=\"container esContainer\"><es-params-panel es-params-def=vm.customerFields es-params-values=vm.customerValues es-panel-open=true es-run-click=vm.addCustomer() es-run-title=Add es-show-run=true></es-params-panel></div>"
   );
 
 
@@ -22,12 +22,12 @@ angular.module('esStoreAssistant').run(['$templateCache', function($templateCach
 
 
   $templateCache.put('views/es00documents.html',
-    "<div class=modal-header><h3 class=modal-title id=modal-title>{{vm.title}}</h3></div><div class=modal-body id=modal-body><uif-spinner ng-show=vm.state.isRunning uif-size=large>{{'MENU.WORKING' | translate}}</uif-spinner><es00-documents-detail es-isudgid=vm.cRow.fTaskGID></es00-documents-detail></div><div class=modal-footer><button class=\"btn btn-primary\" type=button ng-click=vm.ok()>{{'MENU.CLOSE' | translate}}</button></div>"
+    "<div id=esContainer><div class=\"modal-header esContainer\"><h4 class=modal-title id=modal-title>{{vm.title}}</h4></div><div class=\"modal-body esContainer\" id=modal-body><uif-spinner ng-show=vm.state.isRunning uif-size=large>{{'MENU.WORKING' | translate}}</uif-spinner><es00-documents-detail es-isudgid=vm.cRow.fTaskGID></es00-documents-detail></div><div class=modal-footer><button class=\"btn btn-primary\" type=button ng-click=vm.ok()>{{'MENU.CLOSE' | translate}}</button></div></div>"
   );
 
 
   $templateCache.put('views/login.html',
-    "<div ng-cloak><es-login ng-show=showLogin es-credentials=esCredentials es-on-success=authenticate() es-show-subscription=true es-show-bridge=true es-show-sticky-session=0></es-login><uif-spinner ng-show=!showLogin uif-size=large>{{'MENU.AUTHENTICATING' | translate}}</uif-spinner></div>"
+    "<div ng-cloak class=\"container esContainer\"><es-login ng-show=showLogin es-credentials=esCredentials es-on-success=authenticate() es-show-subscription=true es-show-bridge=true es-show-sticky-session=0></es-login><uif-spinner ng-show=!showLogin uif-size=large>{{'MENU.AUTHENTICATING' | translate}}</uif-spinner></div>"
   );
 
 
