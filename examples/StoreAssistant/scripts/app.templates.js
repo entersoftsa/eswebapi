@@ -12,7 +12,7 @@ angular.module('esStoreAssistant').run(['$templateCache', function($templateCach
 
 
   $templateCache.put('views/customer_new.html',
-    "<div class=container><es-params-panel es-params-def=vm.customerFields es-params-values=vm.customerValues es-panel-open=true es-run-click=vm.addCustomer() es-run-title=Add es-show-run=true></es-params-panel></div>"
+    "<div class=\"container esContainer\"><es-params-panel es-params-def=vm.customerFields es-params-values=vm.customerValues es-panel-open=true es-run-click=vm.addCustomer() es-run-title=Add es-show-run=true></es-params-panel></div>"
   );
 
 
