@@ -1,9 +1,8 @@
-<div  id="esContainer">
-
-	<div class="modal-header">
+<div id="esContainer">
+	<div class="modal-header esContainer">
 	    <h4 class="modal-title" id="modal-title">{{vm.title}}</h4>
 	</div>
-	<div class="modal-body" id="modal-body">
+	<div class="modal-body esContainer" id="modal-body">
 	    <uif-spinner ng-show="vm.state.isRunning" uif-size="large">{{'MENU.WORKING' | translate}}</uif-spinner>
 	    <es00-documents-detail es-isudgid="vm.cRow.fTaskGID"></es00-documents-detail>
 	</div>

@@ -22,7 +22,7 @@ angular.module('esStoreAssistant').run(['$templateCache', function($templateCach
 
 
   $templateCache.put('views/es00documents.html',
-    "<div id=esContainer><div class=modal-header><h4 class=modal-title id=modal-title>{{vm.title}}</h4></div><div class=modal-body id=modal-body><uif-spinner ng-show=vm.state.isRunning uif-size=large>{{'MENU.WORKING' | translate}}</uif-spinner><es00-documents-detail es-isudgid=vm.cRow.fTaskGID></es00-documents-detail></div><div class=modal-footer><button class=\"btn btn-primary\" type=button ng-click=vm.ok()>{{'MENU.CLOSE' | translate}}</button></div></div>"
+    "<div id=esContainer><div class=\"modal-header esContainer\"><h4 class=modal-title id=modal-title>{{vm.title}}</h4></div><div class=\"modal-body esContainer\" id=modal-body><uif-spinner ng-show=vm.state.isRunning uif-size=large>{{'MENU.WORKING' | translate}}</uif-spinner><es00-documents-detail es-isudgid=vm.cRow.fTaskGID></es00-documents-detail></div><div class=modal-footer><button class=\"btn btn-primary\" type=button ng-click=vm.ok()>{{'MENU.CLOSE' | translate}}</button></div></div>"
   );
 
 
