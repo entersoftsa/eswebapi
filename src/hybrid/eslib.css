@@ -9,12 +9,20 @@ body, html {
         background: #ebebeb!important;
 }
 
-#esContainer {
+
+a:focus, a:hover,
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus{
+    outline: none;
+box-shadow: none;}
+
+.btn{border-radius: 0px;}
+
+#esContainer{
     font-family: 'Lato', sans-serif;
     background: #ebebeb!important;
-    width: 90%;
+    width: 96%;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 
@@ -33,7 +41,7 @@ body, html {
         font-weight: 300;
 }
 #esContainer h3 {
-        font-size: 34px;
+        font-size: 20px;
         font-weight: 100;
         line-height: 24px;}
 
@@ -150,6 +158,13 @@ button.btn.btn-success.left.md-button {
         padding-top: 20px;
 }
 
+
+.panel-default .panel-heading {
+        color: #5e6f77;
+}
+
+
+
 #esContainer .panel-info>.panel-heading {
         color: #5e6f77;
         background-color: #FFF;
@@ -168,6 +183,14 @@ button.btn.btn-success.left.md-button {
     border-color: #ddd;
     padding: 0px;
 }
+
+.panel-default  {
+    color: #333;
+    background-color: #ffffff;
+    border-color: transparent;
+    padding: 0px;
+}
+
 
 
 #esContainer .table>tbody>tr>td, #esContainer .table>tbody>tr>th, #esContainer .table>tfoot>tr>td, #esContainer .table>tfoot>tr>th, #esContainer .table>thead>tr>td, #esContainer .table>thead>tr>th {
@@ -244,23 +267,24 @@ button.btn.btn-success.left.md-button {
         background-color: #65adc4;
 }
 
+
 #esContainer .panel-body {
-        text-align: center;
-        position: inherit;
-        padding: 0px;
-        background: #fff;
-        margin-bottom: 20px;
+    text-align: center;
+    position: inherit;
+    padding: 0;
+    background: #fff;
+    margin-bottom: 20px;
+    padding-bottom: 58px;
 }
 #esContainer .panel-body .row {
-        height: 14.28%;
-        overflow: hidden;
-        width: 100%;
-        margin: auto;
-        text-align: left;
-        padding-bottom: 15px;
+    height: 14.28%;
+    overflow: hidden;
+    width: 100%;
+    margin: auto;
+    text-align: left;
+    /* padding-bottom: 15px; */
+    margin-bottom: -36px;
 }
-
-
 #esContainer .panel-group .panel {
         margin-bottom: 0;
         border-radius: 0px;
@@ -268,10 +292,14 @@ button.btn.btn-success.left.md-button {
 #esContainer .panel-group {
         margin-bottom: 0;
 }
+.panel-group {
+        margin-bottom: 0;
+}
 
 #esContainer > h4.modal-title {
     font-size: 18px;
 }
+
 
 .panel-title .pull-right{
     float: left!important;
@@ -284,9 +312,15 @@ button.btn.btn-success.left.md-button {
         color: inherit;
         color: #5a85a9;
         line-height: 16px;
-
+        padding:10px;
 }
-
+.esContainer .panel h4 {
+    color: #3c99b6;
+    text-align: left;
+    line-height: 25px;
+    font-weight: 600;
+    padding-top: 10px;
+}
 
 
 /*--------------------------------date panel*/
@@ -591,6 +625,7 @@ a.k-button-bare:hover, a.k-button:hover, .k-button.k-state-active:hover, .k-butt
     text-align: left;
     line-height: 25px;
     font-weight: 600;
+    padding-top: 10px;
 }
 
 .k-grid td {
@@ -649,7 +684,7 @@ a.k-button.k-button-icontext.k-grid-excel {
     background: #0996c3;
     border-radius: 50px!important;
     line-height: 37px;
-    margin-top: 30px;
+    margin-top:25px;
     font-size: 30px;
     border-radius: 20px;
     color: #fff;
@@ -820,39 +855,45 @@ i.dx-icon.dx-icon-columnchooser {
 
 
 td.dx-area-row-cell{
-    background-color: #ddd;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-/*
-.dx-scrollable-content{ box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);}
-*/
 
-.dx-scrollable-wrapper {
-    box-shadow: 0 104px 8px rgba(0, 0, 0, 0.10), 0 5px 5px rgba(0, 0, 0, 0.10);
+td.dx-area-row-cell:last-child{
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25), 0 0px 0px rgba(0, 0, 0, 0.22);
+}
+
+.k-grid tr td:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+
+.k-grid tr td:hover {
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25), 0 0px 0px rgba(0, 0, 0, 0.22);
 }
 
 
 .dx-pivotgrid .dx-column-header .dx-pivotgrid-toolbar .dx-button-content, .dx-pivotgrid .dx-filter-header .dx-pivotgrid-toolbar .dx-button-content {
     padding: 5px;
-    background-color: #65adc4;
+    background-color: #fff;
     color: #fff!important;
 }
 
 
-.dx-pivotgrid-field-chooser-button.dx-button.dx-button-normal.dx-widget.dx-button-has-icon{background-color: #65adc4!important; margin-left: 20px;}
+.dx-pivotgrid-field-chooser-button.dx-button.dx-button-normal.dx-widget.dx-button-has-icon{margin-left: 20px;}
 
 .k-calendar .k-alt, .k-calendar th, .k-dropzone-hovered, .k-footer-template td, .k-grid-footer, .k-group, .k-group-footer td, .k-grouping-header, .k-popup, .k-toolbar, .k-widget .k-status,
 .dx-pivotgrid .dx-total, .dx-pivotgrid .dx-data-header, .dx-pivotgrid .dx-column-header, .dx-pivotgrid .dx-area-description-cell{
-   background-color: #ebebeb;
-    font-weight: 600;    color:#333!important;
+    font-weight: 600;
+    color:#333!important;
 }
-.dx-pivotgrid .dx-pivotgrid-vertical-headers .dx-row-total, .dx-pivotgrid .dx-pivotgrid-area-data .dx-row-total{background-color: #ebebeb; color: #000;}
+.dx-pivotgrid .dx-pivotgrid-vertical-headers .dx-row-total, .dx-pivotgrid .dx-pivotgrid-area-data .dx-row-total{
+    background-color: #ebebeb;
+    color: #000;}
 
 td.dx-pivotgrid-expanded{
         color: #428bca!important;
-    font-weight: 700;
-background: #ebebeb;}
+    font-weight: 700;}
 
 
 .espivot-wrapper {
@@ -866,11 +907,6 @@ background: #ebebeb;}
 /*pivot*/
 
 /*----------------------------login form*/
-
-form.esLogin-form.ng-pristine.ng-valid.ng-scope.ng-valid-required {
-    width: 80%;
-    margin: auto;
-}
 
 .esLogin-form input{
     margin: 15px 0;
@@ -950,6 +986,9 @@ form.esLogin-form.ng-pristine.ng-valid.ng-scope.ng-valid-required {
         }
 }
 @media screen and (max-width: 839px) {
+    #esContainer {
+
+    width: 96%;}
 
         .content-holder {
                 margin-top: 70px;

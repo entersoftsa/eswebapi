@@ -1,16 +1,18 @@
-<uib-accordion close-others="true">
-    <div uib-accordion-group class="panel-primary" heading="1. Search ..." is-open="vm.status.searchisOpen">
-        <es-params-panel es-params-def="vm.customerFields" es-run-title="Search" es-params-values="vm.customerValues" es-panel-open="vm.status.searchisOpen" es-run-click="vm.searchCustomer()" es-show-run="true">
-        </es-params-pamel>
-    </div>
+<div class="container">
+    <uib-accordion close-others="true">
+        <div uib-accordion-group class="panel-primary" heading="1. Search ..." is-open="vm.status.searchisOpen">
+            <es-params-panel class="esContainer" es-params-def="vm.customerFields" es-run-title="Search" es-params-values="vm.customerValues" es-panel-open="vm.status.searchisOpen" es-run-click="vm.searchCustomer()" es-show-run="true">
+            </es-params-pamel>
+        </div>
 
-    <div uib-accordion-group class="panel-danger" heading="2. Locate a customer ..." is-open="vm.status.listisOpen">
-        <es-grid es-group-id="vm.pqDef.GroupID" es-filter-id="vm.pqDef.FilterID" es-execute-params="vm.pqDef.Params" es-pq-options="vm.pqDef.PQOptions" es-data-source="vm.searchDS" es-post-process-grid-options="vm.handleGridOptions(arg1)" />
-    </div>
+        <div uib-accordion-group class="panel-danger" heading="2. Locate a customer ..." is-open="vm.status.listisOpen">
+            <es-grid es-group-id="vm.pqDef.GroupID" es-filter-id="vm.pqDef.FilterID" es-execute-params="vm.pqDef.Params" es-pq-options="vm.pqDef.PQOptions" es-data-source="vm.searchDS" es-post-process-grid-options="vm.handleGridOptions(arg1)" />
+        </div>
 
-    <div uib-accordion-group class="panel-success" heading="3. Customer" is-open="vm.status.formisOpen">
-        <h1>{{vm.CustomerCode}}</h1>
-    </div>
-</uib-accordion>
+        <div uib-accordion-group class="panel-success" heading="3. Customer" is-open="vm.status.formisOpen">
+            <h5>{{vm.CustomerCode}}</h5>
+        </div>
+    </uib-accordion>
+</div>
 
 

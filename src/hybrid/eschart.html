@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="styles/app.min.css" />
 </head>
 
-<body ng-cloak ng-controller="esComponentCtrl" id="esContainer">
+<body ng-cloak ng-controller="esComponentCtrl" class="esContainer">
     <div ng-if="showLogin">
         <es-login es-credentials="esCredentials" es-on-success="authenticate()" es-show-subscription="true" es-show-bridge="true" es-show-sticky-session="0">
         </es-login>
