@@ -4,7 +4,7 @@
         <form name="search_sku" class="form">
             <div class="row">
                 <div class="form-group col-xs-12">
-                    <input id="searchctrl" class="form-control input-lg" placeholder="Barcode, Code, Multiple Codes" ng-required="true" ng-model-options="{getterSetter: true}" ng-model="vm.searchValue.pValue" />
+                    <input id="searchctrl" class="form-control" placeholder="Barcode, Code, Multiple Codes" ng-required="true" ng-model-options="{getterSetter: true}" ng-model="vm.searchValue.pValue" />
                 </div>
             </div>
             <button class="btn btn-primary" type="button" ng-disabled="search_sku.$invalid || vm.status.isrunning" ng-click="vm.searchSKU()">{{'ESUI.GENERIC.OK' | translate}}</button>
