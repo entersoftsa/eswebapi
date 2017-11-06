@@ -143,15 +143,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
         };
 
         var claims = {
-            ESDeviceID: 'kar device',
-            ESApplicationID: "Sme App",
-            ESChannelID: "es web",
-            MyStrVar: "MyStrVar-Value",
-            MyIntVar: 234,
-            ESMyStrVar: "ESMyStrVar-Value",
-            ESMyIntVar: 456,
-            ESDecVar: 332.6987,
-            ESDateVar: new Date()
+            ESApplicationID: "estest"
         };
 
         $scope.doLogin = function() {

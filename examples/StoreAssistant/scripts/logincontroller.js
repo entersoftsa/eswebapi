@@ -53,7 +53,7 @@
 
 
             function onSuccessAuth() {
-                var gotoState = 'sales';
+                var gotoState = 'sales_messages';
 
                 var gotoParams;
                 if ($rootScope.toState) {

@@ -5,8 +5,9 @@
         "SALES":
         {
             "TITLE": "Sales Rep",
-            "SCORE": "My Performance",
-            "INFORMATION": "Information"
+            "MESSAGES": "Messages",
+            "ISSUES": "My Issues",
+            "STORES": "Stores"
         },
 
         "SKU":

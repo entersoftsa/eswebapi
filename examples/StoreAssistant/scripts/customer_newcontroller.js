@@ -12,6 +12,10 @@
         function($scope, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $timeout) {
             var vm = this;
 
+            vm.status = {
+                status: true
+            };
+            
             var fields = new esWebUIHelper.ESParamsDefinitions();
             fields.createDefinitions("Welcome a new customer", [{
                     id: "First_Name",

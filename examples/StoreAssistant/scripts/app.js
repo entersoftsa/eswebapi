@@ -44,8 +44,11 @@
 
             
             var settings = {
-                host: "eswebapi.entersoft.gr",
-                allowUnsecureConnection: false
+                /*host: "eswebapi.entersoft.gr",
+                allowUnsecureConnection: false*/
+
+                host: "localhost/Entersoft.Web.Api",
+                allowUnsecureConnection: true
             };
             esWebApiServiceProvider.setSettings(settings);
         }
@@ -137,10 +140,12 @@
                 controllerAs: 'vm',
                 esUnauthenticated: false
             })
-            .state('sales', {
-                url: '/sales',
+            .state('sales_messages', {
+                url: '/sales_messages',
                 parent: "appmenu",
-                templateUrl: 'views/sales.html',
+                controller: 'sales_messagesCtrl',
+                controllerAs: 'vm',
+                templateUrl: 'views/sales_messages.html',
                 esUnauthenticated: false
             });
     }]);
