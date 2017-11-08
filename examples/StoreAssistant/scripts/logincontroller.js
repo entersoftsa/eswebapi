@@ -17,9 +17,8 @@
 
             $scope.authenticate = function() {
                 var claims = {
-                    ESDeviceID: 'sme mail box',
-                    ESApplicationID: "Sme App",
-                    ESChannelID: "Outlook addin"
+                    ESApplicationID: "esStoreAssistant",
+                    ESChannelID: "Web"
                 };
 
                 esWebApiService.openSession($scope.esCredentials, claims)

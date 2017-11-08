@@ -46,13 +46,13 @@
     }]);
 
 
-     $(document).on('click.nav','.navbar-collapse.in',function(e) {
-        if( $(e.target).is('a') ) {
+    $(document).on('click.nav', '.navbar-collapse.in', function(e) {
+        if ($(e.target).is('a')) {
             $(this).removeClass('in').addClass('collapse');
         }
     });
 
-     
+
     function doChangeLanguage($translate, lang, $q, $http, $injector) {
         lang = lang || window.esLoginLanguage;
         var esCache = $injector.get('esCache');
@@ -1042,27 +1042,16 @@
                     link: function($scope, iElement, iAttrs) {
                         if (!$scope.esLocalData && !iAttrs.esLocalData) {
                             var groups = ($scope.esChartOptions) ? $scope.esChartOptions.group : null;
-                            $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups);
+                            $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups, function() { return $scope.esChartCtrl; });
                         } else {
                             $scope.esChartDataSource = { data: $scope.esLocalData };
                         }
 
                         $scope.esChartOptions.dataSource = $scope.esChartDataSource;
 
-                        if ($scope.esChartOptions && !$scope.esChartOptions.dataBound) {
-                            $scope.esChartOptions.dataBound = function(e) {
-                                if (e && e.sender) {
-                                    kendo.ui.progress(e.sender.element.parent(), false);
-                                }
-                            };
-                        }
-
                         $scope.executePQ = function() {
                             $scope.esPanelOpen.status = false;
                             if ($scope.esChartDataSource) {
-                                if ($scope.esChartCtrl) {
-                                    kendo.ui.progress($scope.esChartCtrl.element.parent(), true);
-                                }
                                 $scope.esChartDataSource.read();
                             }
                         }
@@ -1088,23 +1077,17 @@
                         return "src/partials/esTreeMapPQ.html";
                     },
                     link: function($scope, iElement, iAttrs) {
-                        $scope.esChartDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, false);
+
+                        $scope.esChartDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, false, null, function() { return $scope.esTreeMapCtrl; });
+
                         var tOptions = $scope.esChartOptions || {};
 
                         tOptions.valueField = "value";
                         tOptions.textField = "name";
-                        tOptions.dataBound = function(e) {
-                            if (e && e.sender) {
-                                kendo.ui.progress(e.sender.element.parent(), false);
-                            }
-                        };
 
                         $scope.executePQ = function() {
                             $scope.esPqDef.esPanelOpen.status = false;
                             if ($scope.esChartDataSource) {
-                                if ($scope.esTreeMapCtrl) {
-                                    kendo.ui.progress($scope.esTreeMapCtrl.element.parent(), true);
-                                }
                                 $scope.esChartDataSource.read();
                             }
                         }
@@ -1361,7 +1344,6 @@
                                 })
                                 .catch(function(err) {
                                     $log.error(err);
-                                    throw err;
                                 });
 
 
@@ -1422,7 +1404,7 @@
                         $scope.bubbleMessage = "";
                         $scope.tooltipIsOpen = false;
 
-                        $scope.esMapDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, true, onChange);
+                        $scope.esMapDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, true, onChange, function() { return $scope.esMapCtrl; });
                         $scope.esMapOptions = {};
                         var tOptions = $scope.esMapOptions;
 
@@ -1941,7 +1923,7 @@
                         }
 
                         if (!$scope.esPanelOpen) {
-                            $scope.esPanelOpen = { status: false};
+                            $scope.esPanelOpen = { status: false };
                         }
 
                         if (!iAttrs.esParamsDef && !iAttrs.esPqInfo) {
@@ -2242,7 +2224,7 @@
                 return [ret];
             }
 
-            function getTreeMapDS(espqParams, forMap, onChange) {
+            function getTreeMapDS(espqParams, forMap, onChange, ctrl) {
 
                 var transformFunction = forMap ? convertPQRowsToMapRows : processPQ;
                 var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
@@ -2279,7 +2261,6 @@
                                     options.error(err);
                                 });
                         },
-
                     },
                     schema: {
                         model: {
@@ -2292,10 +2273,26 @@
                     xParam.change = onChange;
                 }
 
+                if (ctrl && angular.isFunction(ctrl)) {
+                    xParam.requestEnd = function(x) {
+                        var elm = ctrl();
+                        if (elm && elm.element && elm.element.parent()) {
+                            kendo.ui.progress(elm.element.parent(), false);
+                        }
+                    };
+
+                    xParam.requestStart = function(x) {
+                        var elm = ctrl();
+                        if (elm && elm.element && elm.element.parent()) {
+                            kendo.ui.progress(elm.element.parent(), true);
+                        }
+                    };
+                }
+
                 return forMap ? new kendo.data.DataSource(xParam) : new kendo.data.HierarchicalDataSource(xParam);
             }
 
-            function prepareWebScroller(espqParams, esOptions, aggregates, groups) {
+            function prepareWebScroller(espqParams, esOptions, aggregates, groups, ctrl) {
                 var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
 
 
@@ -2310,13 +2307,6 @@
                     group: groups,
 
                     transport: {
-                        requestEnd: function(e) {
-                            var response = e.response;
-                            var type = e.type;
-                            console.log(type); // displays "read"
-                            console.log(response.length); // displays "77"
-                        },
-
                         error: function(e) {
                             console.log(e);
                         },
@@ -2364,15 +2354,27 @@
                         },
 
                     },
-                    requestStart: function(e) {
-
-                    },
-
                     schema: {
                         data: "Rows",
                         total: "Count",
                     }
                 };
+
+                if (ctrl && angular.isFunction(ctrl)) {
+                    xParam.requestEnd = function(x) {
+                        var elm = ctrl();
+                        if (elm && elm.element && elm.element.parent()) {
+                            kendo.ui.progress(elm.element.parent(), false);
+                        }
+                    };
+
+                    xParam.requestStart = function(x) {
+                        var elm = ctrl();
+                        if (elm && elm.element && elm.element.parent()) {
+                            kendo.ui.progress(elm.element.parent(), true);
+                        }
+                    };
+                }
 
                 if (qParams && qParams.SchemaColumns && qParams.SchemaColumns.length) {
                     xParam.schema.parse = function(response) {

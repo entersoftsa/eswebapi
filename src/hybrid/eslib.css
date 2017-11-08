@@ -911,29 +911,23 @@ td.dx-area-row-cell:last-child{
 
 .dx-pivotgrid .dx-column-header .dx-pivotgrid-toolbar .dx-button-content, .dx-pivotgrid .dx-filter-header .dx-pivotgrid-toolbar .dx-button-content {
     padding: 5px;
-    background-color: #fff;
+    background-color: #65adc4;
     color: #fff!important;
 }
-
-
-.dx-pivotgrid-field-chooser-button.dx-button.dx-button-normal.dx-widget.dx-button-has-icon{margin-left: 20px;}
+.dx-pivotgrid-field-chooser-button.dx-button.dx-button-normal.dx-widget.dx-button-has-icon{background-color: #65adc4!important; margin-left: 20px;}
 
 .k-calendar .k-alt, .k-calendar th, .k-dropzone-hovered, .k-footer-template td, .k-grid-footer, .k-group, .k-group-footer td, .k-grouping-header, .k-popup, .k-toolbar, .k-widget .k-status,
 .dx-pivotgrid .dx-total, .dx-pivotgrid .dx-data-header, .dx-pivotgrid .dx-column-header, .dx-pivotgrid .dx-area-description-cell{
-    font-weight: 600;
-    color:#333!important;
+   background-color: #ebebeb;
+    font-weight: 600;    color:#333!important;
 }
-.dx-pivotgrid .dx-pivotgrid-vertical-headers .dx-row-total, .dx-pivotgrid .dx-pivotgrid-area-data .dx-row-total{
-    background-color: #ebebeb;
-    color: #000;}
-
+.dx-pivotgrid .dx-pivotgrid-vertical-headers .dx-row-total, .dx-pivotgrid .dx-pivotgrid-area-data .dx-row-total{background-color: #ebebeb; color: #000;}
 td.dx-pivotgrid-expanded{
         color: #428bca!important;
     font-weight: 700;}
 
 
 .espivot-wrapper {
-    overflow-x: auto;
     display: block;
     touch-action: pan-x;
 

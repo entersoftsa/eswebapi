@@ -12,142 +12,284 @@
 </head>
 
 <body ng-cloak ng-controller="esComponentCtrl" class="esContainer">
-    <div ng-if="showLogin">
-        <es-login es-credentials="esCredentials" es-on-success="authenticate()" es-show-subscription="true" es-show-bridge="true" es-show-sticky-session="0">
-        </es-login>
+    <div id="esContainer">
+        <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef">
+        </es-combo-pq>
     </div>
-    <div ng-repeat="section in esPqDef" layout-xs="column">
-        <div ng-repeat="dbItem in section" class="mdl-cell shadow" flex="{{100 / (section.length || 2)}}" flex-sm="100" flex-xs="100" style="background: white;">
-            <div id="anchor{{dbItem.CtxID}}" class="panel-body forms">
-                <div ng-if="::!isFavouritesMode" class="actions-r">
-                    <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, true)" title="{{'FAV.ADD' | translate}}"><i class="mdi md-32 mdi-heart"></i></a></button>
-                </div>
-                <div ng-if="::isFavouritesMode" class="actions-r">
-                    <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, false)" title="{{'FAV.DEL' | translate}}"><i class="mdi md-32 red mdi-heart-off"></i></a></button>
-                    <button role="button" class="btn btn-transparent margin-r" ng-class="{'disabled': !canMoveUpOrDown(dbItem, true)}"><a ng-click="moveUpOrDown(dbItem, true)" title="{{'FAV.UP' | translate}}"><i class="mdi md-32 mdi-arrow-up-bold-circle"></i></a></button>
-                    <button role="button" class="btn btn-transparent" ng-class="{'disabled': !canMoveUpOrDown(dbItem, false)}"><a ng-click="moveUpOrDown(dbItem, false)" title="{{'FAV.DOWN' | translate}}"><i class="mdi md-32 mdi-arrow-down-bold-circle"></i></a></button>
-                </div>
-                <es-web-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esgrid'" es-group-id="dbItem.GroupID" es-p-q-options="dbItem.PQOptions" es-panel-open="dbItem.esPanelOpen" es-params-values="dbItem.Params" es-force-title="dbItem.Title" es-filter-id="dbItem.FilterID" es-grid-options="dbItem.UIOptions">
-                </es-web-pq>
-                <es-chart ng-if="dbItem.ESUIType.toLowerCase() == 'eschart'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
-                </es-chart>
-                <es-tree-map ng-if="dbItem.ESUIType.toLowerCase() == 'estreemap'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
-                </es-tree-map>
-                <es-pivot-pq ng-if="dbItem.ESUIType.toLowerCase() == 'espivot'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
-                </es-pivot-pq>
-                <es-map-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esmap'" es-options="dbItem.UIOptions" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
-                </es-map-pq>
-                <span id="anchor3"></span>
-            </div>
-        </div>
-    </div>
-
 
     <script src="js/eswebapi.all.min.js"></script>
     <script src="js/app.min.js"></script>
-    <!-- build:ESDEBUG -->
+
+
+    <!-- zzzbuild:zzzzESDEBUG -->    
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
-            host: "eswebapi.entersoft.gr",
+            host: "esrdapi.azurewebsites.net",
             allowUnsecureConnection: false,
-            subscriptionId: "rigdev",
-            subscriptionPassword: "passx",
-            UserID: "admin",
-            Password: "entersoft",
-            LangID: "en-GB",
-            bridgeId: "",
+            subscriptionId: "realtest",
+            subscriptionPassword: "***",
+            UserID: "sde",
+            Password: "1234",
+            LangID: "en-US",
+            bridgeId: "001",
             BranchID: "ΑΘΗ"
         };
         window.esDeviceMode = "";
         window.esGridHeight = "";
         window.esWebApiToken = "";
+        window.treeesDef = {
+            "AA": 3039,
+            "ID": "PQ_3039",
+            "Title": "Ανάλυση πωλήσεων ιεραρχίας ειδών",
+            "Description": "Ανάλυση πωλήσεων ιεραρχίας ειδών",
+            "ESUIType": "estreemap",
+            "esDef": {
+                "GroupID": "ESWebManager",
+                "FilterID": "SalesItemHierarchyAnalysis",
+                "UIOptions": {
+                    "autobind": true,
+                    "Type": "horizontal"
+                }
+            }
+
+        };
+        window.mapesDef = {
+            "AA": 3036,
+            "ID": "PQ_3036",
+            "GroupID": "SALES",
+            "Title": "Απεικόνιση πωλήσεων σε χάρτη",
+            "ESUIType": "esMap",
+            "Description": "Map to exloit your sales performcance",
+            "esDef": {
+                "GroupID": "ESWebManager",
+                "FilterID": "SalesAnalysisByRegion",
+                "UIOptions": {
+                    "type": "bubble",
+                    "autoBind": true,
+                    "titleField": "esLabel",
+                    "valueField": "Turnover_Value"
+                }
+            }
+        };
+
         window.esDef = {
-            "AA": 1000,
-            "ID": "PQ_1000",
-            "GroupID": "BUSENT",
-            "Title": {
-                "en": "Trade accounts",
-                "el": "Συναλλασσόμενοι",
-                "ro": "Conturi comerciale",
-                "bg": "Контрагенти"
+            "AA": 30311,
+            "ID": "PQ_30311",
+            "Title": "Κύβος - Πωλήσεις ανά κατηγορία είδους",
+            "ESUIType": "espivot",
+            "Description": "Κύβος - Πωλήσεις ανά κατηγορία είδους",
+            "PQOptions": {
+                "AutoExecute": false
             },
-            "Description": "Συναλλασσόμενοι",
+            "esDef": {
+                "GroupID": "ESWebManager",
+                "FilterID": "SalesCubeByItemCategory",
+                "UIOptions": {
+                    "enableChart": true,
+                    "cubeDef": {
+                        "fields": [{
+                                "dataField": "Period",
+                                "dataType": "date",
+                                "groupInterval": "year",
+                                "area": "column"
+                            },
+                            {
+                                "dataField": "Period",
+                                "dataType": "date",
+                                "groupInterval": "quarter",
+                                "area": "column"
+                            },
+                            {
+                                "dataField": "Period",
+                                "dataType": "date",
+                                "groupInterval": "month",
+                                "area": "column"
+                            },
+                            {
+                                "dataField": "FamilyDescr",
+                                "area": "row"
+                            },
+                            {
+                                "dataField": "GroupDescr",
+                                "area": "row"
+                            },
+                            {
+                                "dataField": "CategoryDescr",
+                                "area": "row"
+                            },
+                            {
+                                "dataField": "TurnOver",
+                                "area": "data"
+                            },
+                            {
+                                "dataField": "SalesQty1",
+                                "area": "data"
+                            }
+                        ]
+                    },
+
+                    "pivotOptions": {
+                        "allowSortingBySummary": true,
+                        "allowSorting": true,
+                        "allowFiltering": true,
+                        "allowExpandAll": true,
+                        "showBorders": true,
+                        "fieldChooser": {
+                            "enabled": true
+                        },
+                        "export": {
+                            "enabled": true
+                        },
+                        "fieldPanel": {
+                            "showDataFields": true,
+                            "showRowFields": true,
+                            "showColumnFields": true,
+                            "showFilterFields": true,
+                            "allowFieldDragging": true,
+                            "visible": true
+                        }
+                    }
+                }
+            }
+        };
+        window.chartesDef = {
+            "AA": 3042,
+            "ID": "PQ_3042",
+            "Title": "Μέση τιμή τζίρου & ποσότητας ανά ημέρα",
+            "Description": "Μέση τιμή τζίρου & ποσότητας ανά ημέρα",
+            "ESUIType": "esChart",
+            "esDef": {
+                "GroupID": "ESWebManager",
+                "FilterID": "SalesRetailAverageTurnOverQuantityByDay",
+                "UIOptions": {
+                    "autoBind": true,
+                    "legend": {
+                        "visible": true,
+                        "position": "top",
+                        "labels": {
+                            "template": "#= series.title #"
+                        }
+                    },
+                    "series": [{
+                            "type": "column",
+                            "field": "ESFIItemPeriodics_TurnOver",
+                            "categoryField": "Day",
+                            "axis": "ESFIItemPeriodics_TurnOver",
+                            "color": "#228B22",
+                            "title": "Τζίρος"
+                        },
+                        {
+                            "type": "line",
+                            "field": "Quantity",
+                            "categoryField": "Day",
+                            "axis": "Quantity",
+                            "title": "Ποσότητα"
+                        }
+
+                    ],
+                    "valueAxis": [{
+                            "visible": true,
+                            "name": "ESFIItemPeriodics_TurnOver",
+                            "labels": {
+                                "format": "{0}"
+                            },
+                            "title": {
+                                "text": {
+                                    "en": "Turnover",
+                                    "el": "Τζίρος",
+                                    "ro": "",
+                                    "bg": ""
+                                }
+                            }
+                        },
+                        {
+                            "visible": true,
+                            "name": "Quantity",
+                            "labels": {
+                                "format": "{0}"
+                            },
+                            "title": {
+                                "text": {
+                                    "en": "Quantity",
+                                    "el": "Ποσότητα",
+                                    "ro": "",
+                                    "bg": ""
+                                }
+                            }
+                        }
+                    ],
+                    "categoryAxis": {
+                        "categories": "Day",
+                        "labels": {
+                            "rotation": 45,
+                            "font": "8px"
+                        },
+                        "axisCrossingValues": [
+                            0,
+                            205
+                        ]
+                    },
+                    "tooltip": {
+                        "visible": true,
+                        "template": " #= category #, <br/>  #= kendo.format('{0:n2}',value )#"
+                    }
+                }
+            }
+        };
+        window.gridesDef = {
+            "AA": 10103,
+            "ID": "PQ_10103",
+            "Title": "Επιχειρηματικές διευθύνσεις",
+            "Description": "Επιχειρηματικές διευθύνσεις",
+            "ESUIType": "esGrid",
+            "esDef": {
+                "GroupID": "ESWebManager",
+                "FilterID": "BusEntitiesBusinessAddresses",
+                "PQOptions": {
+                    "ServerPaging": true,
+                    "PageSize": 20,
+                    "AutoExecute": false
+                }
+            }
+        };
+        window.comboesDef = {
+            "AA": 3040,
+            "ID": "PQ_3040",
+            "GroupID": "SALES",
+            "Title": {
+                "en": "",
+                "el": "Ανάλυση λιανικής",
+                "ro": "",
+                "bg": ""
+            },
+            "Description": "Ανάλυση λιανικής",
             "ESUIType": "esCombo",
-            "esDef": [
-                [{
-                    "AA": 1010,
-                    "ID": "PQ_1010",
-                    "Title": "Πελάτες",
-                    "Description": "Πελάτες",
+            "esDef": [{
+                    "AA": 3041,
+                    "ID": "PQ_3041",
+                    "Title": "Ανάλυση καλαθιού λιανικής ανά υποκατάστημα",
+                    "Description": "Ανάλυση καλαθιού λιανικής ανά υποκατάστημα",
                     "ESUIType": "esGrid",
                     "esDef": {
                         "GroupID": "ESWebManager",
-                        "FilterID": "BusEntitiesCustomers",
+                        "FilterID": "SalesRetailMarketBasketAnalysisByBranch",
                         "PQOptions": {
                             "ServerPaging": true,
                             "PageSize": 20,
                             "AutoExecute": false
                         }
                     }
-                }],
-                [{
-                    "AA": 1011,
-                    "ID": "PQ_1011",
-                    "Title": "Πρόσωπα",
-                    "Description": "Πρόσωπα",
-                    "ESUIType": "esGrid",
-                    "esDef": {
-                        "GroupID": "ESWebManager",
-                        "FilterID": "BusEntitiesPerson",
-                        "PQOptions": {
-                            "ServerPaging": true,
-                            "PageSize": 20,
-                            "AutoExecute": false
-                        }
-                    }
-                }],
-                [{
-                    "AA": 1012,
-                    "ID": "PQ_1012",
-                    "Title": "Επιχειρηματικές Επαφές",
-                    "Description": "Επιχειρηματικές Επαφές",
-                    "ESUIType": "esGrid",
-                    "esDef": {
-                        "GroupID": "ESWebManager",
-                        "FilterID": "BusEntitiesContacts",
-                        "PQOptions": {
-                            "ServerPaging": true,
-                            "PageSize": 20,
-                            "AutoExecute": false
-                        }
-                    }
-                }],
-                [{
-                    "AA": 1013,
-                    "ID": "PQ_1013",
-                    "Title": "Επιχειρηματικές διευθύνσεις",
-                    "Description": "Επιχειρηματικές διευθύνσεις",
-                    "ESUIType": "esGrid",
-                    "esDef": {
-                        "GroupID": "ESWebManager",
-                        "FilterID": "BusEntitiesBusinessAddresses",
-                        "PQOptions": {
-                            "ServerPaging": true,
-                            "PageSize": 20,
-                            "AutoExecute": false
-                        }
-                    }
-                }],
-                [{
-                    "AA": 40002,
-                    "ID": "PQ_40002",
-                    "Title": "Ανάλυση εκπρόθεσμων υποθέσεων",
-                    "Description": "Ανάλυση εκπρόθεσμων υποθέσεων",
+                },
+                {
+                    "AA": 3042,
+                    "ID": "PQ_3042",
+                    "Title": "Μέση τιμή τζίρου & ποσότητας ανά ημέρα",
+                    "Description": "Μέση τιμή τζίρου & ποσότητας ανά ημέρα",
                     "ESUIType": "esChart",
                     "esDef": {
                         "GroupID": "ESWebManager",
-                        "FilterID": "ServiceCasesDueDateAnalysis",
+                        "FilterID": "SalesRetailAverageTurnOverQuantityByDay",
                         "UIOptions": {
                             "autoBind": true,
                             "legend": {
@@ -159,82 +301,155 @@
                             },
                             "series": [{
                                     "type": "column",
-                                    "field": "Cases",
-                                    "categoryField": "Period",
-                                    "axis": "Cases",
-                                    "title": "Υποθέσεις"
+                                    "field": "ESFIItemPeriodics_TurnOver",
+                                    "categoryField": "Day",
+                                    "axis": "ESFIItemPeriodics_TurnOver",
+                                    "color": "#228B22",
+                                    "title": "Τζίρος"
                                 },
                                 {
                                     "type": "line",
-                                    "field": "OverDueCases",
-                                    "categoryField": "Period",
-                                    "axis": "OverDueCases",
-                                    "title": "Εκπρόθεσμες υποθέσεις"
+                                    "field": "Quantity",
+                                    "categoryField": "Day",
+                                    "axis": "Quantity",
+                                    "title": "Ποσότητα"
                                 }
+
                             ],
                             "valueAxis": [{
                                     "visible": true,
-                                    "name": "Cases",
+                                    "name": "ESFIItemPeriodics_TurnOver",
                                     "labels": {
                                         "format": "{0}"
                                     },
                                     "title": {
                                         "text": {
-                                            "en": "Cases",
-                                            "el": "Υποθέσεις",
-                                            "ro": "Cazuri",
-                                            "bg": "Случаи"
-                                        },
-                                        "visible": false
-                                    },
-                                    "axisCrossingValues": [
-                                        0,
-                                        0,
-                                        0
-                                    ]
+                                            "en": "Turnover",
+                                            "el": "Τζίρος",
+                                            "ro": "",
+                                            "bg": ""
+                                        }
+                                    }
                                 },
                                 {
-                                    "visible": false,
-                                    "name": "OverDueCases",
+                                    "visible": true,
+                                    "name": "Quantity",
                                     "labels": {
                                         "format": "{0}"
                                     },
                                     "title": {
                                         "text": {
-                                            "en": "Overdue cases",
-                                            "el": "Εκπρόθεσμες υποθέσεις",
-                                            "ro": "Cazuri restante",
-                                            "bg": "Πросрочени случаи"
-                                        },
-                                        "visible": false
-                                    },
-                                    "axisCrossingValues": [
-                                        0,
-                                        0,
-                                        0
-                                    ]
+                                            "en": "Quantity",
+                                            "el": "Ποσότητα",
+                                            "ro": "",
+                                            "bg": ""
+                                        }
+                                    }
                                 }
                             ],
                             "categoryAxis": {
-                                "categories": "Period",
+                                "categories": "Day",
                                 "labels": {
-                                    "rotation": "auto",
+                                    "rotation": 45,
                                     "font": "8px"
                                 },
                                 "axisCrossingValues": [
                                     0,
-                                    0,
-                                    0
+                                    205
                                 ]
                             },
                             "tooltip": {
                                 "visible": true,
-                                "template": " #= category #, <br/> #= kendo.format('{0:n2}', value)#",
-                                "text-align": "left"
+                                "template": " #= category #, <br/>  #= kendo.format('{0:n2}',value )#"
                             }
                         }
                     }
-                }]
+                },
+
+                {
+                    "AA": 3043,
+                    "ID": "PQ_3043",
+                    "Title": "Φόρτος συναλλαγών ανά εβδομάδα",
+                    "Description": "Φόρτος συναλλαγών ανά εβδομάδα",
+                    "ESUIType": "esChart",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "SalesRetailTransactionLoadAnalysisByWeek",
+                        "UIOptions": {
+                            "autoBind": true,
+                            "legend": {
+                                "visible": true,
+                                "position": "top",
+                                "labels": {
+                                    "template": "#= series.title #"
+                                }
+                            },
+                            "series": [{
+                                    "type": "column",
+                                    "field": "ESFIItemPeriodics_TurnOver",
+                                    "categoryField": "Week",
+                                    "axis": "ESFIItemPeriodics_TurnOver",
+                                    "color": "#228B22",
+                                    "title": "Τζίρος"
+                                },
+                                {
+                                    "type": "line",
+                                    "field": "ESFIItemPeriodics_SalesQty",
+                                    "categoryField": "Week",
+                                    "axis": "ESFIItemPeriodics_SalesQty",
+                                    "title": "Ποσότητα"
+                                }
+
+                            ],
+                            "valueAxis": [{
+                                    "visible": true,
+                                    "name": "ESFIItemPeriodics_TurnOver",
+                                    "labels": {
+                                        "format": "{0}"
+                                    },
+                                    "title": {
+                                        "text": {
+                                            "en": "Turnover",
+                                            "el": "Τζίρος",
+                                            "ro": "",
+                                            "bg": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "visible": true,
+                                    "name": "ESFIItemPeriodics_SalesQty",
+                                    "labels": {
+                                        "format": "{0}"
+                                    },
+                                    "title": {
+                                        "text": {
+                                            "en": "Number of transactions",
+                                            "el": "Πλήθος συναλλαγών",
+                                            "ro": "",
+                                            "bg": ""
+                                        }
+                                    }
+                                }
+                            ],
+                            "categoryAxis": {
+                                "categories": "Week",
+                                "labels": {
+                                    "rotation": 45,
+                                    "font": "8px"
+                                },
+                                "axisCrossingValues": [
+                                    0,
+                                    205
+                                ]
+                            },
+                            "tooltip": {
+                                "visible": true,
+                                "template": " #= category #, <br/>  #= kendo.format('{0:n2}',value )#"
+                            }
+                        }
+                    }
+                }
             ]
         };
     };

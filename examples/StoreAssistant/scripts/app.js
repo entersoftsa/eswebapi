@@ -44,11 +44,8 @@
 
             
             var settings = {
-                /*host: "eswebapi.entersoft.gr",
-                allowUnsecureConnection: false*/
-
-                host: "localhost/Entersoft.Web.Api",
-                allowUnsecureConnection: true
+                host: "esrdapi.azurewebsites.net",
+                allowUnsecureConnection: false
             };
             esWebApiServiceProvider.setSettings(settings);
         }

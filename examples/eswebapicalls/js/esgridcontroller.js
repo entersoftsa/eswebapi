@@ -1132,7 +1132,7 @@ smeControllers.controller('webpqCtrl', ['$location', '$scope', '$log', 'esWebApi
 
 smeControllers.controller('salesCtrl', ['$q', '$location', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals',
     function($q, $location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
-        $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESWebManager", "ItemEntryFact", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
+        $scope.esPqDef = new esGlobals.ESPublicQueryDef("", "ESWebManager", "SalesCubeByItemCategory", new esGlobals.ESPQOptions(), new esGlobals.ESParamValues());
         $scope.esPqDef.UIOptions = {
         	enableChart: true
         };

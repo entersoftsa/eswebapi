@@ -96,13 +96,13 @@
 
             var subscriptionId = "";
             esWebApiServiceProvider.setSettings({
-                //host: "esrdapi.azurewebsites.net",
+                host: "esrdapi.azurewebsites.net",
                 //"host": "192.168.1.190/Entersoft.Web.Api",
-                "host": "eswebapi.entersoft.gr",
+                //"host": "eswebapi.entersoft.gr",
                 //host: "10.211.55.3/entersoftapi",
                 //"host": "esmasterapp.entersoft.gr",
                 subscriptionId: subscriptionId,
-                subscriptionPassword: "passx",
+                subscriptionPassword: "***",
                 allowUnsecureConnection: false,
                 additionalHeaders: {
                     "Ocp-Apim-Subscription-Key": "8"

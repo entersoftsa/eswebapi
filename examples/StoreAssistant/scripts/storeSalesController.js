@@ -25,6 +25,85 @@
                 "Description": "Ανάλυση λιανικής",
                 "ESUIType": "esCombo",
                 "esDef": [{
+            "AA": 30311,
+            "ID": "PQ_30311",
+            "Title": "Κύβος - Πωλήσεις ανά κατηγορία είδους",
+            "ESUIType": "espivot",
+            "Description": "Κύβος - Πωλήσεις ανά κατηγορία είδους",
+            "PQOptions": {
+                "AutoExecute": false
+            },
+            "esDef": {
+                "GroupID": "ESWebManager",
+                "FilterID": "SalesCubeByItemCategory",
+                "UIOptions": {
+                    "enableChart": true,
+                    "cubeDef": {
+                        "fields": [{
+                                "dataField": "Period",
+                                "dataType": "date",
+                                "groupInterval": "year",
+                                "area": "column"
+                            },
+                            {
+                                "dataField": "Period",
+                                "dataType": "date",
+                                "groupInterval": "quarter",
+                                "area": "column"
+                            },
+                            {
+                                "dataField": "Period",
+                                "dataType": "date",
+                                "groupInterval": "month",
+                                "area": "column"
+                            },
+                            {
+                                "dataField": "FamilyDescr",
+                                "area": "row"
+                            },
+                            {
+                                "dataField": "GroupDescr",
+                                "area": "row"
+                            },
+                            {
+                                "dataField": "CategoryDescr",
+                                "area": "row"
+                            },
+                            {
+                                "dataField": "TurnOver",
+                                "area": "data"
+                            },
+                            {
+                                "dataField": "SalesQty1",
+                                "area": "data"
+                            }
+                        ]
+                    },
+
+                    "pivotOptions": {
+                        "allowSortingBySummary": true,
+                        "allowSorting": true,
+                        "allowFiltering": true,
+                        "allowExpandAll": true,
+                        "showBorders": true,
+                        "fieldChooser": {
+                            "enabled": true
+                        },
+                        "export": {
+                            "enabled": true
+                        },
+                        "fieldPanel": {
+                            "showDataFields": true,
+                            "showRowFields": true,
+                            "showColumnFields": true,
+                            "showFilterFields": true,
+                            "allowFieldDragging": true,
+                            "visible": true
+                        }
+                    }
+                }
+            }
+        },{
                         "AA": 3041,
                         "ID": "PQ_3041",
                         "Title": "Ανάλυση καλαθιού λιανικής ανά υποκατάστημα",

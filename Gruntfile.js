@@ -225,13 +225,7 @@ module.exports = function(grunt) {
                     collapseWhitespace: true
                 },
                 files: {
-                    'dist/hybrid/eschart.html': 'dist/hybrid/eschart.html',
-                    'dist/hybrid/estreemap.html': 'dist/hybrid/estreemap.html',
-                    'dist/hybrid/esgrid.html': 'dist/hybrid/esgrid.html',
-                    'dist/hybrid/escombo.html': 'dist/hybrid/escombo.html',
-                    'dist/hybrid/esmap.html': 'dist/hybrid/esmap.html',
-                    'dist/hybrid/espivot.html': 'dist/hybrid/espivot.html'
-                }
+                    'dist/hybrid/escombo.html': 'dist/hybrid/escombo.html'                }
             }
         },
 
