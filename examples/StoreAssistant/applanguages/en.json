@@ -2,6 +2,8 @@
 
     "MENU":
     {
+        "CHGPWD": "Change Password",
+        
         "SALES":
         {
             "TITLE": "Sales Rep",

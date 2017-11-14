@@ -66,6 +66,7 @@
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{theSession.UserName}}<span class="caret"></span></a>
 					<ul class="dropdown-menu">
+						<li><a ng-click="changePassword()">{{'MENU.CHGPWD' | translate}}</a></li>
 						<li><a ng-click="signOut()">{{'MENU.SIGNOUT' | translate}}</a></li>
 					</ul>
 				</li>

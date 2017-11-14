@@ -9,8 +9,8 @@
     var appE = angular.module('esStoreAssistant');
 
 
-    appE.controller('MenuCtrl', ['$state', '$rootScope', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals', '$localStorage',
-        function($state, $rootScope, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals, $localStorage) {
+    appE.controller('MenuCtrl', ['$state', '$rootScope', '$scope', '$log', 'esWebApi', 'esUIHelper', '_', 'esCache', 'esMessaging', 'esGlobals', '$localStorage', '$uibModal',
+        function($state, $rootScope, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals, $localStorage, $uibModal) {
             init();
 
             $scope.signOut = function() {
@@ -25,6 +25,34 @@
                         $state.go('login');
                     });
             }
+
+            $scope.changePassword = function() {
+                var inDef = {
+                    OldPassword: "",
+                    NewPassword: "",
+                    NewPassword2: ""
+                };
+
+                esWebUIHelper.esChangePassword($uibModal, inDef)
+                    .then(function(outdef) {
+                        esWebApiService.changePassword(outdef)
+                            .then(function() {
+                                $scope.showMessage("Password was succesfully changed. For security reasons you will be redirected to the login page");
+                                $localStorage.esStoreAssistantCredentials = null;
+                                $state.go('login');
+                            })
+                            .catch(function(ex) {
+                                var s = esGlobals.getUserMessage(ex);
+                                if (!s.isLogin) {
+                                    $scope.showMessage(s.messageToShow);
+                                }
+                            });
+                    })
+                    .catch(function(err) {
+
+                    });
+
+            };
 
 
             function init() {

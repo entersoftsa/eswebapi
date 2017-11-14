@@ -30,6 +30,7 @@
         __LOGIN__: "api/Login/Login",
         __TOKEN__: "api/Login/validateToken",
         __LOGOUT__: "api/Login/Logout",
+        __CHG_PWD__: "api/Login/ChangePassword",
         __USER_LOGO__: "api/Login/UserLogo/",
         __REMOVE_USER_LOGO__: "api/Login/RemoveUserLogo/",
         __REMOVE_ENTITY_BLOB__: "api/Login/RemoveEntityBlob/",
@@ -1606,6 +1607,30 @@ $scope.doLogout = function ()
                                 });
                                 return promise.catch(function(ex) {
 
+                                });
+                            },
+
+                            changePassword: function(chgPwd) {
+                                if (!chgPwd || !chgPwd.OldPassword || !chgPwd.NewPassword || !chgPwd.NewPassword2) {
+                                    throw new Error("Invalid Arguments. Either Old Password, or New Password or Verify Password is empty");
+                                }
+
+
+                                var hds = prepareHeaders();
+
+                                var tt = esGlobals.trackTimer("AUTH", "CHGPWD", "");
+                                tt.startTime();
+
+                                var promise = $http({
+                                    method: 'post',
+                                    headers: hds,
+                                    url: urlWEBAPI.concat(ESWEBAPI_URL.__CHG_PWD__),
+                                    data: chgPwd
+                                });
+                                return promise
+                                .then(function(ret) {
+                                    esGlobals.sessionClosed();
+                                    esCache.clear();
                                 });
                             },
 

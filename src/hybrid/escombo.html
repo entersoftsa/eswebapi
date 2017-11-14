@@ -12,25 +12,29 @@
 </head>
 
 <body ng-cloak ng-controller="esComponentCtrl" class="esContainer">
+    <div id="esWait">
+    </div>
     <div id="esContainer">
         <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef">
         </es-combo-pq>
+
+        <h4 ng-if="esPqDef && !esPqDef.esDef.length">No Data</h4>
     </div>
 
     <script src="js/eswebapi.all.min.js"></script>
     <script src="js/app.min.js"></script>
 
 
-    <!-- zzzbuild:zzzzESDEBUG -->    
+    <!-- build:ESDEBUG -->    
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
             host: "esrdapi.azurewebsites.net",
             allowUnsecureConnection: false,
             subscriptionId: "realtest",
-            subscriptionPassword: "***",
-            UserID: "sde",
-            Password: "1234",
+            subscriptionPassword: "passx",
+            UserID: "admin",
+            Password: "entersoft",
             LangID: "en-US",
             bridgeId: "001",
             BranchID: "ΑΘΗ"
@@ -38,6 +42,9 @@
         window.esDeviceMode = "";
         window.esGridHeight = "";
         window.esWebApiToken = "";
+        window.xxxesDef = {
+            "ESUIType": "esfav"
+        };
         window.treeesDef = {
             "AA": 3039,
             "ID": "PQ_3039",
@@ -73,7 +80,7 @@
             }
         };
 
-        window.esDef = {
+        window.pivotesDef = {
             "AA": 30311,
             "ID": "PQ_30311",
             "Title": "Κύβος - Πωλήσεις ανά κατηγορία είδους",
@@ -253,7 +260,7 @@
                 }
             }
         };
-        window.comboesDef = {
+        window.esDef = {
             "AA": 3040,
             "ID": "PQ_3040",
             "GroupID": "SALES",

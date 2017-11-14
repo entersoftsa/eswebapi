@@ -33,7 +33,7 @@
             </div>
             <div ng-class="{'has-error': esLoginFrm.password.$invalid}">
                 <label for="password" class="sr-only">{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}</label>
-                <input type="password" name="password" autocomplete="off" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}" ng-model="esCredentials.Password" required>
+                <input type="password" autofocus name="password" autocomplete="off" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}" ng-model="esCredentials.Password" required>
             </div>
             <div ng-if="esShowBridge" ng-class="{'has-error': esLoginFrm.bridgeId.$invalid}">
                 <label for="bridgeId" class="sr-only">{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}</label>

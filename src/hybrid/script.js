@@ -12,6 +12,7 @@
         'underscore',
         'es.Web.UI',
         'ui.bootstrap',
+        'pascalprecht.translate',
     ]);
 
     esApp.run(['$anchorScroll', function($anchorScroll) {
@@ -64,12 +65,20 @@
 
     function doLogin($scope, esGlobals, esWebApiService, runOnSuccess) {
         if (window.esWebApiToken) {
-            $scope.ownLogin = false;
-            esGlobals.setWebApiToken(window.esWebApiToken);
-            if (angular.isFunction(runOnSuccess)) {
-                runOnSuccess();
-            }
-            $scope.isReady = true;
+            esWebApiService.validateToken(window.esWebApiToken)
+                .then(function(ret) {
+                    $scope.ownLogin = false;
+                    esGlobals.setWebApiToken(window.esWebApiToken);
+                    if (angular.isFunction(runOnSuccess)) {
+                        runOnSuccess();
+                    }
+                    $scope.isReady = true;
+
+                })
+                .catch(function(err) {
+                    $scope.showLogin = true;
+                });
+
             return;
         }
 
@@ -82,8 +91,11 @@
     }
 
 
-    esApp.controller('esComponentCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
-        function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
+    esApp.controller('esComponentCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', '$translate',
+        function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $translate) {
+
+            var del = angular.element(document.querySelector('#esWait'));
+            kendo.ui.progress(del, true);
 
             $scope.esCredentials = {};
             $scope.isReady = false;
@@ -107,7 +119,7 @@
 
             $scope.authenticate = function() {
                 var claims = {
-                    "ESApplicationID" : "ESMobileReports"
+                    "ESApplicationID": "ESMobileReports"
                 };
 
                 esWebApiService.openSession($scope.esCredentials, claims)
@@ -121,15 +133,105 @@
                         function(err) {
                             $scope.isReady = false;
                             $scope.showLogin = true;
+                            kendo.ui.progress(del, false);
                             var s = esGlobals.getUserMessage(err);
                         });
 
             };
 
+            function createFavItem(menuItem, shortcutItem) {
+
+                var pqDef = new esGlobals.ESPublicQueryDef().initFromObj(menuItem.esDef);
+                pqDef.Params = esWebUIHelper.createESParams(shortcutItem.Params);
+                pqDef.CtxID = menuItem.ID;
+                pqDef.Title = shortcutItem.Title || menuItem.Title;
+
+                return {
+                    AA: menuItem.AA,
+                    ID: menuItem.ID,
+                    Title: shortcutItem.Title || menuItem.Title,
+                    ESUIType: menuItem.ESUIType.toLowerCase(),
+                    esDef: pqDef
+                };
+            }
+
+            function deepSearch(inp, id) {
+
+                if (!angular.isArray(inp)) {
+                    return inp.ID.toLowerCase() == id ? inp : null;
+                }
+
+                for (var i = 0; i < inp.length; i++) {
+                    var el = inp[i];
+
+                    if (angular.isArray(el)) {
+                        for (var j = 0; j < el.length; j++) {
+                            var t = deepSearch(el[j], id);
+                            if (t) {
+                                return t;
+                            }
+                        }
+                    } else {
+                        if (el.ID.toLowerCase() == id) {
+                            return el;
+                        }
+
+                        if (angular.isArray(el.esDef)) {
+                            var ret = deepSearch(el.esDef, id);
+                            if (ret) {
+                                return ret;
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+
             var runOnSuccess = function() {
+
+                if (window.esDef.ESUIType.toLowerCase() == 'esfav') {
+
+                    esWebApiService.getBodyFromES00Blob("ESGOUser", esGlobals.getClientSession().connectionModel.GID, 9000)
+                        .then(function(ret) {
+                                var fav = JSON.parse(ret.data.TextBody);
+                                var elems;
+
+                                if (window.esMainMenu && angular.isArray(window.esMainMenu) && window.esMainMenu.length) {
+                                    elems = _.map(fav.shortcuts, function(g) {
+                                        var el = g ? deepSearch(window.esMainMenu, g.ID) : null;
+                                        return el ? createFavItem(el, g) : null;
+                                    });
+
+                                    _.remove(elems, function(n) {
+                                        return !n;
+                                    });
+                                } else {
+                                    elems = [];
+                                }
+
+
+                                var mn = {
+                                    Title: $translate.instant("ESUI.FAVOURITES"),
+                                    ID: "favourites",
+                                    ESUIType: "esCombo",
+                                    esDef: elems
+                                };
+
+                                $scope.esPqDef = mn;
+                                kendo.ui.progress(del, false);
+                                return;
+
+                            },
+                            function(ret, err) {
+                                kendo.ui.progress(del, false);
+                                alert(err);
+                            });
+                    return;
+                }
 
                 if (window.esDef.ESUIType.toLowerCase() == 'escombo') {
                     $scope.esPqDef = window.esDef;
+                    kendo.ui.progress(del, false);
                     return;
                 } else {
                     $scope.esPqDef = {
@@ -138,6 +240,7 @@
                         "ESUIType": "esCombo",
                         "esDef": [window.esDef]
                     };
+                    kendo.ui.progress(del, false);
                 }
             };
 

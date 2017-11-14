@@ -14,6 +14,15 @@
 
     "ESUI":
     {
+        "FAVOURITES": "Favourites",
+
+        "CHGPWD" : {
+            "OLDPASSWORD": "Old Password",
+            "NEWPASSWORD": "New Password",
+            "NEWPASSWORD2": "Verify New Password",
+            "TITLE" : "Change Password"
+        },
+
         "GENERIC":
         {
             "OK": "OK",

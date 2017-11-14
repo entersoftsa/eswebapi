@@ -227,6 +227,30 @@
         return modalInstance.result;
     }
 
+    function esChangePassword($uibModal, inData) {
+        if (!inData) {
+            return;
+        }
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            template: '<div ng-include src="\'src/partials/esChangePassword.html\'"></div>',
+            controller: 'esChangePasswordCtrl',
+            controllerAs: '$ctrl',
+            size: 'md',
+            appendTo: null,
+            resolve: {
+                inDef: function() {
+                    return inData;
+                }
+            }
+        });
+
+        return modalInstance.result;
+    }
+
 
     /**
      * @ngdoc filter
@@ -1662,6 +1686,21 @@
 
                 $ctrl.ok = function() {
                     $uibModalInstance.close(true);
+                };
+
+                $ctrl.cancel = function() {
+                    $uibModalInstance.dismiss('cancel');
+                };
+            }
+        ])
+
+        .controller('esChangePasswordCtrl', ['$uibModalInstance', 'inDef',
+            function($uibModalInstance, inDef) {
+                var $ctrl = this;
+                $ctrl.inDef = inDef;
+
+                $ctrl.ok = function() {
+                    $uibModalInstance.close($ctrl.inDef);
                 };
 
                 $ctrl.cancel = function() {
@@ -4155,6 +4194,8 @@ $scope.fetchPQInfo = function() {
                 ESParamInfo: ESParamInfo,
 
                 esAskForField: esAskForField,
+
+                esChangePassword: esChangePassword,
 
                 onMapClick: function(a, b, c) {
                     alert("A location has been clicked. Soon you will see a form here !!!");
