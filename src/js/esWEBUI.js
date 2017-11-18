@@ -135,6 +135,123 @@
         }
     }
 
+    function ESFavourites(inVal) {
+        this.shortcuts = [];
+        this.lastModified = new Date();
+
+        if (!inVal) {
+            return;
+        }
+
+        if (angular.isString(inVal)) {
+            var source = JSON.parse(inVal);
+
+            this.shortcuts = source.shortcuts || [];
+            this.lastModified = source.lastModified;
+            return;
+        }
+
+        if (angular.isArray(inVal)) {
+            this.shortcuts = inVal;
+        }
+    }
+
+    const FAVOURITES_TYPEID = 9000;
+
+    var loadFavourites = function($q, esGlobals, esMessaging, esWebApiService, esCache) {
+        var deferred = $q.defer();
+        var y = esCache.getItem("ES_USR_FAV");
+        if (y) {
+            deferred.resolve(y);
+        } else {
+            esWebApiService.getBodyFromES00Blob("ESGOUser", esGlobals.getClientSession().connectionModel.GID, 9000)
+                .then(function(ret) {
+                    var x = new ESFavourites(ret.data.TextBody);
+                    esCache.setItem("ES_USR_FAV", x);
+                    deferred.resolve(x);
+                })
+                .catch(function(err) {
+                    deferred.reject(err);
+                });
+        }
+
+        return deferred.promise;
+    }
+
+    ESFavourites.prototype.addRemoveFav = function(esGlobals, esMessaging, esWebApiService, esPQDef, sTitle, bRemove) {
+        if (!esPQDef || !esPQDef.CtxID) {
+            return;
+        }
+
+        var id = esPQDef.CtxID.toLowerCase();
+
+        if (angular.isDefined(bRemove)) {
+            _.pullAt(this.shortcuts, bRemove);
+            esMessaging.publish('FAV_REMOVED', id);
+
+        } else {
+            var point = {
+                ID: id,
+                Params: esPQDef.Params.getSerialized(),
+                Title: sTitle
+            };
+
+            this.shortcuts.push(point);
+        }
+
+        return this.save(esGlobals, esWebApiService);
+    }
+
+    ESFavourites.prototype.clearAll = function(esGlobals, esWebApiService) {
+
+        this.lastModified = new Date();
+
+        this.shortcuts = [];
+        return this.save(esGlobals, esWebApiService);
+    }
+
+    ESFavourites.prototype.save = function(esGlobals, esWebApiService) {
+        this.lastModified = new Date();
+
+        var blobInfo = {
+            "ObjectID": "ESGOUser",
+            "KeyID": esGlobals.getClientSession().connectionModel.GID,
+            "TypeID": FAVOURITES_TYPEID,
+            "TextBody": JSON.stringify(this)
+        };
+        return esWebApiService.postBodyToES00Blob(blobInfo);
+    }
+
+    ESFavourites.prototype.moveUpOrDown = function(esGlobals, esWebApiService, curPos, bUp) {
+        if (!this.shortcuts || this.shortcuts.length < 2) {
+            return;
+        }
+
+        if (curPos == -1) {
+            return;
+        }
+
+        if (curPos == 0 && bUp) {
+            return;
+        }
+
+        if (curPos == this.shortcuts.length - 1 && !bUp) {
+            return;
+        }
+
+        var newPos = bUp ? curPos - 1 : curPos + 1;
+        var temp = this.shortcuts[newPos];
+        this.shortcuts[newPos] = this.shortcuts[curPos];
+        this.shortcuts[curPos] = temp;
+
+        var promise = this.save(esGlobals, esWebApiService);
+        return {
+            from: curPos,
+            to: newPos,
+            promise: promise
+        };
+    }
+
 
 
 
@@ -674,8 +791,8 @@
             };
         }])
 
-        .controller('esComboPQCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals',
-            function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals) {
+        .controller('esComboPQCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', '$translate', '$uibModal', '$q', 'esCache', '$timeout', 
+            function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $translate, $uibModal, $q, esCache, $timeout) {
 
                 function esTranslate(item, lang) {
 
@@ -833,7 +950,11 @@
                 }
 
                 var runOnSuccess = function() {
-
+                    if ($scope.esPqDef.ID == "favourites")
+                    {
+                        getFavourites();
+                    }
+                    
                     var arr = [];
                     if ($scope.esPqDef.ESUIType.toLowerCase() != 'escombo') {
                         arr = [$scope.esPqDef];
@@ -860,6 +981,176 @@
 
                 };
 
+                function errReport(ex) {
+                    var s = esGlobals.getUserMessage(ex);
+                    if (!s.isLogin) {
+                        $scope.showUserMessage(s.messageToShow);
+                    }
+                }
+
+                function findFavItem(dbItem) {
+                    return _.findIndex($scope.esPqDef, function(y) {
+                        return y[0] == dbItem;
+                    });
+                }
+
+                $scope.Favourites = null;
+
+                var getFavourites = function() {
+                    var deferred = $q.defer();
+
+                    if (!$scope.Favourites) {
+                        loadFavourites($q, esGlobals, esMessaging, esWebApiService, esCache)
+                            .then(function(ret) {
+                                $scope.Favourites = ret;
+                                deferred.resolve($scope.Favourites);
+                            })
+                            .catch(function(err) {
+                                deferred.reject(err);
+                            });
+                    } else {
+                        deferred.resolve($scope.Favourites);
+                    }
+                    return deferred.promise;
+                }
+
+                $scope.addRemoveFav = function(pqid, bAdd) {
+                    var title = "";
+
+                    if (bAdd) {
+                        var x = {
+                            id: "shortcut",
+                            title: $translate.instant('ESUI.FAV.ADD'),
+                            required: true,
+                            caption: $translate.instant('ESUI.FAV.PROMPT_TITLE'),
+                            param: new esGlobals.ESParamVal("fav_title", "")
+                        };
+
+                        esWebUIHelper.esAskForField($uibModal, x)
+                            .then(function() {
+
+                                getFavourites()
+                                    .then(function(fav) {
+                                        var promise = fav.addRemoveFav(esGlobals, esMessaging, esWebApiService, pqid, x.param.pValue());
+                                        if (!promise) {
+                                            return;
+                                        }
+                                        promise
+                                            .then(function(ret) {
+                                                $scope.showUserMessage($translate.instant('ESUI.FAV.SAVE_SUCCESS'));
+                                            }).catch(function(ex) {
+                                                errReport(ex);
+                                            });
+                                    })
+                                    .catch(function(err) {
+                                        errReport(err);
+                                        return;
+                                    });
+
+                            })
+                            .catch(function(ex) {
+                                if (ex != "cancel") {
+                                    errReport(ex);
+                                }
+                            });
+                    } else {
+                        // remove
+                        var removeIndex = findFavItem(pqid);
+
+                        if (removeIndex == -1) {
+                            return;
+                        }
+
+                        getFavourites()
+                            .then(function(fav) {
+                                var promise = fav.addRemoveFav(esGlobals, esMessaging, esWebApiService, pqid, "", removeIndex);
+                                if (!promise) {
+                                    return;
+                                }
+
+                                promise
+                                    .then(function(ret) {
+                                        $scope.esPqDef.splice(removeIndex, 1);
+                                        $scope.showUserMessage($translate.instant('ESUI.FAV.SAVE_SUCCESS'));
+                                    }).catch(function(ex) {
+                                        errReport(ex);
+                                    });
+
+                            })
+                            .catch(function(err) {
+                                errReport(err);
+                            });
+                    }
+                }
+
+                $scope.clearAll = function() {
+
+                    if (!confirm($translate.instant('ESUI.FAV.CONFIRM_CLEAR'))) {
+                        return;
+                    }
+
+                    getFavourites()
+                        .then(function(fav) {
+                            var promise = fav.clearAll(esGlobals, esWebApiService)
+                                .then(function(ret) {
+                                    $scope.esPqDef = [];
+                                    $scope.showUserMessage($translate.instant('ESUI.FAV.SAVE_SUCCESS'));
+                                }).catch(function(ex) {
+                                    errReport(ex);
+                                });
+
+                        })
+                        .catch(function(err) {
+                            errReport(err);
+                        });
+                }
+
+                $scope.moveUpOrDown = function(dbItem, bUp) {
+                    var itemPos = findFavItem(dbItem);
+
+                    if (itemPos == -1 || !$scope.canMoveUpOrDown(dbItem, bUp)) {
+                        return;
+                    }
+
+                    getFavourites($q, esGlobals, esMessaging, esWebApiService)
+                        .then(function(fav) {
+                            var ret = fav.moveUpOrDown(esGlobals, esWebApiService, itemPos, bUp);
+                            if (!ret) {
+                                return;
+                            }
+
+                            ret.promise
+                                .then(function() {
+                                    var temp = $scope.esPqDef[ret.to];
+                                    $scope.esPqDef[ret.to] = $scope.esPqDef[ret.from];
+                                    $scope.esPqDef[ret.from] = temp;
+                                    $scope.showUserMessage($translate.instant('ESUI.FAV.SAVE_SUCCESS'));
+                                })
+                                .catch(function(ex) {
+                                    errReport(ex);
+                                });
+                        })
+                        .catch(function(err) {
+                            errReport(err);
+                        });
+
+                }
+
+                $scope.canMoveUpOrDown = function(dbItem, bUp) {
+                    var xIndex = findFavItem(dbItem);
+
+                    if (xIndex == -1) {
+                        return false;
+                    }
+
+                    if (bUp) {
+                        return xIndex != 0;
+                    }
+
+                    // Down
+                    return xIndex < $scope.esPqDef.length - 1;
+                }
+
                 runOnSuccess();
             }
         ])
@@ -870,12 +1161,22 @@
                     restrict: 'AE',
                     scope: {
                         esPqDef: "=",
-                        esInApp: "=?"
+                        esInApp: "=?",
+                        isFavouritesMode: "=?",
+                        esShowUserMessage: "&"
                     },
                     templateUrl: function(element, attrs) {
                         return "src/partials/esComboPQ.html";
                     },
-                    link: function($scope, iElement, iAttrs) {}
+                    link: function($scope, iElement, iAttrs) {
+                        if (!$scope.esShowUserMessage || !angular.isFunction($scope.esShowUserMessage)) {
+                            $scope.showUserMessage = function() {
+
+                            };
+                        } else {
+                            $scope.showUserMessage = $scope.esShowUserMessage;
+                        }
+                    }
                 };
             }
         ])
@@ -919,6 +1220,11 @@
                     },
                     link: function($scope, iElement, iAttrs) {
                         $scope.esGridRun = function() {
+
+                            if ($scope.$parent && $scope.$parent.esPanelOpen) {
+                                $scope.$parent.esPanelOpen.status = false;
+                            }
+
                             if ($scope.esGridOptions && $scope.esGridOptions.dataSource) {
                                 if ($scope.esPQOptions && !$scope.esPQOptions.ServerPaging) {
                                     // Refresh all the data from server (no server paging)
@@ -1905,6 +2211,7 @@
                         }
 
                         $scope.executePQ = function() {
+                            $scope.esPanelOpen.status = false;
                             $scope.esGridOptions.dataSource.read();
                         }
 
@@ -4196,6 +4503,8 @@ $scope.fetchPQInfo = function() {
                 esAskForField: esAskForField,
 
                 esChangePassword: esChangePassword,
+
+                ESFavourites: ESFavourites,
 
                 onMapClick: function(a, b, c) {
                     alert("A location has been clicked. Soon you will see a form here !!!");

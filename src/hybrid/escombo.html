@@ -15,17 +15,14 @@
     <div id="esWait">
     </div>
     <div id="esContainer">
-        <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef">
+        <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef" is-favourites-mode="isFav">
         </es-combo-pq>
-
-        <h4 ng-if="esPqDef && !esPqDef.esDef.length">No Data</h4>
     </div>
-
     <script src="js/eswebapi.all.min.js"></script>
     <script src="js/app.min.js"></script>
 
 
-    <!-- build:ESDEBUG -->    
+    <!-- build:ESDEBUG -->
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
@@ -34,17 +31,20 @@
             subscriptionId: "realtest",
             subscriptionPassword: "passx",
             UserID: "admin",
-            Password: "entersoft",
+            Password: "414",
             LangID: "en-US",
             bridgeId: "001",
             BranchID: "ΑΘΗ"
         };
+
         window.esDeviceMode = "";
         window.esGridHeight = "";
         window.esWebApiToken = "";
-        window.xxxesDef = {
+        window.esDef = {
             "ESUIType": "esfav"
         };
+
+
         window.treeesDef = {
             "AA": 3039,
             "ID": "PQ_3039",
@@ -260,7 +260,7 @@
                 }
             }
         };
-        window.esDef = {
+        window.comboesDef = {
             "AA": 3040,
             "ID": "PQ_3040",
             "GroupID": "SALES",

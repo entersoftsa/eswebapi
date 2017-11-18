@@ -11,38 +11,58 @@
     "invalid-subscription-id": "@:ERR_SUBSCRIPTION",
     "ERR_SUBSCRIPTION": "Είτε ο κωδικός είτε το κλειδί της Συνδρομής είναι εφαλμένα",
 
-    "ESUI": {
-        "FAVOURITES": "Συντομεύσεις",
-        "CHGPWD" : {
+    "ESUI":
+    {
+        "FAV":
+        {
+            "FAVOURITES": "Συντομεύσεις",
+            "ADD": "Προσθήκη στις Συντομεύσεις",
+            "DEL": "Διαγραφή από τις Συντομεύσεις",
+            "UP": "Μετακίνηση Πάνω",
+            "DOWN": "Μετακίνηση Κάτω",
+            "CLEAR_ALL": "Διαγραφή όλων των συντομεύσεων",
+            "PROMPT_TITLE": "Προσδιορίστε τίτλο για την συντόμευση",
+            "CONFIRM_CLEAR": "Να διαγραφούν όλες οι συντομεύσεις;",
+            "SAVE_SUCCESS": "Οι αλλαγές στα συνήθη αποθηκεύθηκαν επιτυχώς στο Entersoft Business Suite",
+            "NODATA": "Δεν υπάρχουν ορισμοί προς εμφάνιση"
+        },
+
+        "CHGPWD":
+        {
             "OLDPASSWORD": "Παλαιός Κωδικός",
             "NEWPASSWORD": "Νέος Κωδικός",
             "NEWPASSWORD2": "Επιβεβαίωση Νέου Κωδικού",
-            "TITLE" : "Αλλαγή κωδικού πρόσβασης"
+            "TITLE": "Αλλαγή κωδικού πρόσβασης"
         },
         "GENERIC":
         {
             "OK": "Αποδοχή",
             "CANCEL": "Ακύρωση"
         },
-        "BOOLEAN": {
+        "BOOLEAN":
+        {
             "YES": "Ναί",
             "NO": "Όχι"
         },
-        "PARAMS_PANEL": {
+        "PARAMS_PANEL":
+        {
             "More": "Περισσότερα",
             "Less": "Λιγότερα"
         },
-        "PQ": {
+        "PQ":
+        {
             "DOWNLOAD": "Λήψη",
             "PARAMS_PANEL_RUN": "Αποδοχή",
             "INVESTIGATE": "Αναζήτηση",
             "PARAMS_MISSING": "Μία ή περισσότερες παράμετροι δεν έχουν τιμή"
         },
-        "ESCHARTPQ" : {
+        "ESCHARTPQ":
+        {
             "CHART": "Γράφημα",
             "DATA": "Δεδομένα"
-            },
-        "ESMAPPQ": {
+        },
+        "ESMAPPQ":
+        {
             "MAP": "Χάρτης",
             "DATA": "Δεδομένα",
             "BOTH": "Συνδυασμός",
@@ -50,14 +70,16 @@
             "CLUSTER_CLUSTER": "Συγκέντρωση",
             "CLUSTER_SPIDER": "Αράχνη",
             "RUN_MAP": "Ενημέρωση Χάρτη"
-            },
-        "ESSURVEY": {
+        },
+        "ESSURVEY":
+        {
             "START": "Έναρξη ερωτηματολογίου",
             "NEXT": "Επόμενο",
             "PREVIOUS": "Προηγούμενο",
             "SAVE": "Αποθήκευση και συνέχεια αργότερα"
-            },
-        "LOGIN_FORM": {
+        },
+        "LOGIN_FORM":
+        {
             "SUBSCRIPTION": "Στοιχεία Συνδρομής",
             "SUBSCRIPTION_ID": "Κωδικός Συνδρομής",
             "SUBSCRIPTION_PASSWORD": "Κλειδί Συνδρομής",
@@ -71,7 +93,8 @@
         }
     },
 
-    "ESCOMPLEX": {
+    "ESCOMPLEX":
+    {
         "FROM": "Από ",
         "TO": " Έως ",
         "EQ": "Ίσο",
@@ -84,7 +107,8 @@
         "NULL": "Κενό",
         "NOTNULL": "Μη κενό"
     },
-    "ESDATE_RANGE": {
+    "ESDATE_RANGE":
+    {
         "SDR": "Ημ/νιακό Διάστημα",
         "SD": "Ημερομηνία",
         "ANY": "Οτιδήποτε",

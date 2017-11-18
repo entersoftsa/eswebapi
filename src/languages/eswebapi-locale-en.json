@@ -14,13 +14,26 @@
 
     "ESUI":
     {
-        "FAVOURITES": "Favourites",
+        "FAV":
+        {
+            "FAVOURITES": "Favourites",
+            "ADD": "Add to Favourites",
+            "DEL": "Remove from Favourites",
+            "UP": "Move Up",
+            "DOWN": "Move Down",
+            "CLEAR_ALL": "Delete all favourites",
+            "PROMPT_TITLE": "Please, specify a title for the shortcut",
+            "CONFIRM_CLEAR": "Delete all shortcuts?",
+            "SAVE_SUCCESS": "Changes to your Favourites have been succesfully stored on Entersoft Business Suite",
+            "NODATA": "There is nothing to display"
+        },
 
-        "CHGPWD" : {
+        "CHGPWD":
+        {
             "OLDPASSWORD": "Old Password",
             "NEWPASSWORD": "New Password",
             "NEWPASSWORD2": "Verify New Password",
-            "TITLE" : "Change Password"
+            "TITLE": "Change Password"
         },
 
         "GENERIC":

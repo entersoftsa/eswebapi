@@ -2,13 +2,13 @@
     <div ng-repeat="section in esPqDef" class="row">
         <div ng-repeat="dbItem in section" class="col-xs-12">
             <div id="anchor{{dbItem.CtxID}}" class="esContainer panel-body forms">
-                <div ng-if="::(esInApp && !isFavouritesMode)" class="actions-r">
-                    <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, true)" title="{{'FAV.ADD' | translate}}"><i class="mdi md-32 mdi-heart"></i></a></button>
+                <div ng-if="::!isFavouritesMode" class="actions-r">
+                    <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, true)" title="{{'ESUI.FAV.ADD' | translate}}"><i class="mdi md-32 mdi-heart"></i></a></button>
                 </div>
-                <div ng-if="::(esInApp && isFavouritesMode)" class="actions-r">
-                    <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, false)" title="{{'FAV.DEL' | translate}}"><i class="mdi md-32 red mdi-heart-off"></i></a></button>
-                    <button role="button" class="btn btn-transparent margin-r" ng-class="{'disabled': !canMoveUpOrDown(dbItem, true)}"><a ng-click="moveUpOrDown(dbItem, true)" title="{{'FAV.UP' | translate}}"><i class="mdi md-32 mdi-arrow-up-bold-circle"></i></a></button>
-                    <button role="button" class="btn btn-transparent" ng-class="{'disabled': !canMoveUpOrDown(dbItem, false)}"><a ng-click="moveUpOrDown(dbItem, false)" title="{{'FAV.DOWN' | translate}}"><i class="mdi md-32 mdi-arrow-down-bold-circle"></i></a></button>
+                <div ng-if="::isFavouritesMode" class="actions-r">
+                    <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, false)" title="{{'ESUI.FAV.DEL' | translate}}"><i class="mdi md-32 red mdi-heart-off"></i></a></button>
+                    <button role="button" class="btn btn-transparent margin-r" ng-class="{'disabled': !canMoveUpOrDown(dbItem, true)}"><a ng-click="moveUpOrDown(dbItem, true)" title="{{'ESUI.FAV.UP' | translate}}"><i class="mdi md-32 mdi-arrow-up-bold-circle"></i></a></button>
+                    <button role="button" class="btn btn-transparent" ng-class="{'disabled': !canMoveUpOrDown(dbItem, false)}"><a ng-click="moveUpOrDown(dbItem, false)" title="{{'ESUI.FAV.DOWN' | translate}}"><i class="mdi md-32 mdi-arrow-down-bold-circle"></i></a></button>
                 </div>
                 <es-web-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esgrid'" es-group-id="dbItem.GroupID" es-p-q-options="dbItem.PQOptions" es-panel-open="dbItem.esPanelOpen" es-params-values="dbItem.Params" es-force-title="dbItem.Title" es-filter-id="dbItem.FilterID" es-grid-options="dbItem.UIOptions">
                 </es-web-pq>
@@ -23,5 +23,12 @@
                 <span id="anchor3"></span>
             </div>
         </div>
+    </div>
+    <div class="clearfix">
+        <button class="btn btn-danger pull-right" type="button" ng-if="isFavouritesMode && Favourites.shortcuts.length > 1" ng-click="clearAll()"><i class="mdi md-32 mdi-delete-variant"></i>{{'ESUI.FAV.CLEAR_ALL' | translate}}
+        </button>
+    </div>
+    <div  ng-if="!esPqDef.length" class="alert alert-warning">
+        <strong>{{'ESUI.FAV.NODATA' | translate}}</strong>
     </div>
 </div>

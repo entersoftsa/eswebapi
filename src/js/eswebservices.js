@@ -778,7 +778,7 @@ $scope.doLogin = function() {
                                 return processWEBAPIPromise(promise, tt);
                             },
 
-                            validateToken: function(token) {
+                            validateToken: function(token, credentials) {
                                 if (!token) {
                                     throw new Error("Paramter token cannot be empty");
                                 }
@@ -793,7 +793,7 @@ $scope.doLogin = function() {
                                     data: { webapitoken: !token.startsWith("Bearer ") ? "Bearer " + token : token }
                                 }).
                                 then(function(data) {
-                                    esGlobals.sessionOpened(data.data);
+                                    esGlobals.sessionOpened(data.data, credentials);
                                     return data;
                                 }).
                                 catch(function(ex) {

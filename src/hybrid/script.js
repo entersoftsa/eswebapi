@@ -65,7 +65,7 @@
 
     function doLogin($scope, esGlobals, esWebApiService, runOnSuccess) {
         if (window.esWebApiToken) {
-            esWebApiService.validateToken(window.esWebApiToken)
+            esWebApiService.validateToken(window.esWebApiToken, $scope.esCredentials)
                 .then(function(ret) {
                     $scope.ownLogin = false;
                     esGlobals.setWebApiToken(window.esWebApiToken);
@@ -91,8 +91,8 @@
     }
 
 
-    esApp.controller('esComponentCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', '$translate',
-        function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $translate) {
+    esApp.controller('esComponentCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', '$translate', '$q', 'esCache',
+        function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $translate, $q, esCache) {
 
             var del = angular.element(document.querySelector('#esWait'));
             kendo.ui.progress(del, true);
@@ -139,21 +139,6 @@
 
             };
 
-            function createFavItem(menuItem, shortcutItem) {
-
-                var pqDef = new esGlobals.ESPublicQueryDef().initFromObj(menuItem.esDef);
-                pqDef.Params = esWebUIHelper.createESParams(shortcutItem.Params);
-                pqDef.CtxID = menuItem.ID;
-                pqDef.Title = shortcutItem.Title || menuItem.Title;
-
-                return {
-                    AA: menuItem.AA,
-                    ID: menuItem.ID,
-                    Title: shortcutItem.Title || menuItem.Title,
-                    ESUIType: menuItem.ESUIType.toLowerCase(),
-                    esDef: pqDef
-                };
-            }
 
             function deepSearch(inp, id) {
 
@@ -187,46 +172,80 @@
                 return null;
             }
 
+            function createFavItem(menuItem, shortcutItem) {
+
+                var pqDef = new esGlobals.ESPublicQueryDef().initFromObj(menuItem.esDef);
+                pqDef.Params = esWebUIHelper.createESParams(shortcutItem.Params);
+                pqDef.CtxID = menuItem.ID;
+                pqDef.Title = shortcutItem.Title || menuItem.Title;
+
+                return {
+                    AA: menuItem.AA,
+                    ID: menuItem.ID,
+                    Title: shortcutItem.Title || menuItem.Title,
+                    ESUIType: menuItem.ESUIType.toLowerCase(),
+                    esDef: pqDef
+                };
+            }
+
             var runOnSuccess = function() {
 
                 if (window.esDef.ESUIType.toLowerCase() == 'esfav') {
 
-                    esWebApiService.getBodyFromES00Blob("ESGOUser", esGlobals.getClientSession().connectionModel.GID, 9000)
-                        .then(function(ret) {
-                                var fav = JSON.parse(ret.data.TextBody);
-                                var elems;
+                    $scope.isFav = true;
 
-                                if (window.esMainMenu && angular.isArray(window.esMainMenu) && window.esMainMenu.length) {
-                                    elems = _.map(fav.shortcuts, function(g) {
-                                        var el = g ? deepSearch(window.esMainMenu, g.ID) : null;
-                                        return el ? createFavItem(el, g) : null;
-                                    });
-
-                                    _.remove(elems, function(n) {
-                                        return !n;
-                                    });
-                                } else {
-                                    elems = [];
-                                }
-
-
-                                var mn = {
-                                    Title: $translate.instant("ESUI.FAVOURITES"),
-                                    ID: "favourites",
-                                    ESUIType: "esCombo",
-                                    esDef: elems
-                                };
-
-                                $scope.esPqDef = mn;
-                                kendo.ui.progress(del, false);
-                                return;
-
-                            },
-                            function(ret, err) {
-                                kendo.ui.progress(del, false);
-                                alert(err);
+                    var deferred = $q.defer();
+                    var y = esCache.getItem("ES_USR_FAV");
+                    if (y) {
+                        deferred.resolve(y);
+                    } else {
+                        esWebApiService.getBodyFromES00Blob("ESGOUser", esGlobals.getClientSession().connectionModel.GID, 9000)
+                            .then(function(ret) {
+                                var x = new esWebUIHelper.ESFavourites(ret.data.TextBody);
+                                esCache.setItem("ES_USR_FAV", x);
+                                deferred.resolve(x);
+                            })
+                            .catch(function(err) {
+                                deferred.reject(err);
                             });
+                    }
+
+                    deferred.promise
+                        .then(function(fav) {
+                            var elems;
+
+                            if (window.esMainMenu && angular.isArray(window.esMainMenu) && window.esMainMenu.length) {
+                                elems = _.map(fav.shortcuts, function(g) {
+                                    var el = g ? deepSearch(window.esMainMenu, g.ID) : null;
+                                    return el ? createFavItem(el, g) : null;
+                                });
+
+                                _.remove(elems, function(n) {
+                                    return !n;
+                                });
+                            } else {
+                                elems = [];
+                            }
+
+                            var mn = {
+                                Title: $translate.instant("ESUI.FAV.FAVOURITES"),
+                                ID: "favourites",
+                                ESUIType: "esCombo",
+                                esDef: elems
+                            };
+
+                            $scope.esPqDef = mn;
+                            kendo.ui.progress(del, false);
+                            return;
+
+                        })
+                        .catch(function(err) {
+                            kendo.ui.progress(del, false);
+                            alert(err);
+                        });
                     return;
+                } else {
+                    $scope.isFav = false;
                 }
 
                 if (window.esDef.ESUIType.toLowerCase() == 'escombo') {
