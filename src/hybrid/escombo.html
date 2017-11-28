@@ -15,6 +15,7 @@
     <div id="esWait">
     </div>
     <div id="esContainer">
+        <span kendo-notification="esnotify" auto-hide-after="3000"></span>
         <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef" is-favourites-mode="isFav">
         </es-combo-pq>
     </div>
@@ -40,7 +41,13 @@
         window.esDeviceMode = "";
         window.esGridHeight = "";
         window.esWebApiToken = "";
+
         window.esDef = {
+            "ID": "1234",
+            "ESUIType": "eslink"
+        };
+
+        window.favesDef = {
             "ESUIType": "esfav"
         };
 

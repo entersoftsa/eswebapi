@@ -52,7 +52,7 @@
 
         esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
             var s = esGlobals.getUserMessage(rejection, status);
-            alert(s.messageToShow);
+            $scope.esnotify.error(s.messageToShow);
         });
 
         esGlobals.getESUISettings().mobile = window.esDeviceMode;
@@ -190,6 +190,39 @@
 
             var runOnSuccess = function() {
 
+                if (window.esDef.ESUIType.toLowerCase() == 'eslink' && (window.esMainMenu && angular.isArray(window.esMainMenu) && window.esMainMenu.length)) {
+                    var mn = {
+                        Title: $translate.instant("ESUI.FAV.LINK"),
+                        ID: "eslink",
+                        ESUIType: "esCombo",
+                        esDef: []
+                    };
+
+                    esWebApiService.getBodyFromES00Blob(window.esDef.ID)
+                        .then(function(blob) {
+                            var elems = [];
+                            blob = blob.data;
+                            if (blob.GID == window.esDef.ID && blob.TextBody) {
+                                var g = JSON.parse(blob.TextBody);
+                                var el = deepSearch(window.esMainMenu, g.ID.toLowerCase());
+                                if (el) {
+                                    mn.esDef = [createFavItem(el, g)];
+                                }
+                            }
+
+                            $scope.esPqDef = mn;
+                            kendo.ui.progress(del, false);
+
+                        })
+                        .catch(function(err) {
+                            $scope.esPqDef = mn;
+                            kendo.ui.progress(del, false);
+                            var s = esGlobals.getUserMessage(err);
+                            $scope.esnotify.error(s.messageToShow);
+                        })
+                    return;
+                }
+
                 if (window.esDef.ESUIType.toLowerCase() == 'esfav') {
 
                     $scope.isFav = true;
@@ -241,7 +274,8 @@
                         })
                         .catch(function(err) {
                             kendo.ui.progress(del, false);
-                            alert(err);
+                            var s = esGlobals.getUserMessage(err);
+                            $scope.esnotify.error(s.messageToShow);
                         });
                     return;
                 } else {

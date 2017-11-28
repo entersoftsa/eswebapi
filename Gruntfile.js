@@ -61,6 +61,7 @@ module.exports = function(grunt) {
                     "bower_components/angular-loading-bar/build/loading-bar.min.js",
                     "bower_components/perfect-scrollbar/js/perfect-scrollbar.min.js",
                     "bower_components/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js",
+                    "bower_components/angular-clipboard/angular-clipboard.js",
 
                     "bower_components/jszip/dist/jszip.min.js",
 

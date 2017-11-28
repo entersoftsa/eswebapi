@@ -14,7 +14,14 @@
     ]);
 
 
-    
+    eskbApp.run(['esGlobals',
+        function(esGlobals) {
+            //esGlobals.getESUISettings().mobile = "phone";
+            //esGlobals.getESUISettings().defaultGridHeight = "auto";
+        }
+    ])
+
+
     eskbApp.config(['$logProvider',
         '$stateProvider',
         '$urlRouterProvider',
@@ -32,7 +39,6 @@
             $translateProvider.preferredLanguage('el');
             $translateProvider.fallbackLanguage('en');
             $translateProvider.useSanitizeValueStrategy('escape');
-
 
             $urlRouterProvider.when('/', '/login');
             $urlRouterProvider.when('', '/login');
@@ -96,14 +102,14 @@
 
             var subscriptionId = "";
             esWebApiServiceProvider.setSettings({
-                host: "esrdapi.azurewebsites.net",
-                //"host": "192.168.1.190/Entersoft.Web.Api",
+                //host: "esrdapi.azurewebsites.net",
+                "host": "192.168.1.190/Entersoft.Web.Api",
                 //"host": "eswebapi.entersoft.gr",
                 //host: "10.211.55.3/entersoftapi",
                 //"host": "esmasterapp.entersoft.gr",
                 subscriptionId: subscriptionId,
                 subscriptionPassword: "***",
-                allowUnsecureConnection: false,
+                allowUnsecureConnection: true,
                 additionalHeaders: {
                     "Ocp-Apim-Subscription-Key": "8"
                 }

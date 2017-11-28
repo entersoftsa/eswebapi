@@ -10,7 +10,7 @@
 
 (function() {
     'use strict';
-    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate', 'dx']);
+    var esWEBUI = angular.module('es.Web.UI', ['ngAnimate', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate', 'dx', 'angular-clipboard']);
 
     esWEBUI.run(['$translate', 'esMessaging', '$q', '$http', '$injector', function($translate, esMessaging, $q, $http, $injector) {
 
@@ -157,6 +157,7 @@
     }
 
     const FAVOURITES_TYPEID = 9000;
+    const ESLINK_TYPEID = 9100;
 
     var loadFavourites = function($q, esGlobals, esMessaging, esWebApiService, esCache) {
         var deferred = $q.defer();
@@ -791,8 +792,8 @@
             };
         }])
 
-        .controller('esComboPQCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', '$translate', '$uibModal', '$q', 'esCache', '$timeout', 
-            function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $translate, $uibModal, $q, esCache, $timeout) {
+        .controller('esComboPQCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', '$translate', '$uibModal', '$q', 'esCache', '$timeout', 'clipboard',
+            function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $translate, $uibModal, $q, esCache, $timeout, clipboard) {
 
                 function esTranslate(item, lang) {
 
@@ -950,11 +951,10 @@
                 }
 
                 var runOnSuccess = function() {
-                    if ($scope.esPqDef.ID == "favourites")
-                    {
+                    if ($scope.esPqDef.ID == "favourites") {
                         getFavourites();
                     }
-                    
+
                     var arr = [];
                     if ($scope.esPqDef.ESUIType.toLowerCase() != 'escombo') {
                         arr = [$scope.esPqDef];
@@ -1012,6 +1012,42 @@
                         deferred.resolve($scope.Favourites);
                     }
                     return deferred.promise;
+                }
+
+                $scope.email = function(pqid) {
+                    var blobInfo = {
+                        "ObjectID": "eswebmanager",
+                        "KeyID": "eslink",
+                        "IsNew": true,
+                        "TypeID": ESLINK_TYPEID,
+                        "TextBody": JSON.stringify({
+                            ID: pqid.CtxID,
+                            Params: pqid.Params.getSerialized(),
+                            Title: pqid.Title
+                        })
+                    };
+
+                    esWebApiService.postBodyToES00Blob(blobInfo)
+                        .then(function(ret) {
+                            var x = {
+                                id: "shortcut",
+                                title: $translate.instant('ESUI.FAV.LINK'),
+                                required: true,
+                                caption: $translate.instant('ESUI.FAV.PROMPT_LINK'),
+                                param: new esGlobals.ESParamVal("fav_link", ret.data)
+                            };
+
+                            esWebUIHelper.esAskForField($uibModal, x)
+                                .then(function() {
+                                    if (clipboard && clipboard.supported) {
+                                        clipboard.copyText(ret.data);
+                                    }
+                                })
+                                .catch(function(err) {})
+                        })
+                        .catch(function(err) {
+
+                        });
                 }
 
                 $scope.addRemoveFav = function(pqid, bAdd) {

@@ -5214,14 +5214,15 @@ var ret = {
                             },
 
                             getBodyFromES00Blob: function(objectid, keyid, typeid) {
-                                if (!objectid || !keyid || typeid == null || typeid == undefined) {
+                                if (!objectid) {
                                     throw new Error("invalid parameters");
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__GET_BODY_FROM_ES00BLOB__, objectid);
-                                surl += "?keyid=" + keyid;
-                                surl += "&typeid=" + typeid;
-
+                                if (keyid && typeid) {
+                                    surl += "?keyid=" + keyid;
+                                    surl += "&typeid=" + typeid;
+                                }
 
                                 var tt = esGlobals.trackTimer("ES00BLOB", "GET JSON_OBJECT");
                                 tt.startTime();
