@@ -951,6 +951,13 @@
                 }
 
                 var runOnSuccess = function() {
+
+                    $scope.showUserMessage = function(message) {
+                        if ($scope.esShowUserMessage && angular.isFunction($scope.esShowUserMessage)) {
+                            $scope.esShowUserMessage({ message: message });
+                        }
+                    }
+
                     if ($scope.esPqDef.ID == "favourites") {
                         getFavourites();
                     }
@@ -1029,24 +1036,37 @@
 
                     esWebApiService.postBodyToES00Blob(blobInfo)
                         .then(function(ret) {
-                            var x = {
-                                id: "shortcut",
-                                title: $translate.instant('ESUI.FAV.LINK'),
-                                required: true,
-                                caption: $translate.instant('ESUI.FAV.PROMPT_LINK'),
-                                param: new esGlobals.ESParamVal("fav_link", ret.data)
-                            };
+                            if (clipboard && clipboard.supported) {
+                                var linkurl = ret.data;
+                                if ($scope.esLinkPrefix && $scope.esLinkPrefix.replace("{0}", ret.data) != $scope.esLinkPrefix) {
+                                    linkurl = $scope.esLinkPrefix.replace("{0}", ret.data);
+                                }
 
-                            esWebUIHelper.esAskForField($uibModal, x)
-                                .then(function() {
-                                    if (clipboard && clipboard.supported) {
-                                        clipboard.copyText(ret.data);
-                                    }
-                                })
-                                .catch(function(err) {})
+                                var x = {
+                                    id: "shortcut",
+                                    title: $translate.instant('ESUI.FAV.LINK'),
+                                    required: true,
+                                    inputType: "readonly",
+                                    caption: $translate.instant('ESUI.FAV.PROMPT_LINK'),
+                                    param: new esGlobals.ESParamVal("fav_link", linkurl)
+                                };
+
+                                esWebUIHelper.esAskForField($uibModal, x)
+                                    .then(function() {
+                                        if (clipboard && clipboard.supported) {
+                                            clipboard.copyText(linkurl);
+                                            $scope.showUserMessage($translate.instant('ESUI.FAV.COPY_CLIPBOARD_OK'));
+                                        }
+                                    })
+                                    .catch(function(err) {
+                                        esWebApiService.removeEntityBlob({
+                                            GID: ret.data
+                                        }).catch(function() {});
+                                    })
+                            }
                         })
                         .catch(function(err) {
-
+                            errReport(err);
                         });
                 }
 
@@ -1199,21 +1219,13 @@
                         esPqDef: "=",
                         esInApp: "=?",
                         isFavouritesMode: "=?",
+                        esLinkPrefix: "=?",
                         esShowUserMessage: "&"
                     },
                     templateUrl: function(element, attrs) {
                         return "src/partials/esComboPQ.html";
-                    },
-                    link: function($scope, iElement, iAttrs) {
-                        if (!$scope.esShowUserMessage || !angular.isFunction($scope.esShowUserMessage)) {
-                            $scope.showUserMessage = function() {
-
-                            };
-                        } else {
-                            $scope.showUserMessage = $scope.esShowUserMessage;
-                        }
                     }
-                };
+                }
             }
         ])
 

@@ -1,15 +1,16 @@
 <div ng-controller="esComboPQCtrl">
     <div ng-repeat="section in esPqDef" class="row">
-        <div ng-repeat="dbItem in section" class="col-xs-12">
+        <div ng-repeat="dbItem in section" ng-class="{'col-md-6' : section.length == 2, 'col-lg-3': section.length == 4, 'col=lg-4': section.length == 3, 'col-xs-12': section.length == 1 || section.length > 4}" style="background: white;">
             <div id="anchor{{dbItem.CtxID}}" class="esContainer panel-body forms">
                 <div ng-if="::!isFavouritesMode" class="actions-r">
                     <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, true)" title="{{'ESUI.FAV.ADD' | translate}}"><i class="mdi md-32 mdi-heart"></i></a></button>
-                    <button class="btn" ng-click="email(dbItem)">Clipboard</button>
+                    <button role="button" class="btn btn-transparent"><a ng-click="email(dbItem)" title="{{'ESUI.FAV.LINK' | translate}}"><i class="mdi md-32 mdi-link-variant"></i></a></button>
                 </div>
                 <div ng-if="::isFavouritesMode" class="actions-r">
                     <button role="button" class="btn btn-transparent"><a ng-click="addRemoveFav(dbItem, false)" title="{{'ESUI.FAV.DEL' | translate}}"><i class="mdi md-32 red mdi-heart-off"></i></a></button>
                     <button role="button" class="btn btn-transparent margin-r" ng-class="{'disabled': !canMoveUpOrDown(dbItem, true)}"><a ng-click="moveUpOrDown(dbItem, true)" title="{{'ESUI.FAV.UP' | translate}}"><i class="mdi md-32 mdi-arrow-up-bold-circle"></i></a></button>
                     <button role="button" class="btn btn-transparent" ng-class="{'disabled': !canMoveUpOrDown(dbItem, false)}"><a ng-click="moveUpOrDown(dbItem, false)" title="{{'ESUI.FAV.DOWN' | translate}}"><i class="mdi md-32 mdi-arrow-down-bold-circle"></i></a></button>
+                    <button role="button" class="btn btn-transparent"><a ng-click="email(dbItem)" title="{{'ESUI.FAV.LINK' | translate}}"><i class="mdi md-32 mdi-link-variant"></i></a></button>
                 </div>
                 <es-web-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esgrid'" es-group-id="dbItem.GroupID" es-p-q-options="dbItem.PQOptions" es-panel-open="dbItem.esPanelOpen" es-params-values="dbItem.Params" es-force-title="dbItem.Title" es-filter-id="dbItem.FilterID" es-grid-options="dbItem.UIOptions">
                 </es-web-pq>

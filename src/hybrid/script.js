@@ -198,11 +198,17 @@
                         esDef: []
                     };
 
+                    if (!window.esDef.ID) {
+                        $scope.esPqDef = mn;
+                        kendo.ui.progress(del, false);
+                        return;
+                    }
+
                     esWebApiService.getBodyFromES00Blob(window.esDef.ID)
                         .then(function(blob) {
                             var elems = [];
                             blob = blob.data;
-                            if (blob.GID == window.esDef.ID && blob.TextBody) {
+                            if (blob.GID.toLowerCase() == window.esDef.ID.toLowerCase() && blob.TextBody) {
                                 var g = JSON.parse(blob.TextBody);
                                 var el = deepSearch(window.esMainMenu, g.ID.toLowerCase());
                                 if (el) {

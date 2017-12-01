@@ -1466,10 +1466,12 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
                              * @return {httpPromise} Returns an httpPromise that once resolved, it has a status code OK if everything went OK, or BadRequest if an error occurred.
                              */
                             removeEntityBlob: function(blobInfo) {
-                                if (!blobInfo || !blobInfo.ObjectID || !blobInfo.KeyID) {
-                                    throw new Error("blobInfo argument is null or one or more of the required properties [ObjectID, KeyID] are missing");
+                                var bOK = blobInfo && (blobInfo.GID || (blobInfo.ObjectID && blobInfo.KeyID));
+
+                                if (!bOK) {
+                                    throw new Error("blobInfo argument is null or one or more of the required properties [GID or (ObjectID and KeyID)] are missing");
                                 }
-                                var tt = esGlobals.trackTimer("USER", "REMOVE ENTITY BLOB", blobInfo.ObjectID + " - " + blobInfo.KeyID);
+                                var tt = esGlobals.trackTimer("USER", "REMOVE ENTITY BLOB", blobInfo.ObjectID + " - " + blobInfo.KeyID || '');
                                 blobInfo.TypeID = blobInfo.TypeID || 0;
 
                                 tt.startTime();

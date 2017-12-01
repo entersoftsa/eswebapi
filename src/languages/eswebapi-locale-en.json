@@ -16,6 +16,10 @@
     {
         "FAV":
         {
+            "LINK": "Create a hyperlink to share",
+            "PROMPT_LINK": "Copy hyperlink to clipboard",
+            "COPY_CLIPBOARD_OK": "Hyperlink copied to clipboard",
+
             "FAVOURITES": "Favourites",
             "ADD": "Add to Favourites",
             "DEL": "Remove from Favourites",
