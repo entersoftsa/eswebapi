@@ -189,8 +189,7 @@
             }
 
             var runOnSuccess = function() {
-
-                if (window.esDef.ESUIType.toLowerCase() == 'eslink' && (window.esMainMenu && angular.isArray(window.esMainMenu) && window.esMainMenu.length)) {
+                if (window.esDef.ESUIType.toLowerCase() == 'eslink') {
                     var mn = {
                         Title: $translate.instant("ESUI.FAV.LINK"),
                         ID: "eslink",
@@ -198,7 +197,7 @@
                         esDef: []
                     };
 
-                    if (!window.esDef.ID) {
+                    if (!window.esDef.ID || !(window.esMainMenu && angular.isArray(window.esMainMenu) && window.esMainMenu.length)) {
                         $scope.esPqDef = mn;
                         kendo.ui.progress(del, false);
                         return;
