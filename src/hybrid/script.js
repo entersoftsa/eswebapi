@@ -110,6 +110,7 @@
                 $scope.esCredentials.bridgeId = $window.esWebApiSettings.bridgeId || "";
                 $scope.esCredentials.BranchID = $window.esWebApiSettings.BranchID || "";
                 $scope.esCredentials.LangID = $window.esWebApiSettings.LangID || "";
+                $scope.esClaims = $window.esWebApiSettings.esClaims || {};
             }
             doPrepareCtrl($scope, esMessaging, esGlobals);
 
@@ -118,11 +119,8 @@
             $scope.esCredentials.LangID = !$scope.esCredentials.LangID ? esGlobals.suggestESLanguageID(brseLang) : $scope.esCredentials.LangID;
 
             $scope.authenticate = function() {
-                var claims = {
-                    "ESApplicationID": "ESMobileReports"
-                };
 
-                esWebApiService.openSession($scope.esCredentials, claims)
+                esWebApiService.openSession($scope.esCredentials, $scope.esClaims)
                     .then(function(rep) {
                             $scope.showLogin = false;
                             window.esWebApiToken = esGlobals.getWebApiToken();
@@ -189,6 +187,8 @@
             }
 
             var runOnSuccess = function() {
+                $scope.esLinkPrefix = window.esLinkPrefix || "";
+                
                 if (window.esDef.ESUIType.toLowerCase() == 'eslink') {
                     var mn = {
                         Title: $translate.instant("ESUI.FAV.LINK"),
