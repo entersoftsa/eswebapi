@@ -44,7 +44,7 @@
 
             
             var settings = {
-                host: "esrdapi.azurewebsites.net",
+                host: "eswebapi.azurewebsites.net",
                 allowUnsecureConnection: false
             };
             esWebApiServiceProvider.setSettings(settings);

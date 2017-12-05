@@ -1023,7 +1023,7 @@
 
                 $scope.email = function(pqid) {
                     var blobInfo = {
-                        "ObjectID": "eswebmanager",
+                        "ObjectID": "esanalyzer",
                         "KeyID": "eslink",
                         "IsNew": true,
                         "TypeID": ESLINK_TYPEID,
