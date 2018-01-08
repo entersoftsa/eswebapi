@@ -136,10 +136,11 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
     function($location, $rootScope, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
 
         $scope.credentials = {
-            UserID: 'admin',
-            Password: 'entersoft',
+            UserID: 'sme@entersoft.gr',
+            Password: '414',
             BranchID: 'ΑΘΗ',
-            LangID: 'el-GR'
+            LangID: 'el-GR',
+            bridgeId: '001'
         };
 
         var claims = {

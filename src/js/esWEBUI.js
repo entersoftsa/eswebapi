@@ -1220,6 +1220,7 @@
                         esInApp: "=?",
                         isFavouritesMode: "=?",
                         esLinkPrefix: "=?",
+                        esSimpleMode: "=?",
                         esShowUserMessage: "&"
                     },
                     templateUrl: function(element, attrs) {
@@ -2914,6 +2915,7 @@
                         allPages: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
                         proxyURL: esWebApiService.proxyExportSaveFile("telerik"),
+                        forceProxy: true,
                         filterable: true
                     },
                     excelExport: esExportToExcel
@@ -3003,6 +3005,7 @@
                     excel: {
                         allPages: true,
                         proxyURL: esWebApiService.proxyExportSaveFile("telerik"),
+                        forceProxy: true,
                         fileName: esGroupId + "-" + esFilterId + ".xlsx",
                         filterable: true
                     },

@@ -16,7 +16,7 @@
     </div>
     <div id="esContainer">
         <span kendo-notification="esnotify" auto-hide-after="3000"></span>
-        <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef" is-favourites-mode="isFav" es-link-prefix="esLinkPrefix">
+        <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef" is-favourites-mode="isFav" es-simple-mode="esSimpleMode" es-link-prefix="esLinkPrefix">
         </es-combo-pq>
     </div>
     <script src="js/eswebapi.all.min.js"></script>
@@ -35,7 +35,10 @@
             Password: "414",
             LangID: "en-US",
             bridgeId: "001",
-            BranchID: "ΑΘΗ"
+            BranchID: "ΑΘΗ",
+            esClaims: {
+                "ESApplicationID": "esmaster"
+            }
         };
 
         window.esDeviceMode = "";

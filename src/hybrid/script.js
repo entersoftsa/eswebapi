@@ -63,7 +63,7 @@
         }
     }
 
-    function doLogin($scope, esGlobals, esWebApiService, runOnSuccess) {
+    function doLogin($scope, esGlobals, esWebApiService, runOnSuccess, progress) {
         if (window.esWebApiToken) {
             esWebApiService.validateToken(window.esWebApiToken, $scope.esCredentials)
                 .then(function(ret) {
@@ -76,7 +76,11 @@
 
                 })
                 .catch(function(err) {
-                    $scope.showLogin = true;
+                    kendo.ui.progress(progress, false);
+                    if ($scope.esCredentials.subscriptionPassword && $scope.esCredentials.UserID && $scope.esCredentials.Password && $scope.esCredentials.BranchID) {
+                       $scope.authenticate();
+                        return;
+                    }
                 });
 
             return;
@@ -87,7 +91,6 @@
             return;
         }
 
-        $scope.showLogin = true;
     }
 
 
@@ -99,7 +102,6 @@
 
             $scope.esCredentials = {};
             $scope.isReady = false;
-            $scope.showLogin = false;
             $scope.ownLogin = true;
 
             if ($window.esWebApiSettings) {
@@ -122,7 +124,6 @@
 
                 esWebApiService.openSession($scope.esCredentials, $scope.esClaims)
                     .then(function(rep) {
-                            $scope.showLogin = false;
                             window.esWebApiToken = esGlobals.getWebApiToken();
                             runOnSuccess();
                             $scope.isReady = true;
@@ -130,7 +131,6 @@
                         },
                         function(err) {
                             $scope.isReady = false;
-                            $scope.showLogin = true;
                             kendo.ui.progress(del, false);
                             var s = esGlobals.getUserMessage(err);
                         });
@@ -188,6 +188,7 @@
 
             var runOnSuccess = function() {
                 $scope.esLinkPrefix = window.esLinkPrefix || "";
+                $scope.esSimpleMode = window.esSimpleMode || false;
                 
                 if (window.esDef.ESUIType.toLowerCase() == 'eslink') {
                     var mn = {
@@ -302,7 +303,7 @@
                 }
             };
 
-            doLogin($scope, esGlobals, esWebApiService, runOnSuccess);
+            doLogin($scope, esGlobals, esWebApiService, runOnSuccess, del);
         }
     ]);
 
