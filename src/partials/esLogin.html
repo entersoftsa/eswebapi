@@ -7,7 +7,7 @@
             </div>
             <div ng-class="{'has-error': esLoginFrm.subscriptionPwd.$invalid}">
                 <label for="subscriptionPwd" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}</label>
-                <input type="password" autocomplete="off" name="subscriptionPwd" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}" ng-model="esCredentials.subscriptionPassword" required autofocus>
+                <input type="password" autocomplete="off" name="subscriptionPwd" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}" ng-model="esCredentials.subscriptionPassword" autofocus>
             </div>
 
             <div class="row" ng-if="esShowOnPremises">
