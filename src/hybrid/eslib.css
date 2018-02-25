@@ -942,6 +942,10 @@ td.dx-pivotgrid-expanded{
     margin: 15px 0;
 }
 
+.nav-tabs {
+    margin-bottom: 10px;
+}
+
 /*------------------------------login form ends*/
 
 @media only screen and (max-width: 1024px) {

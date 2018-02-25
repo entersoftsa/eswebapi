@@ -86,10 +86,10 @@
         },
         "LOGIN_FORM":
         {
-            "SUBSCRIPTION": "Subscription Data",
+            "SUBSCRIPTION": "Subscription Credentials",
             "SUBSCRIPTION_ID": "Subscription ID",
             "SUBSCRIPTION_PASSWORD": "Subscription Password",
-            "SIGNIN": "Login",
+            "SIGNIN": "Login Credentials",
             "USER_ID": "User ID",
             "USER_PASSWORD": "User Password",
             "COMPANY_ID": "Company ID",
