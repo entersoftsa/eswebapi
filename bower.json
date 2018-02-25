@@ -44,7 +44,9 @@
     "angular-material": "^1.1.5",
     "mdi": "^2.0.46",
     "perfect-scrollbar": "^0.8.1",
-    "angular-clipboard": "^1.6.2"
+    "angular-clipboard": "^1.6.2",
+    "angular-growl-v2": "^0.7.9",
+    "angular-simple-logger": "^0.1.7"
   },
   "resolutions": {
     "angular-translate": "^2.13.1"

@@ -95,7 +95,8 @@
             "COMPANY_ID": "Company ID",
             "BRANCH_ID": "BranchID ID",
             "LANG_ID": "Language",
-            "SERVERURL": "ES Web Api/App Server Host"
+            "SERVERURL": "ES Web Api/App Server Host",
+            "SHOW_HIDE_SUBSCRIPTION": "Subscription Details"
         }
 
     },

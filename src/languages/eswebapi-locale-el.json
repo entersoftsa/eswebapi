@@ -93,7 +93,8 @@
             "COMPANY_ID": "Εταιρεία",
             "BRANCH_ID": "Υποκ/μα",
             "LANG_ID": "Γλώσσα",
-            "SERVERURL": "ES Web Api/App Server Host"
+            "SERVERURL": "ES Web Api/App Server Host",
+            "SHOW_HIDE_SUBSCRIPTION": "Στοιχεία Συνδρομής"
         }
     },
 

@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-xs-12">
-		<es-params-panel ng-cloak es-params-values="esParamsValues" es-group-id="esGroupId" es-filter-id="esFilterId" es-force-title="::esForceTitle" es-panel-open="esPanelOpen" es-params-def="esParamsDef">
+		<es-params-panel ng-cloak ng-if="::esParamsDef.visibleDefinitions().length" es-params-values="esParamsValues" es-group-id="esGroupId" es-filter-id="esFilterId" es-force-title="::esForceTitle" es-panel-open="esPanelOpen" es-params-def="esParamsDef">
 		</es-params-panel>
 	</div>
 
