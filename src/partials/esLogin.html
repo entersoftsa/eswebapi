@@ -31,8 +31,8 @@
                 </div>
             </uib-tab>
 
-            <uib-tab index="1" heading="{{'ESUI.LOGIN_FORM.SUBSCRIPTION' | translate}}">
-                <div class="col-xs-12 col-sm-6">
+            <uib-tab index="1" heading="{{'ESUI.LOGIN_FORM.SUBSCRIPTION' | translate}}" ng-if="esShowSubscription">
+                <div class="col-xs-12">
                     <div ng-class="{'has-error': esLoginFrm.subscriptionId.$invalid}">
                         <label for="subscriptionId" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_ID' | translate}}</label>
                         <input type="text" name="subscriptionId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_ID' | translate}}" ng-model="esCredentials.subscriptionId">
