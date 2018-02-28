@@ -462,6 +462,8 @@
                         esShowBridge: "=",
                         esCredentials: "=",
                         esShowStickySession: "=",
+                        esLoginLabel: "=?",
+                        esLoginIcon: "=?",
                         esOnSuccess: "&"
                     },
                     template: '<div ng-include src="\'src/partials/esLogin.html\'"></div>',

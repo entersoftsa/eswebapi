@@ -134,7 +134,6 @@ module.exports = function(grunt) {
             build: [
                 "dist",
                 "examples/eswebapicalls/lib/eswebapi/dist",
-                "examples/StoreExample/lib/eswebapi/dist",
                 "../eswebmanager/lib/eswebapi",
                 "../esrfaloreal/lib/eswebapi"
             ],
@@ -265,7 +264,13 @@ module.exports = function(grunt) {
                     expand: true,
                     src: ['*.*'],
                     dest: 'dist/languages/'
-                }, ]
+                }, 
+                {
+                    cwd: 'src/images',
+                    expand: true,
+                    src: ['*.*'],
+                    dest: 'dist/images/'
+                },]
             },
 
             sourcefiles: {
@@ -276,12 +281,7 @@ module.exports = function(grunt) {
                         src: ['dist/**', 'dist/languages/'],
                         dest: 'examples/eswebapicalls/lib/eswebapi/'
                     },
-
                     {
-                        expand: true,
-                        src: ['dist/**', 'dist/languages/'],
-                        dest: 'examples/StoreExample/lib/eswebapi/'
-                    }, {
                         expand: true,
                         src: ['dist/**', 'dist/languages/'],
                         dest: '../eswebmanager/lib/eswebapi/'
@@ -305,6 +305,12 @@ module.exports = function(grunt) {
                         cwd: 'src/languages',
                         src: ['*.*'],
                         dest: 'dist/hybrid/languages'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'src/images',
+                        src: ['*.*'],
+                        dest: 'dist/hybrid/images'
                     },
 
                     {

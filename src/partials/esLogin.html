@@ -1,4 +1,10 @@
+<div class="esloginmain">
     <form name="esLoginFrm" class="esLogin-form" novalidate>
+        <h4 class="esloginlabel" ng-if="::esLoginLabel">{{::esLoginLabel}}</h4>
+        <div class="esloginicon" ng-if="::esLoginIcon">
+            <img ng-src="{{::esLoginIcon}}"></img>
+        </div>
+
 
         <uib-tabset active="active">
             <uib-tab index="0" heading="{{'ESUI.LOGIN_FORM.SIGNIN' | translate}}" disable="tab.disabled">
@@ -50,7 +56,7 @@
                         </div>
                         <div ng-if="esCredentials.onPremises" class="col-xs-12 col-sm-9" ng-class="{'has-error': esLoginFrm.serverUrl.$invalid}">
                             <label for="serverUrl" >{{'ESUI.LOGIN_FORM.SERVERURL' | translate}}</label>
-                            <input type="text" autocomplete="off" name="serverUrl" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SERVERURL' | translate}}" ng-model="esCredentials.host">
+                            <input type="text" autocomplete="off" name="serverUrl" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.LOGIN_ACTION' | translate}}" ng-model="esCredentials.host">
                         </div>
                     </div>
                 </div>
@@ -63,6 +69,7 @@
             </div>
         </div>
         <div class="row">
-            <button class="btn btn-lg btn-primary btn-block" ng-disabled="esLoginFrm.$invalid" ng-click="esOnSuccess()">{{'ESUI.LOGIN_FORM.SIGNIN' | translate}}</button>
+            <button class="btn btn-lg btn-primary btn-block" ng-disabled="esLoginFrm.$invalid" ng-click="esOnSuccess()">{{'ESUI.LOGIN_FORM.DOLOGIN' | translate}}</button>
         </div>
     </form>
+</div>
