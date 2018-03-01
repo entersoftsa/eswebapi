@@ -120,6 +120,8 @@
 
             $scope.esCredentials.LangID = !$scope.esCredentials.LangID ? esGlobals.suggestESLanguageID(brseLang) : $scope.esCredentials.LangID;
 
+            $scope.esLinkPrefix = $window.esLinkPrefix || "";
+
             $scope.authenticate = function() {
 
                 esWebApiService.openSession($scope.esCredentials, $scope.esClaims)

@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.2.5";
+    var version = "2.2.6";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -1951,7 +1951,7 @@ var esAPIversion = {
                  ```js {
                     id: "el-GR",
                     title: "Ελληνικά (GR)",
-                    icon: "data:image/png;base64,......"
+                    icon: "......"
                 }}
                 ```
                 **/

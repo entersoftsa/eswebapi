@@ -14,11 +14,6 @@
 <body ng-cloak ng-controller="esComponentCtrl" class="esContainer">
     <div id="esWait">
     </div>
-    <div ng-if="true"> 
-        <es-login es-credentials="esCredentials" es-on-success="authenticate()" es-login-label="'An Entersoft Cloud Application'" es-login-icon="'images/loginlogo.png'" es-show-subscription="true" es-show-bridge="true" es-show-sticky-session="0"> 
-        </es-login> 
-    </div>
-    
     <div id="esContainer">
         <span kendo-notification="esnotify" auto-hide-after="3000"></span>
         <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef" is-favourites-mode="isFav" es-simple-mode="esSimpleMode" es-link-prefix="esLinkPrefix">
