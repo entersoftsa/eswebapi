@@ -462,7 +462,10 @@
                         esShowBridge: "=",
                         esCredentials: "=",
                         esShowStickySession: "=",
-                        esLoginLabel: "=?",
+                        esLoginLabel: "@?",
+                        esLoginVersion: "@?",
+                        esLoginUrl: "@?",
+                        esLoginTerms: "@?",
                         esLoginIcon: "=?",
                         esOnSuccess: "&"
                     },

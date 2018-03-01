@@ -1,10 +1,10 @@
 <div class="esloginmain">
     <form name="esLoginFrm" class="esLogin-form" novalidate>
         <h4 class="esloginlabel" ng-if="::esLoginLabel">{{::esLoginLabel}}</h4>
+        <h5 class="esloginversion" ng-if="::esLoginVersion">{{::esLoginVersion}}</h5>
         <div class="esloginicon" ng-if="::esLoginIcon">
-            <img ng-src="{{::esLoginIcon}}"></img>
+            <a ng-href="{{::esLoginUrl}}"><img ng-src="{{::esLoginIcon}}"></img></a>
         </div>
-
 
         <uib-tabset active="active">
             <uib-tab index="0" heading="{{'ESUI.LOGIN_FORM.SIGNIN' | translate}}" disable="tab.disabled">
@@ -68,12 +68,20 @@
                 <input type="checkbox" ng-model="esCredentials.StickySession" class="form-control es-login-field" placeholder="StickyMode">
             </div>
         </div>
+
         <div class="col-xs-12">
             <button class="btn btn-lg btn-primary btn-block" ng-disabled="esLoginFrm.$invalid" ng-click="esOnSuccess()">{{'ESUI.LOGIN_FORM.DOLOGIN' | translate}}</button>
         </div>
+
+
         <div class="col-xs-12  es-login-field">
-          <input type="checkbox" ng-model="rememberMe">  <label>{{'LOGIN_FORM.REMEMBERME' | translate}}</label>
+          <input type="checkbox" class="es-check-box" ng-model="rememberMe">  <label>{{'LOGIN_FORM.REMEMBERME' | translate}}</label>
         </div>
+
+        <div class="col-xs-12  es-login-terms" ng-if="::esLoginTerms">
+          {{::esLoginTerms}}
+        </div>
+
     </form>
 </div>
 
