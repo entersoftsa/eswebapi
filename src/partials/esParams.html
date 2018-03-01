@@ -1,7 +1,7 @@
 <uib-accordion close-others="false">
     <div uib-accordion-group class="panel-default esContainer" is-open="esPanelOpen.status">
         <uib-accordion-heading>
-            <i class="pull-right glyphicon " ng-class="{'glyphicon-triangle-bottom': esPanelOpen, 'glyphicon-triangle-right': !esPanelOpen}"></i>
+            <i class="pull-right glyphicon " ng-class="{'glyphicon-triangle-bottom': esPanelOpen.status, 'glyphicon-triangle-right': !esPanelOpen.status}"></i>
             {{::(esForceTitle ? esForceTitle : esParamsDef.title)}}&nbsp; 
         </uib-accordion-heading>
 
