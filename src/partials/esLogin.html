@@ -1,12 +1,25 @@
 <div class="esloginmain">
     <form name="esLoginFrm" class="esLogin-form" novalidate>
-        <h4 class="esloginlabel" ng-if="::esLoginLabel">{{::esLoginLabel}}</h4>
-        <h5 class="esloginversion" ng-if="::esLoginVersion">{{::esLoginVersion}}</h5>
-        <div class="esloginicon" ng-if="::esLoginIcon">
+        <div class="col-xs-12 es-app-info" ng-if="::(esLoginLabel || esLoginVersion)">
+            <span class="esloginlabel" ng-if="::esLoginLabel">{{::esLoginLabel}}</span>
+            <span class="esloginversion" ng-if="::esLoginVersion">{{::esLoginVersion}}</span>
+        </div>
+        <div class="es-login-icon" ng-if="::esLoginIcon">
             <a ng-href="{{::esLoginUrl}}"><img ng-src="{{::esLoginIcon}}"></img></a>
         </div>
 
         <div class="col-xs-12">
+
+            <div class="es-login-lang" ng-class="{'has-error': esLoginFrm.lang.$invalid}">
+                <label for="lang" class="sr-only">{{'ESUI.LOGIN_FORM.LANG_ID' | translate}}</label>
+                <select id="lang"
+                    kendo-drop-down-list
+                    k-ng-model="esCredentials.LangID"
+                    k-options="esLangOptions"
+                    >
+                </select>
+            </div>
+
             <div class="es-login-field" ng-class="{'has-error': esLoginFrm.userId.$invalid}">
                 <label for="userId" class="sr-only">{{'ESUI.LOGIN_FORM.USER_ID' | translate}}</label>
                 <input type="text" name="userId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_ID' | translate}}" ng-model="esCredentials.UserID" required autofocus>
@@ -33,15 +46,6 @@
                 <input type="password" autocomplete="off" name="subscriptionPwd" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}" ng-model="esCredentials.subscriptionPassword" autofocus>
             </div>
                 
-            <div class="es-login-field" ng-class="{'has-error': esLoginFrm.lang.$invalid}">
-                <label for="lang" class="sr-only">{{'ESUI.LOGIN_FORM.LANG_ID' | translate}}</label>
-                <select id="lang"
-                    kendo-drop-down-list
-                    k-ng-model="esCredentials.LangID"
-                    k-options="esLangOptions"
-                    >
-                </select>
-            </div>
         </div>
 
         <div class="col-xs-12">
