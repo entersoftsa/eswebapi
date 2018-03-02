@@ -467,6 +467,7 @@
                         esLoginUrl: "@?",
                         esLoginTerms: "@?",
                         esLoginIcon: "=?",
+                        esLoginShowRememberMe: "=?",
                         esOnSuccess: "&"
                     },
                     template: '<div ng-include src="\'src/partials/esLogin.html\'"></div>',

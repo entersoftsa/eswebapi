@@ -6,66 +6,41 @@
             <a ng-href="{{::esLoginUrl}}"><img ng-src="{{::esLoginIcon}}"></img></a>
         </div>
 
-        <uib-tabset active="active">
-            <uib-tab index="0" heading="{{'ESUI.LOGIN_FORM.SIGNIN' | translate}}" disable="tab.disabled">
-                <div class="col-xs-12">
-                    <div class="es-login-field" ng-class="{'has-error': esLoginFrm.userId.$invalid}">
-                        <label for="userId" class="sr-only">{{'ESUI.LOGIN_FORM.USER_ID' | translate}}</label>
-                        <input type="text" name="userId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_ID' | translate}}" ng-model="esCredentials.UserID" required autofocus>
-                    </div>
-                    <div class="es-login-field" ng-class="{'has-error': esLoginFrm.password.$invalid}">
-                        <label for="password" class="sr-only">{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}</label>
-                        <input type="password" autofocus name="password" autocomplete="off" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}" ng-model="esCredentials.Password" required>
-                    </div>
-                    <div class="es-login-field" ng-if="esShowBridge" ng-class="{'has-error': esLoginFrm.bridgeId.$invalid}">
-                        <label for="bridgeId" class="sr-only">{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}</label>
-                        <input type="text" name="bridgeId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}" ng-model="esCredentials.bridgeId">
-                    </div>
-                    <div class="es-login-field" ng-class="{'has-error': esLoginFrm.branch.$invalid}">
-                        <label for="branch" class="sr-only">{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}</label>
-                        <input type="text" name="branch" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}" ng-model="esCredentials.BranchID" required>
-                    </div>
-                    <div class="es-login-field" ng-class="{'has-error': esLoginFrm.lang.$invalid}">
-                        <label for="lang" class="sr-only">{{'ESUI.LOGIN_FORM.LANG_ID' | translate}}</label>
-                        <select id="lang"
-                            kendo-drop-down-list style="width: 100%"
-                            k-ng-model="esCredentials.LangID"
-                            k-options="esLangOptions"
-                            >
-                        </select>
-                    </div>
-                </div>
-            </uib-tab>
-
-            <uib-tab index="1" heading="{{'ESUI.LOGIN_FORM.SUBSCRIPTION' | translate}}" ng-if="esShowSubscription">
-                <div class="col-xs-12">
-                    <div  class="es-login-field" ng-class="{'has-error': esLoginFrm.subscriptionId.$invalid}">
-                        <label for="subscriptionId" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_ID' | translate}}</label>
-                        <input type="text" name="subscriptionId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_ID' | translate}}" ng-model="esCredentials.subscriptionId">
-                    </div>
-                    <div  class="es-login-field" ng-class="{'has-error': esLoginFrm.subscriptionPwd.$invalid}">
-                        <label for="subscriptionPwd" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}</label>
-                        <input type="password" autocomplete="off" name="subscriptionPwd" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}" ng-model="esCredentials.subscriptionPassword" autofocus>
-                    </div>
-
-                    <div ng-if="esShowOnPremises">
-                        <div class="col-xs-12 col-sm-3">
-                            <label for="serverUrl">On Premises
-                                <input type="checkbox" name="onPremises" ng-model="esCredentials.onPremises" class="form-control" placeholder="StickyMode">
-                            </label>
-                        </div>
-                        <div ng-if="esCredentials.onPremises" class="es-login-field col-xs-12 col-sm-9" ng-class="{'has-error': esLoginFrm.serverUrl.$invalid}">
-                            <label for="serverUrl" >{{'ESUI.LOGIN_FORM.SERVERURL' | translate}}</label>
-                            <input type="text" autocomplete="off" name="serverUrl" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.LOGIN_ACTION' | translate}}" ng-model="esCredentials.host">
-                        </div>
-                    </div>
-                </div>
-            </uib-tab>
-        </uib-tabset>
-
         <div class="col-xs-12">
-            <div ng-if="esShowStickySession" class="form-group">
-                <input type="checkbox" ng-model="esCredentials.StickySession" class="form-control es-login-field" placeholder="StickyMode">
+            <div class="es-login-field" ng-class="{'has-error': esLoginFrm.userId.$invalid}">
+                <label for="userId" class="sr-only">{{'ESUI.LOGIN_FORM.USER_ID' | translate}}</label>
+                <input type="text" name="userId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_ID' | translate}}" ng-model="esCredentials.UserID" required autofocus>
+            </div>
+            <div class="es-login-field" ng-class="{'has-error': esLoginFrm.password.$invalid}">
+                <label for="password" class="sr-only">{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}</label>
+                <input type="password" autofocus name="password" autocomplete="off" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}" ng-model="esCredentials.Password" required>
+            </div>
+            <div class="es-login-field" ng-if="::esShowBridge" ng-class="{'has-error': esLoginFrm.bridgeId.$invalid}">
+                <label for="bridgeId" class="sr-only">{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}</label>
+                <input type="text" name="bridgeId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}" ng-required="::esShowBridge" ng-model="esCredentials.bridgeId">
+            </div>
+            <div class="es-login-field" ng-class="{'has-error': esLoginFrm.branch.$invalid}">
+                <label for="branch" class="sr-only">{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}</label>
+                <input type="text" name="branch" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}" ng-model="esCredentials.BranchID" required>
+            </div>
+
+            <div  class="es-login-field" ng-class="{'has-error': esLoginFrm.subscriptionId.$invalid}" ng-if="::esShowSubscription">
+                <label for="subscriptionId" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_ID' | translate}}</label>
+                <input type="text" name="subscriptionId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_ID' | translate}}" ng-model="esCredentials.subscriptionId">
+            </div>
+            <div  class="es-login-field" ng-class="{'has-error': esLoginFrm.subscriptionPwd.$invalid}" ng-if="::esShowSubscription">
+                <label for="subscriptionPwd" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}</label>
+                <input type="password" autocomplete="off" name="subscriptionPwd" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}" ng-model="esCredentials.subscriptionPassword" autofocus>
+            </div>
+                
+            <div class="es-login-field" ng-class="{'has-error': esLoginFrm.lang.$invalid}">
+                <label for="lang" class="sr-only">{{'ESUI.LOGIN_FORM.LANG_ID' | translate}}</label>
+                <select id="lang"
+                    kendo-drop-down-list
+                    k-ng-model="esCredentials.LangID"
+                    k-options="esLangOptions"
+                    >
+                </select>
             </div>
         </div>
 
@@ -73,9 +48,8 @@
             <button class="btn btn-lg btn-primary btn-block" ng-disabled="esLoginFrm.$invalid" ng-click="esOnSuccess()">{{'ESUI.LOGIN_FORM.DOLOGIN' | translate}}</button>
         </div>
 
-
-        <div class="col-xs-12  es-login-field">
-          <input type="checkbox" class="es-check-box" ng-model="rememberMe">  <label>{{'LOGIN_FORM.REMEMBERME' | translate}}</label>
+        <div class="col-xs-12  es-login-field" ng-if="::esLoginShowRememberMe">
+          <input type="checkbox" class="es-check-box" ng-model="esCredentials.rememberme">  <label>{{'ESUI.LOGIN_FORM.REMEMBERME' | translate}}</label>
         </div>
 
         <div class="col-xs-12  es-login-terms" ng-if="::esLoginTerms">

@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.2.10";
+    var version = "2.2.11";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });

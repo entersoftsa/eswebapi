@@ -97,7 +97,8 @@
             "LANG_ID": "Language",
             "SERVERURL": "ES Web Api/App Server Host",
             "SHOW_HIDE_SUBSCRIPTION": "Subscription Details",
-            "DOLOGIN": "Continue"
+            "DOLOGIN": "Continue",
+            "REMEMBERME": "Remember my credentials"
         }
 
     },
