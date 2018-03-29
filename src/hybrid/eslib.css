@@ -312,7 +312,7 @@ button.btn.btn-success.left.md-button {
         color: inherit;
         color: #5a85a9;
         line-height: 16px;
-        padding:10px;
+     
 }
 .esContainer .panel h4 {
     color: #3c99b6;
@@ -330,20 +330,90 @@ button.btn.btn-success.left.md-button {
     line-height: 40px;
 }
 
-
-.esContainer form.esLogin-form {
-    box-shadow: 1px 1px 7px 0 rgba(145,145,145,.5);
-    padding: 52px;
-    margin-top: -24px;
-    border: 1px solid #fff;
-    background: #fafafa;
-    border-radius: 35px;
+.esloginmain .k-input img, .esloginmain .k-item img {
+    padding-right: 10px;
+}
+.esLogin-form {
+    position: relative;
+    width: 400px;
+    background: #fff;
+    margin: 10px auto;
+    height: 565px;
+    padding: 20px;
+    border-radius: 5px;
 }
 
+
+.esLogin-form:before{
+ position: absolute;
+    z-index: -1;
+    content: "";
+    left: 1px;
+    right: 1px;
+    top: 1px;
+    bottom: 1px;
+    -moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+       border-radius: 5px;
+}
+
+
+@media (max-width: 375px) {
+.esLogin-form {
+    width: 353px;
+    margin-top: 22px;}
+
+}
+
+    
+@media (max-width: 320px) {
+    .esLogin-form {
+    width: 300px;
+    margin-top: 22px;
+    height: 535px;}
+}
+
+.esLogin-form {
+    margin-top: 5px;}
+
+
+
+
+.esLogin-form .es-login-icon{
+    text-align: center;}
+
+.es-app-info {
+    color: #75767a;
+    text-align: center;
+}
+.es-login-icon img {
+    max-width: 200px;
+    margin-bottom: 15px;
+}
+
+.k-popup .k-list .k-state-focused {
+    border-radius: 0px;
+    background: #5bc0de;
+    box-shadow: none;
+}
+
+.esloginmain .k-autocomplete, .esloginmain .k-dropdown-wrap, .esloginmain .k-numeric-wrap, .esloginmain .k-picker-wrap, .esloginmain .k-textbox {
+    border-width: 0px;
+}
+
+.esloginmain .k-state-hover, .esloginmain .k-state-focused{
+    background: #fff;
+ box-shadow: none!important;}
 .esContainer .btn-block, .esContainer .btn-lg {
        width: 30%;
     margin: 20px auto;
     border-radius: 0px;
+}
+
+.es-login-lang {
+    text-align: right;
+    margin-bottom: 8px;
 }
 
 /*--------------------------------date panel*/
@@ -551,6 +621,11 @@ a.k-pager-refresh.k-link {
 
 
 /*---------------------grid styling starts*/
+.escomborow {margin-bottom: 10px; 
+    -moz-box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+}
 
 
 #esContainer .btn {
@@ -1022,14 +1097,6 @@ td.dx-pivotgrid-expanded{
 @media screen and (max-width: 839px) {
 
 
-    .esContainer form.esLogin-form {
-        box-shadow: 1px 1px 7px 0 rgba(145,145,145,.5);
-        padding: 15px;
-        margin-top: -24px;
-        border: 1px solid #fff;
-        background: #fafafa;
-        border-radius: 15px;
-        }
 
          #esContainer {
         width: 96%;}

@@ -899,6 +899,15 @@
                             }
                         });
                     }
+
+                    if (esDef && esDef.UIOptions && esDef.UIOptions.series) {
+                        var loop = angular.isArray(esDef.UIOptions.series) ? esDef.UIOptions.series : [esDef.UIOptions.series];
+                        _.forEach(loop, function(x) {
+                            if (x.title) {
+                                x.title = esTranslate(x.title, lang);
+                            }
+                        });
+                    }
                 }
 
                 function processComponent(item, lang) {
@@ -2393,7 +2402,7 @@
     esWEBUI.factory('esUIHelper', ['$state', '$translate', '$log', '$timeout', 'esMessaging', 'esWebApi', 'esGlobals',
         function($state, $translate, $log, $timeout, esMessaging, esWebApiService, esGlobals) {
 
-            function esColToKCol(esCol, showFormInfo) {
+            function esColToKCol(esCol, showFormInfo, esGridInfo) {
                 var tCol = {
                     field: esCol.field,
                     title: esCol.title,
@@ -2413,7 +2422,9 @@
                     groupFooterTemplate: undefined,
                 }
 
-                tCol.aggregate = esCol.aggregate;
+                if (!esGridInfo || esGridInfo.totalRow) {
+                    tCol.aggregate = esCol.aggregate;
+                }
 
                 switch (esCol.dataType) {
                     case "int32":
@@ -3657,6 +3668,7 @@
                     params: undefined,
                     defaultValues: undefined,
                     groups: undefined,
+                    totalRow: false
                 };
 
                 esGridInfo.groups = _.map(_.filter(gridexInfo.LayoutGroup, function(y) {
@@ -3675,6 +3687,7 @@
                 esGridInfo.rootTable = filterInfo.RootTable;
                 esGridInfo.selectedMasterTable = filterInfo.SelectedMasterTable;
                 esGridInfo.selectedMasterField = filterInfo.SelectedMasterField;
+                esGridInfo.totalRow = filterInfo.TotalRow != "0";
 
                 var z2 = _.map(_.filter(gridexInfo.LayoutColumn, function(y) {
                     return (y.fFilterID.toLowerCase() == fId) && (y.DataTypeName != "Guid");
@@ -3698,7 +3711,7 @@
                         selectedState: (esGridInfo.selectedMasterTable || "").toLowerCase()
                     } : undefined;
 
-                    return esColToKCol(x, showForm);
+                    return esColToKCol(x, showForm, esGridInfo);
                 });
 
 

@@ -91,6 +91,8 @@
             return;
         }
 
+        kendo.ui.progress(progress, false);
+        $scope.isReady = false;
     }
 
 

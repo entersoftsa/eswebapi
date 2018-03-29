@@ -14,6 +14,10 @@
 <body ng-cloak ng-controller="esComponentCtrl" class="esContainer">
     <div id="esWait">
     </div>
+    <div ng-if="false">
+        <es-login es-credentials="esCredentials" es-on-success="authenticate()" es-login-label="'An Entersoft Cloud Application'" es-login-icon="'images/loginlogo.png'" es-show-subscription="false" es-show-bridge="true" es-show-sticky-session="0">
+        </es-login>
+    </div>
     <div id="esContainer">
         <span kendo-notification="esnotify" auto-hide-after="3000"></span>
         <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef" is-favourites-mode="isFav" es-simple-mode="esSimpleMode" es-link-prefix="esLinkPrefix">
@@ -21,15 +25,13 @@
     </div>
     <script src="js/eswebapi.all.min.js"></script>
     <script src="js/app.min.js"></script>
-
-    <!-- build:ESDEBUG -->
+    
+     <!-- build:ESDEBUG -->
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
             host: "eswebapi-1-10-0.azurewebsites.net",
             allowUnsecureConnection: false,
-            subscriptionId: "realtest",
-            subscriptionPassword: "****",
             UserID: "admin",
             Password: "*****",
             LangID: "en-US",
@@ -477,7 +479,6 @@
     });
     </script>
     <!-- endbuild -->
-    
 </body>
 
 </html>
