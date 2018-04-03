@@ -135,6 +135,7 @@ module.exports = function(grunt) {
                 "dist",
                 "examples/eswebapicalls/lib/eswebapi/dist",
                 "../eswebmanager/lib/eswebapi",
+                "../esstoreassistant/lib/eswebapi",
                 "../esrfaloreal/lib/eswebapi"
             ],
 
@@ -285,6 +286,11 @@ module.exports = function(grunt) {
                         expand: true,
                         src: ['dist/**', 'dist/languages/'],
                         dest: '../eswebmanager/lib/eswebapi/'
+                    },
+                    {
+                        expand: true,
+                        src: ['dist/**', 'dist/languages/'],
+                        dest: '../esstoreassistant/lib/eswebapi/'
                     },
                     {
                         expand: true,
