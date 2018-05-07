@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.2.20";
+    var version = "2.2.26";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -374,7 +374,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
      * esGlobals is a factory service that provides functions, constructs and messaging events for common _global_ nature in the context of a typical
      * AngularJS SPA based on Entersoft AngularJS API.
      */
-    esWebFramework.factory('esGlobals', ['$translate', '$rootScope', '$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' /* 'es.Services.GA' */ ,
+    esWebFramework.factory('esGlobals', ['$translate', '$rootScope', '$sessionStorage', '$log', 'esMessaging', 'esCache', '$injector' ,
         function($translate, $rootScope, $sessionStorage, $log, esMessaging, esCache, $injector) {
 
             var esDateRangeOptions = [];
@@ -1593,18 +1593,6 @@ x.setParamValues({p1: 'Hello World'});
                 return ret;
             }
 
-            function fgetGA(injectorName) {
-                if (!$injector) {
-                    return undefined;
-                }
-
-                try {
-                    return $injector.get(!injectorName ? 'es.Services.GA' : injectorName);
-                } catch (x) {
-                    return undefined;
-                }
-
-            }
 
             function fgetModel() {
                 if (!esClientSession.connectionModel) {
@@ -1619,16 +1607,7 @@ x.setParamValues({p1: 'Hello World'});
 
                         esMessaging.publish("AUTH_CHANGED", esClientSession, getAuthToken(session));
 
-                        var esga = fgetGA();
-                        if (angular.isDefined(esga)) {
-
-                            esga.registerEventTrack({
-                                category: 'AUTH',
-                                action: 'RELOGIN',
-                                label: esClientSession.connectionModel.GID
-                            });
-                        }
-
+                        
                         $log.info("RELOGIN User ", esClientSession.connectionModel.Name);
                     } else {
                         esMessaging.publish("AUTH_CHANGED", null, getAuthToken(null));
@@ -1650,16 +1629,6 @@ x.setParamValues({p1: 'Hello World'});
 
                 if (!model) {
                     delete $sessionStorage.__esrequest_sesssion;
-
-                    var esga = fgetGA();
-                    if (angular.isDefined(esga)) {
-                        esga.registerEventTrack({
-                            category: 'AUTH',
-                            action: 'LOGOUT',
-                            label: currentGID
-                        });
-                    }
-
                 } else {
                     $sessionStorage.__esrequest_sesssion = model;
                 }
@@ -1830,17 +1799,6 @@ x.setParamValues({p1: 'Hello World'});
 
             TrackTiming.prototype.send = function() {
                 var timeSpent = this.endTime - this.startTime;
-                var esga = fgetGA();
-                if (!esga) {
-                    return;
-                }
-
-                esga.registerTiming({
-                    timingCategory: this.category,
-                    timingVar: this.variable,
-                    timingValue: timeSpent,
-                    timingLabel: this.label
-                });
                 return this;
             }
 
@@ -2050,8 +2008,6 @@ var exts = esGlobals.getExtensionsForMimeType(mimelist, "text/plain");
                     return [];
                 },
 
-                getGA: fgetGA,
-
                 setWebApiToken: esClientSession.setWebApiToken,
 
                 getWebApiToken: function() {
@@ -2213,15 +2169,6 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                         data.Model.BranchID = data.Model.BranchID || (credentials || {}).BranchID || "-";
 
                         esClientSession.setModel(data.Model);
-
-                        var esga = fgetGA();
-                        if (angular.isDefined(esga)) {
-                            esga.registerEventTrack({
-                                category: 'AUTH',
-                                action: 'LOGIN',
-                                label: data.Model.GID
-                            });
-                        }
 
                         $log.info("LOGIN User ", data.Model.Name);
 

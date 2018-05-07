@@ -78,7 +78,7 @@
                 .catch(function(err) {
                     kendo.ui.progress(progress, false);
                     if ($scope.esCredentials.subscriptionPassword && $scope.esCredentials.UserID && $scope.esCredentials.Password && $scope.esCredentials.BranchID) {
-                       $scope.authenticate();
+                        $scope.authenticate();
                         return;
                     }
                 });
@@ -86,7 +86,7 @@
             return;
         }
 
-        if ($scope.esCredentials.subscriptionPassword && $scope.esCredentials.UserID && $scope.esCredentials.Password && $scope.esCredentials.BranchID) {
+        if ($scope.esCredentials.UserID && $scope.esCredentials.Password && $scope.esCredentials.BranchID) {
             $scope.authenticate();
             return;
         }
