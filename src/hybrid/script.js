@@ -48,7 +48,7 @@
 
     function doPrepareCtrl($scope, esMessaging, esGlobals) {
         $scope.isReady = false;
-
+        $scope.doShowForm = false;
 
         esMessaging.subscribe("ES_HTTP_CORE_ERR", function(rejection, status) {
             var s = esGlobals.getUserMessage(rejection, status);
@@ -67,32 +67,37 @@
         if (window.esWebApiToken) {
             esWebApiService.validateToken(window.esWebApiToken, $scope.esCredentials)
                 .then(function(ret) {
-                    $scope.ownLogin = false;
                     esGlobals.setWebApiToken(window.esWebApiToken);
                     if (angular.isFunction(runOnSuccess)) {
                         runOnSuccess();
                     }
                     $scope.isReady = true;
+                    $scope.doShowForm = false;
 
                 })
                 .catch(function(err) {
                     kendo.ui.progress(progress, false);
-                    if ($scope.esCredentials.subscriptionPassword && $scope.esCredentials.UserID && $scope.esCredentials.Password && $scope.esCredentials.BranchID) {
+                    if ($scope.esCredentials.UserID && $scope.esCredentials.Password && $scope.esCredentials.BranchID && $scope.esCredentials.bridgeId) {
                         $scope.authenticate();
                         return;
                     }
+
+                    $scope.isReady = false;
+                    $scope.doShowForm = true;
+
                 });
 
             return;
         }
 
-        if ($scope.esCredentials.UserID && $scope.esCredentials.Password && $scope.esCredentials.BranchID) {
+        if ($scope.esCredentials.UserID && $scope.esCredentials.Password && $scope.esCredentials.BranchID && $scope.esCredentials.bridgeId) {
             $scope.authenticate();
             return;
         }
 
         kendo.ui.progress(progress, false);
         $scope.isReady = false;
+        $scope.doShowForm = true;
     }
 
 
@@ -104,7 +109,6 @@
 
             $scope.esCredentials = {};
             $scope.isReady = false;
-            $scope.ownLogin = true;
 
             if ($window.esWebApiSettings) {
                 $scope.esCredentials.subscriptionId = $window.esWebApiSettings.subscriptionId || "";
@@ -131,10 +135,12 @@
                             window.esWebApiToken = esGlobals.getWebApiToken();
                             runOnSuccess();
                             $scope.isReady = true;
+                            $scope.doShowForm = false;
 
                         },
                         function(err) {
                             $scope.isReady = false;
+                            $scope.doShowForm = true;
                             kendo.ui.progress(del, false);
                             var s = esGlobals.getUserMessage(err);
                         });
