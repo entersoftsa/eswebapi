@@ -22,6 +22,8 @@
                 </es-pivot-pq>
                 <es-map-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esmap'" es-options="dbItem.UIOptions" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
                 </es-map-pq>
+                <es-single-row-pq ng-if="dbItem.ESUIType.toLowerCase() == 'essinglerow'" es-pq-def="dbItem">
+                </es-single-row-pq>
                 <span id="anchor3"></span>
             </div>
         </div>
