@@ -14,6 +14,11 @@
 
     "ESUI":
     {
+        "SINGLE_ROW": {
+            "FIELD": "Property",
+            "VALUE": "Value"
+        }, 
+
         "FAV":
         {
             "LINK": "Create a hyperlink to share",

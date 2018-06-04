@@ -1458,6 +1458,38 @@
             }
         ])
 
+        .directive('esSingleRowPq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esPqDef: "="
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esSingleRowPQ.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+
+                        $scope.executePQ = function() {
+
+                            esWebApiService.fetchPublicQuery($scope.esPqDef)
+                                .then(function(dat) {
+                                        var r = (dat.data.Rows && dat.data.Rows.length) ? dat.data.Rows[0] : {};
+                                        $scope.singleRow = r;
+                                    },
+                                    function(err) {
+                                        var s = esGlobals.getUserMessage(err);
+                                    });
+
+                        }
+
+                        $scope.executePQ();
+
+                    }
+                };
+            }
+        ])
+
         .directive('esTreeMap', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
             function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
                 return {

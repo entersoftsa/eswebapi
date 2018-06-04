@@ -4077,8 +4077,10 @@ var options = {Accept: 'text/plain'}
                                     cOptions.base64 = !!options.base64;
                                     cOptions.responseType = options.responseType;
                                     cOptions.Accept = options.Accept;
+                                    cOptions.esonly = options.esonly || false;
                                 } else {
                                     cOptions.responseType = 'arraybuffer';
+                                    cOptions.esonly = false;
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_WEB_EAS_ASSET__, assetUrlPath);
@@ -4090,7 +4092,8 @@ var options = {Accept: 'text/plain'}
                                     headers: prepareHeaders(),
                                     url: surl,
                                     params: {
-                                        base64: cOptions.base64
+                                        base64: cOptions.base64,
+                                        esonly: cOptions.esonly
                                     },
                                 };
 

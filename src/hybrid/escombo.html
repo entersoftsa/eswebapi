@@ -26,16 +26,16 @@
     <script src="js/eswebapi.all.min.js"></script>
     <script src="js/app.min.js"></script>
     
-     <!-- build:ESDEBUG -->
+     
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
             host: "eswebapi-1-10-0.azurewebsites.net",
             allowUnsecureConnection: false,
-            UserID: "admin",
-            Password: "*****",
+            UserID: "realtest/mza",
+            Password: "1234",
             LangID: "en-US",
-            bridgeId: "002",
+            bridgeId: "001",
             BranchID: "ΑΘΗ",
             esClaims: {
                 "ESApplicationID": "esanalyzer"
@@ -255,12 +255,30 @@
                 }
             }
         };
-        window.esDef = {
+        window.gridesDef = {
             "AA": 10103,
             "ID": "PQ_10103",
             "Title": "Επιχειρηματικές διευθύνσεις",
             "Description": "Επιχειρηματικές διευθύνσεις",
             "ESUIType": "esGrid",
+            "esDef": {
+                "GroupID": "ESWebManager",
+                "FilterID": "BusEntitiesBusinessAddresses",
+                "PQOptions": {
+                    "ServerPaging": true,
+                    "PageSize": 20,
+                    "AutoExecute": false
+                }
+            }
+        };
+
+
+         window.esDef = {
+            "AA": 10103,
+            "ID": "PQ_10103",
+            "Title": "Επιχειρηματικές διευθύνσεις",
+            "Description": "Επιχειρηματικές διευθύνσεις",
+            "ESUIType": "esSingleRow",
             "esDef": {
                 "GroupID": "ESWebManager",
                 "FilterID": "BusEntitiesBusinessAddresses",
