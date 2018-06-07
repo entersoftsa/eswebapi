@@ -1,3 +1,28 @@
-<es-gauge 
-	es-row="esRow">
-</es-gauge>
+<div class="row">
+    <div class="col-xs-12">
+        <es-params-panel 
+        	ng-cloak 
+            es-panel-open="esPqDef.esPanelOpen"
+            ng-if="!esLocalData"
+            es-group-id="esPqDef" 
+            es-local-data-source="'true'" 
+            es-force-title="esPqDef.Title"
+            es-show-run="'true'" 
+            es-run-click="::executePQ()" 
+        	es-data-source="esMapDataSource" >
+        </es-params-panel>
+    </div>
+
+    <div class="col-xs-12">
+		<kendo-radialgauge k-ng-delay="esPqDef.UIOptions.esScaleOptions" k-pointer="esPqDef.UIOptions.pointer" k-rebind="esPqDef.UIOptions.esScaleOptions" ng-if="esPqDef.UIOptions.GType == 'radial'" 
+    		k-scale="esPqDef.UIOptions.esScaleOptions"
+    		ng-model="esRow.GValue">
+		</kendo-radialgauge>
+		<kendo-lineargauge k-ng-delay="esPqDef.UIOptions.esScaleOptions" k-pointer="esPqDef.UIOptions.pointer" k-rebind="esPqDef.UIOptions.esScaleOptions" ng-if="esPqDef.UIOptions.GType != 'radial'" 
+		    k-scale="esPqDef.UIOptions.esScaleOptions"
+		    ng-model="esRow.GValue">
+		</kendo-lineargauge>
+	</div>
+</div>
+
+
