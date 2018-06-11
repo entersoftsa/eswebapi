@@ -1397,6 +1397,7 @@
                                 .then(function(ret) {
                                     if (ret.data.Rows && ret.data.Rows.length) {
                                         $scope.esRow = ret.data.Rows[0];
+                                        prepareGauge();
                                     }
                                 })
                                 .catch(angular.noop);
