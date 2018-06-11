@@ -936,7 +936,9 @@
                 }
 
                 function processItem(item, lang) {
-
+                    if (!lang) {
+                        lang = esGlobals.getLocale();
+                    }
                     if (angular.isArray(item)) {
                         item = _.map(item, function(x) {
                             return _.orderBy(x, ['AA']);

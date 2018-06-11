@@ -34,7 +34,7 @@
             allowUnsecureConnection: false,
             UserID: "realtest/mza",
             Password: "1234",
-            LangID: "en-US",
+            LangID: "el-GR",
             bridgeId: "001",
             BranchID: "ΑΘΗ",
             esClaims: {
@@ -89,6 +89,229 @@
                     "valueField": "Turnover_Value"
                 }
             }
+        };
+
+        window.esDef = {
+            "AA": 10400,
+            "ID": "PQ_10400",
+            "GroupID": "MGMT",
+            "Title": {
+                "en": "Cash flow",
+                "el": "Cash flow",
+                "ro": "Cash flow",
+                "bg": "Cash flow"
+            },
+            "Description": "Cash flow",
+            "ESUIType": "esCombo",
+            "esDef": [
+                [
+                    {
+                        "AA": 10410,
+                        "ID": "PQ_10410",
+                        "Title": {
+                            "el": "Cash flow",
+                            "en": "Cash flow",
+                            "ro": "Cash flow",
+                            "bg": "Cash flow"
+                        },
+                        "Description": "Cash flow",
+                        "ESUIType": "esChart",
+                        "esDef": {
+                            "GroupID": "ESWebManager",
+                            "FilterID": "FinCashFlowSigned",
+                            "UIOptions": {
+                                "autoBind": true,
+                                "legend": {
+                                    "visible": true,
+                                    "position": "right",
+                                    "labels": {
+                                        "template": "#= series.title #"
+                                    }
+                                },
+                                "series": [
+                                    {
+                                        "field": "Debit",
+                                        "categoryField": "PeriodDescription",
+                                        "axis": "Debit",
+                                        "title": {
+                                            "en": "Inflows",
+                                            "el": "Εισροές",
+                                            "ro": "",
+                                            "bg": ""
+                                        },
+                                        "type": "column",
+                                        "stack": true,
+                                        "color": "#317256"
+                                    },
+                                    {
+                                        "field": "Credit",
+                                        "categoryField": "PeriodDescription",
+                                        "axis": "Debit",
+                                        "title": {
+                                            "en": "Outflows",
+                                            "el": "Εκροές",
+                                            "ro": "",
+                                            "bg": ""
+                                        },
+                                        "type": "column",
+                                        "stack": true,
+                                        "color": "#2378af"
+                                    },
+                                    {
+                                        "field": "ForecastedInflows",
+                                        "categoryField": "PeriodDescription",
+                                        "axis": "Debit",
+                                        "title": {
+                                            "en": "Forecasted inflows",
+                                            "el": "Προβλέψεις εισροών",
+                                            "ro": "",
+                                            "bg": ""
+                                        },
+                                        "type": "column",
+                                        "stack": true,
+                                        "color": "#398564"
+                                    },
+                                    {
+                                        "field": "ForecastedOutflows",
+                                        "categoryField": "PeriodDescription",
+                                        "axis": "Debit",
+                                        "title": {
+                                            "en": "Forecasted outflows",
+                                            "el": "Προβλέψεις εκροών",
+                                            "ro": "",
+                                            "bg": ""
+                                        },
+                                        "type": "column",
+                                        "stack": true,
+                                        "color": "#45acf1"
+                                    },
+                                    {
+                                        "field": "CalculatedForecastedInflows",
+                                        "categoryField": "PeriodDescription",
+                                        "axis": "Debit",
+                                        "title": {
+                                            "en": "Calculated inflows",
+                                            "el": "Προγρ/νες εισροές",
+                                            "ro": "",
+                                            "bg": ""
+                                        },
+                                        "type": "column",
+                                        "stack": true,
+                                        "color": "#419873"
+                                    },
+                                    {
+                                        "field": "CalculatedForecastedOutflows",
+                                        "categoryField": "PeriodDescription",
+                                        "axis": "Debit",
+                                        "title": {
+                                            "en": "Calculated outflows",
+                                            "el": "Προγρ/νες εκροές",
+                                            "ro": "",
+                                            "bg": ""
+                                        },
+                                        "type": "column",
+                                        "stack": true,
+                                        "color": "#8faac6"
+                                    },
+                                    {
+                                        "field": "ProjectedForecastedInflows",
+                                        "categoryField": "PeriodDescription",
+                                        "axis": "Debit",
+                                        "title": {
+                                            "en": "Projected inflows",
+                                            "el": "Εκτιμήσεις εισροών",
+                                            "ro": "",
+                                            "bg": ""
+                                        },
+                                        "type": "column",
+                                        "stack": true,
+                                        "color": "#49ab81"
+                                    },
+                                    {
+                                        "field": "ProjectedForecastedOutflows",
+                                        "categoryField": "PeriodDescription",
+                                        "axis": "Debit",
+                                        "title": {
+                                            "en": "Projected outflows",
+                                            "el": "Εκτιμήσεις εκροών",
+                                            "ro": "",
+                                            "bg": ""
+                                        },
+                                        "type": "column",
+                                        "stack": true,
+                                        "color": "#34a5f1"
+                                    },
+                                    {
+                                        "field": "ExpectesQty",
+                                        "categoryField": "PeriodDescription",
+                                        "axis": "Debit",
+                                        "title": {
+                                            "en": "Balance",
+                                            "el": "Υπόλοιπο",
+                                            "ro": "",
+                                            "bg": ""
+                                        },
+                                        "type": "line",
+                                        "color": "#DAA520",
+                                        "markers": {
+                                            "visible": true,
+                                            "type": "circle",
+                                            "background": "#DAA520"
+                                        }
+                                    }
+                                ],
+                                "valueAxis": {
+                                    "visible": true,
+                                    "name": "Debit",
+                                    "title": {
+                                        "text": {
+                                            "en": "",
+                                            "el": "",
+                                            "ro": "",
+                                            "bg": ""
+                                        }
+                                    }
+                                },
+                                "categoryAxis": {
+                                    "categories": "PeriodDescription",
+                                    "labels": {
+                                        "rotation": 0,
+                                        "font": "8px"
+                                    }
+                                },
+                                "tooltip": {
+                                    "visible": true,
+                                    "template": " #= category #, #= series.title #<br/> #=  kendo.format('{0:n2}',value ) #",
+                                    "text-align": "left"
+                                }
+                            }
+                        }
+                    }
+                ],
+                [
+                    {
+                        "AA": 10420,
+                        "ID": "PQ_10420",
+                        "Title": {
+                            "en": "Cash flow (Detailed)",
+                            "el": "Cash flow (Αναλυτικά)",
+                            "ro": "Cash flow",
+                            "bg": "Cash flow"
+                        },
+                        "Description": "Cash flow",
+                        "ESUIType": "esGrid",
+                        "esDef": {
+                            "GroupID": "ESWebManager",
+                            "FilterID": "FinCashFlow",
+                            "PQOptions": {
+                                "ServerPaging": true,
+                                "PageSize": 20,
+                                "AutoExecute": true
+                            }
+                        }
+                    }
+                ]
+            ]
         };
 
         window.pivotesDef = {
@@ -273,7 +496,7 @@
         };
 
 
-         window.esDef = {
+         window.esgaugeDef = {
             "AA": 10103,
             "ID": "PQ_10103",
             "Title": "Επιχειρηματικές διευθύνσεις",

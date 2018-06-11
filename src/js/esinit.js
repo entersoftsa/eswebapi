@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.2.33";
+    var version = "2.2.34";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -1849,6 +1849,8 @@ x.setParamValues({p1: 'Hello World'});
                 esDetectMobileBrowsers: function() {
                     return isMobile;
                 },
+
+                getLocale: getLocale,
 
 
                 /**
