@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.2.35";
+    var version = "2.2.36";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -1810,9 +1810,44 @@ x.setParamValues({p1: 'Hello World'});
                 return checkMobile;
             })();
 
+            function requiredEBSVersion(ebsVersion, requiredVersion) {
+                if (!requiredVersion) {
+                    return true;
+                }
+
+                if (!ebsVersion) {
+                    return false;
+                }
+
+                ebsVersion = ebsVersion.replace(" - ", ".")
+                var eParts = _.map(ebsVersion.split("."), function(x) {
+                    return parseInt(x.trim());
+                });
+
+                var rParts = _.map(requiredVersion.split("."), function(x) {
+                    return parseInt(x.trim());
+                });
+
+                if (eParts.length != rParts.length && rParts.length != 4) {
+                    return false;
+                }
+
+                var i;
+                for(i = 0; i < 4; i++ ) {
+                    if (eParts[i] < rParts[i]) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
 
             return {
 
+
+                requiredEBSVersion: requiredEBSVersion,
+
+                
                 /**
                  * @ngdoc function
                  * @name es.Services.Web.esGlobals#esConvertGIDtoId
