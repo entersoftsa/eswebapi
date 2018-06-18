@@ -1,17 +1,17 @@
 <label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
-          tooltip-placement="bottom"
-          tooltip-trigger="mouseenter">{{::esParamDef.caption}}
-</label> 
+			 tooltip-placement="bottom">
+	{{::esParamDef.caption}}
+</label>
 
-<span class="k-textbox k-button k-space-right form-control es-param-control">
-	<input 
-			kendo-masked-text-box
-			name="{{::esParamDef.id}}"
-			ng-required="::esParamDef.required"
-			k-mask="::esParamDef.formatString"
-			ng-model-options="{getterSetter: true}"
-			ng-model="esParamVal[esParamDef.id].pValue">
-	</input>
-	<a class="k-icon k-i-search" ng-click="onInvestigate()" ></a>
-</span>
-
+<div class="input-group">
+	<input class="form-control es-param-control"
+				 kendo-masked-text-box
+				 name="{{::esParamDef.id}}"
+				 ng-required="::esParamDef.required"
+				 k-mask="::esParamDef.formatString"
+				 ng-model-options="{getterSetter: true}"
+				 ng-model="esParamVal[esParamDef.id].pValue" />
+	<div class="input-group-append">
+		<span class="input-group-text"><a class="k-icon k-i-search" ng-click="onInvestigate()"></a></span>
+	</div>
+</div>

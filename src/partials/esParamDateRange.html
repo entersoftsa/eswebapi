@@ -1,8 +1,8 @@
 <label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
-      tooltip-placement="bottom"
-      tooltip-trigger="mouseenter">{{::esParamDef.caption}}
+			 tooltip-placement="bottom">
+	{{::esParamDef.caption}}
 </label>
 
-
-  <button type="button" class="btn btn-info modal-style form-control es-param-control" ng-click="askForMore('dr')">{{esParamVal[esParamDef.id].strVal(true)}}<span class="mdi mdi-open-in-new pull-right"></span>
-  </button>
+<button type="button" class="btn btn-info btn-open-modal es-param-control" ng-click="askForMore('dr')">
+	{{esParamVal[esParamDef.id].strVal(true)}}<span class="mdi mdi-open-in-new pull-right"></span>
+</button>

@@ -1,17 +1,16 @@
 <!--  -->
 <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">{{'ESUI.PQ.INVESTIGATE' | translate}} - {{::invParams.paramDef.caption}}</h3>
+	<h5 class="modal-title" id="modal-title">{{'ESUI.PQ.INVESTIGATE' | translate}} - {{::invParams.paramDef.caption}}</h5>
 </div>
 <div class="modal-body" id="modal-body">
-    <es-grid 
-		es-group-id="::invParams.paramDef.invSelectedMasterTable" 
-		es-filter-id="::invParams.paramDef.invSelectedMasterTable + '_search'" 
-		es-post-grid-options="investigateGridOptions"
-		es-execute-params="invParams.pVals">
+	<es-grid es-group-id="::invParams.paramDef.invSelectedMasterTable"
+					 es-filter-id="::invParams.paramDef.invSelectedMasterTable + '_search'"
+					 es-post-grid-options="investigateGridOptions"
+					 es-execute-params="invParams.pVals">
 	</es-grid>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="ok()">{{'ESUI.GENERIC.OK' | translate}}</button>
-    <button class="btn btn-warning" type="button" ng-click="cancel()">{{'ESUI.GENERIC.CANCEL' | translate}}</button>
+	<button class="btn btn-primary" type="button" ng-click="ok()">{{'ESUI.GENERIC.OK' | translate}}</button>
+	<button class="btn btn-default" type="button" ng-click="cancel()">{{'ESUI.GENERIC.CANCEL' | translate}}</button>
 </div>
 

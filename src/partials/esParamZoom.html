@@ -1,17 +1,15 @@
 <label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
-          tooltip-placement="bottom"
-          tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label>
+			 tooltip-placement="bottom">{{::esParamDef.caption}}</label>
 <select class="form-control es-param-control"
-    kendo-combo-box
-    name="{{::esParamDef.id}}"
-    ng-required="::esParamDef.required"
-    k-template="'<span><b>#: Code #</b> -- #: Description #</span>'"
-    k-data-text-field="::esParamDef.invSelectedMasterField"
-    k-data-value-field="::esParamDef.invSelectedMasterField"
-    k-filter="'contains'"
-    k-auto-bind="false"
-    k-min-length="3"
-    k-value-primitive="true"
-    k-ng-model="esParamVal[esParamDef.id].paramValue"
-    k-data-source="esParamLookupDS">
-</select>
+				kendo-combo-box
+				name="{{::esParamDef.id}}"
+				ng-required="::esParamDef.required"
+				k-template="'<span><b>#: Code #</b> -- #: Description #</span>'"
+				k-data-text-field="::esParamDef.invSelectedMasterField"
+				k-data-value-field="::esParamDef.invSelectedMasterField"
+				k-filter="'contains'"
+				k-auto-bind="false"
+				k-min-length="3"
+				k-value-primitive="true"
+				k-ng-model="esParamVal[esParamDef.id].paramValue"
+				k-data-source="esParamLookupDS"></select>

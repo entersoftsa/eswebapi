@@ -1,34 +1,30 @@
-<uib-accordion close-others="false">
-    <div uib-accordion-group class="panel-default esContainer" is-open="esPanelOpen.status">
-        <uib-accordion-heading>
-            <i class="pull-right glyphicon " ng-class="{'glyphicon-triangle-bottom': esPanelOpen.status, 'glyphicon-triangle-right': !esPanelOpen.status}"></i>
-            {{::(esForceTitle ? esForceTitle : esParamsDef.title)}}&nbsp; 
-        </uib-accordion-heading>
+<div class="es-module es-module-params">
+	<uib-accordion close-others="false">
+		<div uib-accordion-group is-open="esPanelOpen.status">
+			<uib-accordion-heading>
+				<i class="mdi " ng-class="{'mdi-menu-down': esPanelOpen.status, 'mdi-menu-right': !esPanelOpen.status}"></i>
+				{{::(esForceTitle ? esForceTitle : esParamsDef.title)}}&nbsp;
+			</uib-accordion-heading>
+			<form novalidate class="form" name="esParamsPanelForm">
+				<div class="row">
+					<div class="form-group col-12 col-md-6 col-lg-3" ng-class="{'has-error is-invalid': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.simpleDefinitions() | orderBy:'aa'">
+						<es-param class="es-param" es-type="::param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
+					</div>
 
-        <form novalidate class="form" name="esParamsPanelForm" class="esContainer">
-            <div class="row">
-                <div class="form-group col-md-6 col-xs-12 col-lg-3" ng-class="{'has-error is-invalid': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.simpleDefinitions() | orderBy:'aa'">
-                    <es-param class="es-param" es-type="::param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
-                </div>
+					<div ng-if="esParamsDef.hasAdvancedParams() && !esMore" class="form-group col-12 col-md-6 col-lg-3 align-self-center">
+						<a class="es-param-more" tabindex="0" ng-click="esToggleMore()">More...</a>
+					</div>
 
-                <div ng-if="esParamsDef.hasAdvancedParams() && !esMore" class="form-group col-md-6 col-xs-12 col-lg-3">                 
-                    <button type="button" class="btn btn-info form-control more-cont es-param-control" ng-click="esToggleMore()">+</button>
-                </div>
-           
-                <div ng-if="esMore" class="form-group col-md-6 col-xs-12 col-lg-3" ng-class="{'has-error is-invalid': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.advancedDefinitions() | orderBy:'aa'">
-                    <es-param class="es-param" es-type="::param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
-                </div>
+					<div ng-if="esMore" class="form-group col-12 col-md-6 col-lg-3" ng-class="{'has-error is-invalid': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.advancedDefinitions() | orderBy:'aa'">
+						<es-param class="es-param" es-type="::param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
+					</div>
 
-                <div ng-if="esMore" class="form-group col-md-6 col-xs-12 col-lg-3">
-                    <button type="button" class="btn btn-info form-control more-cont es-param-control" ng-click="esToggleMore()">-</button>
-                </div>
-            </div>
-        </form>
-
-        <div class="row">
-            <div ng-if="esShowRun" class="col-md-12 col-sm-12 padding-15t">
-                <button type="button" ng-disabled="esParamsPanelForm.$invalid" class="btn btn-primary" ng-click="esRunClick()">{{::esRunTitle}}</button>
-            </div>
-        </div>
-    </div>
-</uib-accordion>
+					<div ng-if="esMore" class="form-group col-12 col-md-6 col-lg-3 align-self-center">
+						<a class="es-param-more" tabindex="0" ng-click="esToggleMore()">Less</a>
+					</div>
+				</div>
+			</form>
+			<button type="button" ng-if="esShowRun" ng-disabled="esParamsPanelForm.$invalid" class="btn btn-primary" ng-click="esRunClick()">{{::esRunTitle}}</button>
+		</div>
+	</uib-accordion>
+</div>

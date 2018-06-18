@@ -1,7 +1,16 @@
-	<label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
-	          tooltip-placement="bottom"
-	          tooltip-trigger="mouseenter">{{::esParamDef.caption}}</label> 
+<label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
+			 tooltip-placement="bottom">{{::esParamDef.caption}}</label>
 
-<button type="button" class="btn btn-default form-control es-param-control check" ng-model-options="{getterSetter: true}" ng-model="esParamVal[esParamDef.id].pValue" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
-        {{esParamVal[esParamDef.id].strVal()}}
+<button type="button" class="btn btn-default es-param-control check" ng-model-options="{getterSetter: true}" ng-model="esParamVal[esParamDef.id].pValue" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+	{{esParamVal[esParamDef.id].strVal()}}
 </button>
+
+
+<div class="form-check">
+	<label class="form-check-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}">
+		<input class="form-check-input" type="checkbox" value=""> {{::esParamDef.caption}}
+		<span class="form-check-sign">
+			<span class="check"></span>
+		</span>
+	</label>
+</div>

@@ -1,6 +1,6 @@
 <div class="row" ng-repeat="param in esParamsDef.definitions | filter:{visible: true} | orderBy:'aa'">
 	<div ng-if="esParamsValues[param.id].strVal()">
-	<span class="col-xs-12 col-sm-6"><strong>{{::param.caption}}<strong></span>
-	<span class="col-xs-12 col-sm-6">{{esParamsValues[param.id].strVal()}}</span>
+		<span class="col-12 col-sm-6"><strong>{{::param.caption}}</strong></span>
+		<span class="col-12 col-sm-6">{{esParamsValues[param.id].strVal()}}</span>
 	</div>
 </div>

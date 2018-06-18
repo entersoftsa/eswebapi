@@ -1,29 +1,27 @@
 <!--  -->
 <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">{{::$ctrl.editedParam.esParamDef.caption}}</h4>
+	<h5 class="modal-title" id="modal-title">{{::$ctrl.editedParam.esParamDef.caption}}</h5>
 </div>
 <div class="modal-body" id="modal-body">
 	<form novalidate class="form" name="d1">
-		<div class="row">
-			<div class="col-xs-12">
-		    	<select 
-		        class="form-control es-param-control" 
-		        kendo-drop-down-list="drDate"
-		        k-data-text-field="'title'" k-auto-bind="true" k-data-value-field="'dValue'" k-data-source="::$ctrl.editedParam.esGlobals.getesDateRangeOptions({dateRangeClass: esParamDef.controlType})" k-value-primitive="true" k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange">
-		        </select>
-		    </div>
+		<div class="form-row">
+			<div class="form-group col-12">
+				<select class="form-control es-param-control"
+								kendo-drop-down-list="drDate"
+								k-data-text-field="'title'" k-auto-bind="true" k-data-value-field="'dValue'" k-data-source="::$ctrl.editedParam.esGlobals.getesDateRangeOptions({dateRangeClass: esParamDef.controlType})" k-value-primitive="true" k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange"></select>
+			</div>
 
-	        <div ng-class="{'col-xs-6': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange == '0', 'col-xs-12': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange == '1'}" ng-hide="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange > '1'">
-	            <input class="form-control es-param-control margin-t" kendo-date-picker k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.fromD"/>
-	        </div>
+			<div ng-class="{'form-group col-6': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange == '0', 'form-group col-12': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange == '1'}" ng-hide="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange > '1'">
+				<input class="form-control es-param-control margin-t" kendo-date-picker k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.fromD" />
+			</div>
 
-	       <div class="col-xs-6" ng-hide="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange != '0'">
-	            <input class="form-control es-param-control margin-t" kendo-date-picker k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.toD"/>
-	       </div>
+			<div class="form-group col-6" ng-hide="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange != '0'">
+				<input class="form-control es-param-control margin-t" kendo-date-picker k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.toD" />
+			</div>
 		</div>
 	</form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{'ESUI.GENERIC.OK' | translate}}</button>
+	<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{'ESUI.GENERIC.OK' | translate}}</button>
 </div>
 

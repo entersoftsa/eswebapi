@@ -41,11 +41,8 @@
     "angular-translate-loader-url": "^2.17.1",
     "modernizr": "^3.6.0",
     "jszip": "^3.1.5",
-    "angular-material": "^1.1.9",
     "mdi": "^2.3.54",
-    "perfect-scrollbar": "^0.8.1",
     "angular-clipboard": "^1.6.2",
-    "angular-growl-v2": "^0.7.9",
     "angular-simple-logger": "^0.1.7"
   }
 }

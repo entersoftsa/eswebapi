@@ -1,30 +1,29 @@
 <!--  -->
 <div class="modal-header">
-    <h4 ng-if="::$ctrl.inDef.title" class="modal-title" id="modal-title">{{::$ctrl.inDef.title}}</h4>
+	<h5 ng-if="::$ctrl.inDef.title" class="modal-title" id="modal-title">{{::$ctrl.inDef.title}}</h5>
 </div>
 <div class="modal-body" id="modal-body">
 	<form novalidate class="form" name="askform">
-		<div class="row">
-		    <div class="form-group col-xs-12" ng-class="{'has-error': askform.{{::$ctrl.inDef.id}}.$invalid}">
-		        <label class="control-label es-param-label" uib-tooltip="{{::$ctrl.inDef.toolTip}}"
-			          tooltip-placement="bottom"
-			          tooltip-trigger="mouseenter">{{::$ctrl.inDef.caption}}
-			    </label>
-
-				<input class="form-control es-param-control" 
-						kendo-masked-text-box
-						name="{{::$ctrl.inDef.id}}"
-						autofocus 
-						ng-required="::$ctrl.inDef.required"
-						k-mask="::$ctrl.inDef.formatString"
-						ng-readonly="::$ctrl.inDef.inputType"
-						ng-model-options="{getterSetter: true}"
-						ng-model="$ctrl.inDef.param.pValue"/>
-		    </div>
+		<div class="form-row">
+			<div class="form-group col-12" ng-class="{'has-error': askform.{{::$ctrl.inDef.id}}.$invalid}">
+				<label class="control-label es-param-label" uib-tooltip="{{::$ctrl.inDef.toolTip}}"
+							 tooltip-placement="bottom">
+					{{::$ctrl.inDef.caption}}
+				</label>
+				<input class="form-control es-param-control"
+							 kendo-masked-text-box
+							 name="{{::$ctrl.inDef.id}}"
+							 autofocus
+							 ng-required="::$ctrl.inDef.required"
+							 k-mask="::$ctrl.inDef.formatString"
+							 ng-readonly="::$ctrl.inDef.inputType"
+							 ng-model-options="{getterSetter: true}"
+							 ng-model="$ctrl.inDef.param.pValue" />
+			</div>
 		</div>
 	</form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-disabled="askform.$invalid" ng-click="$ctrl.ok()">{{'ESUI.GENERIC.OK' | translate}}</button>
-    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">{{'ESUI.GENERIC.CANCEL' | translate}}</button>
+	<button class="btn btn-primary" type="button" ng-disabled="askform.$invalid" ng-click="$ctrl.ok()">{{'ESUI.GENERIC.OK' | translate}}</button>
+	<button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{'ESUI.GENERIC.CANCEL' | translate}}</button>
 </div>

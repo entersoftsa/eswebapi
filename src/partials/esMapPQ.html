@@ -1,28 +1,25 @@
 <div class="row">
-    <div class="col-xs-12">
-        <es-params-panel 
-        	ng-cloak 
-            es-panel-open="esPqDef.esPanelOpen"
-            ng-if="!esLocalData"
-            es-group-id="esPqDef" 
-            es-local-data-source="'true'" 
-            es-force-title="esPqDef.Title"
-            es-show-run="'true'" 
-            es-run-click="::executePQ()" 
-        	es-data-source="esMapDataSource" >
-        </es-params-panel>
-    </div>
-
-    <div class="col-xs-12">
+	<div class="col-12">
+		<es-params-panel ng-cloak
+										 es-panel-open="esPqDef.esPanelOpen"
+										 ng-if="!esLocalData"
+										 es-group-id="esPqDef"
+										 es-local-data-source="'true'"
+										 es-force-title="esPqDef.Title"
+										 es-show-run="'true'"
+										 es-run-click="::executePQ()"
+										 es-data-source="esMapDataSource">
+		</es-params-panel>
+	</div>
+	<div class="col-12">
 		<div class="esmap-wrapper">
-			<div 
-				 kendo-map="esMapCtrl"
-                 uib-tooltip="{{bubbleMessage}}"
-                 tooltip-is-open="tooltipIsOpen"
-                 tooltip-trigger="'none'"
-                 k-ng-delay="esMapOptions.dataSource"
-                 es-options="esOptions"
-			     k-options="esMapOptions">
+			<div kendo-map="esMapCtrl"
+					 uib-tooltip="{{bubbleMessage}}"
+					 tooltip-is-open="tooltipIsOpen"
+					 tooltip-trigger="'none'"
+					 k-ng-delay="esMapOptions.dataSource"
+					 es-options="esOptions"
+					 k-options="esMapOptions">
 			</div>
 		</div>
 	</div>

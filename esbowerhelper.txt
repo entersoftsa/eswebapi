@@ -17,11 +17,8 @@ bower instal angular-loading-bar --save
 bower instal angular-translate-loader-static-files --save
 bower instal modernizr --save
 bower instal angular-ui-router --save
-bower install angular-material --save
 bower install angular-messages --save
 bower install angular-aria --save
 bower install angular-simple-logger --save
-bower install angular-growl-v2 --save
 bower install mdi --save
-bower install perfect-scrollbar --save
 bower install angular-translate-loader-url --save

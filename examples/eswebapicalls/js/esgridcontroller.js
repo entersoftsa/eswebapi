@@ -144,7 +144,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
         };
 
         var claims = {
-            ESApplicationID: "estest"
+            ESApplicationID: "esstoreassistant"
         };
 
         $scope.doLogin = function() {
