@@ -5,7 +5,7 @@
             <span class="esloginversion" ng-if="::esLoginVersion">{{::esLoginVersion}}</span>
         </div>
         <div class="es-login-icon" ng-if="::esLoginIcon">
-            <a ng-href="{{::esLoginUrl}}"><img ng-src="{{::esLoginIcon}}"></img></a>
+            <a ng-href="{{::esLoginUrl}}"  target="_blank"><img ng-src="{{::esLoginIcon}}"></img></a>
         </div>
 
         <div class="col-xs-12">
@@ -56,8 +56,12 @@
           <input type="checkbox" class="es-check-box" ng-model="esCredentials.rememberme">  <label>{{'ESUI.LOGIN_FORM.REMEMBERME' | translate}}</label>
         </div>
 
+        <div class="col-xs-12  es-login-signup" ng-if="::esLoginSignUp">
+            <a ng-href="{{esLoginSignUpUrl}}"  target="_blank">{{esLoginSignUp}}</a>
+        </div>
+
         <div class="col-xs-12  es-login-terms" ng-if="::esLoginTerms">
-          {{::esLoginTerms}}
+            <a ng-href="{{esLoginTermsUrl}}"  target="_blank">{{esLoginTerms}}</a>
         </div>
 
     </form>

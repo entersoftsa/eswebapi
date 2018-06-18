@@ -466,6 +466,9 @@
                         esLoginVersion: "@?",
                         esLoginUrl: "@?",
                         esLoginTerms: "@?",
+                        esLoginTermsUrl: "@?",
+                        esLoginSignUp: "@?",
+                        esLoginSignUpUrl: "@?",
                         esLoginIcon: "=?",
                         esLoginShowRememberMe: "=?",
                         esOnSuccess: "&"
