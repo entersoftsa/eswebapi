@@ -45,8 +45,11 @@
 			<input class="form-check-input" type="checkbox" ng-model="esCredentials.rememberme" />
 			<label class="form-check-label">{{'ESUI.LOGIN_FORM.REMEMBERME' | translate}}</label>
 		</div>
+		<div class="es-login-signup form-group" ng-if="::esLoginSignUp">
+			<a ng-href="{{esLoginSignUpUrl}}" target="_blank">{{esLoginSignUp}}</a>
+		</div>
 		<div class="es-login-terms form-group" ng-if="::esLoginTerms">
-			{{::esLoginTerms}}
+			<a ng-href="{{esLoginTermsUrl}}" target="_blank">{{esLoginTerms}}</a>
 		</div>
 	</form>
 </div>
