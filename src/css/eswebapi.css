@@ -1,5 +1,6 @@
 ﻿/*! Entersoft Application Server WEB API - v2.2.28 - 2018-05-09
 * Copyright (c) 2018 Entersoft SA; Licensed Apache-2.0 */
+
 /*
 	Global Styles
 
@@ -14,15 +15,12 @@
 .modal.fade.in { opacity: 1 !important; }
 .modal-backdrop.in { opacity: 0.5 !important; }
 
+
 /* 
 	Module - specific styles
 */
 
 .es-module-login { width: 35%; margin: 0px auto; }
-
-.es-module-grid { }
-.es-module-grid .k-grid table tbody td { text-overflow: ellipsis; white-space: nowrap; }
-.es-module-grid .k-pager-sizes .k-dropdown { width: 6em; }
 
 .es-module-params { }
 .es-module-params a.es-param-more { cursor: pointer; }
