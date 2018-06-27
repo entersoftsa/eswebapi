@@ -2044,7 +2044,7 @@
                 }
 
                 $scope.selectedRows = _.map(selectedRows, function(selItem) {
-                    return evt.sender.dataItem(selItem)[$scope.invParams.paramDef.invSelectedMasterField];
+                    return evt.sender.dataItem(selItem)[$scope.invParams.esConnect];
                 });
             };
 
@@ -2196,9 +2196,22 @@
                                     resolve: {
                                         invParams: function() {
                                             var newP = $scope.esParamVal[$scope.esParamDef.id].clone("Code");
+                                            var esGroup = "", esFilter = "", esConnect = "";
+                                            var parts = $scope.esParamDef.tags.split("INVPQ:");
+                                            if (parts.length >= 2) {
+                                                parts = parts[1].split("\\");
+                                                if (parts.length >= 3) {
+                                                    esGroup = parts[0];
+                                                    esFilter = parts[1];
+                                                    esConnect = parts[2];
+                                                }
+                                            }
 
                                             return {
                                                 paramDef: $scope.esParamDef,
+                                                esGroup: esGroup,
+                                                esFilter: esFilter,
+                                                esConnect: esConnect,
                                                 pVals: new esGlobals.ESParamValues([newP])
                                             };
                                         }
@@ -2210,9 +2223,6 @@
                                         if (!selectedRows || selectedRows.length == 0) {
                                             return;
                                         }
-
-                                        var selField = $scope.esParamDef.invSelectedMasterField;
-
                                         var sVal = _.join(selectedRows, "\\,");
                                         $scope.esParamVal[$scope.esParamDef.id].pValue(sVal);
                                     })
@@ -3426,7 +3436,7 @@
             };
 
             ESParamInfo.prototype.isInvestigateEntity = function() {
-                if (!this.invSelectedMasterTable || this.isInvestigateZoom())
+                if (this.isInvestigateZoom() || !this.tags || !this.tags.startsWith("INVPQ:"))
                     return false;
 
                 return true;

@@ -4,8 +4,8 @@
 </div>
 <div class="modal-body" id="modal-body">
     <es-grid 
-		es-group-id="::invParams.paramDef.invSelectedMasterTable" 
-		es-filter-id="::invParams.paramDef.invSelectedMasterTable + '_search'" 
+		es-group-id="::invParams.esGroup" 
+		es-filter-id="::invParams.esFilter" 
 		es-post-grid-options="investigateGridOptions"
 		es-execute-params="invParams.pVals">
 	</es-grid>
