@@ -1,33 +1,33 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <title>Entersoft Mobile Public Query Viewer</title>
-    <link rel="stylesheet" href="styles/eswebapi.min.css" />
-    <!-- build:css styles/app.min.css -->
-    <link rel="stylesheet" href="eslib.css">
-    <!-- endbuild -->
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+	<title>Entersoft Mobile Public Query Viewer</title>
+	<link rel="stylesheet" href="styles/eswebapi.min.css" />
+	<!-- build:css styles/app.min.css -->
+	<link rel="stylesheet" href="eslib.css">
+	<!-- endbuild -->
 </head>
 
 <body ng-cloak ng-controller="esComponentCtrl" class="esContainer">
-    <div id="esWait">
-    </div>
-    <div ng-if="doShowForm">
-        <es-login es-credentials="esCredentials" es-on-success="authenticate()" es-login-label="'An Entersoft Cloud Application'" es-login-icon="'images/loginlogo.png'" es-show-subscription="false" es-show-bridge="true" es-show-sticky-session="0">
-        </es-login>
-    </div>
-    <div id="esContainer">
-        <span kendo-notification="esnotify" auto-hide-after="3000"></span>
-        <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef" is-favourites-mode="isFav" es-simple-mode="esSimpleMode" es-link-prefix="esLinkPrefix">
-        </es-combo-pq>
-    </div>
-    <script src="js/eswebapi.all.min.js"></script>
-    <script src="js/app.min.js"></script>
-    
-    <!-- build:ESDEBUG -->
-    <script type="text/javascript">
+	<div id="esWait">
+	</div>
+	<div ng-if="doShowForm">
+		<es-login es-credentials="esCredentials" es-on-success="authenticate()" es-login-label="'An Entersoft Cloud Application'" es-login-icon="'images/loginlogo.png'" es-show-subscription="false" es-show-bridge="true" es-show-sticky-session="0">
+		</es-login>
+	</div>
+	<div id="esContainer" class="container-fluid">
+		<span kendo-notification="esnotify" auto-hide-after="3000"></span>
+		<es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef" is-favourites-mode="isFav" es-simple-mode="esSimpleMode" es-link-prefix="esLinkPrefix">
+		</es-combo-pq>
+	</div>
+	<script src="js/eswebapi.all.min.js"></script>
+	<script src="js/app.min.js"></script>
+
+	<!-- build:ESDEBUG -->
+	<script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
             host: "eswebapi-1-10-0.azurewebsites.net",
@@ -731,8 +731,8 @@
             window.angular.bootstrap(document, ['esWebPqApp']);
         }
     });
-    </script>
-    <!-- endbuild -->
+	</script>
+	<!-- endbuild -->
 </body>
 
 </html>

@@ -10,16 +10,16 @@
 						<es-param class="es-param" es-type="::param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
 					</div>
 
-					<div ng-if="esParamsDef.hasAdvancedParams() && !esMore" class="form-group col-12 col-md-6 col-lg-3 align-self-center">
-						<a class="es-param-more" tabindex="0" ng-click="esToggleMore()">More...</a>
+					<div ng-if="esParamsDef.hasAdvancedParams() && !esMore" class="col-12 col-md-6 col-lg-3 es-param-more">
+						<button type="button" class="btn btn-default" tabindex="0" ng-click="esToggleMore()"><i class="mdi mdi-plus"></i></button>
 					</div>
 
 					<div ng-if="esMore" class="form-group col-12 col-md-6 col-lg-3" ng-class="{'has-error is-invalid': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.advancedDefinitions() | orderBy:'aa'">
 						<es-param class="es-param" es-type="::param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
 					</div>
 
-					<div ng-if="esMore" class="form-group col-12 col-md-6 col-lg-3 align-self-center">
-						<a class="es-param-more" tabindex="0" ng-click="esToggleMore()">Less</a>
+					<div ng-if="esMore" class="col-12 col-md-6 col-lg-3 es-param-more">
+						<button type="button" class="btn btn-default" tabindex="0" ng-click="esToggleMore()"><i class="mdi mdi-minus"></i></button>
 					</div>
 				</div>
 			</form>

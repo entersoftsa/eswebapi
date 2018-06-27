@@ -1,11 +1,10 @@
 <div class="es-module es-module-login">
 	<form name="esLoginFrm" novalidate>
-		<div class="es-app-info" ng-if="::(esLoginLabel || esLoginVersion)">
-			<span class="esloginlabel" ng-if="::esLoginLabel">{{::esLoginLabel}}</span>
-			<span class="esloginversion" ng-if="::esLoginVersion">{{::esLoginVersion}}</span>
-		</div>
 		<div class="es-login-icon" ng-if="::esLoginIcon">
 			<a ng-href="{{::esLoginUrl}}"><img ng-src="{{::esLoginIcon}}" /></a>
+		</div>
+		<div class="es-login-label" ng-if="::esLoginLabel">
+			<span>{{::esLoginLabel}}</span>
 		</div>
 		<div class="es-login-lang form-group" ng-class="{'has-error': esLoginFrm.lang.$invalid}">
 			<label for="lang" class="sr-only">{{'ESUI.LOGIN_FORM.LANG_ID' | translate}}</label>
@@ -50,6 +49,9 @@
 		</div>
 		<div class="es-login-terms form-group" ng-if="::esLoginTerms">
 			<a ng-href="{{esLoginTermsUrl}}" target="_blank">{{esLoginTerms}}</a>
+		</div>
+		<div class="es-login-version" ng-if="::esLoginVersion">
+			<span>{{::esLoginVersion}}</span>
 		</div>
 	</form>
 </div>

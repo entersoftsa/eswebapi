@@ -63,8 +63,6 @@ module.exports = function (grunt) {
 						"bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js",
 						//"bower_components/angular-growl-v2/build/angular-growl.min.js",
 						"bower_components/angular-loading-bar/build/loading-bar.min.js",
-						//"bower_components/perfect-scrollbar/js/perfect-scrollbar.min.js",
-						//"bower_components/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js",
 						"bower_components/angular-clipboard/angular-clipboard.js",
 
 						"bower_components/jszip/dist/jszip.min.js",
@@ -92,9 +90,9 @@ module.exports = function (grunt) {
 						//"bower_components/angular-material/angular-material.css",
 						"bower_components/mdi/css/materialdesignicons.min.css",
 						"bower_components/angular-loading-bar/build/loading-bar.min.css",
-						//"bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css",
 						"bower_components/devextreme-web/css/dx.common.css",
 						"bower_components/devextreme-web/css/dx.light.css",
+						"dist/css/eswebapi.css"
 				],
 
 				dest: 'dist/<%= pkg.name %>.all.css'
