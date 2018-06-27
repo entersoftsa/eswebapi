@@ -54,6 +54,7 @@
 .es-module-params .es-param-more { align-self: center; }
 .es-module-params .es-param-more .btn { font-size: 16px; line-height: 16px; padding: 5px; border: 1px solid #999; color: #333; background-color: #FFF; }
 .es-module-params .es-param-control-check { display: block; }
+.es-module-params .es-param .input-group .input-group-append .input-group-text a { cursor: pointer; }
 
 /* Grid styling */
 .es-module-grid { }
