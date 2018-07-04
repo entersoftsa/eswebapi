@@ -63,7 +63,7 @@
         "PQ":
         {
             "DOWNLOAD": "Download",
-            "PARAMS_PANEL_RUN": "Run",
+            "PARAMS_PANEL_RUN": "Refresh",
             "INVESTIGATE": "Search for",
             "PARAMS_MISSING": "One or more required parameters are not given value"
         },
