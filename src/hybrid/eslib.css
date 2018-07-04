@@ -89,7 +89,6 @@
 .k-grid > .k-grid-header table > thead > tr > th { font-size: 0.875rem; padding-top: 15px; padding-bottom: 15px; color: #444; overflow: auto; white-space: unset; text-overflow: unset; }
 .k-grid > .k-grid-content table > tbody > tr > td { font-size: 0.875rem; }
 .k-grid .k-pager-wrap .k-dropdown { width: 100px; }
-.k-grid table > tbody > tr:nth-of-type(2n) { background-color: #f9f9f9; }
 .k-grid table > tbody > tr > td { border-left: none; }
 .k-grid table > thead > tr > th, .k-grid table > tbody > tr > th, .k-grid table > tfoot > tr > th, .k-grid table > thead > tr > td, .k-grid table > tbody > tr > td, .k-grid table > tfoot > tr > td { padding: 12px 8px; }
 .k-pdf-export .k-grid-toolbar, .k-pdf-export .k-pager-wrap { display: none; }
