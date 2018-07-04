@@ -2,7 +2,7 @@
   "name": "eswebapi",
   "title": "Entersoft Application Server WEB API",
   "description": "Entersoft Application Server WEB API",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "readme": "README.md",
   "license": "Apache-2.0",
   "licenses": [
@@ -33,15 +33,16 @@
     "grunt-nodemailer": "^0.3.0",
     "grunt-prompt": "^1.3.0",
     "grunt-shell": "^1.1.2",
-    "grunt-version": "^1.0.0"
+    "grunt-version": "^1.0.0",
+    "grunt-contrib-cssmin": "^1.0.0",
+    "grunt-contrib-htmlmin": "^1.0.0",
+    "grunt-filerev": "^2.3.1",
+    "grunt-usemin": "^3.1.1"
   },
   "scripts": {
     "postinstall": "bower install"
   },
   "dependencies": {
-    "grunt-contrib-cssmin": "^1.0.0",
-    "grunt-contrib-htmlmin": "^1.0.0",
-    "grunt-filerev": "^2.3.1",
-    "grunt-usemin": "^3.1.1"
+    
   }
 }
