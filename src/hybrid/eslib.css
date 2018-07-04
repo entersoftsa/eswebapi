@@ -25,7 +25,7 @@
 .es-section .actions a:focus, .es-section .actions a.focus, .es-section .actions a:hover { color: #2196f3; background-color: rgba(153, 153, 153, 0.2); border-color: rgba(153, 153, 153, 0.2); }
 
 /* Login page styles */
-.es-module-login { position: relative; width: 90%; padding: 20px; background-color: #FFF; z-index: 9999; box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.14); margin-top: 100px; }
+.es-module-login { position: relative; width: 90%; max-width: 400px; padding: 20px; background-color: #FFF; z-index: 9999; box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.14); margin-top: 100px; }
 .es-module-login form { margin-bottom: 0px; }
 .es-module-login .es-login-label { margin: 15px 0px; color: #75767a; text-align: center; font-size: 24px; font-weight: 600; }
 .es-module-login .es-login-lang .k-input img { margin-right: 8px; }
