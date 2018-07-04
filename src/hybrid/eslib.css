@@ -86,7 +86,7 @@
 .k-grid { border: none; }
 .k-grid > .k-header { padding: 0px 0px 8px 0px; text-align: left; background-color: transparent; }
 .k-grid > .k-grid-header { background-color: #EEE; }
-.k-grid > .k-grid-header table > thead > tr > th { font-size: 0.875rem; padding-top: 15px; padding-bottom: 15px; color: #444; overflow: auto; white-space: unset; text-overflow: unset; }
+.k-grid > .k-grid-header table > thead > tr > th { font-size: 0.875rem; padding-top: 15px; padding-bottom: 15px; color: #444; overflow: auto; white-space: unset; text-overflow: unset; text-align: center; vertical-align: middle; }
 .k-grid > .k-grid-content table > tbody > tr > td { font-size: 0.875rem; }
 .k-grid .k-pager-wrap .k-dropdown { width: 100px; }
 .k-grid table > tbody > tr > td { border-left: none; }
