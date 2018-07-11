@@ -24,6 +24,13 @@
 .es-section .actions a:hover { color: #2196f3; background-color: rgba(153, 153, 153, 0.2); border-color: rgba(153, 153, 153, 0.2); }
 .es-section .actions a:focus, .es-section .actions a.focus, .es-section .actions a:hover { color: #2196f3; background-color: rgba(153, 153, 153, 0.2); border-color: rgba(153, 153, 153, 0.2); }
 
+.es-param .form-check .form-check-input { display: none; }
+.es-param .form-check > label { cursor: pointer; height: 0px; position: relative; width: 40px; }
+.es-param .form-check > label::before { background: black; box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5); border-radius: 8px; content: ''; height: 16px; margin-top: -8px; position: absolute; opacity: 0.3; transition: all 0.4s ease-in-out; width: 40px; }
+.es-param .form-check > label::after { background: white; border-radius: 16px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); content: ''; height: 24px; left: -4px; margin-top: -8px; position: absolute; top: -4px; transition: all 0.3s ease-in-out; width: 24px; }
+.es-param .form-check .form-check-input:checked + label::before { background: inherit; opacity: 0.5; }
+.es-param .form-check .form-check-input:checked + label::after { background: inherit; left: 20px; }
+
 /* Login page styles */
 .es-module-login { position: relative; width: 90%; max-width: 400px; padding: 20px; background-color: #FFF; z-index: 9999; box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.14); margin-top: 100px; }
 .es-module-login form { margin-bottom: 0px; }
@@ -86,7 +93,7 @@
 .k-grid { border: none; }
 .k-grid > .k-header { padding: 0px 0px 8px 0px; text-align: left; background-color: transparent; }
 .k-grid > .k-grid-header { background-color: #EEE; }
-.k-grid > .k-grid-header table > thead > tr > th { font-size: 0.875rem; padding-top: 15px; padding-bottom: 15px; color: #444; overflow: auto; white-space: unset; text-overflow: unset; text-align: center; vertical-align: middle; }
+.k-grid > .k-grid-header table > thead > tr > th { font-size: 0.875rem; padding-top: 15px; padding-bottom: 15px; color: #444; white-space: unset; text-overflow: unset; text-align: center; vertical-align: middle; }
 .k-grid > .k-grid-content table > tbody > tr > td { font-size: 0.875rem; }
 .k-grid .k-pager-wrap .k-dropdown { width: 100px; }
 .k-grid table > tbody > tr > td { border-left: none; }
