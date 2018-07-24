@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.3.4";
+    var version = "2.3.5";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -1837,6 +1837,11 @@ x.setParamValues({p1: 'Hello World'});
                     if (eParts[i] < rParts[i]) {
                         return false;
                     }
+
+                    if (eParts[i] > rParts[i]) {
+                        return true;
+                    }
+
                 }
                 return true;
             }
