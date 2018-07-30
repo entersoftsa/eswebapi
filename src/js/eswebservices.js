@@ -28,6 +28,7 @@
     esWebServices.
     constant('ESWEBAPI_URL', {
         __LOGIN__: "api/Login/Login",
+        __VALIDATE_USER__: "api/Login/ValidateUser",
         __TOKEN__: "api/Login/validateToken",
         __LOGOUT__: "api/Login/Logout",
         __CHG_PWD__: "api/Login/ChangePassword",
@@ -772,9 +773,33 @@ $scope.doLogin = function() {
                                 return processWEBAPIPromise(promise, tt);
                             },
 
+                            validateUser: function(ValidateUserInfo) {
+                                if (!ValidateUserInfo) {
+                                    throw new Error("Parameter token cannot be empty");
+                                }
+
+                                var tt = esGlobals.trackTimer("AUTH", "VALIDATE_USER", "");
+                                tt.startTime();
+
+                                var promise = $http({
+                                    method: 'post',
+                                    url: urlWEBAPI + ESWEBAPI_URL.__VALIDATE_USER__,
+                                    headers: prepareHeaders(),
+                                    data: ValidateUserInfo
+                                }).
+                                then(function(data) {
+                                    return data;
+                                }).
+                                catch(function(ex) {
+                                    throw ex;
+                                });
+
+                                return processWEBAPIPromise(promise, tt);
+                            },
+
                             validateToken: function(token, credentials) {
                                 if (!token) {
-                                    throw new Error("Paramter token cannot be empty");
+                                    throw new Error("Parameter token cannot be empty");
                                 }
 
                                 var tt = esGlobals.trackTimer("AUTH", "TOKEN", token);
