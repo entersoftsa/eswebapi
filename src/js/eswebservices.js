@@ -2450,19 +2450,12 @@ $scope.fetchServerCapabilities = function()
                             fetchServerCapabilities: function() {
 
                                 var defered = $q.defer();
-
-                                $http.get(unSecureWEBAPI + ESWEBAPI_URL.__SERVER_CAPABILITIES__)
+                                $http.get(secureWEBAPI + ESWEBAPI_URL.__SERVER_CAPABILITIES__)
                                     .then(function(data) {
                                         defered.resolve(data.data);
-                                    }, function() {
-                                        $http.get(secureWEBAPI + ESWEBAPI_URL.__SERVER_CAPABILITIES__)
-                                            .then(function(data) {
-                                                defered.resolve(data.data);
-                                            }, function(err) {
-                                                defered.reject([err.data, err.status, err.headers, err.config]);
-                                            });
+                                    }, function(err) {
+                                        defered.reject([err.data, err.status, err.headers, err.config]);
                                     });
-
                                 return defered.promise;
                             },
 

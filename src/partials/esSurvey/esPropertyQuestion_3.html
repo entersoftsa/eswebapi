@@ -3,7 +3,7 @@
 		type="text" 
 		class="es-survey-question-control form-control" 
 		is-open="calendarStatus.opened" 
-		name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
+		name="{{::esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
     	ng-required="esQuestion.Mandatory" 
     	uib-datepicker-popup="{{calendarFormat}}"
     	ng-model="esPsVal[esQuestion.Code]" 

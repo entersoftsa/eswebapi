@@ -1,7 +1,7 @@
 <input 
     class="es-survey-question-control form-control" 
     type="number"
-    	name="{{esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
+    	name="{{::esGlobals.esConvertGIDtoId(esQuestion.GID)}}" 
     	ng-required="esQuestion.Mandatory" 
     	align="right" 
     	ng-model="esPsVal[esQuestion.Code]" 
