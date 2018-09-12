@@ -4101,7 +4101,7 @@ var options = {Accept: 'text/plain'}
                                     cOptions.esonly = false;
                                 }
 
-                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_WEB_EAS_ASSET__, assetUrlPath);
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_WEB_EAS_ASSET__);
                                 var tt = esGlobals.trackTimer("EAS_ASSET", "FETCH", assetUrlPath);
                                 tt.startTime();
 
@@ -4110,6 +4110,7 @@ var options = {Accept: 'text/plain'}
                                     headers: prepareHeaders(),
                                     url: surl,
                                     params: {
+                                        routeId: assetUrlPath,
                                         base64: cOptions.base64,
                                         esonly: cOptions.esonly
                                     },
