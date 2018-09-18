@@ -1325,7 +1325,7 @@
                                 throw "esGridOptions NOT defined. In order to dynamically get the options you must set GroupID and FilterID for esgrid to work";
                             }
                             // Now esGridOption explicitly assigned so ask the server 
-                            esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId, true)
+                            esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId, true, true)
                                 .then(function(ret) {
                                     var p1 = ret.data;
                                     var p2 = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, p1);
@@ -1414,7 +1414,7 @@
             }
         ])
 
-        
+
         .directive('esChart', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
             function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
                 return {
@@ -1562,7 +1562,7 @@
                                     showColumnFields: true,
                                     showFilterFields: true,
                                     allowFieldDragging: true,
-                                    visible: true
+                                    visible: false
                                 }
                             };
 
@@ -1598,7 +1598,8 @@
                             var tOptions = defOptions;
 
                             if ($scope.esPqDef.UIOptions.pivotOptions) {
-                                angular.merge($scope.esPqDef.UIOptions.pivotOptions, tOptions);
+                                var x = angular.merge({}, tOptions, $scope.esPqDef.UIOptions.pivotOptions);
+                                angular.merge(tOptions, x);
                             }
 
                             tOptions.onContextMenuPreparing = function(e) {
@@ -1706,7 +1707,7 @@
 
                             $scope.pivotOptions = tOptions;
 
-                            esWebApiService.fetchPublicQueryInfo($scope.esPqDef, null, true)
+                            esWebApiService.fetchPublicQueryInfo($scope.esPqDef, null, true, true)
                                 .then(function(ret) {
                                     var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esPqDef.GroupID, $scope.esPqDef.FilterID, ret.data);
 
@@ -1995,7 +1996,7 @@
                             if (pqinfo) {
                                 processPQInfo(pqinfo, xDS, g, f);
                             } else {
-                                esWebApiService.fetchPublicQueryInfo(g, f, true)
+                                esWebApiService.fetchPublicQueryInfo(g, f, true, true)
                                     .then(function(ret) {
                                         esCache.setItem("PQI_" + g + "/" + f, ret.data);
                                         processPQInfo(ret.data, xDS, g, f);
@@ -2196,7 +2197,9 @@
                                     resolve: {
                                         invParams: function() {
                                             var newP = $scope.esParamVal[$scope.esParamDef.id].clone("Code");
-                                            var esGroup = "", esFilter = "", esConnect = "";
+                                            var esGroup = "",
+                                                esFilter = "",
+                                                esConnect = "";
                                             var parts = $scope.esParamDef.tags.split("INVPQ:");
                                             if (parts.length >= 2) {
                                                 parts = parts[1].split("\\");
@@ -2320,7 +2323,7 @@
                         if (pqinfo) {
                             processPQInfo(pqinfo);
                         } else {
-                            esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId, true)
+                            esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId, true, true)
                                 .then(function(ret) {
                                     esCache.setItem("PQI_" + $scope.esGroupId + "/" + $scope.esFilterId, ret.data);
                                     processPQInfo(ret.data);
@@ -2397,7 +2400,7 @@
                             if (!iAttrs.esPqInfo) {
                                 // we are given groupid and filterid =>
                                 // we must retrieve pqinfo on owr own
-                                esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId, true)
+                                esWebApiService.fetchPublicQueryInfo($scope.esGroupId, $scope.esFilterId, true, true)
                                     .then(function(ret) {
                                         var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esGroupId, $scope.esFilterId, ret.data);
 
@@ -3043,8 +3046,8 @@
                     },
 
 
-                    filterable: !dsOptions.serverPaging,
-                    groupable: !dsOptions.serverPaging,
+                    filterable: !dsOptions.serverPaging && esGridInfo.FilterLineVisible,
+                    groupable: !dsOptions.serverPaging && esGridInfo.GroupByBoxVisible,
                     toolbar: [{
                             name: "run",
                             text: "Run",
@@ -3530,8 +3533,8 @@
                         if (m && m.connectionModel) {
                             return m.connectionModel.BranchID;
                         }
-
                         return val;
+                        
                     default:
                         return val;
                 };

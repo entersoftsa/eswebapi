@@ -3492,7 +3492,7 @@ function($scope, esWebApi, esWebUIHelper) {
 }
 ```
                              */
-                            fetchPublicQueryInfo: function(pqGroupID, pqFilterID, useCache) {
+                            fetchPublicQueryInfo: function(pqGroupID, pqFilterID, useCache, resolveParams) {
                                 var group = "";
                                 if (pqGroupID instanceof esGlobals.ESPublicQueryDef) {
                                     group = (pqGroupID.GroupID || "").trim();
@@ -3503,6 +3503,9 @@ function($scope, esWebApi, esWebUIHelper) {
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, group, "/", pqFilterID);
+                                if (resolveParams) {
+                                    surl = surl.concat("/true");
+                                }
 
                                 var deferred = $q.defer();
                                 if (useCache) {
