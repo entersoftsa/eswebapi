@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.4.0";
+    var version = "2.4.1";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -1286,7 +1286,7 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                 }
 
                 var fD = calcActualDate(dVal.fromType, dVal.fromD, true);
-                var tD = calcActualDate(dVal.toType, dVal.toD, false);
+                var tD = calcActualDate(dVal.toType || dVal.fromType, angular.isUndefined(dVal.toD) ? dVal.fromD : dVal.toD, false);
 
                 esdate.paramValue.dRange = "0";
                 esdate.paramValue.fromD = fD;
@@ -1338,6 +1338,10 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
                                 return moment().endOf('quarter').add(valOffset, 'quarters').endOf('quarter').toDate();
                             }
                         }
+                    case "SixMonth": 
+                    {
+                        return calcActualDate("Quarter", bFrom ? (valOffset * 2) : (valOffset * 2)  + 1, bFrom);
+                    }
                     default:
                         {
                             alert("ESDateRange option NOT Supported. [" + dateType + ", " + valOffset + ", " + bFrom + "]. Using Current Month instead");
