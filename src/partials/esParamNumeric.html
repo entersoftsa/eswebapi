@@ -2,6 +2,7 @@
 			 tooltip-placement="bottom">{{::esParamDef.caption}}</label>
 <input class="form-control es-param-control"
 			 kendo-numeric-text-box
+			 autocomplete="nope" 
 			 name="{{::esParamDef.id}}"
 			 ng-required="::esParamDef.required"
 			 align="right"

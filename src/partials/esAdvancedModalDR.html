@@ -12,11 +12,11 @@
 			</div>
 
 			<div ng-class="{'form-group col-6': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange == '0', 'form-group col-12': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange == '1'}" ng-hide="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange > '1'">
-				<input class="form-control es-param-control margin-t" kendo-date-picker k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.fromD" />
+				<input class="form-control es-param-control margin-t" autocomplete="nope" kendo-date-picker k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.fromD" />
 			</div>
 
 			<div class="form-group col-6" ng-hide="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.dRange != '0'">
-				<input class="form-control es-param-control margin-t" kendo-date-picker k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.toD" />
+				<input class="form-control es-param-control margin-t" autocomplete="nope" kendo-date-picker k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.toD" />
 			</div>
 		</div>
 	</form>

@@ -1,7 +1,8 @@
 <label class="control-label es-param-label" uib-tooltip="{{::esParamDef.toolTip}}"
 			 tooltip-placement="bottom">{{::esParamDef.caption}}</label>
 <input class="form-control es-param-control"
-			 type="{{::esParamDef.inputType}}"
+			 type="{{::esParamDef.inputType}}" 
+			 autocomplete="nope" 
 			 kendo-masked-text-box
 			 name="{{::esParamDef.id}}"
 			 ng-required="::esParamDef.required"

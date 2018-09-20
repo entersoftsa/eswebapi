@@ -9,10 +9,10 @@
 				<select class="form-control es-param-control" kendo-drop-down-list ng-cloak k-ng-delay="$ctrl.editedParam.esParamDef" k-data-text-field="'caption'" k-data-value-field="'value'" k-auto-bind="true" k-data-source="$ctrl.editedParam.esGlobals.getesComplexParamFunctionOptions()" k-value-primitive="true" k-ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper"></select>
 			</div>
 			<div class="form-group col-12" ng-if="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'NOTNULL' && $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'NULL'" ng-class="{'col-12': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'RANGE', 'col-6': $ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper == 'RANGE'}">
-				<input class="form-control es-param-control margin-t" kendo-masked-text-box ng-required="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'RANGE' && $ctrl.editedParam.esParamDef.required" name="{{::$ctrl.editedParam.esParamDef.id}}" ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.value" />
+				<input class="form-control es-param-control margin-t" autocomplete="nope" kendo-masked-text-box ng-required="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper != 'RANGE' && $ctrl.editedParam.esParamDef.required" name="{{::$ctrl.editedParam.esParamDef.id}}" ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.value" />
 			</div>
 			<div class="form-group col-6" ng-if="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.oper == 'RANGE'">
-				<input class="form-control es-param-control margin-t" kendo-masked-text-box ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.valueTo" />
+				<input class="form-control es-param-control margin-t" autocomplete="nope" kendo-masked-text-box ng-model="$ctrl.editedParam.esParamVal[$ctrl.editedParam.esParamDef.id].paramValue.valueTo" />
 			</div>
 		</div>
 	</form>
