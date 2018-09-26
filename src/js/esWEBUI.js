@@ -2200,7 +2200,7 @@
                                             var esGroup = "",
                                                 esFilter = "",
                                                 esConnect = "";
-                                            var parts = $scope.esParamDef.tags.split("INVPQ:");
+                                            var parts = $scope.esParamDef.getTag("INVPQ:").split("INVPQ:");
                                             if (parts.length >= 2) {
                                                 parts = parts[1].split("\\");
                                                 if (parts.length >= 3) {
@@ -2395,6 +2395,7 @@
                         if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef && !iAttrs.esParamsValues) {
                             $scope.esParamsValues = $scope.esGroupId.Params;
                         }
+
 
                         if (!iAttrs.esParamsDef) {
                             if (!iAttrs.esPqInfo) {
@@ -3438,8 +3439,27 @@
                 return this.invSelectedMasterTable && this.invSelectedMasterTable.length > 4 && this.invSelectedMasterTable[4] == 'Z';
             };
 
+            ESParamInfo.prototype.getTag = function(tagid) {
+                if (!this.tags)
+                {
+                    return "";
+                }
+
+                var id = _.find(this.tags, function(k) {
+                    return k.startsWith(tagid);
+                });
+                return id;
+            }
+
             ESParamInfo.prototype.isInvestigateEntity = function() {
-                if (this.isInvestigateZoom() || !this.tags || !this.tags.startsWith("INVPQ:"))
+                if (this.isInvestigateZoom() || !this.getTag("INVPQ:"))
+                    return false;
+
+                return true;
+            };
+
+            ESParamInfo.prototype.isDisplayedInHeader = function() {
+                if (!this.tags || !this.getTag("TITLEPQ:"))
                     return false;
 
                 return true;
@@ -3608,18 +3628,22 @@
                 return this.advancedDefinitions().length >= 1;
             }
 
-            ESParamsDefinitions.prototype.strVal = function(vals) {
+            ESParamsDefinitions.prototype.strVal = function(vals, onlyDisplayInHeader, separator) {
                 if (!vals || !this.definitions || this.definitions.length == 0) {
                     return '';
                 }
 
-                var s = _.reduce(_.sortBy(_.filter(this.definitions, {
-                    visible: true
-                }), "aa"), function(memo, p) {
-                    return memo + "<h3>" + p.caption + ": </h3>" + vals[p.id].strVal() + "<br/>";
+                separator = separator || " / ";
+
+                var eligible = _.filter(this.definitions, function(p) {
+                    return p.visible && vals[p.id].strVal() && (onlyDisplayInHeader ? p.getTag("TITLEPQ:") : true);
+                });
+
+                var s = _.reduce(_.sortBy(eligible, "aa"), function(memo, p) {
+                    return memo + p.caption + ": " + vals[p.id].strVal() + separator;
                 }, '');
 
-                return s;
+                return s.substring(0, s.lastIndexOf(separator));
             }
 
             function winParamInfoToesParamInfo(winParamInfo, gridexInfo) {
@@ -3640,7 +3664,7 @@
                 espInfo.visible = winParamInfo.Visible == "true";
                 espInfo.required = winParamInfo.Required == "true";
                 espInfo.oDSTag = winParamInfo.ODSTag;
-                espInfo.tags = winParamInfo.Tags;
+                espInfo.tags = winParamInfo.Tags ? winParamInfo.Tags.split("[(,)]") : "";
                 espInfo.visibility = parseInt(winParamInfo.Visibility);
                 espInfo.invQueryID = winParamInfo.InvQueryID;
                 espInfo.invSelectedMasterTable = winParamInfo.InvSelectedMasterTable;

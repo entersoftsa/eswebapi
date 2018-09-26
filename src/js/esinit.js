@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.4.1";
+    var version = "2.4.3";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -1081,12 +1081,12 @@ smeControllers.controller('mainCtrl', ['$location', '$scope', '$log', 'esMessagi
 
                 var s = _.reduce(vals, function(memo, x) {
                     var es = _.find(lst, {
-                        value: x
+                        value: x.toString()
                     });
-                    return memo + (es ? es.text : x.toString()) + " + ";
+                    return memo + (es ? es.text : x.toString()) + ", ";
                 }, '');
 
-                return s.substring(0, s.lastIndexOf(" + "));
+                return s.substring(0, s.lastIndexOf(", "));
             };
 
             function ESBoolParamVal(paramId, paramVal) {
