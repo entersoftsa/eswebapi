@@ -1423,6 +1423,7 @@
                         esPanelOpen: "=?",
                         esPqDef: "=?",
                         esChartOptions: "=",
+                        esChartCtrl: "=?",
                         esLocalData: "=?",
                     },
                     templateUrl: function(element, attrs) {

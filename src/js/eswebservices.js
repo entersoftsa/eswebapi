@@ -5082,12 +5082,16 @@ var ret = {
 ```
                              **/
                             fetchESScale: function(scaleCode) {
+                                var deferred = $q.defer();
+
                                 if (!scaleCode) {
-                                    throw new Error("Invalid parameter");
+                                    deferred.reject("Invalid parameter");
+                                    return deferred.promise;
                                 }
+
                                 scaleCode = scaleCode.toLowerCase();
 
-                                var deferred = $q.defer();
+                                
                                 var cItem = esCache.getItem("ESGOSCALE_" + scaleCode);
                                 if (cItem) {
                                     $timeout(function() {
@@ -5105,7 +5109,7 @@ var ret = {
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                processWEBAPIPromise(ht, tt)
+                                processWEBAPIPromise(ht, tt, true)
                                     .then(function(ret) {
                                         esCache.setItem("ESGOSCALE_" + scaleCode, ret.data);
                                         deferred.resolve(ret.data);
