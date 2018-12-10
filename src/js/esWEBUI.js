@@ -1414,6 +1414,45 @@
             }
         ])
 
+        .directive('esStockChart', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esPanelOpen: "=?",
+                        esPqDef: "=?",
+                        esChartOptions: "=",
+                        esChartCtrl: "=?",
+                        esLocalData: "=?",
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esStockChartPQ.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        if (!$scope.esLocalData && !iAttrs.esLocalData) {
+                            var groups = ($scope.esChartOptions) ? $scope.esChartOptions.group : null;
+                            $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups, function() { return $scope.esChartCtrl; });
+                        } else {
+                            $scope.esChartDataSource = { data: $scope.esLocalData };
+                        }
+
+                        $scope.esChartOptions.dataSource = $scope.esChartDataSource;
+
+                        $scope.executePQ = function() {
+                            $scope.esPanelOpen.status = false;
+                            if ($scope.esChartDataSource) {
+                                $scope.esChartDataSource.read();
+                            }
+                        }
+
+                        angular.element($window).bind('resize', function() {
+                            kendo.resize(angular.element(".eschart-wrapper"));
+                        });
+                    }
+                };
+            }
+        ])
+
 
         .directive('esChart', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
             function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
