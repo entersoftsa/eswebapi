@@ -121,8 +121,10 @@
                         }
                     }
 
-                    var fr =  "#" + (prec ? "." + "#".repeat(prec) : "");
-                    return fr;
+                    return {
+                        type: "fixedPoint",
+                        precision: prec
+                    };
                 }
             case "datetime":
                 return "shortDateShortTime";
