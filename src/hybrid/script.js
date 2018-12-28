@@ -15,7 +15,7 @@
 			'pascalprecht.translate',
 	]);
 
-	esApp.run(['$anchorScroll', function ($rootScope) {
+	esApp.run(['$anchorScroll', function ($anchorScroll) {
 		window.esGoTo = function (goinpage) {
 			if (!goinpage) {
 				return;
