@@ -1509,8 +1509,7 @@
 
                             esWebApiService.fetchPublicQuery($scope.esPqDef)
                                 .then(function(dat) {
-                                        var r = (dat.data.Rows && dat.data.Rows.length) ? dat.data.Rows[0] : {};
-                                        $scope.singleRow = r;
+                                        $scope.rows = dat.data.Rows || [];
                                     },
                                     function(err) {
                                         var s = esGlobals.getUserMessage(err);
@@ -1518,7 +1517,9 @@
 
                         }
 
-                        $scope.executePQ();
+                        if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
+                            $scope.executePQ();
+                        }
 
                     }
                 };

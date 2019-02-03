@@ -1,31 +1,22 @@
 <div class="row">
-	<div class="col-12">
-		<es-params-panel ng-cloak
-										 es-panel-open="esPqDef.esPanelOpen"
-										 ng-if="!esLocalData"
-										 es-group-id="esPqDef"
-										 es-local-data-source="'true'"
-										 es-force-title="esPqDef.Title"
-										 es-show-run="'true'"
-										 es-run-click="::executePQ()"
-										 es-data-source="esChartDataSource">
-		</es-params-panel>
-	</div>
-
-	<div class="col-12">
-		<table class="table table-hover table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>{{'ESUI.SINGLE_ROW.FIELD' | translate}}</th>
-					<th>{{'ESUI.SINGLE_ROW.VALUE' | translate}}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="col in esPqDef.esGridOptions.columns">
-					<td>{{col.title}}</td>
-					<td>{{singleRow[col.field]}}</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+    <div class="col-12">
+        <es-params-panel ng-cloak es-panel-open="esPqDef.esPanelOpen" ng-if="!esLocalData" es-group-id="esPqDef" es-local-data-source="'true'" es-force-title="esPqDef.Title" es-show-run="'true'" es-run-click="::executePQ()" es-data-source="esChartDataSource">
+        </es-params-panel>
+    </div>
+    <div class="col-12">
+        <div class="card-deck">
+            <div class="card border-info mb-3" ng-repeat="row in rows.slice(0, 4)">
+                <div class="card-header">{{row[esPqDef.esGridOptions.columns[0].field]}}</div>
+                <div class="card-body text-info">
+                    <h5 ng-if="::esPqDef.esGridOptions.columns.length > 1" class="card-title">{{row[esPqDef.esGridOptions.columns[1].field]}}</h5>
+                </div>
+                <ul ng-if="::esPqDef.esGridOptions.columns.length > 2" class="list-group list-group-flush">
+                    <li class="list-group-item" ng-repeat="col in esPqDef.esGridOptions.columns.slice(2)">{{col.title}} : {{row[col.field]}}</li>
+                </ul>
+                <div class="card-footer">
+                    <small class="text-muted">{{row[esPqDef.esGridOptions.columns[0].field]}}</small>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
