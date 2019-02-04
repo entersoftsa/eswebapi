@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.5.2";
+    var version = "2.5.3";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -1922,6 +1922,14 @@ x.setParamValues({p1: 'Hello World'});
                  * @return {string} the string representation of the given rgb color in html format i.e. "#c20000"
                  **/
                 rgbToHex: rgbToHex,
+
+                isEmail: function(fieldName) {
+                    return fieldName && fieldName.toLower().indexOf("mail") > -1;
+                },
+
+                isPhone: function(fieldName) {
+                    return fieldName && (fieldName.toLower().indexOf("mobile") > -1 || fieldName.toLower().indexOf("phone") > -1);
+                },
 
                 /**
                  * @ngdoc function

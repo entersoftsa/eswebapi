@@ -1527,7 +1527,6 @@
                             titleField: "", 
                             footerField: "",
                             imageField: "",
-                            imageType: 0,
                             hasMap: false,
                             priorityField: "",
                         };
