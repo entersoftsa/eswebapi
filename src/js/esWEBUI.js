@@ -1547,7 +1547,7 @@
                                 return [];
                             }
                             return _.filter($scope.esPqDef.esGridOptions.columns, function(l) {
-                                return reserved.indexOf(l.colfield) == -1;
+                                return reserved.indexOf(l.field) == -1;
                             });
                         }
 
