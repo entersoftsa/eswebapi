@@ -1509,7 +1509,7 @@
 
                             esWebApiService.fetchPublicQuery($scope.esPqDef)
                                 .then(function(dat) {
-                                        $scope.rows = dat.data.Rows || [];
+                                        $scope.rows = (dat.data.Rows || []).slice(0, $scope.UIOptions.maxCards);
                                     },
                                     function(err) {
                                         var s = esGlobals.getUserMessage(err);
@@ -1519,6 +1519,36 @@
 
                         if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
                             $scope.executePQ();
+                        }
+
+                        var options = {
+                            maxCards: 4,
+                            headerField: "",
+                            titleField: "", 
+                            footerField: "",
+                            imageField: "",
+                            imageType: 0,
+                            hasMap: false,
+                            priorityField: "",
+                        };
+
+                        var scr = $scope.esPqDef.UIOptions
+                        if (scr) {
+                            angular.merge(options, scr);
+                            if (scr.maxCards > 0) {
+                                options.maxCards = scr.maxCards;
+                            }
+                        }
+                        $scope.UIOptions = options;
+
+                        $scope.bodyFields = function() {
+                            var reserved = [$scope.UIOptions.headerField, $scope.UIOptions.titleField, $scope.UIOptions.footerField, $scope.UIOptions.imageField, $scope.UIOptions.priorityField];
+                            if (!$scope.esPqDef.esGridOptions || !$scope.esPqDef.esGridOptions.columns) {
+                                return [];
+                            }
+                            return _.filter($scope.esPqDef.esGridOptions.columns, function(l) {
+                                return reserved.indexOf(l.colfield) == -1;
+                            });
                         }
 
                     }
