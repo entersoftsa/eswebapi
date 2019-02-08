@@ -1830,7 +1830,7 @@
 
 
                                     $scope.esPivotDataSource = esWebUIHelper.getPivotDS($q, $scope.esPqDef, $scope.esPqDef.UIOptions.cubeDef, v);
-                                    if (!$scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
+                                    if ($scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
                                         $scope.gridInstance.option("dataSource", $scope.esPivotDataSource);
                                     }
                                 })
