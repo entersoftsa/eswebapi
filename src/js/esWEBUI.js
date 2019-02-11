@@ -1406,6 +1406,8 @@
                                 .catch(angular.noop);
                         };
 
+                        $scope.esPqDef.runPQ = $scope.executePQ;
+
                         if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
                             $scope.executePQ();
                         }
@@ -1444,6 +1446,8 @@
                                 $scope.esChartDataSource.read();
                             }
                         }
+
+                        $scope.esPqDef.runPQ = $scope.executePQ;
 
                         angular.element($window).bind('resize', function() {
                             kendo.resize(angular.element(".eschart-wrapper"));
@@ -1485,6 +1489,8 @@
                             }
                         }
 
+                        $scope.esPqDef.runPQ = $scope.executePQ;
+
                         angular.element($window).bind('resize', function() {
                             kendo.resize(angular.element(".eschart-wrapper"));
                         });
@@ -1516,6 +1522,8 @@
                                     });
 
                         }
+
+                        $scope.esPqDef.runPQ = $scope.executePQ;
 
                         if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
                             $scope.executePQ();
@@ -1582,6 +1590,8 @@
                                 $scope.esChartDataSource.read();
                             }
                         }
+
+                        $scope.esPqDef.runPQ = $scope.executePQ;
 
                         angular.element($window).bind('resize', function() {
                             kendo.resize(angular.element(".eschart-wrapper"));
@@ -1848,6 +1858,8 @@
                                 }
 
                             };
+
+                            $scope.esPqDef.runPQ = $scope.executePQ;
                         }
                     }
                 }
@@ -1954,6 +1966,8 @@
                                 $scope.esMapDataSource.read();
                             }
                         }
+
+                        $scope.esPqDef.runPQ = $scope.executePQ;
 
                         angular.element($window).bind('resize', function() {
                             kendo.resize(angular.element(".esmap-wrapper"));
@@ -2341,6 +2355,7 @@
                         esForceTitle: "=?",
                         esParamsValues: "=",
                         esPanelOpen: "=?",
+                        esPqDef: "=?",
                         esPQOptions: "=?",
                         esShowTopPagination: "=",
                         esPostProcessGridOptions: "&",
@@ -2387,6 +2402,10 @@
                         $scope.executePQ = function() {
                             $scope.esPanelOpen.status = false;
                             $scope.esGridOptions.dataSource.read();
+                        }
+
+                        if ($scope.esPqDef) {
+                            $scope.esPqDef.runPQ = $scope.executePQ;
                         }
 
                         var pqinfo = esCache.getItem("PQI_" + $scope.esGroupId + "/" + $scope.esFilterId);
@@ -3101,7 +3120,6 @@
                 zArr.push(kendo.ui.Pager.prototype.options.messages.allPages);
                 var grdopt = {
                     pageable: {
-                        refresh: true,
                         pageSizes: zArr
                     },
                     autoBind: resOptions.AutoExecute,

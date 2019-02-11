@@ -21,6 +21,7 @@
         "FAV":
         {
             "LINK": "Δημιουργία συνδέσμου",
+            "RELOAD": "Ανανέωση",
             "PROMPT_LINK": "Αντιγραφή του συνδέσμου στο clipboard",
             "COPY_CLIPBOARD_OK": "Ο σύνδεσμος αντιγράφηκε στο clipboard",
 

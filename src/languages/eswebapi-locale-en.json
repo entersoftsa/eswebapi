@@ -22,6 +22,7 @@
         "FAV":
         {
             "LINK": "Create a hyperlink to share",
+            "RELOAD": "Reload",
             "PROMPT_LINK": "Copy hyperlink to clipboard",
             "COPY_CLIPBOARD_OK": "Hyperlink copied to clipboard",
 
@@ -63,7 +64,7 @@
         "PQ":
         {
             "DOWNLOAD": "Download",
-            "PARAMS_PANEL_RUN": "Refresh",
+            "PARAMS_PANEL_RUN": "Reload",
             "INVESTIGATE": "Search for",
             "PARAMS_MISSING": "One or more required parameters are not given value"
         },

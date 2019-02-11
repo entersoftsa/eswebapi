@@ -9,8 +9,9 @@
 					<a ng-if="::(isFavouritesMode && !esSimpleMode)" class="btn btn-transparent" ng-class="{'disabled': !canMoveUpOrDown(dbItem, true)}" ng-click="moveUpOrDown(dbItem, true)" title="{{'ESUI.FAV.UP' | translate}}"><i class="mdi mdi-arrow-up-bold-circle"></i></a>
 					<a ng-if="::(isFavouritesMode && !esSimpleMode)" class="btn btn-transparent" ng-class="{'disabled': !canMoveUpOrDown(dbItem, false)}" ng-click="moveUpOrDown(dbItem, false)" title="{{'ESUI.FAV.DOWN' | translate}}"><i class="mdi mdi-arrow-down-bold-circle"></i></a>
 					<a ng-if="::(isFavouritesMode && !esSimpleMode)" class="btn btn-transparent" ng-click="email(dbItem)" title="{{'ESUI.FAV.LINK' | translate}}"><i class="mdi mdi-link-variant"></i></a>
+					<a ng-if="::dbItem.runPQ" class="btn btn-transparent" ng-click="dbItem.runPQ()" title="{{'ESUI.FAV.RELOAD' | translate}}"><i class="mdi mdi-reload"></i></a>
 				</div>
-				<es-web-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esgrid'" es-group-id="dbItem.GroupID" es-p-q-options="dbItem.PQOptions" es-panel-open="dbItem.esPanelOpen" es-params-values="dbItem.Params" es-force-title="dbItem.Title" es-filter-id="dbItem.FilterID" es-grid-options="dbItem.UIOptions">
+				<es-web-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esgrid'" es-group-id="dbItem.GroupID" es-p-q-options="dbItem.PQOptions" es-panel-open="dbItem.esPanelOpen" es-params-values="dbItem.Params" es-force-title="dbItem.Title" es-filter-id="dbItem.FilterID" es-grid-options="dbItem.UIOptions" es-pq-def="dbItem">
 				</es-web-pq>
 				<es-chart ng-if="dbItem.ESUIType.toLowerCase() == 'eschart'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
 				</es-chart>
