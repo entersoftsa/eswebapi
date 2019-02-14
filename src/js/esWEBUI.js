@@ -1499,8 +1499,8 @@
 					}
 			])
 
-			.directive('esSingleRowPq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-					function ($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+			.directive('esSingleRowPq', ['$log', '$window', '$uibModal', '$timeout', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+					function ($log, $window, $uibModal, $timeout, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
 						return {
 							restrict: 'AE',
 							scope: {
@@ -1559,6 +1559,19 @@
 									});
 								};
 
+								$scope.getImageUrl = function (item) {
+									if (!$scope.UIOptions.imageField) return null;
+
+									var val = item[$scope.UIOptions.imageField];
+									if (!val) return null;
+
+									if ((val.indexOf('http://') == 0) || (val.indexOf('https://') == 0)) {
+										return val;
+									} else {
+										return esWebApiService.downloadES00BlobURLByGID(item.imageField, 0);
+									}
+								};
+
 								$scope.getFieldText = function (item, fieldName) {
 									if (esGlobals.isEmail(fieldName))
 										return '<a href="mailto:' + item[fieldName] + '">' + item[fieldName] + "</a>";
@@ -1566,6 +1579,55 @@
 										return '<a href="tel:' + item[fieldName] + '">' + item[fieldName] + "</a>";
 									else
 										return item[fieldName];
+								};
+
+								$scope.getClass = function (item) {
+									if (!$scope.UIOptions.priorityField) return 'default';
+
+									var val = item[$scope.UIOptions.priorityField];
+
+									if (val == 1) return 'primary';
+									else if (val == 2) return 'info';
+									else if (val == 3) return 'warning';
+									else if (val == 4) return 'danger';
+									else return 'default';
+								};
+
+								$scope.hasMap = function (item) {
+									return $scope.UIOptions.hasMap && item.Latitude && item.Longitude;
+								};
+
+								$scope.showMap = function (item) {
+									if (!$scope.hasMap(item)) return;
+
+									var modalInstance = $uibModal.open({
+										animation: true,
+										ariaLabelledBy: 'modal-title',
+										ariaDescribedBy: 'modal-body',
+										template: '<div id="esSingleRowPq-map" class="esSingleRowPq-map-container"></div>',
+										size: 'lg'
+									});
+
+									modalInstance.result
+											.then(function (selectedItem) { })
+											.catch(angular.noop);
+
+									modalInstance.opened.then(function () {
+										$timeout(function () {
+											var mapCenter = new google.maps.LatLng(item.Latitude, item.Longitude);
+
+											var mapMarker = new google.maps.Marker({ position: mapCenter });
+
+											var mapOptions = {
+												zoom: 8,
+												center: mapCenter,
+												mapTypeId: google.maps.MapTypeId.ROADMAP
+											};
+
+											var map = new google.maps.Map(document.getElementById("esSingleRowPq-map"), mapOptions);
+											mapMarker.setMap(map);
+										}, 1000);
+									});
 								};
 							}
 						};
