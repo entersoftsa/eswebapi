@@ -21,8 +21,8 @@
 				</es-pivot-pq>
 				<es-map-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esmap'" es-options="dbItem.UIOptions" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
 				</es-map-pq>
-				<es-single-row-pq ng-if="dbItem.ESUIType.toLowerCase() == 'essinglerow'" es-pq-def="dbItem">
-				</es-single-row-pq>
+				<es-card-pq ng-if="dbItem.ESUIType.toLowerCase() == 'escard'" es-pq-def="dbItem">
+				</es-card-pq>
 				<es-gauge-pq ng-if="dbItem.ESUIType.toLowerCase() == 'esgauge'" es-pq-def="dbItem">
 				</es-gauge-pq>
 			</div>

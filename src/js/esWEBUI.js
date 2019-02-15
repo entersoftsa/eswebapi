@@ -1499,7 +1499,7 @@
 					}
 			])
 
-			.directive('esSingleRowPq', ['$log', '$window', '$uibModal', '$timeout', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+			.directive('esCardPq', ['$log', '$window', '$uibModal', '$timeout', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
 					function ($log, $window, $uibModal, $timeout, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
 						return {
 							restrict: 'AE',
@@ -1507,7 +1507,7 @@
 								esPqDef: "="
 							},
 							templateUrl: function (element, attrs) {
-								return "src/partials/esSingleRowPQ.html";
+								return "src/partials/esCardPQ.html";
 							},
 							link: function ($scope, iElement, iAttrs) {
 
@@ -1534,8 +1534,7 @@
 									titleField: "",
 									footerField: "",
 									imageField: "",
-									hasMap: false,
-									priorityField: "",
+									tagField: "",
 								};
 
 								var scr = $scope.esPqDef.UIOptions
@@ -1548,7 +1547,7 @@
 								$scope.UIOptions = options;
 
 								$scope.bodyFields = function () {
-									var reserved = [$scope.UIOptions.headerField, $scope.UIOptions.titleField, $scope.UIOptions.footerField, $scope.UIOptions.imageField, $scope.UIOptions.priorityField];
+									var reserved = [$scope.UIOptions.headerField, $scope.UIOptions.titleField, $scope.UIOptions.footerField, $scope.UIOptions.imageField, $scope.UIOptions.tagField, "Longitude", "Latitude"];
 
 									if (!$scope.esPqDef.esGridOptions || !$scope.esPqDef.esGridOptions.columns) {
 										return [];
@@ -1563,12 +1562,13 @@
 									if (!$scope.UIOptions.imageField) return null;
 
 									var val = item[$scope.UIOptions.imageField];
-									if (!val) return null;
+									if (!val || !angular.isString(val)) return null;
 
+									val = val.toLowerCase().trim();
 									if ((val.indexOf('http://') == 0) || (val.indexOf('https://') == 0)) {
 										return val;
 									} else {
-										return esWebApiService.downloadES00BlobURLByGID(item.imageField, 0);
+										return esWebApiService.downloadES00BlobURLByGID(item[$scope.UIOptions.imageField], 0);
 									}
 								};
 
@@ -1582,9 +1582,9 @@
 								};
 
 								$scope.getClass = function (item) {
-									if (!$scope.UIOptions.priorityField) return 'default';
+									if (!$scope.UIOptions.tagField) return 'default';
 
-									var val = item[$scope.UIOptions.priorityField];
+									var val = item[$scope.UIOptions.tagField];
 
 									if (val == 1) return 'primary';
 									else if (val == 2) return 'info';
@@ -1594,18 +1594,26 @@
 								};
 
 								$scope.hasMap = function (item) {
-									return $scope.UIOptions.hasMap && item.Latitude && item.Longitude;
+									return item.Latitude && item.Longitude;
 								};
 
 								$scope.showMap = function (item) {
 									if (!$scope.hasMap(item)) return;
 
+
 									var modalInstance = $uibModal.open({
 										animation: true,
 										ariaLabelledBy: 'modal-title',
 										ariaDescribedBy: 'modal-body',
-										template: '<div id="esSingleRowPq-map" class="esSingleRowPq-map-container"></div>',
-										size: 'lg'
+										template: '<div ng-include src="\'src/partials/esmodalmap.html\'"></div>',
+										size: 'lg',
+										controller: function() {
+											var $ctrl = this;
+											$ctrl.point = [item.Latitude, item.Longitude];
+											$ctrl.title = ($scope.UIOptions.headerField ? item[$scope.UIOptions.headerField] : "") + " - " + ($scope.UIOptions.titleField ? item[$scope.UIOptions.titleField] : "") || item[0];
+										},
+										controllerAs: '$ctrl'
+										
 									});
 
 									modalInstance.result
@@ -1613,20 +1621,6 @@
 											.catch(angular.noop);
 
 									modalInstance.opened.then(function () {
-										$timeout(function () {
-											var mapCenter = new google.maps.LatLng(item.Latitude, item.Longitude);
-
-											var mapMarker = new google.maps.Marker({ position: mapCenter });
-
-											var mapOptions = {
-												zoom: 8,
-												center: mapCenter,
-												mapTypeId: google.maps.MapTypeId.ROADMAP
-											};
-
-											var map = new google.maps.Map(document.getElementById("esSingleRowPq-map"), mapOptions);
-											mapMarker.setMap(map);
-										}, 1000);
 									});
 								};
 							}
