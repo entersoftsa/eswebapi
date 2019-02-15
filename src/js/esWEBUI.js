@@ -1607,21 +1607,18 @@
 										ariaDescribedBy: 'modal-body',
 										template: '<div ng-include src="\'src/partials/esmodalmap.html\'"></div>',
 										size: 'lg',
-										controller: function() {
+										controller: function () {
 											var $ctrl = this;
 											$ctrl.point = [item.Latitude, item.Longitude];
 											$ctrl.title = ($scope.UIOptions.headerField ? item[$scope.UIOptions.headerField] : "") + " - " + ($scope.UIOptions.titleField ? item[$scope.UIOptions.titleField] : "") || item[0];
 										},
 										controllerAs: '$ctrl'
-										
+
 									});
 
 									modalInstance.result
 											.then(function (selectedItem) { })
 											.catch(angular.noop);
-
-									modalInstance.opened.then(function () {
-									});
 								};
 							}
 						};
