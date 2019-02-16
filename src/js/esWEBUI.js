@@ -1546,16 +1546,22 @@
 								}
 								$scope.UIOptions = options;
 
+								var xFields = null;
+
 								$scope.bodyFields = function () {
+									if (xFields) {
+										return xFields;
+									}
 									var reserved = [$scope.UIOptions.headerField, $scope.UIOptions.titleField, $scope.UIOptions.footerField, $scope.UIOptions.imageField, $scope.UIOptions.tagField, "Longitude", "Latitude"];
 
 									if (!$scope.esPqDef.esGridOptions || !$scope.esPqDef.esGridOptions.columns) {
 										return [];
 									}
 
-									return _.filter($scope.esPqDef.esGridOptions.columns, function (l) {
+									xFields =  _.filter($scope.esPqDef.esGridOptions.columns, function (l) {
 										return reserved.indexOf(l.field) == -1;
 									});
+									return xFields;
 								};
 
 								$scope.getImageUrl = function (item) {
