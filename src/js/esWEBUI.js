@@ -1587,18 +1587,6 @@
 										return item[fieldName];
 								};
 
-								$scope.getClass = function (item) {
-									if (!$scope.UIOptions.tagField) return 'default';
-
-									var val = item[$scope.UIOptions.tagField];
-
-									if (val == 1) return 'primary';
-									else if (val == 2) return 'info';
-									else if (val == 3) return 'warning';
-									else if (val == 4) return 'danger';
-									else return 'default';
-								};
-
 								$scope.hasMap = function (item) {
 									return item.Latitude && item.Longitude;
 								};

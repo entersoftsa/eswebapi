@@ -7,25 +7,23 @@
 		<div class="es-module es-module-card">
 			<div class="row">
 				<div class="col-sm-6 col-md-4 col-xl-3" ng-repeat="row in rows">
-					<div class="card border-{{::getClass(row)}}">
+					<div class="card card-tag-{{::(UIOptions.tagField ? row[UIOptions.tagField] : 'none')}}" ng-class="{'card-noimage': !(UIOptions.imageField && getImageUrl(row))}">
 						<div ng-if="::UIOptions.headerField" class="card-header">{{::row[UIOptions.headerField]}}</div>
-						<div class="card-content">
-							<img class="card-img-top" ng-if="::(UIOptions.imageField && getImageUrl(row))" ng-src="{{::getImageUrl(row)}}" />
-							<div class="card-body">
-								<h5 class="card-title" ng-if="::UIOptions.titleField">{{::row[UIOptions.titleField]}}</h5>
-								<ul ng-if="::bodyFields().length" class="list-group list-group-flush">
-									<li class="list-group-item" ng-repeat="col in ::bodyFields()">
-										<label>{{::col.title}}</label>
-										<p ng-bind-html="::getFieldText(row, col.field)"></p>
-									</li>
-								</ul>
-								<div class="actions">
-									<a class="btn btn-transparent" ng-if="::hasMap(row)" ng-click="showMap(row)"><i class="mdi mdi-earth"></i></a>
-								</div>
-							</div>
+						<img class="card-img-top" ng-if="::(UIOptions.imageField && getImageUrl(row))" ng-src="{{::getImageUrl(row)}}" />
+						<div class="card-body">
+							<h5 class="card-title" ng-if="::UIOptions.titleField">{{::row[UIOptions.titleField]}}</h5>
+							<ul ng-if="::bodyFields().length" class="list-group list-group-flush">
+								<li class="list-group-item" ng-repeat="col in ::bodyFields()">
+									<label>{{::col.title}}</label>
+									<p ng-bind-html="::getFieldText(row, col.field)"></p>
+								</li>
+							</ul>
 						</div>
 						<div ng-if="::(UIOptions.footerField || hasMap(row))" class="card-footer">
 							<small class="text-muted">{{::row[UIOptions.footerField]}}</small>
+							<div class="actions">
+								<a class="btn btn-transparent" ng-if="::hasMap(row)" ng-click="showMap(row)"><i class="mdi mdi-map-marker"></i></a>
+							</div>
 						</div>
 					</div>
 				</div>
