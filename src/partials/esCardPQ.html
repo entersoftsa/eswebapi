@@ -1,12 +1,16 @@
 <div class="row">
 	<div class="col-12">
-		<es-params-panel ng-cloak es-panel-open="esPqDef.esPanelOpen" ng-if="!esLocalData" es-group-id="::esPqDef" es-local-data-source="'true'" es-force-title="::esPqDef.Title" es-show-run="'true'" es-run-click="::executePQ()" es-data-source="esChartDataSource">
+		<es-params-panel ng-cloak es-panel-open="esPqDef.esPanelOpen" ng-if="!esLocalData" es-group-id="::esPqDef" es-local-data-source="'true'" es-force-title="::esPqDef.Title" es-show-run="'true'" es-run-click="::executePQ()">
 		</es-params-panel>
+	</div>
+	<div class="col-12">
+		<kendo-pager ng-if="cardDataSource" auto-bind="false" page-size="::esPqDef.PQOptions.PageSize" page-sizes="[20, 50, 100]" refresh="true" data-source="cardDataSource">
+		</kendo-pager>
 	</div>
 	<div class="col-12">
 		<div class="es-module es-module-card">
 			<div class="row">
-				<div class="col-sm-6 col-md-4 col-xl-3" ng-repeat="row in rows">
+				<div class="col-sm-6 col-md-4 col-xl-3" ng-repeat="row in cardDataSource.data()">
 					<div class="card card-tag-{{::(UIOptions.tagField ? row[UIOptions.tagField] : 'none')}}" ng-class="{'card-noimage': !(UIOptions.imageField && getImageUrl(row))}">
 						<div ng-if="::UIOptions.headerField" class="card-header">{{::row[UIOptions.headerField]}}</div>
 						<img class="card-img-top" ng-if="::(UIOptions.imageField && getImageUrl(row))" ng-src="{{::getImageUrl(row)}}" />
