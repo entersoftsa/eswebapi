@@ -4,11 +4,10 @@
 		</es-params-panel>
 	</div>
 	<div class="col-12">
-		<kendo-pager ng-if="cardDataSource" auto-bind="false" page-size="::esPqDef.PQOptions.PageSize" page-sizes="[20, 50, 100]" refresh="true" data-source="cardDataSource">
-		</kendo-pager>
-	</div>
-	<div class="col-12">
 		<div class="es-module es-module-card">
+			<kendo-pager ng-if="cardDataSource" auto-bind="false" page-size="::esPqDef.PQOptions.PageSize" page-sizes="[20, 50, 100]" refresh="true" data-source="cardDataSource">
+			</kendo-pager>
+
 			<div class="row">
 				<div class="col-sm-6 col-md-4 col-xl-3" ng-repeat="row in cardDataSource.data()">
 					<div class="card card-tag-{{::(UIOptions.tagField ? row[UIOptions.tagField] : 'none')}}" ng-class="{'card-noimage': !(UIOptions.imageField && getImageUrl(row))}">
