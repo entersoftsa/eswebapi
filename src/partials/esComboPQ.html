@@ -15,6 +15,8 @@
 				</es-web-pq>
 				<es-chart ng-if="dbItem.ESUIType.toLowerCase() == 'eschart'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
 				</es-chart>
+				<es-stock-chart ng-if="dbItem.ESUIType.toLowerCase() == 'esstockchart'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
+				</es-stock-chart>
 				<es-tree-map ng-if="dbItem.ESUIType.toLowerCase() == 'estreemap'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen" es-chart-options="dbItem.UIOptions">
 				</es-tree-map>
 				<es-pivot-pq ng-if="dbItem.ESUIType.toLowerCase() == 'espivot'" es-pq-def="dbItem" es-panel-open="dbItem.esPanelOpen">
