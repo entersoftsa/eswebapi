@@ -1435,7 +1435,7 @@
 									var groups = ($scope.esChartOptions) ? $scope.esChartOptions.group : null;
 									$scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups, function () { return $scope.esChartCtrl; });
 								} else {
-									$scope.esChartDataSource = { data: $scope.esLocalData };
+									$scope.esChartDataSource = angular.isArray($scope.esLocalData) ? { data: $scope.esLocalData } : $scope.esLocalData;
 								}
 
 								$scope.esChartOptions.dataSource = $scope.esChartDataSource;
@@ -1447,7 +1447,9 @@
 									}
 								}
 
-								$scope.esPqDef.runPQ = $scope.executePQ;
+								if ($scope.esPqDef) {
+									$scope.esPqDef.runPQ = $scope.executePQ;
+								}
 
 								angular.element($window).bind('resize', function () {
 									kendo.resize(angular.element(".eschart-wrapper"));
