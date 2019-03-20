@@ -107,7 +107,7 @@
 					//"host": "eswebapi.entersoft.gr",
 					//host: "10.211.55.3/entersoftapi",
 					//"host": "esmasterapp.entersoft.gr",
-					"host": "eswebapi-1-10-0.azurewebsites.net",
+					"host": "api.entersoft.gr",
 					//subscriptionId: subscriptionId,
 					//subscriptionPassword: "***",
 					allowUnsecureConnection: false,
