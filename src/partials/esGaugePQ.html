@@ -12,19 +12,16 @@
 		</es-params-panel>
 	</div>
 
-	<div class="col-12">
-		<kendo-radialgauge k-ng-delay="esPqDef.UIOptions.esScaleOptions" k-pointer="esPqDef.UIOptions.pointer" k-rebind="esPqDef.UIOptions.esScaleOptions" ng-if="esPqDef.UIOptions.GType == 'radial'"
-											 k-scale="esPqDef.UIOptions.esScaleOptions"
-											 ng-model="esRow.GValue">
+	<div ng-class="::{ 'col-3': esPqDef.UIOptions.gaugesPerRow == 4, 'col-4': esPqDef.UIOptions.gaugesPerRow == 3, 'col-6': esPqDef.UIOptions.gaugesPerRow == 2, 'col-1': esPqDef.UIOptions.gaugesPerRow == 12, 'col-12': esPqDef.UIOptions.gaugesPerRow == 1}" ng-repeat="esRow in esRows">
+		<kendo-radialgauge k-ng-delay="esRow.esScaleOptions" k-pointer="esRow.esPointer" k-rebind="esRow.esScaleOptions" ng-if="esPqDef.UIOptions.GType == 'radial'"
+											 k-scale="esRow.esScaleOptions">
 		</kendo-radialgauge>
-		<kendo-lineargauge k-ng-delay="esPqDef.UIOptions.esScaleOptions" k-pointer="esPqDef.UIOptions.pointer" k-rebind="esPqDef.UIOptions.esScaleOptions" ng-if="esPqDef.UIOptions.GType == 'linear'"
-											 k-scale="esPqDef.UIOptions.esScaleOptions"
-											 ng-model="esRow.GValue">
+		<kendo-lineargauge k-ng-delay="esRow.esScaleOptions" k-pointer="esRow.esPointer" k-rebind="esRow.esScaleOptions" ng-if="esPqDef.UIOptions.GType == 'linear'"
+											 k-scale="esRow.esScaleOptions">
 		</kendo-lineargauge>
 
-		<kendo-arcgauge k-ng-delay="esPqDef.UIOptions.esScaleOptions" k-pointer="esPqDef.UIOptions.pointer" k-rebind="esPqDef.UIOptions.esScaleOptions" ng-if="esPqDef.UIOptions.GType == 'arc'"
-											 k-scale="esPqDef.UIOptions.esScaleOptions"
-											 ng-model="esRow.GValue">
+		<kendo-arcgauge k-ng-delay="esRow.esScaleOptions" k-pointer="esRow.esPointer" k-rebind="esRow.esScaleOptions" ng-if="esPqDef.UIOptions.GType == 'arc'"
+											 k-scale="esRow.esScaleOptions">
 		</kendo-arcgauge>
 	</div>
 </div>

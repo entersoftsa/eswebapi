@@ -700,9 +700,9 @@
                 var ngModelGetter = $parse(attrs.ngModel);
 
                 /*
-                						ctrl.$validators.esCount = function(modelValue, viewValue) {
-                								return true;
-                						};
+                                        ctrl.$validators.esCount = function(modelValue, viewValue) {
+                                                return true;
+                                        };
                 */
                 var comparator = angular.equals;
 
@@ -1354,52 +1354,81 @@
                         return "src/partials/esGaugePQ.html";
                     },
                     link: function($scope, iElement, iAttrs) {
-                        function prepareGauge() {
-                            if ($scope.esRow.GScale) {
-                                esWebApiService.fetchESScale($scope.esRow.GScale)
-                                    .then(function(ret) {
-                                        var scaleObject = ret;
-                                        var minScale = 0,
-                                            maxScale = 100,
-                                            ranges = [];
-
-                                        if (scaleObject && scaleObject.Ranges && scaleObject.Ranges.length) {
-
-                                            minScale = _.minBy(scaleObject.Ranges, 'MinValue').MinValue;
-                                            maxScale = _.maxBy(scaleObject.Ranges, 'MaxValue').MaxValue;
-
-                                            ranges = _.map(scaleObject.Ranges, function(r) {
-                                                var x = {
-                                                    from: r.MinValue,
-                                                    to: r.MaxValue
-                                                };
-
-                                                if (r.ColorARGB) {
-                                                    x.color = esGlobals.rgbToHex(r.ColorARGB)
-                                                }
-                                                return x;
-                                            });
-                                        }
-
-                                        $scope.esPqDef.UIOptions.esScaleOptions = {
-                                            min: minScale,
-                                            max: maxScale,
-                                            ranges: ranges,
-                                            labels: $scope.esPqDef.UIOptions.labels,
-                                            vertical: !!$scope.esPqDef.UIOptions.vertical
-                                        };
-
-                                        $scope.esPqDef.UIOptions.pointer = $scope.esPqDef.UIOptions.pointer || {};
-                                    })
-                                    .catch(angular.noop);
+                        function prepareGauge(vals) {
+                            if (!$scope.esRows || !$scope.esRows.length || !$scope.esPqDef.UIOptions.pointer) {
+                                return;
                             }
+
+
+                            function evalScale(i, rows) {
+                                if (i >= rows.length) {
+                                    return;
+                                }
+                                var row = rows[i];
+
+                                if (row.GScale) {
+                                    esWebApiService.fetchESScale(row.GScale)
+                                        .then(function(ret) {
+                                            var scaleObject = ret;
+                                            var minScale = 0,
+                                                maxScale = 100,
+                                                ranges = [];
+
+                                            if (scaleObject && scaleObject.Ranges && scaleObject.Ranges.length) {
+
+                                                minScale = _.minBy(scaleObject.Ranges, 'MinValue').MinValue;
+                                                maxScale = _.maxBy(scaleObject.Ranges, 'MaxValue').MaxValue;
+
+                                                ranges = _.map(scaleObject.Ranges, function(r) {
+                                                    var x = {
+                                                        from: r.MinValue,
+                                                        to: r.MaxValue
+                                                    };
+
+                                                    if (r.ColorARGB) {
+                                                        x.color = esGlobals.rgbToHex(r.ColorARGB)
+                                                    }
+                                                    return x;
+                                                });
+                                            }
+
+                                            row.esScaleOptions = {
+                                                min: minScale,
+                                                max: maxScale,
+                                                ranges: ranges,
+                                                labels: $scope.esPqDef.UIOptions.labels,
+                                                vertical: !!$scope.esPqDef.UIOptions.vertical
+                                            };
+
+                                            var tp = angular.isArray($scope.esPqDef.UIOptions.pointer) ? $scope.esPqDef.UIOptions.pointer : [$scope.esPqDef.UIOptions.pointer];
+
+                                            var pointers = [];
+                                            var ix;
+                                            for (ix = 0; ix < tp.length; ix++) {
+                                                var poi = angular.merge({}, tp[ix]);
+                                                poi.value = row["GValue" + (ix + 1)];
+                                                pointers.push(poi);
+                                            }
+
+                                            row.esPointer = pointers;
+
+                                            evalScale(i + 1, rows);
+                                        })
+                                        .catch(angular.noop);
+                                } else {
+                                    evalScale(i + 1, rows);
+                                }
+                            }
+
+                            evalScale(0, $scope.esRows);
+
                         };
 
                         $scope.executePQ = function() {
                             esWebApiService.fetchPublicQuery($scope.esPqDef)
                                 .then(function(ret) {
                                     if (ret.data.Rows && ret.data.Rows.length) {
-                                        $scope.esRow = ret.data.Rows[0];
+                                        $scope.esRows = $scope.esPqDef.UIOptions.expandRows ? ret.data.Rows : [ret.data.Rows[0]];
                                         prepareGauge();
                                     }
                                 })
@@ -1999,13 +2028,13 @@
                         if (dataLayer.type == "bubble") {
                             tOptions.shapeMouseEnter = function(e) {
                                 $scope.bubbleMessage = e.shape.dataItem[dataLayer.titleField] + " - " + e.shape.dataItem[dataLayer.valueField].toString();
-            					e.shape.options.set("stroke", { width: 2, color: "#00f" });
+                                e.shape.options.set("stroke", { width: 2, color: "#00f" });
 
                                 $scope.$apply();
                             };
                             tOptions.shapeMouseLeave = function(e) {
                                 $scope.bubbleMessage = "";
-            					e.shape.options.set("stroke", null);
+                                e.shape.options.set("stroke", null);
                                 $scope.$apply();
                             };
 
@@ -2020,13 +2049,14 @@
                         }
 
                         tOptions.layers = [{
-                            type: "tile",
-                            urlTemplate: "https://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
-                            subdomains: ["a", "b", "c"],
-                            attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>." +
-                                "Tiles courtesy of <a href='http://www.openstreemap.org/'>Entersoft SA</a>"
-                        },
-                        dataLayer];
+                                type: "tile",
+                                urlTemplate: "https://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
+                                subdomains: ["a", "b", "c"],
+                                attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>." +
+                                    "Tiles courtesy of <a href='http://www.openstreemap.org/'>Entersoft SA</a>"
+                            },
+                            dataLayer
+                        ];
 
                         $scope.executePQ = function() {
                             $scope.esPanelOpen.status = false;
@@ -3988,20 +4018,20 @@
 
 
                 /**
-		 * @ngdoc function
-		 * @name es.Web.UI.esUIHelper#winGridInfoToESGridInfo
-		 * @methodOf es.Web.UI.esUIHelper
-		 * @module es.Web.UI
-		 * @kind function
-		 * @description  This function processes and transforms an Entersoft Windows - Janus specific definition of the UI layout of an
-		 * Entersoft Public Query or Entersoft Scroller to an abstract web-oriented defintion of the layout to be used by WEB UI components
-		 * such as telerik kendo-ui, jQuery grids, etc.
-		 * @param {string|ESPublicQueryDef} xGroupID if string then Entersoft Public Query GroupID or a {@link es.Services.Web.esGlobals#methods_ESPublicQueryDef ESPublicQueryDef} object that defines the rest of the parameters
-		 * @param {string} xFilterID Entersoft Public Query FilterID. In case that pqGroupID is ESPublicQueryDef type then this parameter can be null or undefined
-		 * @param {object} gridexInfo The definition object for an Entersoft Public Query (or Scroller) as provided by the result
-		 * of the function {@link es.Services.Web.esWebApi#methods_fetchPublicQueryInfo fetchPublicQueryInfo}.
-		 * @return {object} Returns an object that is the abstract (not Janus specific) representation of the gridexInfo.
-		 * @example
+         * @ngdoc function
+         * @name es.Web.UI.esUIHelper#winGridInfoToESGridInfo
+         * @methodOf es.Web.UI.esUIHelper
+         * @module es.Web.UI
+         * @kind function
+         * @description  This function processes and transforms an Entersoft Windows - Janus specific definition of the UI layout of an
+         * Entersoft Public Query or Entersoft Scroller to an abstract web-oriented defintion of the layout to be used by WEB UI components
+         * such as telerik kendo-ui, jQuery grids, etc.
+         * @param {string|ESPublicQueryDef} xGroupID if string then Entersoft Public Query GroupID or a {@link es.Services.Web.esGlobals#methods_ESPublicQueryDef ESPublicQueryDef} object that defines the rest of the parameters
+         * @param {string} xFilterID Entersoft Public Query FilterID. In case that pqGroupID is ESPublicQueryDef type then this parameter can be null or undefined
+         * @param {object} gridexInfo The definition object for an Entersoft Public Query (or Scroller) as provided by the result
+         * of the function {@link es.Services.Web.esWebApi#methods_fetchPublicQueryInfo fetchPublicQueryInfo}.
+         * @return {object} Returns an object that is the abstract (not Janus specific) representation of the gridexInfo.
+         * @example
 ```js
 var inGroupID = "ESMMStockItem";
 var inFilterID = "ESMMStockItem_Def";
@@ -4637,9 +4667,9 @@ var esgridInfo = esUIHelper.winGridInfoToESGridInfo(inGroupID, inFilterID, gride
 "defaultValues": {
 "paramCode": "ESDCreated",
 "paramValue": {
-		"dRange": "1",
-		"fromD": "2006-04-14T21:00:00.000Z",
-		"toD": null
+        "dRange": "1",
+        "fromD": "2006-04-14T21:00:00.000Z",
+        "toD": null
 }
 }
 }, {
@@ -4659,9 +4689,9 @@ var esgridInfo = esUIHelper.winGridInfoToESGridInfo(inGroupID, inFilterID, gride
 "defaultValues": {
 "paramCode": "ESUCreated",
 "paramValue": {
-		"value": "wλμ",
-		"valueTo": "χχω",
-		"oper": "RANGE"
+        "value": "wλμ",
+        "valueTo": "χχω",
+        "oper": "RANGE"
 }
 }
 }, {
@@ -4681,9 +4711,9 @@ var esgridInfo = esUIHelper.winGridInfoToESGridInfo(inGroupID, inFilterID, gride
 "defaultValues": {
 "paramCode": "ESDModified",
 "paramValue": {
-		"dRange": "1",
-		"fromD": "2011-03-13T22:00:00.000Z",
-		"toD": null
+        "dRange": "1",
+        "fromD": "2011-03-13T22:00:00.000Z",
+        "toD": null
 }
 }
 }],
@@ -4691,31 +4721,31 @@ var esgridInfo = esUIHelper.winGridInfoToESGridInfo(inGroupID, inFilterID, gride
 "ESDCreated": {
 "paramCode": "ESDCreated",
 "paramValue": {
-		"dRange": "1",
-		"fromD": "2006-04-14T21:00:00.000Z",
-		"toD": null
+        "dRange": "1",
+        "fromD": "2006-04-14T21:00:00.000Z",
+        "toD": null
 }
 },
 "ESUCreated": {
 "paramCode": "ESUCreated",
 "paramValue": {
-		"value": "wλμ",
-		"valueTo": "χχω",
-		"oper": "RANGE"
+        "value": "wλμ",
+        "valueTo": "χχω",
+        "oper": "RANGE"
 }
 },
 "ESDModified": {
 "paramCode": "ESDModified",
 "paramValue": {
-		"dRange": "1",
-		"fromD": "2011-03-13T22:00:00.000Z",
-		"toD": null
+        "dRange": "1",
+        "fromD": "2011-03-13T22:00:00.000Z",
+        "toD": null
 }
 }
 }
 }
 ```
-		 **/
+         **/
                 winGridInfoToESGridInfo: winGridInfoToESGridInfo,
 
                 winColToESCol: winColToESCol,
@@ -4723,28 +4753,28 @@ var esgridInfo = esUIHelper.winGridInfoToESGridInfo(inGroupID, inFilterID, gride
                 esGridInfoToLocalKInfo: esGridInfoToLocalKInfo,
 
                 /**
-		 * @ngdoc function
-		 * @name es.Web.UI.esUIHelper#esGridInfoToKInfo
-		 * @methodOf es.Web.UI.esUIHelper
-		 * @module es.Web.UI
-		 * @kind function
-		 * @description  This function processes and transforms an {@link es.Web.UI.esUIHelper#methods_winGridInfoToESGridInfo esgridInfo} object (abstract definition of gridexInfo)
-		 * to a Telerik kendo-grid layout definition object.
-		 * @param {string} inGroupID The Entersoft PQ (or Scroller) GroupID the the gridexInfo object describes
-		 * @param {string} inFilterID The Entersoft PQ (or Scroller) FilterID the the gridexInfo object describes
-		 * @param {object} executeParams The object that will hold or alread holds the values of the Entersoft Public Query Paramters i.e. the object
-		 * that holds the values of the params panel (EBS terminology). If the object is not an empty one i.e. {} BUT is has values for some of the named parameters
-		 * these values will be used as default values for those parameters, overiding any default values coming from the grid layout definition object.
-		 * @param {object} esGridInfo The Entersoft abstract definition object that is the result of {@link es.Web.UI.esUIHelper#methods_winGridInfoToESGridInfo winGridInfoToESGridInfo}.
-		 * of the function {@link es.Services.Web.esWebApi#methods_fetchPublicQueryInfo fetchPublicQueryInfo}.
-		 * @return {object} Returns an object that is the __Telerik kendo-grid specific__ schema definition object that can be used to initialize the
-		 * UI of a kendo-grid or kendo-grid like widget.
-		 *
-		 * The returned object can be directly assigned to the _k-options_ attribute of a __kendo-grid__ Telerik widget
-		 * @example
-		 * This is a screenshot from Pulic Query Info results (geridexInfo, esgridInfo and Telerik kendo-grid options)
-		 * ![Sample run for am ESMMStockItem PQInfo](images/api/es010fetchpqinfo.png)
-		 * 
+         * @ngdoc function
+         * @name es.Web.UI.esUIHelper#esGridInfoToKInfo
+         * @methodOf es.Web.UI.esUIHelper
+         * @module es.Web.UI
+         * @kind function
+         * @description  This function processes and transforms an {@link es.Web.UI.esUIHelper#methods_winGridInfoToESGridInfo esgridInfo} object (abstract definition of gridexInfo)
+         * to a Telerik kendo-grid layout definition object.
+         * @param {string} inGroupID The Entersoft PQ (or Scroller) GroupID the the gridexInfo object describes
+         * @param {string} inFilterID The Entersoft PQ (or Scroller) FilterID the the gridexInfo object describes
+         * @param {object} executeParams The object that will hold or alread holds the values of the Entersoft Public Query Paramters i.e. the object
+         * that holds the values of the params panel (EBS terminology). If the object is not an empty one i.e. {} BUT is has values for some of the named parameters
+         * these values will be used as default values for those parameters, overiding any default values coming from the grid layout definition object.
+         * @param {object} esGridInfo The Entersoft abstract definition object that is the result of {@link es.Web.UI.esUIHelper#methods_winGridInfoToESGridInfo winGridInfoToESGridInfo}.
+         * of the function {@link es.Services.Web.esWebApi#methods_fetchPublicQueryInfo fetchPublicQueryInfo}.
+         * @return {object} Returns an object that is the __Telerik kendo-grid specific__ schema definition object that can be used to initialize the
+         * UI of a kendo-grid or kendo-grid like widget.
+         *
+         * The returned object can be directly assigned to the _k-options_ attribute of a __kendo-grid__ Telerik widget
+         * @example
+         * This is a screenshot from Pulic Query Info results (geridexInfo, esgridInfo and Telerik kendo-grid options)
+         * ![Sample run for am ESMMStockItem PQInfo](images/api/es010fetchpqinfo.png)
+         * 
 ```js
 //fetchPublicQueryInfo sample
 $scope.fetchPQInfo = function() {
@@ -4764,7 +4794,7 @@ alert(a.UserMessage || a.MessageID || "Generic Error");
 });
 }
 ```
-		 * __HTML__
+         * __HTML__
 ```html
 <span>
 <input type="text" ng-model="pGroup"  placeholder="PQ GroupID">
@@ -4773,7 +4803,7 @@ alert(a.UserMessage || a.MessageID || "Generic Error");
 <div kendo-grid k-ng-delay="esGridOptions" k-auto-bind="false" k-options="esGridOptions" />
 </span>
 ```
-		 **/
+         **/
                 esGridInfoToKInfo: esGridInfoToKInfo,
 
                 getZoomDataSource: prepareStdZoom,
