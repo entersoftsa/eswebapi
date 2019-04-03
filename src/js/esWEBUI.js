@@ -1354,25 +1354,46 @@
                         return "src/partials/esGaugePQ.html";
                     },
                     link: function($scope, iElement, iAttrs) {
-                        function prepareGauge(vals) {
+                        function prepareGauge() {
                             if (!$scope.esRows || !$scope.esRows.length || !$scope.esPqDef.UIOptions.pointer) {
                                 return;
                             }
 
+                            function calcPointer(row, minScale, maxScale, ranges) {
+                                row.esScaleOptions = {
+                                    min: minScale,
+                                    max: maxScale,
+                                    ranges: ranges,
+                                    labels: $scope.esPqDef.UIOptions.labels,
+                                    vertical: !!$scope.esPqDef.UIOptions.vertical
+                                };
+
+                                var tp = angular.isArray($scope.esPqDef.UIOptions.pointer) ? $scope.esPqDef.UIOptions.pointer : [$scope.esPqDef.UIOptions.pointer];
+
+                                var pointers = [];
+                                var ix;
+                                for (ix = 0; ix < tp.length; ix++) {
+                                    var poi = angular.merge({}, tp[ix]);
+                                    poi.value = row["GValue" + (ix + 1)];
+                                    pointers.push(poi);
+                                }
+
+                                row.esPointer = pointers;
+                            }
 
                             function evalScale(i, rows) {
                                 if (i >= rows.length) {
                                     return;
                                 }
                                 var row = rows[i];
+                                var minScale = 0,
+                                    maxScale = 100,
+                                    ranges = [{ from: 0, to: 100 }];
 
                                 if (row.GScale) {
                                     esWebApiService.fetchESScale(row.GScale)
                                         .then(function(ret) {
                                             var scaleObject = ret;
-                                            var minScale = 0,
-                                                maxScale = 100,
-                                                ranges = [];
 
                                             if (scaleObject && scaleObject.Ranges && scaleObject.Ranges.length) {
 
@@ -1392,30 +1413,19 @@
                                                 });
                                             }
 
-                                            row.esScaleOptions = {
-                                                min: minScale,
-                                                max: maxScale,
-                                                ranges: ranges,
-                                                labels: $scope.esPqDef.UIOptions.labels,
-                                                vertical: !!$scope.esPqDef.UIOptions.vertical
-                                            };
-
-                                            var tp = angular.isArray($scope.esPqDef.UIOptions.pointer) ? $scope.esPqDef.UIOptions.pointer : [$scope.esPqDef.UIOptions.pointer];
-
-                                            var pointers = [];
-                                            var ix;
-                                            for (ix = 0; ix < tp.length; ix++) {
-                                                var poi = angular.merge({}, tp[ix]);
-                                                poi.value = row["GValue" + (ix + 1)];
-                                                pointers.push(poi);
-                                            }
-
-                                            row.esPointer = pointers;
+                                            calcPointer(row, minScale, maxScale, ranges);
 
                                             evalScale(i + 1, rows);
                                         })
-                                        .catch(angular.noop);
+                                        .catch(function(err) {
+
+                                            calcPointer(row, minScale, maxScale, ranges);
+
+                                            evalScale(i + 1, rows);
+                                        });
                                 } else {
+
+                                    calcPointer(row, minScale, maxScale, ranges);
                                     evalScale(i + 1, rows);
                                 }
                             }
