@@ -1558,10 +1558,6 @@
 
                         $scope.esPqDef.runPQ = $scope.executePQ;
 
-                        if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
-                            $scope.executePQ();
-                        }
-
                         var options = {
                             headerField: "",
                             titleField: "",
@@ -1658,6 +1654,10 @@
                                 .then(function(selectedItem) {})
                                 .catch(angular.noop);
                         };
+
+                        if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
+                            $scope.executePQ();
+                        }
                     }
                 };
             }
