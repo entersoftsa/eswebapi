@@ -1,2 +1,160 @@
 {
+    "ERR_401": "Va rugam sa va conectati",
+    "ERR_403": "Nu este permisa autentificarea. Va rugam sa va logati si sa incercati din nou",
+    "ERR_500": "@:UNKOWN_ERROR",
+    "ERR_GENERAL": "@:UNKOWN_ERROR",
+    "ERR_invalid-webapi-token": "Sesiunea dumneavoastra a expirat. Trebuie sa va relogati",
+    "ERR_expired-webapi-token": "Sesiunea dumneavoastra a expirat. Trebuie sa va relogati",
+    "ERR_login-invalid-password": "UserID sau parola sunt incorecte",
+    "UNKOWN_ERROR": "Eroare generala. Verificati conexiunea la retea sau accesul la Internet",
+
+    "subscription-invalid-password": "@:ERR_SUBSCRIPTION",
+    "invalid-subscription-id": "@:ERR_SUBSCRIPTION",
+    "ERR_SUBSCRIPTION": "SubscriptionID sau Subscription Password nu sunt valide",
+
+    "ESUI":
+    {
+        "SINGLE_ROW": {
+            "FIELD": "Proprietate",
+            "VALUE": "Valoare"
+        }, 
+
+        "FAV":
+        {
+            "LINK": "Creare hyperlink pentru partajare",
+            "PROMPT_LINK": "Copiati  hyperlink-ul in clipboard",
+            "COPY_CLIPBOARD_OK": "Hyperlink-ul a fost copiat in clipboard",
+
+            "FAVOURITES": "Favorite",
+            "ADD": "Adauga la Favorite",
+            "DEL": "Sterge de la Favorite",
+            "UP": "Mutati in sus",
+            "DOWN": "Mutati in jos",
+            "CLEAR_ALL": "Sterge toate favoritele",
+            "PROMPT_TITLE": "Va rugam sa precizati un titlu pentru scurtatura",
+            "CONFIRM_CLEAR": "Stergeti toate scurtaturile?",
+            "SAVE_SUCCESS": "Modificarile pentru favorite au fost salvate cu succes pe Entersoft Business Suite",
+            "NODATA": "Nu este nimic de afisat"
+        },
+
+        "CHGPWD":
+        {
+            "OLDPASSWORD": "Parola veche",
+            "NEWPASSWORD": "Parola noua",
+            "NEWPASSWORD2": "Verificati noua parola",
+            "TITLE": "Schimbati parola"
+        },
+
+        "GENERIC":
+        {
+            "OK": "OK",
+            "CANCEL": "ANULAT"
+        },
+        "BOOLEAN":
+        {
+            "YES": "DA",
+            "NO": "NU"
+        },
+        "PARAMS_PANEL":
+        {
+            "More": "Mai mult",
+            "Less": "Mai putin"
+        },
+        "PQ":
+        {
+            "DOWNLOAD": "Descarcare",
+            "PARAMS_PANEL_RUN": "Refresh",
+            "INVESTIGATE": "Cautare pentru",
+            "PARAMS_MISSING": "Unul sau mai multi parametri necesari nu au valoare"
+        },
+        "ESCHARTPQ":
+        {
+            "CHART": "Grafic",
+            "DATA": "Data"
+        },
+        "ESMAPPQ":
+        {
+            "MAP": "Harta",
+            "DATA": "Data",
+            "BOTH": "Ambele",
+            "CLUSTER_STANDARD": "Standard",
+            "CLUSTER_CLUSTER": "Grupat",
+            "CLUSTER_SPIDER": "Ramificat",
+            "RUN_MAP": "Rulati harta"
+        },
+        "ESSURVEY":
+        {
+            "START": "Incepe sondaj",
+            "NEXT": "Urmatorul",
+            "PREVIOUS": "Anteriorul",
+            "SAVE": "Salvati si continuati mai tarziu"
+        },
+        "LOGIN_FORM":
+        {
+            "SUBSCRIPTION": "Credentiale inregistrare",
+            "SUBSCRIPTION_ID": "ID inregistrare",
+            "SUBSCRIPTION_PASSWORD": "Parola inregistrare",
+            "SIGNIN": "Credentiale de logare",
+            "USER_ID": "ID utilizator",
+            "USER_PASSWORD": "Parola utilizator",
+            "COMPANY_ID": "ID companie",
+            "BRANCH_ID": "ID sucursala",
+            "LANG_ID": "Limba",
+            "SERVERURL": "ES Web Api/App Server Host",
+            "SHOW_HIDE_SUBSCRIPTION": "Detalii inregistrare",
+            "DOLOGIN": "Continuati",
+            "REMEMBERME": "Tine minte credentialele"
+        }
+
+    },
+
+    "ESCOMPLEX":
+    {
+        "FROM": "De la ",
+        "TO": " La ",
+        "EQ": "Egal",
+        "NE": "Nu este egal",
+        "LT": "Mai putin decat",
+        "LE": "Mai putin decat sau Egal",
+        "GT": "Mai mare decat",
+        "GE": "Mai mare decat sau egal",
+        "RANGE": "De la - La",
+        "NULL": "Gol",
+        "NOTNULL": "Nu este gol"
+    },
+    "ESDATE_RANGE":
+    {
+        "SDR": "Interval specific",
+        "SD": "Data specifica",
+        "ANY": "Orice",
+        "TODAY": "Astazi",
+        "UTD": "Pana astazi",
+        "SFTD": "Incepand de astazi",
+        "YTD": "Ieri",
+        "UTYD": "Pana ieri",
+        "TMR": "Maine",
+        "SFTR": "Incepand de maine",
+        "CW": "Aceasta saptamana",
+        "PW": "Saptamana trecuta",
+        "NW": "Saptamana urmatoare",
+        "CM": "Luna aceasta",
+        "PM": "Luna trecuta",
+        "NM": "Luna urmatoare",
+        "SFM": "Din 1 ale lunii ",
+        "UEM": "Pana la finalul lunii ",
+        "SFLM": "De la 1 a lunii trecute",
+        "UELM": "Pana la luna trecuta",
+        "CQ": "Acest trimestru",
+        "PQ": "Trimestrul trecut",
+        "CSM": "Acest semestru",
+        "PSM": "Semestrul trecut",
+        "CY": "Acest an",
+        "PY": "Anul trecut",
+        "CFP": "Aceasta perioada fiscala",
+        "SSFYUTD": "De la inceputul anului fiscal pana astazi",
+        "SFYTEFP": "De la inceputul anului fiscal pana la perioada fiscala",
+        "PFP": "Ultima perioada fiscala",
+        "SLFPUTD": "De la inceputul ultimei perioade fiscale pana astazi",
+        "SFYULFP": "De la inceputul anului fiscal pana la ultima perioada fiscala"
+    }
 }
