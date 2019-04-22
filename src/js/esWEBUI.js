@@ -3740,6 +3740,9 @@
                 }
 
                 if (!_.startsWith(val, "##(")) {
+                    if (ps == "system.datetime, mscorlib") {
+                        return new Date(val).toISOString();
+                    }
                     return val;
                 }
 
