@@ -1540,6 +1540,112 @@
             }
         ])
 
+        .directive('esSanKeyPq', ['$log', '$window', '$uibModal', '$timeout', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+            function($log, $window, $uibModal, $timeout, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esPqDef: "="
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esSanKeyPQ.html";
+                    },
+                    link: {
+                        pre: function($scope, iElement, iAttrs) {
+
+                            $scope.executePQ = function() {
+
+                                if ($scope.sankeyCtrl) {
+                                    $scope.sankeyCtrl.showLoadingIndicator();
+                                }
+
+                                esWebApiService.fetchPublicQuery($scope.esPqDef)
+                                    .then(function(pq) {
+                                        var dt = pq.data.Rows;
+
+                                        $scope.UIOptions.dataSource.length = 0;
+                                        var g = 0;
+                                        for (g = 0; g < dt.length; g++) {
+                                            $scope.UIOptions.dataSource.push(dt[g]);
+                                        }
+
+                                        if ($scope.sankeyCtrl) {
+                                            $scope.sankeyCtrl.getDataSource().reload();
+                                            $scope.sankeyCtrl.hideLoadingIndicator();
+                                        }
+                                    })
+                                    .catch(function(err) {
+                                        $scope.UIOptions.dataSource.length = 0;
+                                        if ($scope.sankeyCtrl) {
+                                            $scope.sankeyCtrl.getDataSource().reload();
+                                            $scope.sankeyCtrl.hideLoadingIndicator();
+                                        }
+                                    });
+                            }
+
+                            var options = {
+                                dataSource: [],
+                                sourceField: "FromDimension",
+                                targetField: "ToDimension",
+                                weightField: "Weight",
+                                link: {
+                                    colorMode: "gradient"
+                                },
+                                onInitialized: function(e) {
+                                    $scope.sankeyCtrl = e.component;
+                                },
+                                tooltip: {
+                                    enabled: true
+                                }
+                            };
+
+                            var scr = $scope.esPqDef.UIOptions
+                            if (scr) {
+                                angular.merge(options, scr);
+                            }
+
+                            $scope.UIOptions = options;
+                            $scope.esPqDef.runPQ = $scope.executePQ;
+
+                            esWebApiService.fetchPublicQueryInfo($scope.esPqDef)
+                                .then(function(ret) {
+                                    var v = esWebUIHelper.winGridInfoToESGridInfo($scope.esPqDef.GroupID, $scope.esPqDef.FilterID, ret.data);
+
+                                    var tp = {
+                                        enabled: true,
+                                        customizeLinkTooltip: function(info) {
+                                            var ts = "<b>" + _.find(v.columns, { field: $scope.UIOptions.sourceField }).title + ":</b> " +
+                                                info.source +
+                                                "<br/><b>" + _.find(v.columns, { field: $scope.UIOptions.targetField }).title + ":</b> " +
+                                                info.target +
+                                                "<br/>" +
+                                                "<b>" + _.find(v.columns, { field: $scope.UIOptions.weightField }).title + ":</b> " +
+                                                info.weight;
+                                            return {
+                                                html: ts
+                                            };
+                                        }
+                                    };
+                                    if ($scope.sankeyCtrl) {
+                                        $scope.sankeyCtrl.option("tooltip", tp);
+                                        $scope.sankeyCtrl.option("title", v.caption);
+                                    }
+
+                                })
+                                .catch(function(err) {
+                                    $log.error(err);
+                                });
+
+
+                            if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
+                                $scope.executePQ();
+                            }
+                        }
+                    }
+                };
+            }
+        ])
+
         .directive('esCardPq', ['$log', '$window', '$uibModal', '$timeout', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
             function($log, $window, $uibModal, $timeout, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
                 return {
@@ -1702,6 +1808,8 @@
                 };
             }
         ])
+
+
 
         .directive('esPivotPq', ['$log', '$window', '$q', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
             function($log, $window, $q, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
