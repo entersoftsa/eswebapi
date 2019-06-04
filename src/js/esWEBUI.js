@@ -1554,7 +1554,7 @@
                         pre: function($scope, iElement, iAttrs) {
 
                             $scope.executePQ = function() {
-
+                                $scope.esPqDef.esPanelOpen.status = false;
                                 if ($scope.sankeyCtrl) {
                                     $scope.sankeyCtrl.showLoadingIndicator();
                                 }
@@ -1659,6 +1659,7 @@
                     link: function($scope, iElement, iAttrs) {
 
                         $scope.executePQ = function() {
+                            $scope.esPqDef.esPanelOpen.status = false;
                             $scope.cardDataSource.page(1);
                         }
 
