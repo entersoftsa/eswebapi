@@ -369,6 +369,10 @@
         return modalInstance.result;
     }
 
+    function doResizeElement() {
+        kendo.resize(angular.element(".eschart-wrapper"));
+    }
+
 
     /**
      * @ngdoc filter
@@ -1490,9 +1494,11 @@
                             $scope.esPqDef.runPQ = $scope.executePQ;
                         }
 
-                        angular.element($window).bind('resize', function() {
-                            kendo.resize(angular.element(".eschart-wrapper"));
+                        $scope.$on('$destroy', function() {
+                            angular.element($window).unbind('resize', doResizeElement);
                         });
+
+                        angular.element($window).bind('resize', doResizeElement);
                     }
                 };
             }
@@ -1532,9 +1538,11 @@
 
                         $scope.esPqDef.runPQ = $scope.executePQ;
 
-                        angular.element($window).bind('resize', function() {
-                            kendo.resize(angular.element(".eschart-wrapper"));
+                        $scope.$on('$destroy', function() {
+                            angular.element($window).unbind('resize', doResizeElement);
                         });
+
+                        angular.element($window).bind('resize', doResizeElement);
                     }
                 };
             }
@@ -1606,6 +1614,18 @@
 
                             $scope.UIOptions = options;
                             $scope.esPqDef.runPQ = $scope.executePQ;
+
+                            $scope.$on('$destroy', function() {
+                                angular.element($window).unbind('resize', resizeSanKey);
+                            });
+
+                            var resizeSanKey = function() {
+                                if ($scope.sankeyCtrl) {
+                                    $scope.sankeyCtrl.render();
+                                }
+                            };
+
+                            angular.element($window).bind('resize', resizeSanKey);
 
                             esWebApiService.fetchPublicQueryInfo($scope.esPqDef)
                                 .then(function(ret) {
@@ -1800,9 +1820,11 @@
 
                         $scope.esPqDef.runPQ = $scope.executePQ;
 
-                        angular.element($window).bind('resize', function() {
-                            kendo.resize(angular.element(".eschart-wrapper"));
+                        $scope.$on('$destroy', function() {
+                            angular.element($window).unbind('resize', doResizeElement);
                         });
+
+                        angular.element($window).bind('resize', doResizeElement);
 
                         tOptions.dataSource = $scope.esChartDataSource;
                     }
@@ -2186,9 +2208,11 @@
 
                         $scope.esPqDef.runPQ = $scope.executePQ;
 
-                        angular.element($window).bind('resize', function() {
-                            kendo.resize(angular.element(".esmap-wrapper"));
+                        $scope.$on('$destroy', function() {
+                            angular.element($window).unbind('resize', doResizeElement);
                         });
+
+                        angular.element($window).bind('resize', doResizeElement);
 
                     }
                 };
