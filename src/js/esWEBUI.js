@@ -369,11 +369,7 @@
         return modalInstance.result;
     }
 
-    function doResizeElement() {
-        kendo.resize(angular.element(".eschart-wrapper"));
-    }
-
-
+    
     /**
      * @ngdoc filter
      * @name es.Web.UI.filter:esTrustHtml
@@ -1474,9 +1470,23 @@
                         return "src/partials/esStockChartPQ.html";
                     },
                     link: function($scope, iElement, iAttrs) {
+                        var ctrlF = function() {
+                            return $scope.esChartCtrl;
+                        };
+
+                        var onResize = function() {
+                            var ctrl = ctrlF();
+                            
+                            if (ctrl) {
+                                ctrl.resize();
+                            } else {
+                                kendo.resize(angular.element(".eschart-wrapper"));
+                            }
+                        };
+
                         if (!$scope.esLocalData && !iAttrs.esLocalData) {
                             var groups = ($scope.esChartOptions) ? $scope.esChartOptions.group : null;
-                            $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups, function() { return $scope.esChartCtrl; });
+                            $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups, ctrlF);
                         } else {
                             $scope.esChartDataSource = angular.isArray($scope.esLocalData) ? { data: $scope.esLocalData } : $scope.esLocalData;
                         }
@@ -1495,10 +1505,10 @@
                         }
 
                         $scope.$on('$destroy', function() {
-                            angular.element($window).unbind('resize', doResizeElement);
+                            angular.element($window).unbind('resize', onResize);
                         });
 
-                        angular.element($window).bind('resize', doResizeElement);
+                        angular.element($window).bind('resize', onResize);
                     }
                 };
             }
@@ -1520,9 +1530,23 @@
                         return "src/partials/esChartPQ.html";
                     },
                     link: function($scope, iElement, iAttrs) {
+                        var ctrlF = function() {
+                            return $scope.esChartCtrl;
+                        };
+
+                        var onResize = function() {
+                            var ctrl = ctrlF();
+                            
+                            if (ctrl) {
+                                ctrl.resize();
+                            } else {
+                                kendo.resize(angular.element(".eschart-wrapper"));
+                            }
+                        };
+
                         if (!$scope.esLocalData && !iAttrs.esLocalData) {
                             var groups = ($scope.esChartOptions) ? $scope.esChartOptions.group : null;
-                            $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups, function() { return $scope.esChartCtrl; });
+                            $scope.esChartDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, null, null, groups, ctrlF);
                         } else {
                             $scope.esChartDataSource = { data: $scope.esLocalData };
                         }
@@ -1538,11 +1562,13 @@
 
                         $scope.esPqDef.runPQ = $scope.executePQ;
 
+
+
                         $scope.$on('$destroy', function() {
-                            angular.element($window).unbind('resize', doResizeElement);
+                            angular.element($window).unbind('resize', onResize);
                         });
 
-                        angular.element($window).bind('resize', doResizeElement);
+                        angular.element($window).bind('resize', onResize);
                     }
                 };
             }
@@ -1601,6 +1627,11 @@
                                 },
                                 onInitialized: function(e) {
                                     $scope.sankeyCtrl = e.component;
+                                },
+                                onIncidentOccurred: function(e) {
+                                    if (e.target && e.target.type == "error") {
+                                        esMessaging.publish("ES_SANKEY_INCIDENT_OCCURED", e);
+                                    }
                                 },
                                 tooltip: {
                                     enabled: true
@@ -1797,14 +1828,28 @@
                     scope: {
                         esPanelOpen: "=?",
                         esPqDef: "=?",
+                        esChartCtrl: "=?",
                         esChartOptions: "=?",
                     },
                     templateUrl: function(element, attrs) {
                         return "src/partials/esTreeMapPQ.html";
                     },
                     link: function($scope, iElement, iAttrs) {
+                         var ctrlF = function() {
+                            return $scope.esTreeMapCtrl;
+                        };
 
-                        $scope.esChartDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, false, null, function() { return $scope.esTreeMapCtrl; });
+                        var onResize = function() {
+                            var ctrl = ctrlF();
+                            
+                            if (ctrl) {
+                                ctrl.resize();
+                            } else {
+                                kendo.resize(angular.element(".eschart-wrapper"));
+                            }
+                        };
+
+                        $scope.esChartDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, false, null, ctrlF);
 
                         var tOptions = $scope.esChartOptions || {};
 
@@ -1821,10 +1866,10 @@
                         $scope.esPqDef.runPQ = $scope.executePQ;
 
                         $scope.$on('$destroy', function() {
-                            angular.element($window).unbind('resize', doResizeElement);
+                            angular.element($window).unbind('resize', onResize);
                         });
 
-                        angular.element($window).bind('resize', doResizeElement);
+                        angular.element($window).bind('resize', onResize);
 
                         tOptions.dataSource = $scope.esChartDataSource;
                     }
@@ -2136,6 +2181,20 @@
                             map.extent(extent);
                         };
 
+                        var ctrlF = function() {
+                            return $scope.esMapCtrl;
+                        };
+
+                        var onResize = function() {
+                            var ctrl = ctrlF();
+                            
+                            if (ctrl) {
+                                ctrl.resize();
+                            } else {
+                                kendo.resize(angular.element(".eschart-wrapper"));
+                            }
+                        };
+
                         $scope.bubbleMessage = "";
                         $scope.tlOptions = {
                             filter: "circle",
@@ -2151,7 +2210,7 @@
                             }
                         };
 
-                        $scope.esMapDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, true, onChange, function() { return $scope.esMapCtrl; });
+                        $scope.esMapDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, true, onChange, ctrlF);
                         $scope.esMapOptions = {};
                         var tOptions = $scope.esMapOptions;
 
@@ -2209,10 +2268,10 @@
                         $scope.esPqDef.runPQ = $scope.executePQ;
 
                         $scope.$on('$destroy', function() {
-                            angular.element($window).unbind('resize', doResizeElement);
+                            angular.element($window).unbind('resize', onResize);
                         });
 
-                        angular.element($window).bind('resize', doResizeElement);
+                        angular.element($window).bind('resize', onResize);
 
                     }
                 };
