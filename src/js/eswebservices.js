@@ -747,6 +747,7 @@ $scope.doLogin = function() {
                                     SubscriptionID: credentials.subscriptionId || esConfigSettings.subscriptionId,
                                     SubscriptionPassword: credentials.subscriptionPassword || esConfigSettings.subscriptionPassword,
                                     BridgeID: credentials.bridgeId || esConfigSettings.bridgeId,
+                                    ExtraPin: credentials.extraPin,
                                     Model: credentials,
                                     Claims: claims || esConfigSettings.claims
                                 };

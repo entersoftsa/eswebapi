@@ -99,6 +99,7 @@
             "USER_PASSWORD": "Парола",
             "COMPANY_ID": "Фирма",
             "BRANCH_ID": "Клон",
+            "EXTRA_PIN": "Extra Pin",
             "LANG_ID": "Език",
             "SERVERURL": "ES Web Api/App Server Host",
             "SHOW_HIDE_SUBSCRIPTION": "Детайли за абонамент",

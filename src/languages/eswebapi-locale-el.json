@@ -98,6 +98,7 @@
             "USER_PASSWORD": "Κλειδί",
             "COMPANY_ID": "Εταιρεία",
             "BRANCH_ID": "Υποκ/μα",
+            "EXTRA_PIN": "Extra Pin",
             "LANG_ID": "Γλώσσα",
             "SERVERURL": "ES Web Api/App Server Host",
             "SHOW_HIDE_SUBSCRIPTION": "Στοιχεία Συνδρομής",

@@ -99,6 +99,7 @@
             "USER_PASSWORD": "Parola utilizator",
             "COMPANY_ID": "ID companie",
             "BRANCH_ID": "ID sucursala",
+            "EXTRA_PIN": "Extra Pin",
             "LANG_ID": "Limba",
             "SERVERURL": "ES Web Api/App Server Host",
             "SHOW_HIDE_SUBSCRIPTION": "Detalii inregistrare",

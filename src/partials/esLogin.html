@@ -29,6 +29,10 @@
 			<label for="branch" class="sr-only">{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}</label>
 			<input type="text" name="branch" autocomplete="nope" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}" ng-model="esCredentials.BranchID" required>
 		</div>
+		<div class="form-group">
+			<label for="extraPin" class="sr-only">{{'ESUI.LOGIN_FORM.EXTRA_PIN' | translate}}</label>
+			<input type="tel" name="extraPin" autocomplete="nope" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.EXTRA_PIN' | translate}}" ng-model="esCredentials.extraPin">
+		</div>
 		<div class="form-group" ng-class="{'has-error': esLoginFrm.subscriptionId.$invalid}" ng-if="::esShowSubscription">
 			<label for="subscriptionId" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_ID' | translate}}</label>
 			<input type="text" name="subscriptionId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_ID' | translate}}" ng-model="esCredentials.subscriptionId">
