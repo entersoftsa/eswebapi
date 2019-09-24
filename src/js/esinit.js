@@ -6,7 +6,7 @@
 		return window._; //Underscore must already be loaded on the page 
 	});
 
-	var version = "2.8.0";
+	var version = "2.8.1";
 	var vParts = _.map(version.split("."), function (x) {
 		return parseInt(x);
 	});
@@ -745,7 +745,9 @@ function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 								};
 							}
 						}
-						this.UIOptions = x.UIOptions;
+						
+						this.UIOptions = angular.merge({}, x.UIOptions);
+
 						for (var prop in inObj) {
 							if (!this.hasOwnProperty(prop)) {
 								// property xxx i.e. param xxx does not exist at all. So we must add it during the merge
