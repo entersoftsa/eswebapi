@@ -4090,7 +4090,7 @@ var options = {Accept: 'text/plain'}
 // sample
 ```
                              */
-                            fetchEASWebAsset: function(assetUrlPath, options) {
+                            fetchEASWebAsset: function(assetUrlPath, options, doNotHandleError) {
                                 var cOptions = {
                                     base64: false,
                                 };
@@ -4127,7 +4127,7 @@ var options = {Accept: 'text/plain'}
                                 }
 
                                 var ht = $http(httpConfig);
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht, tt, doNotHandleError);
                             },
 
                             /**
