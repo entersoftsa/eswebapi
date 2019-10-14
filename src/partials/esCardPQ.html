@@ -15,7 +15,7 @@
 						<img class="card-img-top" ng-if="::(UIOptions.imageField && getImageUrl(row))" ng-src="{{::getImageUrl(row)}}" />
 						<div class="card-body">
 							<h5 class="card-title" ng-if="::UIOptions.titleField">{{::row[UIOptions.titleField]}}</h5>
-							<ul ng-if="::bodyFields().length" class="list-group list-group-flush">
+							<ul ng-if="bodyFields().length" class="list-group list-group-flush">
 								<li class="list-group-item" ng-repeat="col in ::bodyFields()">
 									<label>{{::col.title}}</label>
 									<p ng-bind-html="::getFieldText(row, col.field)"></p>
