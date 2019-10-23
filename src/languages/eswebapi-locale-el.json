@@ -59,6 +59,15 @@
             "More": "Περισσότερα",
             "Less": "Λιγότερα"
         },
+        "PROJECT": {
+            "COL_TITLE": "Περιγραφή",
+            "START_TITLE": "Έναρξη",
+            "END_TITLE": "Λήξη",
+            "RES_TITLE": "Ανάθεση Πόρων",
+            "ID_TITLE": "Κωδικός",
+            "TTYPE_TITLE": "Τύπος",
+            "WP_TITLE": "Ενότητα Εργασίας"
+        },
         "PQ":
         {
             "DOWNLOAD": "Λήψη",

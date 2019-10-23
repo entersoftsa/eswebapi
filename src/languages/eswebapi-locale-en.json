@@ -61,6 +61,15 @@
             "More": "More",
             "Less": "Less"
         },
+        "PROJECT": {
+            "COL_TITLE": "Title",
+            "START_TITLE": "Start Date",
+            "END_TITLE": "End Date",
+            "RES_TITLE": "Assigned Resources",
+            "ID_TITLE": "ID",
+            "TTYPE_TITLE": "Type",
+            "WP_TITLE": "Work Package"
+        },
         "PQ":
         {
             "DOWNLOAD": "Download",
