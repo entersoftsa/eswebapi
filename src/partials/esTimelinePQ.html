@@ -1,0 +1,20 @@
+<div class="row">
+	<div class="col-12">
+		<es-params-panel ng-cloak
+										 es-panel-open="esPqDef.esPanelOpen"
+										 ng-if="!esLocalData"
+										 es-group-id="esPqDef"
+										 es-local-data-source="'true'"
+										 es-force-title="esPqDef.Title"
+										 es-show-run="'true'"
+										 es-run-click="::executePQ()">
+		</es-params-panel>
+	</div>
+
+	<div class="col-12">
+		<div class="eschart-wrapper">
+			<div kendo-timeline="esTimelineCtrl" k-ng-delay="esTimelineOptions" options="esTimelineOptions">
+			</div>
+		</div>
+	</div>
+</div>

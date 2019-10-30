@@ -1606,8 +1606,6 @@
 
                         angular.element($window).bind('resize', onResize);
 
-                        $scope.dataTasks = [];
-
                         $scope.executePQ = function() {
                             $scope.esPqDef.esPanelOpen.status = false;
                             if ($scope.tasksDS) {
@@ -1650,10 +1648,8 @@
                                                 pq = [];
                                             }
 
-                                            $scope.resourcesDS.read();
-                                            $scope.assignmentsDS.read();
-
                                             options.success(pq);
+                                            $scope.resourcesDS.read();
                                         })
                                         .catch(function(err) {
                                             $log.error("Error in DataSource ", err);
@@ -1728,6 +1724,7 @@
                                                 pq = [];
                                             }
                                             options.success(pq);
+                                            $scope.assignmentsDS.read();
                                         })
                                         .catch(function(err) {
                                             $log.error("Error in DataSource ", err);
@@ -1851,6 +1848,160 @@
                             showWorkHours: false,
                             showWorkDays: false
                         };
+
+                        if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
+                            $scope.executePQ();
+                        }
+                    }
+                };
+            }
+        ])
+
+        .directive('esTimelinePq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals', '$translate',
+            function($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals, $translate) {
+                return {
+                    restrict: 'AE',
+                    scope: {
+                        esPqDef: "=",
+                        esTimelineCtrl: "=?"
+                    },
+                    templateUrl: function(element, attrs) {
+                        return "src/partials/esTimelinePQ.html";
+                    },
+                    link: function($scope, iElement, iAttrs) {
+                        var ctrlF = function() {
+                            return $scope.esGanttCtrl;
+                        };
+
+                        var onResize = function() {
+                            var ctrl = ctrlF();
+
+                            if (ctrl) {
+                                ctrl.resize();
+                            } else {
+                                kendo.resize(angular.element(".eschart-wrapper"));
+                            }
+                        };
+
+                        $scope.$on('$destroy', function() {
+                            angular.element($window).unbind('resize', onResize);
+                        });
+
+                        angular.element($window).bind('resize', onResize);
+
+                        $scope.entityDS = {};
+
+                        $scope.executePQ = function() {
+                            $scope.esPqDef.esPanelOpen.status = false;
+                            if ($scope.esTimelineCtrl) {
+                                $scope.esTimelineCtrl.setDataSource(runDS());
+                            }
+                        }
+
+                        $scope.esPqDef.runPQ = $scope.executePQ;
+
+                        var runDS = function() {
+
+                            var timelineDS = new kendo.data.DataSource({
+                                transport: {
+                                    error: function(e) {
+                                        console.log(e);
+                                    },
+
+                                    read: function(options) {
+
+                                        var pqOptions = {};
+                                        pqOptions.WithCount = false;
+                                        pqOptions.Page = -1;
+                                        pqOptions.PageSize = -1;
+
+                                        var executeParams = $scope.esPqDef.Params;
+                                        if (executeParams instanceof esGlobals.ESParamValues) {
+                                            if (!executeParams.isValidState()) {
+                                                var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
+                                                options.error(err);
+                                                throw err;
+
+                                            }
+                                            executeParams = executeParams.getExecuteVals();
+                                        }
+
+
+                                        esWebApiService.fetchPublicQuery($scope.esPqDef.GroupID, $scope.esPqDef.FilterID, pqOptions, executeParams)
+                                            .then(function(pq) {
+                                                if (pq && pq.data && pq.data.Rows && pq.data.Rows.length) {
+                                                    pq = pq.data.Rows;
+                                                } else {
+                                                    pq = [];
+                                                }
+
+                                                var sG = $scope.esPqDef.GroupID;
+                                                var fG = "TimelineBusinessAccountInfo";
+                                                if ($scope.esPqDef.UIOptions && angular.isString($scope.esPqDef.UIOptions.TimelineEntityInfoPQ)) {
+                                                    var parts = $scope.esPqDef.UIOptions.TimelineEntityInfoPQ.split(",");
+                                                    parts[0] = parts[0].trim();
+                                                    if (parts[0]) {
+                                                        sG = parts[0];
+                                                    }
+                                                    if (parts.length > 1) {
+                                                        parts[1] = parts[1].trim();
+                                                        if (parts[1]) {
+                                                            fG = parts[1];
+                                                        }
+                                                    }
+                                                }
+
+                                                esWebApiService.fetchPublicQuery(sG, fG, pqOptions, executeParams)
+                                                    .then(function(master) {
+                                                        if (master && master.data && master.data.Rows && master.data.Rows.length) {
+                                                            $scope.entityDS = master.data.Rows[0];
+                                                        } else {
+                                                            $scope.entityDS = {};
+                                                        }
+
+                                                    })
+                                                    .catch(function(err) {
+                                                        $scope.entityDS = {};
+                                                    });
+
+                                                options.success(pq);
+                                            })
+                                            .catch(function(err) {
+                                                $log.error("Error in DataSource ", err);
+                                                $scope.entityDS = {};
+                                                options.error(err);
+                                            });
+                                    },
+
+                                },
+                                schema: {
+                                    model: {
+                                        fields: {
+                                            date: { from: "Date", type: "date" },
+                                            title: { from: "Title", type: "string" },
+                                            titleAmount: {from: "TitleAmount", type: "number"},
+                                            priority: { from: "Priority", type: "number"},
+                                            longitute: { from: "Longitude", type: "number"},
+                                            latitude: { from: "Latitude", type: "number"},
+                                            qualifier: { from: "Qualifier", type: "number"},
+                                            subtitle: { from: "SubTitle", type: "string" },
+                                            description: { from: "Body", type: "string" },
+                                            formid: { from: "FormID", type: "string" },
+                                            fGID: { from: "fGID", type: "string" }
+                                        }
+                                    }
+                                }
+                            });
+
+                            return timelineDS;
+                        };
+
+                        $scope.esTimelineOptions = {
+                            orientation: "vertical",
+                            alternatingMode: true,
+                            collapsibleEvents: true
+                        };
+
 
                         if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
                             $scope.executePQ();
