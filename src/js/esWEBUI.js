@@ -369,6 +369,15 @@
 		return modalInstance.result;
 	}
 
+	function esResolveBlobUrl(val, esWebApiService) {
+		if (!val || !angular.isString(val)) return null;
+
+		if ((val.toLowerCase().trim().indexOf('http://') === 0) || (val.toLowerCase().trim().indexOf('https://') === 0)) {
+			return val;
+		} else {
+			return esWebApiService.downloadES00BlobURLByGID(val, 0);
+		}
+	}
 
 	/**
 	 * @ngdoc filter
@@ -1870,7 +1879,7 @@
 					},
 					link: function ($scope, iElement, iAttrs) {
 						var ctrlF = function () {
-							return $scope.esGanttCtrl;
+							return $scope.esTimelineCtrl;
 						};
 
 						var onResize = function () {
@@ -1879,7 +1888,7 @@
 							if (ctrl) {
 								ctrl.resize();
 							} else {
-								kendo.resize(angular.element(".eschart-wrapper"));
+								kendo.resize(angular.element(".estimeline-wrapper"));
 							}
 						};
 
@@ -1900,9 +1909,13 @@
 
 						$scope.esPqDef.runPQ = $scope.executePQ;
 
+						$scope.getImageUrl = function (val) {
+							return esResolveBlobUrl(val, esWebApiService);
+						};
+
 						var runDS = function () {
 
-							var timelineDS = new kendo.data.DataSource({
+							return new kendo.data.DataSource({
 								transport: {
 									error: function (e) {
 										console.log(e);
@@ -1934,6 +1947,10 @@
 												} else {
 													pq = [];
 												}
+
+												$scope.timelineDS = pq;
+												$scope.oldestEvent = pq.reduce(function (prev, current) { return (prev.Date < current.Date) ? prev : current; });
+												$scope.newestEvent = pq.reduce(function (prev, current) { return (prev.Date > current.Date) ? prev : current; });
 
 												var sG = $scope.esPqDef.GroupID;
 												var fG = "TimelineBusinessAccountInfo";
@@ -1971,8 +1988,7 @@
 												$scope.entityDS = {};
 												options.error(err);
 											});
-									},
-
+									}
 								},
 								schema: {
 									model: {
@@ -1992,8 +2008,6 @@
 									}
 								}
 							});
-
-							return timelineDS;
 						};
 
 						$scope.esTimelineOptions = {
@@ -2261,24 +2275,17 @@
 								}
 							}
 							return 'none';
-						}
+						};
 
 						$scope.isNoImage = function (item) {
 							return !$scope.getImageUrl(item);
-						}
+						};
 
 						$scope.getImageUrl = function (item) {
-							if (!$scope.UIOptions.imageField) return null;
+							if (!$scope.UIOptions.imageField)
+								return null;
 
-							var val = item[$scope.UIOptions.imageField];
-							if (!val || !angular.isString(val)) return null;
-
-							val = val.toLowerCase().trim();
-							if ((val.indexOf('http://') == 0) || (val.indexOf('https://') == 0)) {
-								return val;
-							} else {
-								return esWebApiService.downloadES00BlobURLByGID(item[$scope.UIOptions.imageField], 0);
-							}
+							return esResolveBlobUrl(item[$scope.UIOptions.imageField], esWebApiService);
 						};
 
 						$scope.getFieldText = function (item, fieldName) {

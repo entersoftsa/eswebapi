@@ -13,6 +13,21 @@
 
 	<div class="col-12">
 		<div class="estimeline-wrapper">
+			<div class="top-header" ng-if="entityDS && entityDS.Name">
+				<div class="row">
+					<div class="col icon">
+						<img ng-if="entityDS.fBlobGID" src="{{ getImageUrl(entityDS.fBlobGID) }}" />
+					</div>
+					<div class="col">
+						<h1>{{ entityDS.Name }}</h1>
+						<h2>
+							{{ entityDS.FullName }}
+							<span class="date" ng-if="oldestEvent && newestEvent">({{ oldestEvent.date | date:'d MMM yyyy' }} - {{ newestEvent.date | date:'d MMM yyyy' }})</span>
+							<span class="badge">{{ timelineDS.length }} items</span>
+						</h2>
+					</div>
+				</div>
+			</div>
 			<div kendo-timeline="esTimelineCtrl" k-ng-delay="esTimelineOptions" options="esTimelineOptions">
 			</div>
 		</div>
