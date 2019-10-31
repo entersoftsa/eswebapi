@@ -2018,8 +2018,8 @@
 							eventTemplate:
 								'<div class="timeline-event-container timeline-event-container-#= data.priority #">' +
 								'	<div class="k-card-header">' +
-								'		<h5 class="k-card-title">#= data.title # <span class="title-amount">#= data.titleAmount ? kendo.toString(data.titleAmount, "c") : "" #</span></h5>' +
-								'		<h6 class="k-card-subtitle">#= data.subtitle #</h6>' +
+								'		<h5 class="k-card-title">#= data.title # <span class="amount">#= data.titleAmount ? kendo.toString(data.titleAmount, "c") : "" #</span></h5>' +
+								'		<h6 class="k-card-subtitle"><i class="mdi mdi-#= ["help-circle", "calendar", "phone-incoming", "phone-outgoing", "email", "alert", "image", "briefcase", "phone-in-talk", "home", "office-building", "email-mark-as-unread", "horseshoe", "clipboard-arrow-right", "cart-arrow-up", "cart-arrow-down", "clipboard-arrow-left", "receipt", "credit-card-outline"][data.qualifier <= 17 ? data.qualifier + 1 : 0] #"></i> #= data.subtitle #</h6>' +
 								'	</div>' +
 								'	<div class="k-card-body">' +
 								'		# if (data.description) { #' +
@@ -2047,12 +2047,6 @@
 								'	# } #' +
 								'</div>',
 							expand: function (e) {
-								/**********************************/
-								console.log("data: ", e);
-								e.dataItem.latitude = 32.7758;
-								e.dataItem.longitude = -96.7966;
-								/**********************************/
-
 								var $eventContainer = $('.k-timeline-event[data-uid="' + e.dataItem.uid + '"] .timeline-event-container');
 								var $mapContainer = $eventContainer.find('.map-container');
 
