@@ -2016,7 +2016,7 @@
 							collapsibleEvents: true,
 							dateFormat: 'MMM d, yyyy HH:mm',
 							eventTemplate:
-								'<div class="timeline-event-container timeline-event-container-#= data.priority #">' +
+								'<div class="timeline-event-container timeline-event-container-#= data.priority # #= !(data.description || (data.images && data.images.length > 0) || (data.latitude && data.longitude)) ? "timeline-event-container-nobody" : "" #">' +
 								'	<div class="k-card-header">' +
 								'		<h5 class="k-card-title">#= data.title # <span class="amount">#= data.titleAmount ? kendo.toString(data.titleAmount, "c") : "" #</span></h5>' +
 								'		<h6 class="k-card-subtitle"><i class="mdi mdi-#= ["help-circle", "calendar", "phone-incoming", "phone-outgoing", "email", "alert", "image", "briefcase", "phone-in-talk", "home", "office-building", "email-mark-as-unread", "horseshoe", "clipboard-arrow-right", "cart-arrow-up", "cart-arrow-down", "clipboard-arrow-left", "receipt", "credit-card-outline"][data.qualifier <= 17 ? data.qualifier + 1 : 0] #"></i> #= data.subtitle #</h6>' +
