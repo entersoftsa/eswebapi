@@ -2014,12 +2014,15 @@
 							orientation: 'vertical',
 							alternatingMode: true,
 							collapsibleEvents: true,
-							dateFormat: 'MMM d, yyyy HH:mm',
+							dateFormat: 'dddd, d MMM yyyy',
 							eventTemplate:
-								'<div class="timeline-event-container timeline-event-container-#= data.priority # #= !(data.description || (data.images && data.images.length > 0) || (data.latitude && data.longitude)) ? "timeline-event-container-nobody" : "" #">' +
+								'<div class="timeline-event-container" data-priority="#= data.priority #">' +
 								'	<div class="k-card-header">' +
-								'		<h5 class="k-card-title">#= data.title # <span class="amount">#= data.titleAmount ? kendo.toString(data.titleAmount, "c") : "" #</span></h5>' +
-								'		<h6 class="k-card-subtitle"><i class="mdi mdi-#= ["help-circle", "calendar", "phone-incoming", "phone-outgoing", "email", "alert", "image", "briefcase", "phone-in-talk", "home", "office-building", "email-mark-as-unread", "horseshoe", "clipboard-arrow-right", "cart-arrow-up", "cart-arrow-down", "clipboard-arrow-left", "receipt", "credit-card-outline"][data.qualifier <= 17 ? data.qualifier + 1 : 0] #"></i> #= data.subtitle #</h6>' +
+								'		<h5 class="k-card-title" title="#= data.title #">' +
+								'			<span class="k-event-title"><i class="mdi mdi-#= [" help-circle", "calendar", "phone-incoming", "phone-outgoing", "email", "alert", "image", "briefcase", "phone-in-talk", "home", "office-building", "email-mark-as-unread", "horseshoe", "clipboard-arrow-right", "cart-arrow-up", "cart-arrow-down", "clipboard-arrow-left", "receipt", "credit-card-outline"][data.qualifier <= 17 ? data.qualifier + 1 : 0] #"></i> #= data.title #</span>' +
+								'			<span class="k-event-collapse k-button k-button-icon k-flat"><span class="k-icon k-i-arrow-chevron-right"></span></span>' +
+								'		</h5>' +
+								'		<h6 class="k-card-subtitle">#= data.subtitle #</h6>' +
 								'	</div>' +
 								'	<div class="k-card-body">' +
 								'		# if (data.description) { #' +
@@ -2046,6 +2049,16 @@
 								'	</div>' +
 								'	# } #' +
 								'</div>',
+							dataBound: function (e) {
+								$('.timeline-event-container').each(function () {
+									var $this = $(this);
+
+									$this.closest('.k-timeline-event').addClass('k-timeline-event-priority-' + ($this.data('priority') || 0));
+
+									if ($.trim($this.find('.k-card-body').html()) === '')
+										$this.addClass('timeline-event-container-nobody');
+								});
+							},
 							expand: function (e) {
 								var $eventContainer = $('.k-timeline-event[data-uid="' + e.dataItem.uid + '"] .timeline-event-container');
 								var $mapContainer = $eventContainer.find('.map-container');
@@ -2075,288 +2088,288 @@
 			}
 		])
 
-        .directive('esCalendarPq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals', '$translate',
-            function ($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals, $translate) {
-                return {
-                    restrict: 'AE',
-                    scope: {
-                        esPqDef: "=",
-                        esCalendarCtrl: "=?"
-                    },
-                    templateUrl: function (element, attrs) {
-                        return "src/partials/esGanttPQ.html";
-                    },
-                    link: function ($scope, iElement, iAttrs) {
-                        var ctrlF = function () {
-                            return $scope.esGanttCtrl;
-                        };
+		.directive('esCalendarPq', ['$log', '$window', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals', '$translate',
+			function ($log, $window, esWebApiService, esMessaging, esWebUIHelper, esGlobals, $translate) {
+				return {
+					restrict: 'AE',
+					scope: {
+						esPqDef: "=",
+						esCalendarCtrl: "=?"
+					},
+					templateUrl: function (element, attrs) {
+						return "src/partials/esGanttPQ.html";
+					},
+					link: function ($scope, iElement, iAttrs) {
+						var ctrlF = function () {
+							return $scope.esGanttCtrl;
+						};
 
-                        var onResize = function () {
-                            var ctrl = ctrlF();
+						var onResize = function () {
+							var ctrl = ctrlF();
 
-                            if (ctrl) {
-                                ctrl.resize();
-                            } else {
-                                kendo.resize(angular.element(".escalendar-wrapper"));
-                            }
-                        };
+							if (ctrl) {
+								ctrl.resize();
+							} else {
+								kendo.resize(angular.element(".escalendar-wrapper"));
+							}
+						};
 
-                        $scope.$on('$destroy', function () {
-                            angular.element($window).unbind('resize', onResize);
-                        });
+						$scope.$on('$destroy', function () {
+							angular.element($window).unbind('resize', onResize);
+						});
 
-                        angular.element($window).bind('resize', onResize);
+						angular.element($window).bind('resize', onResize);
 
-                        $scope.executePQ = function () {
-                            $scope.esPqDef.esPanelOpen.status = false;
-                            if ($scope.tasksDS) {
-                                $scope.tasksDS.read();
-                            }
-                        }
+						$scope.executePQ = function () {
+							$scope.esPqDef.esPanelOpen.status = false;
+							if ($scope.tasksDS) {
+								$scope.tasksDS.read();
+							}
+						}
 
-                        $scope.esPqDef.runPQ = $scope.executePQ;
+						$scope.esPqDef.runPQ = $scope.executePQ;
 
-                        $scope.tasksDS = new kendo.data.GanttDataSource({
-                            transport: {
-                                error: function (e) {
-                                    console.log(e);
-                                },
+						$scope.tasksDS = new kendo.data.GanttDataSource({
+							transport: {
+								error: function (e) {
+									console.log(e);
+								},
 
-                                read: function (options) {
+								read: function (options) {
 
-                                    var pqOptions = {};
-                                    pqOptions.WithCount = false;
-                                    pqOptions.Page = -1;
-                                    pqOptions.PageSize = -1;
+									var pqOptions = {};
+									pqOptions.WithCount = false;
+									pqOptions.Page = -1;
+									pqOptions.PageSize = -1;
 
-                                    var executeParams = $scope.esPqDef.Params;
-                                    if (executeParams instanceof esGlobals.ESParamValues) {
-                                        if (!executeParams.isValidState()) {
-                                            var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
-                                            options.error(err);
-                                            throw err;
+									var executeParams = $scope.esPqDef.Params;
+									if (executeParams instanceof esGlobals.ESParamValues) {
+										if (!executeParams.isValidState()) {
+											var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
+											options.error(err);
+											throw err;
 
-                                        }
-                                        executeParams = executeParams.getExecuteVals();
-                                    }
+										}
+										executeParams = executeParams.getExecuteVals();
+									}
 
 
-                                    esWebApiService.fetchPublicQuery($scope.esPqDef.GroupID, $scope.esPqDef.FilterID, pqOptions, executeParams)
-                                        .then(function (pq) {
-                                            if (pq && pq.data && pq.data.Rows && pq.data.Rows.length) {
-                                                pq = pq.data.Rows;
-                                            } else {
-                                                pq = [];
-                                            }
+									esWebApiService.fetchPublicQuery($scope.esPqDef.GroupID, $scope.esPqDef.FilterID, pqOptions, executeParams)
+										.then(function (pq) {
+											if (pq && pq.data && pq.data.Rows && pq.data.Rows.length) {
+												pq = pq.data.Rows;
+											} else {
+												pq = [];
+											}
 
-                                            options.success(pq);
-                                            $scope.resourcesDS.read();
-                                        })
-                                        .catch(function (err) {
-                                            $log.error("Error in DataSource ", err);
-                                            options.error(err);
-                                        });
-                                },
+											options.success(pq);
+											$scope.resourcesDS.read();
+										})
+										.catch(function (err) {
+											$log.error("Error in DataSource ", err);
+											options.error(err);
+										});
+								},
 
-                            },
-                            schema: {
-                                model: {
-                                    id: "id",
-                                    fields: {
-                                        id: { from: "Code", type: "string" },
-                                        parentId: { from: "ParentCode", type: "string" },
-                                        TaskTypeDescription: { from: "TaskTypeDescription", type: "string" },
-                                        WPCode: { from: "WPCode", type: "string" },
-                                        start: { from: "StartDate", type: "date" },
-                                        end: { from: "FinishDate", type: "date" },
-                                        title: { from: "Title", type: "string" },
-                                        percentComplete: { from: "Completeness", type: "number" },
-                                        summary: { from: "IsSummary", type: "boolean" },
-                                        expanded: { from: "Expanded", type: "boolean" }
-                                    }
-                                }
-                            }
-                        });
+							},
+							schema: {
+								model: {
+									id: "id",
+									fields: {
+										id: { from: "Code", type: "string" },
+										parentId: { from: "ParentCode", type: "string" },
+										TaskTypeDescription: { from: "TaskTypeDescription", type: "string" },
+										WPCode: { from: "WPCode", type: "string" },
+										start: { from: "StartDate", type: "date" },
+										end: { from: "FinishDate", type: "date" },
+										title: { from: "Title", type: "string" },
+										percentComplete: { from: "Completeness", type: "number" },
+										summary: { from: "IsSummary", type: "boolean" },
+										expanded: { from: "Expanded", type: "boolean" }
+									}
+								}
+							}
+						});
 
-                        $scope.resourcesDS = new kendo.data.DataSource({
-                            transport: {
-                                error: function (e) {
-                                    console.log(e);
-                                },
+						$scope.resourcesDS = new kendo.data.DataSource({
+							transport: {
+								error: function (e) {
+									console.log(e);
+								},
 
-                                read: function (options) {
+								read: function (options) {
 
-                                    var pqOptions = {};
-                                    pqOptions.WithCount = false;
-                                    pqOptions.Page = -1;
-                                    pqOptions.PageSize = -1;
+									var pqOptions = {};
+									pqOptions.WithCount = false;
+									pqOptions.Page = -1;
+									pqOptions.PageSize = -1;
 
-                                    var executeParams = $scope.esPqDef.Params;
-                                    if (executeParams instanceof esGlobals.ESParamValues) {
-                                        if (!executeParams.isValidState()) {
-                                            var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
-                                            options.error(err);
-                                            throw err;
+									var executeParams = $scope.esPqDef.Params;
+									if (executeParams instanceof esGlobals.ESParamValues) {
+										if (!executeParams.isValidState()) {
+											var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
+											options.error(err);
+											throw err;
 
-                                        }
-                                        executeParams = executeParams.getExecuteVals();
-                                    }
+										}
+										executeParams = executeParams.getExecuteVals();
+									}
 
-                                    var sG = $scope.esPqDef.GroupID;
-                                    var fG = "ProjectTaskResources";
-                                    if ($scope.esPqDef.UIOptions && angular.isString($scope.esPqDef.UIOptions.ProjectTaskResourcesPQ)) {
-                                        var parts = $scope.esPqDef.UIOptions.ProjectTaskAssignmentsPQ.split(",");
-                                        parts[0] = parts[0].trim();
-                                        if (parts[0]) {
-                                            sG = parts[0];
-                                        }
-                                        if (parts.length > 1) {
-                                            parts[1] = parts[1].trim();
-                                            if (parts[1]) {
-                                                fG = parts[1];
-                                            }
-                                        }
-                                    }
-                                    esWebApiService.fetchPublicQuery(sG, fG, pqOptions, executeParams)
-                                        .then(function (pq) {
-                                            if (pq && pq.data && pq.data.Rows && pq.data.Rows.length) {
-                                                pq = pq.data.Rows;
-                                            } else {
-                                                pq = [];
-                                            }
-                                            options.success(pq);
-                                            $scope.assignmentsDS.read();
-                                        })
-                                        .catch(function (err) {
-                                            $log.error("Error in DataSource ", err);
-                                            options.error(err);
-                                        });
-                                }
-                            },
-                            schema: {
-                                model: {
-                                    id: "id",
-                                    fields: {
-                                        id: { from: "Code", type: "string" },
-                                        Name: { from: "Name", type: "string" },
-                                        Color: { from: "Color", type: "string" },
-                                    }
-                                }
-                            }
-                        });
+									var sG = $scope.esPqDef.GroupID;
+									var fG = "ProjectTaskResources";
+									if ($scope.esPqDef.UIOptions && angular.isString($scope.esPqDef.UIOptions.ProjectTaskResourcesPQ)) {
+										var parts = $scope.esPqDef.UIOptions.ProjectTaskAssignmentsPQ.split(",");
+										parts[0] = parts[0].trim();
+										if (parts[0]) {
+											sG = parts[0];
+										}
+										if (parts.length > 1) {
+											parts[1] = parts[1].trim();
+											if (parts[1]) {
+												fG = parts[1];
+											}
+										}
+									}
+									esWebApiService.fetchPublicQuery(sG, fG, pqOptions, executeParams)
+										.then(function (pq) {
+											if (pq && pq.data && pq.data.Rows && pq.data.Rows.length) {
+												pq = pq.data.Rows;
+											} else {
+												pq = [];
+											}
+											options.success(pq);
+											$scope.assignmentsDS.read();
+										})
+										.catch(function (err) {
+											$log.error("Error in DataSource ", err);
+											options.error(err);
+										});
+								}
+							},
+							schema: {
+								model: {
+									id: "id",
+									fields: {
+										id: { from: "Code", type: "string" },
+										Name: { from: "Name", type: "string" },
+										Color: { from: "Color", type: "string" },
+									}
+								}
+							}
+						});
 
-                        $scope.assignmentsDS = new kendo.data.DataSource({
-                            transport: {
-                                error: function (e) {
-                                    console.log(e);
-                                },
+						$scope.assignmentsDS = new kendo.data.DataSource({
+							transport: {
+								error: function (e) {
+									console.log(e);
+								},
 
-                                read: function (options) {
+								read: function (options) {
 
-                                    var pqOptions = {};
-                                    pqOptions.WithCount = false;
-                                    pqOptions.Page = -1;
-                                    pqOptions.PageSize = -1;
+									var pqOptions = {};
+									pqOptions.WithCount = false;
+									pqOptions.Page = -1;
+									pqOptions.PageSize = -1;
 
-                                    var executeParams = $scope.esPqDef.Params;
-                                    if (executeParams instanceof esGlobals.ESParamValues) {
-                                        if (!executeParams.isValidState()) {
-                                            var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
-                                            options.error(err);
-                                            throw err;
+									var executeParams = $scope.esPqDef.Params;
+									if (executeParams instanceof esGlobals.ESParamValues) {
+										if (!executeParams.isValidState()) {
+											var err = new Error($translate.instant("ESUI.PQ.PARAMS_MISSING"));
+											options.error(err);
+											throw err;
 
-                                        }
-                                        executeParams = executeParams.getExecuteVals();
-                                    }
+										}
+										executeParams = executeParams.getExecuteVals();
+									}
 
-                                    var sG = $scope.esPqDef.GroupID;
-                                    var fG = "ProjectTaskAssignments";
-                                    if ($scope.esPqDef.UIOptions && angular.isString($scope.esPqDef.UIOptions.ProjectTaskAssignmentsPQ)) {
-                                        var parts = $scope.esPqDef.UIOptions.ProjectTaskAssignmentsPQ.split(",");
-                                        parts[0] = parts[0].trim();
-                                        if (parts[0]) {
-                                            sG = parts[0];
-                                        }
-                                        if (parts.length > 1) {
-                                            parts[1] = parts[1].trim();
-                                            if (parts[1]) {
-                                                fG = parts[1];
-                                            }
-                                        }
-                                    }
+									var sG = $scope.esPqDef.GroupID;
+									var fG = "ProjectTaskAssignments";
+									if ($scope.esPqDef.UIOptions && angular.isString($scope.esPqDef.UIOptions.ProjectTaskAssignmentsPQ)) {
+										var parts = $scope.esPqDef.UIOptions.ProjectTaskAssignmentsPQ.split(",");
+										parts[0] = parts[0].trim();
+										if (parts[0]) {
+											sG = parts[0];
+										}
+										if (parts.length > 1) {
+											parts[1] = parts[1].trim();
+											if (parts[1]) {
+												fG = parts[1];
+											}
+										}
+									}
 
-                                    esWebApiService.fetchPublicQuery(sG, fG, pqOptions, executeParams)
-                                        .then(function (pq) {
-                                            if (pq && pq.data && pq.data.Rows && pq.data.Rows.length) {
-                                                pq = pq.data.Rows;
-                                            } else {
-                                                pq = [];
-                                            }
-                                            options.success(pq);
-                                        })
-                                        .catch(function (err) {
-                                            $log.error("Error in DataSource ", err);
-                                            options.error(err);
-                                        });
-                                }
-                            },
-                            schema: {
-                                model: {
-                                    id: "ID",
-                                    fields: {
-                                        ID: { from: "GID", type: "string" },
-                                        ResourceID: { from: "Code", type: "string" },
-                                        Units: { from: "ResourceUsage", type: "number" },
-                                        TaskID: { from: "TaskCode", type: "string" }
-                                    }
-                                }
-                            }
-                        });
+									esWebApiService.fetchPublicQuery(sG, fG, pqOptions, executeParams)
+										.then(function (pq) {
+											if (pq && pq.data && pq.data.Rows && pq.data.Rows.length) {
+												pq = pq.data.Rows;
+											} else {
+												pq = [];
+											}
+											options.success(pq);
+										})
+										.catch(function (err) {
+											$log.error("Error in DataSource ", err);
+											options.error(err);
+										});
+								}
+							},
+							schema: {
+								model: {
+									id: "ID",
+									fields: {
+										ID: { from: "GID", type: "string" },
+										ResourceID: { from: "Code", type: "string" },
+										Units: { from: "ResourceUsage", type: "number" },
+										TaskID: { from: "TaskCode", type: "string" }
+									}
+								}
+							}
+						});
 
-                        $scope.esGanttOptions = {
-                            dataSource: $scope.tasksDS,
-                            assignments: {
-                                dataTaskIdField: "TaskID",
-                                dataResourceIdField: "ResourceID",
-                                dataValueField: "Units",
-                                dataSource: $scope.assignmentsDS
-                            },
-                            resources: {
-                                field: "Resources",
-                                dataColorField: "Color",
-                                dataTextField: "Name",
-                                dataSource: $scope.resourcesDS
-                            },
-                            views: [
-                                "day",
-                                { type: "week", selected: true },
-                                "month"
-                            ],
-                            columns: [
-                                { field: "title", title: $translate.instant("ESUI.PROJECT.COL_TITLE"), width: 200 },
-                                { field: "start", title: $translate.instant("ESUI.PROJECT.START_TITLE"), format: "{0:dd/MM/yyyy}", width: 100 },
-                                { field: "end", title: $translate.instant("ESUI.PROJECT.END_TITLE"), format: "{0:dd/MM/yyyy}", width: 100 },
-                                { field: "Resources", title: $translate.instant("ESUI.PROJECT.RES_TITLE"), width: 400 },
-                                { field: "id", title: $translate.instant("ESUI.PROJECT.ID_TITLE"), width: 100 },
-                                { field: "TaskTypeDescription", title: $translate.instant("ESUI.PROJECT.TTYPE_TITLE"), width: 200 },
-                                { field: "WPCode", title: $translate.instant("ESUI.PROJECT.WP_TITLE"), width: 100, defaultValue: '' },
-                            ],
-                            height: 800,
-                            autoBind: false,
-                            resizable: true,
-                            columnResizeHandleWidth: 6,
-                            navigatable: true,
-                            showWorkHours: false,
-                            showWorkDays: false
-                        };
+						$scope.esGanttOptions = {
+							dataSource: $scope.tasksDS,
+							assignments: {
+								dataTaskIdField: "TaskID",
+								dataResourceIdField: "ResourceID",
+								dataValueField: "Units",
+								dataSource: $scope.assignmentsDS
+							},
+							resources: {
+								field: "Resources",
+								dataColorField: "Color",
+								dataTextField: "Name",
+								dataSource: $scope.resourcesDS
+							},
+							views: [
+								"day",
+								{ type: "week", selected: true },
+								"month"
+							],
+							columns: [
+								{ field: "title", title: $translate.instant("ESUI.PROJECT.COL_TITLE"), width: 200 },
+								{ field: "start", title: $translate.instant("ESUI.PROJECT.START_TITLE"), format: "{0:dd/MM/yyyy}", width: 100 },
+								{ field: "end", title: $translate.instant("ESUI.PROJECT.END_TITLE"), format: "{0:dd/MM/yyyy}", width: 100 },
+								{ field: "Resources", title: $translate.instant("ESUI.PROJECT.RES_TITLE"), width: 400 },
+								{ field: "id", title: $translate.instant("ESUI.PROJECT.ID_TITLE"), width: 100 },
+								{ field: "TaskTypeDescription", title: $translate.instant("ESUI.PROJECT.TTYPE_TITLE"), width: 200 },
+								{ field: "WPCode", title: $translate.instant("ESUI.PROJECT.WP_TITLE"), width: 100, defaultValue: '' },
+							],
+							height: 800,
+							autoBind: false,
+							resizable: true,
+							columnResizeHandleWidth: 6,
+							navigatable: true,
+							showWorkHours: false,
+							showWorkDays: false
+						};
 
-                        if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
-                            $scope.executePQ();
-                        }
-                    }
-                };
-            }
-        ])
+						if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
+							$scope.executePQ();
+						}
+					}
+				};
+			}
+		])
 
 		.directive('esSanKeyPq', ['$log', '$window', '$uibModal', '$timeout', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
 			function ($log, $window, $uibModal, $timeout, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
