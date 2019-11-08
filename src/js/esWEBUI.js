@@ -2019,7 +2019,7 @@
 								'<div class="timeline-event-container" data-priority="#= data.priority #">' +
 								'	<div class="k-card-header">' +
 								'		<h5 class="k-card-title" title="#= data.title #">' +
-								'			<span class="k-event-title"><i class="mdi mdi-#= ["help-circle", "calendar-check", "email", "emoticon-sad-outline", "telescope", "file-document-box-check-outline", "handshake", "truck", "file-document-box-minus-outline", "cash-multiple"][data.qualifier <= 8 ? data.qualifier + 1 : 0] #"></i> #= data.title #</span>' +
+								'			<span class="k-event-title"><i class="mdi mdi-#= ["help-circle", "calendar-check", "email", "emoticon-sad-outline", "telescope", "file-document-box-check-outline", "receipt", "truck", "file-document-box-minus-outline", "cash-multiple"][data.qualifier <= 8 ? data.qualifier + 1 : 0] #"></i> #= data.title #</span>' +
 								'			<span class="k-event-collapse k-button k-button-icon k-flat"><span class="k-icon k-i-arrow-chevron-right"></span></span>' +
 								'		</h5>' +
 								'		<h6 class="k-card-subtitle"><span>#= data.subtitle #</span><span class="amount">#= data.titleAmount ? kendo.toString(data.titleAmount, "c") : data.date && (data.date.getHours() + data.date.getMinutes() > 0) ? kendo.toString(data.date, "HH:mm") : "" #</span></h6>' +
