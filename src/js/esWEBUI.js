@@ -1837,8 +1837,17 @@
 							},
 							views: [
 								"day",
-								{ type: "week", selected: true },
-								"month"
+								{
+									type: "week",
+									dayHeaderTemplate: kendo.template("#=kendo.toString(start, 'ddd d/M')#"),
+									weekHeaderTemplate: "#=kendo.toString(start, 'dddd d/M')# - #=kendo.toString(kendo.date.addDays(end, -1), 'dddd d/M')#",
+									selected: true
+								},
+								{
+									type: "month",
+									weekHeaderTemplate: "#=kendo.toString(start, 'ddd d/M')# - #=kendo.toString(kendo.date.addDays(end, -1), 'ddd d/M')#",
+									monthHeaderTemplate: "#=kendo.toString(start, 'MMMM yyyy')#"
+								}
 							],
 							columns: [
 								{ field: "title", title: $translate.instant("ESUI.PROJECT.COL_TITLE"), width: 200 },
