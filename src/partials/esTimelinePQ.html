@@ -28,36 +28,6 @@
 					</div>
 				</div>
 			</div>
-			<!--
-			<div class="row">
-				<div class="col">
-					<div class="top-header" ng-if="entityDS && entityDS.Name">
-						<div class="row">
-							<div class="col icon">
-								<img ng-if="entityDS.fBlobGID" src="{{ getImageUrl(entityDS.fBlobGID) }}" />
-							</div>
-							<div class="col">
-								<h1>{{ entityDS.Name }}</h1>
-								<h2>
-									{{ entityDS.FullName }}
-									<span class="date" ng-if="oldestEvent && newestEvent">({{ oldestEvent.date | date:'d MMM yyyy' }} - {{ newestEvent.date | date:'d MMM yyyy' }})</span>
-									<span class="badge">{{ timelineDS.length }} items</span>
-								</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col">
-					<div class="qualifier-filter" ng-if="qualifiers">
-						<div class="btn-group btn-group-toggle" data-toggle="buttons">
-							<label class="btn btn-outline-primary" ng-class="{active: qualifier.enabled}" ng-repeat="qualifier in qualifiers" ng-click="filterData()">
-								<input type="checkbox" autocomplete="off" ng-model="qualifier.enabled" ng-true-value="true" ng-false-value="false"><i class="mdi mdi-{{ qualifier.icon }}"></i>
-							</label>
-						</div>
-					</div>
-				</div>
-			</div>
-			-->
 			<div kendo-timeline="esTimelineCtrl" k-ng-delay="esTimelineOptions" options="esTimelineOptions">
 			</div>
 		</div>

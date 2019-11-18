@@ -1922,36 +1922,6 @@
 							return esResolveBlobUrl(val, esWebApiService);
 						};
 
-						// Used to filter the timeline data source when the toolbar qualifier buttons have changed
-						$scope.filterData = function () {
-							$timeout(function () {
-								var filters = $scope.qualifiers
-									.filter(function (item) { return item.enabled; })
-									.map(function (item) {
-										return {
-											field: "Qualifier",
-											operator: "eq",
-											value: item.qualifier
-										};
-									});
-
-								console.log(filters);
-
-								$scope.esTimelineCtrl.dataSource.filter({
-									logic: "or",
-									filters: $scope.qualifiers
-										.filter(function (item) { return item.enabled; })
-										.map(function (item) {
-											return {
-												field: "Qualifier",
-												operator: "eq",
-												value: item.qualifier
-											};
-										})
-								});
-							});
-						};
-
 						var runDS = function () {
 
 							return new kendo.data.DataSource({
@@ -1991,18 +1961,6 @@
 
 												$scope.oldestEvent = pq.length > 0 ? pq.reduce(function (prev, current) { return (prev.Date < current.Date) ? prev : current; }) : null;
 												$scope.newestEvent = pq.length > 0 ? pq.reduce(function (prev, current) { return (prev.Date > current.Date) ? prev : current; }) : null;
-
-												$scope.qualifiers = pq.map(function (item) {
-													return item.Qualifier;
-												}).filter(function (value, index, self) {
-													return self.indexOf(value) === index;
-												}).map(function (qualifier) {
-													return {
-														qualifier: qualifier,
-														icon: ["help-circle", "calendar-check", "email", "emoticon-sad-outline", "telescope", "file-document-box-check-outline", "receipt", "truck", "file-document-box-minus-outline", "cash-multiple"][qualifier <= 8 ? qualifier + 1 : 0],
-														enabled: true
-													};
-												});
 
 												var sG = $scope.esPqDef.GroupID;
 												var fG = "TimelineBusinessAccountInfo";
