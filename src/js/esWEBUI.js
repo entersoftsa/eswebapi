@@ -1922,6 +1922,10 @@
 							return esResolveBlobUrl(val, esWebApiService);
 						};
 
+						$scope.toHeaderDateString = function (date) {
+							return kendo.toString(date, 'd MMM yyyy');
+						};
+
 						var runDS = function () {
 
 							return new kendo.data.DataSource({
