@@ -23,13 +23,12 @@
 						<h5>Since With Us: {{ ::(entityDS.SinceWithUs | date:'d MMM yyyy') }}</h5>
 						<h2>
 							{{ ::(entityDS.FullName || '')}}
-							<span class="date" ng-if="oldestEvent && newestEvent">({{ ::(oldestEvent.date | date:'d MMM yyyy') }} - {{ ::(newestEvent.date | date:'d MMM yyyy') }})</span>
+							<span class="date" ng-if="oldestEvent && newestEvent">({{ toHeaderDateString(oldestEvent.date) }} - {{ toHeaderDateString(newestEvent.date) }})</span>
 							<span class="badge">{{ ::timelineDS.length }} items</span>
 						</h2>
 					</div>
 				</div>
 			</div>
-
 			<div kendo-timeline="esTimelineCtrl" k-ng-delay="esTimelineOptions" options="esTimelineOptions">
 			</div>
 		</div>
