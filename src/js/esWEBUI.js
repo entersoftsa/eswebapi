@@ -1924,7 +1924,10 @@
 						};
 
 						$scope.toHeaderDateString = function (date) {
-							return kendo.toString(date, 'd MMM yyyy');
+							if (date instanceof Date)
+								return kendo.toString(date, 'd MMM yyyy');
+							else
+								return kendo.toString(new Date(date), 'd MMM yyyy');
 						};
 
 						var runDS = function () {
@@ -2019,6 +2022,7 @@
 											qualifier: { from: "Qualifier", type: "number" },
 											subtitle: { from: "SubTitle", type: "string" },
 											description: { from: "Body", type: "string" },
+											additionalInfo: { from: "AdditionalInfo", type: "string" },
 											formid: { from: "FormID", type: "string" },
 											fGID: { from: "fGID", type: "string" }
 										}
@@ -2044,7 +2048,10 @@
 								'	<div class="k-card-body">' +
 								'		# if (data.description) { #' +
 								'		<div class="k-card-description">' +
-								'			<p>#=data.description#</p>' +
+								'			<p>#= data.description #</p>' +
+								'			# if (data.additionalInfo) { #' +
+								'			<p class="text-muted">#= data.additionalInfo #</p>' +
+								'			# } #' +
 								'		</div>' +
 								'		# } #' +
 								'		# if (data.images && data.images.length > 0) { #' +
