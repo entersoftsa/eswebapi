@@ -5,7 +5,7 @@
 	</div>
 	<div class="col-12">
 		<div class="es-module es-module-card">
-			<kendo-pager ng-if="cardDataSource" auto-bind="false" page-size="::esPqDef.PQOptions.PageSize" page-sizes="[20, 50, 100]" refresh="true" data-source="cardDataSource">
+			<kendo-pager ng-if="cardDataSource && cardDataSource.data().length > 1" auto-bind="false" page-size="::esPqDef.PQOptions.PageSize" page-sizes="[20, 50, 100]" refresh="true" data-source="cardDataSource">
 			</kendo-pager>
 
 			<div class="row">

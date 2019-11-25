@@ -1822,6 +1822,7 @@
 						});
 
 						$scope.esGanttOptions = {
+							toolbar: [ { name: "pdf"}],
 							dataSource: $scope.tasksDS,
 							assignments: {
 								dataTaskIdField: "TaskID",
