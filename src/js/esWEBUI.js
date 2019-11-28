@@ -2044,13 +2044,15 @@
 								'			<span class="k-event-collapse k-button k-button-icon k-flat"><span class="k-icon k-i-arrow-chevron-right"></span></span>' +
 								'		</h5>' +
 								'		<h6 class="k-card-subtitle"><span>#= data.subtitle #</span><span class="amount">#= data.titleAmount ? kendo.toString(data.titleAmount, "c") : data.date && (data.date.getHours() + data.date.getMinutes() > 0) ? kendo.toString(data.date, "HH:mm") : "" #</span></h6>' +
+								'			# if (data.additionalInfo) { #' +
+								'			<h6 class="k-card-subtitle">#= data.additionalInfo #</h6>' +
+								'			# } #' +
 								'	</div>' +
 								'	<div class="k-card-body">' +
 								'		# if (data.description) { #' +
 								'		<div class="k-card-description">' +
+								'			# if (data.description) { #' +
 								'			<p>#= data.description #</p>' +
-								'			# if (data.additionalInfo) { #' +
-								'			<p class="text-muted">#= data.additionalInfo #</p>' +
 								'			# } #' +
 								'		</div>' +
 								'		# } #' +
