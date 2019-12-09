@@ -13,17 +13,17 @@
 
 	<div class="col-12">
 		<div class="estimeline-wrapper">
-			<div class="top-header" ng-if="::(entityDS && entityDS.Name)">
+			<div class="top-header" ng-if="(entityDS && entityDS.Name)">
 				<div class="row">
-					<div class="col icon" ng-if="::entityDS.fBlobGID">
-						<img src="{{ ::getImageUrl(entityDS.fBlobGID) }}" />
+					<div class="col icon" ng-if="entityDS.fBlobGID">
+						<img src="{{ getImageUrl(entityDS.fBlobGID) }}" />
 					</div>
 					<div class="col">
-						<h1>{{ ::(entityDS.Code + ' - ' + (entityDS.Name || ''))}} <span class="text-muted" ng-if="entityDS.SinceWithUs">(since {{ toHeaderDateString(entityDS.SinceWithUs) }})</span></h1>
+						<h1>{{ (entityDS.Code + ' - ' + (entityDS.Name || ''))}} <span class="text-muted" ng-if="entityDS.SinceWithUs">(since {{ toHeaderDateString(entityDS.SinceWithUs) }})</span></h1>
 						<h2>
-							{{ ::(entityDS.FullName || '')}}
+							{{ (entityDS.FullName || '')}}
 							<span class="date" ng-if="oldestEvent && newestEvent">({{ toHeaderDateString(oldestEvent.date) }} - {{ toHeaderDateString(newestEvent.date) }})</span>
-							<span class="badge">{{ ::timelineDS.length }} items</span>
+							<span class="badge">{{ timelineDS.length }} items</span>
 						</h2>
 					</div>
 				</div>
