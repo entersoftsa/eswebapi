@@ -16,6 +16,7 @@
 	]);
 
 	esApp.run(['$anchorScroll', function ($anchorScroll) {
+		$window.ga('create', 'UA-50505865-23', 'auto');
 		window.esGoTo = function (goinpage) {
 			if (!goinpage) {
 				return;
@@ -101,14 +102,15 @@
 	}
 
 
-	esApp.controller('esComponentCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', '$translate', '$q', 'esCache',
-			function ($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $translate, $q, esCache) {
+	esApp.controller('esComponentCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', '$translate', '$q', 'esCache', '$location', 
+			function ($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $translate, $q, esCache, $location) {
 
 				var del = angular.element(document.querySelector('#esWait'));
 				kendo.ui.progress(del, true);
 
 				$scope.esCredentials = {};
 				$scope.isReady = false;
+				$window.ga('send', 'pageview', $location.path());
 
 				if ($window.esWebApiSettings) {
 					$scope.esCredentials.subscriptionId = $window.esWebApiSettings.subscriptionId || "";
