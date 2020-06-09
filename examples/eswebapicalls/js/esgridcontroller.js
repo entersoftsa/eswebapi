@@ -144,7 +144,7 @@ smeControllers.controller('loginCtrl', ['$location', '$rootScope', '$scope', '$l
         };
 
         var claims = {
-            ESApplicationID: "esanalyzer"
+            ESApplicationID: "espremanalyzer"
         };
 
         $scope.doLogin = function() {
@@ -1210,13 +1210,13 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
     function($location, $scope, $log, esWebApiService, esWebUIHelper, _, cache, esMessaging, esGlobals) {
         $scope.detailOptions = {};
         $scope.detailOptions.theGroupId = "ESWebManager";
-        $scope.detailOptions.theFilterId = "LevelTAVisitsCurrentMonth";
+        $scope.detailOptions.theFilterId = "BusEntitiesCustomers";
         $scope.detailOptions.theVals = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ISUDGID")]);
         $scope.detailOptions.theGridOptions = {};
 
         $scope.detail2Options = {};
         $scope.detail2Options.theGroupId = "ESWebManager";
-        $scope.detail2Options.theFilterId = "LevelTradeAccountOrders";
+        $scope.detail2Options.theFilterId = "BusEntitiesCustomers";
         $scope.detail2Options.theVals = new esGlobals.ESParamValues([new esGlobals.ESParamVal("ISUDGID")]);
         $scope.detail2Options.theGridOptions = {};
 
@@ -1237,7 +1237,7 @@ smeControllers.controller('masdetpqCtrl', ['$location', '$scope', '$log', 'esWeb
         $scope.masterOptions.theFilterId = "BusEntitiesCustomers";
         $scope.masterOptions.theVals = null;
         $scope.masterOptions.theGridOptions = {
-            xxxxmasterDetailRelations: mds
+            masterDetailRelations: mds
         };
 
 
