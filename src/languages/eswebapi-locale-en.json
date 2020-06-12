@@ -114,7 +114,8 @@
             "SERVERURL": "ES Web Api/App Server Host",
             "SHOW_HIDE_SUBSCRIPTION": "Subscription Details",
             "DOLOGIN": "Continue",
-            "REMEMBERME": "Remember my credentials"
+            "REMEMBERME": "Remember my credentials",
+            "EXTRA_PIN": "Extra PIN"
         }
 
     },

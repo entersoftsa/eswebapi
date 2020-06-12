@@ -16,7 +16,7 @@
 			<div class="top-header" ng-if="(entityDS && entityDS.Name)">
 				<div class="row">
 					<div class="col icon" ng-if="entityDS.fBlobGID">
-						<img src="{{ getImageUrl(entityDS.fBlobGID) }}" />
+						<img ng-src="{{ getImageUrl(entityDS.fBlobGID) }}" />
 					</div>
 					<div class="col">
 						<h1>{{ (entityDS.Code + ' - ' + (entityDS.Name || ''))}} <span class="text-muted" ng-if="entityDS.SinceWithUs">(since {{ toHeaderDateString(entityDS.SinceWithUs) }})</span></h1>

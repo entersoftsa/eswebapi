@@ -15,11 +15,11 @@
 		</div>
 		<div class="form-group" ng-class="{'has-error': esLoginFrm.userId.$invalid}">
 			<label for="userId" class="sr-only">{{'ESUI.LOGIN_FORM.USER_ID' | translate}}</label>
-			<input type="text" autocomplete="nope" name="userId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_ID' | translate}}" ng-model="esCredentials.UserID" required autofocus>
+			<input type="text" autocomplete="nope" name="userId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_ID' | translate}}" ng-model="esCredentials.UserID" required>
 		</div>
 		<div class="form-group" ng-class="{'has-error': esLoginFrm.password.$invalid}">
 			<label for="password" class="sr-only">{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}</label>
-			<input type="password" autofocus name="password" autocomplete="nope" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}" ng-model="esCredentials.Password" required>
+			<input type="password" name="password" autocomplete="nope" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.USER_PASSWORD' | translate}}" ng-model="esCredentials.Password" required>
 		</div>
 		<div class="form-group" ng-if="::esShowBridge" ng-class="{'has-error': esLoginFrm.bridgeId.$invalid}">
 			<label for="bridgeId" class="sr-only">{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}</label>
@@ -39,7 +39,7 @@
 		</div>
 		<div class="form-group" ng-class="{'has-error': esLoginFrm.subscriptionPwd.$invalid}" ng-if="::esShowSubscription">
 			<label for="subscriptionPwd" class="sr-only">{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}</label>
-			<input type="password" autocomplete="nope" name="subscriptionPwd" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}" ng-model="esCredentials.subscriptionPassword" autofocus>
+			<input type="password" autocomplete="nope" name="subscriptionPwd" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.SUBSCRIPTION_PASSWORD' | translate}}" ng-model="esCredentials.subscriptionPassword">
 		</div>
 		<div class="es-login-action form-group">
 			<button class="btn btn-lg btn-primary btn-block" ng-disabled="esLoginFrm.$invalid" ng-click="esOnSuccess()">{{'ESUI.LOGIN_FORM.DOLOGIN' | translate}}</button>

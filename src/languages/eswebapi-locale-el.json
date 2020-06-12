@@ -112,6 +112,7 @@
             "SERVERURL": "ES Web Api/App Server Host",
             "SHOW_HIDE_SUBSCRIPTION": "Στοιχεία Συνδρομής",
             "REMEMBERME": "Διατήρηση στοιχείων σύνδεσης",
+            "EXTRA_PIN": "Επιπλέον PIN",
             "DOLOGIN": "Συνέχεια"
         }
     },

@@ -104,7 +104,8 @@
             "SERVERURL": "ES Web Api/App Server Host",
             "SHOW_HIDE_SUBSCRIPTION": "Детайли за абонамент",
             "DOLOGIN": "Продължете",
-            "REMEMBERME": "Запомни данните за вход"
+            "REMEMBERME": "Запомни данните за вход",
+            "EXTRA_PIN": "Extra PIN"
         }
 
     },

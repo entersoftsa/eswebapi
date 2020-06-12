@@ -312,6 +312,12 @@ module.exports = function (grunt) {
 							src: ['dist/**', 'dist/languages/'],
 							dest: '../esrfaloreal/lib/eswebapi/'
 						},
+						{
+							cwd: "dist/languages/",
+							expand: true,
+							src: ['*.*'],
+							dest: '../esoutlooktaskfinderr/languages/'
+						},
 				],
 			},
 

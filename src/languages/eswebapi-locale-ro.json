@@ -104,7 +104,8 @@
             "SERVERURL": "ES Web Api/App Server Host",
             "SHOW_HIDE_SUBSCRIPTION": "Detalii inregistrare",
             "DOLOGIN": "Continuati",
-            "REMEMBERME": "Tine minte credentialele"
+            "REMEMBERME": "Tine minte credentialele",
+            "EXTRA_PIN": "Extra PIN"
         }
 
     },
