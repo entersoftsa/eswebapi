@@ -2031,7 +2031,7 @@
 							});
 						};
 
-						$scope.esTimelineOptions = {
+						var opts = {
 							orientation: 'vertical',
 							alternatingMode: true,
 							collapsibleEvents: true,
@@ -2107,8 +2107,10 @@
 						};
 
 						if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
-							$scope.executePQ();
+							opts.dataSource = runDS();
 						}
+
+						$scope.esTimelineOptions = opts;
 					}
 				};
 			}
