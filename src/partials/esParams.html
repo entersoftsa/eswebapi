@@ -9,7 +9,7 @@
 			</uib-accordion-heading>
 			<form novalidate class="form" name="esParamsPanelForm">
 				<div class="row">
-					<div class="form-group col-12 col-md-6 col-lg-3" ng-class="{'has-error is-invalid': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.simpleDefinitions() | orderBy:'aa'">
+					<div class="form-group col-12 col-md-6 col-lg-3" ng-class="{'has-error is-invalid': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in esParamsDef.simpleDefinitions() | orderBy:'aa'">
 						<es-param class="es-param" es-type="::param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
 					</div>
 
@@ -17,7 +17,7 @@
 						<button type="button" class="btn btn-default" tabindex="0" ng-click="esToggleMore()"><i class="mdi mdi-plus"></i></button>
 					</div>
 
-					<div ng-if="esMore" class="form-group col-12 col-md-6 col-lg-3" ng-class="{'has-error is-invalid': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in ::esParamsDef.advancedDefinitions() | orderBy:'aa'">
+					<div ng-if="esMore" class="form-group col-12 col-md-6 col-lg-3" ng-class="{'has-error is-invalid': esParamsPanelForm.{{::param.id}}.$invalid}" ng-repeat="param in esParamsDef.advancedDefinitions() | orderBy:'aa'">
 						<es-param class="es-param" es-type="::param | esParamTypeMapper" es-param-val="esParamsValues" es-param-def="param"></es-param>
 					</div>
 

@@ -1,4 +1,18 @@
 <div ng-controller="esComboPQCtrl">
+	<div id="globalCtx" class="es-section global" ng-if="esPqDef.GlobalParamsPanel">
+		<div class="actions">
+			<a class="btn btn-transparent" ng-click="::globalExecutePQ()" title="{{'ESUI.FAV.RELOAD' | translate}}"><i class="mdi mdi-reload"></i></a>
+		</div>
+		<es-params-panel ng-cloak
+			 es-panel-open="esPqDef.GlobalParamsPanel.esPanelOpen"
+			 es-params-def="esPqDef.GlobalParamsPanel.Parameters"
+			 es-params-values="esPqDef.GlobalParamsPanel.Parameters.paramsValues"
+			 es-force-title="esPqDef.GlobalParamsPanel.Parameters.title"
+			 es-show-run="'true'"
+			 es-run-click="::globalExecutePQ()">
+		</es-params-panel>
+	</div>
+
 	<div ng-repeat="section in esPqDef" class="row">
 		<div ng-repeat="dbItem in section" ng-class="{'col-md-6' : section.length == 2, 'col-lg-3': section.length == 4, 'col-lg-4': section.length == 3, 'col-12': section.length == 1 || section.length > 4}">
 			<div id="anchor{{dbItem.CtxID}}" class="es-section">
