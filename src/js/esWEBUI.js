@@ -1037,10 +1037,27 @@
                     }
 
                     if ($scope.esPqDef.GlobalParamsPanel) {
+                        var copyDefs = [];
+                        if ($scope.esPqDef.GlobalParamsPanel.Parameters) {
+                            var lang = esGlobals.getLocale();
+
+                            _.forEach($scope.esPqDef.GlobalParamsPanel.Parameters, function(z) {
+                                var d = angular.merge({}, z);
+                                if (d.caption) 
+                                {
+                                    d.caption = esTranslate(d.caption, lang);
+                                }
+                                if (d.tooltip) 
+                                {
+                                    d.tooltip = esTranslate(d.tooltip, lang);
+                                }
+
+                                copyDefs.push(d);
+                            });
+                        }
                         var promises = [];
                         var paramsdef = new esWebUIHelper.ESParamsDefinitions("", []);
-                        paramsdef = paramsdef.createDefinitions($scope.esPqDef.GlobalParamsPanel.Parameters.title, $scope.esPqDef.GlobalParamsPanel.Parameters.definitions);
-                        //paramsdef.paramsValues = esWebUIHelper.createESParams($scope.esPqDef.GlobalParamsPanel.Parameters.params);
+                        paramsdef = paramsdef.createDefinitions("", copyDefs);
 
                         _.forEach(fin, function(i) {
                             _.forEach(i, function(dbItem) {
@@ -1086,13 +1103,12 @@
                                     var pDef = dbItem.ParametersDefinition && dbItem.ParametersDefinition();
                                     if (pDef instanceof esWebUIHelper.ESParamsDefinitions) {
                                         _.forEach(pDef.definitions, function(p) {
-                                            var xyz = _.find($scope.esPqDef.GlobalParamsPanel.Parameters.definitions, { id: p.id });
+                                            var xyz = _.find($scope.esPqDef.GlobalParamsPanel.Parameters, { id: p.id });
                                             if (xyz) {
                                                 p.visible = false;
                                             }
                                         });
                                     }
-                                    console.log(dbItem.CtxID);
                                 });
 
                                 if ($scope.esPqDef.GlobalParamsPanel.AutoExecute) {
@@ -1121,6 +1137,8 @@
                 }
 
                 $scope.Favourites = null;
+                $scope.globalTitle = $translate.instant('ESUI.PARAMS_PANEL.TITLE');
+                
 
                 var getFavourites = function() {
                     var deferred = $q.defer();
@@ -3588,7 +3606,6 @@
                             if ($scope.esPqDef && $scope.esPqDef.isDonePromise) {
                                 $scope.esPqDef.isDonePromise.resolve($scope.esPqDef);
                             }
-                            console.log("WebPQ Postlink");
                         }
 
                         function processPQInfo(retData) {
@@ -3694,7 +3711,6 @@
                         var donePreparation = function() {
                             if ($scope.esGroupId instanceof esGlobals.ESPublicQueryDef && $scope.esGroupId.isDonePromise) {
                                 $scope.esGroupId.isDonePromise.resolve($scope.esGroupId);
-                                console.log("ChartPQ Postlink");
                             }
                         };
 

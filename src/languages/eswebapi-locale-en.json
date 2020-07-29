@@ -58,6 +58,7 @@
         },
         "PARAMS_PANEL":
         {
+            "TITLE": "Parameters",
             "More": "More",
             "Less": "Less"
         },
