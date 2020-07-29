@@ -7,12 +7,11 @@
 			 es-panel-open="esPqDef.GlobalParamsPanel.esPanelOpen"
 			 es-params-def="esPqDef.GlobalParamsPanel.Parameters"
 			 es-params-values="esPqDef.GlobalParamsPanel.Parameters.paramsValues"
-			 es-force-title="esPqDef.GlobalParamsPanel.Parameters.title"
+			 es-force-title="esPqDef.Title"
 			 es-show-run="'true'"
 			 es-run-click="::globalExecutePQ()">
 		</es-params-panel>
 	</div>
-
 	<div ng-repeat="section in esPqDef" class="row">
 		<div ng-repeat="dbItem in section" ng-class="{'col-md-6' : section.length == 2, 'col-lg-3': section.length == 4, 'col-lg-4': section.length == 3, 'col-12': section.length == 1 || section.length > 4}">
 			<div id="anchor{{dbItem.CtxID}}" class="es-section">
