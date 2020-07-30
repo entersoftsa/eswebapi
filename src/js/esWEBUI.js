@@ -1103,7 +1103,7 @@
                                     var pDef = dbItem.ParametersDefinition && dbItem.ParametersDefinition();
                                     if (pDef instanceof esWebUIHelper.ESParamsDefinitions) {
                                         _.forEach(pDef.definitions, function(p) {
-                                            var xyz = _.find($scope.esPqDef.GlobalParamsPanel.Parameters, { id: p.id });
+                                            var xyz = _.find($scope.esPqDef.GlobalParamsPanel.Parameters.definitions, { id: p.id });
                                             if (xyz) {
                                                 p.visible = false;
                                             }
@@ -1138,7 +1138,7 @@
 
                 $scope.Favourites = null;
                 $scope.globalTitle = $translate.instant('ESUI.PARAMS_PANEL.TITLE');
-                
+
 
                 var getFavourites = function() {
                     var deferred = $q.defer();
@@ -4763,6 +4763,9 @@
                 }
 
                 if (pParam.isInvestigateZoom()) {
+                    if (!pParam.invSelectedMasterField) {
+                        pParam.invSelectedMasterField = "Code";
+                    }
                     if (pParam.multiValued) {
                         return "esParamMultiZoom";
                     } else {
