@@ -1043,12 +1043,10 @@
 
                             _.forEach($scope.esPqDef.GlobalParamsPanel.Parameters, function(z) {
                                 var d = angular.merge({}, z);
-                                if (d.caption) 
-                                {
+                                if (d.caption) {
                                     d.caption = esTranslate(d.caption, lang);
                                 }
-                                if (d.tooltip) 
-                                {
+                                if (d.tooltip) {
                                     d.tooltip = esTranslate(d.tooltip, lang);
                                 }
 
@@ -1090,6 +1088,15 @@
                         $q.all(promises)
                             .then(function(ret) {
                                 var globalParamsDefs = $scope.esPqDef.GlobalParamsPanel.Parameters;
+
+                                if ($scope.esUrlParams) {
+                                    _.forEach(Object.keys($scope.esUrlParams), function(u) {
+                                        var gp = globalParamsDefs.paramsValues[u];
+                                        if (gp) {
+                                            gp.pValue($scope.esUrlParams[u]);
+                                        }
+                                    })
+                                }
 
                                 _.forEach(ret, function(dbItem) {
 
@@ -1355,6 +1362,7 @@
                     scope: {
                         esPqDef: "=",
                         esInApp: "=?",
+                        esUrlParams: "=?",
                         isFavouritesMode: "=?",
                         esLinkPrefix: "=?",
                         esSimpleMode: "=?",
