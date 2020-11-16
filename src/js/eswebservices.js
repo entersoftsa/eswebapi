@@ -5171,6 +5171,13 @@ var ret = {
                                 return surl;
                             },
 
+                            userLogoUrl: function(userid) {
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__USER_LOGO__, userid);
+                                surl += "?webapitoken=" + esGlobals.getWebApiToken();
+                                surl += "&base64=false";
+                                return surl;
+                            },
+
                             /**
                              * @ngdoc function
                              * @name es.Services.Web.esWebApi#downloadES00BlobURLByGID

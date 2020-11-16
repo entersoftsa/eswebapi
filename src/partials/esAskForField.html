@@ -15,6 +15,7 @@
 							 name="{{::$ctrl.inDef.id}}" 
 							 autocomplete="nope" 
 							 autofocus
+							 type="{{::$ctrl.inDef.isPassword ? 'password' : ''}}"
 							 ng-required="::$ctrl.inDef.required"
 							 k-mask="::$ctrl.inDef.formatString"
 							 ng-readonly="::$ctrl.inDef.inputType"

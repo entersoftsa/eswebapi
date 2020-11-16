@@ -379,6 +379,16 @@
         }
     }
 
+    function esResolveUserLogoUrl(val, esWebApiService) {
+        if (!val || !angular.isString(val)) return null;
+
+        if ((val.toLowerCase().trim().indexOf('http://') === 0) || (val.toLowerCase().trim().indexOf('https://') === 0)) {
+            return val;
+        } else {
+            return esWebApiService.userLogoUrl(val);
+        }
+    }
+
     /**
      * @ngdoc filter
      * @name es.Web.UI.filter:esTrustHtml
@@ -5995,6 +6005,10 @@
                 getTreeMapDS: getTreeMapDS,
 
                 getPivotDS: getPivotDS,
+
+                esResolveBlobUrl: esResolveBlobUrl,
+                
+                esResolveUserLogoUrl: esResolveUserLogoUrl,
 
                 createEsParamVal: createEsParamVal,
 
