@@ -575,7 +575,7 @@
             }
         ]);
 
-    function convertPQRowsToMapRows(rows, click) {
+    function convertPQRowsToMapRows(rows, valueField) {
         if (!rows) {
             return rows;
         }
@@ -589,7 +589,16 @@
         });
 
         return _.filter(ts, function(x) {
-            return x.Longitude && x.Latitude;
+            if (!(x.Longitude && x.Latitude)) {
+                return false;
+            }
+
+            if (!valueField) {
+                return true;
+            }
+
+            return x[valueField] > 0;
+            
         });
     };
 
@@ -3165,11 +3174,12 @@
                             }
                         };
 
-                        $scope.esMapDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, true, onChange, ctrlF);
+                        var esOptions = $scope.esOptions || {};
+                        var valField = (esOptions.valueField && angular.isString(esOptions.valueField)) ? esOptions.valueField : "Figure";
+
+                        $scope.esMapDataSource = esWebUIHelper.getTreeMapDS($scope.esPqDef, true, onChange, ctrlF, valField);
                         $scope.esMapOptions = {};
                         var tOptions = $scope.esMapOptions;
-
-                        var esOptions = $scope.esOptions || {};
 
                         var dataLayer = {
                             type: (esOptions.type && angular.isString(esOptions.type)) ? esOptions.type : "marker",
@@ -3177,7 +3187,7 @@
                             locationField: "latlng",
                             titleField: (esOptions.titleField && angular.isString(esOptions.titleField)) ? esOptions.titleField : "esLabel",
                             autoBind: angular.isUndefined(esOptions.autoBind) ? false : !!esOptions.autoBind,
-                            valueField: (esOptions.valueField && angular.isString(esOptions.valueField)) ? esOptions.valueField : "Figure",
+                            valueField: valField,
                         };
 
                         if (dataLayer.type == "bubble") {
@@ -4045,7 +4055,7 @@
                 return [ret];
             }
 
-            function getTreeMapDS(espqParams, forMap, onChange, ctrl) {
+            function getTreeMapDS(espqParams, forMap, onChange, ctrl, valueField) {
 
                 var transformFunction = forMap ? convertPQRowsToMapRows : processPQ;
                 var qParams = angular.isFunction(espqParams) ? espqParams() : espqParams;
@@ -4075,7 +4085,7 @@
                                     pq = pq.data;
 
                                     pq.Rows = pq.Rows || [];
-                                    var data = transformFunction(pq.Rows);
+                                    var data = transformFunction(pq.Rows, valueField);
                                     options.success(data);
                                 })
                                 .catch(function(err) {
