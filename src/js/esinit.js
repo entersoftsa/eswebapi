@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.15.1";
+    var version = "2.15.2";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -822,6 +822,8 @@ function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
                 }
 
                 var d = new Date();
+                var dFullYear = d.getFullYear();
+                var dMonth = d.getMonth();
 
                 var dObj = _.find(esDateRangeOptions, {
                     dValue: dateVal.dRange
@@ -931,7 +933,7 @@ function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
                         {
                             d.setDate(1);
 
-                            var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                            var f = new Date(dFullYear, dMonth + 1, 0);
                             return d.toLocaleDateString(loc) + " - " + f.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 14:
@@ -941,54 +943,57 @@ function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
                         }
                     case 15:
                         {
-                            var f = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                            var f = new Date(dFullYear, dMonth + 1, 0);
                             return "-> " + f.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 16:
                         {
-                            var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-                            var t = new Date(d.getFullYear(), d.getMonth(), 0);
+                            var f = new Date(dFullYear, dMonth - 1, 1);
+                            var t = new Date(dFullYear, dMonth, 0);
                             return f.toLocaleDateString(loc) + " - " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 17:
                         {
-                            var f = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+                            var f = new Date(dFullYear, dMonth - 1, 1);
                             return f.toLocaleDateString(loc) + " ->" + " (" + dObj.title + ")";
                         }
                     case 18:
                         {
-                            var f = new Date(d.getFullYear(), d.getMonth(), 0);
+                            var f = new Date(dFullYear, dMonth, 0);
                             return "-> " + f.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 19:
                         {
-                            var m = d.getMonth();
+                            var m = dMonth;
                             var r = m % 3;
 
-                            var f = new Date(d.getFullYear(), m - r, 1);
-                            var t = new Date(d.getFullYear(), m + (3 - r), 0);
+                            var f = new Date(dFullYear, m - r, 1);
+                            var t = new Date(dFullYear, m + (3 - r), 0);
                             return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 20:
                         {
-                            var m = d.getMonth();
+                            var m = dMonth;
                             var r = m % 3;
 
-                            var t = new Date(d.getFullYear(), m - r, 0);
-                            var f = new Date(d.getFullYear(), t.getMonth() - 2, 1);
+                            var t = new Date(dFullYear, m - r, 0);
+                            var f = new Date(dFullYear, t.getMonth() - 2, 1);
                             return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 21:
                         {
-                            var f = new Date(d.getFullYear(), (m >= 6) ? 6 : 0, 1);
-                            var t = new Date(d.getFullYear(), (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
+                            var m = dMonth;
+                            var f = new Date(dFullYear, (m >= 6) ? 6 : 0, 1);
+                            var t = new Date(dFullYear, (m >= 6) ? 11 : 5, (m >= 6) ? 31 : 30);
                             return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
                         }
                     case 22:
                         {
                             var f;
                             var t;
-                            var y = d.getFullYear();
+                            var y = dFullYear;
+                            var m = dMonth;
+                            
                             if (m >= 6) {
                                 f = new Date(y, 0, 1);
                                 t = new Date(y, 5, 30);
@@ -1002,7 +1007,7 @@ function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 
                     case 23:
                         {
-                            var y = d.getFullYear();
+                            var y = dFullYear;
                             var f = new Date(y, 0, 1);
                             var t = new Date(y, 11, 31);
                             return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
@@ -1010,7 +1015,7 @@ function($location, $scope, $log, esMessaging, esWebApiService, esGlobals) {
 
                     case 24:
                         {
-                            var y = d.getFullYear() - 1;
+                            var y = dFullYear - 1;
                             var f = new Date(y, 0, 1);
                             var t = new Date(y, 11, 31);
                             return f.toLocaleDateString(loc) + " -> " + t.toLocaleDateString(loc) + " (" + dObj.title + ")";
@@ -1784,30 +1789,6 @@ x.setParamValues({p1: 'Hello World'});
                 return mimes;
             }
 
-            function TrackTiming(category, variable, opt_label) {
-                this.category = category;
-                this.variable = variable;
-                this.label = opt_label ? opt_label : undefined;
-                this.startTime;
-                this.endTime;
-                return this;
-            }
-
-            TrackTiming.prototype.startTime = function() {
-                this.startTime = new Date().getTime();
-                return this;
-            }
-
-            TrackTiming.prototype.endTime = function() {
-                this.endTime = new Date().getTime();
-                return this;
-            }
-
-            TrackTiming.prototype.send = function() {
-                var timeSpent = this.endTime - this.startTime;
-                return this;
-            }
-
             var isMobile = (function() {
                 var checkMobile = false;
                 (function(a, b) {
@@ -2219,10 +2200,6 @@ defaultGridHeight: string or undefined
                     } catch (x) {
 
                     }
-                },
-
-                trackTimer: function(category, variable, opt_label) {
-                    return new TrackTiming(category, variable, opt_label);
                 },
 
                 sessionOpened: function(data, credentials) {

@@ -133,6 +133,7 @@ module.exports = function (grunt) {
 					"../eswebmanager/lib/eswebapi",
 					"../esrealtimeretail/lib/eswebapi",
 					"../eswmsmonitor/lib/eswebapi",
+					"../eswebpod/lib/eswebapi",
 					"../esstoreassistant/lib/eswebapi",
 					"../esrfaloreal/lib/eswebapi"
 			],
@@ -301,6 +302,11 @@ module.exports = function (grunt) {
 							expand: true,
 							src: ['dist/**', 'dist/languages/'],
 							dest: '../eswmsmonitor/lib/eswebapi/'
+						},
+						{
+							expand: true,
+							src: ['dist/**', 'dist/languages/'],
+							dest: '../eswebpod/lib/eswebapi/'
 						},
 						{
 							expand: true,

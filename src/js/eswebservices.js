@@ -335,16 +335,14 @@ eskbApp.config(['$logProvider',
                             }
 
                             var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_MIME_TYPES__);
-                            var tt = esGlobals.trackTimer("ES00DOCUMENT_MIME", "FETCH", "");
-                            tt.startTime();
-
+                            
                             var httpConfig = {
                                 method: 'GET',
                                 headers: prepareHeaders(),
                                 url: surl,
                             };
                             var ht = $http(httpConfig);
-                            processWEBAPIPromise(ht, tt)
+                            processWEBAPIPromise(ht)
                                 .then(function(ret) {
                                     esCache.setItem("ES_MIME_TYPES", ret.data);
                                     deferred.resolve(ret.data);
@@ -360,8 +358,8 @@ eskbApp.config(['$logProvider',
                             }
                             var surl = urlWEBAPI.concat(ESWEBAPI_URL.__SCROLLER_COMMAND__);
 
-                            var tt = esGlobals.trackTimer("SCR", "COMMAND", scrollerCommandParams.ScrollerID.concat("/", scrollerCommandParams.CommandID));
-                            tt.startTime();
+                            
+                            
 
                             var ht = $http({
                                 method: 'post',
@@ -412,10 +410,6 @@ eskbApp.config(['$logProvider',
                                 throw new Error("EntityID and CommandID properties must be defined");
                             }
                             var surl = urlWEBAPI + ESWEBAPI_URL.__FORM_COMMAND__;
-
-                            var tt = esGlobals.trackTimer("FORM", "COMMAND", formCommandParams.EntityID.concat("/", formCommandParams.CommandID));
-                            tt.startTime();
-
                             var ht = $http({
                                 method: 'post',
                                 headers: prepareHeaders(),
@@ -423,7 +417,7 @@ eskbApp.config(['$logProvider',
                                 data: formCommandParams
                             });
 
-                            return processWEBAPIPromise(ht, tt);
+                            return processWEBAPIPromise(ht);
                         }
 
                         function execScroller(apiUrl, groupID, filterID, params) {
@@ -431,9 +425,6 @@ eskbApp.config(['$logProvider',
                             filterID = filterID ? filterID.trim() : "";
 
                             var surl = urlWEBAPI.concat(apiUrl, groupID, "/", filterID);
-                            var tt = esGlobals.trackTimer("SCR", "FETCH", groupID.concat("/", filterID));
-                            tt.startTime();
-
                             var ht = $http({
                                 method: 'GET',
                                 headers: prepareHeaders(),
@@ -441,10 +432,10 @@ eskbApp.config(['$logProvider',
                                 params: params
                             });
 
-                            return processWEBAPIPromise(ht, tt);
+                            return processWEBAPIPromise(ht);
                         }
 
-                        function processWEBAPIPromise(promise, tt, doNotHandleError) {
+                        function processWEBAPIPromise(promise, doNotHandleError) {
                             if (!promise) {
                                 throw new Error("processWEBAPIToken can have parameter promise null or undefined");
                             }
@@ -466,19 +457,8 @@ eskbApp.config(['$logProvider',
                             };
 
                             promise = promise.then(webapitokenOK).catch(webapitokenErr);
-
-                            if (tt) {
-                                promise = promise.then(function(a) {
-                                    tt.endTime().send();
-                                    return a;
-                                });
-                            }
-
+                            
                             promise = promise.catch(function(xerr) {
-                                if (tt) {
-                                    tt.endTime().send();
-                                }
-
                                 var a = xerr.data || xerr;
                                 if (a) {
                                     $log.error(a);
@@ -740,8 +720,6 @@ $scope.doLogin = function() {
 ```
 */
                             openSession: function(credentials, claims) {
-                                var tt = esGlobals.trackTimer("AUTH", "LOGIN", "");
-                                tt.startTime();
 
                                 var dat = {
                                     SubscriptionID: credentials.subscriptionId || esConfigSettings.subscriptionId,
@@ -771,16 +749,13 @@ $scope.doLogin = function() {
                                     throw ex;
                                 });
 
-                                return processWEBAPIPromise(promise, tt);
+                                return processWEBAPIPromise(promise);
                             },
 
                             validateUser: function(ValidateUserInfo) {
                                 if (!ValidateUserInfo) {
                                     throw new Error("Parameter token cannot be empty");
                                 }
-
-                                var tt = esGlobals.trackTimer("AUTH", "VALIDATE_USER", "");
-                                tt.startTime();
 
                                 var promise = $http({
                                     method: 'post',
@@ -795,16 +770,13 @@ $scope.doLogin = function() {
                                     throw ex;
                                 });
 
-                                return processWEBAPIPromise(promise, tt);
+                                return processWEBAPIPromise(promise);
                             },
 
                             validateToken: function(token, credentials) {
                                 if (!token) {
                                     throw new Error("Parameter token cannot be empty");
                                 }
-
-                                var tt = esGlobals.trackTimer("AUTH", "TOKEN", token);
-                                tt.startTime();
 
                                 var promise = $http({
                                     method: 'post',
@@ -821,7 +793,7 @@ $scope.doLogin = function() {
                                     throw ex;
                                 });
 
-                                return processWEBAPIPromise(promise, tt);
+                                return processWEBAPIPromise(promise);
                             },
 
                             /**
@@ -878,8 +850,8 @@ $scope.eventLog = function() {
                                     throw new Error("esLog parameter cannot be empty");
                                 }
 
-                                var tt = esGlobals.trackTimer("AUTH", "EVENTLOG", esLog.ID || "NO-ID");
-                                tt.startTime();
+                                
+                                
 
                                 var promise = $http({
                                     method: 'post',
@@ -887,7 +859,7 @@ $scope.eventLog = function() {
                                     url: urlWEBAPI + ESWEBAPI_URL.__EVENTLOG__,
                                     data: JSON.stringify(esLog)
                                 });
-                                return processWEBAPIPromise(promise, tt);
+                                return processWEBAPIPromise(promise);
                             },
 
                             /**
@@ -1249,8 +1221,8 @@ $scope.execEbsService = function() {
                                 var sPart = serviceObj.netAssembly.concat("/", serviceObj.netNamespace, "/", serviceObj.netClass, "/", serviceObj.netMethod);
                                 var dData = paramObject;
 
-                                var tt = esGlobals.trackTimer("EBS_SERVICE", serviceObj.netMethod, sPart);
-                                tt.startTime();
+                                
+                                
 
                                 var httpOptions = {
                                     method: 'post',
@@ -1267,7 +1239,7 @@ $scope.execEbsService = function() {
                                 }
 
                                 var promise = $http(httpOptions);
-                                return processWEBAPIPromise(promise, tt);
+                                return processWEBAPIPromise(promise);
                             },
 
                             /**
@@ -1307,15 +1279,15 @@ $scope.fetchUserLogo = function() {
 ```
                             */
                             fetchUserLogo: function(userID) {
-                                var tt = esGlobals.trackTimer("USER", "LOGO", userID || "NO-ID");
-                                tt.startTime();
+                                
+                                
 
                                 var promise = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__USER_LOGO__, userID || ""),
                                 });
-                                return processWEBAPIPromise(promise, tt);
+                                return processWEBAPIPromise(promise);
                             },
 
                             /**
@@ -1347,10 +1319,10 @@ $scope.fetchUserLogo = function() {
                                     throw new Error("You have to include the ngFileUpload");
                                 }
 
-                                var tt = esGlobals.trackTimer("USER", "UPLOAD ENTITY BLOB", blobInfo.ObjectID + " - " + blobInfo.KeyID + " - " + file);
+                                
                                 blobInfo.TypeID = blobInfo.TypeID || 0;
 
-                                tt.startTime();
+                                
                                 file.upload = Upload.upload({
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__POST_ENTITY_BLOB__),
                                     method: 'POST',
@@ -1450,8 +1422,8 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
                                     throw new Error("You have to include the ngFileUpload");
                                 }
 
-                                var tt = esGlobals.trackTimer("USER", "UPLOAD LOGO", file);
-                                tt.startTime();
+                                
+                                
                                 file.upload = Upload.upload({
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__POST_USER_LOGO__),
                                     method: 'POST',
@@ -1491,17 +1463,17 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
                                 if (!bOK) {
                                     throw new Error("blobInfo argument is null or one or more of the required properties [GID or (ObjectID and KeyID)] are missing");
                                 }
-                                var tt = esGlobals.trackTimer("USER", "REMOVE ENTITY BLOB", blobInfo.ObjectID + " - " + blobInfo.KeyID || '');
+                                
                                 blobInfo.TypeID = blobInfo.TypeID || 0;
 
-                                tt.startTime();
+                                
                                 var promise = $http({
                                     method: 'POST',
                                     headers: prepareHeaders(),
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__REMOVE_ENTITY_BLOB__),
                                     data: blobInfo
                                 });
-                                return processWEBAPIPromise(promise, tt);
+                                return processWEBAPIPromise(promise);
                             },
 
 
@@ -1533,14 +1505,14 @@ $scope.removeCurrentUserLogo = function() {
 ```
                             */
                             removeCurrentUserLogo: function() {
-                                var tt = esGlobals.trackTimer("USER", "REMOVE USER LOGO", "");
-                                tt.startTime();
+                                
+                                
                                 var promise = $http({
                                     method: 'POST',
                                     headers: prepareHeaders(),
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__REMOVE_USER_LOGO__),
                                 });
-                                return processWEBAPIPromise(promise, tt);
+                                return processWEBAPIPromise(promise);
                             },
 
                             /**
@@ -1582,15 +1554,15 @@ $scope.removeCurrentUserLogo = function() {
                                     throw new Error("Invalid personGID");
                                 }
 
-                                var tt = esGlobals.trackTimer("PERSON", "LOGO", personGID);
-                                tt.startTime();
+                                
+                                
 
                                 var promise = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: urlWEBAPI.concat(ESWEBAPI_URL.__PERSON_LOGO__, personGID),
                                 });
-                                return processWEBAPIPromise(promise, tt);
+                                return processWEBAPIPromise(promise);
                             },
 
                             /**
@@ -1619,8 +1591,8 @@ $scope.doLogout = function ()
                                 esGlobals.sessionClosed();
                                 esCache.clear();
 
-                                var tt = esGlobals.trackTimer("AUTH", "LOGOUT", "");
-                                tt.startTime();
+                                
+                                
 
                                 var promise = $http({
                                     method: 'post',
@@ -1640,8 +1612,8 @@ $scope.doLogout = function ()
 
                                 var hds = prepareHeaders();
 
-                                var tt = esGlobals.trackTimer("AUTH", "CHGPWD", "");
-                                tt.startTime();
+                                
+                                
 
                                 var promise = $http({
                                     method: 'post',
@@ -1743,7 +1715,7 @@ $scope.fetchCompanyParam = function() {
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, null, true);
+                                return processWEBAPIPromise(ht, true);
                             },
 
                             /**
@@ -1822,7 +1794,7 @@ $scope.fetchCompanyParams = function() {
 };
 ```
 */
-                            fetchCompanyParams: function(esparams) {
+                            fetchCompanyParams: function(esparams, doNotHandleErrors) {
                                 var surl;
                                 if (!esparams) {
                                     // get all parameters
@@ -1840,7 +1812,15 @@ $scope.fetchCompanyParams = function() {
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht);
+                                return processWEBAPIPromise(ht, doNotHandleErrors);
+                            },
+
+                            execHttp: function(config) {
+                                if (!config) {
+                                    return null;
+                                }
+                                var ht = $http(config);
+                                return ht;
                             },
 
                             registerException: fregisterException,
@@ -2827,8 +2807,8 @@ $scope.fetchUserSites = function()
 
                             executeNewEntityAction: function(entityType, actionID, commandParams) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ENTITYACTION__, entityType, "/", actionID);
-                                var tt = esGlobals.trackTimer("ACTION", "NEW_ENTITY", entityType.concat("/", actionID));
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'post',
@@ -2836,13 +2816,13 @@ $scope.fetchUserSites = function()
                                     url: surl,
                                     data: commandParams
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             executeEntityActionByCode: function(entityType, entityCode, actionID, commandParams) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ENTITYACTION__, entityType, "/", entityCode, "/", actionID);
-                                var tt = esGlobals.trackTimer("ACTION", "ENTITY_CODE", entityType.concat("/", actionID));
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'post',
@@ -2851,13 +2831,13 @@ $scope.fetchUserSites = function()
                                     data: commandParams
                                 });
 
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             executeEntityActionByGID: function(entityType, entityGID, actionID, commandParams) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__ENTITYBYGIDACTION__, entityType, "/", entityGID, "/", actionID);
-                                var tt = esGlobals.trackTimer("ACTION", "ENTITY_GID", entityType.concat("/", actionID));
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'post',
@@ -2866,7 +2846,7 @@ $scope.fetchUserSites = function()
                                     data: commandParams
                                 });
 
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
 
                             },
 
@@ -3519,15 +3499,15 @@ function($scope, esWebApi, esWebUIHelper) {
                                     }
                                 }
 
-                                var tt = esGlobals.trackTimer("PQ", "INFO", group.concat("/", pqFilterID));
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                processWEBAPIPromise(ht, tt)
+                                processWEBAPIPromise(ht)
                                     .then(function(ret) {
                                         if (useCache) {
                                             esCache.setItem(surl, ret);
@@ -3615,8 +3595,8 @@ $scope.fetchStdZoom = function()
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__STANDARD_ZOOM__, zoomID);
-                                var tt = esGlobals.trackTimer("ZOOM", "FETCH", zoomID);
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'get',
@@ -3626,7 +3606,7 @@ $scope.fetchStdZoom = function()
                                     }),
                                     url: surl
                                 });
-                                var sp = processWEBAPIPromise(ht, tt);
+                                var sp = processWEBAPIPromise(ht);
 
                                 sp.then(function(ret) {
                                     if (useCache) {
@@ -3693,8 +3673,8 @@ $scope.multifetchStdZoom = function() {
 
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__MULTI_STANDARD_ZOOM__);
-                                var tt = esGlobals.trackTimer("ZOOM", "MULTI_FETCH", "");
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'POST',
@@ -3702,7 +3682,7 @@ $scope.multifetchStdZoom = function() {
                                     data: toFetchFromSrv,
                                     url: surl
                                 });
-                                var sp = processWEBAPIPromise(ht, tt);
+                                var sp = processWEBAPIPromise(ht);
 
                                 sp.then(function(ret) {
                                     var kx = 0;
@@ -3925,8 +3905,8 @@ $scope.dofetchPublicQuery = function() {
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY__, group, "/", pqFilterID);
-                                var tt = esGlobals.trackTimer("PQ", "FETCH", group.concat("/", pqFilterID));
-                                tt.startTime();
+                                
+                                
 
                                 /**
                                  * $http object configuration
@@ -3952,7 +3932,7 @@ $scope.dofetchPublicQuery = function() {
                                 }
 
                                 var ht = $http(httpConfig);
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             /**
@@ -4012,8 +3992,8 @@ esWebApi.MultiPublicQuery(pqParams)
                              **/
                             multiPublicQuery: function(pqDefs) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__MULTI_PULIC_QUERY__);
-                                var tt = esGlobals.trackTimer("MULTI-PQ", "FETCH", "");
-                                tt.startTime();
+                                
+                                
 
                                 /**
                                  * $http object configuration
@@ -4028,7 +4008,7 @@ esWebApi.MultiPublicQuery(pqParams)
                                 httpConfig.data = pqDefs;
 
                                 var ht = $http(httpConfig);
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             /** 
@@ -4106,8 +4086,8 @@ var options = {Accept: 'text/plain'}
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_WEB_EAS_ASSET__);
-                                var tt = esGlobals.trackTimer("EAS_ASSET", "FETCH", assetUrlPath);
-                                tt.startTime();
+                                
+                                
 
                                 var httpConfig = {
                                     method: 'GET',
@@ -4127,7 +4107,7 @@ var options = {Accept: 'text/plain'}
                                 }
 
                                 var ht = $http(httpConfig);
-                                return processWEBAPIPromise(ht, tt, doNotHandleError);
+                                return processWEBAPIPromise(ht, doNotHandleError);
                             },
 
                             /**
@@ -4484,15 +4464,15 @@ var x = {
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ENTITY__, entityclass, "/", entitygid);
-                                var tt = esGlobals.trackTimer("FETCH_ENTITY", entityclass, entitygid);
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             /**
@@ -4522,15 +4502,15 @@ $scope.fetchEntityByCode = function() {
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ENTITY_BY_CODE__, entityclass, "/", entityCode);
-                                var tt = esGlobals.trackTimer("FETCH_ENTITY", entityclass, entityCode);
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             /**
@@ -4989,15 +4969,15 @@ smeControllers.controller('surveyCtrl', ['$location', '$scope', '$log', 'esWebAp
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESPROPERTY_SET__, psCode);
-                                var tt = esGlobals.trackTimer("FETCH", "PROPERTY_SET", psCode);
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             /**
@@ -5102,15 +5082,15 @@ var ret = {
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ESSCALE__, scaleCode);
-                                var tt = esGlobals.trackTimer("FETCH", "FETCH_SCALE", scaleCode);
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                processWEBAPIPromise(ht, tt, true)
+                                processWEBAPIPromise(ht, true)
                                     .then(function(ret) {
                                         esCache.setItem("ESGOSCALE_" + scaleCode, ret.data);
                                         deferred.resolve(ret.data);
@@ -5137,8 +5117,8 @@ var ret = {
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FI_IMPORTDOCUMENT___);
-                                var tt = esGlobals.trackTimer("ESGENERAL", "FIMPORTDOCUMENT");
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'post',
@@ -5146,7 +5126,7 @@ var ret = {
                                     url: surl,
                                     data: xmldocstr
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
 
                             },
 
@@ -5204,14 +5184,14 @@ var ret = {
                                     return surl;
                                 }
 
-                                var tt = esGlobals.trackTimer("ES00BLOB", "JSON_OBJECT");
-                                tt.startTime();
+                                
+                                
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt, true);
+                                return processWEBAPIPromise(ht, true);
                             },
 
 
@@ -5236,14 +5216,14 @@ var ret = {
                                     return surl;
                                 }
 
-                                var tt = esGlobals.trackTimer("ES00BLOB", "JSON_OBJECT");
-                                tt.startTime();
+                                
+                                
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt, true);
+                                return processWEBAPIPromise(ht, true);
                             },
 
                             getBodyFromES00Blob: function(objectid, keyid, typeid) {
@@ -5257,14 +5237,14 @@ var ret = {
                                     surl += "&typeid=" + typeid;
                                 }
 
-                                var tt = esGlobals.trackTimer("ES00BLOB", "GET JSON_OBJECT");
-                                tt.startTime();
+                                
+                                
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             postBodyToES00Blob: function(blobInfo) {
@@ -5274,15 +5254,15 @@ var ret = {
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__POST_BODY_TO_ES00BLOB__);
 
-                                var tt = esGlobals.trackTimer("ES00BLOB", "POST JSON_OBJECT");
-                                tt.startTime();
+                                
+                                
                                 var ht = $http({
                                     method: 'post',
                                     headers: prepareHeaders(),
                                     url: surl,
                                     data: blobInfo
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
                             /** 
                              * @ngdoc function
@@ -5307,8 +5287,8 @@ var ret = {
                                     surl += "?extType=" + fExt;
                                 }
 
-                                var tt = esGlobals.trackTimer("ES00BLOB_BLOBDATA", "FETCH", es00BlobGID);
-                                tt.startTime();
+                                
+                                
 
                                 var httpConfig = {
                                     method: 'GET',
@@ -5320,7 +5300,7 @@ var ret = {
                                     responseType: 'arraybuffer',
                                 };
                                 var ht = $http(httpConfig);
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             /**
@@ -5356,8 +5336,8 @@ var ret = {
                              **/
                             fetchES00DocumentBlobDataByGID: function(es00documentGID) {
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BLOBDATA_BY_GID__, es00documentGID);
-                                var tt = esGlobals.trackTimer("ES00DOCUMENT_BLOBDATA", "FETCH", es00documentGID);
-                                tt.startTime();
+                                
+                                
 
                                 var httpConfig = {
                                     method: 'GET',
@@ -5369,7 +5349,7 @@ var ret = {
                                     responseType: 'arraybuffer',
                                 };
                                 var ht = $http(httpConfig);
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             /**
@@ -5465,15 +5445,15 @@ $scope.fetchES00DocumentByGID = function() {
                             fetchES00DocumentByGID: function(es00DocumentGID) {
                                 es00DocumentGID = es00DocumentGID ? es00DocumentGID.trim() : "";
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BY_GID__, es00DocumentGID);
-                                var tt = esGlobals.trackTimer("ES00DOCUMENT", "FETCH", es00DocumentGID);
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
 
                             },
 
@@ -5530,15 +5510,15 @@ $scope.fetchES00DocumentByCode = function() {
                             fetchES00DocumentByCode: function(es00DocumentCode) {
                                 es00DocumentCode = es00DocumentCode ? es00DocumentCode.trim() : "";
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BY_CODE__, es00DocumentCode);
-                                var tt = esGlobals.trackTimer("ES00DOCUMENT", "FETCH", es00DocumentCode);
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
 
                             },
 
@@ -5598,15 +5578,15 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                             fetchES00DocumentsByEntityGID: function(entityGID) {
                                 entityGID = entityGID ? entityGID.trim() : "";
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DOCUMENT_BY_ENTITYGID__, entityGID);
-                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "FETCH", entityGID);
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             /**
@@ -5642,8 +5622,8 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__DELETE_ES00DOCUMENT__);
-                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "DELETE", es00Document.GID);
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'post',
@@ -5651,7 +5631,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                     url: surl,
                                     data: es00Document
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
 
                             /**
@@ -5745,8 +5725,8 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 ```
                              */
                             addOrUpdateES00Document: function(doc, file, okfunc, errfunc, progressfunc) {
-                                var tt = esGlobals.trackTimer("ES00DOCUMENT_S", "UPLOAD", file);
-                                tt.startTime();
+                                
+                                
 
                                 if (!file) {
                                     throw new Error("Invalid File");
@@ -5798,15 +5778,15 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__FETCH_ES00DEVICE__, deviceCode);
-                                var tt = esGlobals.trackTimer("ES00DEVICE", "FETCH", deviceCode);
-                                tt.startTime();
+                                
+                                
 
                                 var ht = $http({
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: surl
                                 });
-                                return processWEBAPIPromise(ht, tt);
+                                return processWEBAPIPromise(ht);
                             },
                         }
                     }

@@ -3133,7 +3133,7 @@
 
                             var extent;
                             for (var i = 0; i < e.items.length; i++) {
-                                var loc = [e.items[i].Latitude, e.items[i].Longitude];
+                                var loc = [e.items[i].Latitude || e.items[i].latitude, e.items[i].Longitude || e.items[i].longitude];
 
                                 if (!extent) {
                                     extent = new kendo.dataviz.map.Extent(loc, loc);
