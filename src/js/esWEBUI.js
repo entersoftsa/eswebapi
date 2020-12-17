@@ -2843,8 +2843,8 @@
 
 
 
-        .directive('esPivotPq', ['$log', '$window', '$q', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
-            function($log, $window, $q, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
+        .directive('esPivotPq', ['$log', '$window', '$q', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals', 'esCache',
+            function($log, $window, $q, esWebApiService, esMessaging, esWebUIHelper, esGlobals, esCache) {
                 return {
                     restrict: 'AE',
                     scope: {
@@ -2894,7 +2894,21 @@
                                 tooltip: {
                                     enabled: true,
                                     customizeTooltip: function(args) {
-                                        var valueText = Globalize.formatCurrency(args.originalValue, "EUR");;
+                                        var x = esCache.getItem("ES_BASE_CURR");
+                                        var valueText = "";
+                                        if (x) 
+                                        {
+                                            try {
+                                                valueText = Globalize.formatCurrency(args.originalValue, x);
+                                            }
+                                            catch(err)
+                                            {
+                                                valueText = args.valueText; 
+                                            }
+                                        }
+                                        else {
+                                            valueText = args.valueText;   
+                                        }
 
                                         return {
                                             html: args.seriesName + "<div class='currency'>" +
