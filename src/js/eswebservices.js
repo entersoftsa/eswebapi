@@ -50,6 +50,7 @@
         __ENTITYACTION__: "api/Entity/",
         __ENTITYBYGIDACTION__: "api/EntityByGID/",
         __ELASTICSEARCH__: "api/esearch/",
+        __SEND_SMS__: "api/collaboration/SendSMS/",
         __SERVER_CAPABILITIES__: "api/Login/ServerCapabilities/",
         __FETCH_COMPANY_PARAM__: "api/rpc/FetchCompanyParam/",
         __GET_PARAMETER_VALUE__: "api/rpc/ParameterValue/",
@@ -5760,6 +5761,22 @@ $scope.fetchES00DocumentsByEntityGID = function() {
 
                                 return file.upload;
 
+                            },
+
+                            sendSMS: function(smsObject) {
+                                if (!smsObject || !smsObject.Body || ((smsObject.Recipients || []).length == 0)) 
+                                {
+                                    throw new Error("Invalid smsObject");
+                                }
+
+                                var surl = urlWEBAPI.concat(ESWEBAPI_URL.__SEND_SMS__);
+                                var ht = $http({
+                                    method: 'post',
+                                    headers: prepareHeaders(),
+                                    url: surl,
+                                    data: smsObject
+                                });
+                                return processWEBAPIPromise(ht);
                             },
 
                             /**
