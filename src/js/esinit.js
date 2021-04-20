@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.15.4";
+    var version = "2.16.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -2212,6 +2212,7 @@ defaultGridHeight: string or undefined
 
                         data.Model.LangID = data.Model.LangID || (credentials || {}).LangID || window.esLoginLanguage;
                         data.Model.BranchID = data.Model.BranchID || (credentials || {}).BranchID || "-";
+                        data.Model.Claims = data.Claims;
 
                         esClientSession.setModel(data.Model);
 

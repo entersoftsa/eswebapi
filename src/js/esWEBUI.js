@@ -598,7 +598,7 @@
             }
 
             return x[valueField] > 0;
-            
+
         });
     };
 
@@ -829,8 +829,8 @@
             };
         }])
 
-        .controller('esComboPQCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', '$translate', '$uibModal', '$q', 'esCache', '$timeout', 'clipboard',
-            function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $translate, $uibModal, $q, esCache, $timeout, clipboard) {
+        .controller('esComboPQCtrl', ['$scope', '$log', '$window', 'esMessaging', 'esWebApi', 'esUIHelper', 'esGlobals', '$translate', '$uibModal', '$q', 'esCache', '$timeout', '$interval', 'clipboard',
+            function($scope, $log, $window, esMessaging, esWebApiService, esWebUIHelper, esGlobals, $translate, $uibModal, $q, esCache, $timeout, $interval, clipboard) {
 
                 function esTranslate(item, lang) {
 
@@ -1101,6 +1101,13 @@
                             },
                             Parameters: paramsdef
                         };
+                        if ($scope.esPqDef.GlobalParamsPanel.ReExecute < 1 || $scope.esPqDef.GlobalParamsPanel.ReExecute >= 60) {
+                            fin.GlobalParamsPanel.ReExecute = 0;
+                            console.log("GlobalParamsPanel.ReExecute value should be between 1 min and 59 mins - " + $scope.esPqDef.ID);
+                        } else {
+                            fin.GlobalParamsPanel.ReExecute = $scope.esPqDef.GlobalParamsPanel.ReExecute;
+                        }
+
                         fin.Title = $scope.esPqDef.Title;
                         fin.Description = $scope.esPqDef.Description;
 
@@ -1137,9 +1144,49 @@
                                     }
                                 });
 
+                                var tm;
+                                var tStep;
+                                var tInterval = 20;
+                                var dRun;
+                                var lastRunOn = "";
+
+                                var model = esGlobals.getClientSession().getModel();
+                                if (!model || !model.Claims || !model.Claims.ESApplicationID || model.Claims.ESApplicationID != "espremanalyzer") {
+                                    $scope.esPqDef.GlobalParamsPanel.ReExecute = 0;   
+                                }
+
+                                if ($scope.esPqDef.GlobalParamsPanel.ReExecute) {
+
+                                    tStep = $scope.esPqDef.GlobalParamsPanel.ReExecute * (60 / tInterval);
+                                    $scope.globalTitle = "Last Run - // NEXT Run in " + moment.duration((tStep * tInterval), "seconds").humanize();
+
+                                    tm = $interval(function() {
+                                        tStep--;
+                                        if (tStep == 0) {
+                                            $scope.globalExecutePQ();
+                                            dRun = moment();
+                                            tStep = $scope.esPqDef.GlobalParamsPanel.ReExecute * (60 / tInterval);
+                                        }
+
+                                        $scope.globalTitle = "Last Run " + (dRun ? dRun.fromNow() : " -") + " // Next Run in " + moment.duration((tStep * tInterval), "seconds").humanize();
+                                    }, tInterval * 1000);
+
+                                    $scope.$on('$destroy', function() {
+                                        if (tm) {
+                                            $interval.cancel(tm);
+                                            tm = null;
+                                        }
+                                    });
+                                }
+
                                 if ($scope.esPqDef.GlobalParamsPanel.AutoExecute) {
                                     $scope.globalExecutePQ();
+                                    if ($scope.esPqDef.GlobalParamsPanel.ReExecute) {
+                                        dRun = moment();
+                                        $scope.globalTitle = "Last Run " + dRun.fromNow() + " // Next Run in " + moment.duration((tStep * tInterval), "seconds").humanize();
+                                    }
                                 }
+
                             })
                             .catch(function(err) {
                                 console.log(err);
@@ -2896,18 +2943,14 @@
                                     customizeTooltip: function(args) {
                                         var x = esCache.getItem("ES_BASE_CURR");
                                         var valueText = "";
-                                        if (x) 
-                                        {
+                                        if (x) {
                                             try {
                                                 valueText = Globalize.formatCurrency(args.originalValue, x);
+                                            } catch (err) {
+                                                valueText = args.valueText;
                                             }
-                                            catch(err)
-                                            {
-                                                valueText = args.valueText; 
-                                            }
-                                        }
-                                        else {
-                                            valueText = args.valueText;   
+                                        } else {
+                                            valueText = args.valueText;
                                         }
 
                                         return {
@@ -6031,7 +6074,7 @@
                 getPivotDS: getPivotDS,
 
                 esResolveBlobUrl: esResolveBlobUrl,
-                
+
                 esResolveUserLogoUrl: esResolveUserLogoUrl,
 
                 createEsParamVal: createEsParamVal,

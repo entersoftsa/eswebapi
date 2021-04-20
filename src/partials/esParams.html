@@ -3,7 +3,7 @@
 		<div uib-accordion-group is-open="esPanelOpen.status">
 			<uib-accordion-heading>
 				<span uib-tooltip-html="esParamsDef.strVal(esParamsValues, false, '<br/>')" tooltip-placement="auto bottom-left" tooltip-enable="esParamsDef.strVal(esParamsValues, false) != ''">
-					<i class="mdi " ng-class="{'mdi-menu-down': esPanelOpen.status, 'mdi-menu-right': !esPanelOpen.status}"></i>&nbsp;{{::(esForceTitle ? esForceTitle : esParamsDef.title)}}
+					<i class="mdi " ng-class="{'mdi-menu-down': esPanelOpen.status, 'mdi-menu-right': !esPanelOpen.status}"></i>&nbsp;{{(esForceTitle ? esForceTitle : esParamsDef.title)}}
 					<small>{{esParamsDef.strVal(esParamsValues, true)}}</small>
 				</span>
 			</uib-accordion-heading>
