@@ -2832,7 +2832,7 @@
 			}
 		])
 
-		.directive('esMetricPQ', ['$log', '$window', '$uibModal', '$timeout', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
+		.directive('esMetricPq', ['$log', '$window', '$uibModal', '$timeout', 'esWebApi', 'esMessaging', 'esUIHelper', 'esGlobals',
 			function ($log, $window, $uibModal, $timeout, esWebApiService, esMessaging, esWebUIHelper, esGlobals) {
 				return {
 					restrict: 'AE',
@@ -2846,6 +2846,7 @@
 
 						$scope.executePQ = function () {
 							$scope.esPqDef.esPanelOpen.status = false;
+                            $scope.metricDataSource.page(1);
 						}
 
 						$scope.esPqDef.runPQ = $scope.executePQ;
@@ -2865,12 +2866,13 @@
 						$scope.UIOptions = options;
 
 						var dsOptions = {
-							serverGrouping: false,
-							serverSorting: false,
-							serverFiltering: false,
-							serverAggregates: false,
-							serverPaging: false
-						};
+                            serverGrouping: false,
+                            serverSorting: false,
+                            serverFiltering: false,
+                            serverAggregates: false,
+                            serverPaging: $scope.esPqDef.PQOptions ? (angular.isDefined($scope.esPqDef.PQOptions.ServerPaging) ? $scope.esPqDef.PQOptions.ServerPaging : true) : true,
+                            pageSize: ($scope.esPqDef.PQOptions ? $scope.esPqDef.PQOptionsPageSize : null) || 20
+                        };
 						$scope.metricDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, dsOptions);
 
 						$scope.getTagField = function (item) {
