@@ -2856,6 +2856,7 @@
 							footerField: "",
 							valueField: "",
 							tagField: "",
+							iconField: "",
 						};
 
 						var scr = $scope.esPqDef.UIOptions
@@ -2883,17 +2884,6 @@
 								}
 							}
 							return 'none';
-						};
-
-						$scope.isNoImage = function (item) {
-							return !$scope.getImageUrl(item);
-						};
-
-						$scope.getImageUrl = function (item) {
-							if (!$scope.UIOptions.imageField)
-								return null;
-
-							return esResolveBlobUrl(item[$scope.UIOptions.imageField], esWebApiService);
 						};
 
 						if ($scope.esPqDef && $scope.esPqDef.PQOptions && $scope.esPqDef.PQOptions.AutoExecute) {
