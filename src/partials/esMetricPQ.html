@@ -9,11 +9,11 @@
 				<div class="col-sm-6 col-md-4 col-xl-3" ng-repeat="row in metricDataSource.data()">
 					<div class="card card-tag-{{::getTagField(row)}}">
 						<div class="card-body">
-							<div class="icon" ng-if="::(UIOptions.iconField)">
-								<i class="::row[UIOptions.iconField]"></i>
+							<div class="icon" ng-if="::(UIOptions.iconField && row[UIOptions.iconField])">
+								<i ng-class="::row[UIOptions.iconField]"></i>
 							</div>
 							<div class="value">
-								<h5 ng-if="::UIOptions.valueField">{{::row[UIOptions.valueField]}}</h5>
+								<h5 ng-if="::UIOptions.valueField">{{::getValue(row)}}</h5>
 								<p ng-if="::UIOptions.titleField" ng-bind-html="::row[UIOptions.titleField]"></p>
 							</div>
 						</div>

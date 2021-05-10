@@ -2853,7 +2853,6 @@
 
 						var options = {
 							titleField: "",
-							footerField: "",
 							valueField: "",
 							tagField: "",
 							iconField: "",
@@ -2871,10 +2870,21 @@
                             serverSorting: false,
                             serverFiltering: false,
                             serverAggregates: false,
-                            serverPaging: $scope.esPqDef.PQOptions ? (angular.isDefined($scope.esPqDef.PQOptions.ServerPaging) ? $scope.esPqDef.PQOptions.ServerPaging : true) : true,
-                            pageSize: ($scope.esPqDef.PQOptions ? $scope.esPqDef.PQOptionsPageSize : null) || 20
+                            serverPaging: true,
+                            pageSize: 100
                         };
 						$scope.metricDataSource = esWebUIHelper.getPQDataSource($scope.esPqDef, dsOptions);
+
+                        $scope.getValue  = function(row) {
+                            var v = row[$scope.UIOptions.valueField];
+
+                            if ($scope.UIOptions.formatValue)
+                            {
+                                return kendo.format($scope.UIOptions.formatValue, v);
+                            } else {
+                                return v;
+                            }
+                        }
 
 						$scope.getTagField = function (item) {
 							if ($scope.UIOptions.tagField) {
