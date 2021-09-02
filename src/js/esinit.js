@@ -6,7 +6,7 @@
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "2.18.2";
+    var version = "2.20.0";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -2213,6 +2213,12 @@ defaultGridHeight: string or undefined
                         data.Model.LangID = data.Model.LangID || (credentials || {}).LangID || window.esLoginLanguage;
                         data.Model.BranchID = data.Model.BranchID || (credentials || {}).BranchID || "-";
                         data.Model.Claims = data.Claims;
+                        if (angular.isUndefined(data.IsExternal)) {
+                            data.Model.IsExternal = data.Claims && data.Claims["IsExternal"];
+                        } else 
+                        {
+                            data.Model.IsExternal = data.IsExternal;
+                        }
 
                         esClientSession.setModel(data.Model);
 

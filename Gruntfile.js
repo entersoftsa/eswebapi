@@ -129,7 +129,6 @@ module.exports = function (grunt) {
 			},
 			build: [
 					"dist",
-					"examples/eswebapicalls/lib/eswebapi/dist",
 					"../eswebmanager/lib/eswebapi",
 					"../esrealtimeretail/lib/eswebapi",
 					"../eswmsmonitor/lib/eswebapi",
@@ -283,11 +282,6 @@ module.exports = function (grunt) {
 			sourcefiles: {
 				files: [
 						// includes files within path and its sub-directories
-						{
-							expand: true,
-							src: ['dist/**', 'dist/languages/'],
-							dest: 'examples/eswebapicalls/lib/eswebapi/'
-						},
 						{
 							expand: true,
 							src: ['dist/**', 'dist/languages/'],

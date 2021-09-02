@@ -23,11 +23,11 @@
 		</div>
 		<div class="form-group" ng-if="::esShowBridge" ng-class="{'has-error': esLoginFrm.bridgeId.$invalid}">
 			<label for="bridgeId" class="sr-only">{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}</label>
-			<input type="text" name="bridgeId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}" ng-required="::esShowBridge" ng-model="esCredentials.bridgeId">
+			<input type="text" name="bridgeId" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.COMPANY_ID' | translate}}" ng-model="esCredentials.bridgeId">
 		</div>
 		<div class="form-group" ng-class="{'has-error': esLoginFrm.branch.$invalid}">
 			<label for="branch" class="sr-only">{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}</label>
-			<input type="text" name="branch" autocomplete="nope" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}" ng-model="esCredentials.BranchID" required>
+			<input type="text" name="branch" autocomplete="nope" class="form-control" placeholder="{{'ESUI.LOGIN_FORM.BRANCH_ID' | translate}}" ng-model="esCredentials.BranchID">
 		</div>
 		<div class="form-group">
 			<label for="extraPin" class="sr-only">{{'ESUI.LOGIN_FORM.EXTRA_PIN' | translate}}</label>

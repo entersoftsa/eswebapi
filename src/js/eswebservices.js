@@ -48,6 +48,7 @@
         __SCROLLERROOTTABLE__: "api/rpc/SimpleScrollerRootTable/",
         __SCROLLER__: "api/rpc/SimpleScroller/",
         __ENTITYACTION__: "api/Entity/",
+        __REGISTERED_ENDPOINT_FOR_TYPE__: "api/endpoint/RegisteredEndpointFor",
         __ENTITYBYGIDACTION__: "api/EntityByGID/",
         __ELASTICSEARCH__: "api/esearch/",
         __SEND_SMS__: "api/collaboration/SendSMS/",
@@ -728,7 +729,8 @@ $scope.doLogin = function() {
                                     BridgeID: credentials.bridgeId || esConfigSettings.bridgeId,
                                     ExtraPin: credentials.extraPin,
                                     Model: credentials,
-                                    Claims: claims || esConfigSettings.claims
+                                    Claims: claims || esConfigSettings.claims,
+                                    IsExternal: credentials.IsExternal
                                 };
 
                                 if (!!credentials.StickySession) {
@@ -2801,6 +2803,17 @@ $scope.fetchUserSites = function()
                                     method: 'get',
                                     headers: prepareHeaders(),
                                     url: urlWEBAPI + ESWEBAPI_URL.__FETCH_SESSION_INFO__
+                                });
+
+                                return processWEBAPIPromise(promise);
+                            },
+
+                            registeredEndpointForType: function(endpointType) {
+                                var promise = $http({
+                                    method: 'post',
+                                    headers: prepareHeaders(),
+                                    params: { EndpointType: endpointType},
+                                    url: urlWEBAPI + ESWEBAPI_URL.__REGISTERED_ENDPOINT_FOR_TYPE__
                                 });
 
                                 return processWEBAPIPromise(promise);
