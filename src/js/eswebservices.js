@@ -360,18 +360,11 @@ eskbApp.config(['$logProvider',
                             }
                             var surl = urlWEBAPI.concat(ESWEBAPI_URL.__SCROLLER_COMMAND__);
 
-                            
-                            
-
                             var ht = $http({
                                 method: 'post',
                                 headers: prepareHeaders(),
                                 url: surl,
                                 data: scrollerCommandParams
-                            });
-
-                            ht.then(function() {
-                                tt.endTime().send();
                             });
 
                             return ht;
@@ -1340,7 +1333,6 @@ $scope.fetchUserLogo = function() {
                                 file.upload.then(function(response) {
                                     $timeout(function() {
                                         file.result = response.data;
-                                        tt.endTime().send();
                                         if (angular.isFunction(okfunc)) {
                                             okfunc(file);
                                         }
@@ -1438,7 +1430,6 @@ esWebApi.uploadUserLogo($scope.userLogoImage, undefined, errf, progressf);
                                 file.upload.then(function(response) {
                                     $timeout(function() {
                                         file.result = response.data;
-                                        tt.endTime().send();
                                         if (angular.isFunction(okfunc)) {
                                             okfunc(file);
                                         }
@@ -5765,7 +5756,6 @@ $scope.fetchES00DocumentsByEntityGID = function() {
                                 file.upload.then(function(response) {
                                     $timeout(function() {
                                         file.result = response.data;
-                                        tt.endTime().send();
                                         okfunc(file);
                                     });
                                 }, errfunc);
