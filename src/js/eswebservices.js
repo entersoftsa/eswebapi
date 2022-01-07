@@ -361,7 +361,7 @@ eskbApp.config(['$logProvider',
                             var surl = urlWEBAPI.concat(ESWEBAPI_URL.__SCROLLER_COMMAND__);
 
                             if (window.ESIsB2B) {
-                                if (!scrollerCommandParams || !scrollerCommandParams.FTRAGID) {
+                                if (!scrollerCommandParams || !scrollerCommandParams.FTRAGID || !window.FTRAGID) {
                                     throw new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden.");
                                 }
                             }
@@ -414,7 +414,7 @@ eskbApp.config(['$logProvider',
                             var surl = urlWEBAPI + ESWEBAPI_URL.__FORM_COMMAND__;
 
                             if (window.ESIsB2B) {
-                                if (!formCommandParams || !formCommandParams.FTRAGID) {
+                                if (!formCommandParams || !formCommandParams.FTRAGID || !window.FTRAGID) {
                                     throw new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden.");
                                 }
                             }
@@ -434,7 +434,7 @@ eskbApp.config(['$logProvider',
                             filterID = filterID ? filterID.trim() : "";
 
                             if (window.ESIsB2B) {
-                                if (!params || !params.FTRAGID) {
+                                if (!params || !params.FTRAGID || !window.FTRAGID) {
                                     throw new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter FTRAGID set is forbidden.");
                                 }
                             }
@@ -3930,7 +3930,7 @@ $scope.dofetchPublicQuery = function() {
                                 }
 
                                 if (window.esIsB2B) {
-                                    if (!execParams || !execParams.FTRAGID) {
+                                    if (!execParams || !execParams.FTRAGID  || !window.FTRAGID) {
                                         throw new Error("Trying to execute a PQ with no FTRAGID parameter in PQ [" + pqGroupID + "/" + pqFilterID + "] is forbidden");
                                     }
                                 }
