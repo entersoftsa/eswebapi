@@ -15,7 +15,7 @@
 			'pascalprecht.translate',
 	]);
 
-	esApp.run(['$anchorScroll', function ($anchorScroll) {
+	esApp.run(['$anchorScroll', '$window', function ($anchorScroll, $window) {
 		$window.ga('create', 'UA-50505865-23', 'auto');
 		window.esGoTo = function (goinpage) {
 			if (!goinpage) {
