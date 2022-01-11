@@ -31,13 +31,14 @@
 			function ($logProvider, esWebApiServiceProvider, $translateProvider) {
 
 				var settings = window.esWebApiSettings || {
-					host: "eswebapi.entersoft.gr"
+					host: "api.entersoft.gr",
+					allowUnsecureConnection: false
 				};
 				esWebApiServiceProvider.setSettings(settings);
 
 				$translateProvider.useStaticFilesLoader({
 					files: [{
-						prefix: 'languages/eswebapi-locale-',
+						prefix: window.ESIsB2B ? '/languages/eswebapi-locale-' : 'languages/eswebapi-locale-',
 						suffix: '.json'
 					}]
 				});

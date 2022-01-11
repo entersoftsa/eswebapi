@@ -61,20 +61,22 @@
         var esCache = $injector.get('esCache');
         var aPart = lang.split("-")[0];
 
+        var langURLPrefix = window.ESIsB2B ? '/' : '';
+
         $translate.use(aPart);
 
         if (Globalize) {
             if (!esCache.getItem("Globalize_" + lang)) {
                 $q.all([
-                    $http.get("languages/" + aPart + "-ca-gregorian.json"),
-                    $http.get("languages/" + aPart + "-numbers.json"),
-                    $http.get("languages/" + aPart + "-currencies.json"),
+                    $http.get(langURLPrefix + "languages/" + aPart + "-ca-gregorian.json"),
+                    $http.get(langURLPrefix + "languages/" + aPart + "-numbers.json"),
+                    $http.get(langURLPrefix + "languages/" + aPart + "-currencies.json"),
 
-                    $http.get("languages/likelySubtags.json"),
-                    $http.get("languages/timeData.json"),
-                    $http.get("languages/weekData.json"),
-                    $http.get("languages/currencyData.json"),
-                    $http.get("languages/numberingSystems.json")
+                    $http.get(langURLPrefix + "languages/likelySubtags.json"),
+                    $http.get(langURLPrefix + "languages/timeData.json"),
+                    $http.get(langURLPrefix + "languages/weekData.json"),
+                    $http.get(langURLPrefix + "languages/currencyData.json"),
+                    $http.get(langURLPrefix + "languages/numberingSystems.json")
                 ]).then(function(ret) {
                         _.forEach(ret, function(x) {
                             Globalize.load(x.data);
@@ -96,7 +98,7 @@
             if (kendo) {
                 kendo.culture(lang);
                 if (!esCache.getItem("kendo_" + lang)) {
-                    var kendoMessagesUrl = "languages/kendo.messages." + lang + ".min.js";
+                    var kendoMessagesUrl = langURLPrefix + "languages/kendo.messages." + lang + ".min.js";
 
                     $.getScript(kendoMessagesUrl,
                         function() {

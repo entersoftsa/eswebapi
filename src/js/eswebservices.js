@@ -362,7 +362,9 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 if (!scrollerCommandParams || !scrollerCommandParams.FTRAGID || !window.FTRAGID) {
-                                    throw new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden.");
+                                    var deferred = $q.defer();
+                                    deferred.reject( new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden."));
+                                    return processWEBAPIPromise(deferred.promise);
                                 }
                             }
 
@@ -415,7 +417,9 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 if (!formCommandParams || !formCommandParams.FTRAGID || !window.FTRAGID) {
-                                    throw new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden.");
+                                    var deferred = $q.defer();
+                                    deferred.reject( new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden."));
+                                    return processWEBAPIPromise(deferred.promise);
                                 }
                             }
 
@@ -435,7 +439,9 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 if (!params || !params.FTRAGID || !window.FTRAGID) {
-                                    throw new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter FTRAGID set is forbidden.");
+                                    var deferred = $q.defer();
+                                    deferred.reject( new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter FTRAGID set is forbidden."));
+                                    return processWEBAPIPromise(deferred.promise);
                                 }
                             }
 
@@ -457,7 +463,7 @@ eskbApp.config(['$logProvider',
 
                             var webapitokenOK = function(a) {
                                 var hds;
-                                if (a) {
+                                if (a && angular.isFunction(a.headers)) {
                                     hds = a.headers();
                                     if (hds && hds["x-es-refresh-token"]) {
                                         esGlobals.setWebApiToken(hds["x-es-refresh-token"], a.config.url || "-");
@@ -3931,7 +3937,9 @@ $scope.dofetchPublicQuery = function() {
 
                                 if (window.esIsB2B) {
                                     if (!execParams || !execParams.FTRAGID  || !window.FTRAGID) {
-                                        throw new Error("Trying to execute a PQ with no FTRAGID parameter in PQ [" + pqGroupID + "/" + pqFilterID + "] is forbidden");
+                                        var deferred = $q.defer();
+                                        deferred.reject( new Error("Trying to execute a PQ with no FTRAGID parameter in PQ [" + pqGroupID + "/" + pqFilterID + "] is forbidden"));
+                                        return processWEBAPIPromise(deferred.promise);
                                     }
                                 }
 
