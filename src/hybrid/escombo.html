@@ -2,47 +2,51 @@
 <html>
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
-	<title>Entersoft Mobile Public Query Viewer</title>
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <title>Entersoft Mobile Public Query Viewer</title>
     <!-- Google Analytics -->
     <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     </script>
     <script type="text/javascript">
     </script>
     <!-- End Google Analytics -->
-
-	<link rel="stylesheet" href="styles/eswebapi.min.css" />
-	<!-- build:css styles/app.min.css -->
-	<link rel="stylesheet" href="eslib.css">
-	<!-- endbuild -->
+    <link rel="stylesheet" href="styles/eswebapi.min.css" />
+    <!-- build:css styles/app.min.css -->
+    <link rel="stylesheet" href="eslib.css">
+    <!-- endbuild -->
 </head>
 
 <body ng-cloak ng-controller="esComponentCtrl" class="esContainer">
-	<div id="esWait">
-	</div>
-	<div ng-if="doShowForm">
-		<es-login es-credentials="esCredentials" es-on-success="authenticate()" es-login-label="'An Entersoft Cloud Application'" es-login-icon="'images/loginlogo.png'" es-show-subscription="false" es-show-bridge="true" es-show-sticky-session="0">
-		</es-login>
-	</div>
-	<div id="esContainer" class="container-fluid">
-		<span kendo-notification="esnotify" auto-hide-after="3000"></span>
-		<es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef" is-favourites-mode="false" es-simple-mode="true">
-		</es-combo-pq>
-	</div>
-	<script src="js/eswebapi.all.min.js"></script>
-	<script src="js/app.min.js"></script>
-
-	<!-- build:ESDEBUG -->
-	<script type="text/javascript">
+    <div id="esWait">
+    </div>
+    <div ng-if="doShowForm">
+        <es-login es-credentials="esCredentials" es-on-success="authenticate()" es-login-label="'An Entersoft Cloud Application'" es-login-icon="'images/loginlogo.png'" es-show-subscription="false" es-show-bridge="true" es-show-sticky-session="0">
+        </es-login>
+    </div>
+    <div id="esContainer" class="container-fluid">
+        <span kendo-notification="esnotify" auto-hide-after="3000"></span>
+        <es-combo-pq ng-if="esPqDef" es-pq-def="esPqDef" is-favourites-mode="false" es-simple-mode="true">
+        </es-combo-pq>
+    </div>
+    <script src="js/eswebapi.all.min.js"></script>
+    <script src="js/app.min.js"></script>
+    
+    <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
-            host: "eswebapi-1-10-0.azurewebsites.net",
+            host: "api.entersoft.gr",
             allowUnsecureConnection: false,
             UserID: "realtest/mza",
             Password: "1234",
@@ -59,226 +63,33 @@
         window.esWebApiToken = "";
 
         window.esDef = {
-            "AA": 10400,
-            "ID": "PQ_10400",
-            "GroupID": "MGMT",
+            "AA": 60100,
+            "ID": "PQ_60100",
             "Title": {
-                "en": "Cash flow",
-                "el": "Cash flow",
-                "ro": "Cash flow",
-                "bg": "Cash flow"
+                "en": "Customers",
+                "el": "Πελάτες",
+                "ro": "Clienti",
+                "bg": "Клиенти"
             },
-            "Description": "Cash flow",
-            "ESUIType": "esCombo",
-            "esDef": [
-                [
-                    {
-                        "AA": 10410,
-                        "ID": "PQ_10410",
-                        "Title": {
-                            "el": "Cash flow",
-                            "en": "Cash flow",
-                            "ro": "Cash flow",
-                            "bg": "Cash flow"
-                        },
-                        "Description": "Cash flow",
-                        "ESUIType": "esChart",
-                        "esDef": {
-                            "GroupID": "ESWebManager",
-                            "FilterID": "FinCashFlowSigned",
-                            "UIOptions": {
-                                "autoBind": true,
-                                "legend": {
-                                    "visible": true,
-                                    "position": "right",
-                                    "labels": {
-                                        "template": "#= series.title #"
-                                    }
-                                },
-                                "series": [
-                                    {
-                                        "field": "Debit",
-                                        "categoryField": "PeriodDescription",
-                                        "axis": "Debit",
-                                        "title": {
-                                            "en": "Inflows",
-                                            "el": "Εισροές",
-                                            "ro": "",
-                                            "bg": ""
-                                        },
-                                        "type": "column",
-                                        "stack": true,
-                                        "color": "#317256"
-                                    },
-                                    {
-                                        "field": "Credit",
-                                        "categoryField": "PeriodDescription",
-                                        "axis": "Debit",
-                                        "title": {
-                                            "en": "Outflows",
-                                            "el": "Εκροές",
-                                            "ro": "",
-                                            "bg": ""
-                                        },
-                                        "type": "column",
-                                        "stack": true,
-                                        "color": "#2378af"
-                                    },
-                                    {
-                                        "field": "ForecastedInflows",
-                                        "categoryField": "PeriodDescription",
-                                        "axis": "Debit",
-                                        "title": {
-                                            "en": "Forecasted inflows",
-                                            "el": "Προβλέψεις εισροών",
-                                            "ro": "",
-                                            "bg": ""
-                                        },
-                                        "type": "column",
-                                        "stack": true,
-                                        "color": "#398564"
-                                    },
-                                    {
-                                        "field": "ForecastedOutflows",
-                                        "categoryField": "PeriodDescription",
-                                        "axis": "Debit",
-                                        "title": {
-                                            "en": "Forecasted outflows",
-                                            "el": "Προβλέψεις εκροών",
-                                            "ro": "",
-                                            "bg": ""
-                                        },
-                                        "type": "column",
-                                        "stack": true,
-                                        "color": "#45acf1"
-                                    },
-                                    {
-                                        "field": "CalculatedForecastedInflows",
-                                        "categoryField": "PeriodDescription",
-                                        "axis": "Debit",
-                                        "title": {
-                                            "en": "Calculated inflows",
-                                            "el": "Προγρ/νες εισροές",
-                                            "ro": "",
-                                            "bg": ""
-                                        },
-                                        "type": "column",
-                                        "stack": true,
-                                        "color": "#419873"
-                                    },
-                                    {
-                                        "field": "CalculatedForecastedOutflows",
-                                        "categoryField": "PeriodDescription",
-                                        "axis": "Debit",
-                                        "title": {
-                                            "en": "Calculated outflows",
-                                            "el": "Προγρ/νες εκροές",
-                                            "ro": "",
-                                            "bg": ""
-                                        },
-                                        "type": "column",
-                                        "stack": true,
-                                        "color": "#8faac6"
-                                    },
-                                    {
-                                        "field": "ProjectedForecastedInflows",
-                                        "categoryField": "PeriodDescription",
-                                        "axis": "Debit",
-                                        "title": {
-                                            "en": "Projected inflows",
-                                            "el": "Εκτιμήσεις εισροών",
-                                            "ro": "",
-                                            "bg": ""
-                                        },
-                                        "type": "column",
-                                        "stack": true,
-                                        "color": "#49ab81"
-                                    },
-                                    {
-                                        "field": "ProjectedForecastedOutflows",
-                                        "categoryField": "PeriodDescription",
-                                        "axis": "Debit",
-                                        "title": {
-                                            "en": "Projected outflows",
-                                            "el": "Εκτιμήσεις εκροών",
-                                            "ro": "",
-                                            "bg": ""
-                                        },
-                                        "type": "column",
-                                        "stack": true,
-                                        "color": "#34a5f1"
-                                    },
-                                    {
-                                        "field": "ExpectesQty",
-                                        "categoryField": "PeriodDescription",
-                                        "axis": "Debit",
-                                        "title": {
-                                            "en": "Balance",
-                                            "el": "Υπόλοιπο",
-                                            "ro": "",
-                                            "bg": ""
-                                        },
-                                        "type": "line",
-                                        "color": "#DAA520",
-                                        "markers": {
-                                            "visible": true,
-                                            "type": "circle",
-                                            "background": "#DAA520"
-                                        }
-                                    }
-                                ],
-                                "valueAxis": {
-                                    "visible": true,
-                                    "name": "Debit",
-                                    "title": {
-                                        "text": {
-                                            "en": "",
-                                            "el": "",
-                                            "ro": "",
-                                            "bg": ""
-                                        }
-                                    }
-                                },
-                                "categoryAxis": {
-                                    "categories": "PeriodDescription",
-                                    "labels": {
-                                        "rotation": 0,
-                                        "font": "8px"
-                                    }
-                                },
-                                "tooltip": {
-                                    "visible": true,
-                                    "template": " #= category #, #= series.title #<br/> #=  kendo.format('{0:n2}',value ) #",
-                                    "text-align": "left"
-                                }
-                            }
-                        }
-                    }
-                ],
-                [
-                    {
-                        "AA": 10420,
-                        "ID": "PQ_10420",
-                        "Title": {
-                            "en": "Cash flow (Detailed)",
-                            "el": "Cash flow (Αναλυτικά)",
-                            "ro": "Cash flow",
-                            "bg": "Cash flow"
-                        },
-                        "Description": "Cash flow",
-                        "ESUIType": "esGrid",
-                        "esDef": {
-                            "GroupID": "ESWebManager",
-                            "FilterID": "FinCashFlow",
-                            "PQOptions": {
-                                "ServerPaging": true,
-                                "PageSize": 20,
-                                "AutoExecute": true
-                            }
-                        }
-                    }
-                ]
-            ]
+            "Description": "Πελάτες",
+            "ESUIType": "escard",
+            "esDef": {
+                "GroupID": "ESWebManager",
+                "FilterID": "BusEntitiesCustomers",
+                "PQOptions": {
+                    "ServerPaging": true,
+                    "PageSize": 20,
+                    "AutoExecute": true
+                },
+                "UIOptions": {
+                    "headerField": "Name",
+                    "titleField": "Code",
+                    "footerField": "Footer",
+                    "tagField": "tagField",
+                    "imageField": "BlobGID",
+                    "maxCards": 3300
+                }
+            }
         };
 
 
@@ -289,8 +100,8 @@
             window.angular.bootstrap(document, ['esWebPqApp']);
         }
     });
-	</script>
-	<!-- endbuild -->
+    </script>
+    
 </body>
 
 </html>

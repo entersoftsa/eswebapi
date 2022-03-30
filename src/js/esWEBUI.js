@@ -2732,6 +2732,7 @@
                             footerField: "",
                             imageField: "",
                             tagField: "",
+                            simpleView: false
                         };
 
                         var scr = $scope.esPqDef.UIOptions
@@ -4461,7 +4462,7 @@
                 var grdopt = {
                     pageable: {
                         refresh: true,
-                        pageSizes: [20, 50, 100, kendo.ui.Pager.prototype.options.messages.allPages]
+                        pageSizes: [20, 50, 100, 1000]
                     },
                     autoBind: false,
                     sortable: true,
@@ -4537,10 +4538,10 @@
                     pageSize: resOptions.getPageSizeForUI()
                 };
 
-                var zArr = _.uniq(_.union([resOptions.getPageSizeForUI()], [20, 50, 100])).sort(function(a, b) {
+                var zArr = _.uniq(_.union([resOptions.getPageSizeForUI()], [20, 50, 100, 1000])).sort(function(a, b) {
                     return a - b
                 });
-                zArr.push(kendo.ui.Pager.prototype.options.messages.allPages);
+
                 var grdopt = {
                     pageable: {
                         pageSizes: zArr
@@ -5145,6 +5146,17 @@
                 return f ? _.filter(f, function(g) {
                     return g.isAdvanced()
                 }) : [];
+            }
+
+            ESParamsDefinitions.prototype.hasVisibleParams = function() {
+                var f = this.definitions;
+                if (!f) {
+                    return false;
+                }
+
+                return _.filter(f, function(g) {
+                    return g.visible;
+                }).length > 0;
             }
 
             ESParamsDefinitions.prototype.hasAdvancedParams = function() {

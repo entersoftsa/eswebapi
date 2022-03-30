@@ -1,11 +1,11 @@
 <div class="row">
 	<div class="col-12">
-		<es-params-panel ng-cloak es-panel-open="esPqDef.esPanelOpen" ng-if="!esLocalData" es-group-id="::esPqDef" es-local-data-source="'true'" es-force-title="::esPqDef.Title" es-show-run="'true'" es-run-click="::executePQ()">
+		<es-params-panel ng-if="::!UIOptions.simpleView" ng-cloak es-panel-open="esPqDef.esPanelOpen" ng-if="!esLocalData" es-group-id="::esPqDef" es-local-data-source="'true'" es-force-title="::esPqDef.Title" es-show-run="true" es-run-click="::executePQ()">
 		</es-params-panel>
 	</div>
 	<div class="col-12">
 		<div class="es-module es-module-card">
-			<kendo-pager ng-if="cardDataSource && cardDataSource.data().length > 1" auto-bind="false" page-size="::esPqDef.PQOptions.PageSize" page-sizes="[20, 50, 100]" refresh="true" data-source="cardDataSource">
+			<kendo-pager ng-if="!UIOptions.simpleView && cardDataSource && (cardDataSource.total() > (esPqDef.PQOptions.PageSize || 1))" auto-bind="false" page-size="::esPqDef.PQOptions.PageSize" page-sizes="[20, 50, 100]" refresh="true" data-source="cardDataSource">
 			</kendo-pager>
 
 			<div class="row">
