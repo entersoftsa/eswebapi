@@ -42,14 +42,15 @@
     </div>
     <script src="js/eswebapi.all.min.js"></script>
     <script src="js/app.min.js"></script>
-    
+
+    <!-- build:ESDEBUG -->
     <script type="text/javascript">
     function prepareMobileCall() {
         window.esWebApiSettings = {
             host: "api.entersoft.gr",
             allowUnsecureConnection: false,
-            UserID: "realtest/mza",
-            Password: "1234",
+            UserID: "realtest/BLA",
+            Password: "BLBLABLABLA",
             LangID: "el-GR",
             bridgeId: "001",
             BranchID: "ΑΘΗ",
@@ -63,33 +64,195 @@
         window.esWebApiToken = "";
 
         window.esDef = {
-            "AA": 60100,
-            "ID": "PQ_60100",
+            "AA": 30400,
+            "ID": "PQ_30400",
+            "GroupID": "CML",
             "Title": {
-                "en": "Customers",
-                "el": "Πελάτες",
-                "ro": "Clienti",
-                "bg": "Клиенти"
+                "en": "Turnover statistics",
+                "el": "Στατιστικά τζίρου",
+                "ro": "Statistici cifra de afaceri",
+                "bg": "Оборотна статистика"
             },
-            "Description": "Πελάτες",
-            "ESUIType": "escard",
-            "esDef": {
-                "GroupID": "ESWebManager",
-                "FilterID": "BusEntitiesCustomers",
-                "PQOptions": {
-                    "ServerPaging": true,
-                    "PageSize": 20,
-                    "AutoExecute": true
+            "Description": "Στατιστικά τζίρου",
+            "ESUIType": "esCombo",
+            "GlobalParamsPanel": {
+                "AutoExecute": true,
+                "esPanelOpen": {
+                    "status": true
                 },
-                "UIOptions": {
-                    "headerField": "Name",
-                    "titleField": "Code",
-                    "footerField": "Footer",
-                    "tagField": "tagField",
-                    "imageField": "BlobGID",
-                    "maxCards": 3300
-                }
-            }
+                "Parameters": [{
+                    "id": "Period",
+                    "aa": 1,
+                    "caption": {
+                        "en": "Period",
+                        "el": "Περίοδος",
+                        "ro": "Perioada",
+                        "bg": "Период"
+                    },
+                    "controlType": 6,
+                    "parameterType": "Entersoft.Framework.Platform.ESDateRange, QueryProcess",
+                    "precision": 0,
+                    "multiValued": true,
+                    "visible": true,
+                    "required": false,
+                    "defaultValues": [{
+                        "Value": "ESDateRange(Month, -11, Month, 0)"
+                    }]
+                }]
+            },
+            "esDef": [
+                [{
+                    "AA": 30410,
+                    "ID": "PQ_30410",
+                    "Title": {
+                        "en": "Item hierarchy turnover analysis",
+                        "el": "Ανάλυση τζίρου ιεραρχίας είδους",
+                        "ro": "Analiza cifrei de afaceri - ierarhic",
+                        "bg": "йерархия на артикули анализи на оборота"
+                    },
+                    "ESUIType": "estreemap",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "SalesItemHierarchyAnalysis",
+                        "UIOptions": {
+                            "theme": "Bootstrap",
+                            "Type": "horizontal"
+                        }
+                    }
+                }],
+                [{
+                    "AA": 30420,
+                    "ID": "PQ_30420",
+                    "Title": {
+                        "en": "Sales by item category",
+                        "el": "Πωλήσεις ανά κατηγορία είδους",
+                        "ro": "Vanzari dupa categoria articolului",
+                        "bg": "Продажби по категория артикул"
+                    },
+                    "ESUIType": "espivot",
+                    "Description": "Πωλήσεις ανά κατηγορία είδους",
+                    "PQOptions": {
+                        "AutoExecute": true
+                    },
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "SalesCubeByItemCategory",
+                        "UIOptions": {
+                            "theme": "Bootstrap",
+                            "enableChart": true,
+                            "autoBind": true,
+                            "cubeDef": {
+                                "fields": [{
+                                        "dataField": "Period",
+                                        "dataType": "date",
+                                        "groupInterval": "year",
+                                        "area": "column"
+                                    },
+                                    {
+                                        "dataField": "Period",
+                                        "dataType": "date",
+                                        "groupInterval": "quarter",
+                                        "area": "column"
+                                    },
+                                    {
+                                        "dataField": "Period",
+                                        "dataType": "date",
+                                        "groupInterval": "month",
+                                        "area": "column"
+                                    },
+                                    {
+                                        "dataField": "FamilyDescr",
+                                        "area": "row"
+                                    },
+                                    {
+                                        "dataField": "GroupDescr",
+                                        "area": "row"
+                                    },
+                                    {
+                                        "dataField": "CategoryDescr",
+                                        "area": "row"
+                                    },
+                                    {
+                                        "dataField": "SubCategoryDescr",
+                                        "area": "row"
+                                    },
+                                    {
+                                        "dataField": "TurnOver",
+                                        "area": "data"
+                                    },
+                                    {
+                                        "dataField": "SalesQty1",
+                                        "area": "data"
+                                    }
+                                ]
+                            },
+                            "pivotOptions": {
+                                "allowSortingBySummary": true,
+                                "allowSorting": true,
+                                "allowFiltering": true,
+                                "allowExpandAll": true,
+                                "showBorders": true,
+                                "fieldChooser": {
+                                    "enabled": true
+                                },
+                                "export": {
+                                    "enabled": true
+                                },
+                                "fieldPanel": {
+                                    "showDataFields": true,
+                                    "showRowFields": true,
+                                    "showColumnFields": true,
+                                    "showFilterFields": true,
+                                    "allowFieldDragging": true,
+                                    "visible": false
+                                }
+                            }
+                        }
+                    }
+                }],
+                [{
+                    "AA": 30430,
+                    "ID": "PQ_30430",
+                    "Title": {
+                        "en": "Top items (Turnover)",
+                        "el": "Κορυφαία είδη βάσει τζίρου",
+                        "ro": "Top articole in CA",
+                        "bg": "Топ артикули в оборот"
+                    },
+                    "Description": "Κορυφαία είδη βάσει τζίρου",
+                    "ESUIType": "esGrid",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "SalesTopTurnoverItems",
+                        "PQOptions": {
+                            "ServerPaging": true,
+                            "PageSize": 20,
+                            "AutoExecute": false
+                        }
+                    }
+                }],
+                [{
+                    "AA": 30440,
+                    "ID": "PQ_30440",
+                    "Title": {
+                        "en": "Top customers (Turnover)",
+                        "el": "Κορυφαίοι πελάτες βάσει τζίρου",
+                        "ro": "Top clienti in CA",
+                        "bg": "Топ клиенти в оборот"
+                    },
+                    "Description": "Κορυφαίοι πελάτες βάσει τζίρου",
+                    "ESUIType": "esGrid",
+                    "esDef": {
+                        "GroupID": "ESWebManager",
+                        "FilterID": "SalesTopTurnoverCustomers",
+                        "PQOptions": {
+                            "ServerPaging": true,
+                            "PageSize": 20,
+                            "AutoExecute": false
+                        }
+                    }
+                }]
+            ]
         };
 
 
@@ -101,6 +264,7 @@
         }
     });
     </script>
+<!-- endbuild -->
     
 </body>
 
