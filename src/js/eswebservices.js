@@ -361,9 +361,9 @@ eskbApp.config(['$logProvider',
                             var surl = urlWEBAPI.concat(ESWEBAPI_URL.__SCROLLER_COMMAND__);
 
                             if (window.ESIsB2B) {
-                                if (!scrollerCommandParams || !scrollerCommandParams.FTRAGID || !window.FTRAGID) {
+                                if (!scrollerCommandParams || !scrollerCommandParams.TAGID || !window.TAGID) {
                                     var deferred = $q.defer();
-                                    deferred.reject( new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden."));
+                                    deferred.reject( new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter TAGID set is forbidden."));
                                     return processWEBAPIPromise(deferred.promise);
                                 }
                             }
@@ -416,9 +416,9 @@ eskbApp.config(['$logProvider',
                             var surl = urlWEBAPI + ESWEBAPI_URL.__FORM_COMMAND__;
 
                             if (window.ESIsB2B) {
-                                if (!formCommandParams || !formCommandParams.FTRAGID || !window.FTRAGID) {
+                                if (!formCommandParams || !formCommandParams.TAGID || !window.TAGID) {
                                     var deferred = $q.defer();
-                                    deferred.reject( new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden."));
+                                    deferred.reject( new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter TAGID set is forbidden."));
                                     return processWEBAPIPromise(deferred.promise);
                                 }
                             }
@@ -438,9 +438,9 @@ eskbApp.config(['$logProvider',
                             filterID = filterID ? filterID.trim() : "";
 
                             if (window.ESIsB2B) {
-                                if (!params || !params.FTRAGID || !window.FTRAGID) {
+                                if (!params || !params.TAGID || !window.TAGID) {
                                     var deferred = $q.defer();
-                                    deferred.reject( new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter FTRAGID set is forbidden."));
+                                    deferred.reject( new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter TAGID set is forbidden."));
                                     return processWEBAPIPromise(deferred.promise);
                                 }
                             }
@@ -3936,9 +3936,9 @@ $scope.dofetchPublicQuery = function() {
                                 }
 
                                 if (window.ESIsB2B) {
-                                    if (!execParams || !execParams.FTRAGID  || !window.FTRAGID) {
+                                    if (!execParams || !execParams.TAGID  || !window.TAGID) {
                                         var deferred = $q.defer();
-                                        deferred.reject( new Error("Trying to execute a PQ with no FTRAGID parameter in PQ [" + pqGroupID + "/" + pqFilterID + "] is forbidden"));
+                                        deferred.reject( new Error("Trying to execute a PQ with no TAGID parameter in PQ [" + pqGroupID + "/" + pqFilterID + "] is forbidden"));
                                         return processWEBAPIPromise(deferred.promise);
                                     }
                                 }
@@ -3962,7 +3962,7 @@ $scope.dofetchPublicQuery = function() {
                                 }
 
                                 //if called with 3 arguments then default to a GET request
-                                httpConfig.method = httpVerb || 'GET';
+                                httpConfig.method = httpVerb || 'POST';
 
                                 //if not a GET request, switch to data instead of params
                                 if (httpConfig.method !== 'GET') {
