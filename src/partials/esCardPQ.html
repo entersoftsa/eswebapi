@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-12">
-		<es-params-panel ng-if="::!UIOptions.simpleView" ng-cloak es-panel-open="esPqDef.esPanelOpen" ng-if="!esLocalData" es-group-id="::esPqDef" es-local-data-source="'true'" es-force-title="::esPqDef.Title" es-show-run="true" es-run-click="::executePQ()">
+		<es-params-panel ng-show="::!UIOptions.simpleView" ng-cloak es-panel-open="esPqDef.esPanelOpen" ng-if="!esLocalData" es-group-id="::esPqDef" es-local-data-source="'true'" es-force-title="::esPqDef.Title" es-show-run="true" es-run-click="::executePQ()">
 		</es-params-panel>
 	</div>
 	<div class="col-12">
@@ -9,7 +9,7 @@
 			</kendo-pager>
 
 			<div class="row">
-				<div class="col-sm-6 col-md-4 col-xl-3" ng-repeat="row in cardDataSource.data()">
+				<div ng-class="::{'col-12': UIOptions.simpleView, 'col-sm-6 col-md-4 col-xl-3': !UIOptions.simpleView}" ng-repeat="row in cardDataSource.data()">
 					<div class="card card-tag-{{::getTagField(row)}}" ng-class="::{'card-noimage': isNoImage(row)}">
 						<div ng-if="::UIOptions.headerField" class="card-header">{{::row[UIOptions.headerField]}}</div>
 						<img class="card-img-top" ng-if="::getImageUrl(row)" ng-src="{{::getImageUrl(row)}}" />
@@ -18,7 +18,7 @@
 							<ul ng-if="bodyFields().length" class="list-group list-group-flush">
 								<li class="list-group-item" ng-repeat="col in ::bodyFields()">
 									<label>{{::col.title}}</label>
-									<p ng-bind-html="::getFieldText(row, col.field)"></p>
+									<p ng-style="getFieldStyle(row, col)" ng-bind-html="::getFieldText(row, col)"></p>
 								</li>
 							</ul>
 						</div>
