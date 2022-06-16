@@ -61,7 +61,7 @@
         var esCache = $injector.get('esCache');
         var aPart = lang.split("-")[0];
 
-        var langURLPrefix = window.ESIsB2B ? '/' : '';
+        var langURLPrefix = window.ESIsB2B ? '/assets/collab/' : '';
 
         $translate.use(aPart);
 

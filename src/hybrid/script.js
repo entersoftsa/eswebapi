@@ -38,7 +38,7 @@
 
 				$translateProvider.useStaticFilesLoader({
 					files: [{
-						prefix: window.ESIsB2B ? '/languages/eswebapi-locale-' : 'languages/eswebapi-locale-',
+						prefix: window.ESIsB2B ? '/assets/collab/languages/eswebapi-locale-' : 'languages/eswebapi-locale-',
 						suffix: '.json'
 					}]
 				});
