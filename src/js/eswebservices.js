@@ -3521,9 +3521,14 @@ function($scope, esWebApi, esWebUIHelper) {
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, group, "/", pqFilterID);
+                                
+                                /* sme explicitly ignoring parameter resolveParams
+                                * For cases like ##(ENDPERIODDATE) does not work well
+
                                 if (resolveParams) {
                                     surl = surl.concat("/true");
                                 }
+                                */
 
                                 var deferred = $q.defer();
                                 if (useCache) {

@@ -2804,7 +2804,7 @@
                             else if (esGlobals.isPhone(fieldName))
                                 return '<a href="tel:' + item[fieldName] + '">' + item[fieldName] + "</a>";
                             else
-                                return col.format ? kendo.toString(item[fieldName], col.format) : item[fieldName];
+                                return col.format ? kendo.format(col.format, item[fieldName]) : item[fieldName];
                         };
 
                         $scope.getFieldStyle = function(item, col) {

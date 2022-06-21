@@ -8,7 +8,7 @@
 			<kendo-pager ng-if="!UIOptions.simpleView && cardDataSource && (cardDataSource.total() > (esPqDef.PQOptions.PageSize || 1))" auto-bind="false" page-size="::esPqDef.PQOptions.PageSize" page-sizes="[20, 50, 100]" refresh="true" data-source="cardDataSource">
 			</kendo-pager>
 
-			<div class="row">
+			<div class="row" ng-if="!UIOptions.simpleView || cardDataSource.data().length">
 				<div ng-class="::{'col-12': UIOptions.simpleView, 'col-sm-6 col-md-4 col-xl-3': !UIOptions.simpleView}" ng-repeat="row in cardDataSource.data()">
 					<div class="card card-tag-{{::getTagField(row)}}" ng-class="::{'card-noimage': isNoImage(row)}">
 						<div ng-if="::UIOptions.headerField" class="card-header">{{::row[UIOptions.headerField]}}</div>
