@@ -70,7 +70,6 @@
 			esWebApiService.validateToken(window.esWebApiToken, $scope.esCredentials)
 					.then(function (ret) {
 						esGlobals.setWebApiToken(ret.data.Model.WebApiToken);
-						console.log("X1 -" + window.esWebApiToken + "- =" + ret.data.Model.WebApiToken + "=");
 						if (angular.isFunction(runOnSuccess)) {
 							runOnSuccess();
 						}
@@ -136,9 +135,7 @@
 
 					esWebApiService.openSession($scope.esCredentials, $scope.esClaims)
 							.then(function (rep) {
-								console.log("X5 -" + window.esWebApiToken + "-");
 								window.esWebApiToken = esGlobals.getWebApiToken();
-								console.log("X2 -" + window.esWebApiToken + "-");
 								runOnSuccess();
 								$scope.isReady = true;
 								$scope.doShowForm = false;
