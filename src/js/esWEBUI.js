@@ -6611,7 +6611,7 @@
                     return;
                 }
 
-                var masterVal = e.data.GID || e.data.ISUDGID || e.data.ItemCode;
+                var masterVal = e.data.ISUDGID || e.data.ISUDCODE;
                 if (!masterVal) {
                     console.log("No value in master row for GID or ISUDGID or ItemCode to query the details");
                     return;
@@ -6648,7 +6648,7 @@
 
                         // remove the run / requery button
                         esGridOptions.toolbar = esGridOptions.toolbar.slice(1);
-                        
+
                         $("<div/>")
                             .appendTo(e.detailCell)
                             .kendoGrid(esGridOptions);
