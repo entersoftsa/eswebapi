@@ -3244,7 +3244,7 @@
                                             {
                                                 type: "tile",
                                                 urlTemplate:
-                                                    "http://a.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
+                                                    "https://a.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
                                                 attribution:
                                                     "&copy; OpenStreetMap",
                                             },
