@@ -5117,9 +5117,7 @@
                     $scope.selectedRows = _.map(
                         selectedRows,
                         function (selItem) {
-                            return evt.sender.dataItem(selItem)[
-                                $scope.invParams.esConnect
-                            ];
+                            return evt.sender.dataItem(selItem)[$scope.invParams.esConnect];
                         }
                     );
                 };
@@ -6597,8 +6595,9 @@
                     };
 
                     grdopt.detailDef = pqDef.UIOptions.detailDef;
-                }
-
+                } 
+                
+                grdopt.change = handleChangeGridRow;
                 grdopt.reBind = 0;
                 return grdopt;
             }
@@ -6613,7 +6612,9 @@
 
                 var masterVal = e.data.ISUDGID || e.data.ISUDCODE;
                 if (!masterVal) {
-                    console.log("No value in master row for GID or ISUDGID or ItemCode to query the details");
+                    console.log(
+                        "No value in master row for GID or ISUDGID or ItemCode to query the details"
+                    );
                     return;
                 }
 
@@ -6623,11 +6624,13 @@
                 var esExecuteParams = createESParams({
                     ISUDGID: masterVal,
                 });
-                var esPQOptions = detailDef.PQOptions || new esGlobals.ESPQOptions().initFromObj({
-                    ServerPaging: false,
-                    WithCount: true,
-                    AutoExecute: true
-                });
+                var esPQOptions =
+                    detailDef.PQOptions ||
+                    new esGlobals.ESPQOptions().initFromObj({
+                        ServerPaging: false,
+                        WithCount: true,
+                        AutoExecute: true,
+                    });
 
                 esWebApiService
                     .fetchPublicQueryInfo(esGroupId, esFilterId, true, true)
