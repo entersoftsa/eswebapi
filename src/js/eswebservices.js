@@ -362,7 +362,7 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 scrollerCommandParams = scrollerCommandParams || {};
-                                scrollerCommandParams.TAGID = scrollerCommandParams.TAGID || window.TAGID;
+                                scrollerCommandParams.TAGID = window.TAGID;
                                 if (!scrollerCommandParams.TAGID) {
                                     var deferred = $q.defer();
                                     deferred.reject( new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter TAGID set is forbidden."));
@@ -419,7 +419,7 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 formCommandParams = formCommandParams || {};
-                                formCommandParams.TAGID = formCommandParams.TAGID || window.TAGID;
+                                formCommandParams.TAGID = window.TAGID;
                                 if (!formCommandParams.TAGID) {
                                     var deferred = $q.defer();
                                     deferred.reject( new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter TAGID set is forbidden."));
@@ -443,7 +443,7 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 params = params || {};
-                                params.TAGID = params.TAGID || window.TAGID;
+                                params.TAGID = window.TAGID;
                                 if (!params.TAGID) {
                                     var deferred = $q.defer();
                                     deferred.reject( new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter TAGID set is forbidden."));
@@ -3949,7 +3949,7 @@ $scope.dofetchPublicQuery = function() {
                                 if (window.ESIsB2B) {
 
                                     execParams = execParams || {};
-                                    execParams.TAGID = execParams.TAGID || window.TAGID;
+                                    execParams.TAGID = window.TAGID;
 
                                     if (!execParams.TAGID) {
                                         var deferred = $q.defer();
