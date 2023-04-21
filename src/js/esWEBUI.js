@@ -4001,10 +4001,6 @@
                         var xFields = null;
 
                         $scope.bodyFields = function () {
-                            console.log(
-                                "BF - " + (!xFields ? " NULL " : xFields.length)
-                            );
-
                             if (xFields) {
                                 return xFields;
                             }
