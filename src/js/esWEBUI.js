@@ -6308,7 +6308,7 @@
                 _.forEach(pqinfo.columns, function (x) {
                     var id = x.field.toLowerCase();
                     var idx = _.findIndex(t.fields, function (o) {
-                        return o.dataField.toLowerCase() == id;
+                        return o.dataField && (o.dataField.toLowerCase() == id);
                     });
                     if (idx == -1) {
                         t.fields.push({ dataField: x.field });
@@ -6317,6 +6317,32 @@
 
                 _.forEach(t.fields, function (x) {
                     if (!x.dataField) {
+                        if (x.summaryType == "custom" && x.calculateCustomSummary)
+                        {
+                            var sParts = x.calculateCustomSummary.split(' ');
+                            if (sParts[0] == "delta") {
+                                x.calculateCustomSummary = function(options) {
+                                    var Field = sParts[1];
+                                    var PrevField = sParts[2];
+
+                                    if (options.summaryProcess == 'start') {
+                                        // Initializing "totalValue" here  
+                                        options[Field] = 0;
+                                        options[PrevField] = 0;
+                                     }
+                                     if (options.summaryProcess == 'calculate') {
+                                        // Modifying "totalValue" here  
+                                        options[Field] += options.value[Field];
+                                        options[PrevField] += options.value[PrevField];
+                                     }
+                                     if (options.summaryProcess == 'finalize') {
+                                        // Assigning the final value to "totalValue" here  
+                                        var perc = (options[Field] - options[PrevField]) / options[PrevField] * 100;
+                                        options.totalValue = perc.toFixed(1);
+                                     }
+                                }
+                            }
+                        }
                         return;
                     }
 
