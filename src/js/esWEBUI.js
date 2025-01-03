@@ -5856,7 +5856,17 @@
                                     "<a target='_blank' href='#={0}||''#'>#={0}||''#</a>",
                                     esCol.field
                                 );
-                            } else if (
+                            } 
+                            else if (
+                                esCol.field.toLowerCase().indexOf("download") !=
+                                -1
+                            ) {
+                                tCol.template = kendo.format(
+                                    "<a download='download' href='#={0}||''#'>Download</a>",
+                                    esCol.field
+                                );
+                            }
+                            else if (
                                 esCol.field
                                     .toLowerCase()
                                     .indexOf("eswebimage") != -1
