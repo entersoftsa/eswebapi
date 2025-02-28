@@ -1956,13 +1956,21 @@
                         esGridOptions: "=?",
                         esPostGridOptions: "=?",
                         esPQOptions: "=?",
-                        esDataSource: "=?",
+                        esDataSource: "=?"                                                            
                     },
                     templateUrl: function (element, attrs) {
                         return "src/partials/esGrid.html";
                     },
-                    link: function ($scope, iElement, iAttrs) {
+                    link: function ($scope, iElement, iAttrs) {                        
+                        // Define checkedItems array in the scope
+                        $scope.checkedItems = [];    
+                        
+                        // Define if the showGetCheckedItemsButton is visible 
+                        $scope.showGetCheckedItemsButton = false;
+
                         $scope.esGridRun = function () {
+                            $scope.checkedItems = [];
+
                             if ($scope.$parent && $scope.$parent.esPanelOpen) {
                                 $scope.$parent.esPanelOpen.status = false;
                             }
@@ -1983,6 +1991,67 @@
                                     $scope.esGridOptions.dataSource.page(1);
                                 }
                             }
+                        }; 
+
+                        // Function to get checked items
+                        $scope.getCheckedItems = function() {
+                           // console.log("Checked items:", $scope.checkedItems);
+
+                            if ($scope.checkedItems.length > 0) {
+                                // Construct the download URL with multiple id parameters
+                                var downloadUrl = "/api/collaboration/exportfile?id=";
+
+                                for (var i = 0; i < $scope.checkedItems.length; i++) {
+                                    downloadUrl += $scope.checkedItems[i];
+                                    if (i < $scope.checkedItems.length - 1) {
+                                        downloadUrl += ",";
+                                    }
+                                }
+
+                                //console.log(downloadUrl);
+                       
+                                var link = document.createElement('a');
+                                link.download = 'download';
+                                link.href = downloadUrl;
+                                link.style.display = 'none';
+                                document.body.appendChild(link);
+                       
+                                link.click();
+                       
+                                document.body.removeChild(link);
+                            }else{
+                                console.log("No checked items");
+                            }
+                        };   
+
+                        $scope.updateCheckedItems = function (dataItem) {
+                           // console.log('updateCheckedItems');
+                           // console.log(dataItem);
+                            var itemId = dataItem.ISUDGID; // Assuming 'ISUDGID' is the unique identifier
+                            if (dataItem.isChecked) {
+                                $scope.checkedItems.push(itemId);
+                               // console.log('Item checked:', itemId); // Log checked item
+                            } else {
+                                $scope.checkedItems = _.without($scope.checkedItems, itemId);
+                               // console.log('Item unchecked:', itemId); // Log unchecked item
+                            }
+                           // console.log('Currently checked items:', $scope.checkedItems); // Log the updated array
+
+                            if($scope.checkedItems.length > 0)
+                                $scope.showGetCheckedItemsButton = true;   
+                            else
+                                $scope.showGetCheckedItemsButton = false; 
+                        };
+
+                           // Initialize and maintain checked states on data bound
+                        $scope.esGridOptions.dataBound = function (e) {   
+                            if($scope.checkedItems.length > 0){
+                                $scope.showGetCheckedItemsButton = true;    
+                                var gridData = this.dataSource.data();                            
+                                _.each(gridData, function (dataItem) {
+                                    dataItem.isChecked = $scope.checkedItems.includes(dataItem.ISUDGID);
+                                });
+                            }  
                         };
 
                         $scope.$watch("esGridOptions", function (newV, oldV) {
@@ -2043,7 +2112,7 @@
                                     }
                                 })
                                 .catch(angular.noop);
-                        }
+                        }   
                     },
                 };
             },
@@ -5865,6 +5934,14 @@
                                     "<a download='download' href='#={0}||''#'>Download</a>",
                                     esCol.field
                                 );
+                            }                           
+                            else if (esCol.field.toLowerCase().indexOf("checkbox") != -1) {   
+                                tCol.template = kendo.format(
+                                    "<div align='center' class='checkbox-container'>" +
+                                    "<input type='checkbox' ng-model='dataItem.isChecked' ng-change='updateCheckedItems(dataItem)' data-item-id='#={0}#' />" +
+                                    "</div>",
+                                    esCol.field
+                                );
                             }
                             else if (
                                 esCol.field
@@ -6565,6 +6642,11 @@
                             name: "excel",
                             text: "Excel",
                         },
+                        {
+                            name: "getChecked",
+                            text: "Get Checked Items",
+                            template: "<a role='button' class='k-button k-button-icontext' ng-click='getCheckedItems()' ng-show='showGetCheckedItemsButton'><span class='k-icon k-i-download'/>{{'ESUI.PQ.DOWNLOAD' | translate}}</span></a>"
+                        }
                     ],
                     excel: {
                         allPages: true,
@@ -6681,8 +6763,11 @@
                             esPQOptions
                         );
 
-                        // remove the run / requery button
-                        esGridOptions.toolbar = esGridOptions.toolbar.slice(1);
+                        // let only excel toolbar                     
+                        esGridOptions.toolbar = [ {
+                            name: "excel",
+                            text: "Excel",
+                        }];
 
                         $("<div/>")
                             .appendTo(e.detailCell)
